@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="该系列文章参考摘抄了很多网络上的资料, 结合自己的思路编写, 方便自己日后回顾, 也希望能给大家提供一定的帮助； 什么是OAuth (开放式授权 Open Authorization)1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版; 2.与以往的授权方式不同之处是, OAuth的授权不会使第三方触及到用户的帐号信息(如用户名">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-19T04:49:44.000Z">
+<meta property="og:updated_time" content="2017-09-19T07:00:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OAuth 简介">
 <meta name="twitter:description" content="该系列文章参考摘抄了很多网络上的资料, 结合自己的思路编写, 方便自己日后回顾, 也希望能给大家提供一定的帮助； 什么是OAuth (开放式授权 Open Authorization)1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版; 2.与以往的授权方式不同之处是, OAuth的授权不会使第三方触及到用户的帐号信息(如用户名">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是OAuth-开放式授权-Open-Authorization"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是OAuth (开放式授权 Open Authorization)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth协议版本"><span class="post-toc-number">2.</span> <span class="post-toc-text">OAuth协议版本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的应用场景"><span class="post-toc-number">3.</span> <span class="post-toc-text">OAuth的应用场景</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#名词定义"><span class="post-toc-number">4.</span> <span class="post-toc-text">名词定义</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的思路"><span class="post-toc-number">5.</span> <span class="post-toc-text">OAuth的思路</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的具体运行流程"><span class="post-toc-number">6.</span> <span class="post-toc-text">OAuth的具体运行流程</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下面一一讲解客户端获取授权的四种模式"><span class="post-toc-number">7.</span> <span class="post-toc-text">下面一一讲解客户端获取授权的四种模式:</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#什么是OAuth-开放式授权-Open-Authorization"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么是OAuth (开放式授权 Open Authorization)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth协议版本"><span class="post-toc-number">2.</span> <span class="post-toc-text">OAuth协议版本</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的应用场景"><span class="post-toc-number">3.</span> <span class="post-toc-text">OAuth的应用场景</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#名词定义"><span class="post-toc-number">4.</span> <span class="post-toc-text">名词定义</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的思路-授权码模式"><span class="post-toc-number">5.</span> <span class="post-toc-text">OAuth的思路  (授权码模式)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth的具体运行流程-授权码模式"><span class="post-toc-number">6.</span> <span class="post-toc-text">OAuth的具体运行流程 (授权码模式)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#下面一一讲解客户端获取授权的四种模式"><span class="post-toc-number">7.</span> <span class="post-toc-text">下面一一讲解客户端获取授权的四种模式:</span></a></li></ol>
         </nav>
     </aside>
     
@@ -189,7 +189,7 @@
 <p>2.与以往的授权方式不同之处是, OAuth的授权不会使第三方触及到用户的帐号信息(如用户名与密码), 即第三方无需使用用户的用户名与密码就可以申请获得该用户资源的授权, 因此 OAuth 是安全的, OAuth 是 <code>Open Authorization(开放授权)</code> 的简写;</p>
 <h4 id="OAuth协议版本"><a href="#OAuth协议版本" class="headerlink" title="OAuth协议版本"></a>OAuth协议版本</h4><p>1.0: 2007.12 (有过安全漏洞, 比较复杂不易用)</p>
 <p>2.0: 2010年初 </p>
-<h4 id="OAuth的应用场景"><a href="#OAuth的应用场景" class="headerlink" title="OAuth的应用场景"></a>OAuth的应用场景</h4><p><strong>最常见的, 我们经常会看到很多网站, 用户除了可以使用网站中自己的的账号密码登录之外, 还可以使用其他一些如 QQ, 微信, GitHub, 人人, 豆瓣 等账户进行登录</strong></p>
+<h4 id="OAuth的应用场景"><a href="#OAuth的应用场景" class="headerlink" title="OAuth的应用场景"></a>OAuth的应用场景</h4><p><strong>最常见的, 我们经常会看到很多网站除了可以使用网站的账号密码登录之外, 还可以使用其他一些如 QQ, 微信, GitHub, 人人, 豆瓣 等账户进行登录</strong></p>
 <p>作为第三方的网站, 要让用户使用自己的其他登录进行登录, 则必须要让用户进行授权, 也就是我们通常点击QQ登录之后腾讯为我们弹出的授权页,问我们同不同意使用自己的QQ账号登录这个第三方站点, 并且这个授权页上也有相应的授权范围给我们列出来;</p>
 <p>腾讯其实用的就是OAuth2.0协议让我们对第三方站点进行的授权；</p>
 <p><strong>再比如, 有一个”云冲印”的网站, 可以将用户储存在其他大平台(比如Google)的一些照片冲印出来;</strong></p>
@@ -206,11 +206,11 @@
 <p>(如QQ,google,人人, 微信提供给第三方平台的认证服务器)</p>
 <p>4.Resource server: 资源服务器, 即服务提供商存放用户生成的资源的服务器(当然, 它与认证服务器, 可以是同一台服务器,也可以是不同的服务器)</p>
 <p>(如你的QQ, google, 人人, 微信 账户中的资料所存放的服务器)</p>
-<h4 id="OAuth的思路"><a href="#OAuth的思路" class="headerlink" title="OAuth的思路"></a>OAuth的思路</h4><p>使用OAuth授权标准, 其实就是”服务提供商”在 第三方客户端(也就是上面的云冲印网站或者你自己的网站) 与 “服务提供商”之间, 设置了一个授权层(authorization layer);</p>
-<p>“第三方客户端” 不能去直接登录 “服务提供商” , 而只能跳转到接入的服务提供商的授权层页面; <strong>用户可以在授权层页面指定授权给第三方客户端的权限范围和有效期</strong> ;</p>
+<h4 id="OAuth的思路-授权码模式"><a href="#OAuth的思路-授权码模式" class="headerlink" title="OAuth的思路  (授权码模式)"></a>OAuth的思路  (授权码模式)</h4><p>使用OAuth授权标准, 其实就是”服务提供商”在 第三方客户端(也就是上面的云冲印网站或者你自己的网站) 与 “服务提供商”之间, 设置了一个授权层(authorization layer);</p>
+<p>“第三方客户端” 不能去直接登录 “服务提供商” , 而只能跳转到接入的服务提供商的授权层页面; <strong>用户可以在授权曾页面指定授权给第三方客户端的权限范围和有效期</strong> ;</p>
 <p>“第三方客户端” 在登录授权层以后, 授权服务器会根据用户之前授予第三方客户端的权限, 给第三方客户端生成一种叫令牌(token)的东东, 它与用户的密码不同;</p>
 <p>然后第三方客户端就可以使用令牌去资源服务器中请求资源, 资源服务器就会根据令牌中的的权限范围和有效期, 向”第三方客户端”开放用户储存的部分资料;</p>
-<h4 id="OAuth的具体运行流程"><a href="#OAuth的具体运行流程" class="headerlink" title="OAuth的具体运行流程"></a>OAuth的具体运行流程</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">用户在第三方客户端网站点击 如QQ, 人人, 微信登录按钮 以后, 第三方客户端网站会跳转到相应的服务商(如QQ, 人人, 微信)提供的授权页面, 要求用户给予第三方客户端网站一定的授权;</div><div class="line"></div><div class="line">用户如果同意给予当前所在的第三方客户端网站授权;</div><div class="line"></div><div class="line">第三方客户端使用上一步获得的授权, 向(如QQ, 人人, 微信的)认证服务器申请令牌;</div><div class="line"></div><div class="line">认证服务器对第三方客户端进行认证以后, 确认无误, 同意发放令牌;</div><div class="line"></div><div class="line">第三方客户端使用令牌, 再去向(如QQ, 人人, 微信的)资源服务器申请获取资源;</div><div class="line"></div><div class="line">资源服务器确认令牌无误, 同意向第三方客户端开放资源;</div></pre></td></tr></table></figure>
+<h4 id="OAuth的具体运行流程-授权码模式"><a href="#OAuth的具体运行流程-授权码模式" class="headerlink" title="OAuth的具体运行流程 (授权码模式)"></a>OAuth的具体运行流程 (授权码模式)</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">用户在第三方客户端网站点击 如QQ, 人人, 微信登录按钮 以后, 第三方客户端网站会跳转到相应的服务商(如QQ, 人人, 微信)提供的授权页面, 要求用户给予第三方客户端网站一定的授权;</div><div class="line"></div><div class="line">用户如果同意给予当前所在的第三方客户端网站授权;</div><div class="line"></div><div class="line">第三方客户端使用上一步获得的授权, 向(如QQ, 人人, 微信的)认证服务器申请令牌;</div><div class="line"></div><div class="line">认证服务器对第三方客户端进行认证以后, 确认无误, 同意发放令牌;</div><div class="line"></div><div class="line">第三方客户端使用令牌, 再去向(如QQ, 人人, 微信的)资源服务器申请获取资源;</div><div class="line"></div><div class="line">资源服务器确认令牌无误, 同意向第三方客户端开放资源;</div></pre></td></tr></table></figure>
 <p>不难看出来, 上面六个步骤之中, 第二步是关键,即用户怎样才能给于客户端授权, 有了这个授权以后, 进而凭令牌获取资源;</p>
 <h4 id="下面一一讲解客户端获取授权的四种模式"><a href="#下面一一讲解客户端获取授权的四种模式" class="headerlink" title="下面一一讲解客户端获取授权的四种模式:"></a>下面一一讲解客户端获取授权的四种模式:</h4><p>客户端必须得到用户的授权(authorization grant), 才能获得令牌(access token), OAuth 2.0定义了四种授权方式:</p>
 <p><strong>授权码模式（authorization code）</strong></p>
