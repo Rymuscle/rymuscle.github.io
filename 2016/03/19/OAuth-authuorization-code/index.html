@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Authuorization Code | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OAuth2.0">
+    <meta name="description" content="授权码模式回顾授权码模式(authorization code)是功能最完整、流程最严密的授权模式, 它的特点就是通过 客户端的后台服务器 与 &amp;quot;服务提供商&amp;quot;的认证服务器 进行互动 ; 所以之前我们在介绍OAuth的时候, 其实主要叙述的就是这种比较常用的客户端授权模式 ; 运行步骤回顾1.客户端将用户导向认证服务器的授权页面此时也就是客户端请求认证服务器的授权页面 ; 2.用">
+<meta name="keywords" content="OAuth2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Authuorization Code">
+<meta property="og:url" content="http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="授权码模式回顾授权码模式(authorization code)是功能最完整、流程最严密的授权模式, 它的特点就是通过 客户端的后台服务器 与 &amp;quot;服务提供商&amp;quot;的认证服务器 进行互动 ; 所以之前我们在介绍OAuth的时候, 其实主要叙述的就是这种比较常用的客户端授权模式 ; 运行步骤回顾1.客户端将用户导向认证服务器的授权页面此时也就是客户端请求认证服务器的授权页面 ; 2.用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2130662-45e26019c904014b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-19T15:04:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Authuorization Code">
+<meta name="twitter:description" content="授权码模式回顾授权码模式(authorization code)是功能最完整、流程最严密的授权模式, 它的特点就是通过 客户端的后台服务器 与 &amp;quot;服务提供商&amp;quot;的认证服务器 进行互动 ; 所以之前我们在介绍OAuth的时候, 其实主要叙述的就是这种比较常用的客户端授权模式 ; 运行步骤回顾1.客户端将用户导向认证服务器的授权页面此时也就是客户端请求认证服务器的授权页面 ; 2.用">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2130662-45e26019c904014b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Authuorization Code</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Authuorization Code</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-03-19T12:27:36.000Z" itemprop="datePublished" class="page-time">
+  2016-03-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#授权码模式回顾"><span class="post-toc-number">1.</span> <span class="post-toc-text">授权码模式回顾</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#运行步骤回顾"><span class="post-toc-number">2.</span> <span class="post-toc-text">运行步骤回顾</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#额…-在网上找自己个儿认为了画的比较好的一幅图"><span class="post-toc-number">3.</span> <span class="post-toc-text">额… 在网上找自己个儿认为了画的比较好的一幅图</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第一阶段主要是向用户取得授权许可"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">第一阶段主要是向用户取得授权许可</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第二阶段主要是申请访问令牌-access-token"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">第二阶段主要是申请访问令牌(access_token)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#第三阶段就是使用access-token获取用户数据"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">第三阶段就是使用access_token获取用户数据</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-OAuth-authuorization-code"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Authuorization Code</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-03-19 20:27:36" datetime="2016-03-19T12:27:36.000Z"  itemprop="datePublished">2016-03-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="授权码模式回顾"><a href="#授权码模式回顾" class="headerlink" title="授权码模式回顾"></a>授权码模式回顾</h4><p><strong>授权码模式(authorization code)是功能最完整、流程最严密的授权模式, 它的特点就是通过 <code>客户端的后台服务器</code> 与 <code>&quot;服务提供商&quot;的认证服务器</code> 进行互动 ;</strong> 所以之前我们在介绍OAuth的时候, 其实主要叙述的就是这种比较常用的客户端授权模式 ;</p>
+<h4 id="运行步骤回顾"><a href="#运行步骤回顾" class="headerlink" title="运行步骤回顾"></a>运行步骤回顾</h4><p>1.客户端将用户导向<code>认证服务器</code>的授权页面<br>此时也就是客户端请求认证服务器的授权页面 ;</p>
+<p>2.用户在授权页面给予客户端授权(authorization grant)后, 认证服务器会生成一个授权码code, 并带着这个code重新导向客户端事先指定的 “重定向URL” ;</p>
+<p>3.客户端的回调接口收到授权码, 开始在客户端的服务器中(注意这里不是通过浏览器了)去直接向认证服务器申请令牌, 此时是带着客户端收到的授权码去申请令牌的;</p>
+<p>4.认证服务器最终会返回令牌(access_token);</p>
+<p>5.客户端使用令牌去 资源服务器 申请用户信息;</p>
+<h4 id="额…-在网上找自己个儿认为了画的比较好的一幅图"><a href="#额…-在网上找自己个儿认为了画的比较好的一幅图" class="headerlink" title="额… 在网上找自己个儿认为了画的比较好的一幅图"></a>额… 在网上找自己个儿认为了画的比较好的一幅图</h4><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://upload-images.jianshu.io/upload_images/2130662-45e26019c904014b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>这里, 我们又把OAuth2的整个认证过程大致分为三个阶段(分几个阶段, 几部步骤都是次要的, 重要的是能够理解整个过程):</p>
+<h5 id="第一阶段主要是向用户取得授权许可"><a href="#第一阶段主要是向用户取得授权许可" class="headerlink" title="第一阶段主要是向用户取得授权许可"></a>第一阶段主要是向用户取得授权许可</h5><p>对应图中的第1、2、3步;</p>
+<h5 id="第二阶段主要是申请访问令牌-access-token"><a href="#第二阶段主要是申请访问令牌-access-token" class="headerlink" title="第二阶段主要是申请访问令牌(access_token)"></a>第二阶段主要是申请访问令牌(access_token)</h5><p>对应图中的第4、5步;</p>
+<h5 id="第三阶段就是使用access-token获取用户数据"><a href="#第三阶段就是使用access-token获取用户数据" class="headerlink" title="第三阶段就是使用access_token获取用户数据"></a>第三阶段就是使用access_token获取用户数据</h5><p>这一过程中涉及了不少敏感参数和数据, 例如client_secret相当于是第三方应用自己的密码, access_token某种程度上来讲就是用户的session id, 由于这些参数以及数据极其特殊, 我们当然得确保它们的安全性, HTTPS加密传输以及安全存储是必不可少的防护手段, <strong>不过仅仅做到这些是远远不够的, 因为其实在这个流程里存在一个弱点， 容易被攻击者利用进行CSRF攻击, 稍后讲解 ; </strong></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&title=《Authuorization Code》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&title=《Authuorization Code》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Authuorization Code》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/15/Laravel-install-01/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Laravel-install-01</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/03/19/OAuth/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OAuth 简介</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&title=《Authuorization Code》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&title=《Authuorization Code》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Authuorization Code》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/19/OAuth-authuorization-code/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aQW7cMBAEQP//05trgkTa7uFuAJGlk2FbFOvSGM7w5yd+Xr8993+9eu5XTr7ygQcDA+OxjOTz97+5+nwO+3vldgUMDIwTGEkUXv3/FfJ+/fvV8r1hYGBg5CE4w1+tiYGBgbHCSN6aBS4GBgbGPSOP0WjRBfzXz+IYGBgPZORd9///81fmGxgYGI9ivMqnLtc+NEJ4sysMDIytGXnA5aQZpi37MDAwTmPkY4BZgM6OrMk6dQ2LgYHxQEb++aJEG7X+Zxc4/qhwMTAwNmXMRpKz3Fu50jHsC2JgYGzByF/LN5G3/vOLYsVtEQwMjE0Z7ZFydn6cXcWIClAMDIxjGLN4/dQgc3ZI/sckFgMDYzvGSknXtsnawUO7JgYGxq6M/PrXUhQubL24LYKBgXEAIz865gViPZ0oD7cYGBjnMBJAG8ezwcOwoMTAwNiakcdfstH83VlLbunBwMB4OKNteOVjy/yYmv/1cicYGBjHMJKIXGnDzcrBaH0MDIxjGG0gJpvOwzofD9S9QwwMjO0YbSttJb7zYH3zdQwMjAMYbftsZWA56wi+eQsDA2NTxqt8ZoOE9j/rIQQGBsbWjPWwywu4trhsV8PAwNibsTIMyIM7D83ZHjAwME5gzIIvHy20N7jq0hMDAwOjjNc8WNvGX9Q1xMDAwBidiYcFXzxSxcDAOIGRHD5ngZi8OwtrDAyMcxj50bEdQH4vdodDTQwMjOcxfgG6p0HPjBPPvgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
