@@ -29,7 +29,7 @@
 <meta property="og:description" content="什么是OAuth开放式授权 Open Authorization 1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版; 2.与以往的授权方式不同之处是, OAuth的授权 不会使第三方触及到用户的帐号信息(如用户名与密码) , 即第三方无需使用用户的用户名与密码就可以申请获得该用户资源的授权, 因此 OAuth 是安全的, OA">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth2-01.png">
-<meta property="og:updated_time" content="2017-09-21T14:22:07.000Z">
+<meta property="og:updated_time" content="2017-09-21T14:51:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intro to OAuth">
 <meta name="twitter:description" content="什么是OAuth开放式授权 Open Authorization 1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版; 2.与以往的授权方式不同之处是, OAuth的授权 不会使第三方触及到用户的帐号信息(如用户名与密码) , 即第三方无需使用用户的用户名与密码就可以申请获得该用户资源的授权, 因此 OAuth 是安全的, OA">
@@ -190,8 +190,7 @@
 <p>1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版;</p>
 <p>2.与以往的授权方式不同之处是, OAuth的授权 <strong><em>不会使第三方触及到用户的帐号信息(如用户名与密码)</em></strong> , 即第三方无需使用用户的用户名与密码就可以申请获得该用户资源的授权, 因此 OAuth 是安全的, OAuth 是 <code>Open Authorization(开放授权)</code> 的简写;</p>
 <h2 id="OAuth协议版本"><a href="#OAuth协议版本" class="headerlink" title="OAuth协议版本"></a>OAuth协议版本</h2><h3 id="1-0版本-2007-12"><a href="#1-0版本-2007-12" class="headerlink" title="1.0版本: 2007.12"></a>1.0版本: 2007.12</h3><p>有过安全漏洞, 比较复杂不易用</p>
-<h3 id="2-0版本-2010年初"><a href="#2-0版本-2010年初" class="headerlink" title="2.0版本: 2010年初"></a>2.0版本: 2010年初</h3><h2 id="OAuth的应用场景"><a href="#OAuth的应用场景" class="headerlink" title="OAuth的应用场景"></a>OAuth的应用场景</h2><h3 id="各个站点随处可见的QQ-微信-微博登录"><a href="#各个站点随处可见的QQ-微信-微博登录" class="headerlink" title="各个站点随处可见的QQ,微信,微博登录"></a>各个站点随处可见的<code>QQ</code>,<code>微信</code>,<code>微博</code>登录</h3><p>比如你要做一个站点, 常规做法就需要建立一套用户注册登录体系, 而网民很反感, 因为他们可能有很多站点的用户名密码, 不太想在多一个账号了, 但大家几乎都有 QQ , 微信, 人人, 豆瓣 等互联网大佬的帐号; 那我们为何不用 QQ 帐号登录后, 授权给本网站呢？</p>
-<p>可行, 不过先要确定好相互之间(网站和QQ之间)认证的规范, 这个规范有很多, 也可以自己写, 但业界比较通用 OAuth ;</p>
+<h3 id="2-0版本-2010年初"><a href="#2-0版本-2010年初" class="headerlink" title="2.0版本: 2010年初"></a>2.0版本: 2010年初</h3><h2 id="OAuth的应用场景"><a href="#OAuth的应用场景" class="headerlink" title="OAuth的应用场景"></a>OAuth的应用场景</h2><h3 id="各个站点随处可见的QQ-微信-微博登录"><a href="#各个站点随处可见的QQ-微信-微博登录" class="headerlink" title="各个站点随处可见的QQ,微信,微博登录"></a>各个站点随处可见的<code>QQ</code>,<code>微信</code>,<code>微博</code>登录</h3><p>比如你要做一个站点, 常规做法就需要建立一套用户注册登录体系, 而网民很反感, 因为他们可能有很多站点的用户名密码, 不太想再多一个账号了, 但大家几乎都有 QQ , 微信, 人人, 豆瓣 等互联网大佬的帐号; 那我们为何不用 QQ 帐号登录后, 授权给本网站呢？<br>可行, 不过先要确定好相互之间(网站和QQ之间)认证的规范, 这个规范有很多, 也可以自己写, 但业界比较通用 OAuth ;</p>
 <h3 id="有些站点干脆就是需要使用其他站点的用户资料"><a href="#有些站点干脆就是需要使用其他站点的用户资料" class="headerlink" title="有些站点干脆就是需要使用其他站点的用户资料"></a>有些站点干脆就是需要使用其他站点的用户资料</h3><p>比如, 用户想在 “云冲印”网站上冲印自己Google账户上的照片, 首先”云冲印”网站得读取到用户储存在Google上的照片, 那么用户就需要授予”云冲印”网站自己Google账户的部分权限; (至少也得给予云冲印网站能够读取用户Google账户中照片的权限吧)</p>
 <h2 id="传统授权的弊端"><a href="#传统授权的弊端" class="headerlink" title="传统授权的弊端"></a>传统授权的弊端</h2><p>传统所谓的”授权”做法, 最<code>简单</code> <code>直接</code> <code>暴力</code> 的就是用户直接将自己的Google账号和密码提供给”云冲印”网站, 这样后者就可以读取用户的照片了;</p>
 <p>但这种做法有以下几个严重缺点:</p>
