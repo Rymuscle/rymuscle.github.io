@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>CORS方案 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="CrossDomain">
+    <meta name="description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
+<meta name="keywords" content="CrossDomain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CORS方案">
+<meta property="og:url" content="http://blog.renyimin.com/2015/09/19/CorsAjax/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/cors-cookie.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
+<meta property="og:updated_time" content="2017-09-26T14:36:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CORS方案">
+<meta name="twitter:description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">CORS方案</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">CORS方案</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-09-19T04:45:07.000Z" itemprop="datePublished" class="page-time">
+  2015-09-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CORS说明"><span class="post-toc-number">1.</span> <span class="post-toc-text">CORS说明</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CORS的两类请求"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">CORS的两类请求</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单请求"><span class="post-toc-number">2.</span> <span class="post-toc-text">简单请求</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#先看代码案例"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">先看代码案例</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基本流程分析"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">基本流程分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器直接发出CORS请求"><span class="post-toc-number">2.2.1.</span> <span class="post-toc-text">浏览器直接发出CORS请求</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器识别出跨域AJAX简单请求"><span class="post-toc-number">2.2.2.</span> <span class="post-toc-text">浏览器识别出跨域AJAX简单请求</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器添加的Origin源不在服务器设置的许可范围"><span class="post-toc-number">2.2.3.</span> <span class="post-toc-text">浏览器添加的Origin源不在服务器设置的许可范围</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器添加的Origin源在服务器设置的许可范围内"><span class="post-toc-number">2.2.4.</span> <span class="post-toc-text">浏览器添加的Origin源在服务器设置的许可范围内</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#服务器端的具体设置"><span class="post-toc-number">2.2.5.</span> <span class="post-toc-text">服务器端的具体设置</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#withCredentials-属性"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">withCredentials 属性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CORS请求默认不发送Cookie和HTTP认证信息"><span class="post-toc-number">2.3.1.</span> <span class="post-toc-text">CORS请求默认不发送Cookie和HTTP认证信息</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#例子"><span class="post-toc-number">2.3.2.</span> <span class="post-toc-text">例子</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#两个注意"><span class="post-toc-number">2.3.3.</span> <span class="post-toc-text">两个注意</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-CorsAjax"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">CORS方案</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-09-19 12:45:07" datetime="2015-09-19T04:45:07.000Z"  itemprop="datePublished">2015-09-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="CORS说明"><a href="#CORS说明" class="headerlink" title="CORS说明"></a>CORS说明</h2><ol>
+<li><p>CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;</div><div class="line">CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Origin响应头，即可使指定来源像访问同源接口一样访问跨域接口，但其实CORS的规范定义远不止这些 ;</div></pre></td></tr></table></figure>
+</li>
+<li><p>它允许 <code>浏览器</code> 向 <code>跨源服务器</code> 发出XMLHttpRequest请求, 从而克服了AJAX只能同源使用的限制 ;</p>
+</li>
+<li><p>CORS需要浏览器和服务器同时支持 (目前, 所有浏览器都支持该功能, IE浏览器不能低于IE10) ;</p>
+</li>
+<li><p>整个CORS通信过程都是浏览器自动完成, 不需要用户参与 ;<br> 对于开发者来说, CORS通信与同源的AJAX通信没有差别, 代码完全一样, 浏览器一旦发现AJAX的请求是跨源的, 就会自动添加一些附加的头信息, 有时还会多出一次附加的请求, 但用户不会有感觉;</p>
+<p> <strong> 因此，其实实现CORS通信的关键是服务器, 只要服务器实现了CORS接口，就可以跨源通信 </strong></p>
+</li>
+</ol>
+<h3 id="CORS的两类请求"><a href="#CORS的两类请求" class="headerlink" title="CORS的两类请求"></a>CORS的两类请求</h3><ol>
+<li><p>浏览器将CORS请求分成两类: 简单请求(simple request) 和 非简单请求(not-so-simple request)</p>
+</li>
+<li><p>以下为<code>非简单请求</code>的情况 :</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">请求以 GET, HEAD 或者 POST 以外的方法发起请求 ;</div><div class="line"></div><div class="line">或者，使用 POST，但请求数据为 application/x-www-form-urlencoded, multipart/form-data 或者 text/plain 以外的数据类型, 比如说，用 POST 发送数据类型为 application/xml 或者 text/xml 的 XML 数据的请求 ;</div><div class="line"></div><div class="line">使用自定义请求头（比如添加诸如 X-PINGOTHER）</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h2><h3 id="先看代码案例"><a href="#先看代码案例" class="headerlink" title="先看代码案例"></a>先看代码案例</h3><ol>
+<li><p>客户端代码<br> www.test.com/index.html : </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">   &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">   &lt;title&gt;Title&lt;/title&gt;</div><div class="line">   &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">   &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">       $(document).ready(function()&#123;</div><div class="line">           $(&quot;#btn&quot;).click(function(k) &#123;</div><div class="line">               var data = $(&quot;form&quot;).serializeArray();//序列化name/value</div><div class="line">               $.ajax(&#123;</div><div class="line">                   type: &apos;GET&apos;,  //这里用GET</div><div class="line">                   url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                   dataType: &apos;json&apos;,  //类型</div><div class="line">                   data: data,</div><div class="line">                   success: function (result) &#123;//返回的json数据</div><div class="line">                       console.log(result); //回调输出</div><div class="line">                   &#125;,</div><div class="line">                   timeout: 3000</div><div class="line">               &#125;);</div><div class="line">           &#125;);</div><div class="line">       &#125;);</div><div class="line">   &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">   &lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">   &lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">   &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>服务端代码<br>test.test.com/index.php : </p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="keyword">echo</span> json_encode([<span class="string">'name'</span> =&gt; <span class="string">'lant'</span>, <span class="string">'age'</span> =&gt; <span class="number">100</span>]);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="基本流程分析"><a href="#基本流程分析" class="headerlink" title="基本流程分析"></a>基本流程分析</h3><h4 id="浏览器直接发出CORS请求"><a href="#浏览器直接发出CORS请求" class="headerlink" title="浏览器直接发出CORS请求"></a>浏览器直接发出CORS请求</h4><p>对于简单请求，浏览器直接发出CORS请求, 具体来说, 就是在头信息之中, 自动增加一个Origin字段 ;</p>
+<h4 id="浏览器识别出跨域AJAX简单请求"><a href="#浏览器识别出跨域AJAX简单请求" class="headerlink" title="浏览器识别出跨域AJAX简单请求"></a>浏览器识别出跨域AJAX简单请求</h4><p>浏览器发现这次跨源AJAX请求是简单请求, 就自动在头信息之中, 添加一个Origin字段:<br><img src="/img/cross-domain/ajax-simple-cors.png" width="670" height="420" alt="ajax-simple-cors" align="center"></p>
+<p><strong>上面的头信息中, <code>Origin字段</code> 用来说明本次请求来自哪个源(协议 + 域名 + 端口), 服务器根据这个值, 决定是否同意这次请求 </strong>;</p>
+<h4 id="浏览器添加的Origin源不在服务器设置的许可范围"><a href="#浏览器添加的Origin源不在服务器设置的许可范围" class="headerlink" title="浏览器添加的Origin源不在服务器设置的许可范围"></a>浏览器添加的Origin源不在服务器设置的许可范围</h4><p>如果Origin源, 不在许可范围内, 服务器让然会返回一个正常的HTTP回应, 不过浏览器会发现, 这个回应的头信息并没有包含 <code>Access-Control-Allow-Origin</code> 字段(详见下文), 就知道出错了, 从而抛出一个错误, 被XMLHttpRequest的onerror回调函数捕获; <strong>注意, 这种错误无法通过状态码识别, 因为HTTP回应的状态码有可能是200</strong> ;<br><img src="/img/cross-domain/ajax-simple-cors02.png" width="590" height="260" alt="ajax-simple-cors02" align="center"></p>
+<h4 id="浏览器添加的Origin源在服务器设置的许可范围内"><a href="#浏览器添加的Origin源在服务器设置的许可范围内" class="headerlink" title="浏览器添加的Origin源在服务器设置的许可范围内"></a>浏览器添加的Origin源在服务器设置的许可范围内</h4><ol>
+<li><p>当然, 如果 <code>Origin源在服务器设置的许可范围内</code> , 服务器返回的响应, 就会多出如下个头信息字段(当然也不一定是所有都包含, <strong>具体还得看服务器如何进行设置</strong>) :</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Origin: http://api.bob.com</div><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Expose-Headers: FooBar</div><div class="line">Content-Type: text/html; charset=utf-8</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>重点分析</strong>:<br>上面的头信息之中，有三个与CORS请求相关的字段，都以<code>Access-Control-</code>开头:<br>(1) <code>Access-Control-Allow-Origin</code><br>服务器要设置ajax请求可以跨域, 该字段是必须的, 它的值要么是请求时Origin字段的值，要么是一个<em>，表示接受任意域名的请求;<br>(2) <code>Access-Control-Allow-Credentials</code><br>该字段可选, 它的值是一个布尔值，表示是否允许发送Cookie, <em>*默认情况下，Cookie不包括在CORS请求之中</em></em>, 设为true，即表示服务器明确许可，Cookie可以包含在请求中，一起发给服务器;<br>注意, 这个值也只能设为true，如果服务器不要浏览器发送Cookie，删除该字段即可。<br>(3) <code>Access-Control-Expose-Headers</code><br>该字段可选, CORS请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。如果想拿到其他字段，就必须在Access-Control-Expose-Headers里面指定。上面的例子指定，getResponseHeader(‘FooBar’)可以返回FooBar字段的值。</p>
+</li>
+</ol>
+<h4 id="服务器端的具体设置"><a href="#服务器端的具体设置" class="headerlink" title="服务器端的具体设置"></a>服务器端的具体设置</h4><ol>
+<li>服务器在设置的时候, 其实就是通过header函数设置上面的三个选项!</li>
+<li><p>比如之前的例子中, 如果服务器只是简单的为了实现跨域, 直接设置如下选项即可:</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test1.com"</span>);</div><div class="line"><span class="keyword">echo</span> json_encode([<span class="string">'name'</span> =&gt; <span class="string">'lant'</span>, <span class="string">'age'</span> =&gt; <span class="number">100</span>]);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="withCredentials-属性"><a href="#withCredentials-属性" class="headerlink" title="withCredentials 属性"></a>withCredentials 属性</h3><h4 id="CORS请求默认不发送Cookie和HTTP认证信息"><a href="#CORS请求默认不发送Cookie和HTTP认证信息" class="headerlink" title="CORS请求默认不发送Cookie和HTTP认证信息"></a>CORS请求默认不发送Cookie和HTTP认证信息</h4><ol>
+<li><p>之前在介绍<code>Access-Control-Allow-Credentials</code>选项的时候提到, CORS请求默认不发送Cookie和HTTP认证信息; 如果要把Cookie发到服务器:</p>
+<p> 一方面要 <strong>服务器同意指定Access-Control-Allow-Credentials字段</strong> :</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: <span class="keyword">true</span></div><div class="line"><span class="comment">//php中设置如下:</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
+<p> 另一方面, 开发者必须在AJAX请求中打开 <code>withCredentials</code> 属性:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var xhr = new XMLHttpRequest();</div><div class="line">xhr.withCredentials = true;</div><div class="line">//jquery中设置withCredentials的代码如下:</div><div class="line">$.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>需要以上两方面都做到才可以</p>
+<p> 否则，即使服务器同意发送Cookie，浏览器也不会发送, 或者，服务器要求设置Cookie，浏览器也不会处理 ;</p>
+<p> 但是, 如果省略 <code>withCredentials</code> 设置, 有的浏览器还是会一起发送Cookie, 这时, 可以显式关闭 <code>withCredentials</code> ;</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="keyword">false</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>需要注意的是</strong>:<br> 如果要发送Cookie, <code>Access-Control-Allow-Origin</code> 就不能设为星号<code>*</code>, <strong>必须指定明确的、与请求网页一致的域名</strong> ; </p>
+<p> <strong>同时，Cookie依然遵循同源政策，只有用服务器域名设置的Cookie才会上传, 其他域名的Cookie并不会上传, 且(跨源)原网页代码中的document.cookie也无法读取服务器域名下的Cookie ;</strong></p>
+</li>
+</ol>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><p>域1中的代码(www.test.com/index.php)：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//Cookie依然遵循同源政策，只有用服务器域名设置的Cookie才会上传, 其他域名的Cookie并不会上传, 且(跨源)原网页代码中的document.cookie也无法读取服务器域名下的Cookie</span></div><div class="line">setcookie(<span class="string">'address'</span>, json_encode([<span class="string">'city'</span> =&gt; <span class="string">'yuncheng'</span>, <span class="string">'town'</span> =&gt; <span class="string">'xiaoliang'</span>]), <span class="number">0</span>, <span class="string">'/'</span>, <span class="string">'.test.com'</span>);</div><div class="line"><span class="meta">?&gt;</span></div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=<span class="string">"en"</span>&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=<span class="string">"https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"</span>&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=<span class="string">"text/javascript"</span> &gt;</div><div class="line">        $(document).ready(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">            $.ajaxSetup(&#123;crossDomain: <span class="keyword">true</span>, xhrFields: &#123;withCredentials: <span class="keyword">true</span>&#125;&#125;);</div><div class="line"></div><div class="line">            $(<span class="string">"#btn"</span>).click(<span class="function"><span class="keyword">function</span><span class="params">(k)</span> </span>&#123;</div><div class="line">                <span class="keyword">var</span> data = $(<span class="string">"form"</span>).serializeArray();<span class="comment">//序列化name/value</span></div><div class="line">                $.ajax(&#123;</div><div class="line">                    type: <span class="string">'GET'</span>,  <span class="comment">//这里用GET</span></div><div class="line">                    url: <span class="string">'http://test.test.com/index.php'</span>,</div><div class="line">                    dataType: <span class="string">'json'</span>,  <span class="comment">//类型</span></div><div class="line">                    data: data,</div><div class="line">                    success: <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> </span>&#123;<span class="comment">//返回的json数据</span></div><div class="line">                        console.log(result); <span class="comment">//回调输出</span></div><div class="line">                    &#125;,</div><div class="line">                    timeout: <span class="number">3000</span></div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=<span class="string">"form"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"sex"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"age"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"button"</span> id=<span class="string">"btn"</span> value=<span class="string">"button"</span> /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>域2中的代码(test.test.comindex.php):<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div><div class="line">$address = $_COOKIE[<span class="string">'address'</span>];</div><div class="line"><span class="keyword">echo</span> json_encode([<span class="string">'name'</span> =&gt; <span class="string">'lant'</span>, <span class="string">'age'</span> =&gt; <span class="number">100</span>, <span class="string">'address'</span> =&gt; $address]);</div></pre></td></tr></table></figure></p>
+<p>效果:<br><img src="/img/cross-domain/cors-cookie.png" width="590" height="260" alt="cors-cookie" align="center"></p>
+<h4 id="两个注意"><a href="#两个注意" class="headerlink" title="两个注意"></a>两个注意</h4><ol>
+<li><p>如果域1中在html中设置了 <code>withCredentials</code> 为 true :</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div></pre></td></tr></table></figure>
+<p> 那么在对应的ajax请求的域2中必须设置</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
+<p> 否则, 报错如下:<br> <img src="/img/cross-domain/haha-server-withCredentials.png" width="500" height="160" alt="haha-server-withCredentials" align="center"></p>
+</li>
+<li><p>如果两边都不设置 <code>withCredentials</code> 属性的话, 也就是默认请求不带cookie, 那么即使请求方域1中设置了domain属性为 <code>.test</code> 的cookie值, 服务方(test.test.com)中也获取不到cookie, 因为域1默认请求就没有带cookie ;</p>
+</li>
+</ol>
+<blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">CORS</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/CorsAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/03/10/clusore-introduction/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">PHP的Closure学习整理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/09/18/JsonpAjax/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">JSONP方案</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/CorsAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHElEQVR42u3asbKDMAwEwPz/T+e1rzE5WaawvVQZBgjr4kbC+nzi4/t45NeMnjk6s/jAwMDYltF5xefX+n9+9JzRNeWlwcDAuIAxSrDRNXlQVmP0+X+H5zEwMDAeXyKJ6XwJMDAwMPqMnPeMzKMcAwMDI29iE3xeLOZLtrgXx8DA2JDRaSzf/v3K/gYGBsZWjG/x6FCTgJ58KwwMjKMZbzSi/Wuq74OBgXE2Yy5q8xY32dRMNgl+wDAwMK5nVMO3+l9JafgjsjEwMI5mVPNqrgTMq9QkyhfELgYGxoaMvE3NP5l1WtN8mTAwMG5j5EMVcwFdLRA7ZSgGBsZJjE5ZVh2VqDauhYjHwMC4gJGUg3PtZR7KyaIUvhpiYGAcyqjGaH/bsvr8aEsAAwPjUEY1IpP+cbKHLi4ZBgbGDYxVTeaqAbL+BioGBsapjLy9nCsf5+K7+skPAwPjHkZnI7MzOtZqYjEwMK5hPJM6sbu2TMTAwLiZkQfuXByXu+q3S0MMDIwNGf2PX9XITkY0CuUjBgbGNYxqy5qHcj6WMXkXBgbGoYy5prFf8OUbEtHSYGBgHM3ohF1/PKIa3J1yEwMDY3fGssmyoIjMW9MFY2EYGBjHMarBl7S11TKxGv0YGBgY+ThF3nbObTaUx8IwMDCuZ6z60lUtFhcHLgYGxoaMfDNg7q6kuW2VmxgYGEcz8rjMSeUWtDECgoGBcTTjD/Q5GQbnpaAUAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
