@@ -13,25 +13,22 @@
     
     
     
-    <title>同源策略的限制 -- Ajax请求不能发送 | Lant&#39;s Blog</title>
+    <title>CSRF(Cross-site request forgery) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="CrossDomain">
-    <meta name="description" content="同源策略的限制 - Ajax请求不能发送 同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;  除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 : JSONP  CORS  WebSocket    参考">
-<meta name="keywords" content="CrossDomain">
+    <meta name="keywords" content="Safe">
+    <meta name="keywords" content="Safe">
 <meta property="og:type" content="article">
-<meta property="og:title" content="同源策略的限制 -- Ajax请求不能发送">
-<meta property="og:url" content="http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/index.html">
+<meta property="og:title" content="CSRF(Cross-site request forgery)">
+<meta property="og:url" content="http://blog.renyimin.com/2015/05/05/safe-csrf01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="同源策略的限制 - Ajax请求不能发送 同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;  除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 : JSONP  CORS  WebSocket    参考">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-29T08:38:42.000Z">
+<meta property="og:updated_time" content="2017-09-29T09:23:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="同源策略的限制 -- Ajax请求不能发送">
-<meta name="twitter:description" content="同源策略的限制 - Ajax请求不能发送 同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;  除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 : JSONP  CORS  WebSocket    参考">
+<meta name="twitter:title" content="CSRF(Cross-site request forgery)">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +109,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">同源策略的限制 -- Ajax请求不能发送</div>
+        <div class="flex-col header-title ellipsis">CSRF(Cross-site request forgery)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +131,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">同源策略的限制 -- Ajax请求不能发送</h1>
+        <h1 class="title">CSRF(Cross-site request forgery)</h1>
         <h5 class="subtitle">
             
-                <time datetime="2015-09-17T14:30:19.000Z" itemprop="datePublished" class="page-time">
-  2015-09-17
+                <time datetime="2015-05-05T02:20:16.000Z" itemprop="datePublished" class="page-time">
+  2015-05-05
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Safe/">Safe</a></li></ul>
 
             
         </h5>
@@ -156,23 +153,16 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同源策略的限制-Ajax请求不能发送"><span class="post-toc-number">1.</span> <span class="post-toc-text">同源策略的限制 - Ajax请求不能发送</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-sameoriginpolicy02-ajax-disabled"
+<article id="post-safe-csrf01"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">同源策略的限制 -- Ajax请求不能发送</h1>
+        <h1 class="post-card-title">CSRF(Cross-site request forgery)</h1>
         <div class="post-meta">
-            <time class="post-time" title="2015-09-17 22:30:19" datetime="2015-09-17T14:30:19.000Z"  itemprop="datePublished">2015-09-17</time>
+            <time class="post-time" title="2015-05-05 10:20:16" datetime="2015-05-05T02:20:16.000Z"  itemprop="datePublished">2015-05-05</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Safe/">Safe</a></li></ul>
 
 
 
@@ -184,18 +174,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="同源策略的限制-Ajax请求不能发送"><a href="#同源策略的限制-Ajax请求不能发送" class="headerlink" title="同源策略的限制 - Ajax请求不能发送"></a>同源策略的限制 - Ajax请求不能发送</h2><ol>
-<li><p>同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;</p>
-</li>
-<li><p>除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 :<br> <strong><a href="http://blog.renyimin.com">JSONP</a></strong></p>
-<p> <strong><a href="http://blog.renyimin.com">CORS</a></strong></p>
-<p> <strong><a href="http://blog.renyimin.com">WebSocket</a></strong></p>
-</li>
-</ol>
-<blockquote>
-<p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考</a></p>
-</blockquote>
-
+            
         </div>
 
         <blockquote class="post-copyright">
@@ -221,7 +200,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Safe/">Safe</a></li></ul>
 
 
             
@@ -231,7 +210,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&title=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&title=《CSRF(Cross-site request forgery)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -241,22 +220,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&title=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&title=《CSRF(Cross-site request forgery)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/05/05/safe-csrf01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CSRF(Cross-site request forgery)》 — Lant's Blog&url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -276,20 +255,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
-      <div class="waves-block waves-effect prev">
-        <a href="/2015/09/16/sameoriginpolicy01-cookie-disabled/" id="post-prev" class="post-nav-link">
-          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">同源策略的限制 -- Cookie无法读取</h4>
-        </a>
-      </div>
-    
   
     <div class="waves-block waves-effect next">
-      <a href="/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" id="post-next" class="post-nav-link">
+      <a href="/2015/05/05/sameoriginpolicy07-ajax-disabled-websocket/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Ajax请求不能发送 -- JSONP方案</h4>
+        <h4 class="title">Ajax请求不能发送 -- WebSocket方案</h4>
       </a>
     </div>
   
@@ -400,7 +372,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&title=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&title=《CSRF(Cross-site request forgery)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -410,22 +382,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&title=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&title=《CSRF(Cross-site request forgery)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/05/05/safe-csrf01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《同源策略的限制 -- Ajax请求不能发送》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CSRF(Cross-site request forgery)》 — Lant's Blog&url=http://blog.renyimin.com/2015/05/05/safe-csrf01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/17/sameoriginpolicy02-ajax-disabled/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/05/05/safe-csrf01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -436,7 +408,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrUlEQVR42u3awWojQQwEUP//T+/CngLBTpXU7XjhzckQe6afDd0VSY9HfP35d319/fV69v7v73l2n+9/ffb+x40LDw8Pb7T0Z1dy69eAdnH53V6vGQ8PD+82b3MYzDb3/IDJvyw8PDy8T+NtUmseu9sDAw8PD++Tec+idnJg5PfHw8PD+194STEiL7wmS0++mrfWWvDw8PAmKfdAafU9r6/39/Dw8PBGRYT8kGg35VkQr1eLh4eHd4GXtKw25YO2XNu22aJjAw8PD+8yL//Y5hhox6pWxVw8PDy8o7x8o0/i9etPtcXZzVGBh4eH9x5eHq83mDoQl5/Cw8PDu82bNcBmpCReJ/e/0uvDw8PDK3ltVG3bVznjxg+Ah4eHd5bXLiXZ0NthglNP/KGMi4eHh3eIl5do2809j+CzUkLeVMPDw8M7y9u3sjaBuB2KzVtieHh4ePd4eZtqdp1tpA1baHh4eHgXeLNSQtuUagetNsEdDw8P7x6vjad5sJ4NEOSHTbQSPDw8vGu82ea+icv5Hr4J4nh4eHg3eDlpX0pIjo39YRD9hnh4eHiHeO1gU76se1MPUREZDw8P7yivDbh5zG3vkJRo69iNh4eHd4G3b1NtQvCmYjArH+Ph4eHteck/8+3i8miejykcKODi4eHhXeO1iz41pDUL0D9Edjw8PLwLvHZcoA3ZbZF3Nr5Q/JeAh4eHt+YlD948ftb+T54SPREPDw/vjbzNVr6aYhjF92ImAg8PD2/Ny692u8+LrW00b48NPDw8vBu8fAhgVkidBevZwYCHh4f3Tt6mzb/f9NshraJai4eHh/ervLa71C5304p7egc8PDy8j+HNvo4Zps3JBw4GPDw8vICXFCM2BYu8SJE35/Dw8PB+i9c2wDZtszaOHxsOwMPDwzvD+wtyfs8U+HsR5gAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3aO3LDMAxFUe1/00qbFJHuA5R4BFxVGY9N8qhAiM9x4Of89vBv8u+nuxQfGTJkvJZxXj7Xh+NbkvWvYTcvSIYMGQsYJBSSEJyGy+sVyNlkyJAhoxUEAZgHXxkyZMhIGbWkNAXLkCFDRprEkstcehH8QC4uQ4aMFzLS7f/z7z/pb8iQIeNVjDN80gZnfzV0KhkyZIxm8ACXNh1rLczaSIcMGTJmM8hyPO3kxyIpKynPHXx7GTJkjGDwIho/ROegJMT/esOVIUPGIMZTCWQ6TpEii9VBGTJkjGDwYz31Cdn3gTELGTJkDGXUBi/4yAVZp1iGkyFDxgJG+nmtqZmW50jh70cuLkOGjKEM3lwkaWetNEbKfOjSKUOGjAWMp1oCnfZAGvTj9yFDhowXMtJjpcGx1p3gu8iQIWMDg2BIzO5cENPmRDHsypAhYxyDjzt0wnE6eHETmmXIkDGU0Ql/tZCajqChRFqGDBmjGTwR7bQNyMq1wbKDR3cZMmQMZaSBuDaikV4u0Q1XhgwZCxhpKa027JWOlMXDFjJkyBjHIIV4fgXsvxTyWxkyZGxgnOGTDnXVrowxVYYMGaMZ6ahWv2FJjkW+T66YMmTImMToNAB40OTvj19VZciQsY0RjDU0WpL9/wA3ubgMGTJkhGW4Wrmfn+rgG8uQIWMZIw3B/QwbjXfIkCFjASNNStMAnQ5Y8AuiDBkyNjD4z/rhOIXVUmsZMmQMYnwBs9NBz8+8CqwAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
