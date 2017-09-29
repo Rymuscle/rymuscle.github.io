@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="CrossDomain">
-    <meta name="description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求   jsonp跨域请求案例www.test.com/index.html12345678910111213141516171819202122232425262728293031323334&amp;lt;!DOCTYPE htm">
+    <meta name="description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求 ;  注意: JSONP跨域发送Cookie的话, 只用设置好cookie的domain属性为顶级域名即可 ;   ajax使用jsonp跨域的时候是可以轻松像上面这样带上cookie给所跨的域的 ; 而下一篇介绍的aja">
 <meta name="keywords" content="CrossDomain">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JSONP方案">
-<meta property="og:url" content="http://blog.renyimin.com/2015/09/18/JsonpAjax/index.html">
+<meta property="og:url" content="http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求   jsonp跨域请求案例www.test.com/index.html12345678910111213141516171819202122232425262728293031323334&amp;lt;!DOCTYPE htm">
+<meta property="og:description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求 ;  注意: JSONP跨域发送Cookie的话, 只用设置好cookie的domain属性为顶级域名即可 ;   ajax使用jsonp跨域的时候是可以轻松像上面这样带上cookie给所跨的域的 ; 而下一篇介绍的aja">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-26T13:41:57.000Z">
+<meta property="og:updated_time" content="2017-09-29T04:53:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JSONP方案">
-<meta name="twitter:description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求   jsonp跨域请求案例www.test.com/index.html12345678910111213141516171819202122232425262728293031323334&amp;lt;!DOCTYPE htm">
+<meta name="twitter:description" content="JSONP说明及注意 JSONP是服务器与客户端 跨源通信 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;  但是，JSONP只能发GET请求 ;  注意: JSONP跨域发送Cookie的话, 只用设置好cookie的domain属性为顶级域名即可 ;   ajax使用jsonp跨域的时候是可以轻松像上面这样带上cookie给所跨的域的 ; 而下一篇介绍的aja">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -163,7 +163,7 @@
         </nav>
     </aside>
     
-<article id="post-JsonpAjax"
+<article id="post-sameoriginpolicy03-ajax-disabled-jsonp"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
@@ -187,11 +187,16 @@
             <h2 id="JSONP"><a href="#JSONP" class="headerlink" title="JSONP"></a>JSONP</h2><h3 id="说明及注意"><a href="#说明及注意" class="headerlink" title="说明及注意"></a>说明及注意</h3><ol>
 <li><p>JSONP是服务器与客户端 <strong>跨源通信</strong> 的常用方法, 最大特点就是简单适用, 老式浏览器全部支持, 服务器改造非常小 ;</p>
 </li>
-<li><p>但是，<strong>JSONP只能发GET请求</strong></p>
+<li><p>但是，<strong>JSONP只能发GET请求</strong> ;</p>
+</li>
+<li><p><strong>注意:</strong> JSONP跨域发送Cookie的话, 只用设置好<code>cookie的domain属性</code>为顶级域名即可 ;</p>
 </li>
 </ol>
-<h3 id="jsonp跨域请求案例"><a href="#jsonp跨域请求案例" class="headerlink" title="jsonp跨域请求案例"></a>jsonp跨域请求案例</h3><p>www.test.com/index.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">        $(document).ready(function()&#123;</div><div class="line">            $(&quot;#btn&quot;).click(function(k) &#123;</div><div class="line">                var data = $(&quot;form&quot;).serializeArray();//序列化name/value</div><div class="line">                $.ajax(&#123;</div><div class="line">                    type: &apos;GET&apos;,  //这里用GET</div><div class="line">                    url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                    dataType: &apos;jsonp&apos;,  //类型</div><div class="line">                    data: data,</div><div class="line">                    jsonp: &apos;callback&apos;, //jsonp回调参数，必需</div><div class="line">                    async: false,</div><div class="line">                    success: function (result) &#123;//返回的json数据</div><div class="line">                        console.log(result); //回调输出</div><div class="line">                    &#125;,</div><div class="line">                    timeout: 3000</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">    &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>ajax使用jsonp跨域的时候是可以轻松像上面这样带上cookie给所跨的域的 ;</p>
+<p>而下一篇介绍的ajax使用cors方案跨域的话, 除了设置了cookie的 <code>document.domain</code> 为两个地址的顶级域名, 却也不能带上cookie, 还需要注意 前端和服务端的 <code>withCredentials</code> 头字段 ;</p>
+<h3 id="jsonp跨域请求案例"><a href="#jsonp跨域请求案例" class="headerlink" title="jsonp跨域请求案例"></a>jsonp跨域请求案例</h3><p>www.test.com/index.html<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">    &lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">        $(document).ready(function()&#123;</div><div class="line">            //注意, 此时jsonp是会带上cookie的</div><div class="line">            //当然不设置domain的话, test.test.com自然获取不到cookie</div><div class="line">            document.cookie = &quot;name=value; domain=test.com&quot;;</div><div class="line">            $(&quot;#btn&quot;).click(function() &#123;</div><div class="line">                var data = $(&quot;form&quot;).serializeArray();//序列化name/value</div><div class="line">                $.ajax(&#123;</div><div class="line">                    type: &apos;GET&apos;,  //这里用GET</div><div class="line">                    url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                    dataType: &apos;jsonp&apos;,  //类型</div><div class="line">                    data: data,</div><div class="line">                    jsonp: &apos;callback&apos;, //jsonp回调参数，必需</div><div class="line">                    async: false,</div><div class="line">                    success: function (result) &#123;//返回的json数据</div><div class="line">                        console.log(result); //回调输出</div><div class="line">                    &#125;,</div><div class="line">                    timeout: 3000</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">    &lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">    &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
 <p>test.test.com/index.php<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//jsonp回调参数，必需</span></div><div class="line">$callback = <span class="keyword">isset</span>($_GET[<span class="string">'callback'</span>]) ? trim($_GET[<span class="string">'callback'</span>]) : <span class="string">''</span>;</div><div class="line"></div><div class="line">$sex = <span class="keyword">isset</span>($_GET[<span class="string">'sex'</span>]) ? trim($_GET[<span class="string">'sex'</span>]) : <span class="string">''</span>;</div><div class="line">$age = <span class="keyword">isset</span>($_GET[<span class="string">'age'</span>]) ? trim($_GET[<span class="string">'age'</span>]) : <span class="string">''</span>;</div><div class="line"></div><div class="line">$data = [<span class="string">"sex"</span> =&gt; $sex, <span class="string">"age"</span> =&gt; $age];</div><div class="line">$res = json_encode($data); <span class="comment">//json 数据</span></div><div class="line"><span class="comment">// 不能用return</span></div><div class="line"><span class="keyword">echo</span> $callback . <span class="string">'('</span> . $res . <span class="string">')'</span>;  <span class="comment">//返回格式，必需</span></div></pre></td></tr></table></figure></p>
+<p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考</a></p>
 
         </div>
 
@@ -228,7 +233,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&title=《JSONP方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&title=《JSONP方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -238,22 +243,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&title=《JSONP方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&title=《JSONP方案》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/18/JsonpAjax/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSONP方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSONP方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -276,16 +281,16 @@
 <nav class="post-nav flex-row flex-justify-between">
   
     <div class="waves-block waves-effect prev">
-      <a href="/2015/09/19/CorsAjax/" id="post-prev" class="post-nav-link">
+      <a href="/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" id="post-prev" class="post-nav-link">
         <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">CORS方案</h4>
+        <h4 class="title">CORS方案01 (真对simple request)</h4>
       </a>
     </div>
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2015/09/17/SameOriginPolicy03/" id="post-next" class="post-nav-link">
+      <a href="/2015/09/17/sameoriginpolicy02-ajax-disabled/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
         <h4 class="title">同源策略的限制 -- Ajax请求不能发送</h4>
       </a>
@@ -398,7 +403,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&title=《JSONP方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&title=《JSONP方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -408,22 +413,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&title=《JSONP方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&title=《JSONP方案》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/18/JsonpAjax/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSONP方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/18/JsonpAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JSONP方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/18/JsonpAjax/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -434,7 +439,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACL0lEQVR42u3ay07DMBAF0P7/TxeJFRIluXecItU5XlUojX26GDyPxyNez+/1199/ruNv/X7y9+e/9rpgYWBgfCzjebiS466TEtjJGTAwMG7AOA6y7eFyfE46OTMGBgbGRUH22n0xMDAwktethNrjCygGBgbGLInND5FfBJOr4cW5OAYGxgcy2sbAf35+Y38DAwPjQxjPcs3anLMWZnEqDAyMrRkrRfk2+Wwvi/WTGBgYmzLadLE97uz55LL44v8GBgbGpozZlW6GfHtRDwMD4waMZPv1JLa9FBbpNAYGxqaM9bLa8UDY7AfKQ/BJ1RADA2MLRh5w1wPoelPz5CfAwMC4AWNW+s9Hu/JwnLctMTAw7slor31JWW022VU/iYGBsTVjduHLhzNWynZtiouBgbEfoy3Kz4pu6+NfxyfEwMDYm3EcKGcjX22hrQ3T9cwIBgbGRoykvJWwk+Ja3oqoy20YGBjbMdpQu3LEGSNKcTEwMLZmrA9+tdfEfK9ZcxQDA2M/xjuK9Xka3LYlho0BDAyMGzCu7YvOBjVOQjkGBsbWjLZlOCzZlyE1b2q++BYGBsZ2jGe52uvdSumtCLsYGBhbM1YCYt7yTDbOmwQrYR0DA+NzGW0QzMcjZs3RZNQDAwPjnow2CCZFullxbZjuYmBgYMSpbD6c0bYNTt6DgYGBEV8W26O0yJN+LAYGxtaM9SQ2L70lh6vfj4GBsTWjTR1npf+2/dk2DDAwMDZlfAEnHv71C8IL/gAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqElEQVR42u3aQW4cMQwEQP//0w6QazCDblKyN0DNyVjYsyodRLqpr6/4+f77/PvJ++fvv/P0c/JXhx88PDy80dLfl5UsOge8r2G2EY+rwsPDw7vGS5Z4oxbl78y3CQ8PD+9zeO2r2xY5Lxt4eHh4/y8vLx6rJf5WYcDDw8N75SVhxNkCsN+aw1kLHh4eXsxrI4NP+PnifA8PDw9vMVXPD+VklHVvVY+rxcPDw7vA24cF7aWrWZibbFbxHwMeHh7emjcb7c/C3Fkk0Q7DCiQeHh7eiJcfu3khaTdlFgdHm4uHh4d3jdeGC+8vzRv0sy37Y2HAw8PDu8CbHcFtHLBptYcBBB4eHt4FXv6KttnNvyVZbl7AHrNqPDw8vDXv1PXQ/OA+NQCLvhEPDw/vAi9f0OaT/ApXG0DUkQceHh7empcP7/NGtu7l4ya+buXx8PDwLvDycHYTDWzGZrPo9nEAhoeHh7fmFQOkeGS1AZzaLDw8PLx7vNkRnyyxPdbzULguZnh4eHhHeXnW2y7r/Z2zCLgtUXh4eHi/xdtcC2hj3LyoRNuBh4eH9yO8WTyRN76z437YsuPh4eFd4+X/6m9i1tkVhPa6AB4eHt5tXj7U3wyicvaeioeHh/cJvCSqmMWyxeLigRweHh7ebd538LQDrU0McXiD8PDw8H6Ql4+dkkChjX3bgvG4Kjw8PLwLvPyL2ysFSXnIm/L9BuHh4eGd4n2Xz+bqVd6IJ98VhSN4eHh4F3ibq1SzcdSmKW//Fg8PD+8ebx/j5vFrW1rat30l9QQPDw/vEK+NFWbsPNjdBMF4eHh4n8NrD/figlTZUuef4OHh4X0Cr2W3EUYS7BahMx4eHt41XntkF0fzoShkWB7w8PDwLvBmWegm0m1j3LztHj54eHh4Ke8Pe8zkKUYJqrQAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

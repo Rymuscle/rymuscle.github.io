@@ -13,7 +13,7 @@
     
     
     
-    <title>CORS方案 | Lant&#39;s Blog</title>
+    <title>CORS方案01 (真对simple request) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,8 +23,8 @@
     <meta name="description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
 <meta name="keywords" content="CrossDomain">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CORS方案">
-<meta property="og:url" content="http://blog.renyimin.com/2015/09/19/CorsAjax/index.html">
+<meta property="og:title" content="CORS方案01 (真对simple request)">
+<meta property="og:url" content="http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
 <meta property="og:locale" content="zh-CN">
@@ -32,9 +32,9 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/cors-cookie.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2017-09-26T14:44:13.000Z">
+<meta property="og:updated_time" content="2017-09-27T05:42:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CORS方案">
+<meta name="twitter:title" content="CORS方案01 (真对simple request)">
 <meta name="twitter:description" content="CORS说明 CORS是一个W3C标准, 全称是 “跨域资源共享 “(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求 ; 12众所周知，在以前，跨域可以采用 `代理`、`JSONP` 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allo">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors.png">
     
@@ -117,7 +117,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">CORS方案</div>
+        <div class="flex-col header-title ellipsis">CORS方案01 (真对simple request)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -139,7 +139,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">CORS方案</h1>
+        <h1 class="title">CORS方案01 (真对simple request)</h1>
         <h5 class="subtitle">
             
                 <time datetime="2015-09-19T04:45:07.000Z" itemprop="datePublished" class="page-time">
@@ -168,11 +168,11 @@
         </nav>
     </aside>
     
-<article id="post-CorsAjax"
+<article id="post-sameoriginpolicy04-ajax-disabled-cors-simple"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">CORS方案</h1>
+        <h1 class="post-card-title">CORS方案01 (真对simple request)</h1>
         <div class="post-meta">
             <time class="post-time" title="2015-09-19 12:45:07" datetime="2015-09-19T04:45:07.000Z"  itemprop="datePublished">2015-09-19</time>
 
@@ -259,7 +259,7 @@
  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
 <p> 否则, 报错如下:<br> <img src="/img/cross-domain/haha-server-withCredentials.png" width="500" height="160" alt="haha-server-withCredentials" align="center"></p>
 </li>
-<li><p>如果两边都不设置 <code>withCredentials</code> 属性的话, 也就是默认请求不带cookie, 那么即使请求方域1中设置了domain属性为 <code>.test</code> 的cookie值, 服务方(test.test.com)中也获取不到cookie, 因为域1默认请求就没有带cookie ;</p>
+<li><p>如果两边都不设置 <code>withCredentials</code> 属性的话, 也就是默认请求不带cookie, 那么即使请求方域1中设置了domain属性为 <code>.test.com</code> 的cookie值, 服务方(test.test.com)中也获取不到cookie, 因为域1默认请求就没有带cookie ;</p>
 </li>
 </ol>
 <blockquote>
@@ -301,7 +301,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&title=《CORS方案01 (真对simple request)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -311,22 +311,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&title=《CORS方案01 (真对simple request)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/CorsAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案01 (真对simple request)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -349,16 +349,16 @@
 <nav class="post-nav flex-row flex-justify-between">
   
     <div class="waves-block waves-effect prev">
-      <a href="/2016/03/10/clusore-introduction/" id="post-prev" class="post-nav-link">
+      <a href="/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/" id="post-prev" class="post-nav-link">
         <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">PHP的Closure学习整理</h4>
+        <h4 class="title">CORS方案02 (真对not-so-simple request)</h4>
       </a>
     </div>
   
 
   
     <div class="waves-block waves-effect next">
-      <a href="/2015/09/18/JsonpAjax/" id="post-next" class="post-nav-link">
+      <a href="/2015/09/18/sameoriginpolicy03-ajax-disabled-jsonp/" id="post-next" class="post-nav-link">
         <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
         <h4 class="title">JSONP方案</h4>
       </a>
@@ -471,7 +471,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&title=《CORS方案01 (真对simple request)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -481,22 +481,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/CorsAjax/&title=《CORS方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&title=《CORS方案01 (真对simple request)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/CorsAjax/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案01 (真对simple request)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/CorsAjax/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -507,7 +507,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHElEQVR42u3asbKDMAwEwPz/T+e1rzE5WaawvVQZBgjr4kbC+nzi4/t45NeMnjk6s/jAwMDYltF5xefX+n9+9JzRNeWlwcDAuIAxSrDRNXlQVmP0+X+H5zEwMDAeXyKJ6XwJMDAwMPqMnPeMzKMcAwMDI29iE3xeLOZLtrgXx8DA2JDRaSzf/v3K/gYGBsZWjG/x6FCTgJ58KwwMjKMZbzSi/Wuq74OBgXE2Yy5q8xY32dRMNgl+wDAwMK5nVMO3+l9JafgjsjEwMI5mVPNqrgTMq9QkyhfELgYGxoaMvE3NP5l1WtN8mTAwMG5j5EMVcwFdLRA7ZSgGBsZJjE5ZVh2VqDauhYjHwMC4gJGUg3PtZR7KyaIUvhpiYGAcyqjGaH/bsvr8aEsAAwPjUEY1IpP+cbKHLi4ZBgbGDYxVTeaqAbL+BioGBsapjLy9nCsf5+K7+skPAwPjHkZnI7MzOtZqYjEwMK5hPJM6sbu2TMTAwLiZkQfuXByXu+q3S0MMDIwNGf2PX9XITkY0CuUjBgbGNYxqy5qHcj6WMXkXBgbGoYy5prFf8OUbEtHSYGBgHM3ohF1/PKIa3J1yEwMDY3fGssmyoIjMW9MFY2EYGBjHMarBl7S11TKxGv0YGBgY+ThF3nbObTaUx8IwMDCuZ6z60lUtFhcHLgYGxoaMfDNg7q6kuW2VmxgYGEcz8rjMSeUWtDECgoGBcTTjD/Q5GQbnpaAUAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3aQW7cMAwF0Nz/0u22QOLp/6Q0nQLPq0Hs2HxaUALJr6/4+vVw/Xn3+5Pf7z698+nJ5D0HLjw8PLxDoT8FnYfe/n76Sv78D/Hg4eHhXeOdCnETenI3jxkPDw/vc3jtdpKfdZOzMR4eHt7/yMuLEcm2keDx8PDwPpO3SfH525KS7utSyMVaCx4eHl73/ijoz/l9pb+Hh4eHdyiJJ2l6VrptN5I6Wjw8PLwLvE1pYF9K2Byyizjx8PDwLvCSFldSPE3aXZti8eFaNR4eHt6ItzkutyMFbats9sVod8LDw8M7xHsNy9P6LNy8AFE0wPDw8PAu82bNp9nf8xJDslEdmNvCw8PDW/PaFJxvA7MW2jA2PDw8vAu8TUKfbR7t+/Nniq0CDw8Pb8HLU22xQqO2VjugEMWJh4eHd4HXBp1/JkncZ0e46r0ODw8Pb8Rri637Nv+NoavHZ/Dw8PAu8PIyaw6etbLyRamP+Hh4eHhHea8/NhvGyksb+VG7bYPh4eHh3eO1za2zx+t29Gp4EMfDw8M7ypsNNuXbwH6AoF0+PDw8vNu8/as3bf798b1op+Hh4eEd4s0YLXL2fFssxsPDw3s/L29EJYXXtqSbg4fFCDw8PLxDvDzEfYkhL8K2DbaiGIGHh4d3iDdL02cHBWYH6ChmPDw8vGu8fXk3T/GzDSZZIDw8PLz3806l5v1QQtS1y4u5eHh4eId4m3b+ptPUjnC1y/GXKjUeHh7egtcm3Dag9tg9e/7AhYeHh1fyks2gPS7PknX+3XwR8fDw8O7x8kbXZiPZFBoO1Frw8PDw/imvHQsYBhePLNQvxcPDw3s7b5askwNx3pyLlg8PDw/vGq8drmqTeDtW1W4nj/+Fh4eHd4E3O+zO2ld5cs/LxFdqGHh4eHg/X78BSnENAaXssDUAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

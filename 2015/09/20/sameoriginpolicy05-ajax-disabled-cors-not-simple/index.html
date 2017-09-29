@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>CORS方案02 (真对not-so-simple request) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="CrossDomain">
+    <meta name="description" content="非简单请求预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ; 浏览器先询问服务器, 当前网页所在的域">
+<meta name="keywords" content="CrossDomain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CORS方案02 (真对not-so-simple request)">
+<meta property="og:url" content="http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="非简单请求预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ; 浏览器先询问服务器, 当前网页所在的域">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/2times_request.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/preflight01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/preflight01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/preflight02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/no-simple-error01.png">
+<meta property="og:updated_time" content="2017-09-27T09:42:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CORS方案02 (真对not-so-simple request)">
+<meta name="twitter:description" content="非简单请求预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ; 浏览器先询问服务器, 当前网页所在的域">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">CORS方案02 (真对not-so-simple request)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">CORS方案02 (真对not-so-simple request)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2015-09-20T12:10:16.000Z" itemprop="datePublished" class="page-time">
+  2015-09-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#非简单请求"><span class="post-toc-number">1.</span> <span class="post-toc-text">非简单请求</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#预检请求-preflight-说明"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">预检请求 preflight 说明</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#非简单请求的例子"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">非简单请求的例子</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#分析"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#预检请求"><span class="post-toc-number">1.1.2.1.</span> <span class="post-toc-text">预检请求</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#预检响应"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">预检响应</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#浏览器的正常请求和回应"><span class="post-toc-number">1.1.4.</span> <span class="post-toc-text">浏览器的正常请求和回应</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#WebSocket"><span class="post-toc-number">2.</span> <span class="post-toc-text">WebSocket</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-sameoriginpolicy05-ajax-disabled-cors-not-simple"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">CORS方案02 (真对not-so-simple request)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2015-09-20 20:10:16" datetime="2015-09-20T12:10:16.000Z"  itemprop="datePublished">2015-09-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="非简单请求"><a href="#非简单请求" class="headerlink" title="非简单请求"></a>非简单请求</h2><h3 id="预检请求-preflight-说明"><a href="#预检请求-preflight-说明" class="headerlink" title="预检请求 preflight 说明"></a>预检请求 <code>preflight</code> 说明</h3><ol>
+<li><p>非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 <code>PUT</code> 或 <code>DELETE</code>, 或者 <code>Content-Type</code> 字段的类型是 <code>application/json</code> ;</p>
+</li>
+<li><p>非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 <code>&quot;预检&quot;请求(preflight)</code> ;<br> 浏览器先询问服务器, 当前网页所在的域名是否在服务器的许可名单之中, 以及可以使用哪些HTTP动词和头信息字段;<br> 只有得到肯定答复, 浏览器才会发出正式的XMLHttpRequest请求, 否则就报错 ;</p>
+</li>
+<li><p>非简单请求会导致原先的一次请求变成两次, 第一次请求是 <code>预检请求</code> ;</p>
+</li>
+<li><p>“预检”请求用的请求方法是 <code>OPTIONS</code>，表示这个请求是用来<code>询问</code>的，头信息里面，关键字段是Origin，表示请求来自哪个源 ;<br> 即使你的请求方法是 <code>GET</code>, <code>POST</code> 或者 <code>HEAD</code>(只是请求时自定义了一些header首部字段), 你的这个跨域请求也是 <code>非简单请求</code>，此时请求头显示的 ；</p>
+</li>
+</ol>
+<h4 id="非简单请求的例子"><a href="#非简单请求的例子" class="headerlink" title="非简单请求的例子"></a>非简单请求的例子</h4><ol>
+<li><p>www.test.com/index.php<br> 本例子使用 <code>PUT</code> 来进行ajax请求, 满足 <code>非简单请求</code> 的条件 ;<br> 另外, 本例还<code>自定义了请求时的 header 首部字段</code>, 也满足 <code>非简单请求</code> 的条件 ;</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="meta">?&gt;</span></div><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=<span class="string">"en"</span>&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=<span class="string">"https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js"</span>&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=<span class="string">"text/javascript"</span> &gt;</div><div class="line">        $(document).ready(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">            $(<span class="string">"#btn"</span>).click(<span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">                <span class="comment">//序列化name/value</span></div><div class="line">                <span class="keyword">var</span> data = $(<span class="string">"form"</span>).serializeArray();</div><div class="line">                $.ajax(&#123;</div><div class="line">                    <span class="comment">//这里用PUT, 则为复杂请求</span></div><div class="line">                    type: <span class="string">'PUT'</span>,</div><div class="line">                    url: <span class="string">'http://test.test.com/index.php'</span>,</div><div class="line">                    dataType: <span class="string">'json'</span>,</div><div class="line">                    data: data,</div><div class="line">                    <span class="comment">//或者如果你自定义了一些请求时的 header 首部字段, 那么请求就也是 复杂请求</span></div><div class="line">                    headers: &#123;<span class="string">"custom-header-field"</span> : <span class="string">"test"</span>&#125;,</div><div class="line">                    success: <span class="function"><span class="keyword">function</span> <span class="params">(result)</span> </span>&#123;</div><div class="line">                        console.log(result);</div><div class="line">                    &#125;,</div><div class="line">                    timeout: <span class="number">3000</span></div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=<span class="string">"form"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"sex"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"age"</span>&gt;</div><div class="line">    &lt;input type=<span class="string">"button"</span> id=<span class="string">"btn"</span> value=<span class="string">"button"</span> /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>test.test.com/index.php</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//服务器允许的 Origin</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="comment">//服务器允许的 methods</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Methods: PUT, GET, POST"</span>);</div><div class="line"><span class="comment">//服务器允许设置的头部字段</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Headers: custom-header-field"</span>);</div><div class="line"></div><div class="line">$arguments = file_get_contents(<span class="string">'php://input'</span>);</div><div class="line"><span class="keyword">echo</span> json_encode([<span class="string">'arguments'</span> =&gt; $arguments]);</div></pre></td></tr></table></figure>
+</li>
+<li><p>注意: 像上面例子的复杂跨域请求<br> 必须: 首先和简单请求一样, 服务器端的 <code>Access-Control-Allow-Origin</code> 是必须设置的, 不然首先就跨不了域;</p>
+<p> 必须: 其次, 是使用了 <code>get</code>, <code>post</code>, <code>head</code> 之外方法的 <code>复杂请求</code>, 那么就必须在服务端有对应的 <code>Access-Control-Allow-Method</code>, 否则:<br> <img src="/img/cross-domain/not-simple-error01.png" width="597" height="133" alt="not-simple-error01" align="center"></p>
+<p> 可选: 如果你自定义了 <code>自定义首部字段</code> 的 <code>复杂请求</code>, 那么也要在服务端有对应的 <code>Access-Control-Allow-Headers</code>, 否则:<br> <img src="/img/cross-domain/not-simple-error02.png" width="598" height="150" alt="not-simple-error02" align="center"></p>
+</li>
+<li><p>另外需要关注的是:<br> 如果你设置了自定义的首部字段, 那么即使你的请求类型是get, post, head, 自然也是复杂请求, 此时的HTTP请求方法显示的仍然如下:</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Request Method:OPTIONS</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><h5 id="预检请求"><a href="#预检请求" class="headerlink" title="预检请求"></a>预检请求</h5><ol>
+<li><p>上面<code>www.test.com/index.php</code>代码进行ajax请求的时候, HTTP请求的方法是<code>PUT</code>, 所以浏览器会发现, 这是一个非简单请求, 就自动发出一个”预检”请求, 要求服务器确认可以这样请求 ;</p>
+</li>
+<li><p>所以请求应该是包括预检请求和真正的请求两个请求的:<br><img src="/img/cross-domain/2times_request.png" width="600" height="360" alt="2times_request" align="center"></p>
+</li>
+<li><p>下面是这个”预检”请求的HTTP头信息 和 回应信息:<br><img src="/img/cross-domain/preflight01.png" width="700" height="500" alt="preflight01" align="center"></p>
+</li>
+<li><p>可以看到, “预检”请求用的请求方法是OPTIONS, 表示这个请求是用来询问的, 头信息里面, 关键字段是Origin, 表示请求来自哪个源;<br>除了Origin字段，”预检”请求的头信息包括两个特殊字段:<br>(1)<code>Access-Control-Request-Method</code><br>该字段是必须的，用来列出浏览器的CORS请求会用到哪些HTTP方法，上例是PUT ;<br>(2)<code>Access-Control-Request-Headers</code><br>该字段是一个逗号分隔的字符串，指定浏览器CORS请求会额外发送的头信息字段, 上例是X-Custom-Header ;</p>
+</li>
+</ol>
+<h4 id="预检响应"><a href="#预检响应" class="headerlink" title="预检响应"></a>预检响应</h4><ol>
+<li><p>从下面预检请求的截图中，可以看到预检请求的回应中, 服务器收到”预检”请求以后, 检查了 <code>Origin</code>、<code>Access-Control-Request-Method</code> 和 <code>Access-Control-Request-Headers</code> 字段以后，确认允许跨源请求，就可以做出回应 ;<br> <img src="/img/cross-domain/preflight01.png" width="700" height="500" alt="preflight01" align="center"></p>
+<p> 并且预检请求部分是不会真的发送数据的:<br> <img src="/img/cross-domain/preflight02.png" width="400" height="150" alt="preflight02" align="center"></p>
+</li>
+<li><p>上面的HTTP回应中，关键的是 <code>Access-Control-Allow-Origin</code> 字段，表示 <code>http://www.test.com</code> 可以请求数据, <strong>该字段也可以设为星号</strong>，表示同意任意跨源请求 ;</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Origin: http:<span class="comment">//www.test.com</span></div><div class="line">或者</div><div class="line">Access-Control-Allow-Origin: *</div></pre></td></tr></table></figure>
+</li>
+<li><p>如果浏览器否定了”预检”请求，会返回一个正常的HTTP回应，但是没有任何CORS相关的头信息字段 ; 这时，浏览器就会认定，服务器不同意预检请求，因此触发一个错误，被 <code>XMLHttpRequest</code> 对象的 <code>onerror</code> 回调函数捕获;<br> 控制台会打印出如下的报错信息 ;</p>
+<p><img src="/img/cross-domain/no-simple-error01.png" width="650" height="150" alt="no-simple-error01" align="center"></p>
+</li>
+<li></li>
+</ol>
+<pre><code>服务器回应的其他CORS相关字段如下:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Methods: GET, POST, PUT</div><div class="line">Access-Control-Allow-Headers: X-Custom-Header</div><div class="line">Access-Control-Allow-Credentials: true</div><div class="line">Access-Control-Max-Age: 1728000</div></pre></td></tr></table></figure>
+
+（1）Access-Control-Allow-Methods
+该字段必需，它的值是逗号分隔的一个字符串，表明服务器支持的所有跨域请求的方法。注意，返回的是所有支持的方法，而不单是浏览器请求的那个方法。这是为了避免多次&quot;预检&quot;请求。
+（2）Access-Control-Allow-Headers
+如果浏览器请求包括Access-Control-Request-Headers字段，则Access-Control-Allow-Headers字段是必需的。它也是一个逗号分隔的字符串，表明服务器支持的所有头信息字段，不限于浏览器在&quot;预检&quot;中请求的字段。
+（3）Access-Control-Allow-Credentials
+该字段与简单请求时的含义相同。
+（4）Access-Control-Max-Age
+该字段可选，用来指定本次预检请求的有效期，单位为秒。上面结果中，有效期是20天（1728000秒），即允许缓存该条回应1728000秒（即20天），在此期间，不用发出另一条预检请求。
+</code></pre><p>Method PUT is not allowed by Access-Control-Allow-Methods in preflight response.</p>
+<h4 id="浏览器的正常请求和回应"><a href="#浏览器的正常请求和回应" class="headerlink" title="浏览器的正常请求和回应"></a>浏览器的正常请求和回应</h4><ol>
+<li><p>一旦服务器通过了”预检”请求，以后每次浏览器正常的CORS请求，就都跟简单请求一样，会有一个Origin头信息字段 ;</p>
+</li>
+<li><p>服务器的回应，也都会有一个 <code>Access-Control-Allow-Origin</code> 头信息字段 ;</p>
+</li>
+<li><p>下面是”预检”请求之后，浏览器的正常CORS请求:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">PUT /cors HTTP/1.1</div><div class="line">Origin: http://api.bob.com</div><div class="line">Host: api.alice.com</div><div class="line">X-Custom-Header: value</div><div class="line">Accept-Language: en-US</div><div class="line">Connection: keep-alive</div><div class="line">User-Agent: Mozilla/5.0...</div></pre></td></tr></table></figure>
+<p> 上面头信息的Origin字段是浏览器自动添加的;</p>
+<p> 下面是服务器正常的回应:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Origin: http://api.bob.com</div><div class="line">Content-Type: text/html; charset=utf-8</div></pre></td></tr></table></figure>
+<p> 上面头信息中, <code>Access-Control-Allow-Origin</code> 字段是每次回应都必定包含的 ;</p>
+</li>
+</ol>
+<h2 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h2><blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">参考 CORS</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&title=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&title=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/03/10/clusore-introduction/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">PHP的Closure学习整理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2015/09/19/sameoriginpolicy04-ajax-disabled-cors-simple/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">CORS方案01 (真对simple request)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&title=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&title=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CORS方案02 (真对not-so-simple request)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/20/sameoriginpolicy05-ajax-disabled-cors-not-simple/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAADLklEQVR42u3aQW7jQAwEwPz/09rzIrDSzZGBmCmdgtjWqMYHepr8+oqv69v1/f+vPjX7f77Wq7s9cGFjY2N/CPu6vZL3vHqU+zskG3e/Kfebdf+E2NjY2PvY+TL3vFnpSt6Zfz3RutjY2NjYt4UqedzZHdrVsbGxsbHzwtMeMNoNyoMnbGxs7L/Jzn/i54vdx0k59anwCxsbG3sru414fvPfb+lvY2NjY/9i9lVeecSTFJVZgDV78v/WxcbGxl7EbgOjE1gS97dxVTvug42Njb2VnfzQb0dw2pBo1mB4oL2BjY2N/eHs9rDRfio/cuSbe95OwMbGxt7Hvn/o9lFmpNkhJ99obGxs7K3s5Ad9Es3M2rGzvnQ+VBSthY2Njb2InVNn5SRp9Oav3r9n1oTAxsbG/kR2+9CzA8ls9KdtABcxFjY2NvYidh6+56Xo2UA/X7FeFxsbG3sFOwlo2tiofbUNpE4CLGxsbOyt7Lbtmvz0P4+BZklYUlCxsbGxN7Gj8KUcuzkpOXkTNw+kfojGsLGxsVewZ6S8efCOjvRsI7CxsbH3sa/gOm/Ktp+64ms21oONjY29iT1bOD+i5PHTyQblI0RRIoWNjY39UezkONEWsHzs5uQQko/vvBzZwcbGxl7Ebkdt2pZqG/q0IVQdbGFjY2OvY7cFJl+sLi0Hm1gUSGxsbOxF7Nnt8uNBu0GzO7RhFjY2NvYmdjuI0xaP83vmbYDiSbCxsbFXs9uilQRPbWh10kKI7oaNjY29jj1r4s6OCs+uOBv0wcbGxt7Erlukj75ntgVJoUqGjbCxsbH3sZ8KlZ4d63lH5ISNjY29lT0bqWkD+vwOJ3eOvkhsbGzsdexZNJMcP2ZzMu2RIy+T2NjY2JvYV3nlhSQK6ONy1Ra2H0IrbGxs7EXs/MobAPkRZdZgyDdu1orGxsbG/kR2W5Bmgc5J7ThZ8eUzYGNjY69jnxSGWdHKA6bZUSfK0rCxsbH/MHs2xJM/VnLPdogHGxsbG7seixmVsTxCmh1msLGxsbey8+Zu3kI4+dQsNnpLewAbGxv717NngzVJWJ8fM2bxUNsAxsbGxl7H/gey5SFMGVrfRAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

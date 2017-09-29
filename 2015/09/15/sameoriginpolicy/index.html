@@ -24,11 +24,11 @@
 <meta name="keywords" content="CrossDomain">
 <meta property="og:type" content="article">
 <meta property="og:title" content="浏览器的同源策略(Same origin policy)">
-<meta property="og:url" content="http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/index.html">
+<meta property="og:url" content="http://blog.renyimin.com/2015/09/15/sameoriginpolicy/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策； 最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ：1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ； 2.域名相同http://blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-26T01:45:40.000Z">
+<meta property="og:updated_time" content="2017-09-27T12:26:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浏览器的同源策略(Same origin policy)">
 <meta name="twitter:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策； 最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ：1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ； 2.域名相同http://blog">
@@ -163,7 +163,7 @@
         </nav>
     </aside>
     
-<article id="post-SameOriginPolicy01"
+<article id="post-sameoriginpolicy"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
@@ -194,7 +194,7 @@
 <p>更可怕的是，Cookie 往往用来保存用户的登录状态，如果用户没有退出登录，其他网站就可以内置一些A网站的访问路径, 因为这样就可以拿到A网站之前存在用户本地的cookie, 这样就可以冒充用户，为所欲为，因为浏览器同时还规定，提交表单不受同源政策的限制 ;</p>
 <p><strong>由此可见，”同源政策”是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了 ;</strong></p>
 <h2 id="同源策略的限制范围"><a href="#同源策略的限制范围" class="headerlink" title="同源策略的限制范围"></a>同源策略的限制范围</h2><p>随着互联网的发展, “同源政策”越来越严格, 目前, 如果非同源, 共有三种行为受到限制 :</p>
-<h3 id="Cookie、LocalStorage-和-IndexDB-无法读取"><a href="#Cookie、LocalStorage-和-IndexDB-无法读取" class="headerlink" title="Cookie、LocalStorage 和 IndexDB 无法读取"></a><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</h3><h3 id="DOM-无法获得"><a href="#DOM-无法获得" class="headerlink" title="DOM 无法获得"></a><code>DOM</code> 无法获得</h3><h3 id="AJAX-请求不能发送"><a href="#AJAX-请求不能发送" class="headerlink" title="AJAX 请求不能发送"></a><code>AJAX</code> 请求不能发送</h3><p>虽然这些限制是必要的，但是有时很不方便，合理的用途也受到影响, 将详细介绍，如何合理规避上面三种限制;</p>
+<h3 id="Cookie、LocalStorage-和-IndexDB-无法读取"><a href="#Cookie、LocalStorage-和-IndexDB-无法读取" class="headerlink" title="Cookie、LocalStorage 和 IndexDB 无法读取"></a><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</h3><h3 id="DOM-无法获得"><a href="#DOM-无法获得" class="headerlink" title="DOM 无法获得"></a><code>DOM</code> 无法获得</h3><h3 id="AJAX-请求不能发送"><a href="#AJAX-请求不能发送" class="headerlink" title="AJAX 请求不能发送"></a><code>AJAX</code> 请求不能发送</h3><p>虽然这些限制是必要的，但是有时很不方便，合理的用途也受到影响, 将详细介绍，如何合理规避上面三种限制 ;</p>
 <blockquote>
 <p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">摘自 阮一峰</a></p>
 </blockquote>
@@ -234,7 +234,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -244,22 +244,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -282,7 +282,7 @@
 <nav class="post-nav flex-row flex-justify-between">
   
     <div class="waves-block waves-effect prev">
-      <a href="/2015/09/16/SameOriginPolicy02/" id="post-prev" class="post-nav-link">
+      <a href="/2015/09/16/sameoriginpolicy01-cookie-disabled/" id="post-prev" class="post-nav-link">
         <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
         <h4 class="title">同源策略的限制 -- Cookie无法读取</h4>
       </a>
@@ -397,7 +397,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -407,22 +407,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&title=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/15/SameOriginPolicy01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/09/15/sameoriginpolicy/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -433,7 +433,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aMW7DMAwF0Nz/0unSIUBh95O0h9BPU5Easp4HghT5esXr/bE+fzl65u/K9zx6/oKFgYHxtYzk9ckLjp453+f8AxU+DQYGxgMYR8dKwmu+Tx45y3tiYGBgFANiAsj3x8DAwOgF3DyYJsnfBUEcAwPjAYw8dCbFbVLQnp/hxlocAwPjCxmTwvLuv2/pb2BgYHwV411cSRFbLXQn5/ndBwMDYzXjqkL02kZm7zwYGBhbGdXQmQfQ3n+bg2IYGBirGfNBil4B3GsA/MPDwMB4ACPfKAnHecJXbTlUkl4MDIwNjLwBmSeLd7QiCmMWGBgY6xi9MrUXQCdVZ7kix8DAWMfovaBa3PbanPknw8DA2MqothWrIbg6itELxBgYGE9gzCP0ZOSrV8QetgQwMDDWMSYlZS+VnNSeF1y6YWBgfCEjLxrzZK7akqyOiBVSQwwMjHWMajKXD3X19imkjxgYGKsZefp1X5Ct5rDNIhYDA2MFo3cBNxkFq7Yiyj1YDAyMRYxeApc3HZMDTRoSGBgYz2EkSWF+iCSM9gJxs5+AgYGxlNG71p8ctJdKYmBg7Ga8i6tHygvm5PdC5Y2BgbGCMbkaO08Ee6XvvOWAgYGxlVG9buu1PHspIAYGBsY88PXGIyZp32HqiYGBgTEInb1Lt3JTEwMDA6MYEC9L+PKWKgYGxgMYeTOgN0CWtwqa138YGBirGVeF0avaDPNTYWBgLGL8AJJrVYOTcxnlAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aMW7DMAwFUN//0unSoUAb55O0gVp6mgojYfQ8sKLI44jX68f6/eR89WIedywMDIzHMpJNvHtyvq3zX0kiF14QBgbGBox3P5yETuLkaTSPiYGBgVENlx/1kiSLgYGBMU+4eTJ9x8hfBAYGBkZexFa3fg6olriX1eIYGBgPZEwKy7v/vqW/gYGB8SjGq7jyZJokzfl+vuNgYGAszcgT3LwNkF/M9faDgYGxNmMy4tBrW1YHLwqHRQwMjEUZk2NfL2X3GgAf9omBgbE0o1qCTsAXbHQeDgMD44GMPAn2is/qsbI8ZoGBgbENY3KtVj3wXfuaMDAw1mYkiXIylpG3Fgqtyt+/hYGBsTQjL1Pz67C8AM5TfFRCY2BgLMrIU22v4MwbA5PEjYGBsRujOk5RLWt7h8sPTzAwMDZg5ONf+Wd6x778u38cDTEwMBZlXNto7KXgybAFBgbGDoz5UFe1JVlNxBcUsRgYGA9nzDdxVdFb6GOcv2IMDIxFGRPAtZ+sthyi/x4YGBgLMSaBqiMX85gYGBg7M5IiNmH3NpqPa2BgYOzDeBVXkkB7ibU69nrk51AMDIyHM6qX/vlgRNKSTA6jkwYnBgbGSozeSMS1bYM8EWNgYOzM6CW+arKeFLEfXhMGBgZG8ep/0lSoDm1gYGBg5HVw3jDoRb494WJgYPx7RvVCrVeOFsa8isdNDAyMtRn510Yh5psYl9MYGBgPZHwBE7GdO9CR2Q8AAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
