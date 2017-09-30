@@ -13,25 +13,25 @@
     
     
     
-    <title>Ajax请求不能发送 -- WebSocket方案 | Lant&#39;s Blog</title>
+    <title>认识 WebSocket 协议 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="CrossDomain,WebSocket">
-    <meta name="description" content="简介WebSocket是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信 ; 下面是一个例子，浏览器发出的WebSocket请求的头信息（摘自维基百科）。12345678GET /chat HTTP/1.1Host: server.example.comUpgrade: websocketConnection:">
-<meta name="keywords" content="CrossDomain,WebSocket">
+    <meta name="keywords" content="WebSocket">
+    <meta name="description" content="WebSocket协议WebSocket协议是基于TCP的一种新的网络协议, 它实现了浏览器与服务器全双工(full-duplex)通信 —— 允许服务器主动发送信息给客户端 ;WebSocket通信协议于2011年被IETF定为标准RFC 6455，并被RFC7936所补充规范 ;">
+<meta name="keywords" content="WebSocket">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Ajax请求不能发送 -- WebSocket方案">
-<meta property="og:url" content="http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/index.html">
+<meta property="og:title" content="认识 WebSocket 协议">
+<meta property="og:url" content="http://blog.renyimin.com/2015/07/10/websocket01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="简介WebSocket是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信 ; 下面是一个例子，浏览器发出的WebSocket请求的头信息（摘自维基百科）。12345678GET /chat HTTP/1.1Host: server.example.comUpgrade: websocketConnection:">
+<meta property="og:description" content="WebSocket协议WebSocket协议是基于TCP的一种新的网络协议, 它实现了浏览器与服务器全双工(full-duplex)通信 —— 允许服务器主动发送信息给客户端 ;WebSocket通信协议于2011年被IETF定为标准RFC 6455，并被RFC7936所补充规范 ;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-30T01:44:34.000Z">
+<meta property="og:updated_time" content="2017-09-30T02:52:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Ajax请求不能发送 -- WebSocket方案">
-<meta name="twitter:description" content="简介WebSocket是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信 ; 下面是一个例子，浏览器发出的WebSocket请求的头信息（摘自维基百科）。12345678GET /chat HTTP/1.1Host: server.example.comUpgrade: websocketConnection:">
+<meta name="twitter:title" content="认识 WebSocket 协议">
+<meta name="twitter:description" content="WebSocket协议WebSocket协议是基于TCP的一种新的网络协议, 它实现了浏览器与服务器全双工(full-duplex)通信 —— 允许服务器主动发送信息给客户端 ;WebSocket通信协议于2011年被IETF定为标准RFC 6455，并被RFC7936所补充规范 ;">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Ajax请求不能发送 -- WebSocket方案</div>
+        <div class="flex-col header-title ellipsis">认识 WebSocket 协议</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">Ajax请求不能发送 -- WebSocket方案</h1>
+        <h1 class="title">认识 WebSocket 协议</h1>
         <h5 class="subtitle">
             
-                <time datetime="2015-06-07T02:20:16.000Z" itemprop="datePublished" class="page-time">
-  2015-06-07
+                <time datetime="2015-07-10T04:40:16.000Z" itemprop="datePublished" class="page-time">
+  2015-07-10
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/WebSocket/">WebSocket</a></li></ul></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#例子"><span class="post-toc-number">2.</span> <span class="post-toc-text">例子</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#WebSocket协议"><span class="post-toc-number">1.</span> <span class="post-toc-text">WebSocket协议</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-sameoriginpolicy07-ajax-disabled-websocket"
+<article id="post-websocket01"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">Ajax请求不能发送 -- WebSocket方案</h1>
+        <h1 class="post-card-title">认识 WebSocket 协议</h1>
         <div class="post-meta">
-            <time class="post-time" title="2015-06-07 10:20:16" datetime="2015-06-07T02:20:16.000Z"  itemprop="datePublished">2015-06-07</time>
+            <time class="post-time" title="2015-07-10 12:40:16" datetime="2015-07-10T04:40:16.000Z"  itemprop="datePublished">2015-07-10</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/WebSocket/">WebSocket</a></li></ul></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
 
 
 
@@ -184,10 +184,8 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>WebSocket是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信 ;</p>
-<p>下面是一个例子，浏览器发出的WebSocket请求的头信息（摘自维基百科）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">GET /chat HTTP/1.1</div><div class="line">Host: server.example.com</div><div class="line">Upgrade: websocket</div><div class="line">Connection: Upgrade</div><div class="line">Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==</div><div class="line">Sec-WebSocket-Protocol: chat, superchat</div><div class="line">Sec-WebSocket-Version: 13</div><div class="line">Origin: http://example.com</div></pre></td></tr></table></figure></p>
-<p>上面代码中，有一个字段是Origin，表示该请求的请求源（origin），即发自哪个域名。<br>正是因为有了Origin这个字段，所以WebSocket才没有实行同源政策。因为服务器可以根据这个字段，判断是否许可本次通信。如果该域名在白名单内，服务器就会做出如下回应。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">HTTP/1.1 101 Switching Protocols</div><div class="line">Upgrade: websocket</div><div class="line">Connection: Upgrade</div><div class="line">Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=</div><div class="line">Sec-WebSocket-Protocol: chat</div></pre></td></tr></table></figure></p>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2>
+            <h2 id="WebSocket协议"><a href="#WebSocket协议" class="headerlink" title="WebSocket协议"></a>WebSocket协议</h2><p>WebSocket协议是基于TCP的一种新的网络协议, 它实现了浏览器与服务器全双工(full-duplex)通信 —— 允许服务器主动发送信息给客户端 ;<br>WebSocket通信协议于2011年被IETF定为标准RFC 6455，并被RFC7936所补充规范 ;</p>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -213,7 +211,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
 
 
             
@@ -223,7 +221,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&title=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/07/10/websocket01/&title=《认识 WebSocket 协议》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -233,22 +231,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&title=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/07/10/websocket01/&title=《认识 WebSocket 协议》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/07/10/websocket01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《认识 WebSocket 协议》 — Lant's Blog&url=http://blog.renyimin.com/2015/07/10/websocket01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/07/10/websocket01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -271,17 +269,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2015/05/30/sameoriginpolicy06-summary/" id="post-prev" class="post-nav-link">
+        <a href="/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">小结</h4>
+          <h4 class="title">Ajax请求不能发送 -- WebSocket方案</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2015/07/10/websocket01/" id="post-next" class="post-nav-link">
+      <a href="/2015/07/10/Data-communication-method01/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">认识 WebSocket 协议</h4>
+        <h4 class="title">网络数据通信方式</h4>
       </a>
     </div>
   
@@ -392,7 +390,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&title=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2015/07/10/websocket01/&title=《认识 WebSocket 协议》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -402,22 +400,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&title=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2015/07/10/websocket01/&title=《认识 WebSocket 协议》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2015/07/10/websocket01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ajax请求不能发送 -- WebSocket方案》 — Lant's Blog&url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《认识 WebSocket 协议》 — Lant's Blog&url=http://blog.renyimin.com/2015/07/10/websocket01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/06/07/sameoriginpolicy07-ajax-disabled-websocket/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2015/07/10/websocket01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -428,7 +426,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvElEQVR42u3aSY4bMRAEQP3/0/bVwIjtrIWCBog+Ca2lGTyQpSy+XvH155/r5/3TndO3Tu8mv/a6ceHh4eENhv7zOn0mZ+evT0/JP/9mCvDw8PCu8U4rarJkT5b75+nLf/N4Hw8PD+/LeHkBndS6yefx8PDwfiPveZnOC/Fq/IGHh4f3bbwkjMgD3OoGkEchF7MWPDw8vJiXl7/f8/pKfw8PDw9v3FXPo9Vq26w6huZo8fDw8C7wetFAtZjOQ4q8yC4cDsPDw8Nb5U2W+yTeTRpjvV+LphUPDw/vAq/wRhBSJE2vvD2WRxKFABcPDw/vAm9S2k6GW40z1hpgeHh4eIOjA3lZnIcC84ihGn9EvTs8PDy8JV61sZQAqkVwXoIXtgc8PDy8VV6yJeSL9aQon5Tsx+nGw8PDu8ybDy7fGOYTF21aeHh4eBd4zyXv2gMGoUavJRb16PDw8PBavLzM7RW1k4MIvU3ozb6Hh4eHt8rLs9483u21svJ9rFys4+Hh4a3y8uZ99cHVcDa/U9iu8PDw8K7xkiJ40iqb4HPwm7Hh4eHhXeDlD+5d1Q0mL+ufYXh4eHif4VUX+smxgF5AXN088PDw8O7xku3heRDJg6sFdO9beHh4eLd5vSNQ1aMAuxNUzlrw8PDwVnn5ICZ7Tq/BVg01CmEEHh4e3hJvPtA8VtgqoKOR4+Hh4X2clz84X+J77bFqaIKHh4f3SV5+YLTa5s+bXtUG2/FbeHh4eKu8ySGqnJEPems68PDw8O7xeq2sXtusWo7nTa/lTh0eHh7e0tB7TaytowZ5QPyf/h4eHh7eKq8ay1YX8aQZtrWBNet3PDw8vI/wEsDWppJPNx4eHt538qoxRG8iqo23UWaMh4eHV+RVjwJM4oPqUdRqTouHh4d3m9f7k58fq0omMT/AeiPCwMPDw4t5fwF1BWhtxfx02wAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aQW7DMAxEUd//0i7QbWplZigXEPm1ChK75ksBRhR5XfK6f5d7zdM7n+vz0+uNBQMGjGMZ93JVrtGR69fr58KAAWMOY51An4J2g9CzpR4bDBgwYOjpUkmy9efCgAEDRsbIUu26xIUBAwaMrIjNzrjWdylbw821OAwYMA5kuI2B/3z9Yn8DBgwYhzBuc7kNSz3VlqKCAQNGa0blUF5vG+hHb9kXAQMGjAmMbMTBbWHuaotK/xMYMGAMYOgFrZ6y9VZBZfgMBgwYvRn6kf0bp306XnoKDBgwhjEqwxBZcesexsGAAaM3o9IYUApgPTh95OKPd2DAgNGaUR+weCP3uxgYMGD0ZriHX9nhWjbZFW4NYcCA0Y7hJsHKEZh7ZZbKYcCA0Y+RJc36llEvjJWfBBgwYMxkfLnNHNFwq2d72AIGDBitGZVA18k0C8slSd8cDBgwWjD0P603ON3BMne7+aUKhwEDRjuGHqhS7mbHcMprY2MKAwaMRoxKsnNHLowpD+HHAAYMGDMZ9pFW1KRUnmUPjcGAAaM1w920uctNrLvGNWDAgNGJkYWlbyj1e5V0/3gXDBgwWjMqyddtMVbCLW0NYcCA0YLhJll9MCIb0QiLWBgwYAxg1JuLle2de6hnfAADBoxhjHVLUtnSZUXv5oQLAwaMkYwsFAVpxAMDBowBDLeI3XVw7zYvN9fiMGDAOIRRGbxwy9Es6A2TIzBgwDiV8QNwZ/UbkXzFCgAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
