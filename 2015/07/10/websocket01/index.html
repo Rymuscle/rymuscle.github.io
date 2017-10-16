@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/websocket/comet_ajax_longpolling.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/websocket/comet_iframe_streaming.png">
-<meta property="og:updated_time" content="2017-09-30T10:01:10.000Z">
+<meta property="og:updated_time" content="2017-10-16T03:04:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="polling--&gt;服务推技术--&gt;websocket">
 <meta name="twitter:description" content="背景1.传统Web开发下, 我们都是使用http协议在服务器和客户端之间进行通信, 要知道http协议是一种单向的网络协议, 在建立连接之后, 只能是浏览器向服务器发出请求资源后, 服务器才能响应 ;  注意: 服务器是无法主动的推送数据给客户端的, 这也是为了安全起见 ; 2.既然传统的http请求有上述问题, 那么如下一些现代web开发的场景该如何应对?即时通信系统；即时报价系统；股票的实时行">
@@ -220,8 +220,8 @@
 <p>同样的思路用在 iframe 方案的客户端，iframe 服务器端并不返回直接显示在页面的数据，而是返回对客户端 Javascript 函数的调用，如<code>&lt;script type=&quot;text/javascript&quot;&gt;js_func(&#39;data from server&#39;)&lt;/script&gt;;</code> 服务器端将返回的数据作为客户端 JavaScript 函数的参数传递, 客户端浏览器的 Javascript 引擎在收到服务器返回的 JavaScript 调用时就会去执行代码;</p>
 <p>从图中可以看到,每次数据传送不会关闭连接,连接只会在通信出现错误时或是连接重建时关闭(一些防火墙常被设置为丢弃过长的连接,服务器端可以设置一个超时时间,超时后通知客户端重新建立连接,并关闭原来的连接);</p>
 <p>使用 iframe 请求一个长连接有一个很明显的不足之处:IE、Morzilla Firefox 下端的进度栏都会显示加载没有完成,而且 IE 上方的图标会不停的转动,表示加载正在进行;<br>Google 的天才们使用一个称为“htmlfile”的 ActiveX 解决了在 IE 中的加载显示问题，并将这种方法用到了 gmail+gtalk 产品中。Alex Russell 在 “What else is burried down in the depth’s of Google’s amazing JavaScript?”文章中介绍了这种方法。Zeitoun 网站提供的 comet-iframe.tar.gz，封装了一个基于 iframe 和 htmlfile 的 JavaScript comet 对象，支持 IE、Mozilla Firefox 浏览器，可以作为参考。（请参见 参考资源）</p>
-<h2 id="解决方案-–-WebSocket"><a href="#解决方案-–-WebSocket" class="headerlink" title="解决方案 – WebSocket"></a>解决方案 – WebSocket</h2><p>1.websocket是HTML5中定义的新协议, 它实现了真正的长连接, 实现了浏览器与服务器的全双工通信;<br>WebSocket是为解决客户端与服务端实时通信而产生的技术, websocket协议本质上是一个基于tcp的协议，是先通过HTTP/HTTPS协议发起一条特殊的http请求进行握手后, 创建一个用于交换数据的TCP连接, 此后服务端与客户端通过此TCP连接进行实时通信 ;<br>注意:此时不再需要原HTTP协议的参与了 ;</p>
-<p>2.<br><a href="https://www.ibm.com/developerworks/cn/web/wa-lo-comet/#icomments" target="_blank" rel="external">摘自</a></p>
+<h2 id="解决方案-–-WebSocket"><a href="#解决方案-–-WebSocket" class="headerlink" title="解决方案 – WebSocket"></a>解决方案 – WebSocket</h2><p>1.websocket是HTML5中定义的新协议, 它实现了<strong>真正的</strong>长连接, 实现了浏览器与服务器的全双工通信;<br>WebSocket是为解决客户端与服务端实时通信而产生的技术, websocket协议本质上是一个基于tcp的协议，是先通过HTTP/HTTPS协议发起一条特殊的http请求进行握手后, 创建一个用于交换数据的TCP连接, 此后服务端与客户端通过此TCP连接进行实时通信 ;<br>注意:此时不再需要原HTTP协议的参与了 ;</p>
+<p>2.<br><a href="https://www.ibm.com/developerworks/cn/web/wa-lo-comet/#icomments" target="_blank" rel="external">摘自</a><br><a href="http://blog.csdn.net/fhzaitian/article/details/51691946" target="_blank" rel="external">参考</a></p>
 
         </div>
 
