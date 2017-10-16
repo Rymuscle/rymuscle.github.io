@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="背景我们知道浏览器的同源策略对用户请求的资源是有一些行为限制的:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送  但也有一些就是不在同源策略的限制范围之内; CSRF 跨站点请求伪造CSRF跨站点请求伪造(Cross—Site Request Forgery)跟XSS攻击一样, 存在巨大的危害性, 你可以这样来理解: 攻击者盗用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-16T06:48:00.000Z">
+<meta property="og:updated_time" content="2017-10-16T06:53:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CSRF (Cross-site request forgery)">
 <meta name="twitter:description" content="背景我们知道浏览器的同源策略对用户请求的资源是有一些行为限制的:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送  但也有一些就是不在同源策略的限制范围之内; CSRF 跨站点请求伪造CSRF跨站点请求伪造(Cross—Site Request Forgery)跟XSS攻击一样, 存在巨大的危害性, 你可以这样来理解: 攻击者盗用">
@@ -216,7 +216,7 @@
 <p>该方法还有一个缺点是难以保证 token 本身的安全, 特别是在一些论坛之类支持用户自己发表内容的网站, 黑客可以在上面发布自己个人网站的地址, 由于系统也会在这个地址后面加上 token, 黑客可以在自己的网站上得到这个 token, 并马上就可以发动 CSRF 攻击, 为了避免这一点, 系统可以在添加 token 的时候增加一个判断, 如果这个链接是链到自己本站的, 就在后面添加 token, 如果是通向外网则不加;<br><strong>不过，即使这个 csrftoken 不以参数的形式附加在请求之中, 黑客的网站也同样可以通过 Referer 来得到这个 token 值以发动 CSRF 攻击, 这也是一些用户喜欢手动关闭浏览器 Referer 功能的原因 ;</strong></p>
 <h3 id="在-HTTP-头中自定义属性并验证"><a href="#在-HTTP-头中自定义属性并验证" class="headerlink" title="在 HTTP 头中自定义属性并验证"></a>在 HTTP 头中自定义属性并验证</h3><p>这种方法也是使用 token 并进行验证，和上一种方法不同的是，这里并不是把 token 以参数的形式置于 HTTP 请求之中，而是把它放到 HTTP 头中自定义的属性里;<br>通过 XMLHttpRequest 这个类，可以一次性给所有该类请求加上 csrftoken 这个 HTTP 头属性，并把 token 值放入其中, 这样解决了上种方法在请求中加入 token 的不便，同时，通过 XMLHttpRequest 请求的地址不会被记录到浏览器的地址栏，也不用担心 token 会透过 Referer 泄露到其他网站中去;</p>
 <p>然而这种方法的局限性非常大, XMLHttpRequest 请求通常用于 Ajax 方法中对于页面局部的异步刷新，并非所有的请求都适合用这个类来发起，而且通过该类请求得到的页面不能被浏览器所记录下，从而进行前进，后退，刷新，收藏等操作，给用户带来不便;<br>另外, 对于没有进行 CSRF 防护的遗留系统来说，要采用这种方法来进行防护，要把所有请求都改为 XMLHttpRequest 请求，这样几乎是要重写整个网站，这代价无疑是不能接受的;</p>
-<p><a href="http://blog.csdn.net/stpeace/article/details/53512283" target="_blank" rel="external">原文</a><br><a href="http://blog.csdn.net/qdx411324962/article/details/50235253" target="_blank" rel="external">参考</a></p>
+<p><a href="http://blog.csdn.net/stpeace/article/details/53512283" target="_blank" rel="external">原文</a><br><a href="http://blog.csdn.net/qdx411324962/article/details/50235253" target="_blank" rel="external">参考</a>(并行会话的兼容)</p>
 
         </div>
 
@@ -309,9 +309,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2015/05/15/sameoriginpolicy/" id="post-next" class="post-nav-link">
+      <a href="/2015/05/09/safe-xss01/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">浏览器的同源策略(Same origin policy)</h4>
+        <h4 class="title">XSS (Cross Site Scripting)</h4>
       </a>
     </div>
   
