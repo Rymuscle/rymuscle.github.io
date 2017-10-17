@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/yihuajiemu_mawei.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/authorization_code.png">
-<meta property="og:updated_time" content="2017-10-17T02:02:17.000Z">
+<meta property="og:updated_time" content="2017-10-17T02:09:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02-针对OAuth2的CSRF攻击">
 <meta name="twitter:description" content="针对OAuth2的CSRF攻击例子针对OAuth2的CSRF攻击的例子, 假设有如下几个角色:1.受害者 张三 ;2.攻击者 李四 ;3.还有一个第三方Web应用 Tonr网站, 它集成了第三方社交账号登录并且允许用户将社交账号和 Tonr网站 中的账号进行绑定 ;4.此外还有一个OAuth2服务提供平台 Sparklr网站 ; 攻击流程1.攻击者李四登录Tonr网站 并且选择绑定自己的Spark">
@@ -208,7 +208,7 @@
 <h3 id="分析漏洞的本质"><a href="#分析漏洞的本质" class="headerlink" title="分析漏洞的本质"></a>分析漏洞的本质</h3><p>这个问题的关键点在于, OAuth2的认证流程是分为好几步来完成的, 在的图1中的第4步, 第三方应用在收到一个GET请求时, 除了能知道当前用户的cookie, 以及URL中的Authorization Code之外, 难以分辨出这个请求到底是用户本人的意愿, 还是攻击者利用用户的身份伪造出来的请求;</p>
 <p>于是乎, 攻击者就能使用移花接木的手段, 提前准备一个含有自己的Authorization Code的请求, 并让受害者的浏览器来接着完成后续的令牌申请流程;</p>
 <h3 id="漏洞被使用还需具备的前提条件"><a href="#漏洞被使用还需具备的前提条件" class="headerlink" title="漏洞被使用还需具备的前提条件"></a>漏洞被使用还需具备的前提条件</h3><p>尽管这个攻击既巧妙又隐蔽, 但是要成功进行这样的CSRF攻击也是需要满足一定前提条件的:</p>
-<p>1.首先, 在攻击过程中, 受害者 <code>张三</code> 在 <code>Tonr网站</code> 上的用户会话(User Session)必须是有效的, 也就是说, <code>张三</code>在受到攻击前已经登录了 <code>Tonr网站</code> ;<br>(??有疑问, 为什么必须是登录的呢?)</p>
+<p>1.首先, 在攻击过程中, 受害者 <code>张三</code> 在 <code>Tonr网站</code> 上的用户会话(User Session)必须是有效的, 也就是说, <code>张三</code>在受到攻击前已经登录了 <code>Tonr网站</code> ;<br>?????</p>
 <p>2.其次, 整个攻击必须在短时间内完成, 因为OAuth2提供者颁发的Authorization Code有效期很短, <strong>OAuth2官方推荐的时间是不大于10分钟</strong>, 而一旦Authorization Code过期那么后续的攻击也就不能进行下去了;</p>
 <p>3.最后, 一个Authorization Code只能被使用一次, 如果OAuth2提供者收到重复的Authorization Code, 它会拒绝当前的令牌申请请求, 不止如此, 根据OAuth2官方推荐, 它还可以把和这个已经使用过的Authorization Code相关联的access_token全部撤销掉, 进一步降低安全风险;</p>
 <p>(其实貌似只要做到Authorization Code只能被使用一次, 就可以防止csrf在此处的攻击了, 因为<code>李四</code>在攻击的时候, 一旦获得<code>Authorization Code</code>, 第三方站点服务器就会使用<code>Authorization Code</code>去申请access_token, 然后只要标记<code>Authorization Code</code>为已经使用, 那么<code>张三</code>即使点击李四构造好的链接也没用, 因为连接中的<code>Authorization Code</code>已经被标记为使用过了)</p>
@@ -218,9 +218,9 @@
 <p>在将用户重定向到OAuth2的Authorization Endpoint去的时候, 为用户生成一个随机的字符串, 并作为state参数加入到URL中;</p>
 <p>在收到OAuth2服务提供者返回的Authorization Code请求的时候, 验证接收到的state参数值, 如果是正确合法的请求, 那么此时接受到的参数值应该和上一步提到的为该用户生成的state参数值完全一致, 否则就是异常请求;</p>
 <p>state参数值需要具备下面几个特性:<br>1.不可预测性: 足够的随机, 使得攻击者难以猜到正确的参数值 ;<br>如果你每次生成的state都被放在一起, 比如一个库/缓存中存在很多state;<br>那么问题就是攻击者还是可以拿着自己的code在加上一个state, 来构造一个链接欺骗用户来点击;<br>假设state正好就在你的库/缓存中;<br>所以应该让state和具体的用户关联起来, 虽然用户还没有登录, 但是也可以让state放到session中 ;<br>然后攻击者要猜测出来一个state的话, 即便是已经生成过了, 但是也得正好攻击的是这个用户;</p>
-<p>2.关联性: state参数值可以和当前用户会话(user session)相互关联的 ;<br>比如简书, 每次你点击QQ登录之后, 会跳转到授权页面(url中带了简书服务器生成的state)<br>此时你还会发现简书的cookie中总会多出一个_maleskine_session, 并且值是很长的一大串类似hash加密传, 可以猜测这个值就是state;</p>
+<p>2.<strong>重点是关联性</strong>: state参数值可以和当前用户会话(user session)相互关联的 ;<br>比如简书, 每次你点击QQ登录之后, 会跳转到授权页面(url中带了简书服务器生成的state)<br>此时你还会发现简书的cookie中总会多出一个_maleskine_session, 并且值是很长的一大串类似hash加密传, 可以猜测这个值就是state;</p>
 <p>3.唯一性: 每个用户, 甚至每次请求生成的state参数值都是唯一的 ;</p>
-<p>4.时效性: state参数一旦被使用则立即失效 ;<br>```</p>
+<p>4.时效性: state参数一旦被使用则立即失效 ;</p>
 <blockquote>
 <p><a href="http://insights.thoughtworkers.org/attack-aim-at-oauth2/" target="_blank" rel="external">摘自 马伟 移花接木</a><br><a href="http://blog.sina.com.cn/s/blog_56b798f801018jyb.html" target="_blank" rel="external">参考 state参数漏洞</a></p>
 </blockquote>
