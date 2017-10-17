@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Safe">
-    <meta name="description" content="XSS跨站脚本攻击参考参考httponlyhttp://www.cnblogs.com/h4ck0ne/p/5154622.html">
+    <meta name="description" content="XSS (Cross Site Scripting 跨站脚本攻击)为了不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，所以将跨站脚本攻击缩写为XSS; XSS是一种网站应用程序的安全漏洞攻击, 是代码注入的一种, 它允许恶意用户将代码注入到网页上, 其他用户在观看网页时就会受到影响, 这类攻击通常包含了HTML以及用户端脚本语言; XSS与SQL注入攻击类似,">
 <meta name="keywords" content="Safe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS (Cross Site Scripting)">
 <meta property="og:url" content="http://blog.renyimin.com/2015/05/09/safe-xss01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="XSS跨站脚本攻击参考参考httponlyhttp://www.cnblogs.com/h4ck0ne/p/5154622.html">
+<meta property="og:description" content="XSS (Cross Site Scripting 跨站脚本攻击)为了不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，所以将跨站脚本攻击缩写为XSS; XSS是一种网站应用程序的安全漏洞攻击, 是代码注入的一种, 它允许恶意用户将代码注入到网页上, 其他用户在观看网页时就会受到影响, 这类攻击通常包含了HTML以及用户端脚本语言; XSS与SQL注入攻击类似,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-16T07:29:50.000Z">
+<meta property="og:updated_time" content="2017-10-16T09:52:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS (Cross Site Scripting)">
-<meta name="twitter:description" content="XSS跨站脚本攻击参考参考httponlyhttp://www.cnblogs.com/h4ck0ne/p/5154622.html">
+<meta name="twitter:description" content="XSS (Cross Site Scripting 跨站脚本攻击)为了不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，所以将跨站脚本攻击缩写为XSS; XSS是一种网站应用程序的安全漏洞攻击, 是代码注入的一种, 它允许恶意用户将代码注入到网页上, 其他用户在观看网页时就会受到影响, 这类攻击通常包含了HTML以及用户端脚本语言; XSS与SQL注入攻击类似,">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#XSS跨站脚本攻击"><span class="post-toc-number">1.</span> <span class="post-toc-text">XSS跨站脚本攻击</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#XSS-Cross-Site-Scripting-跨站脚本攻击"><span class="post-toc-number">1.</span> <span class="post-toc-text">XSS (Cross Site Scripting 跨站脚本攻击)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#危害"><span class="post-toc-number">2.</span> <span class="post-toc-text">危害</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总体分为三类"><span class="post-toc-number">3.</span> <span class="post-toc-text">总体分为三类</span></a></li></ol>
         </nav>
     </aside>
     
@@ -184,7 +184,18 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="XSS跨站脚本攻击"><a href="#XSS跨站脚本攻击" class="headerlink" title="XSS跨站脚本攻击"></a>XSS跨站脚本攻击</h2><p><a href="http://blog.csdn.net/kwame211/article/details/76479293?locationNum=5&amp;fps=1" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/sjn0503/article/details/73176092?locationNum=2&amp;fps=1" target="_blank" rel="external">参考httponly</a><br><a href="http://www.cnblogs.com/h4ck0ne/p/5154622.html" target="_blank" rel="external">http://www.cnblogs.com/h4ck0ne/p/5154622.html</a></p>
+            <h2 id="XSS-Cross-Site-Scripting-跨站脚本攻击"><a href="#XSS-Cross-Site-Scripting-跨站脚本攻击" class="headerlink" title="XSS (Cross Site Scripting 跨站脚本攻击)"></a>XSS (Cross Site Scripting 跨站脚本攻击)</h2><p>为了不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，所以将跨站脚本攻击缩写为XSS;</p>
+<p>XSS是一种网站应用程序的安全漏洞攻击, 是代码注入的一种, 它允许恶意用户将代码注入到网页上, 其他用户在观看网页时就会受到影响, 这类攻击通常包含了HTML以及用户端脚本语言;</p>
+<p>XSS与SQL注入攻击类似, SQL注入攻击是以SQL语句作为用户输入, 从而达到查询/修改/删除数据的目的; 而在xss攻击中, 是通过插入恶意脚本, 实现对用户浏览器的控制;</p>
+<h2 id="危害"><a href="#危害" class="headerlink" title="危害"></a>危害</h2><p>盗取cookie, 获取敏感信息;</p>
+<p>利用植入Flash，通过crossdomain权限设置进一步获取更高权限; 或者利用Java等得到类似的操作;</p>
+<p>利用iframe、frame、XMLHttpRequest或上述Flash等方式，以（被攻击者）用户的身份执行一些管理动作，或执行一些如:发微博、加好友、发私信等常规操作，前段时间新浪微博就遭遇过一次XSS ;</p>
+<p>利用可被攻击的域受到其他域信任的特点，以受信任来源的身份请求一些平时不允许的操作，如进行不当的投票活动;</p>
+<p>在访问量极大的一些页面上的XSS可以攻击一些小型网站，实现DDoS攻击的效果;</p>
+<h2 id="总体分为三类"><a href="#总体分为三类" class="headerlink" title="总体分为三类"></a>总体分为三类</h2><p>Dom-Based（Dom式）<br>Stroed-Based（存储式/持久型）<br>Reflex-Based（反射式/非持久型）</p>
+<p>##场景1<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">setcookie(<span class="string">'name'</span>, <span class="string">'renyimin'</span>);</div><div class="line">setcookie(<span class="string">'age'</span>, <span class="number">300</span>);</div><div class="line"><span class="meta">?&gt;</span></div><div class="line">&lt;!doctype html&gt;</div><div class="line">&lt;html lang=<span class="string">"en"</span>&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</div><div class="line">    &lt;title&gt;Document&lt;/title&gt;</div><div class="line">    &lt;script src=<span class="string">"http://libs.baidu.com/jquery/2.1.1/jquery.min.js"</span>&gt;&lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form&gt;</div><div class="line">    &lt;input type=<span class="string">"text"</span> name=<span class="string">"address1"</span> value=<span class="string">""</span> onfocus=<span class="string">"console.log(document.cookie);"</span>&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p><a href="http://blog.csdn.net/kwame211/article/details/76479293?locationNum=5&amp;fps=1" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/sjn0503/article/details/73176092?locationNum=2&amp;fps=1" target="_blank" rel="external">参考httponly</a><br><a href="http://www.cnblogs.com/h4ck0ne/p/5154622.html" target="_blank" rel="external">http://www.cnblogs.com/h4ck0ne/p/5154622.html</a></p>
+<p><a href="http://blog.csdn.net/zhx278171313/article/category/2208273" target="_blank" rel="external">信息安全</a></p>
 
         </div>
 
