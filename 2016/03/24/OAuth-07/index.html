@@ -13,25 +13,25 @@
     
     
     
-    <title>OAuth-implicit-grant | Lant&#39;s Blog</title>
+    <title>Client Credentials Grant. | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OAuth2.0">
-    <meta name="description" content="简化模式/隐式授权(implicit grant type)不通过第三方应用程序的服务器, 直接在浏览器中向认证服务器申请令牌, 跳过了”授权码”这个步骤, 因此得名; 所有步骤在浏览器中完成, 令牌对访问者是可见的, 且客户端不需要认证; 步骤如下1.客户端将用户导向认证服务器 ; 2.用户决定是否给于客户端授权 ; 3.假设用户给予授权, 认证服务器将用户导向客户端指定的”重定向URI”, 并">
+    <meta name="description" content="客户端模式（Client Credentials Grant）指客户端以自己的名义, 而不是以用户的名义, 向”服务提供商”进行认证; 严格地说, 客户端模式并不属于OAuth框架所要解决的问题; 在这种模式中, 用户直接向客户端注册, 客户端以自己的名义要求”服务提供商”提供服务, 其实不存在授权问题; 步骤如下1.客户端向认证服务器进行身份认证, 并要求一个访问令牌 ;2.认证服务器确认无误后">
 <meta name="keywords" content="OAuth2.0">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OAuth-implicit-grant">
-<meta property="og:url" content="http://blog.renyimin.com/2016/03/22/OAuth-06/index.html">
+<meta property="og:title" content="Client Credentials Grant.">
+<meta property="og:url" content="http://blog.renyimin.com/2016/03/24/OAuth-07/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="简化模式/隐式授权(implicit grant type)不通过第三方应用程序的服务器, 直接在浏览器中向认证服务器申请令牌, 跳过了”授权码”这个步骤, 因此得名; 所有步骤在浏览器中完成, 令牌对访问者是可见的, 且客户端不需要认证; 步骤如下1.客户端将用户导向认证服务器 ; 2.用户决定是否给于客户端授权 ; 3.假设用户给予授权, 认证服务器将用户导向客户端指定的”重定向URI”, 并">
+<meta property="og:description" content="客户端模式（Client Credentials Grant）指客户端以自己的名义, 而不是以用户的名义, 向”服务提供商”进行认证; 严格地说, 客户端模式并不属于OAuth框架所要解决的问题; 在这种模式中, 用户直接向客户端注册, 客户端以自己的名义要求”服务提供商”提供服务, 其实不存在授权问题; 步骤如下1.客户端向认证服务器进行身份认证, 并要求一个访问令牌 ;2.认证服务器确认无误后">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-17T03:48:18.000Z">
+<meta property="og:updated_time" content="2017-10-17T03:48:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OAuth-implicit-grant">
-<meta name="twitter:description" content="简化模式/隐式授权(implicit grant type)不通过第三方应用程序的服务器, 直接在浏览器中向认证服务器申请令牌, 跳过了”授权码”这个步骤, 因此得名; 所有步骤在浏览器中完成, 令牌对访问者是可见的, 且客户端不需要认证; 步骤如下1.客户端将用户导向认证服务器 ; 2.用户决定是否给于客户端授权 ; 3.假设用户给予授权, 认证服务器将用户导向客户端指定的”重定向URI”, 并">
+<meta name="twitter:title" content="Client Credentials Grant.">
+<meta name="twitter:description" content="客户端模式（Client Credentials Grant）指客户端以自己的名义, 而不是以用户的名义, 向”服务提供商”进行认证; 严格地说, 客户端模式并不属于OAuth框架所要解决的问题; 在这种模式中, 用户直接向客户端注册, 客户端以自己的名义要求”服务提供商”提供服务, 其实不存在授权问题; 步骤如下1.客户端向认证服务器进行身份认证, 并要求一个访问令牌 ;2.认证服务器确认无误后">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OAuth-implicit-grant</div>
+        <div class="flex-col header-title ellipsis">Client Credentials Grant.</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,11 +134,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OAuth-implicit-grant</h1>
+        <h1 class="title">Client Credentials Grant.</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-03-22T12:11:19.000Z" itemprop="datePublished" class="page-time">
-  2016-03-22
+                <time datetime="2016-03-24T13:07:01.000Z" itemprop="datePublished" class="page-time">
+  2016-03-24
 </time>
 
 
@@ -159,17 +159,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简化模式-隐式授权-implicit-grant-type"><span class="post-toc-number">1.</span> <span class="post-toc-text">简化模式/隐式授权(implicit grant type)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#步骤如下"><span class="post-toc-number">2.</span> <span class="post-toc-text">步骤如下</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端模式（Client-Credentials-Grant）"><span class="post-toc-number">1.</span> <span class="post-toc-text">客户端模式（Client Credentials Grant）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#步骤如下"><span class="post-toc-number">2.</span> <span class="post-toc-text">步骤如下</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-OAuth-06"
+<article id="post-OAuth-07"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OAuth-implicit-grant</h1>
+        <h1 class="post-card-title">Client Credentials Grant.</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-03-22 20:11:19" datetime="2016-03-22T12:11:19.000Z"  itemprop="datePublished">2016-03-22</time>
+            <time class="post-time" title="2016-03-24 21:07:01" datetime="2016-03-24T13:07:01.000Z"  itemprop="datePublished">2016-03-24</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
@@ -184,14 +184,10 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="简化模式-隐式授权-implicit-grant-type"><a href="#简化模式-隐式授权-implicit-grant-type" class="headerlink" title="简化模式/隐式授权(implicit grant type)"></a>简化模式/隐式授权(implicit grant type)</h2><p>不通过第三方应用程序的服务器, 直接在浏览器中向认证服务器申请令牌, 跳过了”授权码”这个步骤, 因此得名; 所有步骤在浏览器中完成, 令牌对访问者是可见的, 且客户端不需要认证;</p>
-<h2 id="步骤如下"><a href="#步骤如下" class="headerlink" title="步骤如下"></a>步骤如下</h2><p>1.客户端将用户导向认证服务器 ;</p>
-<p>2.用户决定是否给于客户端授权 ;</p>
-<p>3.假设用户给予授权, 认证服务器将用户导向客户端指定的”重定向URI”, 并在URI的Hash部分包含了访问令牌 ;</p>
-<p>4.浏览器向资源服务器发出请求, 其中不包括上一步收到的Hash值 ;</p>
-<p>5.资源服务器返回一个网页, 其中包含的代码可以获取Hash值中的令牌 ;</p>
-<p>6.浏览器执行上一步获得的脚本, 提取出令牌 ;</p>
-<p>7.浏览器将令牌发给客户端 ;</p>
+            <h2 id="客户端模式（Client-Credentials-Grant）"><a href="#客户端模式（Client-Credentials-Grant）" class="headerlink" title="客户端模式（Client Credentials Grant）"></a>客户端模式（Client Credentials Grant）</h2><p>指客户端以自己的名义, 而不是以用户的名义, 向”服务提供商”进行认证;</p>
+<p>严格地说, 客户端模式并不属于OAuth框架所要解决的问题;</p>
+<p>在这种模式中, 用户直接向客户端注册, 客户端以自己的名义要求”服务提供商”提供服务, 其实不存在授权问题;</p>
+<h2 id="步骤如下"><a href="#步骤如下" class="headerlink" title="步骤如下"></a>步骤如下</h2><p>1.客户端向认证服务器进行身份认证, 并要求一个访问令牌 ;<br>2.认证服务器确认无误后, 向客户端提供访问令牌 ;</p>
 <blockquote>
 <p><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">参考 阮一峰</a></p>
 </blockquote>
@@ -231,7 +227,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/22/OAuth-06/&title=《OAuth-implicit-grant》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/24/OAuth-07/&title=《Client Credentials Grant.》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -241,22 +237,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/22/OAuth-06/&title=《OAuth-implicit-grant》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/24/OAuth-07/&title=《Client Credentials Grant.》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/22/OAuth-06/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/24/OAuth-07/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OAuth-implicit-grant》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/22/OAuth-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Client Credentials Grant.》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/24/OAuth-07/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/22/OAuth-06/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/24/OAuth-07/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -279,17 +275,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/03/22/OAuth-04/" id="post-prev" class="post-nav-link">
+        <a href="/2016/03/23/OAuth-06/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">04 - 授权码模式各阶段分析 (持续完善中...)</h4>
+          <h4 class="title">Password Credentials Grant</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/03/23/OAuth-07/" id="post-next" class="post-nav-link">
+      <a href="/2016/04/15/Laravel-install-01/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Password Credentials Grant</h4>
+        <h4 class="title">Laravel-install-01</h4>
       </a>
     </div>
   
@@ -400,7 +396,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/22/OAuth-06/&title=《OAuth-implicit-grant》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/24/OAuth-07/&title=《Client Credentials Grant.》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -410,22 +406,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/22/OAuth-06/&title=《OAuth-implicit-grant》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/24/OAuth-07/&title=《Client Credentials Grant.》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/22/OAuth-06/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/24/OAuth-07/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OAuth-implicit-grant》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/22/OAuth-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Client Credentials Grant.》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/24/OAuth-07/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/22/OAuth-06/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/24/OAuth-07/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -436,7 +432,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACGElEQVR42u3aS46DMBAFQO5/aWYbKYL06wZpMOVVlIBNsXD6420rj/1jfH7z/evRqM95dP0FAwMD47GMyvKVBSp3nc+fviAMDIy3MY4eq3fNZBtN18XAwMA4v6YX6lU2ZQwMDIw7Ntx6dnk+AwYGBsYkiZ0ktL1HvyUXx8DAeCBjklje/fmW/gYGBsajGHs47i637a2BgYGxNmNSSquXz+olth4YAwNjbUZ69CH9pnIgrM6L63kYGBhLMOo398r3lbCv/iJ+8DAwMJZmTG6e8Obth+2qqTEwMP4xI20l9gr6aWpaT4YxMDDewJiX+HsJcL24Fh+wwMDAeBljXlZLA8F6I7P0H4KBgbEQY94G6B2eSBPjUtUQAwPjNYxeISxtW6av78cqGBgYSzMmCWQ9pEubE1dt+hgYGE9n9JLSyaGuSgEubnBiYGAszUgbA5O2QX37nmzWGBgY6zHSG65Ka3tp8+H1GBgYSzPqwVkvvKu3MCdIDAwMjDR0Sw9JVGYrvQgMDIwXMNJwsLdpzo9lBO0BDAyM1zDSAxDpQ6cFwcO7MDAwFmXs4UiT3nkrtJL0YmBgrM3obXZpEX9ebuuFmxgYGCsxeglkmoL2Gp8YGBgYk43v2pQ1TaQxMDAwrm0JzEPMoOiGgYGBcTpdeiwsDRZv3HAxMDAewkibAb0l08Q1CDcxMDCWZkyOWaSTNktpYXiKgYGxEOMPCKaTYUUZPMoAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHUlEQVR42u3aSZKDMAwF0Nz/0ukDdEG+JLPAfqyoDMaPhUqDP5/4+l5c99/+/+XVmlefLL4wMDBey0gev2pb9+tf3UevBgMD4wDG1bZW3edh9GqdH3vGwMDAuF06CdP3K+fPwsDAwMgDXx5G71O6BImBgYGRF7GTgjbZerWRh4GBcQ5jUlg+ff/IfAMDA+NVjG/xmvB6SWS0KwwMjK0ZeYCrYnotth4YAwNjb0Y1pCaJY86uHs5o9vMwMDBezsi3mw8dq2lf/iIiHgYGxnaMeQLXG0CO3nce7zEwMDZiTFpm+cGIaoqZH87AwMDYm/HE0Yc84Ut4hTYcBgbG1oxJmTqZSOTHzvLSFwMDY1fGvO3VOzyRv7JoYICBgXEYY9UAcj4YKIR4DAyMrRmTR87L1Oq4Ih+aYmBg7MqYBNxq4VoN34UBJwYGxkaM5NhEdWxZHSQsCNYYGBhbMyYBNCl98xcxGRtgYGCcwMib71VGNU1cdjgMAwNjO0Ye8ia/7AXQwvAAAwPjAMZoktAKmr1jGRgYGBjV4WKvTTYZbf7IbTEwMLZjfItXXvQ+17wrR2sMDIyXM3rBLi8188MT89UwMDD2ZvQaZNWRZLXpnzfpMDAwzmHkga9aAOdp4ij0Y2BgYARFbPVf1bAeNd0wMDAwikPHHruZemJgYBzASEJhvt0qNR8nLKjFMTAwXshYe8yiV4JWw25zqImBgfE+xh+fQLJQ2SZtsAAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
