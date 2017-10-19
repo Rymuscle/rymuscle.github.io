@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>04 - 授权码模式各阶段分析 (持续完善中...) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OAuth2.0">
+    <meta name="description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+<meta name="keywords" content="OAuth2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
+<meta property="og:url" content="http://blog.renyimin.com/2016/03/22/OAuth-04/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_sina.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_qq.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_wechat.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_github.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/jianshu_sina_err01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/jianshu_qq_err01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
+<meta property="og:updated_time" content="2017-10-19T09:06:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
+<meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/oauth_sina.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">04 - 授权码模式各阶段分析 (持续完善中...)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">04 - 授权码模式各阶段分析 (持续完善中...)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-03-22T11:11:10.000Z" itemprop="datePublished" class="page-time">
+  2016-03-22
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第一阶段-第三方站点将导向授权页"><span class="post-toc-number">1.</span> <span class="post-toc-text">第一阶段: 第三方站点将导向授权页</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第二阶段-通过Authorization-Code获取Access-Token"><span class="post-toc-number">2.</span> <span class="post-toc-text">第二阶段: 通过Authorization Code获取Access Token</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#第三阶段-第三方站点通过access-token获取授权平台资源服务器上的用户资源"><span class="post-toc-number">3.</span> <span class="post-toc-text">第三阶段: 第三方站点通过access_token获取授权平台资源服务器上的用户资源</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-OAuth-04"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">04 - 授权码模式各阶段分析 (持续完善中...)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-03-22 19:11:10" datetime="2016-03-22T11:11:10.000Z"  itemprop="datePublished">2016-03-22</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="第一阶段-第三方站点将导向授权页"><a href="#第一阶段-第三方站点将导向授权页" class="headerlink" title="第一阶段: 第三方站点将导向授权页"></a>第一阶段: 第三方站点将导向授权页</h4><ol>
+<li><p>第三方应用将用户导向授权页时, 传递的参数如下:</p>
+<ul>
+<li><code>response_type</code>: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code”</li>
+<li><p><code>client_id/AppID</code>: 表示客户端的ID, 必选项<br>由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个 <code>应用</code> 的;<br>每个<code>应用</code>对应你的一个 <code>第三方站点</code>, 开放平台会为每个<code>应用(第三方站点)</code>生成相应的 <code>AppID</code> 和 <code>AppSecret/AppKey</code>, 主要用来验证应用的合法性;</p>
+</li>
+<li><p><code>redirect_uri</code>: 设定的重定向到<code>第三方站点URI</code>, 必选项</p>
+</li>
+<li><code>scope</code>: 表示申请的权限范围, 可选项</li>
+<li><code>state</code>: 表示客户端的当前状态, 可以指定任意值, 认证服务器会原封不动地返回这个值</li>
+</ul>
+</li>
+<li><p>下面是各开放平台的参数对比:</p>
+<ul>
+<li><p><a href="http://open.weibo.com/wiki/Oauth2/authorize" target="_blank" rel="external">新浪</a><br><img src="/img/oauth/oauth_sina.png" width="500" height="560" alt="sina" align="center"></p>
+</li>
+<li><p><a href="http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token" target="_blank" rel="external">QQ</a><br><img src="/img/oauth/oauth_qq.png" width="500" height="560" alt="qq" align="center"></p>
+</li>
+<li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a><br><img src="/img/oauth/oauth_wechat.png" width="500" height="560" alt="wechat" align="center"></p>
+</li>
+<li><p><a href="https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-authorization-options-for-oauth-apps/" target="_blank" rel="external">GitHub</a><br><img src="/img/oauth/oauth_github.png" width="500" height="560" alt="github" align="center"></p>
+</li>
+</ul>
+</li>
+<li><p>简单测试:</p>
+<ul>
+<li><p>redirect_uri<br>在OAuth服务器中为第三方站点创建<code>应用</code>的时候, 设定的回调地址, 无论在认证服务器, 还是在第三方站点, 都会对其进行校验, <code>以防篡改</code>;</p>
+<p>新浪授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_sina_err01.png" width="450" height="240" alt="github" align="center"></p>
+<p>简书qq授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_qq_err01.png" width="450" height="200" alt="github" align="center"></p>
+</li>
+<li><p>state<br>第三方站点会对state做校验<br>给了一个新的弹框用来进行授权, 但是如果恶意用户复制出弹框中的url, 之后再修改state并刷新页面, 授权后发现:<br><img src="/img/oauth/zhihu_auth_qq_01.png" width="500" height="100" alt="github" align="center"></p>
+</li>
+</ul>
+</li>
+<li><p>从上面各平台也可以看到, 返回参数相对比较简单;</p>
+</li>
+</ol>
+<h4 id="第二阶段-通过Authorization-Code获取Access-Token"><a href="#第二阶段-通过Authorization-Code获取Access-Token" class="headerlink" title="第二阶段: 通过Authorization Code获取Access Token"></a>第二阶段: 通过Authorization Code获取Access Token</h4><ol>
+<li><p>如果第三方站点的用户在第一阶段的授权页中选择对第三方站点授权, 那么就第三方站点就会收到授权服务器的Authorization Code, 进而进入本阶段;<br>(每个用户在授权后, 第三方站点都需要到授权服务器上为用户获取一个access_token, 这个access_token就是以后第三方站点从授权服务器上获取用户信息的凭证了, 一般在获取到access_token令牌之后, 可以存储到session中)</p>
+</li>
+<li><p>本阶段, 我们在自己的第三方站点中就可以使用第一阶段的Authorization Code获取Access Token:</p>
+<ul>
+<li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a><br>(暂不上图, 微信还涉及到了openid, 此处介绍标准OAuth, 因此先不进行介绍)</p>
+</li>
+<li><p><a href="http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token" target="_blank" rel="external">qq</a><br><img src="/img/oauth/access_token_qq.png" width="650" height="680" alt="github" align="center"></p>
+</li>
+<li><p>基本上入参就像QQ互联那样大概有5个 (需要对每个参数进行了解);</p>
+</li>
+</ul>
+</li>
+<li><p>本阶段的返回参数比较有讲究, 一般为如下三个</p>
+<ul>
+<li><p>access_token 授权令牌<br>access_token一般在获取到之后, 第三方站点可以将其 <code>保存到用户的session中</code> , 第三方站点之后要获取用户在授权服务器上的资源的时候, 就需要带上当前session中用户的access_token去获取;</p>
+</li>
+<li><p>expires_in    该access token的有效期,单位为秒 (微信公众平台access_token有效期为2小时, qq互联平台为3个月 可以作为参考)<br>设置access_token有效期也是为了定期修改access_token, 以提高安全性;<br>(并且微信对获取access_token这个基础API是有限制的，每天最多请求2000次, 因为有效期为2小时, 每天2000次也足够了;)</p>
+</li>
+<li><p>refresh_token 授权自动续期时使用 (微信公众平台refresh_token有效期为30天, qq互联平台具体不详, 可以作为参考)</p>
+</li>
+</ul>
+</li>
+<li><p>(可选)权限自动续期问题</p>
+<ul>
+<li><p>注意<a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信公众平台</a>:<br>  1.若access_token已超时，那么进行refresh_token会获取一个新的access_token，新的超时时间, 并且一旦使用refresh_token来刷新access_token的话, refresh_token的过期时间也会更新(自动延期) ;<br>  2.若access_token未超时，那么进行refresh_token不会改变access_token，但超时时间会刷新，相当于续期access_token ;</p>
+</li>
+<li><p>其实第三方站点在受到授权服务器分配给当前用户的access_token之后, 假设说授权服务器返回access_token的过期时间为7200s(2小时), 那么第三方站点将access_token保存到用户session中, 并设置过期时间为6600s(中间可以有个10分钟的服务器时间差);</p>
+</li>
+<li><p>如果第三方站点在使用access_token为用户获取授权服务器中的资源时, 发现session中的access_token并没有过期, 那么请求后就需要为access_token续期(第三方站点和授权服务器上都要做续期)</p>
+</li>
+<li><p>如果第三方站点在使用access_token为用户获取授权服务器中的资源时, 发现session中的access_token过期, 则就需要使用<code>refresh_token</code>调用<code>生成access_token的api接口</code>重新生成access_token来进行续期；<br>  qq:<br>  <img src="/img/oauth/refresh_token_qq.png" width="650" height="640" alt="github" align="center"></p>
+</li>
+<li><p>这样下来, 基本上第三方站点只有在大于refresh_token的过期时间都没有调用过授权服务器的话, 才需要用户重新登录;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="第三阶段-第三方站点通过access-token获取授权平台资源服务器上的用户资源"><a href="#第三阶段-第三方站点通过access-token获取授权平台资源服务器上的用户资源" class="headerlink" title="第三阶段: 第三方站点通过access_token获取授权平台资源服务器上的用户资源"></a>第三阶段: 第三方站点通过access_token获取授权平台资源服务器上的用户资源</h4><blockquote>
+<p>参考: <a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">阮一峰</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/22/OAuth-04/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/22/OAuth-04/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/22/OAuth-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/22/OAuth-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/22/OAuth-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/03/20/OAuth-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03 - OAuth2的CSRF攻击</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/03/22/OAuth-06/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OAuth-implicit-grant</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/22/OAuth-04/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/22/OAuth-04/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/22/OAuth-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/22/OAuth-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/22/OAuth-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACGUlEQVR42u3aSZKDMAwF0Nz/0vQBUk5/SbDAfl6lCNNjodLgzyde12L9/vf7zNU9V0duXhgYGK9lJI+/67V+33/1O/o0GBgYBzBWr9U7ZxJGq8/FwMDAWJ2Th9H8WgwMDIznGNXq8vd9MDAwMCZFbNJ6S9LB/NUfqcUxMDBeyJgUlk//fmS+gYGB8SrGVVzPtduuwcLAwNibkQe4KqbXYsvTPgwMjDMZeaKWH0m2ZeS8T1WGgYGxBSMPc5N/kyZd8iGWPAwMjK0Zk4flKeAk0I8GABgYGJsy8sFAEjSrL1T9TBgYGOcw5kVsHnCr2yYKbTgMDIytGXnjvle+Vj9WPrZc7nHDwMDYjlFt4uchOH+VXusNAwPjNEaeiuUvNB8MFEpiDAyMTRnzAjJP6XqtvegIBgbGAYy80XbvkLIavqM9IxgYGJsykuZXHognIbgZrDEwMA5jVINpsjGiSq2ODTAwMPZmVLdWFNK1VprYQ2JgYJzMqG6GqI4tJ4nmP71DDAyMrRmFyWfcuM/vMBpzYmBgHMDoYXpjy8loc3kVBgbGpoyruPKhYy/IlgtXDAyMAxh3xexqsdrbzFFNNzEwMHZiTBpkyYaMyeATAwMDoxf4qpG717CrJpQYGBgYk7CYlM3JtVHTDQMDAyMYW1YfnyeLDwZcDAyMlzDmm72SR1YL10K6iYGBsTUjLx3nN2220uKgj4GBsR3jD7k+2xmugAUaAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

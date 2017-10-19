@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03 - OAuth2的CSRF攻击 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OAuth2.0">
+    <meta name="description" content="假设有如下几个角色:受害者 lant ;攻击者 rymuscle ;第三方Web应用 liangren网 (它允许用户将其在 sandiruiqi网 的账号 和 liangren网 的账号进行绑定) ;OAuth2服务提供平台 sandiruiqi网 ;  攻击流程  攻击者rymuscle 登录 liangren网 并且选择使用自己的 sandiruiqi网 账号登录 ;  liangren网">
+<meta name="keywords" content="OAuth2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03 - OAuth2的CSRF攻击">
+<meta property="og:url" content="http://blog.renyimin.com/2016/03/20/OAuth-03/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="假设有如下几个角色:受害者 lant ;攻击者 rymuscle ;第三方Web应用 liangren网 (它允许用户将其在 sandiruiqi网 的账号 和 liangren网 的账号进行绑定) ;OAuth2服务提供平台 sandiruiqi网 ;  攻击流程  攻击者rymuscle 登录 liangren网 并且选择使用自己的 sandiruiqi网 账号登录 ;  liangren网">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/authorization_code.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/yihuajiemu_mawei.png">
+<meta property="og:updated_time" content="2017-10-19T07:46:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03 - OAuth2的CSRF攻击">
+<meta name="twitter:description" content="假设有如下几个角色:受害者 lant ;攻击者 rymuscle ;第三方Web应用 liangren网 (它允许用户将其在 sandiruiqi网 的账号 和 liangren网 的账号进行绑定) ;OAuth2服务提供平台 sandiruiqi网 ;  攻击流程  攻击者rymuscle 登录 liangren网 并且选择使用自己的 sandiruiqi网 账号登录 ;  liangren网">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/authorization_code.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03 - OAuth2的CSRF攻击</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">03 - OAuth2的CSRF攻击</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-03-20T14:03:21.000Z" itemprop="datePublished" class="page-time">
+  2016-03-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-OAuth-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03 - OAuth2的CSRF攻击</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-03-20 22:03:21" datetime="2016-03-20T14:03:21.000Z"  itemprop="datePublished">2016-03-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ol>
+<li><p>假设有如下几个角色:<br>受害者 <code>lant</code> ;<br>攻击者 <code>rymuscle</code> ;<br>第三方Web应用 <code>liangren网</code> (它允许用户将其在 <code>sandiruiqi网</code> 的账号 和 <code>liangren网</code> 的账号进行绑定) ;<br>OAuth2服务提供平台 <code>sandiruiqi网</code> ;</p>
+</li>
+<li><p>攻击流程</p>
+<ul>
+<li><p><code>攻击者rymuscle</code> 登录 <code>liangren网</code> 并且选择使用自己的 <code>sandiruiqi网</code> 账号登录 ;</p>
+</li>
+<li><p><code>liangren网</code> 将 <code>攻击者rymuscle</code> 重定向到 <code>sandiruiqi网</code> 的授权页(这时可能需要 <code>攻击者rymuscle</code> 登录过<code>sandiruiqi网</code>), <code>sandiruiqi网</code> 的授权页向 <code>攻击者rymuscle</code> 显示 “是否授权<code>liangren网</code>访问” ;</p>
+</li>
+<li><p><code>攻击者rymuscle</code> 在点击”同意授权”之后, 截获 <code>sandiruiqi网</code> 服务器返回的含有 <code>Authorization Code</code> 参数的HTTP响应 ;</p>
+</li>
+<li><p>然后 <code>攻击者rymuscle</code> 精心构造一个Web页面, 它会触发 <code>liangren网</code> 向 <code>sandiruiqi网</code> 发起<strong>令牌申请</strong>的请求, 而这个请求中的Authorization Code参数正是上一步 <code>攻击者rymuscle</code> 截获到的code ;</p>
+</li>
+<li><p><code>攻击者rymuscle</code> 将这个Web页面放到互联网上, 等待或者诱骗受害者来访问 ;</p>
+</li>
+<li><p>假设正好一个受害者 <code>lant</code> 访问了 <code>攻击者rymuscle</code> 准备的这个Web页面后, 令牌申请流程在 <code>受害者lant</code> 的浏览器里被顺利触发, <code>laingren网</code> 从 <code>sandiruiqi网</code> 那里获取到access_token, 但是这个token以及通过它进一步获取到的用户信息却都是攻击者 <code>攻击者rymuscle</code> 的 ;</p>
+</li>
+<li><p>也就是最终 <code>liangren网</code> 将 <code>攻击者rymuscle</code> 的 <code>sandiruiqi</code> 账号同 <code>lant</code> 的 <code>liangren网</code> 账号关联了起来</p>
+<p>从此以后, <code>lant</code>只要没有察觉到自己最初被悄悄使用了 <code>攻击者rymuscle</code> 的<code>sandiruiqi网</code> 账号登录, 那么他在 <code>liangren网</code> 上的所有资料, 都可以被 <code>攻击者rymuscle</code> 所看到, 并且 <code>攻击者rymuscle</code> 可能在 <code>lant</code> 的账号中做一些非法操作;</p>
+</li>
+</ul>
+</li>
+<li><p>整体时序图分析</p>
+<ul>
+<li><p>先看标准oauth时序图<br><img src="/img/oauth/authorization_code.png" width="635" height="600" alt="qq" align="center"></p>
+</li>
+<li><p>下面是从网上copy的一张图, 从整体上来看, 这次攻击的时序图类似下图:<br><img src="/img/oauth/yihuajiemu_mawei.png" width="635" height="580" alt="sina" align="center"></p>
+</li>
+</ul>
+</li>
+<li><p>可以看到, 攻击的关键点在于:<br>OAuth2的认证流程是分为好几步来完成的, 在标准oauth图的第3步, 第三方应用在收到一个GET请求时, 除了能知道当前用户的cookie, 以及URL中的Authorization Code之外, 难以分辨出这个请求到底是用户本人的意愿, 还是攻击者利用用户的身份伪造出来的请求; 于是乎, 攻击者就能使用移花接木的手段, 提前准备一个含有自己的Authorization Code的请求, 并让受害者的浏览器来接着完成后续的令牌申请流程 ;</p>
+</li>
+<li><p>难点(涉及到了非state参数防御):<br> 尽管这个攻击既巧妙又隐蔽, 但是要成功进行这样的CSRF攻击也是比较困难的 :    </p>
+<ul>
+<li><p>整个攻击必须在短时间内完成, 因为OAuth2提供者颁发的Authorization Code有效期很短, <strong>OAuth2官方推荐的时间是不大于10分钟</strong>, 而一旦Authorization Code过期那么后续的攻击也就不能进行下去了;</p>
+</li>
+<li><p>一个Authorization Code只能被使用一次, 如果OAuth2提供者收到重复的Authorization Code, 它会拒绝当前的令牌申请请求, 不止如此, 根据OAuth2官方推荐, 它还可以把和这个已经使用过的Authorization Code相关联的access_token全部撤销掉, 进一步降低安全风险;</p>
+<p>其实貌似只要做到Authorization Code只能被使用一次, 就可以防止csrf在此处的攻击了, 因为 <code>rymuscle</code> 在攻击的时候, 一旦获得 <code>Authorization Code</code>, 第三方站点服务器就会使用 <code>Authorization Code</code> 去申请access_token, 然后只要标记 <code>Authorization Code</code> 为已经使用, 那么 <code>受害者lant</code> 即使点击 <code>攻击者rymuscle</code> 构造好的链接也没用, 因为连接中的 <code>Authorization Code</code> 已经被标记为使用过了;</p>
+</li>
+<li><p>所以不一定非要使用下面的state参数来进行防御<br><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">比如微信公众平台的OAuth授权: state参数就是可选的</a><br><a href="http://open.weibo.com/wiki/Oauth2/authorize" target="_blank" rel="external">新浪开放平台的OAuth授权, state参数也是可选的</a><br>当然, 他们不一定做的是和此处一样的防御方案, 但明显不依赖于state参数来解决问题;</p>
+</li>
+</ul>
+</li>
+<li><p>state参数防御: 要防止这样的攻击其实很容易, 作为第三方应用的开发者, 只需在OAuth认证过程中加入 <code>state</code> 参数, 并验证它的参数值即可;</p>
+<ul>
+<li><p>在将用户重定向到OAuth2的Authorization Endpoint去的时候, 为用户生成一个随机的字符串, 并作为state参数加入到URL中 ;</p>
+</li>
+<li><p>在收到OAuth2服务提供者返回的Authorization Code请求的时候, 验证接收到的state参数值, 如果是正确合法的请求, 那么此时接受到的参数值应该和上一步提到的为该用户生成的state参数值完全一致, 否则就是异常请求;</p>
+<p>但需要注意 <code>state参数</code> 需要具备下面几个特性:</p>
+</li>
+<li><p>不可预测性: 足够的随机, 使得攻击者难以猜到正确的参数值 ;<br>如果你每次生成的state都被放在一起, 比如一个库/缓存中存在很多state;<br>那么问题就是攻击者还是可以拿着自己的code再加上一个state, 来构造一个链接欺骗用户来点击;(假设state正好就在你的库/缓存中);</p>
+</li>
+<li><p>重点是关联性: state参数值可以和当前用户会话(user session)相互关联的<br>所以应该让state和具体的用户关联起来, 虽然用户还没有登录, 但是也可以让state放到session中 ;<br>然后攻击者要猜测出来一个state的话, 即便是已经生成过了, 但是也得正好攻击的是这个用户;</p>
+</li>
+<li><p>唯一性: 每个用户每次请求生成的state参数值都是唯一的 ;</p>
+</li>
+<li><p>时效性: state参数一旦被使用则立即失效 ;</p>
+</li>
+</ul>
+</li>
+<li><p>其实可以结合以上两种方法来进行防御!</p>
+</li>
+</ol>
+<blockquote>
+<p><a href="http://insights.thoughtworkers.org/attack-aim-at-oauth2/" target="_blank" rel="external">参考 移花接木</a><br><a href="http://blog.sina.com.cn/s/blog_56b798f801018jyb.html" target="_blank" rel="external">参考 state参数漏洞</a><br><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">参考 阮一峰</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/20/OAuth-03/&title=《03 - OAuth2的CSRF攻击》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/20/OAuth-03/&title=《03 - OAuth2的CSRF攻击》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/20/OAuth-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03 - OAuth2的CSRF攻击》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/20/OAuth-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/20/OAuth-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/03/19/OAuth-02/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02 - 授权码模式简介</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/03/22/OAuth-04/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">04 - 授权码模式各阶段分析 (持续完善中...)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/20/OAuth-03/&title=《03 - OAuth2的CSRF攻击》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/20/OAuth-03/&title=《03 - OAuth2的CSRF攻击》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/20/OAuth-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03 - OAuth2的CSRF攻击》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/20/OAuth-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/20/OAuth-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aS5KDMAwFwNz/0pkDTEGeJFjYblaphMFuFhrr8/nE1/fiuv/1/51Xz7z65uELAwNjWUay/FPbun/+1efo1WBgYBzAuNpW755JGK2ui4GBgZFvKz/qJUEZAwMD442Am2eX90/AwMDAmCSxSektOQ7e3/96Lo6BgbEgY5JYvv35lf4GBgbGUoxv8ZpQq+W2wq4wMDC2ZvQS0QTQK7FVXxkGBsYJjHyEovdNMpaR85r1PAwMjMUZ+R/3yvfJgS9/ET94GBgYWzOqi+UtyXveaKPzd4aBgbEIIzm6TYJydUPVZBgDA+MERnX0IS+c5U/Og3KUkWNgYGzKqBbu87NZ9SCYtzCj/yEYGBgbMfIifjXVzLfSK71hYGCcyUhC2/2RsUrK26I/VsHAwNiaUV2ymgBXexS98Q4MDIxzGL2xiV4x7v5pDwxbYGBgbMfIi/t5izE5dD4brDEwMHZlzBuKedBMqNW2AQYGxgmMPLAmhbZeg2GCxMDAOIExH4B4qs2QhObLV4+BgXEkI/+1WnSbjGVgYGBgJMvMy2ST1uZjPQ0MDIxFGN/ilSSlbxfvytEaAwNjcUYv2M0bANVyW++4iYGBsRNjUiDrFeMSfHUPGBgYJzCqgS+P3PkxcTT9hYGBgXFflG81EvJRsELRDQMDAyMut+XLT5LhxwIuBgbGIoy8oNZLU6vDZOXjJgYGxtaMPHUspJSttmUedptNTQwMjPUYfwef+giULFDvAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
