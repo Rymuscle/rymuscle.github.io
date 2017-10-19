@@ -20,13 +20,13 @@
     
     
     <meta name="keywords" content="OAuth2.0">
-    <meta name="description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+    <meta name="description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
 <meta name="keywords" content="OAuth2.0">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
 <meta property="og:url" content="http://blog.renyimin.com/2016/03/22/OAuth-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+<meta property="og:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_sina.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_qq.png">
@@ -37,10 +37,10 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
-<meta property="og:updated_time" content="2017-10-19T09:06:39.000Z">
+<meta property="og:updated_time" content="2017-10-19T09:15:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
-<meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个">
+<meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/oauth_sina.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -198,7 +198,7 @@
 <li><p>第三方应用将用户导向授权页时, 传递的参数如下:</p>
 <ul>
 <li><code>response_type</code>: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code”</li>
-<li><p><code>client_id/AppID</code>: 表示客户端的ID, 必选项<br>由于你可能会有多个站点需要对接QQ/新浪微博/GitHub等开放平台的OAuth授权, 所以一般在授权服务平台登录之后, 是可以创建多个 <code>应用</code> 的;<br>每个<code>应用</code>对应你的一个 <code>第三方站点</code>, 开放平台会为每个<code>应用(第三方站点)</code>生成相应的 <code>AppID</code> 和 <code>AppSecret/AppKey</code>, 主要用来验证应用的合法性;</p>
+<li><p><code>client_id/AppID</code>: 表示客户端的ID, 必选项<br>由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 <code>应用</code> 的 (不同的站点对接授权服务器中不同的<code>应用</code>);<br>每个<code>应用</code>对应你的一个 <code>第三方站点</code>, 开放平台会为每个<code>应用(第三方站点)</code>生成相应的 <code>AppID</code> 和 <code>AppSecret/AppKey</code>, 主要用来验证应用的合法性;</p>
 </li>
 <li><p><code>redirect_uri</code>: 设定的重定向到<code>第三方站点URI</code>, 必选项</p>
 </li>
@@ -220,7 +220,7 @@
 </li>
 <li><p>简单测试:</p>
 <ul>
-<li><p>redirect_uri<br>在OAuth服务器中为第三方站点创建<code>应用</code>的时候, 设定的回调地址, 无论在认证服务器, 还是在第三方站点, 都会对其进行校验, <code>以防篡改</code>;</p>
+<li><p>redirect_uri<br>在OAuth服务器中为第三方站点创建 <code>应用</code> 的时候, 设定的回调地址, 无论在认证服务器, 还是在第三方站点, 都会对其进行校验, <code>以防篡改</code>;</p>
 <p>新浪授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_sina_err01.png" width="450" height="240" alt="github" align="center"></p>
 <p>简书qq授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_qq_err01.png" width="450" height="200" alt="github" align="center"></p>
 </li>
