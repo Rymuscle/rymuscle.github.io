@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
-<meta property="og:updated_time" content="2017-10-19T09:15:05.000Z">
+<meta property="og:updated_time" content="2017-10-19T09:18:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
 <meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
@@ -256,7 +256,7 @@
 </li>
 <li><p>(可选)权限自动续期问题</p>
 <ul>
-<li><p>注意<a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信公众平台</a>:<br>  1.若access_token已超时，那么进行refresh_token会获取一个新的access_token，新的超时时间, 并且一旦使用refresh_token来刷新access_token的话, refresh_token的过期时间也会更新(自动延期) ;<br>  2.若access_token未超时，那么进行refresh_token不会改变access_token，但超时时间会刷新，相当于续期access_token ;</p>
+<li><p>注意<a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信公众平台</a>:<br>  1.若access_token已超时，那么进行refresh_token会获取一个新的access_token，新的超时时间, 并且一旦使用refresh_token来刷新access_token的话, refresh_token的过期时间也会更新(自动延期) ;<br>  2.若access_token未超时，那么进行refresh_token不会改变access_token，但超时时间会刷新，相当于续期access_token ;<br>  这里说的超时时间刷新, 指的自然是第三方站点和授权服务器上的超时时间都要更新了(只不过你如果只是做对接的话,授权服务器上人家已经开发好了, 如果你是授权服务器也是自己开发的话, 那你就需要注意这里了)</p>
 </li>
 <li><p>其实第三方站点在受到授权服务器分配给当前用户的access_token之后, 假设说授权服务器返回access_token的过期时间为7200s(2小时), 那么第三方站点将access_token保存到用户session中, 并设置过期时间为6600s(中间可以有个10分钟的服务器时间差);</p>
 </li>
