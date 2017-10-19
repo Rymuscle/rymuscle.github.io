@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Restful API 安全性相关知识 (继续完善中...) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Restful">
+    <meta name="description" content="背景之前在5月份的时候, 大概花了3周的时间为公司做了一个前后端分离的小项目, 虽然项目整体业务比较简单, 但就是这个简单的小项目, 让我重新对restful api的接口安全行知识进行了简单地梳理; 当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ; Restful API 安全性Restful API的安全性包括的内容其实比较多, 目前我所了解">
+<meta name="keywords" content="Restful">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Restful API 安全性相关知识 (继续完善中...)">
+<meta property="og:url" content="http://blog.renyimin.com/2016/07/19/restful--01--授权/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="背景之前在5月份的时候, 大概花了3周的时间为公司做了一个前后端分离的小项目, 虽然项目整体业务比较简单, 但就是这个简单的小项目, 让我重新对restful api的接口安全行知识进行了简单地梳理; 当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ; Restful API 安全性Restful API的安全性包括的内容其实比较多, 目前我所了解">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-19T02:47:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Restful API 安全性相关知识 (继续完善中...)">
+<meta name="twitter:description" content="背景之前在5月份的时候, 大概花了3周的时间为公司做了一个前后端分离的小项目, 虽然项目整体业务比较简单, 但就是这个简单的小项目, 让我重新对restful api的接口安全行知识进行了简单地梳理; 当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ; Restful API 安全性Restful API的安全性包括的内容其实比较多, 目前我所了解">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Restful API 安全性相关知识 (继续完善中...)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Restful API 安全性相关知识 (继续完善中...)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-07-19T04:21:08.000Z" itemprop="datePublished" class="page-time">
+  2016-07-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/">Restful</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Restful-API-安全性"><span class="post-toc-number">2.</span> <span class="post-toc-text">Restful API 安全性</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端身份认证"><span class="post-toc-number">3.</span> <span class="post-toc-text">客户端身份认证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Basic"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">HTTP Basic</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Digest"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">HTTP Digest</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#API-KEY"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">API KEY</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OAUTH2"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">OAUTH2</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JWT"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">JWT</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-restful--01--授权"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Restful API 安全性相关知识 (继续完善中...)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-07-19 12:21:08" datetime="2016-07-19T04:21:08.000Z"  itemprop="datePublished">2016-07-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/">Restful</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>之前在5月份的时候, 大概花了3周的时间为公司做了一个<code>前后端分离</code>的小项目, 虽然项目整体业务比较简单, 但就是这个简单的小项目, 让我重新对restful api的接口安全行知识进行了简单地梳理;</p>
+<p>当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ;</p>
+<h2 id="Restful-API-安全性"><a href="#Restful-API-安全性" class="headerlink" title="Restful API 安全性"></a>Restful API 安全性</h2><p>Restful API的安全性包括的内容其实比较多, 目前我所了解的主要有:<br><code>客户端的身份认证</code><br><code>身份认证之后的授权</code><br><code>敏感数据的加密, 防篡改</code><br><code>replay的防范</code><br><code>api请求速率限制</code><br>``</p>
+<h2 id="客户端身份认证"><a href="#客户端身份认证" class="headerlink" title="客户端身份认证"></a>客户端身份认证</h2><p>其实在网上可以搜到好多 API身份认证的相关资料, 常见的认证方式有下面这些:<br><code>HTTP Basic</code><br><code>HTTP Digest</code><br><code>API KEY</code><br><code>Oauth</code><br><code>JWT</code></p>
+<p>下面就简单聊聊这些认证方式:</p>
+<h3 id="HTTP-Basic"><a href="#HTTP-Basic" class="headerlink" title="HTTP Basic"></a>HTTP Basic</h3><p>可以网上自行搜索, 基本上不会采用, 因为安全性比较低;</p>
+<h3 id="HTTP-Digest"><a href="#HTTP-Digest" class="headerlink" title="HTTP Digest"></a>HTTP Digest</h3><p>想了解可以网上自行搜索, 以后可能会进行补充, 暂时未做学习;</p>
+<h3 id="API-KEY"><a href="#API-KEY" class="headerlink" title="API KEY"></a>API KEY</h3><h3 id="OAUTH2"><a href="#OAUTH2" class="headerlink" title="OAUTH2"></a>OAUTH2</h3><h3 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h3><p>openid可以主要参考微信公众平台的: <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1445241432" target="_blank" rel="external">https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1445241432</a></p>
+<p>重点: <a href="http://blog.csdn.net/degwei/article/details/51489391" target="_blank" rel="external">http://blog.csdn.net/degwei/article/details/51489391</a><br><a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side</a><br><a href="http://wiki.open.qq.com/wiki/website/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7OpenID_OAuth2.0" target="_blank" rel="external">http://wiki.open.qq.com/wiki/website/%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7OpenID_OAuth2.0</a><br>参考: <a href="http://www.searchsoa.com.cn/showcontent_75305.htm" target="_blank" rel="external">http://www.searchsoa.com.cn/showcontent_75305.htm</a></p>
+<p>WSSE(WS-Security)<br>参考文档 : <a href="https://www.ibm.com/developerworks/cn/webservices/ws-secure/" target="_blank" rel="external">https://www.ibm.com/developerworks/cn/webservices/ws-secure/</a></p>
+<p><a href="http://php-di.org/" target="_blank" rel="external">http://php-di.org/</a></p>
+<p>UnionID<br>AppName<br>AppID<br>AppSecret(AppKey)<br>    当应用通过OpenAPI调用腾讯开放平台资源时需要的加密串，用来验证应用的合法性。AppKey在创建应用时分配<br>OpenID<br>    OpenID是与APP通信的用户key，跳转到应用首页后，URL后会带该参数。根据APPID以及QQ号码生成，不同的appid下同一个QQ号生成的OpenID是不一样的（目前不接受同一个开发者名下的不同应用之间对于同一个用户的OpenID的互通）。<br>    OpenID在每个应用中都是唯一，作为用户的唯一标识，访问OpenAPI时必需传入OpenID。 </p>
+<p>qq开放平台的专业术语解释:<br><a href="http://wiki.open.qq.com/wiki/%E6%A6%82%E5%BF%B5%E5%92%8C%E6%9C%AF%E8%AF%AD#1.3_AppKey" target="_blank" rel="external">http://wiki.open.qq.com/wiki/%E6%A6%82%E5%BF%B5%E5%92%8C%E6%9C%AF%E8%AF%AD#1.3_AppKey</a></p>
+<blockquote>
+<blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html" target="_blank" rel="external">参考 阮一峰</a></p>
+</blockquote>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Restful/">Restful</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&title=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&title=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/07/19/restful--01--授权/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/06/17/restful--02--/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">API Gateway</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&title=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&title=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/07/19/restful--01--授权/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Restful API 安全性相关知识 (继续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/07/19/restful--01--授权/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/07/19/restful--01--授权/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aO3LjMBAFQN3/0tzUwYr13oAKCDQil01L0wymMJ/PJz7Xn3P/++vLST7z/vkHDgYGxmsZ1+1JgrsP9Nsn3D+Zx4aBgXEOIwniPtc9lfvbF4SBgYHx7Zn2Cpj/LwYGBsazCTcJok3BGBgYGCtFbBJ6G+g9+Ce1OAYGxgsZK0nw1z//ZL6BgYHxKsZVnvU0moxC66gwMDC2ZuQJLm+KtePMZKUjWv7AwMA4gJE01Nr1i7aRt7QohoGBsTUjD/rZa18Seg7GwMDYlTFLsvl4YHZlTMarxQwWAwPj5Yz2spin1Nnz+XdhYGCcxmhXHFaWLWbDhuh5DAyMTRmz8WRbiLbXynyA+p9JLAYGxnaMNsSEPRsS5OOHaBKLgYGxEeOBYeGo+MxfR70tgoGBsR1j1ppvE2L7atoYMDAw9mbkSW22sJUHtFQGY2BgHMCYDQbyZN22z+pkjYGBsTWjvSCul6Z5uLM1MgwMjF0ZxZhwNNqcjQHqlI2BgXEMI2+9zYaUecOubsxhYGAcw2i/Jl+8aJ+sm30YGBgHMNangSuwWenbFOkYGBhvZVzlaYeRK6SCioGBsTWjLRfvSc+ODVbKZgwMjP0Y7VJF22JrG2r5YgcGBsZpjDbxtZfFlUtkUcpiYGBgxIOENqC28ffJ/4CBgXEkIx8YtGG1xfBSwsXAwHghI193yC98s5WLdhSKgYFxAiO/xj21PJG06tapGBgYWzD+Aevgk2GtrD3RAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/jianshu_sina_err01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/jianshu_qq_err01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
-<meta property="og:updated_time" content="2017-09-22T07:55:11.000Z">
+<meta property="og:updated_time" content="2017-10-17T03:48:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03-授权码模式分析">
 <meta name="twitter:description" content="各步骤的参数研究客户端将用户导向授权页应该传递的参数12345response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 &quot;code&quot;client_id: 表示客户端的ID, 必选项redirect_uri: 表示重定向URI, 可选项scope: 表示申请的权限范围, 可选项state: 表示客户端的当前状态, 可以指定任意值, 认证服务器会原封不动地返回">
@@ -209,6 +209,9 @@
 <h5 id="简书的state"><a href="#简书的state" class="headerlink" title="简书的state"></a>简书的state</h5><p>简书也对自己生成的state做校验了, 如果你改动授权页中的state, 你会发现登录失败并跳到登录页</p>
 <h3 id="认证服务器返回"><a href="#认证服务器返回" class="headerlink" title="认证服务器返回"></a>认证服务器返回</h3><h4 id="state-1"><a href="#state-1" class="headerlink" title="state"></a>state</h4><p>原样返回之前客户端生成并传递过来的state</p>
 <h4 id="code"><a href="#code" class="headerlink" title="code"></a>code</h4><p>为了防止code被篡改:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">可以设置有时效性, 比如QQ的code会在十分钟后过期, 这样即使攻击者给受害者的链接中是自己的code, 让受害者在十分钟内就点击的难度也会增大</div><div class="line"></div><div class="line">其实最好是code一旦申请过token_access之后, 认证服务器就应该立马做上标记, 以便不能被二次使用</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">参考 阮一峰</a></p>
+</blockquote>
 
         </div>
 
