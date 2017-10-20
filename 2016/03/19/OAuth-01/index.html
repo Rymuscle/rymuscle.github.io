@@ -29,7 +29,7 @@
 <meta property="og:description" content="OAuth(Open Authorization)开放式授权1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ; 2.传统所谓的&amp;quot;授权&amp;quot;, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站; 传统">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth2-01.png">
-<meta property="og:updated_time" content="2017-10-20T01:22:30.000Z">
+<meta property="og:updated_time" content="2017-10-20T02:03:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01 - OAuth开放式授权 简介">
 <meta name="twitter:description" content="OAuth(Open Authorization)开放式授权1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ; 2.传统所谓的&amp;quot;授权&amp;quot;, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站; 传统">
@@ -200,9 +200,11 @@
 </ul>
 <p>2.公司需要为自己的多套系统做统一授权管理;</p>
 <ul>
-<li><p>公司如果做微服务架构, 此时就会了对分布式系统做统一管理, 可能就会做自己的 <code>API Gateway</code> 或者是使用一些开源的ApiGateway解决方案(如<a href="https://getkong.org/" target="_blank" rel="external">kong</a>), 此时在网关系统中就会涉及到<code>api对内部客户端系统的授权管理</code>;</p>
+<li><p>公司如果做微服务架构, 为了对分布式系统做统一管理, 可能就会做自己的 <code>API Gateway</code>系统 或者是使用一些开源的ApiGateway解决方案(如<a href="https://getkong.org/" target="_blank" rel="external">kong</a>) ;<br>各系统对后台api的调用都需要经过api网关系统 ;<br>此时API网关就可以使用OAuth 2.0协议进行身份验证和授权。 API网关可以充当OAuth 2.0授权服务器</p>
 </li>
-<li><p>公司做SSO单点登录也可以用OAuth来实现(当然也可以使用cookie实现);</p>
+<li><p>或者你们公司只是做一个简单的API授权模块, 而不是想做一套完整的api gateway系统;</p>
+</li>
+<li><p>再或者公司做SSO单点登录也可以用OAuth来实现(当然也可以使用cookie实现);</p>
 </li>
 </ul>
 <p>3.公司开发自己对外的开放平台;<br>当然, 此时你公司自然是做大做强了, 可以对一些小公司提供福利了!!</p>
