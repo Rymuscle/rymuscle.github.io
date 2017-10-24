@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
-<meta property="og:updated_time" content="2017-10-20T01:29:33.000Z">
+<meta property="og:updated_time" content="2017-10-20T08:00:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
 <meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
@@ -232,6 +232,9 @@
 </ul>
 </li>
 <li><p>从上面各平台也可以看到, 返回参数相对比较简单;</p>
+<ul>
+<li>返回的code是和授权页登录的用户身份相关的; (后面的access_token也是通过code和用户身份关联起来的)</li>
+</ul>
 </li>
 </ol>
 <h4 id="第二阶段-通过Authorization-Code获取Access-Token"><a href="#第二阶段-通过Authorization-Code获取Access-Token" class="headerlink" title="第二阶段: 通过Authorization Code获取Access Token"></a>第二阶段: 通过Authorization Code获取Access Token</h4><ol>

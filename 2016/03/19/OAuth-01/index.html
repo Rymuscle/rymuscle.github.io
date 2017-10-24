@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="OAuth2.0">
-    <meta name="description" content="OAuth(Open Authorization)开放式授权1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ; 2.传统所谓的&amp;quot;授权&amp;quot;, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站; 传统">
+    <meta name="description" content="开始之前首先需要将 API接口签名验证 和 授权 这两个概念稍微区分一下 现在基本上在网上搜索 Restful API授权认证 方面的内容, 很多文章都会罗列出 OAuth2.0, JWT, API_KEY 等方案;  但其实上述列出的方案并不是都用来解决 授权认证 问题的;授权认证: 一般指的是用户给第三方站点授权(可以是内部系统之间,也可以是第三方站点和授权服务器之间)api接口签名验证: 一">
 <meta name="keywords" content="OAuth2.0">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01 - OAuth开放式授权 简介">
 <meta property="og:url" content="http://blog.renyimin.com/2016/03/19/OAuth-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="OAuth(Open Authorization)开放式授权1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ; 2.传统所谓的&amp;quot;授权&amp;quot;, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站; 传统">
+<meta property="og:description" content="开始之前首先需要将 API接口签名验证 和 授权 这两个概念稍微区分一下 现在基本上在网上搜索 Restful API授权认证 方面的内容, 很多文章都会罗列出 OAuth2.0, JWT, API_KEY 等方案;  但其实上述列出的方案并不是都用来解决 授权认证 问题的;授权认证: 一般指的是用户给第三方站点授权(可以是内部系统之间,也可以是第三方站点和授权服务器之间)api接口签名验证: 一">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth2-01.png">
-<meta property="og:updated_time" content="2017-10-20T02:03:05.000Z">
+<meta property="og:updated_time" content="2017-10-23T09:56:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01 - OAuth开放式授权 简介">
-<meta name="twitter:description" content="OAuth(Open Authorization)开放式授权1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ; 2.传统所谓的&amp;quot;授权&amp;quot;, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站; 传统">
+<meta name="twitter:description" content="开始之前首先需要将 API接口签名验证 和 授权 这两个概念稍微区分一下 现在基本上在网上搜索 Restful API授权认证 方面的内容, 很多文章都会罗列出 OAuth2.0, JWT, API_KEY 等方案;  但其实上述列出的方案并不是都用来解决 授权认证 问题的;授权认证: 一般指的是用户给第三方站点授权(可以是内部系统之间,也可以是第三方站点和授权服务器之间)api接口签名验证: 一">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/oauth2-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-Open-Authorization-开放式授权"><span class="post-toc-number">1.</span> <span class="post-toc-text">OAuth(Open Authorization)开放式授权</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么学习OAuth授权"><span class="post-toc-number">2.</span> <span class="post-toc-text">为什么学习OAuth授权?</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-–-4个角色"><span class="post-toc-number">3.</span> <span class="post-toc-text">OAuth – 4个角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-2-0的运行流程"><span class="post-toc-number">4.</span> <span class="post-toc-text">OAuth 2.0的运行流程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出客户端的授权模式"><span class="post-toc-number">5.</span> <span class="post-toc-text">引出客户端的授权模式</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#开始之前首先需要将-API接口签名验证-和-授权-这两个概念稍微区分一下"><span class="post-toc-number">1.</span> <span class="post-toc-text">开始之前首先需要将 API接口签名验证 和 授权 这两个概念稍微区分一下</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-Open-Authorization-开放式授权"><span class="post-toc-number">2.</span> <span class="post-toc-text">OAuth(Open Authorization)开放式授权</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么学习OAuth授权"><span class="post-toc-number">3.</span> <span class="post-toc-text">为什么学习OAuth授权?</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-–-4个角色"><span class="post-toc-number">4.</span> <span class="post-toc-text">OAuth – 4个角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OAuth-2-0的运行流程"><span class="post-toc-number">5.</span> <span class="post-toc-text">OAuth 2.0的运行流程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出客户端的授权模式"><span class="post-toc-number">6.</span> <span class="post-toc-text">引出客户端的授权模式</span></a></li></ol>
         </nav>
     </aside>
     
@@ -186,29 +186,28 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="OAuth-Open-Authorization-开放式授权"><a href="#OAuth-Open-Authorization-开放式授权" class="headerlink" title="OAuth(Open Authorization)开放式授权"></a>OAuth(Open Authorization)开放式授权</h2><p>1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ;</p>
+            <h2 id="开始之前首先需要将-API接口签名验证-和-授权-这两个概念稍微区分一下"><a href="#开始之前首先需要将-API接口签名验证-和-授权-这两个概念稍微区分一下" class="headerlink" title="开始之前首先需要将 API接口签名验证 和 授权 这两个概念稍微区分一下"></a>开始之前首先需要将 <code>API接口签名验证</code> 和 <code>授权</code> 这两个概念稍微区分一下</h2><ol>
+<li><p>现在基本上在网上搜索 <code>Restful API授权认证</code> 方面的内容, 很多文章都会罗列出 <code>OAuth2.0</code>, <code>JWT</code>, <code>API_KEY</code> 等方案;</p>
+</li>
+<li><p>但其实上述列出的方案并不是都用来解决 <code>授权认证</code> 问题的;<br><code>授权认证</code>: 一般指的是用户给第三方站点授权(可以是内部系统之间,也可以是第三方站点和授权服务器之间)<br><code>api接口签名验证</code>: 一般用的是 JWT 或者 API_KEY (这两个方案其实除了格式, 原理比较类似, 微信公众号开发时, 其实就采用类似这种方案保证api接口数据传输的安全性);</p>
+</li>
+<li><p>你的api接口为了安全起见, 都会做<code>api接口签名验证</code>, 但是你不一定需要做授权认证;</p>
+</li>
+</ol>
+<h2 id="OAuth-Open-Authorization-开放式授权"><a href="#OAuth-Open-Authorization-开放式授权" class="headerlink" title="OAuth(Open Authorization)开放式授权"></a>OAuth(Open Authorization)开放式授权</h2><p>1.OAuth是一个关于授权(authorization)的开放网络标准, 在全世界得到广泛应用, 目前的版本是2.0版 ;</p>
 <p>2.<code>传统所谓的&quot;授权&quot;</code>, 比较 简单, 直接, 暴力, 比如:用户想在一个”云冲印”网站中冲印自己Google账户中的相册, 可能就需要将自己的Google账号和密码提供给”云冲印”网站;</p>
 <p><code>传统授权的弊端</code>:</p>
 <pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">1.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:</div><div class="line">很多第三方网站为了后续的服务, 会保存用户的google账号和密码, 这样很不安全, </div><div class="line">因为难免有些第三方平台会由于自己的安全问题而导致用户的google账号和密码泄露, </div><div class="line">从而导致用户大量信息泄露;</div><div class="line">google为了防止可能存在猪一样的第三方队友, 自然不会让自己的用户使用 如此low的授权方案 去给第三方站点授权 ;</div><div class="line"></div><div class="line">2.用户无法设定 第三方站点的权利范围:</div><div class="line">第三方网站拥有了获取用户在google的资料的权力, </div><div class="line">用户没法限制 第三方网站 获得授权的范围和有效期 ;</div><div class="line"></div><div class="line">3.用户想收回 第三方站点的权利不太方便:</div><div class="line">用户只有修改密码, 才能收回赋予 第三方网站 的权力, </div><div class="line">否则 第三方网站 将会永久拥有用户 Google 账号的权利; </div><div class="line">但是这样做, 又会使得其他所有获得用户授权的第三方应用程序全部失效;</div><div class="line"></div><div class="line">或者, 一些良心第三方可以设置 用户账号 和 google 账号的绑定和解绑,</div><div class="line">但不一定所有第三方都会给你做, 如果不做解绑的话, </div><div class="line">你还真就只有前一种方法能够收回权利;</div></pre></td></tr></table></figure>
 </code></pre><p>3.而OAuth的授权不会让 <code>第三方站点</code> 触及到用户在 <code>google</code> 上的帐号信息(如用户名与密码), 即第三方无需使用用户的google账号与密码就可以获得该用户在 <code>google</code> 上的资源, 因此 OAuth 是安全的, OAuth 是 <code>Open Authorization(开放授权)</code> 的简写;</p>
 <h2 id="为什么学习OAuth授权"><a href="#为什么学习OAuth授权" class="headerlink" title="为什么学习OAuth授权?"></a>为什么学习OAuth授权?</h2><p>1.公司的站点需要对接其他站点的开放平台;</p>
 <ul>
-<li><p>随处可见的 <code>QQ/微信/微博</code> 登录<br>比如你要做一个站点, 常规做法就需要建立一套用户注册登录体系, 但网民很反感, 因为他们可能有很多站点的用户名密码, 不太想再多一个账号了;<br>但大家几乎都有 QQ , 微信, 人人, 豆瓣 等互联网大佬的帐号; 那我们为何不用 QQ/新浪微博… 帐号登录后, 授权给本网站呢？<br>可行, 不过先要确定好相互之间(<code>第三方网站</code> 和 <code>QQ/新浪等可以提供授权服务的大站点</code> 之间)认证的规范, 这个规范有很多, 也可以自己写, 但业界比较通用 OAuth ;</p>
+<li><p>随处可见的 <code>QQ/微信/微博</code> 登录<br>比如你要做一个站点, 常规做法就需要建立一套用户注册登录体系, 但网民很反感, 因为他们可能有很多站点的用户名密码, 不太想再多一个账号了;<br>但大家几乎都有 QQ , 微信, 人人, 豆瓣 等互联网大佬的帐号; 那我们就可以用 QQ/新浪微博… 帐号登录后, 授权给本网站呢;</p>
 </li>
-<li><p>公司站点要接入<code>支付宝相关业务</code>, 那也需要用户授权第三方站点从支付宝获取一定的权利, 这也需要对OAuth相关知识有一定的了解才行;</p>
-</li>
-</ul>
-<p>2.公司需要为自己的多套系统做统一授权管理;</p>
-<ul>
-<li><p>公司如果做微服务架构, 为了对分布式系统做统一管理, 可能就会做自己的 <code>API Gateway</code>系统 或者是使用一些开源的ApiGateway解决方案(如<a href="https://getkong.org/" target="_blank" rel="external">kong</a>) ;<br>各系统对后台api的调用都需要经过api网关系统 ;<br>此时API网关就可以使用OAuth 2.0协议进行身份验证和授权。 API网关可以充当OAuth 2.0授权服务器</p>
-</li>
-<li><p>或者你们公司只是做一个简单的API授权模块, 而不是想做一套完整的api gateway系统;</p>
-</li>
-<li><p>再或者公司做SSO单点登录也可以用OAuth来实现(当然也可以使用cookie实现);</p>
+<li><p>公司站点作为第三方站点, 接入了<code>支付宝相关业务</code>(这样, 用户在本站点进行支付的时候, 就可以授权公司的站点从支付宝获取用户的账号信息,从而完成支付), 当然, 对接支付宝也需要对OAuth相关知识有一定的了解;</p>
 </li>
 </ul>
+<p>2.再比如SSO单点登录: 假设公司有多套内部系统, 也对应了多套后台管理系统, 比如:<br>    <code>A系统</code> – <code>A系统的后台管理系统</code>,<br>    <code>B系统</code> – <code>B系统的后台管理系统</code>,<br>    <code>C系统</code> – <code>C系统的后台管理系统</code>,<br>这样, 开发者或公司的后台管理人员可能就得在每个系统上都有自己的账号, 比较麻烦;<br>其实这时候就应该考虑可以做一个 <code>用户中心</code> 系统, 然后各系统的项目leader就可以在 <code>用户中心</code> 创建自己系统对应的<code>应用</code>(还可以考虑进行一些接口权限的授权);<br>然后各系统的用户(开发者/管理者), 只需要有个用户中心账号, 然后在用户中心进行登录, 就可以登录到其他系统;<br><strong>用户中心的单点登录其实就可以使用OAuth授权协议来做一个授权服务, 一旦用户登录用户中心, 就向用户发放access_token, 然后用户访问各个系统的时候, 都带着access_token去用户中心的认证服务做认证即可;</strong><br>(当然, SSO单点登录的方案不止使用OAuth这一种)</p>
 <p>3.公司开发自己对外的开放平台;<br>当然, 此时你公司自然是做大做强了, 可以对一些小公司提供福利了!!</p>
-<p>4.等等……</p>
 <p>无论以上那种场景, 你都需要对OAuth授权有一定的认识才行;</p>
 <h2 id="OAuth-–-4个角色"><a href="#OAuth-–-4个角色" class="headerlink" title="OAuth – 4个角色"></a>OAuth – 4个角色</h2><p>1.资源拥有者(Resource Owner)<br>资源所有者, 用户自己 ;</p>
 <p>2.资源服务器(Resource Server)<br>资源服务器, 即服务提供商存放用户生成的资源的服务器 (当然, 它与认证服务器, 可以是同一台服务器,也可以是不同的服务器)</p>
