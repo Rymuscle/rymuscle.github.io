@@ -13,17 +13,17 @@
     
     
     
-    <title>04 - 授权码模式各阶段分析 (持续完善中...) | Lant&#39;s Blog</title>
+    <title>04 - 授权码模式各阶段参数分析 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="OAuth2.0,后端架构">
+    <meta name="keywords" content="后端架构,OAuth2.0">
     <meta name="description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
-<meta name="keywords" content="OAuth2.0,后端架构">
+<meta name="keywords" content="后端架构,OAuth2.0">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
+<meta property="og:title" content="04 - 授权码模式各阶段参数分析">
 <meta property="og:url" content="http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
@@ -38,10 +38,9 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/oauth/tengxunqq_01.png">
-<meta property="og:updated_time" content="2017-10-25T08:01:53.000Z">
+<meta property="og:updated_time" content="2017-10-25T08:40:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04 - 授权码模式各阶段分析 (持续完善中...)">
+<meta name="twitter:title" content="04 - 授权码模式各阶段参数分析">
 <meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/oauth_sina.png">
     
@@ -124,7 +123,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04 - 授权码模式各阶段分析 (持续完善中...)</div>
+        <div class="flex-col header-title ellipsis">04 - 授权码模式各阶段参数分析</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -146,7 +145,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">04 - 授权码模式各阶段分析 (持续完善中...)</h1>
+        <h1 class="title">04 - 授权码模式各阶段参数分析</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-05-25T12:10:12.000Z" itemprop="datePublished" class="page-time">
@@ -179,7 +178,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04 - 授权码模式各阶段分析 (持续完善中...)</h1>
+        <h1 class="post-card-title">04 - 授权码模式各阶段参数分析</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-05-25 20:10:12" datetime="2016-05-25T12:10:12.000Z"  itemprop="datePublished">2016-05-25</time>
 
@@ -243,7 +242,7 @@
 </li>
 <li><p>本阶段, 我们在自己的第三方站点中就可以使用第一阶段的Authorization Code获取Access Token:</p>
 <ul>
-<li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a><br>(暂不上图, 微信还涉及到了openid, 此处介绍标准OAuth, 因此先不进行介绍)</p>
+<li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a></p>
 </li>
 <li><p><a href="http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token" target="_blank" rel="external">qq</a><br><img src="/img/oauth/access_token_qq.png" width="650" height="680" alt="github" align="center"></p>
 </li>
@@ -277,20 +276,13 @@
 </li>
 </ol>
 <h4 id="第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源"><a href="#第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源" class="headerlink" title="第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源"></a>第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源</h4><ol>
-<li><p>获取access_token后，进行接口调用，有以下前提：</p>
-<ul>
+<li>获取access_token后，进行接口调用，有以下前提：<ul>
 <li>access_token有效且未超时；</li>
 <li>微信用户已授权给第三方应用帐号相应接口作用域(scope);<br>也就是在授权服务器上还会使用access_token去检测对应的scope权限是否正确;</li>
 </ul>
 </li>
-<li><p>注意, 使用access_token获取用户资源的时候, 得先知道用户在资源服务器上的身份(比如id):</p>
-<ul>
-<li><a href="http://open.weibo.com/wiki/Oauth2/get_token_info" target="_blank" rel="external">新浪</a>需要使用access_token获取用户信息</li>
-<li><a href="http://wiki.open.qq.com/wiki/website/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_Server-side" target="_blank" rel="external">腾讯</a>需要是使用access_token获取用户openid<br><img src="/img/oauth/tengxunqq_01.png" width="600" height="300" alt="github" align="center"></li>
-<li>而微信公众平台在获取access_token之后, 会同时返回<code>openid</code>表示微信用户在本公众号中的唯一标识;</li>
-</ul>
-</li>
 </ol>
+<p>2.许多开放平台在申请完access_token令牌之后, 都提供了对应接口来获取用户相关信息<br><a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">QQ互联</a>提供了相应的接口, 使用Access Token来获取用户的OpenID;<br><a href="http://open.weibo.com/wiki/Oauth2/get_token_info" target="_blank" rel="external">新浪开放平台</a>提供了相应的接口来获取access_token对应的用户信息;<br><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842" target="_blank" rel="external">而微信公众平台</a>: 在获取access_token的时候, 会同时返回<code>openid</code>表示微信用户在本公众号中的唯一标识;</p>
 
         </div>
 
@@ -327,7 +319,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -337,7 +329,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -347,7 +339,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -496,7 +488,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -506,7 +498,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&title=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -516,7 +508,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段分析 (持续完善中...)》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04 - 授权码模式各阶段参数分析》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-01-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
