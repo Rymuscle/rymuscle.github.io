@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="背景曾经在公司做过一个简单的 前后端分离 小项目, 由于项目整体业务比较简单, 所以也让我有时间重新对restful api的接口安全行知识进行了简单地梳理;当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ; Restful API – 接口安全性(整套方案可以参考微信公众平台)1.Restful API的安全性包括的内容其实比较多, 目前我所了解">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-24T09:39:11.000Z">
+<meta property="og:updated_time" content="2017-10-24T10:47:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Restful API 安全性相关知识 (持续完善中...)">
 <meta name="twitter:description" content="背景曾经在公司做过一个简单的 前后端分离 小项目, 由于项目整体业务比较简单, 所以也让我有时间重新对restful api的接口安全行知识进行了简单地梳理;当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ; Restful API – 接口安全性(整套方案可以参考微信公众平台)1.Restful API的安全性包括的内容其实比较多, 目前我所了解">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Restful-API-–-接口安全性-整套方案可以参考微信公众平台"><span class="post-toc-number">2.</span> <span class="post-toc-text">Restful API – 接口安全性(整套方案可以参考微信公众平台)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#可以参考微信公众平台的接口校验规则-可以参考微信开放平台PHP对接的demo文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">可以参考微信公众平台的接口校验规则 (可以参考微信开放平台PHP对接的demo文件):</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端身份认证"><span class="post-toc-number">4.</span> <span class="post-toc-text">客户端身份认证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Basic"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">HTTP Basic</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Digest"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">HTTP Digest</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#API-KEY"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">API KEY</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OAUTH2"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">OAUTH2</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JWT"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">JWT</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Restful-API-–-接口安全性-整套方案可以参考微信公众平台"><span class="post-toc-number">2.</span> <span class="post-toc-text">Restful API – 接口安全性(整套方案可以参考微信公众平台)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#微信公众平台上有很多涉及到接口交互安全性的地方可供参考-同时可参考微信开放平台PHP对接的demo文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">微信公众平台上有很多涉及到接口交互安全性的地方可供参考 (同时可参考微信开放平台PHP对接的demo文件):</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">4.</span> <span class="post-toc-text">注意:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端身份认证"><span class="post-toc-number">5.</span> <span class="post-toc-text">客户端身份认证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Basic"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">HTTP Basic</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-Digest"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">HTTP Digest</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#API-KEY"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">API KEY</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#OAUTH2"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">OAUTH2</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JWT"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">JWT</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -186,22 +186,21 @@
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>曾经在公司做过一个简单的 <code>前后端分离</code> 小项目, 由于项目整体业务比较简单, 所以也让我有时间重新对restful api的接口安全行知识进行了简单地梳理;<br>当然, 文章会随着以后的积累不断进行调整和优化, 也希望大家能够多提出一些宝贵的意见一起进行交流 ;</p>
 <h2 id="Restful-API-–-接口安全性-整套方案可以参考微信公众平台"><a href="#Restful-API-–-接口安全性-整套方案可以参考微信公众平台" class="headerlink" title="Restful API – 接口安全性(整套方案可以参考微信公众平台)"></a>Restful API – 接口安全性(整套方案可以参考微信公众平台)</h2><p>1.Restful API的安全性包括的内容其实比较多, 目前我所了解的主要有:<br><code>客户端的身份认证</code> : 判断请求来源是否合法;<br><code>敏感数据的加密, 防篡改</code> : HTTPS, 数据加密, 签名;<br><code>replay的防范</code> : 防止重放攻击, 在冗余重放时间(服务器间时间误差)内结合nonce参数来保证;<br><code>api请求速率限制</code> : 为防止恶意调用(例如，限制每个用户的API的使用是在?秒内最多?次的API调用，当然速率要调整好)。</p>
-<h2 id="可以参考微信公众平台的接口校验规则-可以参考微信开放平台PHP对接的demo文件"><a href="#可以参考微信公众平台的接口校验规则-可以参考微信开放平台PHP对接的demo文件" class="headerlink" title="可以参考微信公众平台的接口校验规则 (可以参考微信开放平台PHP对接的demo文件):"></a>可以参考微信公众平台的接口校验规则 (可以参考微信开放平台PHP对接的demo文件):</h2><p>微信公众平台上有三种接口授权的安全交互方式:<br>1.微信公众平台配置服务器时设置的 <code>url</code>, <code>token</code> 以及生成 <code>EncodingAESKey</code> 是为了让你确保你的公众平台服务器能够安全地 <code>接收</code> 来自微信服务器的请求，当然, <a href="http://blog.csdn.net/zhutulang/article/details/50614042" target="_blank" rel="external">你也可以选择不进行校验</a>, 不过对于你的服务器来说当然就是比较危险的, 因为一旦你的接口地址泄露, 就有可能被恶意调用;</p>
+<h2 id="微信公众平台上有很多涉及到接口交互安全性的地方可供参考-同时可参考微信开放平台PHP对接的demo文件"><a href="#微信公众平台上有很多涉及到接口交互安全性的地方可供参考-同时可参考微信开放平台PHP对接的demo文件" class="headerlink" title="微信公众平台上有很多涉及到接口交互安全性的地方可供参考 (同时可参考微信开放平台PHP对接的demo文件):"></a>微信公众平台上有很多涉及到接口交互安全性的地方可供参考 (同时可参考微信开放平台PHP对接的demo文件):</h2><p>1.微信公众平台配置服务器时设置的 <code>url</code>, <code>token</code> 以及生成 <code>EncodingAESKey</code> 是为了让你确保你的公众平台服务器能够安全地 <code>接收</code> 来自微信服务器的请求，当然, <a href="http://blog.csdn.net/zhutulang/article/details/50614042" target="_blank" rel="external">你也可以选择不进行校验</a>, 不过对于你的服务器来说当然就是比较危险的, 因为一旦你的接口地址泄露, 就有可能被恶意调用;</p>
 <ul>
 <li>开发者的服务器通过调用微信服务器上的基础接口, 对外提供了很多可能包含用户资料的接口, 这样就要防止外部恶意窃取和调用;</li>
 </ul>
-<p>2.而微信公众平台通过AppID和AppSecret获取的access_token, 这个也是 <code>微信服务器</code> 为了安全起见, 授予 <code>开发者服务器</code> 的token, 让我们有了这个令牌才可以调用人家的接口; </p>
+<p>2.而开发者服务器可以通过微信公众平台的 <code>AppID</code> 和 <code>AppSecret</code> 获取 <code>access_token</code>(全局access_token, 微信有还有一个授权access_token), 这个是 <code>微信服务器</code> 授予 <code>开发者服务器</code> 的token, 为了限制有这个令牌的服务器才被授权可以调用微信服务器的接口; </p>
 <ul>
 <li><p><a href="http://blog.renyimin.com/2016/03/24/OAuth-07/">属于OAuth的 Client Credentials Grant 授权方案(客户端以自己的名义, 而不是以用户的名义, 向”服务提供商”进行认证)</a>, 获取access_token的接口如下:<br><code>https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=APPID&amp;secret=APPSECRET</code></p>
 </li>
-<li><p>如果你们公司有 <code>数据中心</code>, <code>支付中心</code>, <code>用户中心</code> 等比较核心的服务来为公司的各个系统提供接口支持, 那你可能就需要有一个后台 <code>授权服务系统</code>, 专门管理这些服务中心的接口对内部系统的授权, 可以为每个系统生成 <code>APPID</code>, <code>APP_SECRET</code><br>然后各系统使用<code>APPID</code>, <code>APP_SECRET</code> 到 <code>授权服务系统</code> 申请access_token,然后使用access_token来决定是否能调用本服务中的接口;</p>
+<li><p>如果你们公司有 <code>数据中心</code>, <code>支付中心</code>, <code>用户中心</code> 等比较核心的服务来为公司的各个系统提供接口支持, 那你可能就需要有一个后台 <code>授权服务系统</code>, 专门管理这些服务中心的接口对内部系统的授权, 可以为每个系统生成 <code>APPID</code>, <code>APP_SECRET</code><br>然后各系统使用 <code>APPID</code>, <code>APP_SECRET</code> 到 <code>授权服务系统</code> 申请access_token,然后使用access_token来决定是否能调用本服务中的接口;</p>
 </li>
 </ul>
-<p>3.</p>
-<ul>
-<li>为什么开发者服务器调用微信服务器接口的时候, 不采用上一种方式呢?<br>  其接口本身就是开放出来供客户端服务器使用的, 都是基础性的功能接口, 而且是由能提供access_token的开发者服务器调用, 不用对参数做过多校验, 只要开发者服务器被授权就可以调用 ;</li>
-</ul>
 <p>3.OAuth网页授权 (授权码模式, 客户端是以用户的名义 向”服务提供商”进行认证)</p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意:"></a>注意:</h2><ul>
+<li>为什么开发者服务器调用微信服务器接口的时候, 不采用上一种方式呢?<br>其接口本身就是开放出来供客户端服务器使用的, 都是基础的功能性的接口, 一般是由能提供access_token的开发者服务器调用;<br>不用对参数做过多校验, 只要开发者服务器被授权就可以调用;</li>
+</ul>
 <ul>
 <li>微信公众平台并没有通过APPID和APPSECRET来对客户端(我们自己的开发者服务器)进行校验, 而是通过 <code>Token</code> 来识别调用我们的开发者服务器的, 这个token是自主设置，与公众平台wiki中常提的access_token不是一回事, 这个token只用于验证开发者服务器;</li>
 <li>另外, 微信公众平台使用了APPID来对传输的内容进行加密;</li>
