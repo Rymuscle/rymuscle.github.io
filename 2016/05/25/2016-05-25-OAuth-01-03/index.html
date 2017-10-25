@@ -38,7 +38,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/zhihu_auth_qq_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/access_token_qq.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/refresh_token_qq.png">
-<meta property="og:updated_time" content="2017-10-25T08:40:59.000Z">
+<meta property="og:updated_time" content="2017-10-25T08:44:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04 - 授权码模式各阶段参数分析">
 <meta name="twitter:description" content="第一阶段: 第三方站点将导向授权页 第三方应用将用户导向授权页时, 传递的参数如下:  response_type: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code” client_id/AppID: 表示客户端的ID, 必选项由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 应用 的 (不同的站点对接授权服务">
@@ -276,13 +276,15 @@
 </li>
 </ol>
 <h4 id="第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源"><a href="#第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源" class="headerlink" title="第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源"></a>第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源</h4><ol>
-<li>获取access_token后，进行接口调用，有以下前提：<ul>
+<li><p>获取access_token后，进行接口调用，有以下前提：</p>
+<ul>
 <li>access_token有效且未超时；</li>
 <li>微信用户已授权给第三方应用帐号相应接口作用域(scope);<br>也就是在授权服务器上还会使用access_token去检测对应的scope权限是否正确;</li>
 </ul>
 </li>
+<li><p>许多开放平台在申请完access_token令牌之后, 都提供了对应接口来获取用户相关信息<br><a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">QQ互联</a>提供了相应的接口, 使用Access Token来获取用户的OpenID;<br><a href="http://open.weibo.com/wiki/Oauth2/get_token_info" target="_blank" rel="external">新浪开放平台</a>提供了相应的接口来获取access_token对应的用户信息;<br><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842" target="_blank" rel="external">而微信公众平台</a>: 在获取access_token的时候, 会同时返回<code>openid</code>表示微信用户在本公众号中的唯一标识;</p>
+</li>
 </ol>
-<p>2.许多开放平台在申请完access_token令牌之后, 都提供了对应接口来获取用户相关信息<br><a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">QQ互联</a>提供了相应的接口, 使用Access Token来获取用户的OpenID;<br><a href="http://open.weibo.com/wiki/Oauth2/get_token_info" target="_blank" rel="external">新浪开放平台</a>提供了相应的接口来获取access_token对应的用户信息;<br><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842" target="_blank" rel="external">而微信公众平台</a>: 在获取access_token的时候, 会同时返回<code>openid</code>表示微信用户在本公众号中的唯一标识;</p>
 
         </div>
 
@@ -375,9 +377,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/05/26/2016-05-26-OAuth-02/" id="post-next" class="post-nav-link">
+      <a href="/2016/05/30/Encrypt and Decrypt/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">05 - OAuth-implicit-grant</h4>
+        <h4 class="title">Encrypt Decrypt</h4>
       </a>
     </div>
   
