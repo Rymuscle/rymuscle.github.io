@@ -13,25 +13,27 @@
     
     
     
-    <title>06 - Password Credentials Grant | Lant&#39;s Blog</title>
+    <title>02 - 授权码模式 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OAuth2.0">
-    <meta name="description" content="密码模式(Resource Owner Password Credentials Grant)用户向客户端提供自己的用户名和密码,客户端使用这些信息, 向”服务商提供商”索要授权; 在这种模式中, 用户必须把自己的密码给客户端, 但是客户端不得储存密码 ; 这通常用在用户对客户端高度信任的情况下, 比如客户端是操作系统的一部分, 或者由一个著名公司出品;  而认证服务器只有在其他授权模式无法执行的">
+    <meta name="description" content="授权码模式运行过程 运行图  运行过程分析1.向用户取得授权许可对应图中的第1、2、3步; 2.申请访问令牌access_token令牌的申请对应图中的第4、5步; ( 一些授权平台对标准oauth2进行了部分修改, 如QQ互联, 在申请完access_token令牌之后, 还有一步是使用access_token获取openid ) 3.使用令牌获取用户数据 这一过程中涉及了不少敏感参数和数据,">
 <meta name="keywords" content="OAuth2.0">
 <meta property="og:type" content="article">
-<meta property="og:title" content="06 - Password Credentials Grant">
-<meta property="og:url" content="http://blog.renyimin.com/2016/03/23/OAuth-06/index.html">
+<meta property="og:title" content="02 - 授权码模式">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="密码模式(Resource Owner Password Credentials Grant)用户向客户端提供自己的用户名和密码,客户端使用这些信息, 向”服务商提供商”索要授权; 在这种模式中, 用户必须把自己的密码给客户端, 但是客户端不得储存密码 ; 这通常用在用户对客户端高度信任的情况下, 比如客户端是操作系统的一部分, 或者由一个著名公司出品;  而认证服务器只有在其他授权模式无法执行的">
+<meta property="og:description" content="授权码模式运行过程 运行图  运行过程分析1.向用户取得授权许可对应图中的第1、2、3步; 2.申请访问令牌access_token令牌的申请对应图中的第4、5步; ( 一些授权平台对标准oauth2进行了部分修改, 如QQ互联, 在申请完access_token令牌之后, 还有一步是使用access_token获取openid ) 3.使用令牌获取用户数据 这一过程中涉及了不少敏感参数和数据,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-10-19T09:45:24.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/authorization_code.png">
+<meta property="og:updated_time" content="2017-10-25T07:44:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="06 - Password Credentials Grant">
-<meta name="twitter:description" content="密码模式(Resource Owner Password Credentials Grant)用户向客户端提供自己的用户名和密码,客户端使用这些信息, 向”服务商提供商”索要授权; 在这种模式中, 用户必须把自己的密码给客户端, 但是客户端不得储存密码 ; 这通常用在用户对客户端高度信任的情况下, 比如客户端是操作系统的一部分, 或者由一个著名公司出品;  而认证服务器只有在其他授权模式无法执行的">
+<meta name="twitter:title" content="02 - 授权码模式">
+<meta name="twitter:description" content="授权码模式运行过程 运行图  运行过程分析1.向用户取得授权许可对应图中的第1、2、3步; 2.申请访问令牌access_token令牌的申请对应图中的第4、5步; ( 一些授权平台对标准oauth2进行了部分修改, 如QQ互联, 在申请完access_token令牌之后, 还有一步是使用access_token获取openid ) 3.使用令牌获取用户数据 这一过程中涉及了不少敏感参数和数据,">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/authorization_code.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +114,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">06 - Password Credentials Grant</div>
+        <div class="flex-col header-title ellipsis">02 - 授权码模式</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,11 +136,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">06 - Password Credentials Grant</h1>
+        <h1 class="title">02 - 授权码模式</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-03-23T04:45:07.000Z" itemprop="datePublished" class="page-time">
-  2016-03-23
+                <time datetime="2016-05-22T12:27:36.000Z" itemprop="datePublished" class="page-time">
+  2016-05-22
 </time>
 
 
@@ -159,17 +161,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#密码模式-Resource-Owner-Password-Credentials-Grant"><span class="post-toc-number">1.</span> <span class="post-toc-text">密码模式(Resource Owner Password Credentials Grant)</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#授权码模式运行过程"><span class="post-toc-number">1.</span> <span class="post-toc-text">授权码模式运行过程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行过程分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">运行过程分析</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-OAuth-06"
+<article id="post-OAuth-01-01-2016-05-22"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">06 - Password Credentials Grant</h1>
+        <h1 class="post-card-title">02 - 授权码模式</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-03-23 12:45:07" datetime="2016-03-23T04:45:07.000Z"  itemprop="datePublished">2016-03-23</time>
+            <time class="post-time" title="2016-05-22 20:27:36" datetime="2016-05-22T12:27:36.000Z"  itemprop="datePublished">2016-05-22</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
@@ -184,13 +186,14 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="密码模式-Resource-Owner-Password-Credentials-Grant"><a href="#密码模式-Resource-Owner-Password-Credentials-Grant" class="headerlink" title="密码模式(Resource Owner Password Credentials Grant)"></a>密码模式(Resource Owner Password Credentials Grant)</h2><p>用户向客户端提供自己的用户名和密码,客户端使用这些信息, 向”服务商提供商”索要授权;</p>
-<p>在这种模式中, 用户必须把自己的密码给客户端, 但是客户端不得储存密码 ;</p>
-<p>这通常用在用户对客户端高度信任的情况下, 比如客户端是操作系统的一部分, 或者由一个著名公司出品; </p>
-<p>而认证服务器只有在其他授权模式无法执行的情况下, 才能考虑使用这种模式;</p>
-<blockquote>
-<p><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">参考 阮一峰</a></p>
-</blockquote>
+            <h2 id="授权码模式运行过程"><a href="#授权码模式运行过程" class="headerlink" title="授权码模式运行过程"></a>授权码模式运行过程</h2><ol>
+<li>运行图<br><img src="/img/oauth/authorization_code.png" width="535" height="500" alt="qq" align="center"></li>
+</ol>
+<h2 id="运行过程分析"><a href="#运行过程分析" class="headerlink" title="运行过程分析"></a>运行过程分析</h2><p>1.向用户取得授权许可<br>对应图中的第1、2、3步;</p>
+<p>2.申请访问令牌<br>access_token令牌的申请<br>对应图中的第4、5步;</p>
+<p>( 一些授权平台对标准oauth2进行了部分修改, 如QQ互联, 在申请完access_token令牌之后, 还有一步是使用<a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">access_token获取openid</a> )</p>
+<p>3.使用令牌获取用户数据</p>
+<p>这一过程中涉及了不少敏感参数和数据, 例如client_secret相当于是第三方应用自己的密码, access_token某种程度上来讲就是用户的session id, 由于这些参数以及数据极其特殊, 我们当然得确保它们的安全性, HTTPS加密传输以及安全存储是必不可少的防护手段, <strong>不过仅仅做到这些是远远不够的, 因为其实在这个流程里存在一个弱点， 容易被攻击者利用进行CSRF攻击, 稍后讲解 ; </strong></p>
 
         </div>
 
@@ -227,7 +230,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/23/OAuth-06/&title=《06 - Password Credentials Grant》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&title=《02 - 授权码模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -237,22 +240,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/23/OAuth-06/&title=《06 - Password Credentials Grant》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&title=《02 - 授权码模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/23/OAuth-06/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06 - Password Credentials Grant》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/23/OAuth-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02 - 授权码模式》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/23/OAuth-06/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -275,17 +278,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/03/22/OAuth-05/" id="post-prev" class="post-nav-link">
+        <a href="/2016/05/19/OAuth-00-2016-05-19/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">05 - OAuth-implicit-grant</h4>
+          <h4 class="title">01 - OAuth(Open Authorization)开放式授权协议</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/03/24/OAuth-07/" id="post-next" class="post-nav-link">
+      <a href="/2016/05/24/OAuth-01-02-2016-05-24/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">07 - Client Credentials Grant.</h4>
+        <h4 class="title">03 - OAuth2.0的CSRF攻击</h4>
       </a>
     </div>
   
@@ -396,7 +399,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/23/OAuth-06/&title=《06 - Password Credentials Grant》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&title=《02 - 授权码模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -406,22 +409,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/23/OAuth-06/&title=《06 - Password Credentials Grant》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&title=《02 - 授权码模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/23/OAuth-06/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06 - Password Credentials Grant》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/23/OAuth-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02 - 授权码模式》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/23/OAuth-06/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/22/OAuth-01-01-2016-05-22/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -432,7 +435,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACI0lEQVR42u3aS3KEMAwFwNz/0uQAKTtPEiwwzYqa4eNmoZJk/fzEx7U49v/+vXL1zNUvNx8YGBivZSSvT16Q3LV//uo8+jQYGBgfYKyWlTw6vz6PnPnaMDAwMPbX9FK9JChjYGBg3MWo8vYkDAwMjD0jKWKTZSXpYL70R2pxDAyMFzImheXT54/sb2BgYLyKcRWPPO3rtduu1oGBgXE2Y9JKe6LF1gNjYGB8h9ErOPe/9MJ0c/sTAwPjaMakQT/ZHtg/v5luYmBgHMfobSgmr8/xNwyTYWBgfIBRTfXu3c7MP1k0ZoGBgXEcYzLukAfNPEHMy10MDAyMJAXsjWvkwxbVYTUMDIyzGXkrrZqu5Uvptd4wMDC+xshDWz54Md8YKJTEGBgYRzOqr0zCcbn4HI93YGBgnM3Im2V5Q62X9lUbecsMFwMD4zhGD5Mvuhq+J8EaAwPjPMb+hhxQaIoFCWV12wADA+NsRjVeJVfmbbJeYfxPEYuBgXE0YzIAcdc2Q7XRVq7FMTAwjmPkOwnVpttkLGP5XgwMjA8wesvttckmW5vLuzAwMA5lXMUjb671gmy5cMXAwPgAYxLseueTYY5quomBgXESo1dAVkvQ/ItWm3QYGBjfYeSBb7KsanlcmAHDwMDAiBeX35Wnm4WmGwYGBkawbVl9fR6yHwy4GBgYL2EkoXBSplaHycrbmRgYGEcz8tJx/tBmKy0O+hgYGMcxfgGh7kup/Af+NQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACPUlEQVR42u3azU7DQAxF4bz/SwcJsYgESc+1p6hxzqwioEO+Liz/bRs++/c5Ph/P2c+Pvz278+yG7R1HhgwZt2Xsl+eMQZ5/v9DZ3xPYiy9IhgwZD2DwIHv9KfJaPOCSd5MhQ4aMTpC9vjkN7jJkyJDRL1zTQpTfL0OGDBm8iK0FR/LSJIgvq8VlyJBxQ0ZtMPA/z2+fb8iQIePjGXt4SNO/1oarvc/PDTJkyBjNuB4l1kYFaQlaGx5spK6VIUPGUEa6HsGzNZ5oFhfFZMiQMZqRvnTtH3cCdJyAypAhYxyDFJPkus5QgdwsQ4aMZzI6Kw7kU2SomX7raAYrQ4aMcYzO8JK3+NOEL3iWIUPGaEanybWqTcaDfpAgypAhYygj7c+tXVclABkyZDyTURtJ1hpzKT4YdsqQIeMxjFqLLW2r9Rt2L9ptMmTIGMe4Tt3SFTEyvOQhe8EgU4YMGeMYvOrlzbg01esU1TJkyJjNSBcpaitfaaGbLqXJkCFjNoMkbaSwJIkgX9RIvyYZMmRMZfSD4A5O2rwjLbxtbSyXIUPGxzN4ME0TxzRA19Y1ZMiQMZvRX4ZI22EkcSx+VoYMGUMZe3h4N56XoOmq2R+flSFDxmhGGuw6id2qMacMGTKeySBBlrTJ+oE7DdMyZMh4GiPdsEr/PU8N0wRUhgwZMki7vxZMV40NZMiQIaMzEqi13mr3yJAh4wkMUsSmA87aQJSvoG28hpYhQ8bNGWkBmbbYOmPOfvNOhgwZN2d8AYQu+ghxPCxMAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 
