@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/password_credentials_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_client_credentials_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_client_credentials_02.png">
-<meta property="og:updated_time" content="2017-10-25T07:37:05.000Z">
+<meta property="og:updated_time" content="2017-10-25T07:38:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01 - OAuth(Open Authorization)开放式授权协议">
 <meta name="twitter:description" content="OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版 OAuth之前的传统”授权”比较 简单, 直接, 暴力, 那就是直接提供自己资源服务器的账号和密码给第三方站点, 这种做法弊端太多:   1234567891011121314151617181.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:很多第三方网站为了后续的服务, 会保存用户的goo">
@@ -231,7 +231,7 @@
 </li>
 <li><p>服务器 <code>不提供像用户数据这样的重要资源</code> ，仅仅是一些开放的功能性API;<br>例如微信公众平台, Google Storage或Amazon S3 等开放平台提供的基础服务接口;</p>
 </li>
-<li><p>场景:<br>1.你自己实现了一套基础服务的Api(都是些基础功能接口, 并不涉及用户数据这种重要资源), <code>提供给内部其他系统通过认证的方式来调用</code>;<br>2.公司如果实力强悍的话, 也可以将公司开发的基础服务Api公开出来 <code>供外部其他第三方站点服务器</code> 来调用, 比如: 微信公众平台的开放接口其实就是使用这种方式(但微信的网页授权采用的就是授权码模式):<br><img src="/img/oauth/oauth_client_credentials_02.png" width="699" height="475" alt="oauth_client_credentials_02" align="center"></p>
+<li><p>场景:<br>1.你自己实现了一套基础服务的Api(都是些基础功能接口, 并不涉及用户数据这种重要资源), <code>提供给内部其他系统通过认证的方式来调用</code>;<br>2.公司如果实力强悍的话, 也可以将公司开发的基础服务Api公开出来 <code>供外部其他第三方站点服务器</code> 来调用, 比如: <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140183" target="_blank" rel="external">微信公众平台的开放接口其实就是使用这种方式</a>(但微信的网页授权采用的就是授权码模式):<br><img src="/img/oauth/oauth_client_credentials_02.png" width="699" height="475" alt="oauth_client_credentials_02" align="center"></p>
 </li>
 </ul>
 <h4 id="客户端模式-Client-Credentials-和-用户密码模式-有时候比较容易混淆"><a href="#客户端模式-Client-Credentials-和-用户密码模式-有时候比较容易混淆" class="headerlink" title="客户端模式(Client Credentials) 和 用户密码模式 有时候比较容易混淆"></a>客户端模式(Client Credentials) 和 用户密码模式 有时候比较容易混淆</h4><p>1.客户端模式: 如果客户端以自己的身份向服务提供商进行认证, 那需要授权中心给各个应用(不管是内部系统还是第三方站点服务器)分配对应的AppID和AppSecret, 然后第三方应用使用这两个信息来想认证服务器申请access_token, 这种场景下, 认证服务器提供的接口都是功能性的基础接口;<br>2.用户密码模式: 如果客户端以单个用户身份向服务提供商进行认证, 只要用户账号密码能通过认证服务器, 认证服务器就会发放access_token, 当然这种场景需要的是<code>几方角色都属于本公司内部</code>;</p>
