@@ -147,14 +147,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-2016-06-26-restful-02-安全"
+            <article id="post-2016-09-15-sameoriginpolicy-02"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-06-26 12:21:08" datetime="2016-06-26T04:21:08.000Z"  itemprop="datePublished">2016-06-26</time>
+        <time class="post-time" title="2016-09-15 21:10:13" datetime="2016-09-15T13:10:13.000Z"  itemprop="datePublished">2016-09-15</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/">Restful</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
 
 
 
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/06/26/2016-06-26-restful-02-安全/">Restful API 安全性相关知识 (持续完善中...)</a>
+      <a class="post-title-link" href="/2016/09/15/2016-09-15-sameoriginpolicy-02/">02.同源策略的限制 之 &#34;Cookie无法读取&#34;</a>
     </h3>
   
 
@@ -175,23 +175,73 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Restful API – 接口安全性
-其实整套方案可以参考微信公众平台中 进行 服务器配置 时, 微信推荐的签名校验策略;
+        回顾之前学习同源策略基础知识的时候, 了解了同源策略的 三种行为 限制:
 
-首先请注意，开发者在接收消息和事件时，都需要进行消息加解密（某些事件可能需要回复，回复时也需要先进行加密）。但是，通过API主动调用接口（包括调用客服消息接口发消息）时，不需要进行加密。
-服务器配置时设置的token其实就相当于自定义的通信私钥;
+Cookie、LocalStorage 和 IndexDB 无法读取
+DOM 无法获得 
+AJAX 请求不能发送 
 
-涉及到的相关要点...
+不过这里需要注意一点: “同源策略”的限制, 并没有限制住CSRF攻击“同源策略的限制”并不会导致 B站点中嵌入的 A站点超链接去读取A站点用户的cookie;假如你当前已经登录了邮箱，或bbs，同时...
     
 
-        <a href="/2016/06/26/2016-06-26-restful-02-安全/" class="post-more waves-effect waves-button">
+        <a href="/2016/09/15/2016-09-15-sameoriginpolicy-02/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Restful/">Restful</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2016-09-15-sameoriginpolicy-01"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2016-09-15 19:21:54" datetime="2016-09-15T11:21:54.000Z"  itemprop="datePublished">2016-09-15</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/09/15/2016-09-15-sameoriginpolicy-01/">01.浏览器的同源策略(Same origin policy)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策；
+最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ：
+1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ；
+2.域名完全相同http:...
+    
+
+        <a href="/2016/09/15/2016-09-15-sameoriginpolicy-01/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
 
     </div>
     

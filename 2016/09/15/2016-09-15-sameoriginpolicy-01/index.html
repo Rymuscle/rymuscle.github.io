@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01.浏览器的同源策略(Same origin policy) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="CrossDomain">
+    <meta name="description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策； 最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ： 1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ； 2.域名完全相同http://b">
+<meta name="keywords" content="CrossDomain">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01.浏览器的同源策略(Same origin policy)">
+<meta property="og:url" content="http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策； 最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ： 1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ； 2.域名完全相同http://b">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-27T08:57:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01.浏览器的同源策略(Same origin policy)">
+<meta name="twitter:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策； 最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 “三个相同” ： 1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ； 2.域名完全相同http://b">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01.浏览器的同源策略(Same origin policy)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">01.浏览器的同源策略(Same origin policy)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-09-15T11:21:54.000Z" itemprop="datePublished" class="page-time">
+  2016-09-15
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同源策略"><span class="post-toc-number">1.</span> <span class="post-toc-text">同源策略</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同源策略目的"><span class="post-toc-number">2.</span> <span class="post-toc-text">同源策略目的</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同源策略的限制"><span class="post-toc-number">3.</span> <span class="post-toc-text">同源策略的限制</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-09-15-sameoriginpolicy-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01.浏览器的同源策略(Same origin policy)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-09-15 19:21:54" datetime="2016-09-15T11:21:54.000Z"  itemprop="datePublished">2016-09-15</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h3 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a><code>同源策略</code></h3><p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策；</p>
+<p>最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 <strong>“三个相同”</strong> ：</p>
+<p><strong>1.协议相同</strong><br><code>http://blog.renyimin.com</code> 和 <code>https://blog.renyimin.com</code> 就不是同一个源 ；</p>
+<p><strong>2.域名完全相同</strong><br><code>http://blog.renyimin.com/test/index.php</code> 和 <code>http://blog.renyimin.com/welcome/index.html</code> 就是同一个源; 但是 <code>http://www.renyimin.com/test/index.php</code> 和 <code>http://blog.renyimin.com/test/index.php</code> 就不是同一个源 ；<br>请注意：localhost和127.0.0.1虽然都指向本机, 但也不是同一个源 ;</p>
+<p><strong>3.端口相同</strong><br><code>http://www.renyimin.com:8080/test/index.php</code> 和 <code>http://www.renyimin.com:80/test/index.php</code> 就不是同一个源 ;</p>
+<p>再举例来说，<code>http://www.example.com/dir/page.html</code> 这个网址，协议是 <code>http://</code>，域名是 <code>www.example.com</code>，端口是<code>80</code>（默认端口可以省略），它的同源情况如下：</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">http://www.example.com/dir2/other.html：同源</div><div class="line"></div><div class="line">http://example.com/dir/other.html：不同源（域名不同）</div><div class="line"></div><div class="line">http://v2.www.example.com/dir/other.html：不同源（域名不同）</div><div class="line"></div><div class="line">http://www.example.com:81/dir/other.html：不同源（端口不同）</div></pre></td></tr></table></figure>
+</code></pre><h3 id="同源策略目的"><a href="#同源策略目的" class="headerlink" title="同源策略目的"></a>同源策略目的</h3><p>1.为了保证用户信息的安全，防止恶意的网站窃取数据;<br>比如:用户登录一家银行网站后，又去浏览其他站点, 如果没有同源策略限制, 其他站点就也能读取银行网站的 Cookie, 会发生什么？</p>
+<ul>
+<li>如果 Cookie 包含用户银行的私密信息，这些信息就会泄漏给第三方站点, 当然, cookie中包含的敏感信息通常经过加密，很难将其反向破解, 但这并不意味着绝对安全;</li>
+<li>不去获取cookie中的信息, 而是直接偷取Cookie去骗取银行网站的信任;</li>
+</ul>
+<p>2.由此可见，”同源政策”是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了 ;</p>
+<h3 id="同源策略的限制"><a href="#同源策略的限制" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>随着互联网的发展, “同源政策”越来越严格, 目前, 如果非同源, 共有三种行为受到限制:</p>
+<ol>
+<li><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</li>
+<li><code>DOM</code> 无法获得 </li>
+<li><code>AJAX</code> 请求不能发送 </li>
+</ol>
+<p>(可能我平时更过关注到的是1，3这两点限制)</p>
+<ol>
+<li>不过这里需要注意一点: <strong>“同源策略”的限制, 并没有限制住CSRF攻击</strong><br>“同源策略的限制”并不会导致 B站点中嵌入的 <code>A站点超链接去读取A站点用户的cookie</code>;<br>假如你当前已经登录了邮箱，或bbs，同时你又访问了另外一个站点，假设这就是一个钓鱼网站; 这个网站上面可能因为某个图片吸引你，你去点击一下，此时可能就会触发一个js的点击事件，去构造一个bbs发帖的请求，去往你的bbs站点发帖，由于当前你的浏览器状态已经是登陆状态，所以session登陆cookie信息都会跟正常的请求一样，纯天然的利用当前的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; (这也就是我们通常所说的CSRF攻击, CSRF攻击的主要目的是让用户在不知情的情况下攻击自己已登录的一个系统，类似于钓鱼);</li>
+</ol>
+<p>最后, 虽然这些限制是必要的，但是有时很不方便，合理的用途也受到影响, 接下来将详细介绍如何在需要的时候合理地去规避”同源政策”的限制 ;</p>
+<blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考 阮一峰</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&title=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&title=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/05/25/2016-05-25-OAuth-01-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">04 - 授权码模式各阶段参数分析</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/09/15/2016-09-15-sameoriginpolicy-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02.同源策略的限制 之 &#34;Cookie无法读取&#34;</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&title=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&title=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.浏览器的同源策略(Same origin policy)》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACt0lEQVR42u3aQW7kMAwEwPz/07tATgtsbHeLkjOH8mkQzMgqBRAJkl9f8fPn+7n6/O/z/69O/Hbzg4eHh7e09avnaumrjSbfb4/yav37PePh4eGd5uWvufrL/ZEla7YB6f77eHh4eJ/Au7/0Hy7o2yOYpPV4eHh4n8zL0+62cDAJEnh4eHi/xUu23pYbklCRH9PxWgseHh5ezJs3wN7//Gp/Dw8PDy8OCXmQaLeSlzZGu8XDw8M7wGvb/PPBgrWm2lqKj4eHh3eal4837brQ86OclC3w8PDw9vLWXpaUZfMjWAsqUdDCw8PDO8xLQkL74kmK3JYhflgHDw8P7wBvV1Nq10bbA4oaY3h4eHgHeG3DPnllEjz2Tj08pN14eHh4L/LWCrJ5+aAt5ibr/PB9PDw8vK28pACRFwIm13ebZEdFXjw8PLxjvLYokFzZOTUfOMjTdDw8PLxzvPbanQ8EJEe2VhCpTxQPDw9vwJsPVE06UPnKayNZeHh4eLt4yUKTwkRbdFhLoC8PCA8PD+8AL7/017a+t4C7NqCAh4eHd5o3KZ7Ow0aSaiepeVSrxsPDw1viJS9oxwvmDbP5fwwPDw/vHK8t6c4bY/evbwu4ebMNDw8Pby8vuVInjHz9nJ230/Dw8PD28nJMPijQDh8U0w3tg4eHh/cKr73iJ+lyHmzaObKHWgseHh7egDcZFGgDQL5ay374FR4eHt5WXjIQ0CbE+YbyALCYS+Ph4eG9wss3vVa2WFt58SDw8PDwDvDmFdG2QLCrebY2fICHh4e3i9dWL/LkO7/K5wWLh1oLHh4e3gFemy63qXMSQtq3RGk6Hh4e3q/y2gLE2naTtL5oyOHh4eF9AG9evFhbId/zKDDg4eHhxby2fLAWPPIAU0yN4eHh4b3O23XR54u2DbPRWAAeHh7eTt5fjiENAfK9qLQAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
