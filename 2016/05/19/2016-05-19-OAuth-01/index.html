@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01 - OAuth(Open Authorization)开放式授权协议 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="后端架构,OAuth2.0">
+    <meta name="description" content="OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版 OAuth之前的传统”授权”比较 简单, 直接, 暴力, 一般是直接提供自己资源服务器的账号和密码给第三方站点, 要知道这种做的法弊端太多:   12345678910111.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:很多第三方网站为了后续的服务, 会保存用户资源服务器的账号和密码, 这">
+<meta name="keywords" content="后端架构,OAuth2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01 - OAuth(Open Authorization)开放式授权协议">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版 OAuth之前的传统”授权”比较 简单, 直接, 暴力, 一般是直接提供自己资源服务器的账号和密码给第三方站点, 要知道这种做的法弊端太多:   12345678910111.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:很多第三方网站为了后续的服务, 会保存用户资源服务器的账号和密码, 这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_authorization_code_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_implict_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/password_credentials_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/password_credentials_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_client_credentials_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oauth/oauth_client_credentials_02.png">
+<meta property="og:updated_time" content="2017-10-27T02:19:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01 - OAuth(Open Authorization)开放式授权协议">
+<meta name="twitter:description" content="OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版 OAuth之前的传统”授权”比较 简单, 直接, 暴力, 一般是直接提供自己资源服务器的账号和密码给第三方站点, 要知道这种做的法弊端太多:   12345678910111.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:很多第三方网站为了后续的服务, 会保存用户资源服务器的账号和密码, 这">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oauth/oauth_authorization_code_01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01 - OAuth(Open Authorization)开放式授权协议</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">01 - OAuth(Open Authorization)开放式授权协议</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-19T03:05:00.000Z" itemprop="datePublished" class="page-time">
+  2016-05-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/后端架构/">后端架构</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/后端架构/OAuth2-0/">OAuth2.0</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth是一个关于授权-authorization-的开放网络标准-目前的版本是2-0版"><span class="post-toc-number">1.</span> <span class="post-toc-text">OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#OAuth2-0协议定义了用于获得授权的”四种主要授权类型”"><span class="post-toc-number">2.</span> <span class="post-toc-text">OAuth2.0协议定义了用于获得授权的”四种主要授权类型”</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#1-授权码-Authorization-code-模式"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">1.授权码(Authorization code)模式</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#2-隐式授权模式-Implicit-Grant"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2.隐式授权模式(Implicit Grant)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#3-密码模式-Resource-Owner-Password-Credentials"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">3.密码模式(Resource Owner Password Credentials)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#4-客户端模式-Client-Credentials"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">4.客户端模式(Client Credentials)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端模式-Client-Credentials-和-用户密码模式-有时候比较容易混淆"><span class="post-toc-number">3.</span> <span class="post-toc-text">客户端模式(Client Credentials) 和 用户密码模式 有时候比较容易混淆</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-05-19-OAuth-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01 - OAuth(Open Authorization)开放式授权协议</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-19 11:05:00" datetime="2016-05-19T03:05:00.000Z"  itemprop="datePublished">2016-05-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/后端架构/">后端架构</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/后端架构/OAuth2-0/">OAuth2.0</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h4 id="OAuth是一个关于授权-authorization-的开放网络标准-目前的版本是2-0版"><a href="#OAuth是一个关于授权-authorization-的开放网络标准-目前的版本是2-0版" class="headerlink" title="OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版"></a>OAuth是一个关于授权(authorization)的开放网络标准, 目前的版本是2.0版</h4><ul>
+<li><p>OAuth之前的传统”授权”比较 简单, 直接, 暴力, 一般是直接提供自己资源服务器的账号和密码给第三方站点, 要知道这种做的法弊端太多:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">1.如果用户在每个第三方站点都这样做, 那将会存在严重安全隐患:</div><div class="line">很多第三方网站为了后续的服务, 会保存用户资源服务器的账号和密码, 这样很不安全, </div><div class="line">因为难免有些第三方平台会由于自己的安全问题而导致用户的账号和密码泄露, 从而导致用户大量信息泄露 ;</div><div class="line"></div><div class="line">2.用户无法设定第三方站点的权利范围:</div><div class="line">第三方网站拥有了获取用户某个资源服务器的账号和密码后, 就拥有了资源服务器上的所有的资料, 用户没法限制第三方站点获取资源服务器上资源的权利范围和有效期 ;</div><div class="line"></div><div class="line">3.用户想收回第三方站点的权利不太方便:</div><div class="line">用户只有修改密码, 才能收回赋予第三方网站的权力, 否则第三方网站将会永久拥有用户资源服务器上资源的权利，但是这样做, 又会使得其他所有获得用户授权的第三方应用程序全部失效 ;</div><div class="line"></div><div class="line">或者, 一些良心第三方可以设置 用户账号 和 资源服务器账号的绑定和解绑, 但不一定所有第三方都会给你做, 如果不做解绑的话, 你还真就只有前一种方法能够收回权利 ;</div></pre></td></tr></table></figure>
+</li>
+<li><p>而OAuth的授权不会让 <code>第三方站点</code> 触及到用户在 <code>资源服务器</code> 上的帐号信息(如用户名与密码), 即第三方站点无需使用用户资源服务器上的账号与密码, 就可以获得该用户在 <code>资源服务器</code> 上的资源, 因此 OAuth 是安全的 ;</p>
+</li>
+</ul>
+<h4 id="OAuth2-0协议定义了用于获得授权的”四种主要授权类型”"><a href="#OAuth2-0协议定义了用于获得授权的”四种主要授权类型”" class="headerlink" title="OAuth2.0协议定义了用于获得授权的”四种主要授权类型”"></a>OAuth2.0协议定义了用于获得授权的”四种主要授权类型”</h4><h5 id="1-授权码-Authorization-code-模式"><a href="#1-授权码-Authorization-code-模式" class="headerlink" title="1.授权码(Authorization code)模式"></a>1.<a href="http://localhost:4000/2016/03/19/OAuth-authorization-code01/" target="_blank" rel="external">授权码(Authorization code)模式</a></h5><ul>
+<li>授权码模式是功能最完整、流程最严密的授权模式(标准的Server授权模式, 非常适合Server端的Web应用);</li>
+<li>它的特点是: <code>通过客户端的后台服务器, 与&quot;服务提供商&quot;的认证服务器进行互动</code>;<br><img src="/img/oauth/oauth_authorization_code_01.png" width="711" height="514" alt="authorization_code_01" align="center"></li>
+<li><p>运行流程图解</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">用户打开客户端以后，客户端要求用户给予授权。</div><div class="line">用户同意给予客户端授权。</div><div class="line">客户端使用上一步获得的授权，向认证服务器申请令牌。</div><div class="line">认证服务器对客户端进行认证以后，确认无误，同意发放令牌。</div><div class="line">客户端使用令牌，向资源服务器申请获取资源。</div><div class="line">资源服务器确认令牌无误，同意向客户端开放资源</div></pre></td></tr></table></figure>
+</li>
+<li><p>场景:<br>  比如公司需要对接 QQ, 微博, 微信(网页授权) 等登录授权;<br>  或者公司达到可以做自己对外的开放平台;<br>  当然, 公司如果要做对外开放平台, 可能不止使用这一种模式:</p>
+<pre><code>像微信网页授权使用的就是`授权码模式`； 
+
+但是微信的基础功能接口和开发者服务器交互的时候, 就使用到了`客户端模式`；
+
+而微信服务器涉及到和开发者服务器进行消息交互的时候, 还使用了类似`JWT`的签名校验来保证数据传输的安全;
+</code></pre></li>
+</ul>
+<h5 id="2-隐式授权模式-Implicit-Grant"><a href="#2-隐式授权模式-Implicit-Grant" class="headerlink" title="2.隐式授权模式(Implicit Grant)"></a>2.隐式授权模式(Implicit Grant)</h5><ul>
+<li>也叫简化模式, 该模式<code>不通过第三方应用程序的服务器</code>, 而是直接在浏览器中向认证服务器申请令牌, 跳过了”授权码”这个步骤, 因此得名;</li>
+<li>它的特点是: 所有步骤在浏览器中完成, 令牌对访问者是可见的;</li>
+<li>流程图:<br><img src="/img/oauth/oauth_implict_01.png" width="660" height="570" alt="oauth_implict_01" align="center"></li>
+<li>场景:</li>
+</ul>
+<h5 id="3-密码模式-Resource-Owner-Password-Credentials"><a href="#3-密码模式-Resource-Owner-Password-Credentials" class="headerlink" title="3.密码模式(Resource Owner Password Credentials)"></a>3.密码模式(Resource Owner Password Credentials)</h5><ul>
+<li>用户向客户端提供自己的用户名和密码, 客户端使用这些信息，向”服务商提供商”索要授权 ;</li>
+<li>这种模式要求用户提供用户名和密码来交换访问令牌access_token ;</li>
+<li>它的特点是:<br>客户端仍然是以单个用户的名义向”服务提供商”进行认证;<br>在这种模式中, 用户必须把自己的密码给客户端, 但是客户端不得储存密码, 这通常用在 <code>用户对客户端高度信任的情况下</code>, 比如客户端也是系统的一部分;</li>
+<li>流程图:<br><img src="/img/oauth/password_credentials_01.png" width="750" height="387" alt="password_credentials_01" align="center"></li>
+<li><p>下图也可参考:<br><img src="/img/oauth/password_credentials_02.png" width="527" height="218" alt="password_credentials_02" align="center"></p>
+</li>
+<li><p>场景:<br>比如当third party application、authorization server、resource owner都是自己公司内的系统, Resource owner对third party application足够信任，所以我们就能采取这种模式来实现;<br>就像: 公司如果有多套内部后台系统, 开发人员和公司管理员可能就要准备多套账号, 比较麻烦, 为了解决这个问题, 可以做一个<code>账号中心</code>系统, 用户在登录各个系统后台的时候, 会先跳转到用户中心进行登录, 一旦登录成功之后, 就会给用户分发一个access_token, 用来在各个系统间作为登录认证 (这也实现了<code>SSO单点登录</code>);<br>(参考: <a href="http://www.cnblogs.com/richieyang/p/4918819.html" target="_blank" rel="external">http://www.cnblogs.com/richieyang/p/4918819.html</a>)</p>
+</li>
+</ul>
+<h5 id="4-客户端模式-Client-Credentials"><a href="#4-客户端模式-Client-Credentials" class="headerlink" title="4.客户端模式(Client Credentials)"></a>4.客户端模式(Client Credentials)</h5><ul>
+<li><p>客户端模式指客户端<code>以客户端自己的名义, 而不是以单个用户的名义</code>，向”服务提供商”进行认证;<br>严格地说, 客户端模式并不属于OAuth框架所要解决的问题;</p>
+</li>
+<li><p>流程图:<br><img src="/img/oauth/oauth_client_credentials_01.png" width="760" height="165" alt="oauth_client_credentials_01" align="center"></p>
+</li>
+<li><p>服务器 <code>不提供像用户数据这样的重要资源</code>，仅仅是一些开放的功能性API;<br>例如微信公众平台, Google Storage或Amazon S3 等开放平台提供的基础服务接口;</p>
+</li>
+<li><p>场景:<br>1.你自己实现了一套基础服务的Api(都是些基础功能接口, 并不涉及用户数据这种重要资源), <code>提供给内部其他系统通过认证的方式来调用</code>;<br>2.公司如果实力强悍的话, 也可以将公司开发的基础服务Api公开出来 <code>供外部其他第三方站点服务器</code> 来调用, 比如: <a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140183" target="_blank" rel="external">微信公众平台的开放接口其实就是使用这种方式</a>(但微信的网页授权采用的就是授权码模式):<br><img src="/img/oauth/oauth_client_credentials_02.png" width="699" height="475" alt="oauth_client_credentials_02" align="center"></p>
+</li>
+</ul>
+<h4 id="客户端模式-Client-Credentials-和-用户密码模式-有时候比较容易混淆"><a href="#客户端模式-Client-Credentials-和-用户密码模式-有时候比较容易混淆" class="headerlink" title="客户端模式(Client Credentials) 和 用户密码模式 有时候比较容易混淆"></a>客户端模式(Client Credentials) 和 用户密码模式 有时候比较容易混淆</h4><p>1.客户端模式: 如果客户端以自己的身份向服务提供商进行认证, 那需要授权中心给各个应用(不管是内部系统还是第三方站点服务器)分配对应的AppID和AppSecret, 然后第三方应用使用这两个信息来向”认证服务器”申请access_token, 这种场景下, 认证服务器一般提供的接口都是功能性的基础服务接口;<br>2.用户密码模式: 如果客户端以单个用户身份向服务提供商进行认证, 只要用户账号密码能通过认证服务器, 认证服务器就会发放access_token, 当然这种场景需要的是<code>几方角色都属于本公司内部</code>;</p>
+<p>当然这里所聊的是授权相关的知识, 并没有涉及数据传输的加密及签名校验, 但其实像微信公众平台这样开放平台, 除了基础服务接口供给开发者服务器调用时不需要做数据传输的加密和签名校验; 当微信服务器和开发者服务器涉及到用户消息数据的收发时, 会推荐对数据进行加密和签名校验;</p>
+<blockquote>
+<p>参考: <a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html</a><br>参考: <a href="http://www.cnblogs.com/richieyang/p/4918819.html" target="_blank" rel="external">http://www.cnblogs.com/richieyang/p/4918819.html</a><br>参考: <a href="http://www.dannysite.com/blog/176/" target="_blank" rel="external">http://www.dannysite.com/blog/176/</a></p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/后端架构/">后端架构</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&title=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&title=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/22/2016-05-22-OAuth-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02 - 授权码模式</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&title=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&title=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01 - OAuth(Open Authorization)开放式授权协议》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/19/2016-05-19-OAuth-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3aQW7DMAwEwP7/0+61QBB3l4rRWh6dgtiRNT4wJKWvr3gcP8b598fLSGY+f8rHBgYGxm0Zx+k4X+7r5ytmPp8BAwPjOYwkFL67P1lWHkbzF4SBgYExC6nrWRwGBgbGFYwk+Caz/XHAxcDA+PeMPPC1y2rbdpfX4hgYGDdkrBSWV3++ZH8DAwPjVoyjHDm1DZfHwsDAwNibkQe4/FBFXhInRzeKFBMDA2NTRluytg39lZK1gGFgYDyAMTtgcY5cOYpRt/wwMDAewFhv0ydF7KypF/0WAwNja0bblG8TwTxMt1cxMDCexshTvWGRuRyOh8EXAwNjC8YsdZvx2vZcsdmAgYGxNWP9AW1DLT9mkW+gYmBg7M1Yam+VCd+sVVefFsHAwNiOkYfL5P48yBYJX47EwMDYlLFSvs62MPMwunRmBAMDYyNGm4rly8rxM3b074GBgbEFI3/MShr3qYD+9mgIBgbG1oxfLsTl6IyUv7IoZGNgYDyGMduYbJPLqNHfbktgYGA8jHHe5MoX0Zav7SvDwMB4GqNN/tpyN9nybAvd5jIGBsZdGUc5ZhsJM1JBxcDA2Jqx0rhvU8m26G1nw8DA2JvRHvma3ZO/v3Z+DAyM5zDywJc369ulL4V+DAwMjHKroF1Q/uJ+qcgxMDAwyiDbbiS093z4fwMDA+PfM5IidraRMDtyUSedGBgYWzPa0nTl8ER+/2dLawwMjNsyvgFzZiLgcwXPBwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
