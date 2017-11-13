@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01.PHP - Iterator (迭代器) 接口简介 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="PHP协程相关,Generator/yield/coroutine">
+    <meta name="description" content="迭代: 可以理解为是指反复执行一个过程, 每执行一次叫做一次迭代;  在php中我们经常做迭代, 如下: 12345678910&amp;lt;?php$mapping  =  [&apos;red&apos; =&amp;gt; &apos;#FF0000&apos;,&apos;green&apos; =&amp;gt; &apos;#00FF00&apos;,&apos;blue&apos; =&amp;gt; &apos;##0000FF&apos;];foreach  ($mapping  as  $key  =&amp;gt;  $valu">
+<meta name="keywords" content="PHP协程相关,Generator&#x2F;yield&#x2F;coroutine">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01.PHP - Iterator (迭代器) 接口简介">
+<meta property="og:url" content="http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="迭代: 可以理解为是指反复执行一个过程, 每执行一次叫做一次迭代;  在php中我们经常做迭代, 如下: 12345678910&amp;lt;?php$mapping  =  [&apos;red&apos; =&amp;gt; &apos;#FF0000&apos;,&apos;green&apos; =&amp;gt; &apos;#00FF00&apos;,&apos;blue&apos; =&amp;gt; &apos;##0000FF&apos;];foreach  ($mapping  as  $key  =&amp;gt;  $valu">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-11-13T05:44:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01.PHP - Iterator (迭代器) 接口简介">
+<meta name="twitter:description" content="迭代: 可以理解为是指反复执行一个过程, 每执行一次叫做一次迭代;  在php中我们经常做迭代, 如下: 12345678910&amp;lt;?php$mapping  =  [&apos;red&apos; =&amp;gt; &apos;#FF0000&apos;,&apos;green&apos; =&amp;gt; &apos;#00FF00&apos;,&apos;blue&apos; =&amp;gt; &apos;##0000FF&apos;];foreach  ($mapping  as  $key  =&amp;gt;  $valu">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01.PHP - Iterator (迭代器) 接口简介</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">01.PHP - Iterator (迭代器) 接口简介</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-13T03:05:00.000Z" itemprop="datePublished" class="page-time">
+  2017-05-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP协程相关/">PHP协程相关</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP协程相关/Generator-yield-coroutine/">Generator/yield/coroutine</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-2017-05-13-Iterator-generator-yield-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01.PHP - Iterator (迭代器) 接口简介</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-13 11:05:00" datetime="2017-05-13T03:05:00.000Z"  itemprop="datePublished">2017-05-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP协程相关/">PHP协程相关</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP协程相关/Generator-yield-coroutine/">Generator/yield/coroutine</a></li></ul></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ol>
+<li><p>迭代: 可以理解为是指反复执行一个过程, 每执行一次叫做一次迭代;</p>
+<ul>
+<li><p>在php中我们经常做迭代, 如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">$mapping  =  [</div><div class="line"><span class="string">'red'</span> =&gt; <span class="string">'#FF0000'</span>,</div><div class="line"><span class="string">'green'</span> =&gt; <span class="string">'#00FF00'</span>,</div><div class="line"><span class="string">'blue'</span> =&gt; <span class="string">'##0000FF'</span></div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">foreach</span>  ($mapping  <span class="keyword">as</span>  $key  =&gt;  $value)  &#123;</div><div class="line">printf(<span class="string">"key:  %d  -  value:  %s  \n"</span>,  $key,  $value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>上述代码通过foreach对数组遍历并迭代输出其内容, 在foreach内部, 每次迭代都会将当前的元素的值赋给$value并将数组的指针移动指向下一个元素为下一次迭代做准备,从而实现顺序遍历;<br>像这样能够让外部的迭代自己内部数据的接口就是<code>迭代器接口</code>;<br>对应的那个被迭代的对象(这里是数组), 其实就是<code>迭代器对象</code>;</p>
+</li>
+</ul>
+</li>
+<li>PHP中提供的迭代器接口和类<ul>
+<li>PHP提供了统一的迭代器接口<a href="http://php.net/manual/en/class.appenditerator.php" target="_blank" rel="external">预定义接口中</a>;</li>
+<li>SPL标准库中也提供了多种<a href="http://php.net/manual/zh/book.spl.php" target="_blank" rel="external">迭代器类</a>;</li>
+</ul>
+</li>
+<li><p>简单实现一个迭代器</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Created by PhpStorm.</span></div><div class="line"><span class="comment"> * User: renyimin</span></div><div class="line"><span class="comment"> * Date: 2017/5/13</span></div><div class="line"><span class="comment"> * Time: 下午11:25</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Xrange</span> <span class="keyword">implements</span> <span class="title">Iterator</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">protected</span> $start;</div><div class="line">    <span class="keyword">protected</span> $limit;</div><div class="line">    <span class="keyword">protected</span> $step;</div><div class="line">    <span class="keyword">protected</span> $i;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($start, $limit, $step = <span class="number">0</span>)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;start = $start;</div><div class="line">        <span class="keyword">$this</span>-&gt;limit = $limit;</div><div class="line">        <span class="keyword">$this</span>-&gt;step  = $step;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rewind</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;i = <span class="keyword">$this</span>-&gt;start;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">next</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;i += <span class="keyword">$this</span>-&gt;step;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">current</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">key</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">valid</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;i &lt;= <span class="keyword">$this</span>-&gt;limit;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">foreach</span> (<span class="keyword">new</span> Xrange(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>) <span class="keyword">as</span> $key =&gt; $value) &#123;</div><div class="line">    printf(<span class="string">"%d %d"</span> . PHP_EOL, $key, $value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ php Iterator.php </div><div class="line"><span class="number">0</span> <span class="number">0</span></div><div class="line"><span class="number">2</span> <span class="number">2</span></div><div class="line"><span class="number">4</span> <span class="number">4</span></div><div class="line"><span class="number">6</span> <span class="number">6</span></div><div class="line"><span class="number">8</span> <span class="number">8</span></div><div class="line"><span class="number">10</span> <span class="number">10</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>补充:</p>
+</li>
+</ol>
+<ul>
+<li><p>可以将一个普通对象变成一个可被遍历的对象, 场景: 如一个StudentsContact对象, 这个对象是用于处理学生联系方式的, 通过 addStudent 方法注册学生, 通过 getAllStudent 获取全部注册的学生联系方式数组(比如获取一页学生联系方式列表), 我们以往是通过 StudentsContact::getAllStudent() 获取一个数组然后遍历该数组, 但是现在有了迭代器, 只要这个类继承这个接口, 就可以直接遍历该对象获取学生数组, 并且可以在获取之前在类的内部就对输出的数据做好处理工作;</p>
+</li>
+<li><p>PHP的迭代器可以让你利用 面向对象 实现常见的数据结构, 例如列表, 堆栈, 队列与图<strong><em> ; (有助于你使用纯面向对象的思想来设计你的程序)<br>特别说明一下 </em></strong>对对象的遍历<strong><em>,   一般人觉得所谓的</em></strong>遍历对象<em>*</em>就是对一个对象里的属性或者方法一个一个的取出来, 然后做输出或者处理; 实际上, 这里的迭代器对对象的遍历并不是这个意思, 可能这句话本身的描述有问题, 比如, 可以使用迭代器模拟一个<code>字符串对象的迭代器</code>类, 让PHP可以对这个字符串对象进行遍历;</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span> <span class="keyword">implements</span> <span class="title">Iterator</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">private</span> $string;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($string)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;string = <span class="keyword">$this</span>-&gt;strToArray($string);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * <span class="doctag">@param</span> $string</span></div><div class="line"><span class="comment">     * <span class="doctag">@param</span> int $l</span></div><div class="line"><span class="comment">     * <span class="doctag">@return</span> array</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">strToArray</span><span class="params">($string, $l = <span class="number">0</span>)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="comment">//if ($l &gt; 0) &#123;</span></div><div class="line">            <span class="comment">//$ret = array();</span></div><div class="line">            <span class="comment">//$len = mb_strlen($string, "UTF-8");</span></div><div class="line">            <span class="comment">//for ($i = 0; $i &lt; $len; $i += $l) &#123;</span></div><div class="line">                <span class="comment">//$ret[] = mb_substr($string, $i, $l, "UTF-8");</span></div><div class="line">            <span class="comment">//&#125;</span></div><div class="line">            <span class="comment">//return $ret;</span></div><div class="line">        <span class="comment">//&#125;</span></div><div class="line">        <span class="keyword">return</span> preg_split(<span class="string">"//u"</span>, $string, <span class="number">-1</span>, PREG_SPLIT_NO_EMPTY);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">current</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> current(<span class="keyword">$this</span>-&gt;string);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">next</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> next(<span class="keyword">$this</span>-&gt;string);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">key</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> key(<span class="keyword">$this</span>-&gt;string);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">valid</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (key(<span class="keyword">$this</span>-&gt;string) === <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rewind</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        reset(<span class="keyword">$this</span>-&gt;string);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$string = <span class="keyword">new</span> String(<span class="string">'这个是什么213jdjlf'</span>);</div><div class="line"><span class="keyword">foreach</span> ($string <span class="keyword">as</span> $k =&gt; $v) &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"&#123;$k&#125; =&gt; &#123;$v&#125;"</span> . <span class="string">"&lt;br/&gt;"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">结果:</div><div class="line"><span class="number">0</span> =&gt; 这</div><div class="line"><span class="number">1</span> =&gt; 个</div><div class="line"><span class="number">2</span> =&gt; 是</div><div class="line"><span class="number">3</span> =&gt; 什</div><div class="line"><span class="number">4</span> =&gt; 么</div><div class="line"><span class="number">5</span> =&gt; <span class="number">2</span></div><div class="line"><span class="number">6</span> =&gt; <span class="number">1</span></div><div class="line"><span class="number">7</span> =&gt; <span class="number">3</span></div><div class="line"><span class="number">8</span> =&gt; j</div><div class="line"><span class="number">9</span> =&gt; d</div><div class="line"><span class="number">10</span> =&gt; j</div><div class="line"><span class="number">11</span> =&gt; l</div><div class="line"><span class="number">12</span> =&gt; f</div></pre></td></tr></table></figure></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Generator-yield-coroutine/">Generator/yield/coroutine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP协程相关/">PHP协程相关</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&title=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&title=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/09/21/2016-09-21-sameoriginpolicy-07/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">07.小结 &#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34;</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/13/2017-05-13-Iterator-generator-yield-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02.PHP - Generator (迭代)生成器</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&title=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&title=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.PHP - Iterator (迭代器) 接口简介》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACo0lEQVR42u3aQXLbMAwF0Nz/0u1MV+2kdv4HCSWLp5XHskU+LQgMgI+P+Pr150q++fv6/MvPn2d3L194eHh4o62/uk4Wnm2ufTWv9oyHh4e3zUuWeQV7z2i32AabLyx4eHh438prM9hbv8z3g4eHh/fTeLMSw62XgoeHh/fTeEkxIi8H5OnyyefLtRY8PDy8mHe3tPrM58X+Hh4eHt5BV70tsOaJdXL3wm7x8PDwFnhJy6pduG10zVYvRrLw8PDwHuElh3i7rXycKyl/FMk3Hh4e3gIvL0AkCXRbbD0p7yZ7wMPDw7vLa7fbBoxbR/msLYeHh4f3DC8/vk9a+G2MyoNHXffFw8PDO+Dly88aXbPUeTYngIeHh7fNyx/aBpLz8JAPMbxMqfHw8PAe5OXLt8d322ybsfHw8PD2eLfKrCe8jeYZHh4e3gYvR95aOEmO8wGvKJDg4eHhLfBa8ElISEh5EMLDw8N7npdsejbw1JZcb40v/PNLPDw8vGXe+YhA+80sRS7Sazw8PLw1XnLEt8XZ2WBB+68v9oyHh4f3IC8vBLSB4daYV3Ly4+Hh4T3Di4aZLjW0kiQ+SZ1fPgcPDw9vjXfejK8LrFeLHVEDDA8PD+8qb1aMyLe+UbqtJyDw8PDwrvLax+Vl2byddivtricj8PDw8EpenubOyhOz1Pmo6YWHh4e3zDsvPWw3sdrnZzfw8PDw7vDaNtisQNCGmbZ0goeHh7fNOwkGeSO/bXHlqflKwRcPDw8v4CXBoC1S3Lo7Cwz/qbXg4eHhLfBODuvzsJE3xuo0HQ8PD+9beW05tW3/t8MHRUqNh4eH9628tv3/PrTMXmjxfDw8PLw13qzBn6TCM/B7avFy8fDw8BZ4J4NWK+WDuA121NPDw8PDm/B+Azu+xTrqMA7QAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
