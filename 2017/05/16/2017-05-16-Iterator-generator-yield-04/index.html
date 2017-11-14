@@ -13,7 +13,7 @@
     
     
     
-    <title>04.PHP - 系统调用 | Lant&#39;s Blog</title>
+    <title>04.与调度器之间通信--系统调用 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,14 +23,14 @@
     <meta name="description" content="既然调度器已经运行了, 那么我们来看下一个问题：任务和调度器之间的通信 ;  任务和调度器之间的通信:  我们将使用与 进程和操作系统会话 相同的方式来通信: 系统调用 ;  使用 系统调用 这种通信方式的理由是: 操作系统与进程相比, 两者是处在不同的权限级别上, 操作系统为了执行特权级别的操作(如杀死另一个进程), 就不得不以某种方式把控制传回给内核, 这样内核就可以执行所说的操作了;(再说">
 <meta name="keywords" content="Coroutine">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04.PHP - 系统调用">
+<meta property="og:title" content="04.与调度器之间通信--系统调用">
 <meta property="og:url" content="http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="既然调度器已经运行了, 那么我们来看下一个问题：任务和调度器之间的通信 ;  任务和调度器之间的通信:  我们将使用与 进程和操作系统会话 相同的方式来通信: 系统调用 ;  使用 系统调用 这种通信方式的理由是: 操作系统与进程相比, 两者是处在不同的权限级别上, 操作系统为了执行特权级别的操作(如杀死另一个进程), 就不得不以某种方式把控制传回给内核, 这样内核就可以执行所说的操作了;(再说">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-14T02:50:38.000Z">
+<meta property="og:updated_time" content="2017-11-14T08:10:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04.PHP - 系统调用">
+<meta name="twitter:title" content="04.与调度器之间通信--系统调用">
 <meta name="twitter:description" content="既然调度器已经运行了, 那么我们来看下一个问题：任务和调度器之间的通信 ;  任务和调度器之间的通信:  我们将使用与 进程和操作系统会话 相同的方式来通信: 系统调用 ;  使用 系统调用 这种通信方式的理由是: 操作系统与进程相比, 两者是处在不同的权限级别上, 操作系统为了执行特权级别的操作(如杀死另一个进程), 就不得不以某种方式把控制传回给内核, 这样内核就可以执行所说的操作了;(再说">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04.PHP - 系统调用</div>
+        <div class="flex-col header-title ellipsis">04.与调度器之间通信--系统调用</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">04.PHP - 系统调用</h1>
+        <h1 class="title">04.与调度器之间通信--系统调用</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-05-16T14:15:00.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04.PHP - 系统调用</h1>
+        <h1 class="post-card-title">04.与调度器之间通信--系统调用</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-05-16 22:15:00" datetime="2017-05-16T14:15:00.000Z"  itemprop="datePublished">2017-05-16</time>
 
@@ -193,7 +193,7 @@
 <li><p>代码:</p>
 <ul>
 <li><p>任务类: 和之前没什么变化</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> </span>&#123;</div><div class="line">    <span class="keyword">protected</span> $taskId;</div><div class="line">    <span class="keyword">protected</span> $coroutine;</div><div class="line">    <span class="keyword">protected</span> $sendValue = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">protected</span> $beforeFirstYield = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($taskId, Generator $coroutine)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;taskId = $taskId;</div><div class="line">        <span class="keyword">$this</span>-&gt;coroutine = $coroutine;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getTaskId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;taskId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setSendValue</span><span class="params">($sendValue)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;sendValue = $sendValue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">//每个任务在第一次被调度时, 会进行一次系统调用, 之后的调度才是任务中的循环</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;beforeFirstYield) &#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;beforeFirstYield = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;coroutine-&gt;current();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            $retval = <span class="keyword">$this</span>-&gt;coroutine-&gt;send(<span class="keyword">$this</span>-&gt;sendValue);</div><div class="line">            <span class="keyword">$this</span>-&gt;sendValue = <span class="keyword">null</span>;</div><div class="line">            <span class="keyword">return</span> $retval;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">isFinished</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> !<span class="keyword">$this</span>-&gt;coroutine-&gt;valid();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> </span>&#123;</div><div class="line">    <span class="keyword">protected</span> $taskId;</div><div class="line">    <span class="keyword">protected</span> $coroutine;</div><div class="line">    <span class="keyword">protected</span> $sendValue = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">protected</span> $beforeFirstYield = <span class="keyword">true</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($taskId, Generator $coroutine)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;taskId = $taskId;</div><div class="line">        <span class="keyword">$this</span>-&gt;coroutine = $coroutine;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getTaskId</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;taskId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setSendValue</span><span class="params">($sendValue)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;sendValue = $sendValue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="comment">//每个任务在第一次被调度时, 会进行一次系统调用, 之后的调度才是任务中的循环</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;beforeFirstYield) &#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;beforeFirstYield = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;coroutine-&gt;current();</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;coroutine-&gt;send(<span class="keyword">$this</span>-&gt;sendValue);</div><div class="line">            <span class="keyword">$this</span>-&gt;sendValue = <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">isFinished</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> !<span class="keyword">$this</span>-&gt;coroutine-&gt;valid();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 <li><p>系统调用:系统调用是操作系统提供给程序设计人员的一种服务,程序设计人员在编写程序时,可以利用系统调用来请求操作系统的服务</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SystemCall</span> </span>&#123;</div><div class="line">    <span class="keyword">protected</span> $callback;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(callable $callback)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;callback = $callback;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__invoke</span><span class="params">(Task $task, Scheduler $scheduler)</span> </span>&#123;</div><div class="line">        $callback = <span class="keyword">$this</span>-&gt;callback;</div><div class="line">        <span class="keyword">return</span> $callback($task, $scheduler);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -249,7 +249,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.PHP - 系统调用》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.与调度器之间通信--系统调用》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -259,7 +259,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.PHP - 系统调用》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.与调度器之间通信--系统调用》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -269,7 +269,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.PHP - 系统调用》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.与调度器之间通信--系统调用》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -303,6 +303,13 @@
         </a>
       </div>
     
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/05/17/2017-05-17-Iterator-generator-yield-05/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">05. 与调度器之间通信 -- 粗糙的父子任务</h4>
+      </a>
+    </div>
   
 </nav>
 
@@ -411,7 +418,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.PHP - 系统调用》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.与调度器之间通信--系统调用》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -421,7 +428,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.PHP - 系统调用》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&title=《04.与调度器之间通信--系统调用》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -431,7 +438,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.PHP - 系统调用》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.与调度器之间通信--系统调用》 — Lant's Blog&url=http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
