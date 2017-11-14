@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="(迭代器)生成器也是一个函数,不同的是这个函数的返回值是依次返回,而不是只返回一个单独的值; 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口;  生成器为可中断的函数 要从生成器认识协程, 理解它内部是如何工作是非常重要的: 生成器是一种可中断的函数, 在它里面的yield构成了中断点;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-14T01:41:47.000Z">
+<meta property="og:updated_time" content="2017-11-14T02:05:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03.PHP - 如何使用协程来实施任务调度">
 <meta name="twitter:description" content="(迭代器)生成器也是一个函数,不同的是这个函数的返回值是依次返回,而不是只返回一个单独的值; 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口;  生成器为可中断的函数 要从生成器认识协程, 理解它内部是如何工作是非常重要的: 生成器是一种可中断的函数, 在它里面的yield构成了中断点;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口;">
@@ -201,7 +201,7 @@
 <li><p>现在你应当明白 <code>协程</code> 和 <code>任务调度</code> 之间的关系:</p>
 <ul>
 <li>yield指令提供了任务中断自身的一种方法, 然后把控制交回给任务调度器, 因此协程可以运行多个其他任务; 更进一步来说, yield还可以用来在任务和调度器之间进行通信;</li>
-<li>(可以这么理解: 调度器在调度任务的时候, 是通过轮询的方式来调度的, 这样就需要终端某个任务才能进行切换, 这就是任务中的yield的作用; 另外, )</li>
+<li>可以这么理解: 调度器在调度任务的时候, 是通过模拟一个队列, 然后将任务压栈, 之后<strong>每个任务执行一次就中断</strong>, 然后只要任务没有执行完毕, 就执行<code>出栈再次压栈</code>, 通过这样就实现了轮询的方式进行调度; 这里的重点是<strong>每个任务执行一次就中断</strong>, 这就是每个任务中 <code>yield</code> 的作用;</li>
 </ul>
 </li>
 <li><p>小疑问:</p>
