@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Coroutine">
-    <meta name="description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口;  再看一个简单的 迭代生成器 进行双">
+    <meta name="description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
 <meta name="keywords" content="Coroutine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03.PHP - 如何使用协程来实施任务调度">
 <meta property="og:url" content="http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口;  再看一个简单的 迭代生成器 进行双">
+<meta property="og:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-15T02:27:57.000Z">
+<meta property="og:updated_time" content="2017-11-15T02:29:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03.PHP - 如何使用协程来实施任务调度">
-<meta name="twitter:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口;  再看一个简单的 迭代生成器 进行双">
+<meta name="twitter:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -178,11 +178,11 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <ol>
-<li><p>从之前的知识可以了解到, 其实<code>(迭代器)生成器</code> 也只不过是一个函数, <strong>不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值</strong>;<br> 或者, 换句话说, 生成器使你能更方便的实现了迭代器接口 ;</p>
+<li><p>从之前的知识可以了解到, 其实<code>(迭代器)生成器</code> 也只不过是一个函数, <strong>不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值</strong>; (也就是说, 生成器使你更方便的实现了迭代器) ;</p>
+</li>
+<li><p>为什么叫 <code>迭代生成器</code>, 因为它返回了一个 <code>迭代器</code>, 而这个迭代器实现了Iterator接口 ;</p>
 </li>
 <li><p>生成器为<strong>可中断的函数</strong>, 在它里面的 yield 构成了中断点 ;</p>
-</li>
-<li><p>为什么叫 <code>迭代生成器</code>, 因为它返回了一个 <code>迭代器</code>, 而这个迭代器实现了Iterator接口;</p>
 </li>
 <li><p>再看一个简单的 <code>迭代生成器</code> 进行双向传输信息的 例子 :</p>
  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield1'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield2'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;current());    <span class="comment">// string(6) "yield1"</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret1'</span>)); <span class="comment">// string(4) "ret1"   (the first var_dump in gen)</span></div><div class="line">                              <span class="comment">// string(6) "yield2" (the var_dump of the -&gt;send() return value)</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret2'</span>)); <span class="comment">// string(4) "ret2"   (again from within gen)</span></div><div class="line">                              <span class="comment">// NULL               (the return value of -&gt;send())</span></div></pre></td></tr></table></figure>
