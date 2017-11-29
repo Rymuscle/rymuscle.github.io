@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="PHP高级,Coroutine">
-    <meta name="description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象, 可以参考PHP: 生成器类的结构, 实现了迭代器;1234567891011&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $step) &amp;#123;">
+    <meta name="description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象;( 参考PHP: 生成器类的结构, 会发现生成器这个类也确实实现了迭代器接口);12345678910&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $st">
 <meta name="keywords" content="PHP高级,Coroutine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="02.PHP - Generator (迭代)生成器">
 <meta property="og:url" content="http://blog.renyimin.com/2017/05/13/2017-05-13-Iterator-generator-yield-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象, 可以参考PHP: 生成器类的结构, 实现了迭代器;1234567891011&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $step) &amp;#123;">
+<meta property="og:description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象;( 参考PHP: 生成器类的结构, 会发现生成器这个类也确实实现了迭代器接口);12345678910&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $st">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-15T03:01:08.000Z">
+<meta property="og:updated_time" content="2017-11-29T18:09:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02.PHP - Generator (迭代)生成器">
-<meta name="twitter:description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象, 可以参考PHP: 生成器类的结构, 实现了迭代器;1234567891011&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $step) &amp;#123;">
+<meta name="twitter:description" content="Generator (迭代)生成器  之所以叫 迭代生成器, 是因为生成的东西是个迭代器对象;( 参考PHP: 生成器类的结构, 会发现生成器这个类也确实实现了迭代器接口);12345678910&amp;lt;?phpfunction xrange($start, $end, $step = 1) &amp;#123;    for ($i = $start; $i &amp;lt;= $end; $i += $st">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -180,7 +180,7 @@
             <ol>
 <li><p>Generator (迭代)生成器</p>
 <ul>
-<li>之所以叫 <code>迭代生成器</code>, 是因为生成的东西是个<code>迭代器对象</code>, <a href="http://php.net/manual/zh/class.generator.php" target="_blank" rel="external">可以参考PHP: 生成器类的结构</a>, 实现了<code>迭代器</code>;<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">xrange</span><span class="params">($start, $end, $step = <span class="number">1</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> ($i = $start; $i &lt;= $end; $i += $step) &#123;</div><div class="line">        <span class="keyword">yield</span> $i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">$range = xrange(<span class="number">1</span>, <span class="number">1000000</span>);</div><div class="line">var_dump($range); <span class="comment">// object(Generator)#1</span></div><div class="line">var_dump($range <span class="keyword">instanceof</span> Iterator); <span class="comment">// bool(true)</span></div></pre></td></tr></table></figure>
+<li>之所以叫 <code>迭代生成器</code>, 是因为生成的东西是个<code>迭代器对象</code>;( <a href="http://php.net/manual/zh/class.generator.php" target="_blank" rel="external">参考PHP: 生成器类的结构</a>, 会发现生成器这个类也确实实现了<code>迭代器</code>接口);<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">xrange</span><span class="params">($start, $end, $step = <span class="number">1</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> ($i = $start; $i &lt;= $end; $i += $step) &#123;</div><div class="line">        <span class="keyword">yield</span> $i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$range = xrange(<span class="number">1</span>, <span class="number">1000000</span>);</div><div class="line">var_dump($range); <span class="comment">// object(Generator)#1</span></div><div class="line">var_dump($range <span class="keyword">instanceof</span> Iterator); <span class="comment">// bool(true)</span></div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -203,7 +203,7 @@
 </li>
 <li><p>补充 ：</p>
 <ul>
-<li>一个简单的例子就是使用生成器来重新实现 range() 函数, 标准的 range() 函数需要在内存中生成一个数组包含每一个在它范围内的值，然后返回该数组, 结果就是会产生多个很大的数组。 比如, 调用 range(0, 1000000) 将导致内存占用超过 100 MB ;</li>
+<li>另外, 我们可以使用生成器来重新实现 range() 函数, 标准的 range() 函数需要在内存中生成一个数组包含每一个在它范围内的值，然后返回该数组, 结果就是会产生多个很大的数组。 比如, 调用 range(0, 1000000) 将导致内存占用超过 100 MB ;</li>
 <li>做为一种替代方法, 我们可以实现一个 xrange() 生成器, 只需要足够的内存来创建 Iterator 对象并在内部跟踪生成器的当前状态，这样只需要不到1K字节的内存;</li>
 <li>例子:  即使你打印100W个键值对, 也不一次性将这些简直对放入变量中导致内存爆掉  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">xrange</span><span class="params">($start, $limit, $step = <span class="number">1</span>)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> ($i = $start; $i &lt;= $limit; $i += $step) &#123;</div><div class="line">        <span class="keyword">yield</span> $i + <span class="number">1</span> =&gt; $i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">foreach</span> (xrange(<span class="number">0</span>, <span class="number">10000000000</span>, <span class="number">2</span>) <span class="keyword">as</span> $key =&gt; $value) &#123;</div><div class="line">    printf(<span class="string">"%d =&gt; %d"</span> . PHP_EOL, $key, $value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
