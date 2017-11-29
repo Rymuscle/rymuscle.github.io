@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="PHP高级,Coroutine">
-    <meta name="description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
+    <meta name="description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信息的 例子 :  1234567891011121314&amp;lt;?phpfunction gen(">
 <meta name="keywords" content="PHP高级,Coroutine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03.PHP - 如何使用协程来实施任务调度">
 <meta property="og:url" content="http://blog.renyimin.com/2017/05/16/2017-05-16-Iterator-generator-yield-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
+<meta property="og:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信息的 例子 :  1234567891011121314&amp;lt;?phpfunction gen(">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-29T18:20:38.000Z">
+<meta property="og:updated_time" content="2017-11-29T19:00:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03.PHP - 如何使用协程来实施任务调度">
-<meta name="twitter:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  为什么叫 迭代生成器, 因为它返回了一个 迭代器, 而这个迭代器实现了Iterator接口 ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信">
+<meta name="twitter:description" content="从之前的知识可以了解到, 其实(迭代器)生成器 也只不过是一个函数, 不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值; (也就是说, 生成器使你更方便的实现了迭代器) ;  生成器为可中断的函数, 在它里面的 yield 构成了中断点 ;  再看一个简单的 迭代生成器 进行双向传输信息的 例子 :  1234567891011121314&amp;lt;?phpfunction gen(">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -180,27 +180,33 @@
             <ol>
 <li><p>从之前的知识可以了解到, 其实<code>(迭代器)生成器</code> 也只不过是一个函数, <strong>不同的是这个函数的返回值是依次返回, 而不是只返回一个单独的值</strong>; (也就是说, 生成器使你更方便的实现了迭代器) ;</p>
 </li>
-<li><p>为什么叫 <code>迭代生成器</code>, 因为它返回了一个 <code>迭代器</code>, 而这个迭代器实现了Iterator接口 ;</p>
-</li>
 <li><p>生成器为<strong>可中断的函数</strong>, 在它里面的 yield 构成了中断点 ;</p>
+<ul>
+<li>再看一个简单的 <code>迭代生成器</code> 进行双向传输信息的 例子 :  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield1'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield2'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;current());    <span class="comment">// string(6) "yield1"</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret1'</span>)); <span class="comment">// string(4) "ret1"   (the first var_dump in gen)</span></div><div class="line">                              <span class="comment">// string(6) "yield2" (the var_dump of the -&gt;send() return value)</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret2'</span>)); <span class="comment">// string(4) "ret2"   (again from within gen)</span></div><div class="line">                              <span class="comment">// NULL               (the return value of -&gt;send())</span></div></pre></td></tr></table></figure>
 </li>
-<li><p>再看一个简单的 <code>迭代生成器</code> 进行双向传输信息的 例子 :</p>
- <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield1'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">    $ret = (<span class="keyword">yield</span> <span class="string">'yield2'</span>);</div><div class="line">    var_dump($ret);</div><div class="line">&#125;</div><div class="line"> </div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;current());    <span class="comment">// string(6) "yield1"</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret1'</span>)); <span class="comment">// string(4) "ret1"   (the first var_dump in gen)</span></div><div class="line">                              <span class="comment">// string(6) "yield2" (the var_dump of the -&gt;send() return value)</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'ret2'</span>)); <span class="comment">// string(4) "ret2"   (again from within gen)</span></div><div class="line">                              <span class="comment">// NULL               (the return value of -&gt;send())</span></div></pre></td></tr></table></figure>
+</ul>
+</li>
+<li><p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001432090171191d05dae6e129940518d1d6cf6eeaaa969000" target="_blank" rel="external">那么什么是协程(Coroutine)</a>？</p>
+<ul>
+<li><p><strong><code>协程</code>, 又称<code>微线程</code>, <code>纤程</code>, 英文名<code>Coroutine</code> </strong></p>
+</li>
+<li><p>和多线程相比, 协程的优势?<br>（1）最大的优势就是协程极高的执行效率, 因为子程序切换不是线程切换, 而是由程序自身控制, 因此, 没有线程切换的开销; 所以, 和多线程比, 当应用的线程数量越多, 换成协程的话, 性能优势就越明显;</p>
+<p>（2）第二大优势就是不需要多线程的锁机制, 因为只有一个线程, 也不存在同时写变量冲突, 在协程中控制共享资源不加锁, 只需要判断状态就好了, 所以执行效率比多线程高很多;</p>
+</li>
+</ul>
+<ul>
+<li><p>协程是在应用程序的层面进行切换, 而不是线程级的切换, 所以切换带来的开销很小;</p>
+</li>
+<li><p><strong>多进程+协程</strong><br>因为协程是一个线程执行, 那怎么利用多核CPU呢?<br>最简单的方法是<strong>多进程+协程</strong>, 既充分利用多核, 又充分发挥协程的高效率, 可获得极高的性能。</p>
+</li>
+<li><p><code>协程（coroutine</code>）跟具有操作系统概念的线程不一样, 实际上协程就是类函数一样的程序组件, 你可以在一个线程里面轻松创建数十万个协程,就像数十万次函数调用一样。只不过函数只有一个调用入口起始点, 返回之后就结束了, 而协程入口既可以是起始点, 又可以从上一个返回点继续执行, 也就是说协程之间可以通过 yield 方式转移执行权, 对称（symmetric）、平级地调用对方, 而不是像函数那样上下级调用关系;<br>当然协程也可以模拟函数那样实现上下级调用关系, 这就叫非对称协程（asymmetric coroutines）;</p>
+</li>
+</ul>
 </li>
 <li><p>注意：</p>
 <ul>
 <li>yield表达式两边的括号在PHP7以前不是可选的, 也就是说在PHP5.5和PHP5.6中圆括号是必须的 ;</li>
 <li>….</li>
-</ul>
-</li>
-<li><p>什么是协程（Coroutine）？</p>
-<ul>
-<li><p>在协程出现之前，要实现多任务并发，在无OS（操作系统）时代，可以使用状态机的思想对多任务进行拆解，在单进程环境中运行多任务，但是这种模式下需要开发者对每个任务有清晰的了解，也要开发者自行开发与任务相关功能（如任务间的通讯）;</p>
-</li>
-<li><p>后来出现了OS（操作系统），咱们就开始使用OS提供的进程和线程功能来轻易实现多任务了。在OS中，进程的上下文切换是OS内核控制。但是后来却出现了一个问题，频繁的进程上下文切换导致了OS性能的降低（主要是短时执行消耗小的任务进程）;</p>
-</li>
-<li><p>为了解决这个问题，开始提出新的概念，就是在同一进程或线程中运行多个任务，这种问题就相当于回到了早期的无OS时代的多任务实现。而现在解决方案称为协程。其本质是，将将任务切换的部分工作从内核转移到应用层;</p>
-</li>
 </ul>
 </li>
 <li><p>协程特点:</p>
@@ -221,9 +227,9 @@
 </ul>
 </li>
 <li><p>小疑问:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'foo'</span>;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'bar'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;send(<span class="string">'something'</span>));</div></pre></td></tr></table></figure>
-<p>// 鸟哥博客相关讨论小结:<br>// 在send之前, 如果没有显示地调用current, 那么当$gen迭代器被创建的时候一个rewind()方法已经被隐式调用<br>// 所以实际上发生的应该类似:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'foo'</span>;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'bar'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;rewind());       <span class="comment">//不过可惜的是, rewind的执行将虽然会导致第一个yield被执行, 但是却会忽略他的返回值.</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'something'</span>));   <span class="comment">// 真正当我们调用yield的时候, 我们得到的是第二个yield的值! 导致第一个yield的值被忽略.</span></div></pre></td></tr></table></figure>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'foo'</span>;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'bar'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;send(<span class="string">'something'</span>));</div></pre></td></tr></table></figure>
+<p> // 鸟哥博客相关讨论小结:<br> // 在send之前, 如果没有显示地调用current, 那么当$gen迭代器被创建的时候一个rewind()方法已经被隐式调用<br> // 所以实际上发生的应该类似:</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gen</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'foo'</span>;</div><div class="line">    <span class="keyword">yield</span> <span class="string">'bar'</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">var_dump($gen-&gt;rewind());       <span class="comment">//不过可惜的是, rewind的执行将虽然会导致第一个yield被执行, 但是却会忽略他的返回值.</span></div><div class="line">var_dump($gen-&gt;send(<span class="string">'something'</span>));   <span class="comment">// 真正当我们调用yield的时候, 我们得到的是第二个yield的值! 导致第一个yield的值被忽略.</span></div></pre></td></tr></table></figure>
 </li>
 <li><p>先看一个简单的任务调度程序: 通过模拟cpu轮询来调度两个 循环打印的任务</p>
 <ul>
