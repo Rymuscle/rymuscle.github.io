@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Django数据模型要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：  首先要配置数据库连接信息  选择使用的数据库类型及相关配置 如果涉及到读写分离或者项目中使用多个数据库的时候, 需要配置多个数据库配置块   如果涉及到读写分离或者项目中使用多个数据库的时候, 还需要实现 数据库路由  如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分model">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-04T04:27:50.000Z">
+<meta property="og:updated_time" content="2017-12-04T05:41:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="0 - Django数据库路由 -- 为完待续">
 <meta name="twitter:description" content="Django数据模型要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：  首先要配置数据库连接信息  选择使用的数据库类型及相关配置 如果涉及到读写分离或者项目中使用多个数据库的时候, 需要配置多个数据库配置块   如果涉及到读写分离或者项目中使用多个数据库的时候, 还需要实现 数据库路由  如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分model">
@@ -196,13 +196,14 @@
 </li>
 <li><p>如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分models</p>
 </li>
-<li><p>接下来就是创建表对应的模型了<br> Django的ORM在创建model的时候, 需要提供表的信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表);<br> 在model创建时, 需要注意的点比较多, 此处暂时列出如下几点:</p>
+<li><p>接下来就是创建表对应的模型了<br> Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表);<br> 在model创建时, 需要注意的点比较多, 此处暂时列出如下几点:</p>
 <ul>
 <li>会涉及到表的字段选择和设置的问题</li>
 <li>会涉及到表的关系 (一对多, 多对多)</li>
 <li>会涉及到model的继承问题</li>
 <li>数据库事务(Transcation)的控制</li>
-<li>模型只能针对关系型数据库? 非关系型的NoSQL数据库如何对接?</li>
+<li>数据库索引的使用</li>
+<li>Django原生ORM只能针对关系型数据库? 非关系型的NoSQL数据库如何对接?<br>（<a href="http://jingpin.jikexueyuan.com/article/11501.html）" target="_blank" rel="external">http://jingpin.jikexueyuan.com/article/11501.html）</a><br>（<a href="https://www.zhihu.com/question/19818326）" target="_blank" rel="external">https://www.zhihu.com/question/19818326）</a></li>
 </ul>
 </li>
 <li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p>
@@ -237,6 +238,7 @@
  <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure>
 </li>
 </ol>
+<p><a href="http://jingpin.jikexueyuan.com/zhuti/python/" target="_blank" rel="external">http://jingpin.jikexueyuan.com/zhuti/python/</a></p>
 
         </div>
 
