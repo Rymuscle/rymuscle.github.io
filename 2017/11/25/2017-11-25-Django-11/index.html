@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/showmigrations_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/makemigrations_01.png">
-<meta property="og:updated_time" content="2017-12-05T14:23:53.000Z">
+<meta property="og:updated_time" content="2017-12-05T14:25:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="11 - Django连接MySQL">
 <meta name="twitter:description" content="连接mysql数据库 当我们修改项目配置文件中的数据库配置项为如下配置项  123456789101112DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#123;        # &amp;apos;ENGINE&amp;apos;: &amp;apos;django.db.backends.sqlite3&amp;apos;,        # &amp;apos;NAME&amp;apos;: o">
@@ -249,8 +249,8 @@
 </li>
 <li><p>在稍后如果觉得数据表结构不合适, 可能会更改数据表的字段信息, 如果在添加了字段之后运行迁移的两个命令时, 会出现如下错误:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">You are trying to add a non-nullable field &apos;pub_date&apos; to article without a default; we can&apos;t do that (the database needs something to populate existing rows).</div><div class="line"></div><div class="line">Please select a fix:</div><div class="line"></div><div class="line"> 1) Provide a one-off default now (will be set on all existing rows)</div><div class="line"></div><div class="line"> 2) Quit, and let me add a default in models.py</div><div class="line"></div><div class="line">这段话的意思是 pub_date 字段没有默认值，而且非Null 那么 </div><div class="line"></div><div class="line">1) 指定一个一次性的值供更改数据库时使用。</div><div class="line"></div><div class="line">2) 停止当前操作，在 models.py 中给定默认值，然后再来migrate。</div></pre></td></tr></table></figure>
-<p> 此时, 选择1, 然后输入 <code>timezone.now()</code> 即可!<br> 目前觉着这个貌似没啥大用!!</p>
-<p> 次修改完之后, migrations命令都会生成数据model的更改记录文件;</p>
+<p> 此时, 选择1, 然后输入 <code>&#39;&#39;</code> 即可, 或者你在增加字段的时候指定默认值!<br> 目前觉着这个貌似没啥大用!!</p>
+<p> 当然, 你还可以修改字段名, 删除字段…..<br> 每次修改完之后, migrations命令都会生成数据model的更改记录文件;</p>
 </li>
 </ol>
 <h3 id="遗留数据库整合到Django"><a href="#遗留数据库整合到Django" class="headerlink" title="遗留数据库整合到Django"></a>遗留数据库整合到Django</h3><p>(<a href="http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html" target="_blank" rel="external">http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html</a>)<br>在进行models迁移的时候, 如果表结构已经存在了呢?</p>
