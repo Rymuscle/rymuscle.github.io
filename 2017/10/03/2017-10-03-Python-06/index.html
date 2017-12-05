@@ -29,7 +29,8 @@
 <meta property="og:description" content="AnacondaAnaconda 是一个用于科学计算的Python发行版, 支持 Linux, Mac, Windows系统, 提供了包管理与环境管理的功能，可以很方便地解决多版本python并存、切换以及各种第三方包安装问题; Anaconda利用工具/命令conda来进行package和environment的管理, 并且已经包含了Python和相关的配套工具; 言而总之, 就是 Anacon">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/secret_key.png">
-<meta property="og:updated_time" content="2017-12-04T08:15:42.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/django/pip_haha.png">
+<meta property="og:updated_time" content="2017-12-04T13:59:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06 - Python 环境准备入门 - Anaconda">
 <meta name="twitter:description" content="AnacondaAnaconda 是一个用于科学计算的Python发行版, 支持 Linux, Mac, Windows系统, 提供了包管理与环境管理的功能，可以很方便地解决多版本python并存、切换以及各种第三方包安装问题; Anaconda利用工具/命令conda来进行package和environment的管理, 并且已经包含了Python和相关的配套工具; 言而总之, 就是 Anacon">
@@ -234,7 +235,7 @@
 <li><p>如何激活并进入环境</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># 安装好后，使用activate激活某个环境</div><div class="line">activate python34 # for Windows</div><div class="line">source activate python36 # for Linux &amp; Mac</div><div class="line"># 激活后，会发现terminal输入的地方多了python34的字样，实际上，此时系统做的事情就是把默认2.7环境从PATH中去除，再把3.4对应的命令加入PATH</div></pre></td></tr></table></figure>
 </li>
-<li><p>如果想返回默认的python宿主环境 (注意此时宿主环境已经成了装完anaconda之后的python了)</p>
+<li><p>如果想返回默认的python宿主环境 (注意此时宿主环境中的 <code>python</code> 已经成了装完anaconda之后的python了)</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">deactivate python36 # for Windows</div><div class="line">source deactivate python36 # for Linux &amp; Mac</div></pre></td></tr></table></figure>
 </li>
 <li><p>删除一个已有的环境</p>
@@ -243,7 +244,7 @@
 </ul>
 <h4 id="Conda的包管理"><a href="#Conda的包管理" class="headerlink" title="Conda的包管理"></a>Conda的包管理</h4><ol>
 <li><p>conda的一些常用操作如下：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">conda list  # 查看当前环境下已安装的包</div><div class="line">conda list -n python34  # 查看某个指定环境的已安装包</div><div class="line">conda search numpy  # 查找package信息</div><div class="line">conda install -n python34 numpy # 安装package, 如果不用-n指定环境名称，则被安装在当前活跃环境</div><div class="line"># 也可以通过-c指定通过某个channel安装</div><div class="line"></div><div class="line"># 更新package</div><div class="line">conda update -n python34 numpy</div><div class="line"></div><div class="line"># 删除package</div><div class="line">conda remove -n python34 numpy</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">conda list  # 查看当前环境下已安装的包</div><div class="line">conda list -n python36  # 查看某个指定环境的已安装包</div><div class="line">conda search numpy  # 查找package信息</div><div class="line">conda install -n python36 numpy # 安装package, 如果不用-n指定环境名称，则被安装在当前活跃环境</div><div class="line"># 也可以通过-c指定通过某个channel安装</div><div class="line"></div><div class="line"># 更新package</div><div class="line">conda update -n python36 numpy</div><div class="line"></div><div class="line"># 删除package</div><div class="line">conda remove -n python36 numpy</div></pre></td></tr></table></figure>
 </li>
 <li><p>前面已经提到，conda将conda自身、python等都视为package，因此，完全可以使用conda来管理conda和python的版本，例如 </p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># 更新conda，保持conda最新</div><div class="line">conda update conda</div><div class="line"></div><div class="line"># 更新anaconda</div><div class="line">conda update anaconda</div><div class="line"></div><div class="line"># 更新python</div><div class="line">conda update python</div><div class="line"># 假设当前环境是python 3.4, conda会将python升级为3.4.x系列的当前最新版本</div><div class="line"></div><div class="line"># 更新conda，保持conda最新</div><div class="line">conda update conda</div><div class="line"></div><div class="line"># 更新anaconda</div><div class="line">conda update anaconda</div><div class="line"></div><div class="line"># 更新python</div><div class="line">conda update python</div><div class="line"># 假设当前环境是python 3.4, conda会将python升级为3.4.x系列的当前最新版本</div></pre></td></tr></table></figure>
@@ -257,7 +258,15 @@
 </ol>
 <h3 id="到目前为止-我的机器上有"><a href="#到目前为止-我的机器上有" class="headerlink" title="到目前为止, 我的机器上有"></a>到目前为止, 我的机器上有</h3><h4 id="Mac-自带的Python2-7"><a href="#Mac-自带的Python2-7" class="headerlink" title="Mac 自带的Python2.7"></a>Mac 自带的Python2.7</h4><h4 id="自己安装的Python3-6"><a href="#自己安装的Python3-6" class="headerlink" title="自己安装的Python3.6"></a>自己安装的Python3.6</h4><h4 id="virtualenv-virtualenvwrapper"><a href="#virtualenv-virtualenvwrapper" class="headerlink" title="virtualenv (virtualenvwrapper)"></a>virtualenv (virtualenvwrapper)</h4><h4 id="后来又装了Anaconda"><a href="#后来又装了Anaconda" class="headerlink" title="后来又装了Anaconda"></a>后来又装了Anaconda</h4><p>可以随意使用哪个都行, 也可以选择一款自己觉得方便的保留下来即可 (当然, 后两种是比较方便的)!</p>
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol>
-<li>使用Python虚拟环境的话, 要注意你拿到的Django代码需要进行配置, 因为这个项目不是你在本环境中通过<code>django-admin</code>生成的, 所以你项目中的<code>SECRET_KEY</code>并没有被django管理, 所以你需要在虚拟环境中配置相关信息:<br>(第一项可以不配置, 启动Django server的时候指明使用哪个配置文件即可就行)<br><img src="/img/django/secret_key.png" widtj="527" height="136"></li>
+<li><p>使用Python虚拟环境的话, 要注意你拿到的Django代码需要进行配置, 因为这个项目不是你在本环境中通过<code>django-admin</code>生成的, 所以你项目中的<code>SECRET_KEY</code>并没有被django管理, 所以你需要在虚拟环境中配置相关信息:<br>(第一项可以不配置, 启动Django server的时候指明使用哪个配置文件即可就行)<br><img src="/img/django/secret_key.png" widtj="527" height="136"></p>
+</li>
+<li><p>使用虚拟环境之后, 如果希望安装Django, 可以针对本环境重新进行安装的, 只要你是在本虚拟环境中, 就可以切换到Django的解压包目录下, 执行 <code>python setup.py install</code> 就相当于给当前虚拟环境安装了Django了;</p>
+</li>
+<li><p>另外, 你如果使用的是<code>Anaconda</code>, 那么你在当前虚拟环境中如果安装扩展的时候使用的是<code>pip</code>, 那么你用<code>conda list</code>看到的包列表中会说明这个包使用pip安装的, 那么你卸载的时候也要使用 <code>pip uninstall ..</code>, 如果你是使用 <code>conda install -n python36 ...</code> 则就要使用 <code>conda remove -n python36 ..</code> 来卸载;<br><img src="/img/django/pip_haha.png" width="600" height="270/"></p>
+<p> <strong>否则卸载的时候就会提示你没有此包</strong>;</p>
+</li>
+<li><p>感觉上还是 virtualenv + pip 比较干净整洁简单一点;</p>
+</li>
 </ol>
 
         </div>

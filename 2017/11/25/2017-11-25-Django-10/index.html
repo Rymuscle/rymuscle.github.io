@@ -13,25 +13,25 @@
     
     
     
-    <title>03 - 重新规划Django项目布局结构和目录结构 | Lant&#39;s Blog</title>
+    <title>10 - Django数据库模型前置信息 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Django">
-    <meta name="description" content="django的models拆分1.在Django开发中如果models文件过长,就需要对其进行拆分, 一般会使用的拆分方法如下:  根据功能/业务直接拆分app, 没必要将一个app写的过于冗长; 删除默认的models.py文件, 创建models包，需要在 models/ 下添加init.py文件, 然后在models下创建模型文件, 但是此时执行 python manage.py syncd">
+    <meta name="description" content="要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：  首先要选择数据库并配置数据库连接信息  接下来就是创建表对应的模型了 Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表); 在model创建时, 需要注意的">
 <meta name="keywords" content="Django">
 <meta property="og:type" content="article">
-<meta property="og:title" content="03 - 重新规划Django项目布局结构和目录结构">
-<meta property="og:url" content="http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/index.html">
+<meta property="og:title" content="10 - Django数据库模型前置信息">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="django的models拆分1.在Django开发中如果models文件过长,就需要对其进行拆分, 一般会使用的拆分方法如下:  根据功能/业务直接拆分app, 没必要将一个app写的过于冗长; 删除默认的models.py文件, 创建models包，需要在 models/ 下添加init.py文件, 然后在models下创建模型文件, 但是此时执行 python manage.py syncd">
+<meta property="og:description" content="要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：  首先要选择数据库并配置数据库连接信息  接下来就是创建表对应的模型了 Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表); 在model创建时, 需要注意的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-04T04:32:30.000Z">
+<meta property="og:updated_time" content="2017-12-05T13:47:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="03 - 重新规划Django项目布局结构和目录结构">
-<meta name="twitter:description" content="django的models拆分1.在Django开发中如果models文件过长,就需要对其进行拆分, 一般会使用的拆分方法如下:  根据功能/业务直接拆分app, 没必要将一个app写的过于冗长; 删除默认的models.py文件, 创建models包，需要在 models/ 下添加init.py文件, 然后在models下创建模型文件, 但是此时执行 python manage.py syncd">
+<meta name="twitter:title" content="10 - Django数据库模型前置信息">
+<meta name="twitter:description" content="要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：  首先要选择数据库并配置数据库连接信息  接下来就是创建表对应的模型了 Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表); 在model创建时, 需要注意的">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">03 - 重新规划Django项目布局结构和目录结构</div>
+        <div class="flex-col header-title ellipsis">10 - Django数据库模型前置信息</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,11 +134,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">03 - 重新规划Django项目布局结构和目录结构</h1>
+        <h1 class="title">10 - Django数据库模型前置信息</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-11-10T12:21:17.000Z" itemprop="datePublished" class="page-time">
-  2017-11-10
+                <time datetime="2017-11-25T12:18:00.000Z" itemprop="datePublished" class="page-time">
+  2017-11-25
 </time>
 
 
@@ -156,20 +156,13 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#django的models拆分"><span class="post-toc-number">1.</span> <span class="post-toc-text">django的models拆分</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#正确的使用和设置Database和Model"><span class="post-toc-number">2.</span> <span class="post-toc-text">正确的使用和设置Database和Model</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-2017-11-10-Django-03"
+<article id="post-2017-11-25-Django-10"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">03 - 重新规划Django项目布局结构和目录结构</h1>
+        <h1 class="post-card-title">10 - Django数据库模型前置信息</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-11-10 20:21:17" datetime="2017-11-10T12:21:17.000Z"  itemprop="datePublished">2017-11-10</time>
+            <time class="post-time" title="2017-11-25 20:18:00" datetime="2017-11-25T12:18:00.000Z"  itemprop="datePublished">2017-11-25</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Django/">Django</a></li></ul>
@@ -184,31 +177,40 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h3 id="django的models拆分"><a href="#django的models拆分" class="headerlink" title="django的models拆分"></a>django的models拆分</h3><p>1.在Django开发中如果models文件过长,就需要对其进行拆分, 一般会使用的拆分方法如下:</p>
-<ul>
-<li>根据功能/业务直接拆分app, 没必要将一个app写的过于冗长;</li>
-<li>删除默认的models.py文件, 创建<code>models包</code>，需要在 models/ 下添加<strong>init</strong>.py文件, 然后在models下创建模型文件, 但是此时执行 <code>python manage.py syncdb</code> 仍然不能生成对应的数据表, 需要在<code>__init__.py</code>文件中导入这些modules, 在<strong>init</strong>.py中加入:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">from user import *</div><div class="line">from order import *</div></pre></td></tr></table></figure>
+            <p>要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：</p>
+<ol>
+<li><p>首先要选择数据库并配置数据库连接信息</p>
 </li>
+<li><p>接下来就是创建表对应的模型了<br> Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表);<br> 在model创建时, 需要注意的点比较多, 此处暂时列出如下几点:</p>
+<ul>
+<li>如果表已经事先设计好了, 那么在写model的时候, 还要写上字段定义的话, 会不会冲突出错? (遗留数据库整合到Django)</li>
+<li>会涉及到表的字段选择和设置的问题</li>
+<li>会涉及到表的关系 (一对多, 多对多)</li>
+<li>会涉及到model的继承问题</li>
+<li>数据库事务(Transcation)的控制</li>
+<li>数据库索引的使用</li>
+<li>Django原生ORM只能针对关系型数据库? 非关系型的NoSQL数据库如何对接?<br>（<a href="http://jingpin.jikexueyuan.com/article/11501.html）" target="_blank" rel="external">http://jingpin.jikexueyuan.com/article/11501.html）</a><br>（<a href="https://www.zhihu.com/question/19818326）" target="_blank" rel="external">https://www.zhihu.com/question/19818326）</a></li>
 </ul>
-<p>现在执行<code>python manage.py syncdb</code>就会生成对应的表了．</p>
-<p>当然，还要注意的是，最好在拆分的model中每张表都添加一个元选项: <code>app_label</code>, 指明是那个app下的model.<br>例:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class User(models.Model):</div><div class="line">name = models.CharField(max_length = 255, null = False)</div><div class="line">age = models.IntegerField(null = True)</div><div class="line">class Meta:</div><div class="line">app_label = &apos;person&apos;</div><div class="line">db_table = &apos;student&apos;</div></pre></td></tr></table></figure></p>
-<p>这两种方式都可行，但是比较推荐使用第一种方式，首先它不用像第二种方式每个class都添加app_label,另外拆分app会使正个项目结构更加清晰明了;</p>
-<h3 id="正确的使用和设置Database和Model"><a href="#正确的使用和设置Database和Model" class="headerlink" title="正确的使用和设置Database和Model"></a><a href="http://www.weiguda.com/blog/8/" target="_blank" rel="external">正确的使用和设置Database和Model</a></h3><!--<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/img/django/model_catch.png" alt="截图" title="">
-                </div>
-                <div class="image-caption">截图</div>
-            </figure>–&gt;
-<h3 id="组织和设置urls-py"><a href="#组织和设置urls-py" class="headerlink" title="组织和设置urls.py"></a><a href="http://www.weiguda.com/blog/9/">组织和设置urls.py</a></h3><!--<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="/img/django/urls.png" alt="截图" title="">
-                </div>
-                <div class="image-caption">截图</div>
-            </figure>–&gt;
-<p><a href="http://www.weiguda.com/blog/7/">摘自</a></p>
--->
+</li>
+<li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p>
+<ul>
+<li>python manage.py makemigrations</li>
+<li>python manage.py migrate TestModel </li>
+</ul>
+</li>
+<li><p>如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分models</p>
+</li>
+<li><p>如果涉及到<code>读写分离</code>或者项目中<code>使用多个数据库</code>的时候, 需要配置多个数据库配置块</p>
+</li>
+<li><p>配置好数据库连接信息之后, 你可能启动Django还会失败, 因为你还要选择</p>
+</li>
+<li><p>如果配置了多个数据库配置块的话, 还需要实现 <strong>数据库路由</strong> 来决定你的查询操作是要操作哪个数据库</p>
+</li>
+</ol>
+<ol>
+<li>…… 未完待续</li>
+</ol>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -244,7 +246,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&title=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&title=《10 - Django数据库模型前置信息》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -254,22 +256,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&title=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&title=《10 - Django数据库模型前置信息》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10 - Django数据库模型前置信息》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -292,17 +294,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/11/10/2017-11-10-Django-02/" id="post-prev" class="post-nav-link">
+        <a href="/2017/11/10/2017-11-10-Django-03/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">02 - 重新规划Django项目布局结构和目录结构</h4>
+          <h4 class="title">03 - 重新规划Django项目布局结构和目录结构</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/25/2017-11-25-Django-10/" id="post-next" class="post-nav-link">
+      <a href="/2017/11/25/2017-11-25-Django-11/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">10 - Django数据库模型前置信息</h4>
+        <h4 class="title">11 - Django连接MySQL</h4>
       </a>
     </div>
   
@@ -413,7 +415,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&title=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&title=《10 - Django数据库模型前置信息》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -423,22 +425,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&title=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&title=《10 - Django数据库模型前置信息》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03 - 重新规划Django项目布局结构和目录结构》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10 - Django数据库模型前置信息》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/10/2017-11-10-Django-03/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -449,7 +451,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACI0lEQVR42u3aS27DMAxF0ex/0+40QFH7PlIGKvFqVCSFpeMBI34+H7yur/X7k/tFnvzXLouXDBkytmWQQ9xvQI7On8xflgwZMqYxSChMD1cLo3xfGTJkyLh/XBo6eYiXIUOGjD6jE0D/UcCVIUPGhgwe+EhKef95LcVdlovLkCFjQ0YnCL799yv9DRkyZGzFuMKVNjj5VfJqLBkyZJzN4AGOl8PIZTG9UJIXJ0OGjDmM+7STD2GQwYvO8+MqnQwZMjZn1Ei89J8OnC0Y4JAhQ8ahjLT4VWshvNcolSFDxqmMTouRj3DxV8C/lSFDxjQGudilh+MXzWJxTYYMGcMYafDtH4WPf6HkWYYMGUcz+pvxRJRcOnloDn5JZMiQcSijtllazus0IR52lyFDxqEMPrrKBzJ4SyAtAsqQIWMao9O87BTg0svfw9VQhgwZRzPSUtoFVi35TEt+MmTImMaotTPTtiV5TmcUQ4YMGWcz+PRC/Lhw2CJ9WTJkyJjAIGGxM/K1KoA+gGXIkDGY0U9T02YDT31lyJAxjdHpf6YFtdqNtZiFy5AhY3PGFa5lbw43L9G+MmTIOJrBVzo2UWtJ8uGPYNhChgwZRzDSIEsS1LTcVrs+ypAhYxqjFvjS/2x1VkkqK0OGDBkgQeWHWzVSJkOGDBk8HeWHTjNs9BJlyJAxgFEbquCXxVYwXVtukyFDxoYMnjrWCvq1JLb2MyBDhozjGD8DwH5MBhEXIQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aQY4iMRAEQP7/afa60m73ZJZpabDDJwTI7ZiRkirbr1c83n+Nf9+5H8nMV0/58MDAwPhaRrKIq3euZmifks98+RQMDIwDGEkUJstqY/Rq5nxtGBgYGHm83mPWwxcDAwOjZbTd5ez7GBgYGG0TmxSF9+VgHsEP9uIYGBhfyFgJwadfP3K+gYGB8VWMdznaoMwPJt8LAwMDY29GHnB5WZYUi21BGT0FAwNjU8bsUkW76NmRQwHDwMA4kjEL07bsu4cV5SYGBsYBjFmY5gHdFnxtmYiBgbE34x6wcvS40hLn0YyBgXECIwm4dvtsvQHOS1IMDIzTGG3hOLuu0V7/itpaDAyMrRnthldburXXNfJovpwTAwNja0berM62w/JNunYlGBgY5zCiS6Jl2ZdfufjU9h8GBsbejHajP7/ylTTDswtqxf8EAwPjyxmz5SZ/lfUILtaGgYGxKSM/bsyjOY/XGfg/n2JgYGzNSLbyPxWRswuyxVMwMDAOYOQNZ1syrhyI5ocNGBgYJzBWwjfZJvvUDBgYGBj51LNLGLNwj6IZAwNjU8a7HDN2e7RQUzEwMLZmtO3irMmcBWtetmJgYJzAaEM2b3QTRr4BFzWxGBgYWzPy4MsLwaSVbcu+6LIFBgbG8YwnjjnzmX/oyDEwMDDKY4O24GsPOB/83cDAwPiVjKT5bI8q20Iwj28MDIzTGHnrOCsfZ03s7GcAAwNjO8YfrICdOysE5lsAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
