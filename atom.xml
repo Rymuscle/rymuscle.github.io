@@ -47,9 +47,9 @@
     <link href="http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/"/>
     <id>http://blog.renyimin.com/2017/11/25/2017-11-25-Django-10/</id>
     <published>2017-11-25T12:18:00.000Z</published>
-    <updated>2017-12-05T13:47:41.000Z</updated>
+    <updated>2017-12-05T14:30:14.000Z</updated>
     
-    <content type="html"><![CDATA[<p>要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：</p><ol><li><p>首先要选择数据库并配置数据库连接信息</p></li><li><p>接下来就是创建表对应的模型了<br> Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来 (而在Laravel中, 貌似迁移是迁移文件, 而model只是为了方便操作ORM, 不依此生成表);<br> 在model创建时, 需要注意的点比较多, 此处暂时列出如下几点:</p><ul><li>如果表已经事先设计好了, 那么在写model的时候, 还要写上字段定义的话, 会不会冲突出错? (遗留数据库整合到Django)</li><li>会涉及到表的字段选择和设置的问题</li><li>会涉及到表的关系 (一对多, 多对多)</li><li>会涉及到model的继承问题</li><li>数据库事务(Transcation)的控制</li><li>数据库索引的使用</li><li>Django原生ORM只能针对关系型数据库? 非关系型的NoSQL数据库如何对接?<br>（<a href="http://jingpin.jikexueyuan.com/article/11501.html）" target="_blank" rel="external">http://jingpin.jikexueyuan.com/article/11501.html）</a><br>（<a href="https://www.zhihu.com/question/19818326）" target="_blank" rel="external">https://www.zhihu.com/question/19818326）</a></li></ul></li><li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p><ul><li>python manage.py makemigrations</li><li>python manage.py migrate TestModel </li></ul></li><li><p>如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分models</p></li><li><p>如果涉及到<code>读写分离</code>或者项目中<code>使用多个数据库</code>的时候, 需要配置多个数据库配置块</p></li><li><p>配置好数据库连接信息之后, 你可能启动Django还会失败, 因为你还要选择</p></li><li><p>如果配置了多个数据库配置块的话, 还需要实现 <strong>数据库路由</strong> 来决定你的查询操作是要操作哪个数据库</p></li></ol><ol><li>…… 未完待续</li></ol>]]></content>
+    <content type="html"><![CDATA[<p>要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：</p><ol><li><p>首先要选择数据库并配置数据库连接信息;</p></li><li><p>接下来就是创建表对应的模型了<br> Django的ORM在创建model的时候, 需要提供的表信息比较多, 因为Django会依据model帮你创建出表结构来;<br> 在model创建时, 需要注意的点比较多, 此处暂时列出如下几点:</p><ul><li>原先遗留数据库如何整合到Django?</li><li>数据model对应的字段类型比较多, 注意多加使用, 还可以自定义字段类型</li><li>表之间的关系 (一对多, 多对多…)</li><li>事务(Transcation)的使用</li><li>数据库索引的使用</li><li>聚合的相关用法</li><li>会涉及到model的继承问题</li><li>Django原生ORM只能针对关系型数据库? 非关系型的NoSQL数据库如何对接?<br>（<a href="http://jingpin.jikexueyuan.com/article/11501.html）" target="_blank" rel="external">http://jingpin.jikexueyuan.com/article/11501.html）</a><br>（<a href="https://www.zhihu.com/question/19818326）" target="_blank" rel="external">https://www.zhihu.com/question/19818326）</a></li><li>更高级的</li></ul></li><li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p><ul><li>python manage.py makemigrations</li><li>python manage.py migrate TestModel </li></ul></li><li><p>如果应用的models.py中创建的model将来可能会过多的话, 还要考虑拆分models</p></li><li><p>如果涉及到<code>读写分离</code>或者项目中<code>使用多个数据库</code>的时候, 需要配置多个数据库配置块</p></li><li><p>配置好数据库连接信息之后, 你可能启动Django还会失败, 因为你还要选择</p></li><li><p>如果配置了多个数据库配置块的话, 还需要实现 <strong>数据库路由</strong> 来决定你的查询操作是要操作哪个数据库</p></li></ol><ol><li>…… 未完待续</li></ol>]]></content>
     
     <summary type="html">
     
@@ -57,9 +57,9 @@
       
         &lt;p&gt;要使用Django的数据模型, 你需要做的事情及考虑还是比较多的：&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;首先要选择数据库并配置数据库连接信息&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;首先要选择数据库并配置数据库连接信息;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;p&gt;接下来就是创建表对应的模型了&lt;br&gt; Django的ORM在创建model的时候, 需要提供的表信息比
+&lt;li&gt;&lt;p&gt;接下来就是创建表对应的模型了&lt;br&gt; Django的ORM在创建model的时候, 需要提供的表信息
       
     
     </summary>
