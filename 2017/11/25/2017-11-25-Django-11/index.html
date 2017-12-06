@@ -13,7 +13,7 @@
     
     
     
-    <title>11 - Django连接MySQL | Lant&#39;s Blog</title>
+    <title>11 - Django连接MySQL (未完...) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,16 +23,17 @@
     <meta name="description" content="连接mysql数据库 当我们修改项目配置文件中的数据库配置项为如下配置项  123456789101112DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#123;        # &amp;apos;ENGINE&amp;apos;: &amp;apos;django.db.backends.sqlite3&amp;apos;,        # &amp;apos;NAME&amp;apos;: o">
 <meta name="keywords" content="Django">
 <meta property="og:type" content="article">
-<meta property="og:title" content="11 - Django连接MySQL">
+<meta property="og:title" content="11 - Django连接MySQL (未完...)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="连接mysql数据库 当我们修改项目配置文件中的数据库配置项为如下配置项  123456789101112DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#123;        # &amp;apos;ENGINE&amp;apos;: &amp;apos;django.db.backends.sqlite3&amp;apos;,        # &amp;apos;NAME&amp;apos;: o">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/showmigrations_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/makemigrations_01.png">
-<meta property="og:updated_time" content="2017-12-05T14:25:50.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/django/inspectdb_01.png">
+<meta property="og:updated_time" content="2017-12-06T13:35:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="11 - Django连接MySQL">
+<meta name="twitter:title" content="11 - Django连接MySQL (未完...)">
 <meta name="twitter:description" content="连接mysql数据库 当我们修改项目配置文件中的数据库配置项为如下配置项  123456789101112DATABASES = &amp;#123;    &amp;apos;default&amp;apos;: &amp;#123;        # &amp;apos;ENGINE&amp;apos;: &amp;apos;django.db.backends.sqlite3&amp;apos;,        # &amp;apos;NAME&amp;apos;: o">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/django/showmigrations_01.png">
     
@@ -115,7 +116,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">11 - Django连接MySQL</div>
+        <div class="flex-col header-title ellipsis">11 - Django连接MySQL (未完...)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -137,7 +138,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">11 - Django连接MySQL</h1>
+        <h1 class="title">11 - Django连接MySQL (未完...)</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-11-25T13:07:00.000Z" itemprop="datePublished" class="page-time">
@@ -170,7 +171,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">11 - Django连接MySQL</h1>
+        <h1 class="post-card-title">11 - Django连接MySQL (未完...)</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-11-25 21:07:00" datetime="2017-11-25T13:07:00.000Z"  itemprop="datePublished">2017-11-25</time>
 
@@ -237,6 +238,9 @@
 </li>
 </ul>
 </li>
+<li><p>如果想要查看你迁移文件所对应的sql语句, 可以使用如下命令</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py sqlmigrate blog(对应你的应用名) 0001</div></pre></td></tr></table></figure>
+</li>
 <li><p>在执行 <code>migrate</code> 命令的时候, 该命令首先会找出所有还没有被应用的迁移文件</p>
 <ul>
 <li>Django使用数据库中的一个<code>django_migraton</code>的特殊表来追踪哪些迁移文件被应用过</li>
@@ -252,13 +256,35 @@
 <p> 此时, 选择1, 然后输入 <code>&#39;&#39;</code> 即可, 或者你在增加字段的时候指定默认值!<br> 目前觉着这个貌似没啥大用!!</p>
 <p> 当然, 你还可以修改字段名, 删除字段…..<br> 每次修改完之后, migrations命令都会生成数据model的更改记录文件;</p>
 </li>
+<li><p>由于你每次执行完迁移命令之后, <code>django_migraton</code> 这张表中都会记录哪些迁移文件你做了迁移(包括你的更改表结构所生成的迁移文件), 所以每次你执行迁移命令的时候, 只会执行新增的model表结构所生成的的迁移文件;<br> 所以迁移会很快</p>
+</li>
 </ol>
-<h3 id="遗留数据库整合到Django"><a href="#遗留数据库整合到Django" class="headerlink" title="遗留数据库整合到Django"></a>遗留数据库整合到Django</h3><p>(<a href="http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html" target="_blank" rel="external">http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html</a>)<br>在进行models迁移的时候, 如果表结构已经存在了呢?</p>
-<pre><code>- 很可能之前已经创建好的数据表, 那如何做数据迁移?
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure>
-
-- 能否将已经存在的数据表直接生成models模型类?
-</code></pre><h3 id="Django数据库路由"><a href="#Django数据库路由" class="headerlink" title="Django数据库路由"></a>Django数据库路由</h3><ol>
+<h3 id="遗留数据库整合到Django"><a href="#遗留数据库整合到Django" class="headerlink" title="遗留数据库整合到Django"></a><a href="http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html" target="_blank" rel="external">遗留数据库整合到Django</a></h3><p>在进行models迁移的时候, 如果表结构已经存在了呢?</p>
+<ul>
+<li>虽然Django<strong>最适合用来开发新的应用</strong>，但也可以将它整合到遗留的数据库中; Django包含了很多工具，尽可能自动化解决这类问题;</li>
+</ul>
+<ol>
+<li><p>首先你需要向Django提供你的数据库配置信息(这个之前已经了解过了)<br> 也就是让Django知道你想整合的数据库在哪里</p>
+</li>
+<li><p>Django自带了一个叫做 <code>inspectdb</code> 的工具(<strong><a href="http://python.usyiyi.cn/translate/django_182/ref/django-admin.html#django-admin-inspectdb" target="_blank" rel="external">inspectdb文档</a></strong>), 可以按照现有的数据库创建模型;</p>
+<ul>
+<li><p>运行如下命令并查看输出:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb</div></pre></td></tr></table></figure>
+</li>
+<li><p>因此可以重定向标准输出流来保存文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb &gt; models.py</div></pre></td></tr></table></figure>
+<p>这样就会在当前目录下生成一个models.py的模型文件, 你可以将这个模型文件放入到你创建的应用中</p>
+</li>
+<li><p>默认情况下，inspectdb创建的模型是未被管理的, 所以生成的模型文件中的Meta类中的 <code>managed = False</code> 就是告诉Django不要管理每个表的创建,修改和删除:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Person(models.Model):</div><div class="line">    id = models.IntegerField(primary_key=True)</div><div class="line">    first_name = models.CharField(max_length=70)</div><div class="line">    class Meta:</div><div class="line">        managed = False</div><div class="line">        db_table = &apos;CENSUS_PERSONS&apos;</div></pre></td></tr></table></figure>
+<p><strong>也就是说你在model中对表结构做出修改的时候, 使用迁移命令 <code>migration</code> 会发现它并不会识别出表结构已经发生变化了, 除非你把model类中的Meta类的 <code>managed</code> 改成True或者删除</strong><br><strong>如果你希望Django管理表的生命周期，你需要把managed选项改为 True（或者简单地把它移除，因为True是默认值）</strong></p>
+</li>
+<li><p>另外需要注意的是:<br><img src="/img/django/inspectdb_01.png" width="626" height="185"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="Django数据库路由"><a href="#Django数据库路由" class="headerlink" title="Django数据库路由"></a>Django数据库路由</h3><ol>
 <li><p>之前我们已经对Django的setting文件做了配置, 并成功连接到了Mysql数据库, 但如果我们要做更复杂的业务, 这根本不够, 比如我们要做<strong>读写分离</strong>该如何配置?</p>
 </li>
 <li><p>在使用PHP的框架时, 一般我们只用在配置文件中配置好读写库的相关配置, 比如Laravel框架, 不管你用的是原生 SQL，还是查询构建器，还是 Eloquent ORM，只要配置正确，合适的连接总是会被使用;<br> 但是Django中就没有这么简单;</p>
@@ -316,7 +342,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL (未完...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -326,7 +352,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL (未完...)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -336,7 +362,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11 - Django连接MySQL》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11 - Django连接MySQL (未完...)》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -478,7 +504,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL (未完...)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -488,7 +514,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&title=《11 - Django连接MySQL (未完...)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -498,7 +524,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11 - Django连接MySQL》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11 - Django连接MySQL (未完...)》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
