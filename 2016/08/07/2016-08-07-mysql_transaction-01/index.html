@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
-<meta property="og:updated_time" content="2017-12-10T11:11:13.000Z">
+<meta property="og:updated_time" content="2017-12-10T11:19:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务 - 01">
 <meta name="twitter:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个写操作); 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=100`元从">
@@ -163,7 +163,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">事务的概念</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的ACID特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">事务的ACID特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务会出现的问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">事务会出现的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#脏读-（读取的数据不正确）"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">脏读 （读取的数据不正确）</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#不可重复读（同一事务内读取的同一数据不一样）"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">不可重复读（同一事务内读取的同一数据不一样）</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#幻读-间隙锁"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">幻读 (间隙锁)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的4种隔离级别"><span class="post-toc-number">4.</span> <span class="post-toc-text">事务的4种隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">READ UNCOMMITTED (未提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-COMMITTED-提交读-解决脏读"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">READ COMMITTED (提交读) - 解决脏读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读-解决脏读"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">REPEATABLE READ (可重复读) - 解决脏读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SERIALIZABLE-可串行化"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">SERIALIZABLE(可串行化)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务会出现的另一个问题"><span class="post-toc-number">5.</span> <span class="post-toc-text">事务会出现的另一个问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#丢失更新"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">丢失更新</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">事务的概念</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的ACID特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">事务的ACID特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务会出现的问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">事务会出现的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#幻读-间隙锁"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">幻读 (间隙锁)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的4种隔离级别"><span class="post-toc-number">4.</span> <span class="post-toc-text">事务的4种隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">READ UNCOMMITTED (未提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">READ COMMITTED (提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">REPEATABLE READ (可重复读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SERIALIZABLE-可串行化"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">SERIALIZABLE(可串行化)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务会出现的另一个问题-丢失更新"><span class="post-toc-number">5.</span> <span class="post-toc-text">事务会出现的另一个问题 - 丢失更新</span></a></li></ol>
         </nav>
     </aside>
     
@@ -209,7 +209,8 @@
 </li>
 </ol>
 <h4 id="事务会出现的问题"><a href="#事务会出现的问题" class="headerlink" title="事务会出现的问题"></a>事务会出现的问题</h4><p>在并发量比较大的时候, 很容易出现多个事务同时进行的情况, 假设有两个事务正在同时进行, 两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对操作的数据做一定的保护处理, 所以最终导致一些问题的出现;</p>
-<h5 id="脏读-（读取的数据不正确）"><a href="#脏读-（读取的数据不正确）" class="headerlink" title="脏读 （读取的数据不正确）"></a>脏读 （读取的数据不正确）</h5><ol>
+<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>读取的数据不正确,不是最终的持久保存数据,而是可能会反悔的数据;</p>
+<ol>
 <li><p>读取的数据是不正确的数据, 即为脏读;<br> mysql中一个事务读取了另一个并行事务未提交的写数据, 那这个读取就是脏读<br> <img src="/img/mysql/transaction/dirty_read.png" width="608" height="190"></p>
 </li>
 <li><p>事务A在T4阶段读取库存为20, 这个库存其实就属于脏数据, 因为这个数据是事务B最终会撤销掉的数据, 所以如果事务A使用库存20进行后续的操作, 就会引发问题;</p>
@@ -219,7 +220,8 @@
 <li><p>但是脏读问题解决后, 还是有问题存在的, 那就是事务内部的 ‘不可重复读’ 的问题;</p>
 </li>
 </ol>
-<h5 id="不可重复读（同一事务内读取的同一数据不一样）"><a href="#不可重复读（同一事务内读取的同一数据不一样）" class="headerlink" title="不可重复读（同一事务内读取的同一数据不一样）"></a>不可重复读（同一事务内读取的同一数据不一样）</h5><ol>
+<h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><p>同一事务内读取的同一数据不一样</p>
+<ol>
 <li><p>之前说的在<code>read commited</code>级别时, 一个事务只能读取另一个事务已经提交的数据, 这就会出现不可重复读的问题(即,<strong>两次读取的结果一次是自己读取的, 一次是另一个事务提交之后的</strong>);<br>不可重复读, 即不能多次重复去读, 因为读出来的结果不一样, 因此认为存在不可重复读的问题;</p>
 </li>
 <li><p>如何避免这个问题?<br>这就要用到事务的特性 – <code>隔离性</code>, 当事务的隔离级别为 <code>repeatable read</code> 或以上级别时, 一个事务内部对数据的多次查询都是相同的(无论该数据在中途是否被其他事务修改过), 因此也就避免了不可重复读的问题;</p>
@@ -237,24 +239,27 @@
 </ul>
 </li>
 </ol>
-<p>幻读和不可重复度都是通过 <code>Repeatable read</code> 及以上级别的隔离级别来防止</p>
+<p>幻读和不可重复读都是通过 <code>Repeatable read</code> 及以上级别的隔离级别来防止</p>
 <ol>
 <li>如何避免这个问题?<br>这就要用到事务的特性 – <code>隔离性</code>, <strong>还是</strong>当事务的隔离级别为 <code>Repeatable read</code> 及以上级别时, 会通过间隙锁来防止幻读的出现, 即锁定特定数据的前后间隙让数据无法被插入;</li>
 </ol>
 <h4 id="事务的4种隔离级别"><a href="#事务的4种隔离级别" class="headerlink" title="事务的4种隔离级别"></a>事务的4种隔离级别</h4><p>事务的隔离性比较复杂, 在SQL标准中定义了四种隔离级别, <strong>每一种级别都规定了在一个事务中所做的修改, 哪些在事务内和事务间是可见的, 哪些是不可见的</strong>, <strong>较低的隔离级别通常可以执行更高的并发, 系统的开销也更低</strong>;</p>
 <p>下面简单了解一下四种隔离级别</p>
-<h5 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED (未提交读)"></a>READ UNCOMMITTED (未提交读)</h5><ul>
+<h5 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED (未提交读)"></a>READ UNCOMMITTED (未提交读)</h5><p>出现 <code>脏读</code></p>
+<ul>
 <li><p>在READ UNCOMMITTED级别, 事务中的修改, 即使没有提交, 对其他事务也都是可见的; 也就是说事务可以读取未递交的数据, 这也就造成了<code>脏读(Dirty Read)</code>的出现;</p>
 </li>
 <li><p>这个级别会导致很多问题, <strong>从性能上来说, READ UNCOMMITTED级别也不会比其他的级别好太多, 但却缺乏其他级别的很多好处, 所以在实际应用中一般很少使用</strong>;</p>
 </li>
 </ul>
-<h5 id="READ-COMMITTED-提交读-解决脏读"><a href="#READ-COMMITTED-提交读-解决脏读" class="headerlink" title="READ COMMITTED (提交读) - 解决脏读"></a>READ COMMITTED (提交读) - 解决<code>脏读</code></h5><ul>
+<h5 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED (提交读)"></a>READ COMMITTED (提交读)</h5><p>解决 <code>脏读</code>, 出现 <code>不可重复读</code></p>
+<ul>
 <li>大多数数据库系统的默认隔离级别都是READ COMMIT(<strong>但MySQL不是</strong>);</li>
 <li>READ COMMIT满足前面提到的隔离性的简单定义: 一个事务开始时, 只能”看见”已经提交的事务所做的修改; 也就是说一个事务从开始直到事务提交之前, 所做的任何修改对其他事务都是不可见的; 这也就解决了<code>脏读</code>的问题!!</li>
 <li>这个级别有时候也叫不可重复读(nonrepeatable read), 应为两次执行同样的查询, 可能会得到不一样的结果;</li>
 </ul>
-<h5 id="REPEATABLE-READ-可重复读-解决脏读"><a href="#REPEATABLE-READ-可重复读-解决脏读" class="headerlink" title="REPEATABLE READ (可重复读) - 解决脏读"></a>REPEATABLE READ (可重复读) - 解决<code>脏读</code></h5><ul>
+<h5 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ (可重复读)"></a>REPEATABLE READ (可重复读)</h5><p>解决<code>脏读</code>, 解决 <code>不可重复读</code>, 依然无法解决 <code>幻读</code></p>
+<ul>
 <li><p>首先 REPEATABLE READ 比 <code>READ COMMITTED</code> 的隔离级别高, 也可以解决脏读的问题; 该级别保证了在同一个事务中多次读取同样的记录的结果是一致的;</p>
 </li>
 <li><p>但是理论上, 可重复读这个隔离级别还是无法解决另外一个幻读(Phantom Read)的问题;<br>  所谓幻读, 指的是当某个事务在读取某个范围内的记录时, 另外一个事务又在该范围内插入了新的记录, 当之前的事务再次读取该范围的记录时, 会产生幻行(Phantom Row);<br>  InnoDB和XtraDB存储引擎通过多版本并发控制(MVCC)解决了幻读的问题</p>
@@ -263,8 +268,8 @@
 </li>
 </ul>
 <h5 id="SERIALIZABLE-可串行化"><a href="#SERIALIZABLE-可串行化" class="headerlink" title="SERIALIZABLE(可串行化)"></a>SERIALIZABLE(可串行化)</h5><p>SERIALIZABLE是最高的隔离级别, 他通过强制事务串行执行, 避免了前面说的幻读的问题;<br>简单来说, SERIALIZABLE 会在读取的每一行数据上都加锁, 所以可能导致大量的超时和锁争用的问题, 实际应用中也很少用到这个隔离级别, 只有在非常需要保障数据一致性而且可以接受没有并发的情况下, 才考虑采用该级别;</p>
-<h4 id="事务会出现的另一个问题"><a href="#事务会出现的另一个问题" class="headerlink" title="事务会出现的另一个问题"></a>事务会出现的另一个问题</h4><p>之前介绍了在高并发下事务会出现的问题及如何使用事务的隔离级别来进行解决;<br>其实还有一个问题需要解决, 那就是 <code>丢失更新</code> 的问题!!</p>
-<h5 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h5><ol>
+<h4 id="事务会出现的另一个问题-丢失更新"><a href="#事务会出现的另一个问题-丢失更新" class="headerlink" title="事务会出现的另一个问题 - 丢失更新"></a>事务会出现的另一个问题 - 丢失更新</h4><p>之前介绍了在高并发下事务会出现的问题及如何使用事务的隔离级别来进行解决;<br>但纵使你使用最高隔离级别, 还有一个问题需要解决, 那就是 <code>丢失更新</code> 的问题!!</p>
+<ol>
 <li><p>先看一下丢失更新的例子:</p>
 <ul>
 <li>由于事务A与事务B互相不知道对方的存在，因此导致了悲剧的发生<br><img src="/img/mysql/transaction/loss_update_01.png" width="513" height="585"></li>
