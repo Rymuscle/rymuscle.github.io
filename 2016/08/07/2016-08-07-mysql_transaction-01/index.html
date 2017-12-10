@@ -20,21 +20,21 @@
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个写操作); 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=100`元从">
+    <meta name="description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个’写操作’); 放在事务中的多个操作, “要么全部执行成功, 要么全部执行失败”, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL(INNODB引擎)事务 - 01">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个写操作); 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=100`元从">
+<meta property="og:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个’写操作’); 放在事务中的多个操作, “要么全部执行成功, 要么全部执行失败”, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
-<meta property="og:updated_time" content="2017-12-10T11:19:06.000Z">
+<meta property="og:updated_time" content="2017-12-10T11:35:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务 - 01">
-<meta name="twitter:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个写操作); 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=100`元从">
+<meta name="twitter:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个’写操作’); 放在事务中的多个操作, “要么全部执行成功, 要么全部执行失败”, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -189,27 +189,32 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h4 id="事务的概念"><a href="#事务的概念" class="headerlink" title="事务的概念"></a>事务的概念</h4><ol>
-<li><p>事务可以理解为一个<code>独立的工作单元</code>, 在这个独立的工作单元中, 有一组操作(一般会有多个写操作);<br> 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这也是事务的目的;</p>
+<li><p>事务可以理解为一个<code>独立的工作单元</code>, 在这个独立的工作单元中, 有一组操作(一般会有多个’写操作’);<br> 放在事务中的多个操作, “要么全部执行成功, 要么全部执行失败”, 这当然也是事务的目的;</p>
 </li>
 <li><p>还是通过最经典的银行应用来解释事务<br> 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查A用户余额`&gt;=100`元</div><div class="line">从A用户余额中`-100`元</div><div class="line">给B用户余额`+100`元</div></pre></td></tr></table></figure>
-<p> 注意:上面的三个步骤的操作必须打包在一个事务中, 来作为一个<code>独立的工作单元</code>来执行, 在这个<code>独立工作单元</code>(即事务)中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤(当然,主要是回滚写操作);</p>
-<p> 假设第二步(<code>从A用户余额中</code>-100<code>元</code>)操作成功, 但是第三步(给B用户余额<code>+100</code>元)操作失败, 那么整个事务就是失败的, 那就必须将第二步的操作也回滚;</p>
+<p> <strong>注意</strong>:上面的三个步骤的操作必须打包在一个事务中, 来作为一个<code>独立的工作单元</code>来执行, 在这个<code>独立工作单元</code>(即事务)中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤(当然,主要是回滚写操作);</p>
+<p> 假设第二步(<code>从A用户余额中</code>-100<code>元</code>)操作成功, 但是第三步(给B用户余额<code>+100</code>元)操作失败, 那么整个事务也就应该是失败的, 那就必须将第二步的操作也回滚;</p>
 </li>
 </ol>
 <h4 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h4><p>一个运行良好的事务处理系统必须具备这些标准特性</p>
 <ol>
-<li><p>Atomicity 原子性<br>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚; 对于一个事务来说, 不可能只执行其中的一部分操作, 这就是事务的原子性;</p>
+<li><p>Atomicity 原子性<br>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚;<br>对于一个事务来说, 不可能只成功执行其中的一部分操作, 这就是事务的原子性;</p>
 </li>
 <li><p>Consistency 一致性<br>事务的<code>一致性</code>会保证<strong>数据库总是从一个一致性的状态转换到另一个一致性的状态</strong>;<br>(比如在之前的转账例子中, 即使已经行完了第二步(<code>从A用户余额中</code>-100<code>元</code>), 但在开始执行第三步(给B用户余额<code>+100</code>元)时系统突然崩溃, 那么A用户的余额也不会损失100元, 因为事务最终没有提交, 所以事务中所做的修改也不会保存到数据库中;</p>
 </li>
-<li><p><strong>Isolation 隔离性</strong><br><code>通常来说</code>, <strong>一个事务所做的修改在最终提交以前, 对其他事务是不可见的</strong>;<br>(比如在之前的转账例子中, 在执行完第二步但是第三部还没开始的时候, 此时有另一个账户汇总的程序开始运行, 那么这个程序所拿到的A账户余额并没有被<code>-100</code>)<br>后面我们还会详细讨论事务<code>隔离性</code>的 <code>隔离级别</code>, 就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (也就是还有特例喽)</p>
-</li>
-<li><p>Durability 持久性<br>一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会<code>理论上永久保存到数据库中</code>; </p>
+<li><p><strong>Isolation 隔离性</strong></p>
 </li>
 </ol>
+<ul>
+<li><code>通常来说</code>, <strong>一个事务所做的修改在最终提交以前, 对其他事务是不可见的</strong>;<br>(比如在之前的转账例子中, 在执行完第二步但是第三步还没开始的时候, 此时有另一个账户汇总的程序开始运行, 那么这个程序所拿到的A账户余额应该是没有被<code>-100</code>的余额才对)</li>
+<li>后面我们还会详细讨论事务<code>隔离性</code>的 <code>隔离级别</code>, 就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (也就是还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code> )</li>
+</ul>
+<ol>
+<li>Durability 持久性<br>一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会 <code>理论上永久保存到数据库中</code>; </li>
+</ol>
 <h4 id="事务会出现的问题"><a href="#事务会出现的问题" class="headerlink" title="事务会出现的问题"></a>事务会出现的问题</h4><p>在并发量比较大的时候, 很容易出现多个事务同时进行的情况, 假设有两个事务正在同时进行, 两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对操作的数据做一定的保护处理, 所以最终导致一些问题的出现;</p>
-<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>读取的数据不正确,不是最终的持久保存数据,而是可能会反悔的数据;</p>
+<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>读取的数据不正确,不是最终的持久保存数据,而是可能会被其他某个事务<code>反悔(rollback))</code>的数据;</p>
 <ol>
 <li><p>读取的数据是不正确的数据, 即为脏读;<br> mysql中一个事务读取了另一个并行事务未提交的写数据, 那这个读取就是脏读<br> <img src="/img/mysql/transaction/dirty_read.png" width="608" height="190"></p>
 </li>
@@ -217,12 +222,12 @@
 </li>
 <li><p>如何避免这个问题？<br>这就要用到事务的特性 – <code>隔离性</code>, 当事务的隔离级别为 <code>read commited</code> 及以上隔离级别, <strong>可以让一个事务只能读取另一个事务已经提交的数据</strong>, 这样就可以避免了上面的脏读现象 (也就是说如果事务B还没有提交, 那么T4时, 事务A读取到的库存就应该还是10);</p>
 </li>
-<li><p>但是脏读问题解决后, 还是有问题存在的, 那就是事务内部的 ‘不可重复读’ 的问题;</p>
+<li><p>但是脏读问题解决后, 还是有问题存在的, 那就是 ‘不可重复读’ 的问题;</p>
 </li>
 </ol>
 <h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><p>同一事务内读取的同一数据不一样</p>
 <ol>
-<li><p>之前说的在<code>read commited</code>级别时, 一个事务只能读取另一个事务已经提交的数据, 这就会出现不可重复读的问题(即,<strong>两次读取的结果一次是自己读取的, 一次是另一个事务提交之后的</strong>);<br>不可重复读, 即不能多次重复去读, 因为读出来的结果不一样, 因此认为存在不可重复读的问题;</p>
+<li><p>之前说的在<code>read commited</code>级别时, 一个事务只能读取另一个事务已经提交的数据, 这就会出现不可重复读的问题(即,<strong>两次读取的结果一次是自己最初读取的, 一次是另一个事务提交之后的</strong>);<br>不可重复读, 即不能多次重复去读, 因为读出来的结果不一样, 因此认为存在不可重复读的问题;</p>
 </li>
 <li><p>如何避免这个问题?<br>这就要用到事务的特性 – <code>隔离性</code>, 当事务的隔离级别为 <code>repeatable read</code> 或以上级别时, 一个事务内部对数据的多次查询都是相同的(无论该数据在中途是否被其他事务修改过), 因此也就避免了不可重复读的问题;</p>
 </li>
@@ -268,7 +273,7 @@
 </li>
 </ul>
 <h5 id="SERIALIZABLE-可串行化"><a href="#SERIALIZABLE-可串行化" class="headerlink" title="SERIALIZABLE(可串行化)"></a>SERIALIZABLE(可串行化)</h5><p>SERIALIZABLE是最高的隔离级别, 他通过强制事务串行执行, 避免了前面说的幻读的问题;<br>简单来说, SERIALIZABLE 会在读取的每一行数据上都加锁, 所以可能导致大量的超时和锁争用的问题, 实际应用中也很少用到这个隔离级别, 只有在非常需要保障数据一致性而且可以接受没有并发的情况下, 才考虑采用该级别;</p>
-<h4 id="事务会出现的另一个问题-丢失更新"><a href="#事务会出现的另一个问题-丢失更新" class="headerlink" title="事务会出现的另一个问题 - 丢失更新"></a>事务会出现的另一个问题 - 丢失更新</h4><p>之前介绍了在高并发下事务会出现的问题及如何使用事务的隔离级别来进行解决;<br>但纵使你使用最高隔离级别, 还有一个问题需要解决, 那就是 <code>丢失更新</code> 的问题!!</p>
+<h4 id="事务会出现的另一个问题-丢失更新"><a href="#事务会出现的另一个问题-丢失更新" class="headerlink" title="事务会出现的另一个问题 - 丢失更新"></a>事务会出现的另一个问题 - 丢失更新</h4><p>之前介绍了在高并发下事务会出现的问题及如何使用事务的隔离级别来进行解决;<br>但纵使你使用最高隔离级别, 还有一个问题需要解决, 那就是 <code>丢失更新</code> 的问题!!<br>虽然整个事务过程中只读取了一次, 不会出现<code>脏读</code>, <code>不可重复读</code>这类问题, 但是会由于<strong>不在乎其他事务的更新提交</strong>而出现 <code>丢失更新</code> 的问题;</p>
 <ol>
 <li><p>先看一下丢失更新的例子:</p>
 <ul>
