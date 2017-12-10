@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2017-12-06T13:35:03.000Z</updated>
+  <updated>2017-12-06T13:44:21.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/"/>
     <id>http://blog.renyimin.com/2017/11/25/2017-11-25-Django-11/</id>
     <published>2017-11-25T13:07:00.000Z</published>
-    <updated>2017-12-06T13:35:03.000Z</updated>
+    <updated>2017-12-06T13:44:21.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="连接mysql数据库"><a href="#连接mysql数据库" class="headerlink" title="连接mysql数据库"></a>连接mysql数据库</h3><ol><li><p>当我们修改项目配置文件中的数据库配置项为如下配置项</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DATABASES = &#123;</div><div class="line">    &apos;default&apos;: &#123;</div><div class="line">        # &apos;ENGINE&apos;: &apos;django.db.backends.sqlite3&apos;,</div><div class="line">        # &apos;NAME&apos;: os.path.join(BASE_DIR, &apos;db.sqlite3&apos;)</div><div class="line">        &apos;ENGINE&apos;: &apos;django.db.backends.mysql&apos;,</div><div class="line">        &apos;NAME&apos;: &apos;test&apos;,</div><div class="line">        &apos;USER&apos;: &apos;root&apos;,</div><div class="line">        &apos;PASSWORD&apos;: &apos;renyimin&apos;,</div><div class="line">        &apos;HOST&apos;: &apos;127.0.01&apos;,</div><div class="line">        &apos;PORT&apos;: &apos;3306&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure><p> 之后 <code>python manage.py runserver --settings=MyDjangoBlog.settings.local</code> 启动Django服务会发现报错:</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: No module named &apos;MySQLdb&apos;.</div><div class="line">Did you install mysqlclient or MySQL-python?</div></pre></td></tr></table></figure></li><li><p>这是因为我们还没有提供Django可以连接数据库的组件:</p></li></ol><ul><li><p>一般我们会使用MySQL, 在python2.x中用 <code>mysqldb</code> 用的比较多，但是在python3.x中已经不支持那个组件了, 可以选择使用 <code>pymysql</code></p></li><li><p>这里使用的是Anaconda虚拟环境, 所以使用 <code>conda install pymysql</code> (使用virtualenv的话, 可以 <code>pip install pymysql</code> )</p><p>  然后注意需要在你项目的主目录下的<code>__init__.py</code>(我的目录是 ~/Desktop/MyDjangoBlog/MyDjangoBlog/)，写入以下代码</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import pymysql</div><div class="line">pymysql.install_as_MySQLdb()</div></pre></td></tr></table></figure></li><li><p>之后便成功启动Django服务了;</p></li></ul><h3 id="创建model"><a href="#创建model" class="headerlink" title="创建model"></a>创建model</h3><ol><li><p>首先你会在 <code>应用</code> 的 <code>models.py</code> 文件中创建每张表对应的模型类</p></li><li><p>创建model的时候, 是需要设置数据表相关的字段信息的, 这就涉及到字段的选择?</p><ul><li>了解Django有哪些字段类型, 如何自定义自己的字段类型 ?<br><a href="https://docs.djangoproject.com/en/1.11/ref/models/fields/" target="_blank" rel="external">https://docs.djangoproject.com/en/1.11/ref/models/fields/</a></li></ul></li><li><p>Django的model相关使用 (<a href="http://python.usyiyi.cn/documents/django_182/topics/db/models.html#quick-example" target="_blank" rel="external">http://python.usyiyi.cn/documents/django_182/topics/db/models.html#quick-example</a>)</p></li></ol><h3 id="几个Django的基本命令"><a href="#几个Django的基本命令" class="headerlink" title="几个Django的基本命令"></a>几个Django的基本命令</h3><ol><li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p><ul><li><p>数据库迁移的两大命令</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python manage.py makemigrations # 使用model层, 生成对应的数据库迁移文件</div><div class="line">python manage.py migrate TestModel # 开始执行迁移文件, 更新数据库</div></pre></td></tr></table></figure></li><li><p>上面两个命令调用默认为全局，即对所有最新更改的model或迁移文件进行操作; 如果想要精确到某个迁移文件(比如0004_xxx.py), 可以运行</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py migrate app_name 0004</div></pre></td></tr></table></figure></li><li><p>如果想看迁移文件的执行状态，可以用 <code>python manage.py showmigrations</code> 命令查看, 会列出每个应用(包含Django默认自带的应用)下的迁移文件的迁移状态:<br>   <img src="/img/django/showmigrations_01.png" width="700" height="250/"></p></li></ul></li><li><p>尝试创建一张简单的user表的模型, 然后运行上面两个命令, </p><ul><li>结果可能有 <code>warnings</code> 提示:<br><img src="/img/django/makemigrations_01.png" width="650" height="400/"></li><li>解决方法:<br>在数据库配置项中添加如下配置:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos;OPTIONS&apos;: &#123;</div><div class="line">    &apos;init_command&apos;: &quot;SET sql_mode=&apos;STRICT_TRANS_TABLES&apos;&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li></ul></li><li><p>如果想要查看你迁移文件所对应的sql语句, 可以使用如下命令</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py sqlmigrate blog(对应你的应用名) 0001</div></pre></td></tr></table></figure></li><li><p>在执行 <code>migrate</code> 命令的时候, 该命令首先会找出所有还没有被应用的迁移文件</p><ul><li>Django使用数据库中的一个<code>django_migraton</code>的特殊表来追踪哪些迁移文件被应用过</li><li><p>其次, 如果没有发现你应用下的迁移文件记录, 那就会执行, 但之后还会检查是否库中真的有你的表</p></li><li><p>如果你删除<code>django_migraton</code>表中对应自己应用中migration文件的那条记录, 你就可以重新使用 <code>migrate</code> 命令来生成表, 但如果你的表仍然存在,则会报错, 所以<strong>不要进行此类破坏性操作</strong>;</p></li><li>或者你如果直接在数据库中删除了你自己的表, 那么你直接运行 <code>migrate</code> 命令, 会发现也没有效果, 因为该命令首先会查看<code>django_migraton</code>, 而其中还有你迁移文件的记录;</li></ul></li><li><p>在稍后如果觉得数据表结构不合适, 可能会更改数据表的字段信息, 如果在添加了字段之后运行迁移的两个命令时, 会出现如下错误:</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">You are trying to add a non-nullable field &apos;pub_date&apos; to article without a default; we can&apos;t do that (the database needs something to populate existing rows).</div><div class="line"></div><div class="line">Please select a fix:</div><div class="line"></div><div class="line"> 1) Provide a one-off default now (will be set on all existing rows)</div><div class="line"></div><div class="line"> 2) Quit, and let me add a default in models.py</div><div class="line"></div><div class="line">这段话的意思是 pub_date 字段没有默认值，而且非Null 那么 </div><div class="line"></div><div class="line">1) 指定一个一次性的值供更改数据库时使用。</div><div class="line"></div><div class="line">2) 停止当前操作，在 models.py 中给定默认值，然后再来migrate。</div></pre></td></tr></table></figure><p> 此时, 选择1, 然后输入 <code>&#39;&#39;</code> 即可, 或者你在增加字段的时候指定默认值!<br> 目前觉着这个貌似没啥大用!!</p><p> 当然, 你还可以修改字段名, 删除字段…..<br> 每次修改完之后, migrations命令都会生成数据model的更改记录文件;</p></li><li><p>由于你每次执行完迁移命令之后, <code>django_migraton</code> 这张表中都会记录哪些迁移文件你做了迁移(包括你的更改表结构所生成的迁移文件), 所以每次你执行迁移命令的时候, 只会执行新增的model表结构所生成的的迁移文件;<br> 所以迁移会很快</p></li></ol><h3 id="遗留数据库整合到Django"><a href="#遗留数据库整合到Django" class="headerlink" title="遗留数据库整合到Django"></a><a href="http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html" target="_blank" rel="external">遗留数据库整合到Django</a></h3><p>在进行models迁移的时候, 如果表结构已经存在了呢?</p><ul><li>虽然Django<strong>最适合用来开发新的应用</strong>，但也可以将它整合到遗留的数据库中; Django包含了很多工具，尽可能自动化解决这类问题;</li></ul><ol><li><p>首先你需要向Django提供你的数据库配置信息(这个之前已经了解过了)<br> 也就是让Django知道你想整合的数据库在哪里</p></li><li><p>Django自带了一个叫做 <code>inspectdb</code> 的工具(<strong><a href="http://python.usyiyi.cn/translate/django_182/ref/django-admin.html#django-admin-inspectdb" target="_blank" rel="external">inspectdb文档</a></strong>), 可以按照现有的数据库创建模型;</p><ul><li><p>运行如下命令并查看输出:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb</div></pre></td></tr></table></figure></li><li><p>因此可以重定向标准输出流来保存文件:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb &gt; models.py</div></pre></td></tr></table></figure><p>这样就会在当前目录下生成一个models.py的模型文件, 你可以将这个模型文件放入到你创建的应用中</p></li><li><p>默认情况下，inspectdb创建的模型是未被管理的, 所以生成的模型文件中的Meta类中的 <code>managed = False</code> 就是告诉Django不要管理每个表的创建,修改和删除:</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Person(models.Model):</div><div class="line">    id = models.IntegerField(primary_key=True)</div><div class="line">    first_name = models.CharField(max_length=70)</div><div class="line">    class Meta:</div><div class="line">        managed = False</div><div class="line">        db_table = &apos;CENSUS_PERSONS&apos;</div></pre></td></tr></table></figure><p><strong>也就是说你在model中对表结构做出修改的时候, 使用迁移命令 <code>migration</code> 会发现它并不会识别出表结构已经发生变化了, 除非你把model类中的Meta类的 <code>managed</code> 改成True或者删除</strong><br><strong>如果你希望Django管理表的生命周期，你需要把managed选项改为 True（或者简单地把它移除，因为True是默认值）</strong></p></li><li><p>另外需要注意的是:<br><img src="/img/django/inspectdb_01.png" width="626" height="185"></p></li></ul></li></ol><h3 id="Django数据库路由"><a href="#Django数据库路由" class="headerlink" title="Django数据库路由"></a>Django数据库路由</h3><ol><li><p>之前我们已经对Django的setting文件做了配置, 并成功连接到了Mysql数据库, 但如果我们要做更复杂的业务, 这根本不够, 比如我们要做<strong>读写分离</strong>该如何配置?</p></li><li><p>在使用PHP的框架时, 一般我们只用在配置文件中配置好读写库的相关配置, 比如Laravel框架, 不管你用的是原生 SQL，还是查询构建器，还是 Eloquent ORM，只要配置正确，合适的连接总是会被使用;<br> 但是Django中就没有这么简单;</p></li><li><p>在Django中, 有 <code>数据库路由</code> 的概念:<br> 当我们有很多模型的时候, 通过实现一个数据库路由, 可以指定你的模型<strong>在进行哪类操作的时候, 操作哪个数据库！</strong></p></li></ol><h3 id="实现数据库路由"><a href="#实现数据库路由" class="headerlink" title="实现数据库路由"></a>实现数据库路由</h3><ol><li><p>一个数据库路由是一个拥有4个方法的类，这四个方法是:</p><ul><li>db_for_read(model, **hints) # 对于该model 用哪个数据库来读</li><li>db_for_write(model, **hints) # 对于该model用哪个数据库来写</li><li>allow_relation(obj1, obj2, **hints) # 是否允许两个对象关联到数据库</li><li>allow_migrate(db, app_label, model_name=None, **hints) # 对于指定的app，是否允许对db这个数据库进行migrate</li></ul></li><li><p>接下来, 我们可以在项目的目录下创建一个 <code>routers.py</code></p> <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure></li></ol><p><a href="http://jingpin.jikexueyuan.com/zhuti/python/" target="_blank" rel="external">http://jingpin.jikexueyuan.com/zhuti/python/</a></p>]]></content>
+    <content type="html"><![CDATA[<h3 id="连接mysql数据库"><a href="#连接mysql数据库" class="headerlink" title="连接mysql数据库"></a>连接mysql数据库</h3><ol><li><p>当我们修改项目配置文件中的数据库配置项为如下配置项</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">DATABASES = &#123;</div><div class="line">    &apos;default&apos;: &#123;</div><div class="line">        # &apos;ENGINE&apos;: &apos;django.db.backends.sqlite3&apos;,</div><div class="line">        # &apos;NAME&apos;: os.path.join(BASE_DIR, &apos;db.sqlite3&apos;)</div><div class="line">        &apos;ENGINE&apos;: &apos;django.db.backends.mysql&apos;,</div><div class="line">        &apos;NAME&apos;: &apos;test&apos;,</div><div class="line">        &apos;USER&apos;: &apos;root&apos;,</div><div class="line">        &apos;PASSWORD&apos;: &apos;renyimin&apos;,</div><div class="line">        &apos;HOST&apos;: &apos;127.0.01&apos;,</div><div class="line">        &apos;PORT&apos;: &apos;3306&apos;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure><p> 之后 <code>python manage.py runserver --settings=MyDjangoBlog.settings.local</code> 启动Django服务会发现报错:</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">......</div><div class="line">django.core.exceptions.ImproperlyConfigured: Error loading MySQLdb module: No module named &apos;MySQLdb&apos;.</div><div class="line">Did you install mysqlclient or MySQL-python?</div></pre></td></tr></table></figure></li><li><p>这是因为我们还没有提供Django可以连接数据库的组件:</p></li></ol><ul><li><p>一般我们会使用MySQL, 在python2.x中用 <code>mysqldb</code> 用的比较多，但是在python3.x中已经不支持那个组件了, 可以选择使用 <code>pymysql</code></p></li><li><p>这里使用的是Anaconda虚拟环境, 所以使用 <code>conda install pymysql</code> (使用virtualenv的话, 可以 <code>pip install pymysql</code> )</p><p>  然后注意需要在你项目的主目录下的<code>__init__.py</code>(我的目录是 ~/Desktop/MyDjangoBlog/MyDjangoBlog/)，写入以下代码</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import pymysql</div><div class="line">pymysql.install_as_MySQLdb()</div></pre></td></tr></table></figure></li><li><p>之后便成功启动Django服务了;</p></li></ul><h3 id="创建model"><a href="#创建model" class="headerlink" title="创建model"></a>创建model</h3><ol><li><p>首先你会在 <code>应用</code> 的 <code>models.py</code> 文件中创建每张表对应的模型类</p></li><li><p>创建model的时候, 是需要设置数据表相关的字段信息的, 这就涉及到字段的选择?</p><ul><li>了解Django有哪些字段类型, 如何自定义自己的字段类型 ?<br><a href="https://docs.djangoproject.com/en/1.11/ref/models/fields/" target="_blank" rel="external">https://docs.djangoproject.com/en/1.11/ref/models/fields/</a></li></ul></li><li><p>Django的model相关使用 (<a href="http://python.usyiyi.cn/documents/django_182/topics/db/models.html#quick-example" target="_blank" rel="external">http://python.usyiyi.cn/documents/django_182/topics/db/models.html#quick-example</a>)</p></li></ol><h3 id="几个Django的基本命令"><a href="#几个Django的基本命令" class="headerlink" title="几个Django的基本命令"></a>几个Django的基本命令</h3><ol><li><p>创建好model模型文件之后, 接下来还要接触几个Django的基本命令</p><ul><li><p>数据库迁移的两大命令</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">python manage.py makemigrations # 使用model层, 生成对应的数据库迁移文件</div><div class="line">python manage.py migrate TestModel # 开始执行迁移文件, 更新数据库</div></pre></td></tr></table></figure></li><li><p>上面两个命令调用默认为全局，即对所有最新更改的model或迁移文件进行操作; 如果想要精确到某个迁移文件(比如0004_xxx.py), 可以运行</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py migrate app_name 0004</div></pre></td></tr></table></figure></li><li><p>如果想看迁移文件的执行状态，可以用 <code>python manage.py showmigrations</code> 命令查看, 会列出每个应用(包含Django默认自带的应用)下的迁移文件的迁移状态:<br>   <img src="/img/django/showmigrations_01.png" width="700" height="250/"></p></li></ul></li><li><p>尝试创建一张简单的user表的模型, 然后运行上面两个命令, </p><ul><li>结果可能有 <code>warnings</code> 提示:<br><img src="/img/django/makemigrations_01.png" width="650" height="400/"></li><li>解决方法:<br>在数据库配置项中添加如下配置:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&apos;OPTIONS&apos;: &#123;</div><div class="line">    &apos;init_command&apos;: &quot;SET sql_mode=&apos;STRICT_TRANS_TABLES&apos;&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li></ul></li><li><p>如果想要查看你迁移文件所对应的sql语句, 可以使用如下命令</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py sqlmigrate blog(对应你的应用名) 0001</div></pre></td></tr></table></figure></li><li><p>在执行 <code>migrate</code> 命令的时候, 该命令首先会找出所有还没有被应用的迁移文件</p><ul><li>Django使用数据库中的一个<code>django_migraton</code>的特殊表来追踪哪些迁移文件被应用过</li><li><p>其次, 如果没有发现你应用下的迁移文件记录, 那就会执行, 但之后还会检查是否库中真的有你的表</p></li><li><p>如果你删除<code>django_migraton</code>表中对应自己应用中migration文件的那条记录, 你就可以重新使用 <code>migrate</code> 命令来生成表, 但如果你的表仍然存在,则会报错, 所以<strong>不要进行此类破坏性操作</strong>;</p></li><li>或者你如果直接在数据库中删除了你自己的表, 那么你直接运行 <code>migrate</code> 命令, 会发现也没有效果, 因为该命令首先会查看<code>django_migraton</code>, 而其中还有你迁移文件的记录;</li></ul></li><li><p>在稍后如果觉得数据表结构不合适, 可能会更改数据表的字段信息, 如果在添加了字段之后运行迁移的两个命令时, 会出现如下错误:</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">You are trying to add a non-nullable field &apos;pub_date&apos; to article without a default; we can&apos;t do that (the database needs something to populate existing rows).</div><div class="line"></div><div class="line">Please select a fix:</div><div class="line"></div><div class="line"> 1) Provide a one-off default now (will be set on all existing rows)</div><div class="line"></div><div class="line"> 2) Quit, and let me add a default in models.py</div><div class="line"></div><div class="line">这段话的意思是 pub_date 字段没有默认值，而且非Null 那么 </div><div class="line"></div><div class="line">1) 指定一个一次性的值供更改数据库时使用。</div><div class="line"></div><div class="line">2) 停止当前操作，在 models.py 中给定默认值，然后再来migrate。</div></pre></td></tr></table></figure><p> 此时, 选择1, 然后输入 <code>&#39;&#39;</code> 即可, 或者你在增加字段的时候指定默认值!<br> 目前觉着这个貌似没啥大用!!</p><p> 当然, 你还可以修改字段名, 删除字段…..<br> 每次修改完之后, migrations命令都会生成数据model的更改记录文件;</p></li><li><p>由于你每次执行完迁移命令之后, <code>django_migraton</code> 这张表中都会记录哪些迁移文件你做了迁移(包括你的更改表结构所生成的迁移文件), 所以每次你执行迁移命令的时候, 只会执行新增的model表结构所生成的的迁移文件;<br> 所以迁移会很快</p></li></ol><h3 id="遗留数据库整合到Django"><a href="#遗留数据库整合到Django" class="headerlink" title="遗留数据库整合到Django"></a><a href="http://python.usyiyi.cn/translate/django_182/howto/legacy-databases.html" target="_blank" rel="external">遗留数据库整合到Django</a></h3><p>在进行models迁移的时候, 如果表结构已经存在了呢?</p><ul><li>虽然Django<strong>最适合用来开发新的应用</strong>，但也可以将它整合到遗留的数据库中; Django包含了很多工具，尽可能自动化解决这类问题;</li></ul><ol><li><p>首先你需要向Django提供你的数据库配置信息(这个之前已经了解过了)<br> 也就是让Django知道你想整合的数据库在哪里</p></li><li><p>Django自带了一个叫做 <code>inspectdb</code> 的工具(<strong><a href="http://python.usyiyi.cn/translate/django_182/ref/django-admin.html#django-admin-inspectdb" target="_blank" rel="external">inspectdb文档</a></strong>), 可以按照现有的数据库创建模型;</p><ul><li><p>运行如下命令并查看输出:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb</div></pre></td></tr></table></figure></li><li><p>因此可以重定向标准输出流来保存文件:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py inspectdb &gt; models.py</div></pre></td></tr></table></figure><p>这样就会在当前目录下生成一个models.py的模型文件, 你可以将这个模型文件放入到你创建的应用中</p></li><li><p>默认情况下，inspectdb创建的模型是未被管理的, 所以生成的模型文件中的Meta类中的 <code>managed = False</code> 就是告诉Django不要管理每个表的创建,修改和删除:</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">class Person(models.Model):</div><div class="line">    id = models.IntegerField(primary_key=True)</div><div class="line">    first_name = models.CharField(max_length=70)</div><div class="line">    class Meta:</div><div class="line">        managed = False</div><div class="line">        db_table = &apos;CENSUS_PERSONS&apos;</div></pre></td></tr></table></figure><p><strong>也就是说你在model中对表结构做出修改的时候, 使用迁移命令 <code>migration</code> 会发现它并不会识别出表结构已经发生变化了, 除非你把model类中的Meta类的 <code>managed</code> 改成True或者删除</strong><br><strong>如果你希望Django管理表的生命周期，你需要把managed选项改为 True（或者简单地把它移除，因为True是默认值）</strong></p></li><li><p>另外需要注意的是:<br><img src="/img/django/inspectdb_01.png" width="626" height="185"></p></li></ul></li><li><p>遗留的数据库导入为Django的model的时候, 之前表之前的关系(一对多,多对多…)会怎样?</p><ul><li></li></ul></li></ol><h3 id="Django数据库路由"><a href="#Django数据库路由" class="headerlink" title="Django数据库路由"></a>Django数据库路由</h3><ol><li><p>之前我们已经对Django的setting文件做了配置, 并成功连接到了Mysql数据库, 但如果我们要做更复杂的业务, 这根本不够, 比如我们要做<strong>读写分离</strong>该如何配置?</p></li><li><p>在使用PHP的框架时, 一般我们只用在配置文件中配置好读写库的相关配置, 比如Laravel框架, 不管你用的是原生 SQL，还是查询构建器，还是 Eloquent ORM，只要配置正确，合适的连接总是会被使用;<br> 但是Django中就没有这么简单;</p></li><li><p>在Django中, 有 <code>数据库路由</code> 的概念:<br> 当我们有很多模型的时候, 通过实现一个数据库路由, 可以指定你的模型<strong>在进行哪类操作的时候, 操作哪个数据库！</strong></p></li></ol><h3 id="实现数据库路由"><a href="#实现数据库路由" class="headerlink" title="实现数据库路由"></a>实现数据库路由</h3><ol><li><p>一个数据库路由是一个拥有4个方法的类，这四个方法是:</p><ul><li>db_for_read(model, **hints) # 对于该model 用哪个数据库来读</li><li>db_for_write(model, **hints) # 对于该model用哪个数据库来写</li><li>allow_relation(obj1, obj2, **hints) # 是否允许两个对象关联到数据库</li><li>allow_migrate(db, app_label, model_name=None, **hints) # 对于指定的app，是否允许对db这个数据库进行migrate</li></ul></li><li><p>接下来, 我们可以在项目的目录下创建一个 <code>routers.py</code></p> <figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure></li></ol><p><a href="http://jingpin.jikexueyuan.com/zhuti/python/" target="_blank" rel="external">http://jingpin.jikexueyuan.com/zhuti/python/</a></p>]]></content>
     
     <summary type="html">
     
@@ -328,6 +328,124 @@
   </entry>
   
   <entry>
+    <title>02 - 分布式锁</title>
+    <link href="http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/"/>
+    <id>http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/</id>
+    <published>2017-04-13T12:03:09.000Z</published>
+    <updated>2017-12-07T13:07:00.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;分布式锁&quot;&gt;&lt;a href=&quot;#分布式锁&quot; class=&quot;headerlink&quot; title=&quot;分布式锁&quot;&gt;&lt;/a&gt;分布式锁&lt;/h3&gt;
+      
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>05 - 分布式</title>
+    <link href="http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/"/>
+    <id>http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/</id>
+    <published>2017-04-13T12:03:09.000Z</published>
+    <updated>2017-12-07T13:07:56.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>01 - 分布式</title>
+    <link href="http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-01/"/>
+    <id>http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-01/</id>
+    <published>2017-04-13T05:20:31.000Z</published>
+    <updated>2017-12-07T13:07:12.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="数据一致性问题"><a href="#数据一致性问题" class="headerlink" title="数据一致性问题"></a>数据一致性问题</h3>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;数据一致性问题&quot;&gt;&lt;a href=&quot;#数据一致性问题&quot; class=&quot;headerlink&quot; title=&quot;数据一致性问题&quot;&gt;&lt;/a&gt;数据一致性问题&lt;/h3&gt;
+      
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>02 - 并发写问题</title>
+    <link href="http://blog.renyimin.com/2017/04/11/2017-04-09-concurrency-02/"/>
+    <id>http://blog.renyimin.com/2017/04/11/2017-04-09-concurrency-02/</id>
+    <published>2017-04-11T14:19:27.000Z</published>
+    <updated>2017-12-08T05:59:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="初级并发写的问题"><a href="#初级并发写的问题" class="headerlink" title="初级并发写的问题"></a>初级并发写的问题</h3><h4 id="如何保证并发写的数据安全问题"><a href="#如何保证并发写的数据安全问题" class="headerlink" title="如何保证并发写的数据安全问题"></a>如何保证并发写的数据安全问题</h4><h4 id="锁的名词"><a href="#锁的名词" class="headerlink" title="锁的名词"></a>锁的名词</h4><p>常见的关于锁的名词有很多个, 大致如下:</p><ol><li><p>读锁(共享锁, 乐观锁)</p></li><li><p>写锁(排他锁, 悲观锁)</p></li><li>意向共享锁</li><li>意向排他锁</li><li>间隙锁</li></ol><h4 id="MySQL锁的使用"><a href="#MySQL锁的使用" class="headerlink" title="MySQL锁的使用"></a>MySQL锁的使用</h4><ol><li></li><li></li></ol><h4 id="Redis锁的利用"><a href="#Redis锁的利用" class="headerlink" title="Redis锁的利用"></a>Redis锁的利用</h4><ol><li>Redis的事务涉及到的WATCH</li><li>Redis原子锁</li></ol><h4 id="memcached锁"><a href="#memcached锁" class="headerlink" title="memcached锁"></a>memcached锁</h4><p><a href="https://github.com/Yurunsoft/YurunLock" target="_blank" rel="external">https://github.com/Yurunsoft/YurunLock</a></p><h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><ol><li>如: 并发减少库存如何保证不超卖<br><a href="">利用Redis锁</a></li><li>如: </li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;初级并发写的问题&quot;&gt;&lt;a href=&quot;#初级并发写的问题&quot; class=&quot;headerlink&quot; title=&quot;初级并发写的问题&quot;&gt;&lt;/a&gt;初级并发写的问题&lt;/h3&gt;&lt;h4 id=&quot;如何保证并发写的数据安全问题&quot;&gt;&lt;a href=&quot;#如何保证并发写的数据安全问题&quot;
+      
+    
+    </summary>
+    
+      <category term="高并发" scheme="http://blog.renyimin.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    
+      <category term="高并发" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>01 - 并发读问题</title>
+    <link href="http://blog.renyimin.com/2017/04/09/2017-04-09-concurrency-01/"/>
+    <id>http://blog.renyimin.com/2017/04/09/2017-04-09-concurrency-01/</id>
+    <published>2017-04-09T11:16:54.000Z</published>
+    <updated>2017-12-07T12:58:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="初级并发读的问题"><a href="#初级并发读的问题" class="headerlink" title="初级并发读的问题"></a>初级并发读的问题</h3><h4 id="如何尽可能承载更高的并发访问量"><a href="#如何尽可能承载更高的并发访问量" class="headerlink" title="如何尽可能承载更高的并发访问量"></a>如何尽可能承载更高的并发访问量</h4><ol><li></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;初级并发读的问题&quot;&gt;&lt;a href=&quot;#初级并发读的问题&quot; class=&quot;headerlink&quot; title=&quot;初级并发读的问题&quot;&gt;&lt;/a&gt;初级并发读的问题&lt;/h3&gt;&lt;h4 id=&quot;如何尽可能承载更高的并发访问量&quot;&gt;&lt;a href=&quot;#如何尽可能承载更高的并发访问
+      
+    
+    </summary>
+    
+      <category term="高并发" scheme="http://blog.renyimin.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    
+      <category term="高并发" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>07.小结 &quot;Jsonp&quot; 对比 &quot;CORS简单/非简单请求&quot;</title>
     <link href="http://blog.renyimin.com/2016/09/21/2016-09-21-sameoriginpolicy-07/"/>
     <id>http://blog.renyimin.com/2016/09/21/2016-09-21-sameoriginpolicy-07/</id>
@@ -424,144 +542,6 @@
     
     
       <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>03.同源策略的限制 之 &quot;Ajax请求不能发送&quot;</title>
-    <link href="http://blog.renyimin.com/2016/09/16/2016-09-16-sameoriginpolicy-03/"/>
-    <id>http://blog.renyimin.com/2016/09/16/2016-09-16-sameoriginpolicy-03/</id>
-    <published>2016-09-16T05:04:17.000Z</published>
-    <updated>2017-10-27T09:33:06.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="同源策略的限制-Ajax请求不能发送"><a href="#同源策略的限制-Ajax请求不能发送" class="headerlink" title="同源策略的限制 - Ajax请求不能发送"></a>同源策略的限制 - Ajax请求不能发送</h2><ol><li><p>同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;</p></li><li><p>除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 :<br> <strong><a href="http://localhost:4000/2016/09/17/2016-09-17-sameoriginpolicy-04/" target="_blank" rel="external">JSONP</a></strong></p><p> <strong><a href="http://blog.renyimin.com">CORS</a></strong></p><p> <strong><a href="http://blog.renyimin.com">WebSocket</a></strong></p></li></ol><blockquote><p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;同源策略的限制-Ajax请求不能发送&quot;&gt;&lt;a href=&quot;#同源策略的限制-Ajax请求不能发送&quot; class=&quot;headerlink&quot; title=&quot;同源策略的限制 - Ajax请求不能发送&quot;&gt;&lt;/a&gt;同源策略的限制 - Ajax请求不能发送&lt;/h2&gt;&lt;ol&gt;
-
-      
-    
-    </summary>
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/categories/CrossDomain/"/>
-    
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>02.同源策略的限制 之 &quot;Cookie无法读取&quot;</title>
-    <link href="http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-02/"/>
-    <id>http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-02/</id>
-    <published>2016-09-15T13:10:13.000Z</published>
-    <updated>2017-10-27T09:18:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h3><p>之前学习同源策略基础知识的时候, 了解了同源策略的 <code>三种行为</code> 限制:</p><ol><li><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</li><li><code>DOM</code> 无法获得 </li><li><p><code>AJAX</code> 请求不能发送 </p></li><li><p>不过这里需要注意一点: <strong>“同源策略”的限制, 并没有限制住CSRF攻击</strong><br>“同源策略的限制”并不会导致 B站点中嵌入的 <code>A站点超链接去读取A站点用户的cookie</code>;<br>假如你当前已经登录了邮箱，或bbs，同时你又访问了另外一个站点，假设这就是一个钓鱼网站; 这个网站上面可能因为某个图片吸引你，你去点击一下，此时可能就会触发一个js的点击事件，去构造一个bbs发帖的请求，去往你的bbs站点发帖，由于当前你的浏览器状态已经是登陆状态，所以session登陆cookie信息都会跟正常的请求一样，纯天然的利用当前的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; (这也就是我们通常所说的CSRF攻击, CSRF攻击的主要目的是让用户在不知情的情况下攻击自己已登录的一个系统，类似于钓鱼);</p></li></ol><h3 id="同源策略的限制之”Cookie无法读取”"><a href="#同源策略的限制之”Cookie无法读取”" class="headerlink" title="同源策略的限制之”Cookie无法读取”"></a>同源策略的限制之”Cookie无法读取”</h3><ol><li><p>本篇构造跨域的场景来模拟”Cookie无法读取”的限制, 方法主要有:</p><ul><li>B站<code>&lt;a href=&quot;A&quot;&gt;test&lt;/a&gt;</code>超链接无法读取B站点的cookie; (而csrf所讨论的是B站<code>&lt;a href=&quot;A&quot;&gt;test&lt;/a&gt;</code>超链接可以读取A站点自己的cookie)</li><li><p>不通过B站超链接, 而是直接打开另一个网页来访问A站点, 结果当然也是A站点读不到B站点的Cookie ;</p></li><li><p>暂时不会涉及到 <code>Ajax请求所涉及的cookie传递问题</code>, 这个问题属于同源策略的第三种限制 <code>AJAX请求不能发送</code>;</p></li></ul></li><li><p>例子 :<br> A网页是 <code>http://www.test.com/index.html</code>，B网页是 <code>http://test.test.com/index.html</code> :<br> A: www.test.com/index.html (此处是使用js来设置cookie进行测试; 当然, 用服务端代码php测试也是OK的)</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    document.cookie=&quot;name=value;&quot;;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-disabled-01.png" width="650" height="272" alt="cookie-disabled-01" align="center"></p><p> B: test.test.com/index.html</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    console.log(document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> // 可以看到, 同顶级域名也不能跨子域名获取cookie<br> <img src="/img/cross-domain/cookie-disabled-02.png" width="650" height="272" alt="cookie-disabled-02" align="center"></p><p> //同理, 直接在<code>http://www.test.com/index.html</code>中超链接点击到<code>http://test.test.com/index.html</code>也是获取不到cookie的 ;</p></li></ol><h3 id="合理规避Cookie无法读取的限制"><a href="#合理规避Cookie无法读取的限制" class="headerlink" title="合理规避Cookie无法读取的限制"></a><code>合理</code>规避Cookie无法读取的限制</h3><ol><li>虽然同源导致的这些限制是必要, 但是有些情况下, 其实我们是需要 <code>合理</code> 规避Cookie无法读取的限制的 ;</li><li>比如: 如果两个网页的顶级域名相同, 只是二级域名不同的话, 浏览器其实是允许你通过设置 <code>document.domain</code> 来共享 Cookie 的;</li><li><p>例子:<br> A网页是 <code>http://www.test.com/index.html</code>，B网页是 <code>http://test.test.com/index.html</code>, 那么只要设置相同的 <code>document.domain</code>，两个网页就可以共享Cookie :<br> A: www.test.com/index.html (此处是使用js来设置cookie进行测试; 当然, 用php代码也是OK的)</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    document.cookie=&quot;name=value; domain=test.com&quot;;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-share.png" width="559" height="272" alt="cookie-share" align="center"></p><p> B: test.test.com/index.html</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    console.log(document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-share02.png" width="300" height="275" alt="cookie-share" align="center"></p></li><li><p>注意:<br>这种方法只适用于 <code>Cookie</code> 和 <code>iframe 窗口(DOM无法获取)</code>; 而 LocalStorage 和 IndexDB 无法通过这种方法来规避同源政策，而要使用之后会介绍的PostMessage API ;</p></li></ol><blockquote><p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考 阮一峰</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;回顾&quot;&gt;&lt;a href=&quot;#回顾&quot; class=&quot;headerlink&quot; title=&quot;回顾&quot;&gt;&lt;/a&gt;回顾&lt;/h3&gt;&lt;p&gt;之前学习同源策略基础知识的时候, 了解了同源策略的 &lt;code&gt;三种行为&lt;/code&gt; 限制:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;Coo
-      
-    
-    </summary>
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/categories/CrossDomain/"/>
-    
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>01.浏览器的同源策略(Same origin policy)</title>
-    <link href="http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/"/>
-    <id>http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-01/</id>
-    <published>2016-09-15T11:21:54.000Z</published>
-    <updated>2017-10-27T08:57:30.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a><code>同源策略</code></h3><p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策；</p><p>最初，它的含义是指，A网页设置的 Cookie，B网页不能打开，除非这两个网页”同源”，所谓 “同源” 指的是 <strong>“三个相同”</strong> ：</p><p><strong>1.协议相同</strong><br><code>http://blog.renyimin.com</code> 和 <code>https://blog.renyimin.com</code> 就不是同一个源 ；</p><p><strong>2.域名完全相同</strong><br><code>http://blog.renyimin.com/test/index.php</code> 和 <code>http://blog.renyimin.com/welcome/index.html</code> 就是同一个源; 但是 <code>http://www.renyimin.com/test/index.php</code> 和 <code>http://blog.renyimin.com/test/index.php</code> 就不是同一个源 ；<br>请注意：localhost和127.0.0.1虽然都指向本机, 但也不是同一个源 ;</p><p><strong>3.端口相同</strong><br><code>http://www.renyimin.com:8080/test/index.php</code> 和 <code>http://www.renyimin.com:80/test/index.php</code> 就不是同一个源 ;</p><p>再举例来说，<code>http://www.example.com/dir/page.html</code> 这个网址，协议是 <code>http://</code>，域名是 <code>www.example.com</code>，端口是<code>80</code>（默认端口可以省略），它的同源情况如下：</p><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">http://www.example.com/dir2/other.html：同源</div><div class="line"></div><div class="line">http://example.com/dir/other.html：不同源（域名不同）</div><div class="line"></div><div class="line">http://v2.www.example.com/dir/other.html：不同源（域名不同）</div><div class="line"></div><div class="line">http://www.example.com:81/dir/other.html：不同源（端口不同）</div></pre></td></tr></table></figure></code></pre><h3 id="同源策略目的"><a href="#同源策略目的" class="headerlink" title="同源策略目的"></a>同源策略目的</h3><p>1.为了保证用户信息的安全，防止恶意的网站窃取数据;<br>比如:用户登录一家银行网站后，又去浏览其他站点, 如果没有同源策略限制, 其他站点就也能读取银行网站的 Cookie, 会发生什么？</p><ul><li>如果 Cookie 包含用户银行的私密信息，这些信息就会泄漏给第三方站点, 当然, cookie中包含的敏感信息通常经过加密，很难将其反向破解, 但这并不意味着绝对安全;</li><li>不去获取cookie中的信息, 而是直接偷取Cookie去骗取银行网站的信任;</li></ul><p>2.由此可见，”同源政策”是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了 ;</p><h3 id="同源策略的限制"><a href="#同源策略的限制" class="headerlink" title="同源策略的限制"></a>同源策略的限制</h3><p>随着互联网的发展, “同源政策”越来越严格, 目前, 如果非同源, 共有三种行为受到限制:</p><ol><li><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</li><li><code>DOM</code> 无法获得 </li><li><code>AJAX</code> 请求不能发送 </li></ol><p>(可能我平时更过关注到的是1，3这两点限制)</p><ol><li>不过这里需要注意一点: <strong>“同源策略”的限制, 并没有限制住CSRF攻击</strong><br>“同源策略的限制”并不会导致 B站点中嵌入的 <code>A站点超链接去读取A站点用户的cookie</code>;<br>假如你当前已经登录了邮箱，或bbs，同时你又访问了另外一个站点，假设这就是一个钓鱼网站; 这个网站上面可能因为某个图片吸引你，你去点击一下，此时可能就会触发一个js的点击事件，去构造一个bbs发帖的请求，去往你的bbs站点发帖，由于当前你的浏览器状态已经是登陆状态，所以session登陆cookie信息都会跟正常的请求一样，纯天然的利用当前的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; (这也就是我们通常所说的CSRF攻击, CSRF攻击的主要目的是让用户在不知情的情况下攻击自己已登录的一个系统，类似于钓鱼);</li></ol><p>最后, 虽然这些限制是必要的，但是有时很不方便，合理的用途也受到影响, 接下来将详细介绍如何在需要的时候合理地去规避”同源政策”的限制 ;</p><blockquote><p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考 阮一峰</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;同源策略&quot;&gt;&lt;a href=&quot;#同源策略&quot; class=&quot;headerlink&quot; title=&quot;同源策略&quot;&gt;&lt;/a&gt;&lt;code&gt;同源策略&lt;/code&gt;&lt;/h3&gt;&lt;p&gt;1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策；&lt;/p&gt;
-      
-    
-    </summary>
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/categories/CrossDomain/"/>
-    
-    
-      <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>04 - 授权码模式各阶段参数分析</title>
-    <link href="http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-04/"/>
-    <id>http://blog.renyimin.com/2016/05/25/2016-05-25-OAuth-04/</id>
-    <published>2016-05-25T12:10:12.000Z</published>
-    <updated>2017-10-25T08:44:37.000Z</updated>
-    
-    <content type="html"><![CDATA[<h4 id="第一阶段-第三方站点将导向授权页"><a href="#第一阶段-第三方站点将导向授权页" class="headerlink" title="第一阶段: 第三方站点将导向授权页"></a>第一阶段: 第三方站点将导向授权页</h4><ol><li><p>第三方应用将用户导向授权页时, 传递的参数如下:</p><ul><li><code>response_type</code>: 表示授权类型, 必选项, 此处由于采用的是授权码模式, 所以值固定为 “code”</li><li><p><code>client_id/AppID</code>: 表示客户端的ID, 必选项<br>由于你可能会有多个站点需要对接OAuth授权服务器, 所以一般在授权服务平台登录之后, 是可以创建多个 <code>应用</code> 的 (不同的站点对接授权服务器中不同的<code>应用</code>);<br>每个<code>应用</code>对应你的一个 <code>第三方站点</code>, 开放平台会为每个<code>应用(第三方站点)</code>生成相应的 <code>AppID</code> 和 <code>AppSecret/AppKey</code>, 主要用来验证应用的合法性;</p></li><li><p><code>redirect_uri</code>: 设定的重定向到<code>第三方站点URI</code>, 必选项</p></li><li><code>scope</code>: 表示申请的权限范围, 可选项</li><li><code>state</code>: 表示客户端的当前状态, 可以指定任意值, 认证服务器会原封不动地返回这个值</li></ul></li><li><p>下面是各开放平台的参数对比:</p><ul><li><p><a href="http://open.weibo.com/wiki/Oauth2/authorize" target="_blank" rel="external">新浪</a><br><img src="/img/oauth/oauth_sina.png" width="500" height="560" alt="sina" align="center"></p></li><li><p><a href="http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token" target="_blank" rel="external">QQ</a><br><img src="/img/oauth/oauth_qq.png" width="500" height="560" alt="qq" align="center"></p></li><li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a><br><img src="/img/oauth/oauth_wechat.png" width="500" height="560" alt="wechat" align="center"></p></li><li><p><a href="https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-authorization-options-for-oauth-apps/" target="_blank" rel="external">GitHub</a><br><img src="/img/oauth/oauth_github.png" width="500" height="560" alt="github" align="center"></p></li><li><p><a href="https://doc.open.alipay.com/docs/doc.htm?treeId=193&amp;articleId=105656&amp;docType=1#s5" target="_blank" rel="external">蚂蚁金服</a><br><img src="/img/oauth/oauth_alipay.png" width="500" alt="github" align="center"></p></li></ul></li><li><p>简单测试:</p><ul><li><p>redirect_uri<br>在OAuth服务器中为第三方站点创建 <code>应用</code> 的时候, 设定的回调地址, 无论在认证服务器, 还是在第三方站点, 都会对其进行校验, <code>以防篡改</code>;</p><p>新浪授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_sina_err01.png" width="450" height="240" alt="github" align="center"></p><p>简书qq授权传递错误 redirect_uri<br><img src="/img/oauth/jianshu_qq_err01.png" width="450" height="200" alt="github" align="center"></p></li><li><p>state<br>第三方站点会对state做校验<br>给了一个新的弹框用来进行授权, 但是如果恶意用户复制出弹框中的url, 之后再修改state并刷新页面, 授权后发现:<br><img src="/img/oauth/zhihu_auth_qq_01.png" width="500" height="100" alt="github" align="center"></p></li></ul></li><li><p>从上面各平台也可以看到, 返回参数相对比较简单;</p><ul><li>返回的code是和授权页登录的用户身份相关的; (后面的access_token也是通过code和用户身份关联起来的)</li></ul></li></ol><h4 id="第二阶段-通过Authorization-Code获取Access-Token"><a href="#第二阶段-通过Authorization-Code获取Access-Token" class="headerlink" title="第二阶段: 通过Authorization Code获取Access Token"></a>第二阶段: 通过Authorization Code获取Access Token</h4><ol><li><p>如果第三方站点的用户在第一阶段的授权页中选择对第三方站点授权, 那么就第三方站点就会收到授权服务器的Authorization Code, 进而进入本阶段;<br>(每个用户在授权后, 第三方站点都需要到授权服务器上为用户获取一个access_token, 这个access_token就是以后第三方站点从授权服务器上获取用户信息的凭证了, 一般在获取到access_token令牌之后, 可以存储到session中)</p></li><li><p>本阶段, 我们在自己的第三方站点中就可以使用第一阶段的Authorization Code获取Access Token:</p><ul><li><p><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信</a></p></li><li><p><a href="http://wiki.connect.qq.com/%E4%BD%BF%E7%94%A8authorization_code%E8%8E%B7%E5%8F%96access_token" target="_blank" rel="external">qq</a><br><img src="/img/oauth/access_token_qq.png" width="650" height="680" alt="github" align="center"></p></li><li><p>基本上入参就像QQ互联那样大概有5个 (需要对每个参数进行了解);</p></li></ul></li><li><p>本阶段的返回参数比较有讲究, 一般为如下三个</p><ul><li><p>access_token 授权令牌<br>access_token一般在获取到之后, 第三方站点可以将其 <code>保存到用户的session中</code> , 第三方站点之后要获取用户在授权服务器上的资源的时候, 就需要带上当前session中用户的access_token去获取;</p></li><li><p>expires_in    该access token的有效期,单位为秒 (微信公众平台access_token有效期为2小时, qq互联平台为3个月 可以作为参考)<br>设置access_token有效期也是为了定期修改access_token, 以提高安全性;<br>(并且微信对获取access_token这个基础API是有限制的，每天最多请求2000次, 因为有效期为2小时, 每天2000次也足够了;)</p></li><li><p>refresh_token 授权自动续期时使用 (微信公众平台refresh_token有效期为30天, qq互联平台具体不详, 可以作为参考)</p></li></ul></li><li><p>(可选)权限自动续期问题</p><ul><li><p>注意<a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">微信公众平台</a>:<br>  1.若access_token已超时，那么进行refresh_token会获取一个新的access_token，新的超时时间, 并且一旦使用refresh_token来刷新access_token的话, refresh_token的过期时间也会更新(自动延期) ;<br>  2.若access_token未超时，那么进行refresh_token不会改变access_token，但超时时间会刷新，相当于续期access_token ;<br>  这里说的超时时间刷新, 指的自然是第三方站点和授权服务器上的超时时间都要更新了(只不过你如果只是做对接的话, 授权服务器这部分人家已经开发好了, 如果你是授权服务器也是自己开发的话, 那你就需要注意这里了)</p></li><li><p>其实第三方站点在受到授权服务器分配给当前用户的access_token之后, 假设说授权服务器返回access_token的过期时间为7200s(2小时), 那么第三方站点将access_token保存到用户session中, 并设置过期时间为6600s(中间可以有个10分钟的服务器时间差);</p></li><li><p>如果第三方站点在使用access_token为用户获取授权服务器中的资源时, 发现session中的access_token并没有过期, 那么请求后就需要为access_token续期(第三方站点和授权服务器上都要做续期)</p></li><li><p>如果第三方站点在使用access_token为用户获取授权服务器中的资源时, 发现session中的access_token过期, 则就需要使用<code>refresh_token</code>调用<code>生成access_token的api接口</code>重新生成access_token来进行续期；<br>  qq:<br>  <img src="/img/oauth/refresh_token_qq.png" width="650" height="640" alt="github" align="center"></p></li><li><p>这样下来, 基本上第三方站点只有在大于refresh_token的过期时间都没有调用过授权服务器的话, 才需要用户重新登录;</p></li></ul></li></ol><h4 id="第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源"><a href="#第三阶段-比较简单-第三方站点通过access-token获取授权平台资源服务器上的用户资源" class="headerlink" title="第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源"></a>第三阶段(比较简单): 第三方站点通过access_token获取授权平台资源服务器上的用户资源</h4><ol><li><p>获取access_token后，进行接口调用，有以下前提：</p><ul><li>access_token有效且未超时；</li><li>微信用户已授权给第三方应用帐号相应接口作用域(scope);<br>也就是在授权服务器上还会使用access_token去检测对应的scope权限是否正确;</li></ul></li><li><p>许多开放平台在申请完access_token令牌之后, 都提供了对应接口来获取用户相关信息<br><a href="http://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="external">QQ互联</a>提供了相应的接口, 使用Access Token来获取用户的OpenID;<br><a href="http://open.weibo.com/wiki/Oauth2/get_token_info" target="_blank" rel="external">新浪开放平台</a>提供了相应的接口来获取access_token对应的用户信息;<br><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140842" target="_blank" rel="external">而微信公众平台</a>: 在获取access_token的时候, 会同时返回<code>openid</code>表示微信用户在本公众号中的唯一标识;</p></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h4 id=&quot;第一阶段-第三方站点将导向授权页&quot;&gt;&lt;a href=&quot;#第一阶段-第三方站点将导向授权页&quot; class=&quot;headerlink&quot; title=&quot;第一阶段: 第三方站点将导向授权页&quot;&gt;&lt;/a&gt;第一阶段: 第三方站点将导向授权页&lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;第三方
-      
-    
-    </summary>
-    
-      <category term="后端架构" scheme="http://blog.renyimin.com/categories/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="OAuth2.0" scheme="http://blog.renyimin.com/categories/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/OAuth2-0/"/>
-    
-    
-      <category term="后端架构" scheme="http://blog.renyimin.com/tags/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="OAuth2.0" scheme="http://blog.renyimin.com/tags/OAuth2-0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>03 - OAuth2.0的CSRF攻击</title>
-    <link href="http://blog.renyimin.com/2016/05/24/2016-05-24-OAuth-03/"/>
-    <id>http://blog.renyimin.com/2016/05/24/2016-05-24-OAuth-03/</id>
-    <published>2016-05-24T11:27:36.000Z</published>
-    <updated>2017-10-25T08:01:49.000Z</updated>
-    
-    <content type="html"><![CDATA[<ol><li><p>假设有如下几个角色:<br>受害者 <code>lant</code> ;<br>攻击者 <code>rymuscle</code> ;<br>第三方Web应用 <code>liangren网</code> (它允许用户将其在 <code>sandiruiqi网</code> 的账号 和 <code>liangren网</code> 的账号进行绑定) ;<br>OAuth2服务提供平台 <code>sandiruiqi网</code> ;</p></li><li><p>攻击流程</p><ul><li><p><code>攻击者rymuscle</code> 登录 <code>liangren网</code> 并且选择使用自己的 <code>sandiruiqi网</code> 账号登录 ;</p></li><li><p><code>liangren网</code> 将 <code>攻击者rymuscle</code> 重定向到 <code>sandiruiqi网</code> 的授权页(这时可能需要 <code>攻击者rymuscle</code> 登录过<code>sandiruiqi网</code>), <code>sandiruiqi网</code> 的授权页向 <code>攻击者rymuscle</code> 显示 “是否授权<code>liangren网</code>访问” ;</p></li><li><p><code>攻击者rymuscle</code> 在点击”同意授权”之后, 截获 <code>sandiruiqi网</code> 服务器返回的含有 <code>Authorization Code</code> 参数的HTTP响应 ;</p></li><li><p>然后 <code>攻击者rymuscle</code> 精心构造一个Web页面, 它会触发 <code>liangren网</code> 向 <code>sandiruiqi网</code> 发起<strong>令牌申请</strong>的请求, 而这个请求中的Authorization Code参数正是上一步 <code>攻击者rymuscle</code> 截获到的code ;</p></li><li><p><code>攻击者rymuscle</code> 将这个Web页面放到互联网上, 等待或者诱骗受害者来访问 ;</p></li><li><p>假设正好一个受害者 <code>lant</code> 访问了 <code>攻击者rymuscle</code> 准备的这个Web页面后, 令牌申请流程在 <code>受害者lant</code> 的浏览器里被顺利触发, <code>laingren网</code> 从 <code>sandiruiqi网</code> 那里获取到access_token, 但是这个token以及通过它进一步获取到的用户信息却都是攻击者 <code>攻击者rymuscle</code> 的 ;</p></li><li><p>也就是最终 <code>liangren网</code> 将 <code>攻击者rymuscle</code> 的 <code>sandiruiqi</code> 账号同 <code>lant</code> 的 <code>liangren网</code> 账号关联了起来</p><p>从此以后, <code>lant</code>只要没有察觉到自己最初被悄悄使用了 <code>攻击者rymuscle</code> 的<code>sandiruiqi网</code> 账号登录, 那么他在 <code>liangren网</code> 上的所有资料, 都可以被 <code>攻击者rymuscle</code> 所看到, 并且 <code>攻击者rymuscle</code> 可能在 <code>lant</code> 的账号中做一些非法操作;</p></li></ul></li><li><p>整体时序图分析</p><ul><li><p>先看标准oauth时序图<br><img src="/img/oauth/authorization_code.png" width="635" height="600" alt="qq" align="center"></p></li><li><p>下面是从网上copy的一张图, 从整体上来看, 这次攻击的时序图类似下图:<br><img src="/img/oauth/yihuajiemu_mawei.png" width="635" height="580" alt="sina" align="center"></p></li></ul></li><li><p>可以看到, 攻击的关键点在于:<br>OAuth2的认证流程是分为好几步来完成的, 在标准oauth图的第3步, 第三方应用在收到一个GET请求时, 除了能知道当前用户的cookie, 以及URL中的Authorization Code之外, 难以分辨出这个请求到底是用户本人的意愿, 还是攻击者利用用户的身份伪造出来的请求; 于是乎, 攻击者就能使用移花接木的手段, 提前准备一个含有自己的Authorization Code的请求, 并让受害者的浏览器来接着完成后续的令牌申请流程 ;</p></li><li><p>难点(涉及到了非state参数防御):<br> 尽管这个攻击既巧妙又隐蔽, 但是要成功进行这样的CSRF攻击也是比较困难的 :    </p><ul><li><p>整个攻击必须在短时间内完成, 因为OAuth2提供者颁发的Authorization Code有效期很短, <strong>OAuth2官方推荐的时间是不大于10分钟</strong>, 而一旦Authorization Code过期那么后续的攻击也就不能进行下去了;</p></li><li><p>一个Authorization Code只能被使用一次, 如果OAuth2提供者收到重复的Authorization Code, 它会拒绝当前的令牌申请请求, 不止如此, 根据OAuth2官方推荐, 它还可以把和这个已经使用过的Authorization Code相关联的access_token全部撤销掉, 进一步降低安全风险;</p><p>其实貌似只要做到Authorization Code只能被使用一次, 就可以防止csrf在此处的攻击了, 因为 <code>rymuscle</code> 在攻击的时候, 一旦获得 <code>Authorization Code</code>, 第三方站点服务器就会使用 <code>Authorization Code</code> 去申请access_token, 然后只要标记 <code>Authorization Code</code> 为已经使用, 那么 <code>受害者lant</code> 即使点击 <code>攻击者rymuscle</code> 构造好的链接也没用, 因为连接中的 <code>Authorization Code</code> 已经被标记为使用过了;</p></li><li><p>所以不一定非要使用下面的state参数来进行防御<br><a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&amp;t=resource/res_list&amp;verify=1&amp;id=open1419316505&amp;token=&amp;lang=zh_CN" target="_blank" rel="external">比如微信公众平台的OAuth授权: state参数就是可选的</a><br><a href="http://open.weibo.com/wiki/Oauth2/authorize" target="_blank" rel="external">新浪开放平台的OAuth授权, state参数也是可选的</a><br>当然, 他们不一定做的是和此处一样的防御方案, 但明显不依赖于state参数来解决问题;</p></li></ul></li><li><p>state参数防御: 要防止这样的攻击其实很容易, 作为第三方应用的开发者, 只需在OAuth认证过程中加入 <code>state</code> 参数, 并验证它的参数值即可;</p><ul><li><p>在将用户重定向到OAuth2的Authorization Endpoint去的时候, 为用户生成一个随机的字符串, 并作为state参数加入到URL中 ;</p></li><li><p>在收到OAuth2服务提供者返回的Authorization Code请求的时候, 验证接收到的state参数值, 如果是正确合法的请求, 那么此时接受到的参数值应该和上一步提到的为该用户生成的state参数值完全一致, 否则就是异常请求;</p><p>但需要注意 <code>state参数</code> 需要具备下面几个特性:</p></li><li><p>不可预测性: 足够的随机, 使得攻击者难以猜到正确的参数值 ;<br>如果你每次生成的state都被放在一起, 比如一个库/缓存中存在很多state;<br>那么问题就是攻击者还是可以拿着自己的code再加上一个state, 来构造一个链接欺骗用户来点击;(假设state正好就在你的库/缓存中);</p></li><li><p>重点是关联性: state参数值可以和当前用户会话(user session)相互关联的<br>所以应该让state和具体的用户关联起来, 虽然用户还没有登录, 但是也可以让state放到session中 ;<br>然后攻击者要猜测出来一个state的话, 即便是已经生成过了, 但是也得正好攻击的是这个用户;</p></li><li><p>唯一性: 每个用户每次请求生成的state参数值都是唯一的 ;</p></li><li><p>时效性: state参数一旦被使用则立即失效 ;</p></li><li><p>参考 蚂蚁金服开放平台:<br><img src="/img/oauth/state_alipay.png" width="600" height="550" alt="wechat" align="center"></p></li></ul></li><li><p>其实可以结合以上各种方法一起来进行防御!</p></li></ol><blockquote><p><a href="http://insights.thoughtworkers.org/attack-aim-at-oauth2/" target="_blank" rel="external">参考 移花接木</a><br><a href="http://blog.sina.com.cn/s/blog_56b798f801018jyb.html" target="_blank" rel="external">参考 state参数漏洞</a><br><a href="http://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="external">参考 阮一峰</a></p></blockquote>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;假设有如下几个角色:&lt;br&gt;受害者 &lt;code&gt;lant&lt;/code&gt; ;&lt;br&gt;攻击者 &lt;code&gt;rymuscle&lt;/code&gt; ;&lt;br&gt;第三方Web应用 &lt;code&gt;liangren网&lt;/code&gt; (它允许用户将其在 &lt;code&gt;sandirui
-      
-    
-    </summary>
-    
-      <category term="后端架构" scheme="http://blog.renyimin.com/categories/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="OAuth2.0" scheme="http://blog.renyimin.com/categories/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/OAuth2-0/"/>
-    
-    
-      <category term="后端架构" scheme="http://blog.renyimin.com/tags/%E5%90%8E%E7%AB%AF%E6%9E%B6%E6%9E%84/"/>
-    
-      <category term="OAuth2.0" scheme="http://blog.renyimin.com/tags/OAuth2-0/"/>
     
   </entry>
   
