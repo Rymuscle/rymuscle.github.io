@@ -13,25 +13,25 @@
     
     
     
-    <title>01. MySQL(INNODB引擎)事务 | Lant&#39;s Blog</title>
+    <title>MySQL锁 - 01 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="MySQL事务的隔离级别1. 2.    锁锁的名词 在学习锁相关知识之前, 先看一些关于锁的名词, 因为常见的和锁相关的词实在是比较多, 如:  锁冲突 死锁    表级锁(MYISAM, INNODB引擎) 意向锁(意向共享锁, 意向排他锁) 行级锁(记录锁) (INNODB引擎) 页级锁(BDB引擎)    共享锁(S锁)(读锁) 排他锁(X锁)(写锁)     乐观锁  悲观锁     记">
+    <meta name="description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的隔离级别，其实它的精髓就是锁机制; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定的">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01. MySQL(INNODB引擎)事务">
+<meta property="og:title" content="MySQL锁 - 01">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="MySQL事务的隔离级别1. 2.    锁锁的名词 在学习锁相关知识之前, 先看一些关于锁的名词, 因为常见的和锁相关的词实在是比较多, 如:  锁冲突 死锁    表级锁(MYISAM, INNODB引擎) 意向锁(意向共享锁, 意向排他锁) 行级锁(记录锁) (INNODB引擎) 页级锁(BDB引擎)    共享锁(S锁)(读锁) 排他锁(X锁)(写锁)     乐观锁  悲观锁     记">
+<meta property="og:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的隔离级别，其实它的精髓就是锁机制; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-09T06:41:39.000Z">
+<meta property="og:updated_time" content="2017-12-11T12:43:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01. MySQL(INNODB引擎)事务">
-<meta name="twitter:description" content="MySQL事务的隔离级别1. 2.    锁锁的名词 在学习锁相关知识之前, 先看一些关于锁的名词, 因为常见的和锁相关的词实在是比较多, 如:  锁冲突 死锁    表级锁(MYISAM, INNODB引擎) 意向锁(意向共享锁, 意向排他锁) 行级锁(记录锁) (INNODB引擎) 页级锁(BDB引擎)    共享锁(S锁)(读锁) 排他锁(X锁)(写锁)     乐观锁  悲观锁     记">
+<meta name="twitter:title" content="MySQL锁 - 01">
+<meta name="twitter:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的隔离级别，其实它的精髓就是锁机制; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定的">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01. MySQL(INNODB引擎)事务</div>
+        <div class="flex-col header-title ellipsis">MySQL锁 - 01</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">01. MySQL(INNODB引擎)事务</h1>
+        <h1 class="title">MySQL锁 - 01</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-08-09T11:16:54.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#MySQL事务的隔离级别"><span class="post-toc-number">1.</span> <span class="post-toc-text">MySQL事务的隔离级别</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#锁"><span class="post-toc-number"></span> <span class="post-toc-text">锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁的名词"><span class="post-toc-number">1.</span> <span class="post-toc-text">锁的名词</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁冲突"><span class="post-toc-number">2.</span> <span class="post-toc-text">锁冲突</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#死锁"><span class="post-toc-number">3.</span> <span class="post-toc-text">死锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#表级锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">表级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#页级锁"><span class="post-toc-number">5.</span> <span class="post-toc-text">页级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#行级锁"><span class="post-toc-number">6.</span> <span class="post-toc-text">行级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Innodb中的行锁与表锁注意事项"><span class="post-toc-number">7.</span> <span class="post-toc-text">Innodb中的行锁与表锁注意事项</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#共享锁-Share-Lock"><span class="post-toc-number">8.</span> <span class="post-toc-text">共享锁(Share Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#排他锁-Xclusive-Lock"><span class="post-toc-number">9.</span> <span class="post-toc-text">排他锁(Xclusive Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#意向锁-不用干预"><span class="post-toc-number">10.</span> <span class="post-toc-text">意向锁 (不用干预)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#间隙锁"><span class="post-toc-number">11.</span> <span class="post-toc-text">间隙锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#next-key锁"><span class="post-toc-number">12.</span> <span class="post-toc-text">next-key锁</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#锁"><span class="post-toc-number"></span> <span class="post-toc-text">锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁的名词"><span class="post-toc-number">1.</span> <span class="post-toc-text">锁的名词</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁冲突"><span class="post-toc-number">2.</span> <span class="post-toc-text">锁冲突</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#死锁"><span class="post-toc-number">3.</span> <span class="post-toc-text">死锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#表级锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">表级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#页级锁"><span class="post-toc-number">5.</span> <span class="post-toc-text">页级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#行级锁"><span class="post-toc-number">6.</span> <span class="post-toc-text">行级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Innodb中的行锁与表锁注意事项"><span class="post-toc-number">7.</span> <span class="post-toc-text">Innodb中的行锁与表锁注意事项</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#共享锁-Share-Lock"><span class="post-toc-number">8.</span> <span class="post-toc-text">共享锁(Share Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#排他锁-Xclusive-Lock"><span class="post-toc-number">9.</span> <span class="post-toc-text">排他锁(Xclusive Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#意向锁-不用干预"><span class="post-toc-number">10.</span> <span class="post-toc-text">意向锁 (不用干预)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#间隙锁"><span class="post-toc-number">11.</span> <span class="post-toc-text">间隙锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#next-key锁"><span class="post-toc-number">12.</span> <span class="post-toc-text">next-key锁</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01. MySQL(INNODB引擎)事务</h1>
+        <h1 class="post-card-title">MySQL锁 - 01</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-08-09 19:16:54" datetime="2016-08-09T11:16:54.000Z"  itemprop="datePublished">2016-08-09</time>
 
@@ -184,10 +184,11 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="MySQL事务的隔离级别"><a href="#MySQL事务的隔离级别" class="headerlink" title="MySQL事务的隔离级别"></a>MySQL事务的隔离级别</h4><p>1.</p>
-<p>2.</p>
-<ol>
-<li></li>
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ol>
+<li><p>之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?<br> <strong>这是因为我们之前介绍的隔离级别，其实它的精髓就是锁机制</strong>;<br> <strong>而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 <code>丢失更新</code> 的问题</strong> （乐观,悲观锁的使用）</p>
+</li>
+<li><p>所以我们也需要对锁有一定的认识; </p>
+</li>
 </ol>
 <h3 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h3><h4 id="锁的名词"><a href="#锁的名词" class="headerlink" title="锁的名词"></a>锁的名词</h4><ol>
 <li>在学习锁相关知识之前, 先看一些关于<code>锁</code>的名词, 因为常见的和<code>锁</code>相关的词实在是比较多, 如: <ul>
@@ -404,7 +405,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -414,7 +415,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -424,7 +425,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -452,17 +453,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/08/07/2016-08-07-mysql_transaction-02/" id="post-prev" class="post-nav-link">
+        <a href="/2016/08/07/2016-08-07-mysql_transaction-01/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">MySQL(INNODB引擎)事务 - 02</h4>
+          <h4 class="title">MySQL(INNODB引擎)事务 - 01</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/09/15/2016-09-15-sameoriginpolicy-01/" id="post-next" class="post-nav-link">
+      <a href="/2016/08/09/2016-08-09-mysql_locks-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01.浏览器的同源策略(Same origin policy)</h4>
+        <h4 class="title">MySQL锁 - 02</h4>
       </a>
     </div>
   
@@ -573,7 +574,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -583,7 +584,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -593,7 +594,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. MySQL(INNODB引擎)事务》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
