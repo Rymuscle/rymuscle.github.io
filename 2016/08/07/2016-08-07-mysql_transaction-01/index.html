@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
-<meta property="og:updated_time" content="2017-12-10T11:35:04.000Z">
+<meta property="og:updated_time" content="2017-12-11T02:17:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务 - 01">
 <meta name="twitter:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中, 有一组操作(一般会有多个’写操作’); 放在事务中的多个操作, “要么全部执行成功, 要么全部执行失败”, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设用户A通过银行的ATM取款机给用户B转账100元, 那么银行ATM应用的转账程序中至少需要三个步骤才能完成转账操作:  123检查A用户余额`&amp;gt;=">
@@ -214,7 +214,7 @@
 <li>Durability 持久性<br>一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会 <code>理论上永久保存到数据库中</code>; </li>
 </ol>
 <h4 id="事务会出现的问题"><a href="#事务会出现的问题" class="headerlink" title="事务会出现的问题"></a>事务会出现的问题</h4><p>在并发量比较大的时候, 很容易出现多个事务同时进行的情况, 假设有两个事务正在同时进行, 两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对操作的数据做一定的保护处理, 所以最终导致一些问题的出现;</p>
-<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>读取的数据不正确,不是最终的持久保存数据,而是可能会被其他某个事务<code>反悔(rollback))</code>的数据;</p>
+<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>同一事务内读取的同一数据不一样(也具备不可重复读的问题,因为脏读的隔离级别是最低的), 并且是不正确的数据 (第二次读取到的数据不是永久的, 可能会被其他某个事务<code>反悔(rollback))</code>)</p>
 <ol>
 <li><p>读取的数据是不正确的数据, 即为脏读;<br> mysql中一个事务读取了另一个并行事务未提交的写数据, 那这个读取就是脏读<br> <img src="/img/mysql/transaction/dirty_read.png" width="608" height="190"></p>
 </li>
@@ -225,7 +225,7 @@
 <li><p>但是脏读问题解决后, 还是有问题存在的, 那就是 ‘不可重复读’ 的问题;</p>
 </li>
 </ol>
-<h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><p>同一事务内读取的同一数据不一样</p>
+<h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><p>同一事务内读取的同一数据不一样 (只不过第二次读取到的数据是永久的)</p>
 <ol>
 <li><p>之前说的在<code>read commited</code>级别时, 一个事务只能读取另一个事务已经提交的数据, 这就会出现不可重复读的问题(即,<strong>两次读取的结果一次是自己最初读取的, 一次是另一个事务提交之后的</strong>);<br>不可重复读, 即不能多次重复去读, 因为读出来的结果不一样, 因此认为存在不可重复读的问题;</p>
 </li>
