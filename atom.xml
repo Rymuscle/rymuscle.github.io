@@ -328,6 +328,24 @@
   </entry>
   
   <entry>
+    <title>05 - 分布式</title>
+    <link href="http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/"/>
+    <id>http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/</id>
+    <published>2017-04-13T12:03:09.000Z</published>
+    <updated>2017-12-07T13:07:56.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+      <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
     <title>02 - 分布式锁</title>
     <link href="http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/"/>
     <id>http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/</id>
@@ -342,24 +360,6 @@
       
         &lt;h3 id=&quot;分布式锁&quot;&gt;&lt;a href=&quot;#分布式锁&quot; class=&quot;headerlink&quot; title=&quot;分布式锁&quot;&gt;&lt;/a&gt;分布式锁&lt;/h3&gt;
       
-    
-    </summary>
-    
-      <category term="分布式" scheme="http://blog.renyimin.com/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-    
-      <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>05 - 分布式</title>
-    <link href="http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/"/>
-    <id>http://blog.renyimin.com/2017/04/13/2017-04-17-distributed-05/</id>
-    <published>2017-04-13T12:03:09.000Z</published>
-    <updated>2017-12-07T13:07:56.000Z</updated>
-    
-    <summary type="html">
     
     </summary>
     
@@ -392,56 +392,6 @@
     
     
       <category term="分布式" scheme="http://blog.renyimin.com/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>02 - 并发写问题</title>
-    <link href="http://blog.renyimin.com/2017/04/11/2017-04-09-concurrency-02/"/>
-    <id>http://blog.renyimin.com/2017/04/11/2017-04-09-concurrency-02/</id>
-    <published>2017-04-11T14:19:27.000Z</published>
-    <updated>2017-12-11T14:04:51.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="初级并发写的问题"><a href="#初级并发写的问题" class="headerlink" title="初级并发写的问题"></a>初级并发写的问题</h3><h4 id="保证并发写的数据安全问题"><a href="#保证并发写的数据安全问题" class="headerlink" title="保证并发写的数据安全问题"></a>保证并发写的数据安全问题</h4><h4 id="MySQL锁并发测试抢购超卖问题"><a href="#MySQL锁并发测试抢购超卖问题" class="headerlink" title="MySQL锁并发测试抢购超卖问题"></a>MySQL锁并发测试抢购超卖问题</h4><ol><li><p>代码如下</p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">Test</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Models</span>\<span class="title">Test</span>\<span class="title">Goods</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Http</span>\<span class="title">Request</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Requests</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">Controller</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">DB</span>;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 主要做一些高并发测试</span></div><div class="line"><span class="comment"> * Class ConcurrencyController</span></div><div class="line"><span class="comment"> * <span class="doctag">@package</span> App\Http\Controllers</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcurrencyController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="comment">/*</span></div><div class="line"><span class="comment">    DROP TABLE IF EXISTS `goods`;</span></div><div class="line"><span class="comment">    CREATE TABLE `goods` (</span></div><div class="line"><span class="comment">    `id` int(10) NOT NULL AUTO_INCREMENT,</span></div><div class="line"><span class="comment">    `goods_name` varchar(100) NOT NULL,</span></div><div class="line"><span class="comment">    `num` int(100) NOT NULL,</span></div><div class="line"><span class="comment">    PRIMARY KEY (`id`)</span></div><div class="line"><span class="comment">    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span></div><div class="line"><span class="comment">    INSERT INTO `goods` VALUES (1, 'iphone 6 plus', 10);</span></div><div class="line"><span class="comment">    */</span></div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * mysql模拟并发写(修改)数据</span></div><div class="line"><span class="comment">     * Jmeter模拟调用10次</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">analogueConcurrencyByMySql</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        $good = Goods::select(<span class="string">'num'</span>)-&gt;find(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> ($good[<span class="string">'num'</span>]&gt;<span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">//增加代复杂度,不然超卖不好模拟出来</span></div><div class="line">            usleep(<span class="number">500000</span>);</div><div class="line">            $res = Goods::where([<span class="string">'id'</span> =&gt; <span class="number">1</span>])-&gt;decrement(<span class="string">'num'</span>, <span class="number">1</span>);<span class="comment">//-&gt;update(['num' =&gt; $good['num']-1]);</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 乐观锁测试</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">mysqlOptimisticLock</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        $good = Goods::select(<span class="string">'num'</span>)-&gt;find(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> ($good[<span class="string">'num'</span>]&gt;<span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">//增加代复杂度,不然超卖不好模拟出来</span></div><div class="line">            usleep(<span class="number">500000</span>);</div><div class="line">            Goods::where([<span class="string">'id'</span> =&gt; <span class="number">1</span>])-&gt;where(<span class="string">'num'</span>, <span class="string">'&gt;'</span>, <span class="string">'0'</span>)-&gt;decrement(<span class="string">'num'</span>, <span class="number">1</span>);<span class="comment">//-&gt;update(['num' =&gt; $good['num']-1]);</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 悲观锁测试(没有事务, 测试失败)</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">mysqlPessimisticLock1</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        $good = Goods::select(<span class="string">'num'</span>)-&gt;lockForUpdate()-&gt;find(<span class="number">1</span>);</div><div class="line">        <span class="keyword">if</span> ($good[<span class="string">'num'</span>]&gt;<span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">//增加代复杂度,不然超卖不好模拟出来</span></div><div class="line">            usleep(<span class="number">500000</span>);</div><div class="line">            Goods::where([<span class="string">'id'</span> =&gt; <span class="number">1</span>])-&gt;decrement(<span class="string">'num'</span>, <span class="number">1</span>);<span class="comment">//-&gt;update(['num' =&gt; $good['num']-1]);</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 悲观锁测试(有事务, 测试成功)</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">mysqlPessimisticLock2</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            DB::beginTransaction();</div><div class="line">            $good = Goods::select(<span class="string">'num'</span>)-&gt;lockForUpdate()-&gt;find(<span class="number">1</span>);</div><div class="line">            <span class="keyword">if</span> ($good[<span class="string">'num'</span>]&gt;<span class="number">0</span>) &#123;</div><div class="line">                <span class="comment">//增加代复杂度,不然超卖不好模拟出来</span></div><div class="line">                usleep(<span class="number">500000</span>);</div><div class="line">                Goods::where([<span class="string">'id'</span> =&gt; <span class="number">1</span>])-&gt;decrement(<span class="string">'num'</span>, <span class="number">1</span>);<span class="comment">//-&gt;update(['num' =&gt; $good['num']-1]);</span></div><div class="line">            &#125;</div><div class="line">            DB::commit();</div><div class="line">        &#125; <span class="keyword">catch</span>(\<span class="keyword">Exception</span> $e) &#123;</div><div class="line">            DB::rollback();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li><li><p>悲观锁必须配合事务使用</p></li></ol><h4 id="Redis锁的利用"><a href="#Redis锁的利用" class="headerlink" title="Redis锁的利用"></a>Redis锁的利用</h4><ol><li>Redis的事务涉及到的WATCH</li><li>Redis原子锁</li></ol><h4 id="memcached锁"><a href="#memcached锁" class="headerlink" title="memcached锁"></a>memcached锁</h4><p><a href="https://github.com/Yurunsoft/YurunLock" target="_blank" rel="external">https://github.com/Yurunsoft/YurunLock</a></p><h4 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h4><ol><li>如: 并发减少库存如何保证不超卖<br><a href="">利用Redis锁</a></li><li>如: </li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;初级并发写的问题&quot;&gt;&lt;a href=&quot;#初级并发写的问题&quot; class=&quot;headerlink&quot; title=&quot;初级并发写的问题&quot;&gt;&lt;/a&gt;初级并发写的问题&lt;/h3&gt;&lt;h4 id=&quot;保证并发写的数据安全问题&quot;&gt;&lt;a href=&quot;#保证并发写的数据安全问题&quot; cla
-      
-    
-    </summary>
-    
-      <category term="高并发" scheme="http://blog.renyimin.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
-    
-    
-      <category term="高并发" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>01 - 并发读问题</title>
-    <link href="http://blog.renyimin.com/2017/04/09/2017-04-09-concurrency-01/"/>
-    <id>http://blog.renyimin.com/2017/04/09/2017-04-09-concurrency-01/</id>
-    <published>2017-04-09T11:16:54.000Z</published>
-    <updated>2017-12-07T12:58:03.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="初级并发读的问题"><a href="#初级并发读的问题" class="headerlink" title="初级并发读的问题"></a>初级并发读的问题</h3><h4 id="如何尽可能承载更高的并发访问量"><a href="#如何尽可能承载更高的并发访问量" class="headerlink" title="如何尽可能承载更高的并发访问量"></a>如何尽可能承载更高的并发访问量</h4><ol><li></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h3 id=&quot;初级并发读的问题&quot;&gt;&lt;a href=&quot;#初级并发读的问题&quot; class=&quot;headerlink&quot; title=&quot;初级并发读的问题&quot;&gt;&lt;/a&gt;初级并发读的问题&lt;/h3&gt;&lt;h4 id=&quot;如何尽可能承载更高的并发访问量&quot;&gt;&lt;a href=&quot;#如何尽可能承载更高的并发访问
-      
-    
-    </summary>
-    
-      <category term="高并发" scheme="http://blog.renyimin.com/categories/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
-    
-    
-      <category term="高并发" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
     
   </entry>
   
@@ -534,6 +484,59 @@
       
       
         &lt;h3 id=&quot;JSONP&quot;&gt;&lt;a href=&quot;#JSONP&quot; class=&quot;headerlink&quot; title=&quot;JSONP&quot;&gt;&lt;/a&gt;JSONP&lt;/h3&gt;&lt;p&gt;1.JSONP是服务器与客户端 &lt;strong&gt;跨源通信&lt;/strong&gt; 的常用方法, 最大特点就是&lt;code&gt;简
+      
+    
+    </summary>
+    
+      <category term="CrossDomain" scheme="http://blog.renyimin.com/categories/CrossDomain/"/>
+    
+    
+      <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>03.同源策略的限制 之 &quot;Ajax请求不能发送&quot;</title>
+    <link href="http://blog.renyimin.com/2016/09/16/2016-09-16-sameoriginpolicy-03/"/>
+    <id>http://blog.renyimin.com/2016/09/16/2016-09-16-sameoriginpolicy-03/</id>
+    <published>2016-09-16T05:04:17.000Z</published>
+    <updated>2017-10-27T09:33:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="同源策略的限制-Ajax请求不能发送"><a href="#同源策略的限制-Ajax请求不能发送" class="headerlink" title="同源策略的限制 - Ajax请求不能发送"></a>同源策略的限制 - Ajax请求不能发送</h2><ol><li><p>同源政策规定, AJAX请求只能发给同源的网址, 否则就报错 ;</p></li><li><p>除了架设服务器代理(浏览器请求同源服务器，再由后者请求外部服务), 有三种方法规避这个限制 :<br> <strong><a href="http://localhost:4000/2016/09/17/2016-09-17-sameoriginpolicy-04/" target="_blank" rel="external">JSONP</a></strong></p><p> <strong><a href="http://blog.renyimin.com">CORS</a></strong></p><p> <strong><a href="http://blog.renyimin.com">WebSocket</a></strong></p></li></ol><blockquote><p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;同源策略的限制-Ajax请求不能发送&quot;&gt;&lt;a href=&quot;#同源策略的限制-Ajax请求不能发送&quot; class=&quot;headerlink&quot; title=&quot;同源策略的限制 - Ajax请求不能发送&quot;&gt;&lt;/a&gt;同源策略的限制 - Ajax请求不能发送&lt;/h2&gt;&lt;ol&gt;
+
+      
+    
+    </summary>
+    
+      <category term="CrossDomain" scheme="http://blog.renyimin.com/categories/CrossDomain/"/>
+    
+    
+      <category term="CrossDomain" scheme="http://blog.renyimin.com/tags/CrossDomain/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>02.同源策略的限制 之 &quot;Cookie无法读取&quot;</title>
+    <link href="http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-02/"/>
+    <id>http://blog.renyimin.com/2016/09/15/2016-09-15-sameoriginpolicy-02/</id>
+    <published>2016-09-15T13:10:13.000Z</published>
+    <updated>2017-10-27T09:18:13.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="回顾"><a href="#回顾" class="headerlink" title="回顾"></a>回顾</h3><p>之前学习同源策略基础知识的时候, 了解了同源策略的 <code>三种行为</code> 限制:</p><ol><li><code>Cookie</code>、<code>LocalStorage</code> 和 <code>IndexDB</code> 无法读取</li><li><code>DOM</code> 无法获得 </li><li><p><code>AJAX</code> 请求不能发送 </p></li><li><p>不过这里需要注意一点: <strong>“同源策略”的限制, 并没有限制住CSRF攻击</strong><br>“同源策略的限制”并不会导致 B站点中嵌入的 <code>A站点超链接去读取A站点用户的cookie</code>;<br>假如你当前已经登录了邮箱，或bbs，同时你又访问了另外一个站点，假设这就是一个钓鱼网站; 这个网站上面可能因为某个图片吸引你，你去点击一下，此时可能就会触发一个js的点击事件，去构造一个bbs发帖的请求，去往你的bbs站点发帖，由于当前你的浏览器状态已经是登陆状态，所以session登陆cookie信息都会跟正常的请求一样，纯天然的利用当前的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; (这也就是我们通常所说的CSRF攻击, CSRF攻击的主要目的是让用户在不知情的情况下攻击自己已登录的一个系统，类似于钓鱼);</p></li></ol><h3 id="同源策略的限制之”Cookie无法读取”"><a href="#同源策略的限制之”Cookie无法读取”" class="headerlink" title="同源策略的限制之”Cookie无法读取”"></a>同源策略的限制之”Cookie无法读取”</h3><ol><li><p>本篇构造跨域的场景来模拟”Cookie无法读取”的限制, 方法主要有:</p><ul><li>B站<code>&lt;a href=&quot;A&quot;&gt;test&lt;/a&gt;</code>超链接无法读取B站点的cookie; (而csrf所讨论的是B站<code>&lt;a href=&quot;A&quot;&gt;test&lt;/a&gt;</code>超链接可以读取A站点自己的cookie)</li><li><p>不通过B站超链接, 而是直接打开另一个网页来访问A站点, 结果当然也是A站点读不到B站点的Cookie ;</p></li><li><p>暂时不会涉及到 <code>Ajax请求所涉及的cookie传递问题</code>, 这个问题属于同源策略的第三种限制 <code>AJAX请求不能发送</code>;</p></li></ul></li><li><p>例子 :<br> A网页是 <code>http://www.test.com/index.html</code>，B网页是 <code>http://test.test.com/index.html</code> :<br> A: www.test.com/index.html (此处是使用js来设置cookie进行测试; 当然, 用服务端代码php测试也是OK的)</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    document.cookie=&quot;name=value;&quot;;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-disabled-01.png" width="650" height="272" alt="cookie-disabled-01" align="center"></p><p> B: test.test.com/index.html</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    console.log(document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> // 可以看到, 同顶级域名也不能跨子域名获取cookie<br> <img src="/img/cross-domain/cookie-disabled-02.png" width="650" height="272" alt="cookie-disabled-02" align="center"></p><p> //同理, 直接在<code>http://www.test.com/index.html</code>中超链接点击到<code>http://test.test.com/index.html</code>也是获取不到cookie的 ;</p></li></ol><h3 id="合理规避Cookie无法读取的限制"><a href="#合理规避Cookie无法读取的限制" class="headerlink" title="合理规避Cookie无法读取的限制"></a><code>合理</code>规避Cookie无法读取的限制</h3><ol><li>虽然同源导致的这些限制是必要, 但是有些情况下, 其实我们是需要 <code>合理</code> 规避Cookie无法读取的限制的 ;</li><li>比如: 如果两个网页的顶级域名相同, 只是二级域名不同的话, 浏览器其实是允许你通过设置 <code>document.domain</code> 来共享 Cookie 的;</li><li><p>例子:<br> A网页是 <code>http://www.test.com/index.html</code>，B网页是 <code>http://test.test.com/index.html</code>, 那么只要设置相同的 <code>document.domain</code>，两个网页就可以共享Cookie :<br> A: www.test.com/index.html (此处是使用js来设置cookie进行测试; 当然, 用php代码也是OK的)</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    document.cookie=&quot;name=value; domain=test.com&quot;;</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-share.png" width="559" height="272" alt="cookie-share" align="center"></p><p> B: test.test.com/index.html</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">&lt;head&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;script type=&quot;application/javascript&quot;&gt;</div><div class="line">    console.log(document.cookie);</div><div class="line">&lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure><p> <img src="/img/cross-domain/cookie-share02.png" width="300" height="275" alt="cookie-share" align="center"></p></li><li><p>注意:<br>这种方法只适用于 <code>Cookie</code> 和 <code>iframe 窗口(DOM无法获取)</code>; 而 LocalStorage 和 IndexDB 无法通过这种方法来规避同源政策，而要使用之后会介绍的PostMessage API ;</p></li></ol><blockquote><p><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">参考 阮一峰</a></p></blockquote>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h3 id=&quot;回顾&quot;&gt;&lt;a href=&quot;#回顾&quot; class=&quot;headerlink&quot; title=&quot;回顾&quot;&gt;&lt;/a&gt;回顾&lt;/h3&gt;&lt;p&gt;之前学习同源策略基础知识的时候, 了解了同源策略的 &lt;code&gt;三种行为&lt;/code&gt; 限制:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;Coo
       
     
     </summary>

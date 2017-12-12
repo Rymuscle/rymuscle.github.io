@@ -13,27 +13,25 @@
     
     
     
-    <title>MySQL锁 - 02 | Lant&#39;s Blog</title>
+    <title>01 - 并发读问题 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL">
-    <meta name="description" content="乐观锁(Optimistic Lock) 乐观锁, 也叫乐观并发控制, 它假设多用户并发的事务在处理时不会彼此互相影响, 各事务能够在不产生锁的情况下处理各自影响的那部分数据; 在提交数据更新之前, 每个事务才会检查在该事务读取数据后, 有没有其他事务又修改了该数据, 如果其他事务有更新的话, 那么当前正在提交的事务会进行回滚;  很显然, 这可以解决 丢失更新 的问题, 因为在这个事务中, 操作">
-<meta name="keywords" content="MySQL">
+    <meta name="keywords" content="高并发">
+    <meta name="description" content="初级并发读的问题如何尽可能承载更高的并发访问量">
+<meta name="keywords" content="高并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL锁 - 02">
-<meta property="og:url" content="http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/index.html">
+<meta property="og:title" content="01 - 并发读问题">
+<meta property="og:url" content="http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="乐观锁(Optimistic Lock) 乐观锁, 也叫乐观并发控制, 它假设多用户并发的事务在处理时不会彼此互相影响, 各事务能够在不产生锁的情况下处理各自影响的那部分数据; 在提交数据更新之前, 每个事务才会检查在该事务读取数据后, 有没有其他事务又修改了该数据, 如果其他事务有更新的话, 那么当前正在提交的事务会进行回滚;  很显然, 这可以解决 丢失更新 的问题, 因为在这个事务中, 操作">
+<meta property="og:description" content="初级并发读的问题如何尽可能承载更高的并发访问量">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
-<meta property="og:updated_time" content="2017-12-11T09:54:28.000Z">
+<meta property="og:updated_time" content="2017-12-12T02:29:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL锁 - 02">
-<meta name="twitter:description" content="乐观锁(Optimistic Lock) 乐观锁, 也叫乐观并发控制, 它假设多用户并发的事务在处理时不会彼此互相影响, 各事务能够在不产生锁的情况下处理各自影响的那部分数据; 在提交数据更新之前, 每个事务才会检查在该事务读取数据后, 有没有其他事务又修改了该数据, 如果其他事务有更新的话, 那么当前正在提交的事务会进行回滚;  很显然, 这可以解决 丢失更新 的问题, 因为在这个事务中, 操作">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
+<meta name="twitter:title" content="01 - 并发读问题">
+<meta name="twitter:description" content="初级并发读的问题如何尽可能承载更高的并发访问量">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -114,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL锁 - 02</div>
+        <div class="flex-col header-title ellipsis">01 - 并发读问题</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL锁 - 02</h1>
+        <h1 class="title">01 - 并发读问题</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-08-09T13:07:12.000Z" itemprop="datePublished" class="page-time">
-  2016-08-09
+                <time datetime="2016-08-10T11:16:54.000Z" itemprop="datePublished" class="page-time">
+  2016-08-10
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/高并发/">高并发</a></li></ul>
 
             
         </h5>
@@ -161,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#乐观锁-Optimistic-Lock"><span class="post-toc-number">1.</span> <span class="post-toc-text">乐观锁(Optimistic Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#悲观锁-Pessimistic-Lock"><span class="post-toc-number">2.</span> <span class="post-toc-text">悲观锁(Pessimistic Lock)</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#初级并发读的问题"><span class="post-toc-number">1.</span> <span class="post-toc-text">初级并发读的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#如何尽可能承载更高的并发访问量"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">如何尽可能承载更高的并发访问量</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
-<article id="post-2016-08-09-mysql_locks-02"
+<article id="post-2016-08-10-concurrency-01"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL锁 - 02</h1>
+        <h1 class="post-card-title">01 - 并发读问题</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-08-09 21:07:12" datetime="2016-08-09T13:07:12.000Z"  itemprop="datePublished">2016-08-09</time>
+            <time class="post-time" title="2016-08-10 19:16:54" datetime="2016-08-10T11:16:54.000Z"  itemprop="datePublished">2016-08-10</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/高并发/">高并发</a></li></ul>
 
 
 
@@ -186,34 +184,8 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="乐观锁-Optimistic-Lock"><a href="#乐观锁-Optimistic-Lock" class="headerlink" title="乐观锁(Optimistic Lock)"></a>乐观锁(Optimistic Lock)</h4><ol>
-<li><p>乐观锁, 也叫乐观并发控制, 它假设多用户并发的事务在处理时不会彼此互相影响, 各事务能够在不产生锁的情况下处理各自影响的那部分数据;<br> 在提交数据更新之前, 每个事务才会检查在该事务读取数据后, 有没有其他事务又修改了该数据, 如果其他事务有更新的话, 那么当前正在提交的事务会进行回滚;</p>
-</li>
-<li><p>很显然, 这可以解决 <code>丢失更新</code> 的问题, 因为在这个事务中, 操作语句可能类似下面:<br> <img src="/img/mysql/transaction/loss_update_01.png" width="513" height="585"></p>
-</li>
-<li><p>这不但可以解决丢失更新的问题, 还可以不放在事务内;</p>
-</li>
-<li><p>乐观锁的底层机制<br> (<a href="https://www.cnblogs.com/zhiqian-ali/p/6200874.html" target="_blank" rel="external">https://www.cnblogs.com/zhiqian-ali/p/6200874.html</a>)<br> 其底层机制是这样：在数据库内部update同一行的时候是不允许并发的，即数据库每次执行一条update语句时会获取被update行的写锁，直到这一行被成功更新后才释放</p>
-</li>
-</ol>
-<h4 id="悲观锁-Pessimistic-Lock"><a href="#悲观锁-Pessimistic-Lock" class="headerlink" title="悲观锁(Pessimistic Lock)"></a>悲观锁(Pessimistic Lock)</h4><ol>
-<li><p>悲观锁的特点是先获取锁, 再进行业务操作, 即<code>悲观</code>的认为获取锁是非常有可能失败的, 因此要先确保获取锁成功再进行业务操作; 通常所说的<code>一锁二查三更新</code>即指的是使用悲观锁;</p>
-</li>
-<li><p>通常来讲在数据库上的悲观锁需要数据库本身提供支持, 即通过常用的<code>select … for update</code>操作来实现悲观锁, 当数据库执行<code>select for update</code>时会获取被select中的数据行的行锁, 因此其他并发执行的<code>select for update</code>如果试图选中同一行则会发生排斥(需要等待行锁被释放), 因此达到锁的效果;</p>
-<ul>
-<li><code>for update</code> 仅适用于InnoDB;</li>
-<li><code>for update</code> 必须在事务块(BEGIN/COMMIT)中才能生效;</li>
-<li>在进行事务操作时, 通过<code>for update</code>语句, MySQL会对查询结果集中每行数据都添加<strong>排他锁</strong>, 其他并行事务对该记录的<code>查询</code>, <code>更新</code>, <code>删除</code>操作都会被阻塞, 排他锁包含行锁、表锁。</li>
-</ul>
-</li>
-<li><p><code>for update</code> 必须注意点:</p>
-<ul>
-<li>这里需要注意的一点是, 不同的数据库对 <code>select for update</code> 的实现和支持都是有所区别的, 例如oracle支持 <code>select for update no wait</code>, 表示如果拿不到锁立刻报错, 而不是等待; 而mysql就没有 <code>no wait</code> 这个选项;</li>
-<li>另外mysql还有个问题是 <code>select for update</code> 语句执行中所有扫描过的行都会被锁上，这一点很容易造成问题, <strong>因此如果在mysql中用悲观锁务必要确定走了索引, 而不是全表扫描</strong>;</li>
-</ul>
-</li>
-<li><p>很显然, 这也是为了解决 <code>丢失更新</code> 的问题!</p>
-</li>
+            <h3 id="初级并发读的问题"><a href="#初级并发读的问题" class="headerlink" title="初级并发读的问题"></a>初级并发读的问题</h3><h4 id="如何尽可能承载更高的并发访问量"><a href="#如何尽可能承载更高的并发访问量" class="headerlink" title="如何尽可能承载更高的并发访问量"></a>如何尽可能承载更高的并发访问量</h4><ol>
+<li></li>
 </ol>
 
         </div>
@@ -241,7 +213,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高并发/">高并发</a></li></ul>
 
 
             
@@ -251,7 +223,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&title=《MySQL锁 - 02》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&title=《01 - 并发读问题》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -261,22 +233,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&title=《MySQL锁 - 02》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&title=《01 - 并发读问题》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 02》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01 - 并发读问题》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -299,17 +271,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/08/09/2016-08-09-mysql_locks-01/" id="post-prev" class="post-nav-link">
+        <a href="/2016/08/09/2016-08-09-mysql_locks-02/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">MySQL锁 - 01</h4>
+          <h4 class="title">MySQL锁 - 02</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/08/10/2016-08-10-concurrency-01/" id="post-next" class="post-nav-link">
+      <a href="/2016/08/10/2016-08-10-concurrency-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01 - 并发读问题</h4>
+        <h4 class="title">02 - 并发写问题</h4>
       </a>
     </div>
   
@@ -420,7 +392,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&title=《MySQL锁 - 02》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&title=《01 - 并发读问题》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -430,22 +402,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&title=《MySQL锁 - 02》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&title=《01 - 并发读问题》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 02》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01 - 并发读问题》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/10/2016-08-10-concurrency-01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -456,7 +428,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aS5LDMAhFUe9/0+4FpJ2+D5ROCV2NUvnYOhlgQFwXXvfLev/p0zefrvx6nesTS4YMGdsyyCbI+0/b6l8B/UEyZMg4gEFCYRrrSBh9Ct98bzJkyJDBX6c35oFehgwZMmoBlyeRPHB/4bkhQ4aMrRid29eCbOdPkSFDxmkM3nX//9cfOd+QIUPGVow7XLWClgTKu7FkyJAxm5EWliRl5CUxTxzf70eGDBmzGemQBA+jaXgl91qQt8qQIWNDRg2T3iYdxeAp6eNzQ4YMGUMZabO+cwzAY2bQepMhQ8ZQBknvUmpaxPK/LxizkCFDxjhG/2Z8E8t6hDJkyDiMUUv+ar/tN/h+2Y8MGTJGM3g7jIxE1EYu0iugdpsMGTIGMdYCeOuNJ47BtIgMGTIOYKQHBvHNwo0G78iQIWM0I52tWlX08hI3GLaQIUPGaAa5NE8f0yvwlhxKEGXIkDGUwVvzJDimyBQcPzFkyJAxgtHZdC2wBgeTvFUnQ4aMAxi8oOVNt854GVlBhitDhowRDJLSpeVlOpBRa73JkCHjHEYaOkkw5cE3/e2VPh9kyJCxLeMOVz/UclJAlSFDxmhGWi6mLTbSSksHPlqlrwwZMrZl1IYqyKfpUUF6ICpDhozTGLXA90ezHhxMpmnf458iQ4YMGe0hsFUw1DWUIUOGjFJNTIbA0u8se27IkCFjEwYpYlNY7aiAt+FkyJBxDoOXjukBZHrM0Mn0ZMiQMZTxA1PX0T+7phR+AAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3aUY6DMAxFUfa/aWYBqHCfDdLEufmqKCU5g+SxEx8HHudl3H97f//1t9fnHF8MGTJkLMsg099fuf/Vr7nur/BZZMiQsQ+DhMLOUtLIydcmQ4YMGSR01iauhWwZMmTISBmtZO7/BFwZMmQswugEvjTI8u28T2pxGTJkLMjoBMGvP39yviFDhoylGGc40ul5oDwbQ4YMGbMZPMDVmidSEk/7ZMiQsRsjPbAkMPJt7XC0lcPKkCFjWQZP++43wtJ6M33yA0+GDBmjGbV2CrLpn6aSrf8YMmTIGM3gQZAsotYWVksrZciQsQMjTdHSIEtCbWtzTYYMGdsw+OJ44sjDOv+D/nwNMmTIGM3gE7ybAqaLRmuQIUPGUEYtCNZaLvpPaL0HGTJkLMt4qxAl7HSh6RUZMmRMZbxVWPIt/rTERTPKkCFjNIMnYWRjjjNqW3Ioz5UhQ8ZoRi0FJEePnePSoNVMhgwZoxlpCUoOLzvNFunRggwZMnZgkG2vNCnkKWbaHPaw6SZDhozRDB5G08+11DNuFJMhQ8YGjDR0FjPQ0v3F8lWGDBkjGGc4+BZbmvCRMP3wHmTIkDGUwUct1KYJXy3plCFDxg4MEmTTkrITNIsHDzJkyNiA0TkYILE83j5LU08ZMmTIwEVmv3zlq2o1W8iQIWMDBno0LoNr97wQcGXIkLEUI23e4u2tncavACxDhozRDF461sJxrdmiVlrLkCFjHOMPQxe8KpXNHPcAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
