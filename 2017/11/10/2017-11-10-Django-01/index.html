@@ -20,29 +20,23 @@
     
     
     <meta name="keywords" content="Django">
-    <meta name="description" content="Python 可以帮我们做很多事情, 包括web开发, 为了让我们的开发更加方便, 和其他脚本语言(比如PHP)一样, Python也有很多web框架, 常见的比如: Django, Pylons, Tornado, Bottle, Flask 等;这里我们要说的是使用比较广泛的 Django; 本篇笔记主要是安装Django, 简单使用Django的一些基本命令, 最终运行一个web应用;  M">
+    <meta name="description" content="Python也有很多web框架, 常用的如: Django, Tornado, Flask, Bottle, Pylons 等; Django版本的选择 选择一款 LTS 版本  各版本发布列表   各版本对应python版本的支持情况  通过上述了解, 此处采用Django1.11.7版本:  Django的安装本机是Mac系统  直接官网下载源码包  tar.gz包下载   解压, 到包中执行">
 <meta name="keywords" content="Django">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01 - Django入门">
 <meta property="og:url" content="http://blog.renyimin.com/2017/11/10/2017-11-10-Django-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Python 可以帮我们做很多事情, 包括web开发, 为了让我们的开发更加方便, 和其他脚本语言(比如PHP)一样, Python也有很多web框架, 常见的比如: Django, Pylons, Tornado, Bottle, Flask 等;这里我们要说的是使用比较广泛的 Django; 本篇笔记主要是安装Django, 简单使用Django的一些基本命令, 最终运行一个web应用;  M">
+<meta property="og:description" content="Python也有很多web框架, 常用的如: Django, Tornado, Flask, Bottle, Pylons 等; Django版本的选择 选择一款 LTS 版本  各版本发布列表   各版本对应python版本的支持情况  通过上述了解, 此处采用Django1.11.7版本:  Django的安装本机是Mac系统  直接官网下载源码包  tar.gz包下载   解压, 到包中执行">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/version_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/version_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/version_feature.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/version_django_python.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/python_version_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/django/install_django.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/django_version_02.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/django_blog.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/django_blog_02.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/django_runserver.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/django/run_server_result.png">
-<meta property="og:updated_time" content="2017-12-01T03:18:20.000Z">
+<meta property="og:updated_time" content="2017-12-14T03:09:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01 - Django入门">
-<meta name="twitter:description" content="Python 可以帮我们做很多事情, 包括web开发, 为了让我们的开发更加方便, 和其他脚本语言(比如PHP)一样, Python也有很多web框架, 常见的比如: Django, Pylons, Tornado, Bottle, Flask 等;这里我们要说的是使用比较广泛的 Django; 本篇笔记主要是安装Django, 简单使用Django的一些基本命令, 最终运行一个web应用;  M">
+<meta name="twitter:description" content="Python也有很多web框架, 常用的如: Django, Tornado, Flask, Bottle, Pylons 等; Django版本的选择 选择一款 LTS 版本  各版本发布列表   各版本对应python版本的支持情况  通过上述了解, 此处采用Django1.11.7版本:  Django的安装本机是Mac系统  直接官网下载源码包  tar.gz包下载   解压, 到包中执行">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/django/version_01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -171,7 +165,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Meet-Django"><span class="post-toc-number">1.</span> <span class="post-toc-text">Meet Django</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Install-Django-Mac"><span class="post-toc-number">2.</span> <span class="post-toc-text">Install Django (Mac)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建项目-Django基本命令"><span class="post-toc-number">3.</span> <span class="post-toc-text">构建项目 (Django基本命令)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建应用-Django基本命令"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建应用 (Django基本命令)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他Django命令"><span class="post-toc-number">5.</span> <span class="post-toc-text">其他Django命令</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Django版本的选择"><span class="post-toc-number">1.</span> <span class="post-toc-text">Django版本的选择</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Django的安装"><span class="post-toc-number">2.</span> <span class="post-toc-text">Django的安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建项目及应用"><span class="post-toc-number">3.</span> <span class="post-toc-text">构建项目及应用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Git拉取Django代码后的问题"><span class="post-toc-number">4.</span> <span class="post-toc-text">Git拉取Django代码后的问题</span></a></li></ol>
         </nav>
     </aside>
     
@@ -196,59 +190,67 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>Python 可以帮我们做很多事情, 包括web开发, 为了让我们的开发更加方便, 和其他脚本语言(比如PHP)一样, Python也有很多web框架, 常见的比如: <strong>Django</strong>, Pylons, Tornado, Bottle, <strong>Flask</strong> 等;<br>这里我们要说的是使用比较广泛的 <code>Django</code>;</p>
-<p>本篇笔记主要是安装Django, 简单使用Django的一些基本命令, 最终运行一个web应用; </p>
-<h3 id="Meet-Django"><a href="#Meet-Django" class="headerlink" title="Meet Django"></a>Meet Django</h3><ol>
-<li><p>简介</p>
-<blockquote>
-<p>“Django is a high-level Python Web framework that encourages rapid development and clean, pragmatic design. Built by experienced developers, it takes care of much of the hassle of Web development, so you can focus on writing your app without needing to reinvent the wheel. It’s free and open source.” </p>
-</blockquote>
-</li>
-<li><p>版本选择:<br> <img src="/img/django/version_01.png" width="520" height="250"><br> <img src="/img/django/version_02.png" width="500" height="270"><br> <img src="/img/django/version_feature.png" width="500" height="300"></p>
-</li>
-<li><p>Django版本能够支持的python版本?<br> <img src="/img/django/version_django_python.png" width="477" height="192"><br> 本地python 版本:<br> <img src="/img/django/python_version_01.png" width="550" height="65"></p>
-</li>
+            <p>Python也有很多web框架, 常用的如: <strong>Django</strong>, <strong>Tornado</strong>, <strong>Flask</strong>, Bottle, Pylons 等;</p>
+<h3 id="Django版本的选择"><a href="#Django版本的选择" class="headerlink" title="Django版本的选择"></a>Django版本的选择</h3><ol>
+<li>选择一款 <code>LTS</code> 版本<br> <img src="/img/django/version_01.png" width="480" height="250"></li>
+<li>各版本发布列表<br> <img src="/img/django/version_02.png" width="480" height="270"><br> <img src="/img/django/version_feature.png" width="480" height="300"></li>
+<li>各版本对应python版本的支持情况<br> <img src="/img/django/version_django_python.png" width="477" height="192"></li>
+<li>通过上述了解, 此处采用Django1.11.7版本:</li>
 </ol>
-<h3 id="Install-Django-Mac"><a href="#Install-Django-Mac" class="headerlink" title="Install Django (Mac)"></a>Install Django (Mac)</h3><ol>
-<li><p>通过上述了解, 此处采用Django1.11.7版本:<br> <img src="/img/django/install_django.png" width="605" height="331"></p>
-</li>
-<li><p>pip安装可能会有点慢, 所以采用上图中的源码包下载, 下载完成后解压进入解压包的根目录:</p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">执行: python setup.py install</div></pre></td></tr></table></figure>
-<p> 如下安装成功:<br> <img src="/img/django/django_version_02.png" width="500" height="100"></p>
-</li>
-</ol>
-<h3 id="构建项目-Django基本命令"><a href="#构建项目-Django基本命令" class="headerlink" title="构建项目 (Django基本命令)"></a>构建项目 (Django基本命令)</h3><ol>
-<li><p>新建一个 Django 项目 </p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cd ~/Desktop/</div><div class="line">django-admin.py startproject MyDjangoBlog</div></pre></td></tr></table></figure>
-<p> 项目目录结构如下:<br> <img src="/img/django/django_blog.png" width="429" height="250"></p>
-</li>
-</ol>
-<h3 id="构建应用-Django基本命令"><a href="#构建应用-Django基本命令" class="headerlink" title="构建应用 (Django基本命令)"></a>构建应用 (Django基本命令)</h3><ol>
-<li><p>先进入项目目录下, 再执行如下命令;</p>
-</li>
-<li><p>创建应用: </p>
- <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">python manage.py startapp blog</div></pre></td></tr></table></figure>
-<p> 则会在项目目录中创建一个应用:<br> <img src="/img/django/django_blog_02.png" width="365" height="408"></p>
-</li>
-<li><p>之后使用Django自带的开发服务器</p>
-<pre><code class="python">python manage.py runserver <span class="number">8080</span>
-</code></pre>
-<p> <img src="/img/django/django_runserver.png" width="550" height="180"><br> 查看效果: 表示启动成功<br> <img src="/img/django/run_server_result.png" width="550" height="130"></p>
-</li>
-<li><p>另外, 在新建完应用之后, 要让项目知道你有这个应用了</p>
+<h3 id="Django的安装"><a href="#Django的安装" class="headerlink" title="Django的安装"></a>Django的安装</h3><p>本机是Mac系统</p>
+<ol>
+<li><p>直接官网下载源码包</p>
 <ul>
-<li>将我们新建的应用(blog)添加到 settings.py 中的 INSTALLED_APPS中，也就是告诉Django有这么一个应用</li>
-<li>新建的 app 如果不加到 INSTALL_APPS 中的话, django 就不能自动找到app中的模板文件(app-name/templates/下的文件)和静态文件(app-name/static/中的文件) </li>
+<li>tar.gz包下载<br>  <img src="/img/django/install_django.png" width="485" height="270"></li>
+<li>解压, 到包中执行 <code>python setup.py install</code></li>
+</ul>
+</li>
+<li><p>github拉取代码 <code>git clone -b stable/1.11.x https://github.com/django/django.git</code></p>
+<ul>
+<li>到包中执行 <code>python setup.py install</code></li>
+</ul>
+</li>
+<li><p>直接 <code>pip install Django==1.11.7</code> 安装;</p>
+<ul>
+<li>注意可能因你安装Python版本的不同, 可能使用 <code>pip</code> 或 <code>pip3</code></li>
+<li>本机在学习阶段, 安装了 <code>Anaconda3</code>(将自己的<code>python3</code>写到了环境变量里), 所以可以直接使用<code>pip</code> </li>
+</ul>
+</li>
+<li><p>如下则安装成功:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; import django</div><div class="line">&gt;&gt;&gt; print(django.get_version())</div><div class="line">1.11.7</div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="构建项目及应用"><a href="#构建项目及应用" class="headerlink" title="构建项目及应用"></a>构建项目及应用</h3><ol>
+<li><p>先看一下<code>Django</code>常用基本命令</p>
+<ul>
+<li>django-admin.py startproject 项目名 : 新建项目 (PyCharm professional版可以在创建Django项目时直接执行命令生成目录结构)</li>
+<li>python manage.py  : 查看命令列表</li>
+<li>python manage.py startapp appname  : 新建 app</li>
+<li>python manage.py runserver ip:port  : 启动服务器，默认ip和端口为<a href="http://127.0.0.1:8000/" target="_blank" rel="external">http://127.0.0.1:8000/</a></li>
+<li>python manage.py makemigrations  : 显示并记录所有数据的改动</li>
+<li>python manage.py migrate  : 将改动更新到数据库</li>
+<li>python manage.py sqlmigrate 你的应用名 0001 : 查看迁移文件对用的sql语句</li>
+<li>python manage.py createsuperuser  : 为Django自带简版admin后台系统创建超级管理员账号</li>
+<li>python manage.py dbshell  (数据库命令行)</li>
+</ul>
+</li>
+<li><p>Django自带的开发服务器</p>
+<ul>
+<li>Django包含一个可用于测试的轻量级Web服务器</li>
+<li>python manage.py runserver</li>
+<li>参考: <a href="http://python.usyiyi.cn/documents/django_182/topics/install.html" target="_blank" rel="external">http://python.usyiyi.cn/documents/django_182/topics/install.html</a></li>
+</ul>
+</li>
+<li><p>如果您使用MySQL, 则需要使用<code>DB API driver</code></p>
+<ul>
+<li>参考: <a href="http://python.usyiyi.cn/documents/django_182/topics/install.html" target="_blank" rel="external">http://python.usyiyi.cn/documents/django_182/topics/install.html</a>, <a href="http://python.usyiyi.cn/documents/django_182/ref/databases.html#mysql-db-api-drivers" target="_blank" rel="external">http://python.usyiyi.cn/documents/django_182/ref/databases.html#mysql-db-api-drivers</a></li>
+<li>这里我们可以选择安装 mysqlclient, 但貌似安装过程错误不好解决</li>
+<li>所以选择同一个作者开发的<a href="https://github.com/PyMySQL" target="_blank" rel="external">PyMysql</a>:<br>  <code>pip install pymysql</code><br>  主目录下配置:  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">import pymysql</div><div class="line">pymysql.install_as_MySQLdb()</div></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 </ol>
-<h3 id="其他Django命令"><a href="#其他Django命令" class="headerlink" title="其他Django命令"></a>其他Django命令</h3><ol>
-<li><p>可以使用 <code>python manage.py</code> 看到详细的命令列表</p>
-</li>
-<li><p>更多Django命令之后会逐渐接触到</p>
-</li>
-</ol>
-
+<h3 id="Git拉取Django代码后的问题"><a href="#Git拉取Django代码后的问题" class="headerlink" title="Git拉取Django代码后的问题"></a>Git拉取Django代码后的问题</h3>
         </div>
 
         <blockquote class="post-copyright">
@@ -332,17 +334,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/10/03/2017-10-03-Python-06/" id="post-prev" class="post-nav-link">
+        <a href="/2017/05/16/2017-05-16-Iterator-generator-yield-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">06 - Python 环境准备入门 - Anaconda</h4>
+          <h4 class="title">04.与调度器之间通信--系统调用</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/10/2017-11-10-Django-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/11/13/2017-11-13-Django-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02 - 重新规划Django项目布局结构和目录结构</h4>
+        <h4 class="title">Django URL路由</h4>
       </a>
     </div>
   
