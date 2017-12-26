@@ -13,29 +13,29 @@
     
     
     
-    <title>MySQL索引 | Lant&#39;s Blog</title>
+    <title>《高性能mysql》 -- 第五章 创建高性能索引 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="准备 创建一张测试表: 123456789DROP TABLE IF EXISTS `user_test`;CREATE TABLE `user_test` (  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT &amp;apos;主键&amp;apos;,  `user_name` char(20) NOT NULL COMMENT &amp;apos;姓名&amp;apos;,  `">
+    <meta name="description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL索引">
+<meta property="og:title" content="《高性能mysql》 -- 第五章 创建高性能索引">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="准备 创建一张测试表: 123456789DROP TABLE IF EXISTS `user_test`;CREATE TABLE `user_test` (  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT &amp;apos;主键&amp;apos;,  `user_name` char(20) NOT NULL COMMENT &amp;apos;姓名&amp;apos;,  `">
+<meta property="og:description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/explain_index.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/b-tree.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/hash_index.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_engine.png">
-<meta property="og:updated_time" content="2017-12-19T06:29:02.000Z">
+<meta property="og:updated_time" content="2017-12-26T01:46:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL索引">
-<meta name="twitter:description" content="准备 创建一张测试表: 123456789DROP TABLE IF EXISTS `user_test`;CREATE TABLE `user_test` (  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT &amp;apos;主键&amp;apos;,  `user_name` char(20) NOT NULL COMMENT &amp;apos;姓名&amp;apos;,  `">
+<meta name="twitter:title" content="《高性能mysql》 -- 第五章 创建高性能索引">
+<meta name="twitter:description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/index/explain_index.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -117,7 +117,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL索引</div>
+        <div class="flex-col header-title ellipsis">《高性能mysql》 -- 第五章 创建高性能索引</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -139,7 +139,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL索引</h1>
+        <h1 class="title">《高性能mysql》 -- 第五章 创建高性能索引</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-08-02T11:11:12.000Z" itemprop="datePublished" class="page-time">
@@ -164,7 +164,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组合索引测试"><span class="post-toc-number">2.</span> <span class="post-toc-text">组合索引测试</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sql语句分析"><span class="post-toc-number">3.</span> <span class="post-toc-text">sql语句分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#explain命令"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">explain命令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#结果字段分析"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">结果字段分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组合索引"><span class="post-toc-number">4.</span> <span class="post-toc-text">组合索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">5.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#认识索引"><span class="post-toc-number">6.</span> <span class="post-toc-text">认识索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常见的索引算法"><span class="post-toc-number">7.</span> <span class="post-toc-text">常见的索引算法</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sql语句分析"><span class="post-toc-number">1.</span> <span class="post-toc-text">sql语句分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#explain命令"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">explain命令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#结果字段分析"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">结果字段分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组合索引"><span class="post-toc-number">2.</span> <span class="post-toc-text">组合索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">3.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#认识索引"><span class="post-toc-number">4.</span> <span class="post-toc-text">认识索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常见的索引算法"><span class="post-toc-number">5.</span> <span class="post-toc-text">常见的索引算法</span></a></li></ol>
         </nav>
     </aside>
     
@@ -172,7 +172,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL索引</h1>
+        <h1 class="post-card-title">《高性能mysql》 -- 第五章 创建高性能索引</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-08-02 19:11:12" datetime="2016-08-02T11:11:12.000Z"  itemprop="datePublished">2016-08-02</time>
 
@@ -189,18 +189,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h4><ol>
-<li>创建一张测试表: <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">DROP TABLE IF EXISTS `user_test`;</div><div class="line">CREATE TABLE `user_test` (</div><div class="line">  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT &apos;主键&apos;,</div><div class="line">  `user_name` char(20) NOT NULL COMMENT &apos;姓名&apos;,</div><div class="line">  `age` tinyint(3) NOT NULL COMMENT &apos;年龄&apos;,</div><div class="line">  `gender` tinyint(1) NOT NULL COMMENT &apos;1:男, 2:女&apos;,</div><div class="line">  `desctiption` text NOT NULL COMMENT &apos;简介&apos;,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="组合索引测试"><a href="#组合索引测试" class="headerlink" title="组合索引测试"></a>组合索引测试</h4><ol>
-<li>为表增加<code>组合索引</code>: <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">CREATE INDEX name_age_gender_index ON `user_test` ( `user_name`, `age`, `gender` );</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li></li>
-</ol>
-<h4 id="sql语句分析"><a href="#sql语句分析" class="headerlink" title="sql语句分析"></a>sql语句分析</h4><h5 id="explain命令"><a href="#explain命令" class="headerlink" title="explain命令"></a>explain命令</h5><ol>
+            <h4 id="sql语句分析"><a href="#sql语句分析" class="headerlink" title="sql语句分析"></a>sql语句分析</h4><h5 id="explain命令"><a href="#explain命令" class="headerlink" title="explain命令"></a>explain命令</h5><ol>
 <li><p>如何确定一个查询有没有走索引, 走了哪些索引？<br> MySQL中自带命令行工具 <code>explain</code> 来查看一个sql语句是否了索引, 使用方式：<code>explain select * from tb_test;</code>;</p>
 </li>
 <li><p>结果字段<br> <img src="/img/mysql/index/explain_index.png" width="860" height="38"></p>
@@ -243,6 +232,7 @@
 </li>
 </ol>
 <p><a href="https://www.cnblogs.com/clphp/p/5403215.html" target="_blank" rel="external">参考</a></p>
+<p><a href="http://note.youdao.com/noteshare?id=318087ab0c6345d56ef1a010be163915" target="_blank" rel="external">相关笔记</a></p>
 <pre><code>index | 按索引次序扫描, 先读索引, 再读实际的行, 结果还是全表扫描, 主要优点是避免了排序, 因为索引是排好的;
 all  |  全表扫描 
 ref   |  参照查询，也就是等值查询
@@ -356,7 +346,7 @@ const | 常量查询
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《MySQL索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -366,7 +356,7 @@ const | 常量查询
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《MySQL索引》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -376,7 +366,7 @@ const | 常量查询
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL索引》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -412,9 +402,9 @@ const | 常量查询
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/08/02/2016-08-03-mysql_index-02/" id="post-next" class="post-nav-link">
+      <a href="/2016/08/02/2016-08-03-btree-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">MySQL索引 - 02</h4>
+        <h4 class="title">BTree,B-Tree,B+Tree</h4>
       </a>
     </div>
   
@@ -525,7 +515,7 @@ const | 常量查询
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《MySQL索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -535,7 +525,7 @@ const | 常量查询
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《MySQL索引》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&title=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -545,7 +535,7 @@ const | 常量查询
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL索引》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《《高性能mysql》 -- 第五章 创建高性能索引》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
