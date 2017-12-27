@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL(INNODB引擎)事务浅析 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="前言先针对自己以前错误的思维做个记录, 可以跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁的资料包括一些书籍, 于是乎 死锁, 锁">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL(INNODB引擎)事务浅析">
+<meta property="og:url" content="http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言先针对自己以前错误的思维做个记录, 可以跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁的资料包括一些书籍, 于是乎 死锁, 锁">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/022_zangdu.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/meituan_suo.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/xiaojie_01.png">
+<meta property="og:updated_time" content="2017-12-27T14:43:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL(INNODB引擎)事务浅析">
+<meta name="twitter:description" content="前言先针对自己以前错误的思维做个记录, 可以跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁的资料包括一些书籍, 于是乎 死锁, 锁">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/022_zangdu.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务浅析</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL(INNODB引擎)事务浅析</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-08-08T11:12:11.000Z" itemprop="datePublished" class="page-time">
+  2016-08-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#各隔离级别如何解决问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">各隔离级别如何解决问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#丢失更新"><span class="post-toc-number">2.1.0.1.</span> <span class="post-toc-text">丢失更新</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#幻读-间隙锁"><span class="post-toc-number">2.1.0.2.</span> <span class="post-toc-text">幻读 (间隙锁)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的4种隔离级别"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">事务的4种隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">2.1.1.1.</span> <span class="post-toc-text">READ UNCOMMITTED (未提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">2.1.1.2.</span> <span class="post-toc-text">READ COMMITTED (提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">2.1.1.3.</span> <span class="post-toc-text">REPEATABLE READ (可重复读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SERIALIZABLE-可串行化"><span class="post-toc-number">2.1.1.4.</span> <span class="post-toc-text">SERIALIZABLE(可串行化)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#小结"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">小结</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-08-08-mysql_transaction-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL(INNODB引擎)事务浅析</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-08-08 19:12:11" datetime="2016-08-08T11:12:11.000Z"  itemprop="datePublished">2016-08-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>先针对自己以前错误的思维做个记录, 可以跳过</p>
+<ol>
+<li>由于以前看到很多资料在谈到并发控制的时候, 都会提到用<code>锁</code>来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: <code>现在并发出问题了, 那怎么用锁的相关知识来解决?</code>;</li>
+<li>而且近期一段时间也一直在看很多有关MySQL<code>锁</code>的资料包括一些书籍, 于是乎 <code>死锁</code>, <code>锁冲突</code>, <code>行锁</code>,<code>表锁</code>, <code>读锁</code>, <code>写锁</code>… N多锁相关的名词(后面的笔记会把所有自己遇到的, 全部整理并进行分析), 大量的篇幅, 高深晦涩的描述, 直接导致我意识里认为<code>嗯, 锁真tm高大上, 真tm高端, 也真tm重要</code>; </li>
+<li>于是就进入了思想误区, 认为在解决<code>脏读</code>,<code>不可重复读</code>,<code>幻读</code>的资料中, 应该大篇幅的描述如何用锁相关的知识来解决这些问题, 然而略失落了, 资料倒是提了点儿锁的知识, 但更多的是用事务的哪个隔离级别来解决这些问题, <code>锁</code>哪儿去了?</li>
+<li><p>尤其是在分析<code>脏读</code>,<code>不可重复读</code>,<code>幻读</code>这几个问题的时候, 一上去就全乱了, 比如 <code>脏读</code>, 如果以MySQL<code>锁</code>的相关知识作为前提来分析, <strong>我当即懵逼</strong> ‘事务A读取数据的时候肯定会加S锁的, 事务B自然是无法对未完成的事务A中的数据进行修改的, 我C, <strong>这种脏读的场景根本就不成立嘛呀!</strong>‘<br> <img src="/img/mysql/transaction/022_zangdu.png" width="609" height="175"><br>……<br>……</p>
+</li>
+<li><p>晕了几天之后,终于稍微醒了点……</p>
+<blockquote>
+<p><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">参考美团技术文档</a><br> <img src="/img/mysql/transaction/meituan_suo.png" width="609" height="313"></p>
+</blockquote>
+</li>
+<li><p>显然, <strong>事务隔离级别的核心就是锁</strong>，在分析高并发事务问题的时候, 请别以隔离级别(锁)为前提, 这是结果的解决方案! </p>
+</li>
+</ol>
+<h2 id="各隔离级别如何解决问题"><a href="#各隔离级别如何解决问题" class="headerlink" title="各隔离级别如何解决问题"></a>各隔离级别如何解决问题</h2><h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><pre><code>2. 在上图中, 事务A一开始查询没有数据, 但是插入记录失败, 提示主键冲突;
+    **这种查询明明没有, 插入却提示已经存在的现象, 叫做幻读**;
+
+3. 幻读和不可重复读类似, 即两次读取的结果不一致, 两者的不同点在于:
+    - 不可重复读针对数据的修改造成的读不一致;
+    - 而幻读针对数据的插入和删除造成的读不一致, 如同发生幻觉一样;
+
+4. 如何避免这个问题?
+    当事务的隔离级别为 `SERIALIZABLE` 时, 会通过间隙锁来防止幻读的出现, 即锁定特定数据的前后间隙让数据无法被插入;
+</code></pre><ul>
+<li>当事务的隔离级别为 <code>repeatable read</code> 或 <code>以上</code> 级别时, 一个事务内部对数据的多次查询都是相同的(无论该数据在中途是否被其他事务修改并最终提交过, 本事务都不理会), 这样就避免了不可重复读的问题;</li>
+<li>但是该隔离级别依然解决不了<code>幻读</code>的问题!!</li>
+</ul>
+<p>但是 <code>不可重复读问题</code> 解决后, 还是有问题存在的:</p>
+<ul>
+<li>因为在一个事务内部, 如果<code>直接忽略其他并行事务对当前数据所做的修改</code>的话, 虽然确实可以解决事务内部不可重复读的问题。</li>
+<li>但很显然这会造成另一个问题, 那就是 忽略并行事务的修改 而造成的 <code>丢失更新</code>;<br> <img src="/img/mysql/transaction/loss_update_02.png" width="604" height="243"><br> (注意: 这里是在 <code>已解决不可重复读</code> 情况下在事务内多次读取时进行的举例)</li>
+<li>其实不管是 <code>已解决不可重复读</code> 情况下在事务内多次读取,  还是 <code>没有解决不可重复读</code> 情况下在事务内只读取一次, <code>丢失更新</code> 都是存在的!!<br> <img src="/img/mysql/transaction/loss_update_01.png" width="605" height="215"></li>
+</ul>
+<h5 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h5><ol>
+<li><p>上面在 <code>不可重复读问题</code> 的末尾, 已经介绍了 <code>丢失更新</code> 是怎么产生的!!!</p>
+</li>
+<li><p>解决方案  – 貌似无法通过隔离级别来进行解决<br> 实际上, 上面介绍的情况只是一种常见的<code>丢失更新</code>的情况<br> 通过 <code>乐观锁</code> 可以解决这个问题, 事务在进行更新余额操作的时候, SQL修改为 <code>update table set kucun=1100 where id=xxx **** and kucun=1000****</code>, 通过加上一个金额的判断, 这样的话, 如果更改之前数据没有修改则执行成功, 否则执行失败回滚;</p>
+</li>
+<li><p>当然, 你可以可以通过设置InnoDB的隔离级别为SERIALIZABLE, 不过在实际场景中很少使用该隔离级别;</p>
+</li>
+</ol>
+<h5 id="幻读-间隙锁"><a href="#幻读-间隙锁" class="headerlink" title="幻读 (间隙锁)"></a>幻读 (间隙锁)</h5><ol>
+<li><p>幻读主要是查询记录的数量问题<br> <img src="/img/mysql/transaction/huan_read.png" width="607" height="251"></p>
+</li>
+<li><p>在上图中, 事务A一开始查询没有数据, 但是插入记录失败, 提示主键冲突;<br> <strong>这种查询明明没有, 插入却提示已经存在的现象, 叫做幻读</strong>;</p>
+</li>
+<li><p>幻读和不可重复读类似, 即两次读取的结果不一致, 两者的不同点在于:</p>
+<ul>
+<li>不可重复读针对数据的修改造成的读不一致;</li>
+<li>而幻读针对数据的插入和删除造成的读不一致, 如同发生幻觉一样;</li>
+</ul>
+</li>
+<li><p>如何避免这个问题?<br> 当事务的隔离级别为 <code>SERIALIZABLE</code> 时, 会通过间隙锁来防止幻读的出现, 即锁定特定数据的前后间隙让数据无法被插入;</p>
+</li>
+</ol>
+<h4 id="事务的4种隔离级别"><a href="#事务的4种隔离级别" class="headerlink" title="事务的4种隔离级别"></a>事务的4种隔离级别</h4><p>事务的隔离性比较复杂, 在SQL标准中定义了四种隔离级别, <strong>每一种级别都规定了在一个事务中所做的修改, 哪些在事务内和事务间是可见的, 哪些是不可见的</strong>, <strong>较低的隔离级别通常可以执行更高的并发, 系统的开销也更低</strong>;<br>事务的隔离级别其实是通过 <code>锁机制</code> 实现的;</p>
+<p>下面简单了解一下四种隔离级别</p>
+<h5 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED (未提交读)"></a>READ UNCOMMITTED (未提交读)</h5><p>出现 <code>脏读</code></p>
+<ul>
+<li>在READ UNCOMMITTED级别, 事务中的修改, 即使没有提交, 对其他事务也都是可见的; 也就是说事务可以读取未递交的数据, 这也就造成了<code>脏读(Dirty Read)</code>的出现;<br>  可能有人就会问, 不是Mysql的InnoDB引擎有锁么, 为什么没锁啊! 因为锁本身就是隔离级别的核心, 只是当前Read Uncommitted这种级别，对任何操作都不会加锁，数据库一般都不会用!!!<br>  <a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">参考 美团</a></li>
+</ul>
+<ul>
+<li>这个级别会导致很多问题, <strong>从性能上来说, READ UNCOMMITTED级别也不会比其他的级别好太多, 但却缺乏其他级别的很多好处, 所以在实际应用中一般很少使用</strong>;</li>
+</ul>
+<h5 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED (提交读)"></a>READ COMMITTED (提交读)</h5><p>解决 <code>脏读</code></p>
+<ul>
+<li>大多数数据库系统的默认隔离级别都是READ COMMITED(<strong>但MySQL不是</strong>);</li>
+<li>READ COMMIT满足前面提到的隔离性的简单定义: 一个事务开始时, 只能”看见”已经提交的事务所做的修改; 也就是说一个事务从开始直到事务提交之前, 所做的任何修改对其他事务都是不可见的; 这也就解决了<code>脏读</code>的问题!!</li>
+<li>这个级别有时候也叫不可重复读(nonrepeatable read), 应为两次执行同样的查询, 可能会得到不一样的结果;</li>
+</ul>
+<h5 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ (可重复读)"></a>REPEATABLE READ (可重复读)</h5><p>解决<code>脏读</code>, 解决 <code>不可重复读</code>, 依然无法解决 <code>幻读</code></p>
+<ul>
+<li><p>首先 REPEATABLE READ 比 <code>READ COMMITTED</code> 的隔离级别高, 也可以解决脏读的问题; 该级别保证了在同一个事务中多次读取同样的记录的结果是一致的;</p>
+</li>
+<li><p>但是理论上, 可重复读这个隔离级别还是无法解决另外一个幻读(Phantom Read)的问题;<br>  所谓幻读, 指的是当某个事务在读取某个范围内的记录时, 另外一个事务又在该范围内插入了新的记录, 当之前的事务再次读取该范围的记录时, 会产生幻行(Phantom Row);<br>  InnoDB和XtraDB存储引擎通过多版本并发控制(MVCC)解决了幻读的问题</p>
+</li>
+<li><p>可重复读是MySQL的默认事务隔离级别;</p>
+</li>
+</ul>
+<h5 id="SERIALIZABLE-可串行化"><a href="#SERIALIZABLE-可串行化" class="headerlink" title="SERIALIZABLE(可串行化)"></a>SERIALIZABLE(可串行化)</h5><p>SERIALIZABLE是最高的隔离级别, 他通过强制事务串行执行, 避免了前面说的幻读的问题;<br>简单来说, SERIALIZABLE 会在读取的每一行数据上都加锁, 所以可能导致大量的超时和锁争用的问题, 实际应用中也很少用到这个隔离级别, 只有在非常需要保障数据一致性而且可以接受没有并发的情况下, 才考虑采用该级别;</p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p><img src="/img/mysql/transaction/xiaojie_01.png" width="627" height="196"></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/08/07/2016-08-07-mysql_transaction-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">MySQL(INNODB引擎)事务浅析</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/08/09/2016-08-09-mysql_locks-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL锁 - 01</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACoklEQVR42u3aQW7DQAgF0Nz/0u22VWXrA0PiSs+rKHVi3lSaIcDrFV9fP66r96v3XN1/9cSrOw9ceHh4eIPQrx5cDSsJ8f711TLlMePh4eFt85JAqxv0/TLdf+qKkceMh4eH9xzeHHwfev5ZPDw8vP/CK3x1nGrfp/h4eHh4z+QlxYickSTTebEjL47g4eHhvYfXS4U/+3qlv4eHh4c37qr3Sqi9bTo/kArR4uHh4S3w8g23OgQwHyDoHQx4eHh4n+LlRYFJuPkxM1omPDw8vGVeL13ukSYF38KxgYeHh7fA65UVeun1PFnPjw08PDy8PV6OSainduZeEj/6X+Hh4eHFyXRv1KmagudBT0avfkWFh4eHt8BLQpw8Pmn/TxYueR8PDw9vg9cbe0qWIx+Wqn5/ecALDw8P7yhv0lJKAs1LFdWFi1pueHh4eEd5p5pYeRB56jz5Kx4eHt4er9qyyn/8V0sV+UFyjISHh4c34FWHq5IjJC8c9Aa8RkNXeHh4eANeNY3uBZ0vVrOacnUg4eHh4b2FNxm9SsC9VlnzWMLDw8Nb4+XlgDysUwl3b2le+arj4eHhHeJVC6+T8m7veMDDw8P7LG/S0Eo27t4i9gYIol8MeHh4eANer8lULfsm23p+hFQLJXh4eHgbvGpanGzN1fvzcm2e3OPh4eG9k1f48MIyzdtveHh4eO/hTbbjHDDBNy88PDy8ZVh1fOps6XZ0APz9Hjw8PLwF3nyPzYcJqq/zIvIIhoeHh9fi9Q6DajEib49V2VFnDw8PD2+B12trzQeqNuoPeHh4eM/kVUsVvUGuSWqOh4eH90xekvjOB17zflahpouHh4c35lULtacY+dJURx/w8PDw9njVH/nV8mtvYKt657EaBh4eHt7ds74ByhRUuUyAfpwAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

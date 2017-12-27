@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的事务的隔离级别，其实它的核心就是锁; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定">
+    <meta name="description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的问题;高级别如果在非事务场景中, 要能在高并发的时候解决非事务下(不使用事务)的 丢失更新 的问题,  （乐观,悲观锁的使用">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL锁 - 01">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/09/2016-08-09-mysql_locks-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的事务的隔离级别，其实它的核心就是锁; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定">
+<meta property="og:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的问题;高级别如果在非事务场景中, 要能在高并发的时候解决非事务下(不使用事务)的 丢失更新 的问题,  （乐观,悲观锁的使用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T01:50:05.000Z">
+<meta property="og:updated_time" content="2017-12-27T09:51:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL锁 - 01">
-<meta name="twitter:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识? 这是因为我们之前介绍的事务的隔离级别，其实它的核心就是锁; 而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 丢失更新 的问题 （乐观,悲观锁的使用）  所以我们也需要对锁有一定">
+<meta name="twitter:description" content="前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的问题;高级别如果在非事务场景中, 要能在高并发的时候解决非事务下(不使用事务)的 丢失更新 的问题,  （乐观,悲观锁的使用">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -185,7 +185,11 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><ol>
-<li><p>之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?<br> <strong>这是因为我们之前介绍的事务的隔离级别，其实它的核心就是锁</strong>;<br> <strong>而且我们学习了锁的概念之后, 还能在高并发的时候解决非事务下(不使用事务)或者事务的隔离级别也解决不了的 <code>丢失更新</code> 的问题</strong> （乐观,悲观锁的使用）</p>
+<li><p>之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?</p>
+<ul>
+<li>我们之前介绍的事务的隔离级别，其实它的核心就是锁;</li>
+<li>虽然之前也了解到事务的最隔离级别是可以解决 <code>丢失更新</code> 的问题;高级别如果在非事务场景中, 要能在高并发的时候解决非事务下(不使用事务)的 <code>丢失更新</code> 的问题,  （乐观,悲观锁的使用）</li>
+</ul>
 </li>
 <li><p>所以我们也需要对锁有一定的认识; </p>
 </li>
@@ -454,7 +458,7 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/08/07/2016-08-07-mysql_transaction-01/" id="post-prev" class="post-nav-link">
+        <a href="/2016/08/08/2016-08-08-mysql_transaction-02/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
           <h4 class="title">MySQL(INNODB引擎)事务浅析</h4>
         </a>
