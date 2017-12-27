@@ -20,22 +20,19 @@
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
+    <meta name="description" content="相关笔记补充 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMPLE：简单SELEC">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="《高性能mysql》 -- 第五章 创建高性能索引">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/02/2016-08-02-mysql_index-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
+<meta property="og:description" content="相关笔记补充 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMPLE：简单SELEC">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/explain_index.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/b-tree.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/hash_index.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_engine.png">
-<meta property="og:updated_time" content="2017-12-26T01:46:50.000Z">
+<meta property="og:updated_time" content="2017-12-26T01:49:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《高性能mysql》 -- 第五章 创建高性能索引">
-<meta name="twitter:description" content="sql语句分析explain命令 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMP">
+<meta name="twitter:description" content="相关笔记补充 如何确定一个查询有没有走索引, 走了哪些索引？ MySQL中自带命令行工具 explain 来查看一个sql语句是否了索引, 使用方式：explain select * from tb_test;;  结果字段    结果字段分析 id: 这是SELECT的查询序列号;  select_type: select的类型, 可以有以下几种:  12345678SIMPLE：简单SELEC">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/index/explain_index.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -164,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#sql语句分析"><span class="post-toc-number">1.</span> <span class="post-toc-text">sql语句分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#explain命令"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">explain命令</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#结果字段分析"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">结果字段分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#组合索引"><span class="post-toc-number">2.</span> <span class="post-toc-text">组合索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">3.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#认识索引"><span class="post-toc-number">4.</span> <span class="post-toc-text">认识索引</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#常见的索引算法"><span class="post-toc-number">5.</span> <span class="post-toc-text">常见的索引算法</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#相关笔记"><span class="post-toc-number">1.</span> <span class="post-toc-text">相关笔记</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#补充"><span class="post-toc-number">2.</span> <span class="post-toc-text">补充</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#结果字段分析"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">结果字段分析</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -189,7 +186,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h4 id="sql语句分析"><a href="#sql语句分析" class="headerlink" title="sql语句分析"></a>sql语句分析</h4><h5 id="explain命令"><a href="#explain命令" class="headerlink" title="explain命令"></a>explain命令</h5><ol>
+            <h4 id="相关笔记"><a href="#相关笔记" class="headerlink" title="相关笔记"></a><a href="http://note.youdao.com/noteshare?id=318087ab0c6345d56ef1a010be163915" target="_blank" rel="external">相关笔记</a></h4><h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><ol>
 <li><p>如何确定一个查询有没有走索引, 走了哪些索引？<br> MySQL中自带命令行工具 <code>explain</code> 来查看一个sql语句是否了索引, 使用方式：<code>explain select * from tb_test;</code>;</p>
 </li>
 <li><p>结果字段<br> <img src="/img/mysql/index/explain_index.png" width="860" height="38"></p>
@@ -231,85 +228,7 @@
 <li><p>其他一些Tip: 当type显示为 <code>index</code> 时, 并且Extra显示为 <code>Using Index</code>, 表明使用了覆盖索引;</p>
 </li>
 </ol>
-<p><a href="https://www.cnblogs.com/clphp/p/5403215.html" target="_blank" rel="external">参考</a></p>
-<p><a href="http://note.youdao.com/noteshare?id=318087ab0c6345d56ef1a010be163915" target="_blank" rel="external">相关笔记</a></p>
-<pre><code>index | 按索引次序扫描, 先读索引, 再读实际的行, 结果还是全表扫描, 主要优点是避免了排序, 因为索引是排好的;
-all  |  全表扫描 
-ref   |  参照查询，也就是等值查询
-range |  以范围的形式扫描 （比如: select * from pre_order where id&gt;10000 and id&lt;10001）
-const | 常量查询
-</code></pre><ul>
-<li>possible_keys: 可能用到的索引    </li>
-<li>key  : 本次查询最终选择使用哪个索引，NULL为未使用索引</li>
-<li>key_len : 选择的索引使用的前缀长度或者整个长度</li>
-<li>rows    : </li>
-<li>extra   : 额外信息，主要是指fetch data的具体方式</li>
-</ul>
-<ol>
-<li><h4 id="组合索引"><a href="#组合索引" class="headerlink" title="组合索引"></a>组合索引</h4></li>
-<li><p>组合索引(nickname_account_createdTime_Index):</p>
-<ul>
-<li>一个表中含有多个单列索引不代表是组合索引,通俗一点讲, 组合索引是: 创建一个索引, 这个索引包含多个字段</li>
-<li><code>CREATE INDEX nickname_account_createdTime_Index ON award (nickname, account, created_time);</code></li>
-<li>那么他实际包含的是3个索引<code>(nickname)</code>,<code>(nickname,account)</code>,<code>(nickname,account,created_time)</code></li>
-</ul>
-</li>
-<li><p>在查询的时候需要遵循mysql<code>组合索引</code>的<strong>最左前缀</strong></p>
-<ul>
-<li>什么是最左前缀: where条件需要按照建立索引时, 字段的排序方式;</li>
-<li>不按索引最左列开始查询(多列索引), 例如 <code>index(&#39;c1&#39;, &#39;c2&#39;, &#39;c3&#39;) where &#39;c2&#39; = &#39;aaa&#39;</code> 不会使用索引, <code>where &#39;c2&#39; = &#39;aaa&#39; and &#39;c3&#39;=&#39;sss&#39;</code> 不能使用索引;</li>
-<li>查询中某个列有<strong>范围查询</strong>, 则其右边的所有列都无法使用查询(多列查询): <code>where c1= &#39;xxx&#39; and c2 like = &#39;aa%&#39; and c3=&#39;sss&#39;</code> 该查询只会使用索引中的前两列, 因为<code>like</code>是范围查询;</li>
-<li>不能跳过某个字段来进行查询, 这样利用不到索引, 比如我的sql是<br>explain select * from ‘award’ where nickname &gt; ‘rSUQFzpkDz3R’ and account = ‘DYxJoqZq2rd7’ and created_time = 1449567822; 那么这时候他使用不到其组合索引.<br>因为我的索引是 (nickname, account, created_time),如果第一个字段出现 范围符号的查找,那么将不会用到索引,如果我是第二个或者第三个字段使用范围符号的查找,那么他会利用索引,利用的索引是(nickname),<br>因为上面说了建立组合索引(nickname, account, created_time), 会出现三个索</li>
-</ul>
-</li>
-</ol>
-<h4 id="索引基础"><a href="#索引基础" class="headerlink" title="索引基础"></a>索引基础</h4><p>在MySQL中, 存储引擎使用类似的方法使用索引, 其先在索引中找到对应值, 然后根据匹配的索引记录找到对应的数据行; 假如要运行下面的查询:<br>    <code>SELECT first_name FROM sakila.actor WHERE actor_id = 5</code><br>    如果在<code>actor_id</code>列上创建了索引, 则MySQL将使用该索引找到actor_id为5的行, 也就是说, MySQL先在索引上按值进行查找, 然后返回所有包含该值的数据行;</p>
-<h4 id="认识索引"><a href="#认识索引" class="headerlink" title="认识索引"></a>认识索引</h4><ol>
-<li>索引是一种特殊的文件(InnoDB数据表上的索引也是表空间的一个组成部分), 包含着对数据表里所有记录的引用指针(通俗的说, 数据库索引好比是一本书前面的目录, 能加快数据库的查询速度);</li>
-<li>索引既然是一个文件, 那么它也会占据物理空间;</li>
-<li><p>对于<code>MyISAM</code>存储引擎来说:</p>
-<ul>
-<li><code>.frm</code>后缀的文件存储的是表结构;</li>
-<li><code>.myd</code>后缀的文件存储的是表数据;</li>
-<li><code>.myi</code>后缀的文件存储的就是索引;</li>
-</ul>
-</li>
-<li><p>对于<code>InnoDB</code>存储引擎来说:</p>
-<ul>
-<li><code>.frm</code>后缀的文件存储的是表结构。</li>
-<li><code>.ibd</code>后缀的文件存放索引和数据(需要开启<code>innodb_file_per_table</code>参数, 参考:<a href="https://www.cnblogs.com/xuan52rock/p/4551192.html" target="_blank" rel="external">https://www.cnblogs.com/xuan52rock/p/4551192.html</a>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SHOW VARIABLES LIKE &apos;%per_table%&apos;; # 可以查看是否开启</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>因此，当你对一张表建立索引时, 索引文件的大小会改变, 当你数据表中的数据因为增删改变化时, 索引文件也会变化的, 只不过MySQL会自动维护索引, 这个过程不需要你介入, 这也是为什么不恰当的索引会影响MySQL性能的原因;</p>
-</li>
-<li><p>总结:</p>
-<ul>
-<li>索引是按照特定的数据结构把数据表中的数据放在索引文件中，以便于快速查找；</li>
-<li>索引存在于磁盘中，会占据物理空间。</li>
-</ul>
-</li>
-</ol>
-<h4 id="常见的索引算法"><a href="#常见的索引算法" class="headerlink" title="常见的索引算法"></a>常见的索引算法</h4><ol>
-<li>索引文件是按照不同的数据结构来存储的, 数据结构的不同也产生了不同的索引类型, 常见的索引类型包括:</li>
-</ol>
-<ul>
-<li><p>B-Tree索引<br>  B-Tree索引是最常用的一种索引，如果没有指定特定的类型，那么多半就是B-Tree索引，事实上，很多搜索引擎使用的是它的变种B+Tree，这是对B-Tree的一个优化，如果需要详细了解，可以参考数据结构方面的书籍，这里不做详细探讨。以下统称为B-Tree索引。<br>  绝大多数的存储引擎，比如MyISAM和InnoDB都支持这种索引，因此说它是应用最广泛，最常用的一种索引方式，但是不同的存储引擎在具体实现时会稍有不同，比如MyISAM会使用前缀压缩的方式对索引进行压缩，InnoDB则不会。<br>  下图展示了B-Tree索引是如何存储被索引的数据的:<br>  <img src="/img/mysql/index/b-tree.png" width="730" height="240"></p>
-<ul>
-<li>说明:<br>  左图是一个包含三列的数据表，右图则展示了数据是如何被索引的。<br>  可以看出B-Tree是对索引列是按照顺序存储的，每个叶子节点指向被索引的数据，这也是B-Tree索引支持范围查找数据的原因。</li>
-</ul>
-</li>
-<li><p>哈希索引<br>  相比于B-Tree索引, 哈希索引的实现就比较简单了, 它是基于哈希表来实现的, 对于要索引的列, 存储引擎会计算出一一对应的哈希码, 然后把哈希码存放在哈希表中作为key, value值是指向该行数据的指针;<br>  <img src="/img/mysql/index/hash_index.png" width="819" height="99/"></p>
-</li>
-<li><p>空间数据索引(R-Tree)<br>  空间索引可用于地理数据存储，它需要GIS相关函数的支持，由于MySQL的GIS支持并不完善，所以该索引方式在MySQL中很少有人使用。</p>
-</li>
-<li><p>全文索引<br>  全文索引主要用于海量数据的搜索, 比如淘宝或者京东对商品的搜索, 你不可能使用like进行模糊匹配吧, MySQL从5.6开始支持InnoDB引擎的全文索引, 功能没有专业的搜索引擎比如<code>Sphinx</code>或<code>Solr</code>丰富, 如果你的需求比较简单, 可以尝试一下MySQL的全文索引, 否则建议使用专业的搜索引擎;</p>
-</li>
-</ul>
-<p>聚集索引</p>
-<p>非聚集索引</p>
-<p><a href="https://dev.mysql.com/doc/refman/5.7/en/create-index.html#create-index-storage-engine-index-types" target="_blank" rel="external">MYSQL各存储引擎所用的索引算法</a><br><img src="/img/mysql/index/index_engine.png" width="330" height="177/"></p>
-<p>参考:<br><a href="http://www.cnblogs.com/chenshishuo/p/5030029.html" target="_blank" rel="external">http://www.cnblogs.com/chenshishuo/p/5030029.html</a><br><a href="https://www.cnblogs.com/xuan52rock/p/4551192.html" target="_blank" rel="external">https://www.cnblogs.com/xuan52rock/p/4551192.html</a><br><a href="http://blog.csdn.net/xluren/article/details/32746183" target="_blank" rel="external">http://blog.csdn.net/xluren/article/details/32746183</a><br><a href="https://tech.meituan.com/mysql-index.html" target="_blank" rel="external">https://tech.meituan.com/mysql-index.html</a></p>
+<p>额外参考:<br><a href="https://www.cnblogs.com/clphp/p/5403215.html" target="_blank" rel="external">https://www.cnblogs.com/clphp/p/5403215.html</a><br><a href="http://www.cnblogs.com/chenshishuo/p/5030029.html" target="_blank" rel="external">http://www.cnblogs.com/chenshishuo/p/5030029.html</a><br><a href="https://www.cnblogs.com/xuan52rock/p/4551192.html" target="_blank" rel="external">https://www.cnblogs.com/xuan52rock/p/4551192.html</a><br><a href="http://blog.csdn.net/xluren/article/details/32746183" target="_blank" rel="external">http://blog.csdn.net/xluren/article/details/32746183</a><br><a href="https://tech.meituan.com/mysql-index.html" target="_blank" rel="external">https://tech.meituan.com/mysql-index.html</a></p>
 
         </div>
 

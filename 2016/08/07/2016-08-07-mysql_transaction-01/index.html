@@ -13,29 +13,31 @@
     
     
     
-    <title>MySQL(INNODB引擎)事务 - 01 | Lant&#39;s Blog</title>
+    <title>MySQL(INNODB引擎)事务 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中有一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Man`余额中">
+    <meta name="description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个 独立的工作单元 中有 一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Ma">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL(INNODB引擎)事务 - 01">
+<meta property="og:title" content="MySQL(INNODB引擎)事务">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中有一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Man`余额中">
+<meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个 独立的工作单元 中有 一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Ma">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/loss_update_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/xiaojie_01.png">
-<meta property="og:updated_time" content="2017-12-13T01:49:39.000Z">
+<meta property="og:updated_time" content="2017-12-27T09:35:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL(INNODB引擎)事务 - 01">
-<meta name="twitter:description" content="事务的概念 事务可以理解为一个独立的工作单元, 在这个独立的工作单元中有一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Man`余额中">
+<meta name="twitter:title" content="MySQL(INNODB引擎)事务">
+<meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个 独立的工作单元 中有 一组操作; 放在事务中的多个操作, 要么全部执行成功, 要么全部执行失败, 这当然也是事务的目的;  还是通过最经典的银行应用来解释事务 假设Iron Man通过网上银行给Wolverine转账100元, 那么本次转账操作至少需要三个步骤:  123检查`Iron Man`余额`&amp;gt;=100`元从`Iron Ma">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -117,7 +119,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务 - 01</div>
+        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -139,7 +141,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL(INNODB引擎)事务 - 01</h1>
+        <h1 class="title">MySQL(INNODB引擎)事务</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-08-07T13:01:07.000Z" itemprop="datePublished" class="page-time">
@@ -164,7 +166,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">事务的概念</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的ACID特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">事务的ACID特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#高并发事务的问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">高并发事务的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#幻读-间隙锁"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">幻读 (间隙锁)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#丢失更新"><span class="post-toc-number">4.</span> <span class="post-toc-text">丢失更新</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的4种隔离级别"><span class="post-toc-number">5.</span> <span class="post-toc-text">事务的4种隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">READ UNCOMMITTED (未提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">READ COMMITTED (提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">REPEATABLE READ (可重复读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SERIALIZABLE-可串行化"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">SERIALIZABLE(可串行化)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的概念"><span class="post-toc-number">1.</span> <span class="post-toc-text">事务的概念</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的-ACID-特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">事务的 ACID 特性</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务隔离级别"><span class="post-toc-number">3.</span> <span class="post-toc-text">事务隔离级别</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#高并发事务的问题"><span class="post-toc-number">4.</span> <span class="post-toc-text">高并发事务的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#丢失更新"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">丢失更新</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#幻读-间隙锁"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">幻读 (间隙锁)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#事务的4种隔离级别"><span class="post-toc-number">5.</span> <span class="post-toc-text">事务的4种隔离级别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">READ UNCOMMITTED (未提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">READ COMMITTED (提交读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">REPEATABLE READ (可重复读)</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#SERIALIZABLE-可串行化"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">SERIALIZABLE(可串行化)</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -172,7 +174,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL(INNODB引擎)事务 - 01</h1>
+        <h1 class="post-card-title">MySQL(INNODB引擎)事务</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-08-07 21:01:07" datetime="2016-08-07T13:01:07.000Z"  itemprop="datePublished">2016-08-07</time>
 
@@ -190,51 +192,75 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h4 id="事务的概念"><a href="#事务的概念" class="headerlink" title="事务的概念"></a>事务的概念</h4><ol>
-<li><p>事务可以理解为一个<code>独立的工作单元</code>, 在这个独立的工作单元中有一组操作;<br> 放在事务中的多个操作, <strong>要么全部执行成功, 要么全部执行失败</strong>, 这当然也是事务的目的;</p>
+<li><p><code>事务</code> 可以理解为一个 <code>独立的工作单元</code>, 在这个 <code>独立的工作单元</code> 中有 <code>一组操作</code>;<br> 放在事务中的多个操作, <strong>要么全部执行成功, 要么全部执行失败</strong>, 这当然也是事务的目的;</p>
 </li>
 <li><p>还是通过最经典的银行应用来解释事务<br> 假设<code>Iron Man</code>通过网上银行给<code>Wolverine</code>转账100元, 那么本次转账操作至少需要三个步骤:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure>
-<p> <strong>注意</strong>:上面的三个步骤的操作必须打包在一个事务中, 来作为一个 <code>独立的工作单元</code> 来执行, 在这个<code>独立工作单元</code>(即事务)中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤;</p>
-<p> 假设第二步操作成功, 但是第三步操作失败, 那么整个事务也就应该是失败的, 那就必须将第二步的操作也回滚;</p>
+<p> <strong>注意</strong>:上面的三个步骤的操作必须打包在一个事务中, 来作为一个 <code>独立的工作单元</code> 来执行, 在这个 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤;<br> 假设第二步操作成功, 但是第三步操作失败, 那么整个事务也就应该是失败的, 那就必须将第二步的操作也回滚;</p>
 </li>
-<li><p>这就是事务最基本的特性, <strong>保证数据的一致性</strong>, 但这只是理想情况下, 真实场景(高并发)下, 事务为了做到一致性, 需要做的事情还很多;</p>
+<li><p>这就是事务最基本的特性, <strong>保证数据的一致性</strong>。</p>
+</li>
+<li><p>但这只是理想情况下, 在真实的高并发场景下, 事务为了做到一致性, 需要做的事情其实还很多, 因为高并发会出现很多理想状态下所意想不到的问题。</p>
 </li>
 </ol>
-<h4 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h4><p>一个运行良好的事务处理系统必须具备这些标准特性</p>
+<h4 id="事务的-ACID-特性"><a href="#事务的-ACID-特性" class="headerlink" title="事务的 ACID 特性"></a>事务的 ACID 特性</h4><p>一个运行良好的事务处理系统必须具备这些标准特性</p>
 <ol>
-<li><p>Atomicity 原子性<br>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚;<br>对于一个事务来说, 不可能只成功执行其中的一部分操作, 这就是事务的原子性;</p>
+<li><p>Atomicity 原子性<br>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚;<br>对于一个事务来说, <strong>不能只成功执行其中的一部分操作</strong>, 这就是事务的原子性;</p>
 </li>
-<li><p>Consistency 一致性<br>事务的<code>一致性</code>会保证<strong>数据库总是从一个一致性的状态转换到另一个一致性的状态</strong>;<br>(比如在之前的转账例子中, 即使已经行完了第二步(<code>从A用户余额中</code>-100<code>元</code>), 但在开始执行第三步(给B用户余额<code>+100</code>元)时系统突然崩溃, 那么A用户的余额也不会损失100元, 因为事务最终没有提交, 所以事务中所做的修改也不会保存到数据库中;</p>
+<li><p>Consistency 一致性<br>事务的<code>一致性</code>会保证 <strong>数据库总是从一个一致性的状态 转换到 另一个一致性的状态</strong>;<br>(比如在之前的转账例子中, 即使已经行完了第二步(<code>从A用户余额中</code>-100<code>元</code>), 但在开始执行第三步(给B用户余额<code>+100</code>元)时系统突然崩溃, 那么A用户的余额也不会损失100元, 因为事务最终没有提交, 所以事务中所做的修改也不会保存到数据库中;</p>
 </li>
-<li><p><strong>Isolation 隔离性</strong><br><code>通常来说</code>, <strong>一个事务所做的修改在最终提交以前, 对其他事务是不可见的</strong>;<br>(比如在之前的转账例子中, 在执行完第二步但是第三步还没开始的时候, 此时有另一个账户汇总的程序开始运行, 那么这个程序所拿到的A账户余额应该是没有被<code>-100</code>的余额才对)<br>后面我们还会详细讨论事务<code>隔离性</code>的 <code>隔离级别</code>, 就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (也就是还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code>, 对其他事务的可见造成了脏读问题)</p>
+<li><p><strong>Isolation 隔离性</strong><br><strong>通常来说</strong>, 一个事务所做的修改在最终提交以前, 对其他事务是不可见的;</p>
+<p> 比如在之前的转账例子中, 在执行完成第二步, 但是第三步还没开始的时候, 此时有另一个账户汇总的程序开始运行, 那么这个程序所拿到的A账户余额应该是没有被 <code>-100</code> 的余额才对</p>
+<p> 后面我们还会详细讨论事务<code>隔离性</code>的 <code>隔离级别</code>, 到时候就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (也就是还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code>, 对其他事务的可见就造成了<code>脏读问题</code>的出现)</p>
 </li>
-<li><p>Durability 持久性<br>一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会 <code>理论上永久保存到数据库中</code>; </p>
+<li><p>Durability 持久性<br>一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会 <code>永久保存到数据库中</code>;<br>(这里所说的<code>永久</code> ~你懂得就好~, 别太较真了, 你要是把硬盘烧掉, 哪儿来的永久可言…)</p>
 </li>
 </ol>
-<h4 id="高并发事务的问题"><a href="#高并发事务的问题" class="headerlink" title="高并发事务的问题"></a>高并发事务的问题</h4><p>在并发量比较大的时候, 很容易出现多个事务同时进行的情况, 假设有两个事务正在同时进行, 两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对操作的数据做一定的保护处理, 所以最终导致一些问题的出现;</p>
-<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><ol>
-<li><p>mysql中一个事务读取了<strong>另一个并行事务</strong>未提交的写数据, 那这个读取就是脏读</p>
+<h4 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h4><p><code>事务的隔离级别</code> 其实就是通过 <code>锁机制</code> 实现的;</p>
+<h4 id="高并发事务的问题"><a href="#高并发事务的问题" class="headerlink" title="高并发事务的问题"></a>高并发事务的问题</h4><p>在并发量比较大的时候, 很容易出现<strong>多个事务同时进行</strong>的情况。</p>
+<p>假设有两个事务正在同时进行, <strong>值得注意的是</strong>: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境<strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以<strong>最终会导致一些问题的出现</strong>;</p>
+<h5 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h5><p>读取的是<code>非永久性</code>的数据!</p>
+<ol>
+<li><p>mysql中一个事务读取了另一个并行事务未最终提交的写数据, 那这个读取就是脏读。<br>(要知道, 另一个事务最终可能会因为内部其他子操作的失败, 而导致事务最终整体提交失败, 那么当前事务读取到的这个数据就是个<code>非永久的数据</code>(会被回滚), 也就是所谓的<code>脏数据</code>)</p>
 </li>
 <li><p>图示:<br> <img src="/img/mysql/transaction/dirty_read.png" width="608" height="190"></p>
 </li>
-<li><p>事务A在T4阶段读取库存为20, 这个库存其实就属于脏数据, 因为这个数据是事务B最终会撤销掉的数据, 所以如果事务A使用库存20进行后续的操作, 就会引发问题;</p>
+<li><p>事务A在T4阶段读取库存为20, 这个库存其实就属于<code>脏数据</code>, 因为这个数据是<code>事务B最终会撤销掉的数据</code>即<code>非永久性的数据</code>, 所以如果事务A使用库存20进行后续的操作, 就会引发问题;</p>
 </li>
-<li><p>解决方案 - 事务的<code>隔离性</code><br> 当事务的隔离级别为 <code>read commited</code> 及以上隔离级别时, <strong>可以让一个事务只能读取另一个事务已经提交的数据</strong>, 这样就可以避免了上面的脏读现象;</p>
+<li><p>解决方案 - 事务的<code>隔离性</code><br> 当事务的隔离级别为 <code>read commited</code> 及 <code>以上</code> 隔离级别时, <strong>可以让一个事务只能读取另一个事务已经提交的数据</strong>, 这样就可以避免了上面的脏读现象;</p>
 </li>
-<li><p>但是<code>脏读</code>解决后, 还是有问题存在的:<br> 试想一下, 既然解决<code>脏读</code>之后, 一个事务只能读取另一个事务已经提交的数据, 那么就会出现, 在同一个事务单元内, 多次读取同一个数据, 虽然首次之后再次读取的结果是永久数据, 但也有可能和第一次数据不一样;<br> 这种情况就是 <code>不可重复读</code>;</p>
+<li><p>但是<code>脏读问题</code>解决后, 还是有问题存在的:</p>
+<ul>
+<li><p>试想一下, 解决<code>脏读</code>之后, 一个事务确实是只能读取另一个事务已经提交的数据, 也就是每个事务读到的数据都是永久数据; </p>
+</li>
+<li><p>那问题在哪里?<br>在同一个事务单元内, 虽然每次读取到的都是永久数据, 但是会出现, 两次读到的数据可能是不一样的;<br><img src="/img/mysql/transaction/bukechongfudu.png" width="607" height="204"></p>
+</li>
+</ul>
 </li>
 </ol>
 <h5 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h5><ol>
-<li><p>同一事务内读取的同一数据不一样 (只不过第二次读取到的数据是永久的)</p>
+<li><p>上面在 <code>脏读问题</code> 的末尾, 已经介绍了不可重复读是怎么产生的!!!</p>
+</li>
+<li><p>解决方案 - 事务的<code>隔离性</code></p>
 <ul>
-<li>同一个事务单元内, 多次读取同一个数据, 获取到的结果却不一样;</li>
-<li>首次之后再次读取的结果是其他与该事物并行的事务已经提交的修改;</li>
-<li>但很明显, 同一个事务内的两次读取结果不一样;</li>
+<li>当事务的隔离级别为 <code>repeatable read</code> 或 <code>以上</code> 级别时, 一个事务内部对数据的多次查询都是相同的(无论该数据在中途是否被其他事务修改并最终提交过, 本事务都不理会), 这样就避免了不可重复读的问题;</li>
+<li>但是该隔离级别依然解决不了<code>幻读</code>的问题!!</li>
 </ul>
 </li>
-<li><p>解决方案 - 事务的<code>隔离性</code><br> 当事务的隔离级别为 <code>repeatable read</code> 或以上级别时, 一个事务内部对数据的多次查询都是相同的(无论该数据在中途是否被其他事务修改过, 本事务都不理会), 这样就避免了不可重复读的问题;<br> 但是该隔离级别依然解决不了<code>幻读</code>的问题!!</p>
+<li><p>但是 <code>不可重复读问题</code> 解决后, 还是有问题存在的:</p>
+<ul>
+<li>因为在一个事务内部, 如果<code>直接忽略其他并行事务对当前数据所做的修改</code>的话, 虽然确实可以解决事务内部不可重复读的问题。</li>
+<li>但很显然这会造成另一个问题, 那就是 忽略并行事务的修改 而造成的 <code>丢失更新</code>;<br> <img src="/img/mysql/transaction/loss_update_02.png" width="604" height="243"><br> (注意: 这里是在 <code>已解决不可重复读</code> 情况下在事务内多次读取时进行的举例)</li>
+<li>其实不管是 <code>已解决不可重复读</code> 情况下在事务内多次读取,  还是 <code>没有解决不可重复读</code> 情况下在事务内只读取一次, <code>丢失更新</code> 都是存在的!!<br> <img src="/img/mysql/transaction/loss_update_01.png" width="605" height="215"></li>
+</ul>
 </li>
-<li><p>但是<code>不可重复读</code>解决后, 还是有问题存在的:<br> 因为一个事务内部, 如果第二次读取同一个数据, 为了保持和首次读取一致而<code>忽略并行事务对其所做的修改的话</code>, 那么很显然, 会造成另一个问题, 那就是<code>并行事务的修改会被忽略掉</code>;<br> 这就是最后将会介绍的一个问题 <code>丢失更新</code>;</p>
+</ol>
+<h5 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h5><ol>
+<li><p>上面在 <code>不可重复读问题</code> 的末尾, 已经介绍了 <code>丢失更新</code> 是怎么产生的!!!</p>
+</li>
+<li><p>解决方案  – 貌似无法通过隔离级别来进行解决<br> 实际上, 上面介绍的情况只是一种常见的<code>丢失更新</code>的情况<br> 通过 <code>乐观锁</code> 可以解决这个问题, 事务在进行更新余额操作的时候, SQL修改为 <code>update table set kucun=1100 where id=xxx **** and kucun=1000****</code>, 通过加上一个金额的判断, 这样的话, 如果更改之前数据没有修改则执行成功, 否则执行失败回滚;</p>
+</li>
+<li><p>当然, 你可以可以通过设置InnoDB的隔离级别为SERIALIZABLE, 不过在实际场景中很少使用该隔离级别;</p>
 </li>
 </ol>
 <h5 id="幻读-间隙锁"><a href="#幻读-间隙锁" class="headerlink" title="幻读 (间隙锁)"></a>幻读 (间隙锁)</h5><ol>
@@ -251,15 +277,6 @@
 <li><p>如何避免这个问题?<br> 当事务的隔离级别为 <code>SERIALIZABLE</code> 时, 会通过间隙锁来防止幻读的出现, 即锁定特定数据的前后间隙让数据无法被插入;</p>
 </li>
 </ol>
-<h4 id="丢失更新"><a href="#丢失更新" class="headerlink" title="丢失更新"></a>丢失更新</h4><ol>
-<li><p>先看一下丢失更新的例子:</p>
-<ul>
-<li>由于事务A与事务B互相不知道对方的存在，因此导致了悲剧的发生<br><img src="/img/mysql/transaction/loss_update_01.png" width="513" height="585"></li>
-</ul>
-</li>
-<li><p>解决方案  – 貌似无法通过隔离级别来进行解决<br>通过<code>乐观锁</code>可以解决这个问题, 事务在进行更新余额操作的时候, SQL修改为 <code>update table set kucun=1100 where id=xxx **** and kucun=1000****</code>, 通过加上一个金额的判断, 这样的话, 如果更改之前数据没有修改则执行成功, 否则执行失败回滚;</p>
-</li>
-</ol>
 <h4 id="事务的4种隔离级别"><a href="#事务的4种隔离级别" class="headerlink" title="事务的4种隔离级别"></a>事务的4种隔离级别</h4><p>事务的隔离性比较复杂, 在SQL标准中定义了四种隔离级别, <strong>每一种级别都规定了在一个事务中所做的修改, 哪些在事务内和事务间是可见的, 哪些是不可见的</strong>, <strong>较低的隔离级别通常可以执行更高的并发, 系统的开销也更低</strong>;</p>
 <p>下面简单了解一下四种隔离级别</p>
 <h5 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED (未提交读)"></a>READ UNCOMMITTED (未提交读)</h5><p>出现 <code>脏读</code></p>
@@ -269,7 +286,7 @@
 <li><p>这个级别会导致很多问题, <strong>从性能上来说, READ UNCOMMITTED级别也不会比其他的级别好太多, 但却缺乏其他级别的很多好处, 所以在实际应用中一般很少使用</strong>;</p>
 </li>
 </ul>
-<h5 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED (提交读)"></a>READ COMMITTED (提交读)</h5><p>解决 <code>脏读</code>, 出现 <code>不可重复读</code></p>
+<h5 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED (提交读)"></a>READ COMMITTED (提交读)</h5><p>解决 <code>脏读</code></p>
 <ul>
 <li>大多数数据库系统的默认隔离级别都是READ COMMIT(<strong>但MySQL不是</strong>);</li>
 <li>READ COMMIT满足前面提到的隔离性的简单定义: 一个事务开始时, 只能”看见”已经提交的事务所做的修改; 也就是说一个事务从开始直到事务提交之前, 所做的任何修改对其他事务都是不可见的; 这也就解决了<code>脏读</code>的问题!!</li>
@@ -322,7 +339,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -332,7 +349,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -342,7 +359,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -491,7 +508,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -501,7 +518,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -511,7 +528,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
