@@ -24,14 +24,14 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL(INNODB引擎)事务浅析">
-<meta property="og:url" content="http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/index.html">
+<meta property="og:url" content="http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolv">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
-<meta property="og:updated_time" content="2017-12-28T01:31:42.000Z">
+<meta property="og:updated_time" content="2017-12-28T09:03:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务浅析">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolv">
@@ -59,7 +59,7 @@
     <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpeg">
+          <img src="/img/avatar1.png">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Lant</h5>
@@ -141,8 +141,8 @@
         <h1 class="title">MySQL(INNODB引擎)事务浅析</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-08-07T13:01:07.000Z" itemprop="datePublished" class="page-time">
-  2016-08-07
+                <time datetime="2017-08-07T13:01:07.000Z" itemprop="datePublished" class="page-time">
+  2017-08-07
 </time>
 
 
@@ -167,13 +167,13 @@
         </nav>
     </aside>
     
-<article id="post-2016-08-07-mysql_transaction-01"
+<article id="post-2017-08-07-mysql_transaction-01"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
         <h1 class="post-card-title">MySQL(INNODB引擎)事务浅析</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-08-07 21:01:07" datetime="2016-08-07T13:01:07.000Z"  itemprop="datePublished">2016-08-07</time>
+            <time class="post-time" title="2017-08-07 21:01:07" datetime="2017-08-07T13:01:07.000Z"  itemprop="datePublished">2017-08-07</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -277,7 +277,7 @@
     </div>
     <footer>
         <a href="http://blog.renyimin.com">
-            <img src="/img/avatar.jpeg" alt="Lant">
+            <img src="/img/avatar1.png" alt="Lant">
             Lant
         </a>
     </footer>
@@ -302,7 +302,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -312,22 +312,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -350,15 +350,15 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/08/02/2016-08-03-btree-03/" id="post-prev" class="post-nav-link">
+        <a href="/2017/05/16/2017-05-16-Iterator-generator-yield-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">BTree,B-Tree,B+Tree</h4>
+          <h4 class="title">04.与调度器之间通信--系统调用</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/08/08/2016-08-08-mysql_transaction-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/08/08/2017-08-08-mysql_transaction-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
         <h4 class="title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h4>
       </a>
@@ -471,7 +471,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -481,22 +481,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/07/2017-08-07-mysql_transaction-01/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -507,7 +507,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3aQW7jMAwF0N7/0jPbDiZ2PkkxNYrnVeC4sp4KSAzJr6/4+vPt+n7n/pn/719dvTceu/Dw8PAGU7968f3Urz7fT/H++eRd0WLh4eHhrfGudtT8mSr71DK9mQ8eHh7eA3j5dKubexIb4+Hh4f0O3gSWZA/w8PDwnslLkhEJIyflyYj7O8dyLXh4eHi1elNURXrO55X6Hh4eHt64qp6Uo/LCf3Um1aLXixHw8PDwFnj5hlsNtfP2qXy06jzx8PDwNnjJz/h5UrW6HEkCIlomPDw8vAVefnrkC1FN6Z5iFFIVeHh4eGNejqmyqwdPFRO1I+Dh4eEd5eUbfdJKNa9M5eng5pGAh4eHd4hX3aaraYi8eDZvvXqRa8HDw8M7yqsmZHstApNgvXpUXP5iwMPDw1vj5aWvPMjOG6R6If6bJcbDw8M7yqu+JgdH61pc6Pyv3nRG4OHh4Q14SWA9acaaPJ9/G42Jh4eHt8ZLErjJ1j85bA4cA70OBTw8PLyAlxfv86nkAXd1zHKGAQ8PD2+Z10sT5MdM3sg1OQz+GRMPDw9vgTeZaBLBzhMceXtBL3GMh4eH1+NNwuKccTakLvwb8PDw8BZ4SQKiWiqbTCJfPjw8PLyf4lWnW43Nq4Fyr4HgTTIXDw8P7yivmiCoJlvzFqt5IhgPDw/vM7w8LD5VKqtOcbT0eHh4eGu8SRPVvHhWpRbmg4eHh7fG673mLGblwsPDw1uA5VcvTTAfoZkWwcPDw1vg9fbYvLh1tsCWpydGRwgeHh5ewOs1ofaaBiaBe3U0PDw8vG1erzB2T/1QNiU5GPDw8PAewOuVwfJAeR6a4+Hh4T2Tl6dxN8Ys95Th4eHhHeXlJav8mbys1TtyosIYHh4e3gJvozErSU+cffJwDgMPDw/v9f2/wFDFOpm3ou8AAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACoElEQVR42u3aQW7CQAwFUO5/6XZbqSV822Oaqm9WCEIyL4vE+vbjEa+PL+vrN9fHfP/+2epd8djCw8PDG2z92YWvv6+eJ//v933m18LDw8Pb5j17ouaf8/8mW89v6wsLHh4e3i1519vNH+5JbYyHh4f3d3mFC7TOkJfjeHh4eL/Fy0OE/LF+TcrDiCQcOZC14OHh4dX6TVEX6T6fV/p7eHh4eOOuet6OSm5KdSfVptcPZ8DDw8Nb4FU3mpfa+fhUfrbqPvHw8PA2eHmgUI0qEljvv4XbhIeHh7fGq566V2TPQ9tyVIGHh4e3xksweRusOlY1wbwYR8DDw8Nb4519VfSijfy6hZACDw8Pb403H42qjmTl/6qOXj3NWvDw8PAO8UZ9s0MxRB745remPL+Ah4eHd4hXPlExsIgChVYQjIeHh7fHmxSv1fUI1vzFE01G4OHh4Y155ZZ8sUnWOz7/9UXWgoeHh7fA68Wyk8i11wyrNu3w8PDw9ni9z0n00BvMSgYFotuHh4eHt8CbIPNiN9loNaQoRM94eHh4a7xJsdsb3spL/N5AGB4eHt57eNXC91SMWy2pC2NheHh4eAu8+XhTD5m3tfDw8PDuxtsIIyaF8mTo6k1ZCx4e3r/nTQKCXjOselNyDB4eHt57eFEYWnxA90r2SYFeGL3Cw8PDO8SrBg1nhwOq1Hw/eHh4eHu8pE31OLqq+NFl8PDw8BYuUB0O6K1TQUNU3OPh4eEt8OYP8d6m8wZbcvwIhoeHh9fiVYdQqy2xXszRi5jx8PDw3slLQorrEYFfS1OSFwMeHh7eDXiT10O1yO6V5nh4eHj34SWpRg+Thx35zcXDw8Pb451tWVUZ1Zgjjzzw8PDwNnjzwawNQPXIYxkGHh4e3hXvE3gwkpczUX0/AAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 

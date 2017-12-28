@@ -24,7 +24,7 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL(INNODB引擎)事务各隔离级别和锁的关系">
-<meta property="og:url" content="http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/index.html">
+<meta property="og:url" content="http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
 <meta property="og:locale" content="zh-CN">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/zuse.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lock_result.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/transaction_state_01.png">
-<meta property="og:updated_time" content="2017-12-28T08:20:45.000Z">
+<meta property="og:updated_time" content="2017-12-28T09:03:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务各隔离级别和锁的关系">
 <meta name="twitter:description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
@@ -69,7 +69,7 @@
     <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpeg">
+          <img src="/img/avatar1.png">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Lant</h5>
@@ -151,8 +151,8 @@
         <h1 class="title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-08-08T11:12:11.000Z" itemprop="datePublished" class="page-time">
-  2016-08-08
+                <time datetime="2017-08-08T11:12:11.000Z" itemprop="datePublished" class="page-time">
+  2017-08-08
 </time>
 
 
@@ -177,13 +177,13 @@
         </nav>
     </aside>
     
-<article id="post-2016-08-08-mysql_transaction-02"
+<article id="post-2017-08-08-mysql_transaction-02"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
         <h1 class="post-card-title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-08-08 19:12:11" datetime="2016-08-08T11:12:11.000Z"  itemprop="datePublished">2016-08-08</time>
+            <time class="post-time" title="2017-08-08 19:12:11" datetime="2017-08-08T11:12:11.000Z"  itemprop="datePublished">2017-08-08</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -315,7 +315,7 @@
     </div>
     <footer>
         <a href="http://blog.renyimin.com">
-            <img src="/img/avatar.jpeg" alt="Lant">
+            <img src="/img/avatar1.png" alt="Lant">
             Lant
         </a>
     </footer>
@@ -340,7 +340,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -350,22 +350,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -388,7 +388,7 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/08/07/2016-08-07-mysql_transaction-01/" id="post-prev" class="post-nav-link">
+        <a href="/2017/08/07/2017-08-07-mysql_transaction-01/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
           <h4 class="title">MySQL(INNODB引擎)事务浅析</h4>
         </a>
@@ -396,9 +396,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/08/09/2016-08-09-mysql_locks-01/" id="post-next" class="post-nav-link">
+      <a href="/2017/11/10/2017-11-10-Django-01/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">MySQL锁 - 01</h4>
+        <h4 class="title">01 - Django入门</h4>
       </a>
     </div>
   
@@ -509,7 +509,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -519,22 +519,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/08/2016-08-08-mysql_transaction-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/08/2017-08-08-mysql_transaction-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -545,7 +545,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACoklEQVR42u3aQW7DQAgF0Nz/0u22VWXrA0PiSs+rKHVi3lSaIcDrFV9fP66r96v3XN1/9cSrOw9ceHh4eIPQrx5cDSsJ8f711TLlMePh4eFt85JAqxv0/TLdf+qKkceMh4eH9xzeHHwfev5ZPDw8vP/CK3x1nGrfp/h4eHh4z+QlxYickSTTebEjL47g4eHhvYfXS4U/+3qlv4eHh4c37qr3Sqi9bTo/kArR4uHh4S3w8g23OgQwHyDoHQx4eHh4n+LlRYFJuPkxM1omPDw8vGVeL13ukSYF38KxgYeHh7fA65UVeun1PFnPjw08PDy8PV6OSainduZeEj/6X+Hh4eHFyXRv1KmagudBT0avfkWFh4eHt8BLQpw8Pmn/TxYueR8PDw9vg9cbe0qWIx+Wqn5/ecALDw8P7yhv0lJKAs1LFdWFi1pueHh4eEd5p5pYeRB56jz5Kx4eHt4er9qyyn/8V0sV+UFyjISHh4c34FWHq5IjJC8c9Aa8RkNXeHh4eANeNY3uBZ0vVrOacnUg4eHh4b2FNxm9SsC9VlnzWMLDw8Nb4+XlgDysUwl3b2le+arj4eHhHeJVC6+T8m7veMDDw8P7LG/S0Eo27t4i9gYIol8MeHh4eANer8lULfsm23p+hFQLJXh4eHgbvGpanGzN1fvzcm2e3OPh4eG9k1f48MIyzdtveHh4eO/hTbbjHDDBNy88PDy8ZVh1fOps6XZ0APz9Hjw8PLwF3nyPzYcJqq/zIvIIhoeHh9fi9Q6DajEib49V2VFnDw8PD2+B12trzQeqNuoPeHh4eM/kVUsVvUGuSWqOh4eH90xekvjOB17zflahpouHh4c35lULtacY+dJURx/w8PDw9njVH/nV8mtvYKt657EaBh4eHt7ds74ByhRUuUyAfpwAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACpElEQVR42u3aQY4iMQwF0L7/pWe2s6DQ/3ZCM9KrFYKC5AUpcdn++YmvP/9cT++39zzd/zTi050HLjw8PLzF1J8Gng32/lvvXz8tUz5nPDw8vNu8p8ltNuVkmZJx88XFw8PD+2bebLBk6jkbDw8P73/hJZt1DkuyB3h4eHjfyUuSEZvtPvnN9ruHcy14eHh4Xb3pZxbO/tbrK/U9PDw8vHVVvT0kNsX+fKxitnh4eHgXePeaANpgepMsfj9PPDw8vM/wNgX7fLrJbx5YJjw8PLyjvBaQN5ImpE3CNzo28PDw8K7x8vznZlFOBev5sYGHh4d3g5c3RSVF+rx4n5f8Z0cRHh4e3j3eLP3aUvOF2LdevUhG4OHh4R3lzZqcZpNOJnRjdDw8PLwbvHzgPHGQbPdtQqEN8fHw8PDu8YblpbjMH+VC4taE5NM6pMbDw8MreW2pqZ3crJFr8ykeHh7ePV7+YN/ek4fLbexf/2N4eHh4R3ntxr0pR80+3SSC8fDw8H6LN0s6tBNtg/W2PIaHh4d3ite2Vc22732prA3i8fDw8D7Jmz3wt4fKPqSOTjw8PDy8y7zZIdEGynmiti2Y4eHh4X2SN5tWPnwbKG8aCF6E1Hh4eHhHeZsiU9sWEBX447aGtkEBDw8P7yyvTT3MAuXNFDdJEDw8PLzP89oC/6w5oKUmxxUeHh7ebV5SBpuVr04dJ8MLDw8P7xpsU+7Kf/NUoiFK7OLh4eFd4O332FniNXndLusQhoeHhzfitYdBnrBolyNv58oXFw8PD+8eLylT5cfGR7MpycGAh4eH9wW85DhJwvE2zdF+Cw8PD+8beHkZrMXkid2i8IaHh4d3jbcpWe0Zm0aEoukKDw8P7xBv9pA/K97ngPbOwzkMPDw8vNfv/wVtZnOoa5JztwAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
