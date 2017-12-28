@@ -20,21 +20,21 @@
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过应用给 Wolveri">
+    <meta name="description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolv">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL(INNODB引擎)事务浅析">
 <meta property="og:url" content="http://blog.renyimin.com/2016/08/07/2016-08-07-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过应用给 Wolveri">
+<meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolv">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
-<meta property="og:updated_time" content="2017-12-27T13:48:35.000Z">
+<meta property="og:updated_time" content="2017-12-28T01:31:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务浅析">
-<meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过应用给 Wolveri">
+<meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败, 当然, 也正是事务的目的;  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolv">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -193,7 +193,7 @@
 </li>
 <li><p>不免俗套, 这还是通过最经典的银行<code>转账</code>应用来解释一下</p>
 <ul>
-<li><p>假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 <code>Iron Man</code> 通过应用给 <code>Wolverine</code> 转账100元, 那么本次转账操作至少需要三个步骤:</p>
+<li><p>假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 <code>Iron Man</code> 通过该银行应用给 <code>Wolverine</code> 转账100元, 那么本次转账操作至少需要三个步骤:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure>
 </li>
 <li><p><strong>注意</strong>: 上面的三个步骤的操作必须打包在一个事务中, 从而可以作为一个 <code>独立的工作单元</code> 来执行。在这个 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤。</p>
@@ -254,19 +254,18 @@
 <ul>
 <li>但不可重复读重点是针对<code>update</code>和<code>delete</code>。</li>
 <li>而幻读的重点是针对<code>insert</code>。</li>
-<li><p>如果使用锁机制来实现这两种隔离级别, 大致是如下这样子:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在可重复读中, 该sql第一次读取到数据后, 就需要将数据加锁, 让其它事务无法修改(update/delete)这些数据, 就可以实现可重复读了。</div><div class="line">但这种方法却无法锁住insert的数据, 所以当事务A先前读取了数据, 事务B还是可以insert数据提交, 这时事务A就会发现莫名其妙多了一条之前没有的数据, 这就是幻读, 幻读不能通过行锁来避免。</div><div class="line">幻读是需要事务的Serializable隔离级别, 这么做可以有效的避免幻读、不可重复读、脏读等问题, 但却会极大的降低数据库的并发能力。</div></pre></td></tr></table></figure>
-</li>
-<li><p>所以说不可重复读和幻读最大的区别，就在于如何通过锁机制来解决他们产生的问题。</p>
-</li>
 </ul>
+</li>
+<li><p>如果使用锁机制来实现这两种隔离级别, 大致是如下这样子:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在可重复读中, 该sql第一次读取到数据后, 就需要将数据加锁, 让其它事务无法修改(update/delete)这些数据, 就可以实现可重复读了。</div><div class="line">但这种方法却无法锁住insert的数据, 所以当事务A先前读取了数据, 事务B还是可以insert数据提交, 这时事务A就会发现莫名其妙多了一条之前没有的数据, 这就是幻读, 幻读不能通过行锁来避免。</div><div class="line">幻读是需要事务的Serializable隔离级别, 这么做可以有效的避免幻读、不可重复读、脏读等问题, 但却会极大的降低数据库的并发能力。</div></pre></td></tr></table></figure>
+<p> 所以说不可重复读和幻读最大的区别，就在于如何通过锁机制来解决他们产生的问题。</p>
 </li>
 <li><p>如下图:<br> <img src="/img/mysql/transaction/huan_read.png" width="607" height="251"></p>
 </li>
 <li><p>那么这个问题如何解决呢?<br> 在MySQL中, 其实事务已经用自身特性（<code>隔离性</code>的最高隔离级别<code>SERIALIZABLE</code>）解决了这个问题;</p>
 </li>
 </ol>
-<p>这里只先点出解决方案, 后面在进行详细分析该隔离级别是如何帮助事务解决问题的）</p>
+<p>这里只是先直接给出各问题解决方案, 后面在进行详细分析该隔离级别是如何帮助事务解决问题的!</p>
 
         </div>
 
@@ -359,9 +358,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/08/09/2016-08-09-mysql_locks-01/" id="post-next" class="post-nav-link">
+      <a href="/2016/08/08/2016-08-08-mysql_transaction-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">MySQL锁 - 01</h4>
+        <h4 class="title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h4>
       </a>
     </div>
   
