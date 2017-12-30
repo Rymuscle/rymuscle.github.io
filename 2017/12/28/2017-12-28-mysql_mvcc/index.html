@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/mysql_mvcc_jieshao.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_01.png">
-<meta property="og:updated_time" content="2017-12-30T12:01:30.000Z">
+<meta property="og:updated_time" content="2017-12-30T12:06:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL-InnoDB-MVCC多版本并发控制">
 <meta name="twitter:description" content="MVCC(Multiversion Concurrency Control)1.先引用《高性能MySQL》中对MVCC的部分介绍   MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁。基于提升并发性能的考虑, 它们一般都同时实现了多版本并发控制(MVCC)。不仅是MySQL, 包括Oracle,PostgreSQL等其他数据库系统也都实现了MVCC, 但各自的实现机制不尽相同, 因为M">
@@ -162,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC"><span class="post-toc-number">1.</span> <span class="post-toc-text">MVCC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#比较算法"><span class="post-toc-number">3.</span> <span class="post-toc-text">比较算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对别READ-COMMITED和REPEATABLE-READ"><span class="post-toc-number">4.</span> <span class="post-toc-text">对别READ COMMITED和REPEATABLE READ</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本文主要参考和引用如下文章"><span class="post-toc-number">6.</span> <span class="post-toc-text">本文主要参考和引用如下文章</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC"><span class="post-toc-number">1.</span> <span class="post-toc-text">MVCC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#比比算法"><span class="post-toc-number">3.</span> <span class="post-toc-text">比比算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对别READ-COMMITED和REPEATABLE-READ"><span class="post-toc-number">4.</span> <span class="post-toc-text">对别READ COMMITED和REPEATABLE READ</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本文主要参考和引用如下文章"><span class="post-toc-number">6.</span> <span class="post-toc-text">本文主要参考和引用如下文章</span></a></li></ol>
         </nav>
     </aside>
     
@@ -226,7 +226,7 @@
 <li>在innodb中, 每创建一个新事务, 存储引擎都会将当前系统中的活跃事务列表(trx_sys-&gt;trx_list)创建一个副本(<code>read view</code>), 副本中保存的是系统中当前不应该被本事务看到的其他事务id列表。</li>
 <li>当用户在事务中要读取某行记录的时候, innodb会将该行当前的版本号与该read view进行比较, 下面介绍 <code>比较算法</code> ;</li>
 </ul>
-<h2 id="比较算法"><a href="#比较算法" class="headerlink" title="比较算法"></a>比较算法</h2><p>设该行的当前事务id为<code>trx_id_current</code>, <code>read view</code>中该行最早的事务id为<code>trx_id_first</code>, 最迟的事务id为<code>trx_id_last</code></p>
+<h2 id="比比算法"><a href="#比比算法" class="headerlink" title="比比算法"></a>比比算法</h2><p>设该行的当前事务id为<code>trx_id_current</code>, <code>read view</code>中该行最早的事务id为<code>trx_id_first</code>, 最迟的事务id为<code>trx_id_last</code></p>
 <ol>
 <li>如果<code>trx_id_current &lt; trx_id_first</code>, 那就表示<br> 当前事务在读取该行记录的时候, 给该行数据设置的隐藏事务ID字段的值, 比<code>read view</code>中记录的 ‘当前系统中其他事务给该行记录设置的事务ID都要小’。<br> 这就意味着, 当前所有和该行记录有关的事务中, 当前事务是第一个读取到该行记录的, 没有任何在当前事务前面对该行数据做过更改但还没有提交的事务, 所以当前事务可以直接拿到表中<strong>稳定的数据</strong>!</li>
 <li>如果<code>trx_id_current &gt; trx_id_last</code> 的话，那就表示<br> 当前事务在读取该行记录的时候, 给该行数据设置的隐藏事务ID字段的值, 比<code>read view</code>中记录的 ‘当前系统中其他事务给该行记录设置的事务ID都要大’。<br> 这就意味着, 当前所有和该行记录有关的事务中, 当前事务是最后一个读取到该行记录的, 所以需要从该行记录的<code>DB_ROLL_PTR</code>指针所指向的回滚段中取出最新的undo-log的版本号, 将它赋值给<code>trx_id_current</code>，然后继续重新开始整套比较算法, 这么迭代下去, 会在undo-log中一层层往下找下去, 最终就会取到<strong>稳定的数据</strong>!</li>
@@ -358,6 +358,13 @@
         </a>
       </div>
     
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/29/2017-12-29-mysql_transaction-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h4>
+      </a>
+    </div>
   
 </nav>
 
