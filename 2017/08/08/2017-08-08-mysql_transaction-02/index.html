@@ -41,7 +41,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/zuse.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lock_result.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/transaction_state_01.png">
-<meta property="og:updated_time" content="2017-12-28T09:06:53.000Z">
+<meta property="og:updated_time" content="2017-12-28T09:28:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务各隔离级别和锁的关系">
 <meta name="twitter:description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
@@ -302,6 +302,17 @@
 </ol>
 <p><strong>所以可以得出</strong>: <code>READ UNCOMMITTED</code>隔离级别下, 读压根不会加任何锁，写会加排他锁，并到事务结束之后释放。</p>
 <h3 id="READ-COMMITTED"><a href="#READ-COMMITTED" class="headerlink" title="READ COMMITTED"></a>READ COMMITTED</h3><p>(提交读)</p>
+<ol>
+<li>了解了上面 <code>READ UNCOMMITTED</code> 隔离级别是如何加锁的, 并且在上一篇文章中, 已经知道 <code>READ COMMITTED</code> 隔离级别可以解决脏读的问题, 那接下来, 对于 <code>READ COMMITTED</code> 隔离级别, 试想一下如果让你用锁来设计, 你会怎么做?</li>
+</ol>
+<ul>
+<li>既然<code>READ COMMITTED</code> 隔离级别可以解决<code>脏读</code>的问题, 也就是他可以让事务只能读其他事务已提交的的记录。</li>
+<li>如果用锁机制来实现该隔离级别:<br>  试想一下, 当在事务A中读取数据D的时候, 假设D之前已经在事务B中了, 并且事务B中对数据D做了修改, 但是事务B还没有完成(commit/rollback), 那如何让事务A无法读取数据D呢?<br>  当事务B在对数据D操作的时候, 假设给数据D加上了行级的排他锁(X lock), 那事务A自然只能阻塞等事务A完成后才能读取数据D了!</li>
+<li>数据库这样做的话确实实现了<code>READ COMMITTED</code>隔离级别的效果, 但问题是这是一种很低效的做法, 因为对于大部分应用来说, 读操作是多于写操作的, 当写操作加锁时, 那么读操作全部被阻塞, 这样在大用户量高并发的情况下, 会直接降低数据库的读效率。</li>
+</ul>
+<ol>
+<li>所以, 数据库是这样干的</li>
+</ol>
 <h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>(可重复读)</p>
 <h3 id="SERIALIZABLE"><a href="#SERIALIZABLE" class="headerlink" title="SERIALIZABLE"></a>SERIALIZABLE</h3><p>(可串行化)</p>
 <p>参考资料:<br>-《高性能MySQL》</p>
