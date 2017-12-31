@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2017-12-30T11:54:08.000Z">
+<meta property="og:updated_time" content="2017-12-31T08:16:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)事务浅析">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
@@ -210,7 +210,7 @@
 <ol>
 <li><p>Atomicity 原子性<br> 一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚。对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p>
 </li>
-<li><p>Consistency 一致性<br> 事务的<code>一致性</code>会保证 <strong>数据库总是从一个一致性的状态 转换到 另一个一致性的状态</strong>;<br> 比如在之前的转账例子:</p>
+<li><p>Consistency 一致性<br> 虽然可数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性会保证 <strong>数据库总是从一个一致性的状态 转换到 另一个一致性的状态</strong>;<br> 比如在之前的转账例子:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">转账前的一致性状态是: &apos;Iron Man&apos;(余额500), &apos;Wolverine&apos;(余额15)</div><div class="line">转账成功后的一致性状态是: &apos;Iron Man&apos;(余额400), &apos;Wolverine&apos;(余额115)</div><div class="line">转账如果失败的话, 一致性的状态应该回滚到转账前的状态: &apos;Iron Man&apos;(余额500), &apos;Wolverine&apos;(余额15)</div></pre></td></tr></table></figure>
 </li>
 </ol>

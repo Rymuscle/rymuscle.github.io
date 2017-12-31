@@ -13,25 +13,25 @@
     
     
     
-    <title>02 - 分布式锁 | Lant&#39;s Blog</title>
+    <title>MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="分布式">
-    <meta name="description" content="分布式锁">
-<meta name="keywords" content="分布式">
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02 - 分布式锁">
-<meta property="og:url" content="http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/index.html">
+<meta property="og:title" content="MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系">
+<meta property="og:url" content="http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="分布式锁">
+<meta property="og:description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-07T13:07:00.000Z">
+<meta property="og:updated_time" content="2017-12-31T10:08:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02 - 分布式锁">
-<meta name="twitter:description" content="分布式锁">
+<meta name="twitter:title" content="MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系">
+<meta name="twitter:description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02 - 分布式锁</div>
+        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">02 - 分布式锁</h1>
+        <h1 class="title">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-04-13T12:03:09.000Z" itemprop="datePublished" class="page-time">
-  2017-04-13
+                <time datetime="2017-12-31T08:01:47.000Z" itemprop="datePublished" class="page-time">
+  2017-12-31
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/分布式/">分布式</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分布式锁"><span class="post-toc-number">1.</span> <span class="post-toc-text">分布式锁</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#REPEATABLE-READ"><span class="post-toc-number">1.</span> <span class="post-toc-text">REPEATABLE READ</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SERIALIZABLE"><span class="post-toc-number">2.</span> <span class="post-toc-text">SERIALIZABLE</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2017-04-13-distributed-02"
+<article id="post-2017-12-31-mysql_transaction-05"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02 - 分布式锁</h1>
+        <h1 class="post-card-title">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-04-13 20:03:09" datetime="2017-04-13T12:03:09.000Z"  itemprop="datePublished">2017-04-13</time>
+            <time class="post-time" title="2017-12-31 16:01:47" datetime="2017-12-31T08:01:47.000Z"  itemprop="datePublished">2017-12-31</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/分布式/">分布式</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -184,7 +184,14 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3>
+            <h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>(可重复读)</p>
+<h3 id="SERIALIZABLE"><a href="#SERIALIZABLE" class="headerlink" title="SERIALIZABLE"></a>SERIALIZABLE</h3><p>(可串行化)</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
+<li><a href="https://www.imooc.com/article/17290" target="_blank" rel="external">慕课mark_rock同学手记</a></li>
+<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
+</ul>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -210,7 +217,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式/">分布式</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
 
             
@@ -220,7 +227,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&title=《02 - 分布式锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -230,22 +237,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&title=《02 - 分布式锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02 - 分布式锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -268,19 +275,12 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/04/13/2017-04-17-distributed-05/" id="post-prev" class="post-nav-link">
+        <a href="/2017/12/31/2017-12-31-mysql_transaction-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">05 - 分布式</h4>
+          <h4 class="title">MySQL(INNODB引擎)事务READ COMMITTED隔离级别和锁的关系</h4>
         </a>
       </div>
     
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/05/13/2017-05-13-Iterator-generator-yield-01/" id="post-next" class="post-nav-link">
-        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01.PHP - Iterator (迭代器) 接口简介</h4>
-      </a>
-    </div>
   
 </nav>
 
@@ -389,7 +389,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&title=《02 - 分布式锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -399,22 +399,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&title=《02 - 分布式锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02 - 分布式锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/13/2017-04-13-distributed-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -425,7 +425,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3ay47CMAwF0Pn/n2a2SBXMtR3ENDlZVVDaHBZW/Pj5idfjaT1/cr1+/+31OdfPr98uWxgYGLdlPN6u9xt9dWfCSN6V3I+BgXEO41UES+5JtpWH0fy9GBgYGHkQrB4lk78DAwMDo8dIktjoGPfdgIuBgXFbRvV4l6e41dT347k4BgbGDRmTIPjp64/0NzAwMG7FeBRXtcFZDd+9hYGBsTdj0lZc1UJ4n5omRT0MDIwTGHmZfj4ilm86OSBiYGCcxshbkvNBivzgmLQfMDAwzmHkzcvqr6oBd1ntEAMDYyNG/vrJcFieJPeegIGBcQ6jV+6fNCbzlkPhIIiBgbEdIz+cVcNl3hjIR9CivwADA2MjRvWheXJbHZUYtVExMDAOYKxtQ+bBevJGDAwMjF5xvzrUNWlLYGBgnMboFch6YxbJdXOoAgMDY2tGtUBWbW32npMX7zAwMPZmrGo65rwePnomBgbG1ozJsazXNe0NWER7w8DA2JSRJ6XVklweQOfJMAYGxgmMecibFNEmgxcYGBgnMKoHwWproTA2USy0RSdcDAyMmzMmRfw8QFdboaMgi4GBsR1jVbSeJLGrxjIwMDD2ZuRJYxJAk21NAnHUvMTAwNiUUX19dRiiPDZRDf0YGBgY8dZ7eWV+hv0jI8fAwMAoFsXywlnvHgwMjNMYq5LY5Ld5MP1auQ0DA+OfMaoHuPyTJBGtPm3U1MTAwLgf4xcroNYsLTvY4wAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsUlEQVR42u3aQXICMQwEwP3/p5NrqqgsM5a9cGhOFCFrtw+WkHRd8evn9pV/M3nC63P+fnKdeOHh4eEd2HpOut/Kf9/JD649bjw8PLxzvLWt5Bd6G06Sz+/3jIeHh/c9vHtMkt8mwWayHzw8PLxv5rXhpA0tydPw8PDwPsVLihHJMkly3BYj8jQdDw8P7xne3uv+mfdH+nt4eHh446563uCflCfaNLrYLR4eHt4BXn7htsh8sCBJ0Ef7xMPDw9vKywebckYOa1tr9THh4eHhHeDl6WybCufsOePNPvHw8PC28vLh0b0lhnnCnRwKHh4e3mlekuzu6ra1ZeLFneDh4eEd4OWDAmtFhCTwzFPt+scAHh4e3oDX/kO7fNL+b0vGxZHh4eHhfYi3donnray8LJvss14YDw8Pr+Tl7fw2tV3L5fMWWrF/PDw8vAO89vLNiwvzAYX8r0XdGg8PD28Tb204YFKErZPjYIQr2hweHh7egNemxXlgyAsH+fPrQgYeHh7eAV4eJCbliXYoYVJuWIyBeHh4eDGvvZTzEkASKuZJ+ZuAgYeHh/cgby2q5GXcthjRHs3V1qHx8PDwSl77yz0v6a49bW344N/AgIeHh7eVN7++2yLvWvl1bYAADw8P7xwvKdeuta/aEav8oIvyMR4eHt6DvEkRNk+4J4dSpNF4eHh4x3hroaIdIGhHFvJP3qTUeHh4eI/w2rGAttS79r/1Mnh4eHhbYW1xth0yyAPGKAC8PgcPDw/vAG9+x+YpePu+XWUSovDw8PBaXh4MJg2q5AkJKVkXDw8P7xle3hhbu+KvR15RGRcPDw/vcV5b0l1Lx+epOR4eHt738Nom2SSEJKOx9dAVHh4e3iZe27KaXPdrbbO8xIyHh4d3mtf+yM+XnADab26rYeDh4eHdrfULS5ANAVjuLFsAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

@@ -13,7 +13,7 @@
     
     
     
-    <title>MySQL(INNODB引擎)事务各隔离级别和锁的关系 | Lant&#39;s Blog</title>
+    <title>MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,7 +23,7 @@
     <meta name="description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL(INNODB引擎)事务各隔离级别和锁的关系">
+<meta property="og:title" content="MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
@@ -41,9 +41,9 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/zuse.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lock_result.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/transaction_state_01.png">
-<meta property="og:updated_time" content="2017-12-30T12:05:02.000Z">
+<meta property="og:updated_time" content="2017-12-31T10:18:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL(INNODB引擎)事务各隔离级别和锁的关系">
+<meta name="twitter:title" content="MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系">
 <meta name="twitter:description" content="前言先针对自己以前错误的思维做个记录, 可以直接跳过  由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?; 而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死锁,">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/022_zangdu.png">
     
@@ -126,7 +126,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务各隔离级别和锁的关系</div>
+        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -148,7 +148,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h1>
+        <h1 class="title">MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-12-29T11:12:11.000Z" itemprop="datePublished" class="page-time">
@@ -173,7 +173,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#各隔离级别-与-锁"><span class="post-toc-number">2.</span> <span class="post-toc-text">各隔离级别 与 锁</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#READ-UNCOMMITTED"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">READ UNCOMMITTED</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#READ-UNCOMMITTED-测试"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">READ UNCOMMITTED 测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#演示脏读效果"><span class="post-toc-number">2.2.1.</span> <span class="post-toc-text">演示脏读效果</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#测试-分析隔离级别如何加锁"><span class="post-toc-number">2.2.2.</span> <span class="post-toc-text">测试,分析隔离级别如何加锁</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#READ-COMMITTED"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">READ COMMITTED</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#REPEATABLE-READ"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">REPEATABLE READ</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SERIALIZABLE"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">SERIALIZABLE</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#“READ-UNCOMMITTED与锁”的困惑"><span class="post-toc-number">2.</span> <span class="post-toc-text">“READ UNCOMMITTED与锁”的困惑</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED与锁-测试"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ UNCOMMITTED与锁 测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#演示该隔离级别脏读效果"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">演示该隔离级别脏读效果</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试-分析该隔离级别如何加锁"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">测试,分析该隔离级别如何加锁</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -181,7 +181,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL(INNODB引擎)事务各隔离级别和锁的关系</h1>
+        <h1 class="post-card-title">MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-12-29 19:12:11" datetime="2017-12-29T11:12:11.000Z"  itemprop="datePublished">2017-12-29</time>
 
@@ -203,7 +203,7 @@
 <li>由于以前看到很多资料在谈到并发控制的时候, 都会提到用<code>锁</code>来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: <code>现在并发出问题了, 那怎么用锁的相关知识来解决?</code>;</li>
 <li>而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 <code>死锁</code>, <code>锁冲突</code>, <code>行锁</code>,<code>表锁</code>, <code>读锁</code>, <code>写锁</code>, <code>乐观锁</code>, <code>悲观锁</code> ……等等 N多锁相关的名词(后面的笔记会把所有自己遇到的, 全部整理并进行分析), 大量的篇幅, 高深晦涩的描述, 直接导致我意识里认为<code>嗯, 锁真tm高大上, 真tm高端, 肯定tm就是它了</code>; </li>
 <li>于是就进入了思想误区, 认为在解决<code>脏读</code>,<code>不可重复读</code>,<code>幻读</code>的资料中, 应该大篇幅的描述如何用锁相关的知识来解决这些问题, 然而略失落了, 资料倒是提了点儿锁的知识, 但更多的是用事务的哪个隔离级别来解决这些问题, <code>锁</code>哪儿去了?</li>
-<li><p>尤其是在分析<code>脏读</code>,<code>不可重复读</code>,<code>幻读</code>这几个问题的时候, 一上去就全乱了, 比如 <code>脏读</code>, 如果总是以MySQL锁的相关知识作为前提来分析, <strong>就会陷入误区</strong> ‘事务A读取数据的时候肯定会加S锁的, 事务B自然是无法对未完成的事务A中的数据进行修改的, 我C, <strong>这种脏读的场景根本就不成立嘛!</strong>‘, 那为什么不提锁, 而是用隔离级别来解决。<br> <img src="/img/mysql/transaction/022_zangdu.png" width="609" height="175"><br>……<br>……</p>
+<li><p>尤其是在分析<code>脏读</code>,<code>不可重复读</code>,<code>幻读</code>这几个问题的时候, 一上去就全乱了, 比如 <code>脏读</code>, 如果总是以MySQL锁的相关知识作为前提来分析, <strong>就会陷入误区</strong> ‘事务A读取数据的时候肯定会加S锁的, 事务B自然是无法对未完成的事务A中的数据进行修改的, 我Ca, <strong>这种脏读的场景根本就不成立嘛!</strong>‘, 那为什么不提锁, 而是用隔离级别来解决。<br> <img src="/img/mysql/transaction/022_zangdu.png" width="609" height="175"><br>……<br>……</p>
 </li>
 <li><p>晕了几天之后,终于稍微醒了点……</p>
 <blockquote>
@@ -213,7 +213,7 @@
 <li><p>显然, <strong>事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略</strong>，在分析之前的几个高并发事务问题的时候, <code>隔离级别(锁)</code>自然是不能作为前置知识点的, 而是最终问题的解决方案! </p>
 </li>
 </ol>
-<h2 id="各隔离级别-与-锁"><a href="#各隔离级别-与-锁" class="headerlink" title="各隔离级别 与 锁"></a>各隔离级别 与 锁</h2><h3 id="READ-UNCOMMITTED"><a href="#READ-UNCOMMITTED" class="headerlink" title="READ UNCOMMITTED"></a>READ UNCOMMITTED</h3><p>(未提交读)</p>
+<h2 id="“READ-UNCOMMITTED与锁”的困惑"><a href="#“READ-UNCOMMITTED与锁”的困惑" class="headerlink" title="“READ UNCOMMITTED与锁”的困惑"></a>“READ UNCOMMITTED与锁”的困惑</h2><p>(未提交读)</p>
 <ol>
 <li><p>在READ UNCOMMITTED级别, 事务中的修改, 即使还没有提交, 对其他事务也都是可见的; 也就是说事务可以读取未提交的数据, 这也就造成了 <code>脏读(Dirty Read)</code> 的出现。</p>
 </li>
@@ -251,7 +251,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      2 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="READ-UNCOMMITTED-测试"><a href="#READ-UNCOMMITTED-测试" class="headerlink" title="READ UNCOMMITTED 测试"></a>READ UNCOMMITTED 测试</h3><h4 id="演示脏读效果"><a href="#演示脏读效果" class="headerlink" title="演示脏读效果"></a>演示脏读效果</h4><ol>
+<h2 id="READ-UNCOMMITTED与锁-测试"><a href="#READ-UNCOMMITTED与锁-测试" class="headerlink" title="READ UNCOMMITTED与锁 测试"></a>READ UNCOMMITTED与锁 测试</h2><h3 id="演示该隔离级别脏读效果"><a href="#演示该隔离级别脏读效果" class="headerlink" title="演示该隔离级别脏读效果"></a>演示该隔离级别脏读效果</h3><ol>
 <li><p>先查看当前会话(当前客户端)事务的隔离级别: <code>SELECT @@SESSION.tx_isolation;</code><br> 可以看到: <code>REPEATABLE READ</code> 是InnoDB存储引擎的默认事务隔离级别</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 </li>
@@ -270,7 +270,7 @@
 <li><p>切换到客户端1, 再次查询数据, 发现数据已经变成了’钢铁侠-托尼’; 然后客户端2 <code>rollback</code> 事务, 再到客户端1中查询,发现user_name又变成了’钢铁侠’, 那之前独到’钢铁侠-托尼’就是脏数据了, 这就是一次 <code>脏读</code><br> <img src="/img/mysql/transaction/result_01.png" width="515" height="845"></p>
 </li>
 </ol>
-<h4 id="测试-分析隔离级别如何加锁"><a href="#测试-分析隔离级别如何加锁" class="headerlink" title="测试,分析隔离级别如何加锁"></a>测试,分析隔离级别如何加锁</h4><ol>
+<h3 id="测试-分析该隔离级别如何加锁"><a href="#测试-分析该隔离级别如何加锁" class="headerlink" title="测试,分析该隔离级别如何加锁"></a>测试,分析该隔离级别如何加锁</h3><ol>
 <li>重新构造测试条件<br> <img src="/img/mysql/transaction/qianti_02.png" width="525" height="930"></li>
 <li><p>客户端1开启事务, 然后对数据做修改</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; update test_transaction set user_name=&apos;钢铁侠-rymuscle&apos; where id=2;</div><div class="line">Query OK, 1 row affected (0.00 sec)</div><div class="line">Rows matched: 1  Changed: 1  Warnings: 0</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
@@ -288,34 +288,23 @@
 <li>事务状态 <code>select * from information_schema.INNODB_TRX;</code><br><img src="/img/mysql/transaction/transaction_state_01.png" width="805" height="880"></li>
 </ul>
 </li>
-<li><p>所以, <strong>READ UNCOMMITTED 隔离级别下, 写操作是有锁的, 而且是有X排他锁, 直到客户端1事务完成, 锁才释放, 客户端2才能进行写操作</strong></p>
+<li><p>所以, <strong>READ UNCOMMITTED 隔离级别下, 写操作是会加锁的, 而且是X排他锁, 直到客户端1事务完成, 锁才释放, 客户端2才能进行写操作</strong></p>
 </li>
 <li><p>接下来你肯定会纳闷 “既然该隔离级别下事务在修改数据的时候加的是x锁, 并且是事务完成后才释放, 那之前的测试客户端2在事务中修改完数据之后, 为什么事务还没完成, 也就是x锁还在, 结果客户端1却能读取到客户端2修改的数据”？<strong>这完全不符合排他锁的特性啊(要知道,排他锁会阻塞除当前事务之外的其他事务的读,写操作)</strong></p>
 <ul>
 <li><p>其实网上已经有人在sqlserver的官网上找到了相关资料:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ansactions running at the READ UNCOMMITTED level do not issue shared locks to prevent other transactions from modifying data read by the current transaction. </div><div class="line">READ UNCOMMITTED transactions are also not blocked by exclusive locks that would prevent the current transaction from reading rows that have been modified but not committed by other transactions. </div><div class="line">When this option is set, it is possible to read uncommitted modifications, which are called dirty reads. Values in the data can be changed and rows can appear or disappear in the data set before the end of the transaction. </div><div class="line">This option has the same effect as setting NOLOCK on all tables in all SELECT statements in a transaction. </div><div class="line">This is the least restrictive of the isolation levels.</div></pre></td></tr></table></figure>
 </li>
-<li><p>翻译翻译, 在思考思考, 其实说的是<br>在 READ UNCOMMITTED 级别运行的事务不会发出共享锁来防止其他事务修改当前事务读取的数据, 既然不加共享锁了, 那么当前事务所读取的数据自然就可以被其他事务来修改。<br>而且当前事务要读取其他事务未提交的修改, 也不会被排他锁阻止, 因为排他锁会阻止其他事务再对其锁定的数据加读写锁, <strong>但是可笑的是, 事务在该隔离级别下去读数据的话根本什么锁都不加, 这就让排他锁无法排其他锁了</strong>。<br>这就导致了事务可以读取未提交的修改, 称为脏读。</p>
+<li><p>翻译翻译, 在思考思考, 其实说的是<br>在 READ UNCOMMITTED 级别运行的事务不会发出共享锁来防止其他事务修改当前事务读取的数据, 既然不加共享锁了, 那么当前事务所读取的数据自然就可以被其他事务来修改。<br>而且当前事务要读取其他事务未提交的修改, 也不会被排他锁阻止, 因为排他锁会阻止其他事务再对其锁定的数据加读写锁, <strong>但是可笑的是, 事务在该隔离级别下去读数据的话根本什么锁都不加, 这就让排他锁无法排它了, 因为它连锁都没有</strong>。<br>这就导致了事务可以读取未提交的修改, 称为脏读。</p>
 </li>
 </ul>
 </li>
 </ol>
-<p><strong>所以可以得出</strong>: <code>READ UNCOMMITTED</code>隔离级别下, 读压根不会加任何锁，写会加排他锁，并到事务结束之后释放。</p>
-<h3 id="READ-COMMITTED"><a href="#READ-COMMITTED" class="headerlink" title="READ COMMITTED"></a>READ COMMITTED</h3><p>(提交读)</p>
-<ol>
-<li>了解了上面 <code>READ UNCOMMITTED</code> 隔离级别是如何加锁的, 并且在上一篇文章中, 已经知道 <code>READ COMMITTED</code> 隔离级别可以解决脏读的问题, 那接下来, 对于 <code>READ COMMITTED</code> 隔离级别, 试想一下如果让你用锁来设计, 你会怎么做?<ul>
-<li>既然<code>READ COMMITTED</code> 隔离级别可以解决<code>脏读</code>的问题, 也就是他可以让事务只能读其他事务已提交的的记录。</li>
-<li>如果用锁机制来实现该隔离级别:<br>  试想一下, 当在事务A中读取数据D的时候, 假设D之前已经在事务B中了, 并且事务B中对数据D做了修改, 但是事务B还没有完成(commit/rollback), 那如何让事务A无法读取数据D呢?<br>  当事务B在对数据D操作的时候, 假设给数据D加上了行级的排他锁(X lock), 那事务A自然只能阻塞等事务A完成后才能读取数据D了!</li>
-<li>数据库这样做的话确实实现了<code>READ COMMITTED</code>隔离级别的效果, 但问题是这是一种很低效的做法, 因为对于大部分应用来说, 读操作是多于写操作的, 当写操作加锁时, 那么读操作全部被阻塞, 这样在大用户量高并发的情况下, 会直接降低数据库的读效率。</li>
-</ul>
-</li>
-<li>所以, 数据库是这样干的</li>
-</ol>
-<h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>(可重复读)</p>
-<h3 id="SERIALIZABLE"><a href="#SERIALIZABLE" class="headerlink" title="SERIALIZABLE"></a>SERIALIZABLE</h3><p>(可串行化)</p>
+<p><strong>所以可以得出</strong>: <code>READ UNCOMMITTED</code>隔离级别下, 读不会加任何锁。而写会加排他锁，并到事务结束之后释放。</p>
 <p>参考资料:<br>-《高性能MySQL》</p>
 <ul>
-<li><a href="https://www.imooc.com/article/17290" target="_blank" rel="external">慕课mark_rock同学手记</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
+<li><a href="https://www.imooc.com/article/17291" target="_blank" rel="external">慕课mark_rock同学手记</a></li>
 <li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
 </ul>
 
@@ -354,7 +343,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -364,7 +353,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -374,7 +363,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -408,6 +397,13 @@
         </a>
       </div>
     
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/31/2017-12-31-mysql_transaction-04/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL(INNODB引擎)事务READ COMMITTED隔离级别和锁的关系</h4>
+      </a>
+    </div>
   
 </nav>
 
@@ -516,7 +512,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -526,7 +522,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&title=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -536,7 +532,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务各隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/29/2017-12-29-mysql_transaction-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
