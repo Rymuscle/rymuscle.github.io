@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/31/2017-12-31-mysql_transaction-05/">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</a>
+      <a class="post-title-link" href="/2017/12/31/2017-12-31-mysql_transaction-05/">正真了解InnoDB事务repeatable read隔离级别</a>
     </h3>
   
 
@@ -176,13 +176,11 @@
 
     
         REPEATABLE READ(可重复读)
-SERIALIZABLE(可串行化)
 
-MySQL官方文档
-慕课mark_rock同学手记
-美团技术博客
+之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:
 
-
+既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。
+解决脏读问题...
     
 
         <a href="/2017/12/31/2017-12-31-mysql_transaction-05/" class="post-more waves-effect waves-button">
@@ -192,7 +190,7 @@ MySQL官方文档
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
 
     </div>
     
@@ -219,7 +217,7 @@ MySQL官方文档
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/31/2017-12-31-mysql_transaction-04/">MySQL(INNODB引擎)事务READ COMMITTED隔离级别和锁的关系</a>
+      <a class="post-title-link" href="/2017/12/31/2017-12-31-mysql_transaction-04/">正真了解InnoDB事务read committed隔离级别</a>
     </h3>
   
 
@@ -243,7 +241,7 @@ MySQL官方文档
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
 
     </div>
     
@@ -270,7 +268,7 @@ MySQL官方文档
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/29/2017-12-29-mysql_transaction-02/">MySQL(INNODB引擎)事务READ UNCOMMITTED隔离级别和锁的关系</a>
+      <a class="post-title-link" href="/2017/12/29/2017-12-29-mysql_transaction-02/">正真了解InnoDB事务read uncommitted隔离级别</a>
     </h3>
   
 
@@ -293,7 +291,7 @@ MySQL官方文档
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
 
     </div>
     
@@ -343,7 +341,7 @@ MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     
@@ -370,7 +368,7 @@ MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/27/2017-12-27-mysql_transaction-01/">MySQL(INNODB引擎)事务浅析</a>
+      <a class="post-title-link" href="/2017/12/27/2017-12-27-mysql_transaction-01/">MySQL(INNODB引擎)高并发事务问题及解决方案</a>
     </h3>
   
 
@@ -395,7 +393,7 @@ MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     

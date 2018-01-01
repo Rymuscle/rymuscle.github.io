@@ -13,25 +13,25 @@
     
     
     
-    <title>MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系 | Lant&#39;s Blog</title>
+    <title>正真了解InnoDB事务repeatable read隔离级别 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL">
-    <meta name="description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
-<meta name="keywords" content="MySQL">
+    <meta name="keywords" content="MySQL,MVCC,事务,隔离级别与锁">
+    <meta name="description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
+<meta name="keywords" content="MySQL,MVCC,事务,隔离级别与锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系">
+<meta property="og:title" content="正真了解InnoDB事务repeatable read隔离级别">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
+<meta property="og:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-31T10:08:57.000Z">
+<meta property="og:updated_time" content="2018-01-01T09:23:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系">
-<meta name="twitter:description" content="REPEATABLE READ(可重复读) SERIALIZABLE(可串行化)  MySQL官方文档 慕课mark_rock同学手记 美团技术博客">
+<meta name="twitter:title" content="正真了解InnoDB事务repeatable read隔离级别">
+<meta name="twitter:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</div>
+        <div class="flex-col header-title ellipsis">正真了解InnoDB事务repeatable read隔离级别</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</h1>
+        <h1 class="title">正真了解InnoDB事务repeatable read隔离级别</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-12-31T08:01:47.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#REPEATABLE-READ"><span class="post-toc-number">1.</span> <span class="post-toc-text">REPEATABLE READ</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SERIALIZABLE"><span class="post-toc-number">2.</span> <span class="post-toc-text">SERIALIZABLE</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#REPEATABLE-READ"><span class="post-toc-number">1.</span> <span class="post-toc-text">REPEATABLE READ</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系</h1>
+        <h1 class="post-card-title">正真了解InnoDB事务repeatable read隔离级别</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-12-31 16:01:47" datetime="2017-12-31T08:01:47.000Z"  itemprop="datePublished">2017-12-31</time>
 
@@ -185,7 +185,25 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>(可重复读)</p>
-<h3 id="SERIALIZABLE"><a href="#SERIALIZABLE" class="headerlink" title="SERIALIZABLE"></a>SERIALIZABLE</h3><p>(可串行化)</p>
+<ol>
+<li><p>之前已经了解到, 该隔离级别可以解决<code>不可重复读问题</code> (当然, 也能解决<code>脏读问题</code>), 那么如果单纯用锁来实现, 可能会是如下这样子:</p>
+<ul>
+<li>既然<code>REPEATABLE READ</code> 隔离级别可以解决<code>脏读</code>, <code>不可重复读</code>的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。</li>
+<li>解决<code>脏读问题</code>:<br>  试想一下, 当在事务A中读取数据D的时候, 假设D之前已经在事务B中了, 并且事务B中对数据D做了修改, 但是事务B还没有完成(commit/rollback), 那如何让事务A无法读取数据D呢?<br>  当事务B在对数据D做写操作的时候, 假设给数据D加上了行级的排他锁(X lock), 那事务A自然只能阻塞等事务A完成后才能读取数据D了, 这样就解决了<code>脏读问题</code>。</li>
+<li>解决 <code>不可重复读问题</code>:<br>  试想一下, 当在事务A中第一次读取了数据D之后, 直接给该数据D加S共享锁, 那其他事务自然只能阻塞等事务A完成后才能对数据D做修改操作了, 这样就解决了<code>不可重复读</code>, 在事务A中多次读取数据D, 都是一样的。</li>
+</ul>
+</li>
+<li><p>上面使用<code>S锁+X锁</code>确实可以实现 <code>READ COMMITTED</code> 隔离级别的效果, 也就避免了<code>脏读问题</code>和<code>不可重复读问题</code>, 当然, 这里的问题仍然是低效！！！！</p>
+</li>
+<li><p>因为 MySQL 在事务隔离级别Read committed 、Repeatable Read下，InnoDB 存储引擎采用<code>非锁定</code>的<code>一致性读</code>－－即读取数据不用加锁，即采用的是MVCC中<code>一致性非锁定读</code>模式, 所以, InnoDB的做法是: <strong>读不影响写，写不影响读</strong>。</p>
+<ul>
+<li>读不影响写: 当数据正在执行读操作时，其他事务的写操作不会因此去等待当前事务行上S锁的释放，而是会去读取行的一个快照数据。   </li>
+<li>写不影响读：当数据正在执行写操作时，其他事务的读操作不会因此去等待当前事务行上X锁的释放，而是会去读取行的一个快照数据。    </li>
+</ul>
+</li>
+<li><p>所以总结来看, <code>READ UNCOMMITTED</code> 和 <code>REPEATABLE READ</code> 这两个隔离级别都是使用 <code>写用排他锁 + 读用MVCC</code>, 区别可以参考 <a href="/2017/12/28/2017-12-28-mysql_mvcc/">MySQL-InnoDB-MVCC多版本并发控制</a></p>
+</li>
+</ol>
 <ul>
 <li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
 <li><a href="https://www.imooc.com/article/17290" target="_blank" rel="external">慕课mark_rock同学手记</a></li>
@@ -217,7 +235,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
 
 
             
@@ -227,7 +245,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -237,7 +255,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -247,7 +265,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -277,7 +295,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/12/31/2017-12-31-mysql_transaction-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">MySQL(INNODB引擎)事务READ COMMITTED隔离级别和锁的关系</h4>
+          <h4 class="title">正真了解InnoDB事务read committed隔离级别</h4>
         </a>
       </div>
     
@@ -389,7 +407,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -399,7 +417,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -409,7 +427,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务REPEATABLE READ隔离级别和锁的关系》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

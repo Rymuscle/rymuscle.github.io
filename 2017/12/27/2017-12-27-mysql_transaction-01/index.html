@@ -13,17 +13,17 @@
     
     
     
-    <title>MySQL(INNODB引擎)事务浅析 | Lant&#39;s Blog</title>
+    <title>MySQL(INNODB引擎)高并发事务问题及解决方案 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL">
+    <meta name="keywords" content="MySQL,事务">
     <meta name="description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
-<meta name="keywords" content="MySQL">
+<meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MySQL(INNODB引擎)事务浅析">
+<meta property="og:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
@@ -34,9 +34,9 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/gelijibie_wenti.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-01-01T04:23:41.000Z">
+<meta property="og:updated_time" content="2018-01-01T08:44:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL(INNODB引擎)事务浅析">
+<meta name="twitter:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
@@ -119,7 +119,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)事务浅析</div>
+        <div class="flex-col header-title ellipsis">MySQL(INNODB引擎)高并发事务问题及解决方案</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -141,7 +141,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">MySQL(INNODB引擎)事务浅析</h1>
+        <h1 class="title">MySQL(INNODB引擎)高并发事务问题及解决方案</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-12-27T13:01:07.000Z" itemprop="datePublished" class="page-time">
@@ -174,7 +174,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">MySQL(INNODB引擎)事务浅析</h1>
+        <h1 class="post-card-title">MySQL(INNODB引擎)高并发事务问题及解决方案</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-12-27 21:01:07" datetime="2017-12-27T13:01:07.000Z"  itemprop="datePublished">2017-12-27</time>
 
@@ -255,9 +255,30 @@
 <h3 id="幻读-间隙锁"><a href="#幻读-间隙锁" class="headerlink" title="幻读 (间隙锁)"></a>幻读 (间隙锁)</h3><ol>
 <li><p>很多人, 当然也包括本人, 容易搞混 <code>不可重复读</code> 和 <code>幻读</code> , 确实这两者有些相似。</p>
 <ul>
-<li>但不可重复读重点是针对<code>update</code>和<code>delete</code>。</li>
-<li>而幻读的重点是针对<code>insert</code>。</li>
+<li>但不可重复读重点是针对<code>update</code>。 </li>
+<li>而幻读的重点是针对<code>insert</code>，<code>delete</code>。</li>
 </ul>
+</li>
+<li><p>不可重复读其实还好理解, 但幻读经常容易和不可重复读搞混淆, 因此此处专门模拟一个幻读现象来对比一下, 在InnoDB默认<code>REPEATABLE-READ</code>隔离级别下测试:</p>
+<ul>
+<li><p>打开客户端1查看隔离级别及初始数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>打开客户端2查看隔离级别及初始数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在客户端2中开启事务, 然后查询数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在客户端1中插入一条id为4的新数据 (直接自动提交)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">Query OK, 1 row affected (0.00 sec)</div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">|  4 | 死侍    |  18 |      0 | A bad boy          |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">4 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在客户端2事务中再次查询数据, 发现数据没有变化(表示可以重复读), 但是在客户端2事务中插入一条id为4的新数据, 发现提示数据已经存在, 这就是幻读</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line"> // 下面是客户端1插入数据之后, 发现客户端2在事务中可以重复读</div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line">// 下面是客户端1插入数据之后, 发现客户端2在事务中不能再次插入, 出现了幻读</div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>注意delete也一样，开启客户端2事务, 如果是客户端1<code>删除一条数据</code>, 客户端2的事务中再次执行delete删除客户端1中删除的数据会发现执行虽然成功了, 但是影响的row是0行!!!</p>
 </li>
 <li><p>如果使用锁机制来实现这两种隔离级别, 大致是如下这样子:</p>
   <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在可重复读中, 该sql第一次读取到数据后, 就需要将数据加锁, 让其它事务无法修改(update/delete)这些数据, 就可以实现可重复读了。</div><div class="line">但这种方法却无法锁住insert的数据, 所以当事务A先前读取了数据, 事务B还是可以insert数据提交, 这时事务A就会发现莫名其妙多了一条之前没有的数据, 这就是幻读, 幻读不能通过行锁来避免。</div><div class="line">幻读是需要事务的Serializable隔离级别, 这么做可以有效的避免幻读、不可重复读、脏读等问题, 但却会极大的降低数据库的并发能力。</div></pre></td></tr></table></figure>
@@ -310,7 +331,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
 
             
@@ -320,7 +341,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -330,7 +351,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -340,7 +361,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -489,7 +510,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -499,7 +520,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&title=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -509,7 +530,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)事务浅析》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL(INNODB引擎)高并发事务问题及解决方案》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
