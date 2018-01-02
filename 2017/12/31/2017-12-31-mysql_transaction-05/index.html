@@ -13,24 +13,24 @@
     
     
     
-    <title>正真了解InnoDB事务repeatable read隔离级别 | Lant&#39;s Blog</title>
+    <title>mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,MVCC,事务,隔离级别与锁">
+    <meta name="keywords" content="MySQL,事务,隔离级别与锁,MVCC">
     <meta name="description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
-<meta name="keywords" content="MySQL,MVCC,事务,隔离级别与锁">
+<meta name="keywords" content="MySQL,事务,隔离级别与锁,MVCC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="正真了解InnoDB事务repeatable read隔离级别">
+<meta property="og:title" content="mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-01T09:23:14.000Z">
+<meta property="og:updated_time" content="2018-01-02T01:32:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="正真了解InnoDB事务repeatable read隔离级别">
+<meta name="twitter:title" content="mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC">
 <meta name="twitter:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">正真了解InnoDB事务repeatable read隔离级别</div>
+        <div class="flex-col header-title ellipsis">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">正真了解InnoDB事务repeatable read隔离级别</h1>
+        <h1 class="title">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-12-31T08:01:47.000Z" itemprop="datePublished" class="page-time">
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">正真了解InnoDB事务repeatable read隔离级别</h1>
+        <h1 class="post-card-title">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-12-31 16:01:47" datetime="2017-12-31T08:01:47.000Z"  itemprop="datePublished">2017-12-31</time>
 
@@ -245,7 +245,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -255,7 +255,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -265,7 +265,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -295,7 +295,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/12/31/2017-12-31-mysql_transaction-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">正真了解InnoDB事务read committed隔离级别</h4>
+          <h4 class="title">mysql(InnoDB)事务隔离级别(READ COMMITTED) 与 锁,MVCC</h4>
         </a>
       </div>
     
@@ -407,7 +407,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -417,7 +417,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&title=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -427,7 +427,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《正真了解InnoDB事务repeatable read隔离级别》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
