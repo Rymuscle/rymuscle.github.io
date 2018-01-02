@@ -30,11 +30,13 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huan_read.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/gelijibie_wenti.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huandu_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huandu_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huandu_03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/huandu_04.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-01-01T08:44:03.000Z">
+<meta property="og:updated_time" content="2018-01-02T07:11:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
@@ -253,13 +255,31 @@
 </li>
 </ol>
 <h3 id="幻读-间隙锁"><a href="#幻读-间隙锁" class="headerlink" title="幻读 (间隙锁)"></a>幻读 (间隙锁)</h3><ol>
-<li><p>很多人, 当然也包括本人, 容易搞混 <code>不可重复读</code> 和 <code>幻读</code> , 确实这两者有些相似。</p>
+<li><p>由于很多人(当然也包括本人), 容易搞混 <code>不可重复读</code> 和 <code>幻读</code> , 这两者确实非常相似。</p>
 <ul>
-<li>但不可重复读重点是针对<code>update</code>。 </li>
-<li>而幻读的重点是针对<code>insert</code>，<code>delete</code>。</li>
+<li>但 <code>不可重复读</code> 的重点是针对 <code>update</code>, <code>delete</code>。 </li>
+<li>而 <code>幻读</code> 的重点针对的是 <code>insert</code>。(可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a>)</li>
 </ul>
 </li>
-<li><p>不可重复读其实还好理解, 但幻读经常容易和不可重复读搞混淆, 因此此处专门模拟一个幻读现象来对比一下, 在InnoDB默认<code>REPEATABLE-READ</code>隔离级别下测试:</p>
+<li><p>虽然网上有不少资料提到<code>幻读</code>, 但是可能表达的都不太准确, 比如这样一段对幻读的解释 ‘同样的条件, 第一次和第二次读出来的记录不一样’ 在网络上随处可见, 但其实并不准确, 因为 <code>delete</code> 其实并不是幻读的范畴(<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a>)也一点都没涉及到<code>delete</code>)。</p>
+</li>
+<li><p>如果<code>手动加锁</code>来演示, 你便会看清他们的本质:</p>
+<ul>
+<li><p>如果 <code>insert</code>, 则操作被阻塞, 并且可以看到具体加的是<code>X锁+GAP锁</code>:<br><img src="/img/mysql/transaction/huandu_01.png" width="600" height="425"><br><img src="/img/mysql/transaction/huandu_02.png" width="486" height="345"></p>
+</li>
+<li><p>如果 <code>delete</code>或者<code>update</code>, 则操作被阻塞, 但是可以看到具体加的只有<code>X锁</code>:<br><img src="/img/mysql/transaction/huandu_03.png" width="600" height="425"><br><img src="/img/mysql/transaction/huandu_04.png" width="475" height="335"></p>
+</li>
+<li><p>可以看到, 其他事务只有在 <code>insert</code> 的时候, 才会加GAP锁来防止幻读!所以delete/update 和 insert 此处是要区分开的。</p>
+</li>
+</ul>
+</li>
+<li><p>不过, 后面学到mvcc的时候, 你会知道<strong>加锁的低效性</strong>, 所以<strong>还有两种</strong>解决方案:</p>
+<ul>
+<li>使用<code>隔离性</code>的最高隔离级别<code>SERIALIZABLE</code>, 但该隔离级别在实际中很少使用;</li>
+<li>其实 <code>REPEATABLE READ</code> 就可以防止幻读, 《高性能MySQL》中也说了, REPEATABLE READ 理论是是不能防止<code>幻读</code>的, 但是由于该隔离级别还使用了MVCC, 可以做到非锁定一致性读取, 所以, 只要你真的确定你明白<code>幻读</code>的意思, 你在 <code>REPEATABLE READ</code>隔离级别下是模拟不出幻读效果的;</li>
+</ul>
+</li>
+<li><p>至于<strong>网络上如下所谓的幻读现象</strong>, 本人觉得是<strong>误导</strong>, 刚开始本人也认为这就是<code>REPEATABLE-READ</code>隔离级别无法解决<code>幻读</code>的铁证, 后来发现错了, <code>幻读</code>是指两次读操作发现记录<code>增多</code>导致的不一致, 而如下是多次<code>insert</code>, 虽然也是个问题, 但已经不是 <code>幻读</code> 问题了:</p>
 <ul>
 <li><p>打开客户端1查看隔离级别及初始数据</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
@@ -273,23 +293,14 @@
 <li><p>在客户端1中插入一条id为4的新数据 (直接自动提交)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">Query OK, 1 row affected (0.00 sec)</div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">|  4 | 死侍    |  18 |      0 | A bad boy          |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">4 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 </li>
-<li><p>在客户端2事务中再次查询数据, 发现数据没有变化(表示可以重复读), 但是在客户端2事务中插入一条id为4的新数据, 发现提示数据已经存在, 这就是幻读</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line"> // 下面是客户端1插入数据之后, 发现客户端2在事务中可以重复读</div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line">// 下面是客户端1插入数据之后, 发现客户端2在事务中不能再次插入, 出现了幻读</div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+<li><p>在客户端2事务中再次查询数据, 发现数据没有变化(表示<strong>可以重复读, 并且克服了幻读</strong>), 但是在客户端2事务中插入一条id为4的新数据, 发现提示数据已经存在, <strong>注意, 虽然爆出问题来了, 但不是 <code>幻读</code> 范畴</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
-<li><p>注意delete也一样，开启客户端2事务, 如果是客户端1<code>删除一条数据</code>, 客户端2的事务中再次执行delete删除客户端1中删除的数据会发现执行虽然成功了, 但是影响的row是0行!!!</p>
-</li>
-<li><p>如果使用锁机制来实现这两种隔离级别, 大致是如下这样子:</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">在可重复读中, 该sql第一次读取到数据后, 就需要将数据加锁, 让其它事务无法修改(update/delete)这些数据, 就可以实现可重复读了。</div><div class="line">但这种方法却无法锁住insert的数据, 所以当事务A先前读取了数据, 事务B还是可以insert数据提交, 这时事务A就会发现莫名其妙多了一条之前没有的数据, 这就是幻读, 幻读不能通过行锁来避免。</div><div class="line">幻读是需要事务的Serializable隔离级别, 这么做可以有效的避免幻读、不可重复读、脏读等问题, 但却会极大的降低数据库的并发能力。</div></pre></td></tr></table></figure>
-<p> 所以说不可重复读和幻读最大的区别，就在于如何通过锁机制来解决他们产生的问题。</p>
-</li>
-<li><p>如下图:<br> <img src="/img/mysql/transaction/huan_read.png" width="607" height="251"></p>
-</li>
-<li><p>那么这个问题如何解决呢?<br> 在MySQL中, 其实事务已经用自身特性（<code>隔离性</code>的最高隔离级别<code>SERIALIZABLE</code>）解决了这个问题;</p>
+<li><p>那么这是什么问题呢?<br> 个人认为, 如果你的表中真的会出现两条完全相同的记录, 考虑一下, 最起码的表规范（第二范式）是否先满足一下?</p>
 </li>
 </ol>
-<p><strong>上面只是先直接给出各问题解决方案（可以参考下图）,后面会出几篇文章详细分析各个隔离级别的内部机制是如何帮助事务解决问题的!</strong><br>    <img src="/img/mysql/transaction/gelijibie_wenti.png" width="607" height="157"></p>
 <h2 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h2><ol>
 <li><p>最后聊一下<code>高并发事务</code>的另一个问题 – <code>丢失更新问题</code>, 该问题和之前几个问题需要区分开, 因为解决方案不是一类!</p>
 </li>
