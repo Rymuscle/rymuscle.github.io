@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-01-04T07:14:14.000Z">
+<meta property="og:updated_time" content="2018-01-09T06:48:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 这还是通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
@@ -257,10 +257,10 @@
 <li>而 <code>幻读</code> 主要是说多次读取一个范围内的记录(包括直接查询所有记录结果或者做聚合统计), 发现结果不一致(标准档案一般指记录增多, 记录的减少应该也算是幻读)。(可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a>)</li>
 </ul>
 </li>
-<li><p>其实对于 <code>幻读</code>, MySQL的InnoDB引擎默认的<code>RR</code>级别已经通过<code>MVCC自动帮我们解决了</code>, 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把<code>幻读</code>和<code>不可重复读</code>搞混淆, 所以这可能就是比较头痛的点吧!<br> 具体可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述, 理论上RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
+<li><p>其实对于 <code>幻读</code>, MySQL的InnoDB引擎默认的<code>RR</code>级别已经通过<code>MVCC自动帮我们解决了</code>（并非完全解决）, 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把<code>幻读</code>和<code>不可重复读</code>搞混淆, 所以这可能就是比较头痛的点吧!<br> 具体可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述, 理论上RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
 </li>
 </ol>
-<h3 id="幻读的延伸"><a href="#幻读的延伸" class="headerlink" title="幻读的延伸"></a>幻读的延伸</h3><p>MVCC虽然解决了<code>幻读</code>问题, 但仍然存在一个比较<strong>奇葩的问题</strong>; 接下来进行演示:</p>
+<h3 id="幻读的延伸"><a href="#幻读的延伸" class="headerlink" title="幻读的延伸"></a>幻读的延伸</h3><p>MVCC虽然解决了<code>幻读</code>问题, 但严格来说只能说是<strong>部分</strong>解决幻读问题, 接下来进行演示:</p>
 <ol>
 <li><p>打开客户端1查看隔离级别及初始数据</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
