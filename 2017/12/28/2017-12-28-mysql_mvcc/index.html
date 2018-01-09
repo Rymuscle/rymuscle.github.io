@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_03.png">
-<meta property="og:updated_time" content="2018-01-09T06:37:16.000Z">
+<meta property="og:updated_time" content="2018-01-09T06:43:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL-InnoDB-MVCC多版本并发控制">
 <meta name="twitter:description" content="(Multiversion Concurrency Control) 前言最近正在啃《高性能MySQL》这本书, 当看到事务相关知识时, 决定对该知识点稍微深入一下,《高性能MySQL》中在介绍事务相关知识点时, 显然不是特别深入, 很多比较底层的知识点并没有太多的深入, 当然此处并不是要对本书做什么评判, 言归正传, 这里主要先说一下本人在啃相关知识点时的曲折之路:   首先是事务相关ACID特">
@@ -260,23 +260,14 @@
 <li>4.从该行记录的 DB_ROLL_PTR 指针所指向的回滚段中取出最新的undo-log的版本号, 将它赋值该 <code>trx_id_current</code>，然后跳到步骤1重新开始判断。</li>
 <li>5.将该可见行的值返回。</li>
 </ul>
-<h2 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h2><ol>
-<li>下面是一个非常简版的演示事务对某行记录的更新过程, 当然, InnoDB引擎在内部要做的工作非常多:<br><img src="/img/mysql/mvcc/yanshi_01.png" width="600" height="819/"></li>
-<li>下面是一套比较算法的应用过程<br><img src="/img/mysql/mvcc/yanshi_02.png" width="602/"><br><img src="/img/mysql/mvcc/yanshi_03.png" width="602/"><br>也可参考<a href="https://github.com/zhangyachen/zhangyachen.github.io/issues/68中的案例" target="_blank" rel="external">https://github.com/zhangyachen/zhangyachen.github.io/issues/68中的案例</a></li>
-</ol>
-<h2 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a>当前读和快照读</h2><ol>
-<li><p>MySQL的InnoDB存储引擎默认事务隔离级别是RR(可重复读), 是通过 “行排他锁+MVCC” 一起实现的, 不仅可以保证可重复读, 还可以<strong>部分</strong>防止幻读, 而非完全防止;</p>
-</li>
-<li><p>为什么是部分防止幻读, 而不是完全防止?</p>
-</li>
-</ol>
+<h2 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h2><p>1.下面是一个非常简版的演示事务对某行记录的更新过程, 当然, InnoDB引擎在内部要做的工作非常多:<br><img src="/img/mysql/mvcc/yanshi_01.png" width="600" height="819/"><br>2.下面是一套比较算法的应用过程<br><img src="/img/mysql/mvcc/yanshi_02.png" width="602/"><br><img src="/img/mysql/mvcc/yanshi_03.png" width="602/"><br>也可参考<a href="https://github.com/zhangyachen/zhangyachen.github.io/issues/68中的案例" target="_blank" rel="external">https://github.com/zhangyachen/zhangyachen.github.io/issues/68中的案例</a></p>
+<h2 id="当前读和快照读"><a href="#当前读和快照读" class="headerlink" title="当前读和快照读"></a>当前读和快照读</h2><p>1.MySQL的InnoDB存储引擎默认事务隔离级别是RR(可重复读), 是通过 “行排他锁+MVCC” 一起实现的, 不仅可以保证可重复读, 还可以<strong>部分</strong>防止幻读, 而非完全防止;</p>
+<p>2.为什么是部分防止幻读, 而不是完全防止?</p>
 <ul>
 <li>效果: 在如果事务B在事务A执行中, insert了一条数据并提交, 事务A再次查询, 虽然读取的是undo中的旧版本数据(防止了部分幻读), 但是事务A中执行update或者delete都是可以成功的!!</li>
 <li>因为在innodb中的操作可以分为<code>当前读(current read)</code>和<code>快照读(snapshot read)</code>:</li>
 </ul>
-<ol>
-<li>快照读(snapshot read)<br> 简单的select操作(当然不包括 select … lock in share mode, select … for update)</li>
-</ol>
+<p>3.快照读(snapshot read)<br>    简单的select操作(当然不包括 select … lock in share mode, select … for update)</p>
 <p>4.当前读(current read) <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-locking-reads.html" target="_blank" rel="external">官网文档 Locking Reads</a></p>
 <ul>
 <li>select … lock in share mode</li>
