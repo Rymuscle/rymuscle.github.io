@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>MySQL锁 - 01 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="参考: http://blog.csdn.net/tanga842428/article/details/52748531 前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL锁 - 01">
+<meta property="og:url" content="http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="参考: http://blog.csdn.net/tanga842428/article/details/52748531 前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-01-10T01:35:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL锁 - 01">
+<meta name="twitter:description" content="参考: http://blog.csdn.net/tanga842428/article/details/52748531 前言 之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?  我们之前介绍的事务的隔离级别，其实它的核心就是锁; 虽然之前也了解到事务的最隔离级别是可以解决 丢失更新 的">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">MySQL锁 - 01</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">MySQL锁 - 01</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-02T13:08:27.000Z" itemprop="datePublished" class="page-time">
+  2018-01-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常见锁相关的词"><span class="post-toc-number">2.</span> <span class="post-toc-text">常见锁相关的词</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#锁冲突"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">锁冲突</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#死锁"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">死锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#表级锁"><span class="post-toc-number">2.0.3.</span> <span class="post-toc-text">表级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#页级锁"><span class="post-toc-number">2.0.4.</span> <span class="post-toc-text">页级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#行级锁"><span class="post-toc-number">2.0.5.</span> <span class="post-toc-text">行级锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Innodb中的行锁与表锁注意事项"><span class="post-toc-number">2.0.6.</span> <span class="post-toc-text">Innodb中的行锁与表锁注意事项</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#共享锁-Share-Lock"><span class="post-toc-number">2.0.7.</span> <span class="post-toc-text">共享锁(Share Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#排他锁-Xclusive-Lock"><span class="post-toc-number">2.0.8.</span> <span class="post-toc-text">排他锁(Xclusive Lock)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#意向锁-不用干预"><span class="post-toc-number">2.0.9.</span> <span class="post-toc-text">意向锁 (不用干预)</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#间隙锁"><span class="post-toc-number">2.0.10.</span> <span class="post-toc-text">间隙锁</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#next-key锁"><span class="post-toc-number">2.0.11.</span> <span class="post-toc-text">next-key锁</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2018-01-02-mysql_locks-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">MySQL锁 - 01</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-02 21:08:27" datetime="2018-01-02T13:08:27.000Z"  itemprop="datePublished">2018-01-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>参考: <a href="http://blog.csdn.net/tanga842428/article/details/52748531" target="_blank" rel="external">http://blog.csdn.net/tanga842428/article/details/52748531</a></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>之前已经学习了事务及事务在高并发下所面临的问题, 并且介绍了事务的隔离级别是如何解决这些问题的; 那这些问题已经通过事务解决了, 为什么还要学习锁的相关知识?</p>
+<ul>
+<li>我们之前介绍的事务的隔离级别，其实它的核心就是锁;</li>
+<li>虽然之前也了解到事务的最隔离级别是可以解决 <code>丢失更新</code> 的问题;高级别如果在非事务场景中, 要能在高并发的时候解决非事务下(不使用事务)的 <code>丢失更新</code> 的问题,  （乐观,悲观锁的使用）</li>
+</ul>
+</li>
+<li><p>所以我们也需要对锁有一定的认识; </p>
+</li>
+</ol>
+<h2 id="常见锁相关的词"><a href="#常见锁相关的词" class="headerlink" title="常见锁相关的词"></a>常见<code>锁</code>相关的词</h2><ol>
+<li><p>在学习锁相关知识之前, 先看一些关于<code>锁</code>的名词: </p>
+<ul>
+<li><code>锁冲突</code></li>
+<li><code>锁等待</code></li>
+<li><code>锁争用</code></li>
+</ul>
+<hr>
+<ul>
+<li><code>死锁</code></li>
+</ul>
+<hr>
+<ul>
+<li><code>两段锁 2PL</code> (<a href="https://www.cnblogs.com/rainwang/p/4429211.html" target="_blank" rel="external">https://www.cnblogs.com/rainwang/p/4429211.html</a>)</li>
+</ul>
+<hr>
+<ul>
+<li><code>表级锁</code>(MYISAM, INNODB引擎)</li>
+<li><code>意向锁</code>(<code>意向共享锁</code>, <code>意向排他锁</code>)</li>
+<li><code>行级锁</code>(<code>记录锁</code>) (INNODB引擎)</li>
+<li><code>页级锁</code>(BDB引擎)</li>
+</ul>
+<hr>
+<ul>
+<li><code>共享锁(S锁)</code>(<code>读锁</code>)</li>
+<li><code>排他锁(X锁)</code>(<code>写锁</code>) </li>
+</ul>
+<hr>
+<ul>
+<li><code>记录锁</code></li>
+<li><a href=""><code>Gap Locks</code>(间隙锁)</a></li>
+<li><code>next-key锁</code></li>
+</ul>
+<hr>
+<ul>
+<li><code>自动锁</code></li>
+<li><code>显示锁</code></li>
+</ul>
+<hr>
+<ul>
+<li><code>乐观锁</code> </li>
+<li><p><code>悲观锁</code> </p>
+<p>自旋锁: 传统的互斥锁，只要一检测到锁被其他线程所占用了，就立刻放弃cpu时间片，把cpu留给其他线程，这就会产生一次上下文切换。当系统压力大的时候，频繁的上下文切换会导致sys值过高。自旋锁，在检测到锁不可用的时候，首先cpu忙等一小会儿，如果还是发现不可用，再放弃cpu，进行切换。互斥锁消耗cpu sys值，自旋锁消耗cpu usr值。</p>
+<p>递归锁: 如果在同一个线程中，对同一个互斥锁连续加锁两次，即第一次加锁后，没有释放，继续进行对这个锁进行加锁，那么如果这个互斥锁不是递归锁，将导致死锁。可以把递归锁理解为一种特殊的互斥锁。</p>
+<p>死锁: 构成死锁有四大条件，其中有一个就是加锁顺序不一致，如果能保证不同类型的锁按照某个特定的顺序加锁，就能大大降低死锁发生的概率，之所以不能完全消除，是因为同一种类型的锁依然可能发生死锁。另外，对同一个锁连续加锁两次，如果是非递归锁，也将导致死锁。<br><a href="http://mysql.taobao.org/monthly/2017/01/01/" target="_blank" rel="external">http://mysql.taobao.org/monthly/2017/01/01/</a></p>
+</li>
+</ul>
+</li>
+</ol>
+<p>(<code>DML锁</code>和<code>DDL锁</code>：<a href="http://www.hollischuang.com/archives/909" target="_blank" rel="external">http://www.hollischuang.com/archives/909</a>)</p>
+<h4 id="锁冲突"><a href="#锁冲突" class="headerlink" title="锁冲突"></a>锁冲突</h4><p>线程1将A上锁后, 线程2又对A上锁, 锁不能共存否则会出现锁冲突; (<strong>共享锁和共享锁可以共存</strong>, 共享锁和排它锁不能共存, 排它锁和排他锁也不可以共存)</p>
+<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><ol>
+<li><p>死锁通常发生在多个线程同时但以不同的顺序请求同一组锁的时候; 比如:<br> 线程1锁住了A, 然后尝试对B进行加锁, 于此同时线程2已经锁住了B, 接着尝试对A进行加锁, 这时死锁就发生了, 线程1永远得不到B, 线程2也永远得不到A, 并且它们永远也不会知道发生了这样的事情; <strong>为了得到彼此的对象(A和B), 它们将永远阻塞下去, 这种情况就是一个死锁</strong>; </p>
+</li>
+<li><p>有多种方法可以避免死锁, 这里只介绍常见的三种:</p>
+<ul>
+<li><p>如果不同程序会并发存取多个表，尽量约定以相同的顺序访问表, 可以大大降低死锁机会;</p>
+</li>
+<li><p>在同一个事务中, 尽可能做到一次锁定所需要的所有资源, 减少死锁产生概率;</p>
+</li>
+<li><p>对于非常容易产生死锁的业务部分, 可以尝试使用升级锁定颗粒度, 通过表级锁定来减少死锁产生的概率;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h4><ol>
+<li><p><code>表级锁</code>是MySQL中锁定粒度最大的一种锁, 表示对当前操作的整张表加锁, 它实现简单, 资源消耗较少, 被大部分MySQL引擎支持, 最常使用的<code>MYISAM</code>与<code>INNODB</code>引擎都支持表级锁定, 但<code>INNODB</code>默认采用的是行级锁, 表级锁定分为表共享读锁(共享锁)与表独占写锁(排他锁);<br> (<code>意向锁</code>就属于<code>表锁</code>)</p>
+</li>
+<li><p>特点:</p>
+<ul>
+<li>加锁快(开销小)</li>
+<li>锁定粒度大(出现锁冲突(即:锁等待)的概率最高, 并发度最低)</li>
+<li>MYISAM引擎默认就是表级锁 (另外, 由于MYISAM引擎不支持事务, 每次操作执行完后会立即提交, 也就是每次操作只加一个锁, 其他操作只用等待就行; 而在InnoDB中, 锁是逐步获得的, 就造成了死锁的可能)</li>
+</ul>
+</li>
+</ol>
+<h4 id="页级锁"><a href="#页级锁" class="headerlink" title="页级锁"></a>页级锁</h4><ol>
+<li><p>页级锁是MySQL中锁定粒度介于行级锁和表级锁中间的一种锁, 表级锁加锁速度快,但冲突多,行级锁冲突少,但加锁速度慢, 所以取了折衷的页级, 一次锁定相邻的一组记录; (BDB支持页级锁)</p>
+</li>
+<li><p>特点:</p>
+<ul>
+<li>加锁时间和开销界于表锁和行锁之间</li>
+<li>锁定粒度界于表锁和行锁之间, 并发度一般</li>
+<li>BDB引擎使用的就是页级锁, 会出现死锁</li>
+</ul>
+</li>
+</ol>
+<h4 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h4><ol>
+<li><p>行级锁是Mysql中锁定粒度最细的一种锁, 只对当前操作的行进行加锁, 行级锁能大大减少数据库操作的冲突, 因为其加锁粒度最小, 但行级锁加锁的开销也最大。行级锁分为共享锁 和 排他锁;</p>
+</li>
+<li><p>特点:</p>
+<ul>
+<li>加锁慢, 开销大</li>
+<li>锁定粒度最小(发生锁冲突的概率最低, 并发度也最高)</li>
+<li>INNODB引擎使用行锁, 支持事务, 会出现死锁</li>
+</ul>
+</li>
+</ol>
+<h4 id="Innodb中的行锁与表锁注意事项"><a href="#Innodb中的行锁与表锁注意事项" class="headerlink" title="Innodb中的行锁与表锁注意事项"></a>Innodb中的行锁与表锁<strong>注意事项</strong></h4><ol>
+<li><p>前面提到过, <strong>Innodb引擎中既支持行锁也支持表锁</strong>, 那么什么时候会锁住整张表, 什么时候或只锁住一行?</p>
+<ul>
+<li>InnoDB行锁是通过给索引上的索引项加锁来实现的，这一点MySQL与Oracle不同，后者是通过在数据块中对相应数据行加锁来实现的; </li>
+<li>InnoDB这种行锁实现特点意味着: <strong>只有通过索引条件检索数据, InnoDB才使用行级锁, 否则, InnoDB将使用表锁!</strong><br>(不过, 在实际应用中, 一般在做更改的时候, 都是使用主键进行筛选, 所以自然是行锁)</li>
+</ul>
+</li>
+<li><p><strong>在实际应用中, 要特别注意InnoDB行锁的这一特性, 不然的话, 可能导致大量的锁冲突, 从而影响并发性能</strong>;</p>
+<ul>
+<li>在不通过索引条件查询的时候,InnoDB 确实使用的是表锁,而不是行锁;</li>
+<li><p>由于 MySQL 的行锁是针对索引加的锁, 而不是针对记录加的锁, 所以<strong>虽然是访问不同行的记录, 但是如果是使用相同的索引键, 是会出现锁冲突的</strong>, 应用设计的时候要注意这一点;<br>(也就是Innodb引擎中, 写操作即使是操作不同的行, 也可能由于使用一样的索引而导致锁冲突)</p>
+</li>
+<li><p>当表有多个索引的时候, 不同的事务可以使用不同的索引锁定不同的行, 另外, 不论是使用主键索引、唯一索引或普通索引, InnoDB 都会使用行锁来对数据加锁;</p>
+</li>
+<li>即便在条件中使用了索引字段, 但是否使用索引来检索数据是由 MySQL 通过判断不同执行计划的代价来决定的, 如果 MySQL 认为全表扫效率更高, 比如对一些很小的表, 它就不会使用索引, 这种情况下 InnoDB 将使用表锁, 而不是行锁;<br>因此, 在分析锁冲突时, 别忘了检查 SQL 的执行计划, 以确认是否真正使用了索引;</li>
+</ul>
+</li>
+<li><p>行级锁都是基于索引的，如果一条SQL语句用不到索引是不会使用行级锁的，会使用表级锁。行级锁的缺点是：由于需要请求大量的锁资源，所以速度慢，内存消耗大。</p>
+</li>
+</ol>
+<h4 id="共享锁-Share-Lock"><a href="#共享锁-Share-Lock" class="headerlink" title="共享锁(Share Lock)"></a>共享锁(Share Lock)</h4><ol>
+<li><p>共享锁又称读锁, 是读取操作创建的锁。</p>
+<ul>
+<li><p>其他事务可以并发读取数据, 但不能对数据进行修改(获取数据上的排他锁), 直到已释放所有共享锁; (<strong>也就是共享锁只可以和共享锁共存</strong>)</p>
+</li>
+<li><p>如果事务T对数据A加上共享锁后, 则其他事务只能对A再加共享锁, 不能加排他锁, 获准共享锁的事务只能读数据, 不能修改数据;</p>
+</li>
+</ul>
+</li>
+<li><p>对于一般的<code>select</code>语句, <strong>InnoDB不会加任何锁</strong>, 当然, 也可以显示手动去自己加:</p>
+<ul>
+<li><code>SELECT ... LOCK IN SHARE MODE;</code></li>
+<li>在查询语句后面增加<code>LOCK IN SHARE MODE</code>, Mysql会对查询结果中的每行都加共享锁, 当没有其他线程对查询结果集中的任何一行使用排他锁时, 可以成功申请共享锁, 否则会被阻塞; 其他线程也可以读取使用了共享锁的表, 而且这些线程读取的是同一个版本的数据;</li>
+</ul>
+</li>
+</ol>
+<h4 id="排他锁-Xclusive-Lock"><a href="#排他锁-Xclusive-Lock" class="headerlink" title="排他锁(Xclusive Lock)"></a>排他锁(Xclusive Lock)</h4><ol>
+<li><p>排他锁又称写锁, 如果事务T对数据A加上排他锁后, 则其他事务不能再对A加任任何类型的锁; 获准排他锁的事务既能读数据, 又能修改数据。</p>
+</li>
+<li><p>对于<code>insert、update、delete</code>，InnoDB会自动给涉及的数据加排他锁(X), 当然, 也可以显示手动去自己加:</p>
+<ul>
+<li><p><code>SELECT ... FOR UPDATE;</code></p>
+</li>
+<li><p>在查询语句后面增加<code>FOR UPDATE</code>, Mysql会对查询结果中的每行都加排他锁, 当没有其他线程对查询结果集中的任何一行使用排他锁时, 可以成功申请排他锁, 否则会被阻塞;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="意向锁-不用干预"><a href="#意向锁-不用干预" class="headerlink" title="意向锁 (不用干预)"></a>意向锁 (不用干预)</h4><ol>
+<li>意向锁是表级锁, 其设计目的主要是为了在一个事务中揭示下一行将要被请求锁的类型;</li>
+<li><p>InnoDB中的两个表锁:</p>
+<ul>
+<li><p>意向共享锁(IS): 表示事务准备给数据行加入共享锁, 也就是说一个数据行加共享锁前必须先取得该<strong>表的IS锁</strong>;</p>
+</li>
+<li><p>意向排他锁(IX): 类似上面, 表示事务准备给数据行加入排他锁, 说明事务在一个数据行加排他锁前必须先取得该<strong>表的IX锁</strong>;</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>3.意向锁是InnoDB自动加的,不需要用户干预;</p>
+<p>4.显示加共享锁或排他锁:</p>
+<ul>
+<li>共享锁：<code>SELECT ... LOCK IN SHARE MODE</code>;</li>
+<li>排他锁：<code>SELECT ... FOR UPDATE</code>;</li>
+</ul>
+<ol>
+<li><strong><strong>共享锁和意向共享锁，排他锁与意向排他锁的区别</strong></strong><ul>
+<li>共享锁和排他锁: 系统在特定的条件下会自动添加共享锁或者排他锁, 也可以手动添加共享锁或者排他锁;</li>
+<li>意向共享锁和意向排他锁都是系统自动添加和自动释放的, <strong>整个过程无需人工干预</strong>;</li>
+<li><strong>共享锁和排他锁都是锁的行记录,意向共享锁和意向排他锁锁定的是表</strong>。</li>
+</ul>
+</li>
+</ol>
+<h4 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h4><ol>
+<li>间隙锁是innodb中 <code>行锁</code> 的一种，但是这种锁锁住的却<strong>不止一行数据</strong>, 他锁住的是多行, 是一个数据范围;</li>
+</ol>
+<ol>
+<li><p>通过生活中的一个小场景来认识间隙锁: a,b,c 三个人依次站成一排, 此时, 新来了一个d, 如何让新来的d不站在小红旁边?</p>
+<ul>
+<li><p>其实只要将b和它前面的a之间的空隙封锁; 再将b和它后面的c之间的空隙封锁; 那么d就不能站到b的旁边了;</p>
+</li>
+<li><p>这里的a, b, c, d 如果对应到数据表中, 那就是就是一条条记录；</p>
+</li>
+<li><p>他们之间的空隙也就是间隙, 而封锁他们之间间隙的锁, 就叫做间隙锁;</p>
+</li>
+</ul>
+</li>
+<li><p>(<a href="http://www.jianshu.com/p/bf862c37c4c9" target="_blank" rel="external">http://www.jianshu.com/p/bf862c37c4c9</a>)</p>
+</li>
+</ol>
+<h4 id="next-key锁"><a href="#next-key锁" class="headerlink" title="next-key锁"></a>next-key锁</h4><ol>
+<li></li>
+<li></li>
+</ol>
+<p>MYISAM 和 INNODB相比:<br>MYISAM不会出现死锁(因为MYISAM没有事务)</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/12/31/2017-12-31-mysql_transaction-05/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/01/10/2018-01-10-OOP-factory/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OOP-Factory</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&title=《MySQL锁 - 01》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL锁 - 01》 — Lant's Blog&url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/01/02/2018-01-02-mysql_locks-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aQW7DMAwEwP7/0ynQU4HA9pJSipoenQIntTU+bEVRX1/xeP2Mo+vv3/6+8v756PdH324bGBgYt2W8TscK4/wOybOSuWFgYDyHcR6ySWjmSZiHezI3DAwMjDxAqy+iGr4YGBgY1eDLp7Ve9GJgYGDkReyuaeVP+UgtjoGBcUNGtTHwl58/2N/AwMC4CePVGknZuTdYL+6JgYExmrGy0Z8v9XqN0vIGHwYGxmhGtRzd8LBie6BwWA0DA2MoY2Uq1a38fAtvqTGAgYExiJFE3jmpekiid5jjYiYYGBijGbsOWCQhm0y0t+ePgYExm7Fr+75XplZD/3BuGBgYoxn55PLreaTmcRwtFjEwMIYyeou2vaGZNDsvZoWBgTGaUY2/JJR701o5p4qBgfE0RiHaggVcfofq4rK8X4iBgXFbxsrBrHy6KxONmpcYGBijGckf50ci8vK1F83R6TYMDIxxjLwQTWK0F7t52Xw4QwwMjNGM6lGwHiBK/WB5GnViMTAwHsM4Lx17MV1tD1SvY2BgPI2RBGvUUGy9rN6rxMDAmM3oxWi+oZaXtb0jFxgYGLMZr+JYWQ72rkT/DDAwMEYzqjHX24ZbuXN1KxADA2MqIwnZleVdL8oLzUsMDIzHMHbttPcWiB+pwjEwMB7MWCliq63NQvsBAwMDo9VuzBeavd9gYGA8jZEUsdWGZd5aSJ5ysZTEwMAYzeht3/fK1OorO4/+Df0NDAyM/874BrGvslDHg4ynAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

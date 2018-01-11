@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OOP-Singleton | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP">
+    <meta name="description" content="常见场景举例1.框架底层的数据库模型类其实就是单例模式ThinkPHP3.2中, 虽然 数据库模型 使用了单例模式, 但并非传统意义上所谓 三公一私 的单例:首先, 创建数据库模型实例的过程中, 类调用层次大概为: Think\Model -&amp;gt; Think\Db -&amp;gt; Think\Db\Driver\Mysql -&amp;gt;Think\Db\Driver  D()/M()方法都可以调用">
+<meta name="keywords" content="OOP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOP-Singleton">
+<meta property="og:url" content="http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="常见场景举例1.框架底层的数据库模型类其实就是单例模式ThinkPHP3.2中, 虽然 数据库模型 使用了单例模式, 但并非传统意义上所谓 三公一私 的单例:首先, 创建数据库模型实例的过程中, 类调用层次大概为: Think\Model -&amp;gt; Think\Db -&amp;gt; Think\Db\Driver\Mysql -&amp;gt;Think\Db\Driver  D()/M()方法都可以调用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/singleton/01.png">
+<meta property="og:updated_time" content="2018-01-11T08:48:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOP-Singleton">
+<meta name="twitter:description" content="常见场景举例1.框架底层的数据库模型类其实就是单例模式ThinkPHP3.2中, 虽然 数据库模型 使用了单例模式, 但并非传统意义上所谓 三公一私 的单例:首先, 创建数据库模型实例的过程中, 类调用层次大概为: Think\Model -&amp;gt; Think\Db -&amp;gt; Think\Db\Driver\Mysql -&amp;gt;Think\Db\Driver  D()/M()方法都可以调用">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/singleton/01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OOP-Singleton</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OOP-Singleton</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-07-10T10:21:21.000Z" itemprop="datePublished" class="page-time">
+  2017-07-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常见场景举例"><span class="post-toc-number">1.</span> <span class="post-toc-text">常见场景举例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#优点"><span class="post-toc-number">2.</span> <span class="post-toc-text">优点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缺点"><span class="post-toc-number">3.</span> <span class="post-toc-text">缺点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#几个基本注意事项"><span class="post-toc-number">4.</span> <span class="post-toc-text">几个基本注意事项</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2018-01-08-OOP-Singleton"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OOP-Singleton</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-07-10 18:21:21" datetime="2017-07-10T10:21:21.000Z"  itemprop="datePublished">2017-07-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="常见场景举例"><a href="#常见场景举例" class="headerlink" title="常见场景举例"></a>常见场景举例</h2><p>1.框架底层的<code>数据库模型类</code>其实就是单例模式<br>ThinkPHP3.2中, 虽然 <code>数据库模型</code> 使用了单例模式, 但并非传统意义上所谓 <code>三公一私</code> 的单例:<br>首先, 创建数据库模型实例的过程中, 类调用层次大概为: <code>Think\Model</code> -&gt; <code>Think\Db</code> -&gt; <code>Think\Db\Driver\Mysql</code> -&gt;<code>Think\Db\Driver</code></p>
+<ul>
+<li><code>D()/M()</code>方法都可以调用 <code>Think\Model</code> 这个模型类, 虽然 <code>Think\Model</code> 层并未做到单例, 即 <code>new Model(...)</code> 实例出的对象为非单例, 但其通过调用下层 <code>Think\Db</code> 的 <code>getInstance()</code> , 然后简单结合一个 <code>数据库对象池$_db</code>(注册树模式) 来保证底层各不同数据库对象的单例性; </li>
+<li><code>Think\Db</code> 的 <code>getInstance()</code> 通过 <code>数据库连接池, $instance</code> 保证了下层 <code>Think\Db\Driver\Mysql</code> 的单例性</li>
+<li>而 <code>Think\Db</code> 其内部与底层沟通的方法全是static型, 用户在顶层控制器中直接new也没意义</li>
+<li>只有在顶层控制器直接 new <code>Think\Db\Driver\Mysql</code> 你会获得不同的数据库连接实例, 但一般也不会直接new底层!</li>
+<li>最下层 <code>Think\Db\Driver</code> 为抽象类, 无法new</li>
+</ul>
+<p>所以实现单例未必需要严格按照传统的规则来, 具体场景具体对待吧!</p>
+<p>…未完待续</p>
+<p>2.日志类<br>TP3中的Log类比较简单, 作为基础类, 直接各方法为静态, 很简单就做到了要想使用, 就必然是单例, 基本上你new也没什么用!<br>…未完待续</p>
+<p>3.项目的<code>配置类</code><br>TP3中并没有做实现</p>
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><p>1.提供了对唯一实例的受控访问<br>2.由于在系统内存中只存在一个对象，因此可以节约系统资源，对于一些需要频繁创建和销毁的对象单例模式无疑可以提高系统的性能</p>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>1.滥用单例将带来一些负面问题, 如为了节省资源将数据库连接池对象设计为的单例类，可能会导致共享连接池对象的程序过多而出现连接池溢出；如果实例化的对象长时间不被利用，系统会认为是垃圾而被回收，这将导致对象状态的丢失。</p>
+<h2 id="几个基本注意事项"><a href="#几个基本注意事项" class="headerlink" title="几个基本注意事项"></a>几个基本注意事项</h2><ol>
+<li><p>通常我们都是遵循正常的”三私一公”来写单例, 但是可以看到如下代码会因为<code>序列化</code>,<code>反序列化</code>而导致单例出问题</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">class Singleton</div><div class="line">&#123;</div><div class="line">    private static $instance = null;</div><div class="line"></div><div class="line">    private function __construct()</div><div class="line">    &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private function __clone()</div><div class="line">    &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static function getInstance()</div><div class="line">    &#123;</div><div class="line">        if (null === self::$instance) self::$instance = new self();</div><div class="line">        return self::$instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">echo &apos;&lt;pre/&gt;&apos;;</div><div class="line">$test_1 = Singleton::getInstance();</div><div class="line">$test_2 = Singleton::getInstance();</div><div class="line">var_dump($test_1);      //实例1</div><div class="line">var_dump($test_2);      //实例1</div><div class="line">var_dump($test_1 === $test_2);  // true</div><div class="line"></div><div class="line">echo &apos;unserialize, serialize:---------------------------&lt;br/&gt;&apos;;</div><div class="line">$test_1 = unserialize(serialize($test_1));</div><div class="line">var_dump($test_1);      //实例2</div><div class="line">var_dump(Singleton::getInstance()); //实例1</div><div class="line">var_dump( Singleton::getInstance() === $test_1);    //false</div><div class="line"></div><div class="line">echo &apos;unserialize, serialize:---------------------------&lt;br/&gt;&apos;;</div><div class="line">$test_3 = Singleton::getInstance();</div><div class="line">var_dump($test_3);  //实例1</div><div class="line">$test_3 = unserialize(serialize($test_3));</div><div class="line">var_dump($test_3);  //实例3</div><div class="line">var_dump(Singleton::getInstance()); //实例1</div><div class="line">var_dump( Singleton::getInstance() === $test_3); //false</div></pre></td></tr></table></figure>
+</li>
+<li><p><a href="http://www.laruence.com/2011/03/18/1909.html" target="_blank" rel="external">鸟哥博文</a>其实并不能完全解决, 看下面例子: 虽然每次反序列化后的所有实例都一致, 但是一旦碰到再次反序列化, 还是会出问题</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> $instance = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">self</span>::$instance = <span class="keyword">$this</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> === <span class="keyword">self</span>::$instance) <span class="keyword">self</span>::$instance = <span class="keyword">new</span> <span class="keyword">self</span>();</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>::$instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</div><div class="line">    </div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> <span class="string">'&lt;pre/&gt;'</span>;</div><div class="line">$test_1 = Singleton::getInstance();    </div><div class="line">$test_2 = Singleton::getInstance();    </div><div class="line">var_dump($test_1);     <span class="comment">//实例1</span></div><div class="line">var_dump($test_2);     <span class="comment">//实例1</span></div><div class="line">var_dump($test_1 === $test_2); <span class="comment">//true</span></div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">'unserialize, serialize:---------------------------&lt;br/&gt;'</span>;</div><div class="line">$test_1 = unserialize(serialize($test_1));</div><div class="line">var_dump($test_1);  <span class="comment">//实例2</span></div><div class="line">var_dump(Singleton::getInstance()); <span class="comment">//实例2</span></div><div class="line">var_dump( Singleton::getInstance() === $test_1);   <span class="comment">//true</span></div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">'unserialize, serialize:---------------------------&lt;br/&gt;'</span>;</div><div class="line">$test_3 = Singleton::getInstance();</div><div class="line">var_dump($test_3);     <span class="comment">//实例2</span></div><div class="line">$test_3 = unserialize(serialize($test_3));</div><div class="line">var_dump($test_3);     <span class="comment">//实例3</span></div><div class="line">var_dump(Singleton::getInstance());    <span class="comment">//实例3</span></div><div class="line">var_dump( Singleton::getInstance() === $test_3);   <span class="comment">//true</span></div></pre></td></tr></table></figure>
+<p> <strong>可以看到还是出现了多个不同的实例!!!</strong><br> 博文中有个评论比较有意思, 可以看一下:<br> <img src="/img/oop/singleton/01.png" width="599" height="345"></p>
+</li>
+<li><p>另外, 单例模式出现继承关系时, 需要注意PHP的 <code>self</code> 和 <code>static</code> 关键字的区别</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">class Singleton</div><div class="line">&#123;</div><div class="line">    protected static $instance = null;</div><div class="line"></div><div class="line">    protected function __construct()</div><div class="line">    &#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected function __clone()</div><div class="line">    &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    protected function __wakeup()</div><div class="line">    &#123;</div><div class="line">        static::$instance = $this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public static function getInstance()</div><div class="line">    &#123;</div><div class="line">        if (null === static::$instance) static::$instance = new static();</div><div class="line">        return static::$instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">echo &apos;&lt;pre/&gt;&apos;;</div><div class="line">$test_1 = Singleton::getInstance();</div><div class="line">$test_2 = Singleton::getInstance();</div><div class="line">var_dump($test_1);</div><div class="line">var_dump($test_2);</div><div class="line">var_dump($test_1 === $test_2);</div><div class="line"></div><div class="line">class Log extends Singleton</div><div class="line">&#123;</div><div class="line">    // 注意: 每个继承单例的子类, 必须要做清空, 否则所有的实例都是上面的实例结果</div><div class="line">    protected static $instance = null;</div><div class="line"></div><div class="line">    public function write()</div><div class="line">    &#123;</div><div class="line">        echo &apos;success write something&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class Model extends Singleton</div><div class="line">&#123;</div><div class="line">    // 注意: 每个继承单例的子类, 必须要做清空, 否则所有的实例都是上面的实例结果</div><div class="line">    protected static $instance = null;</div><div class="line"></div><div class="line">    public function select()</div><div class="line">    &#123;</div><div class="line">        echo &apos;success select something&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$log_1 = Log::getInstance();</div><div class="line">$log_2 = Log::getInstance();</div><div class="line">var_dump($log_1);</div><div class="line">var_dump($log_2);</div><div class="line">var_dump($log_1 === $log_2);</div><div class="line">$model_1 = Model::getInstance();</div><div class="line">$model_2 = Model::getInstance();</div><div class="line">var_dump($model_1);</div><div class="line">var_dump($model_2);</div><div class="line">var_dump($model_1 === $model_2);</div><div class="line"></div><div class="line">var_dump($model_1 === $test_2); // false</div></pre></td></tr></table></figure></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&title=《OOP-Singleton》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&title=《OOP-Singleton》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP-Singleton》 — Lant's Blog&url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/03/10/2017-03-10-Laravel-Facade/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">Laravel-Facade</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/07/10/2018-01-06-OOP-SOLID/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OOP-S.O.L.I.D</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&title=《OOP-Singleton》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&title=《OOP-Singleton》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP-Singleton》 — Lant's Blog&url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/07/10/2018-01-08-OOP-Singleton/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACI0lEQVR42u3a3W4CIRAGUN//pe1tGyt+M7AmC4cro3Hh2GQ6Pzwe8Xq+rN/vP4rr9Tnj95ctDAyM2zKew/V63PEhxrskr9+98+5sGBgY5zCSjcchMjlEEliTgI6BgYGRM1YFUAwMDIxVjCrv3fMxMDAweow8yRsfLj9uXu4ursUxMDBuyOg9+juvL5lvYGBg3IrxXLSi1K2YShZ2x8DA2JrRK1Zn2nBJydpMTzEwMDZlVJtl1Q1WBe4o1GJgYBzAyBtq1cQuifrVfTEwMM5h9HpZSZDtXSzLd8TAwDiHkVvnf608XObf/VPEYmBgbM1YlbRVW3J5QfvhaRgYGFsz5hO45FjVMN0sVjEwMLZmXAHLt0++1dwFAwNjU0YSUnvt+2RImXwa9Q4xMDC2Y8xfm6huXyhNZ/4CGBgY2zGqE87eYKC6CpctMDAwDmD0WmYz6WDyTiG3xcDA2JQxc6D805nxZ/TTYGBgHMDoPbp6XaOaDmJgYGD0Lqcmr6vXLHpXNzAwMM5h5AEuT+CSht3MpYp/zoCBgbE1o9cUq7bkqm216igCAwNjb8aqgWIvTOfDzg9sDAyMrRn5mm+QJaVsNUHEwMA4h7Eq4RsH0/Hv10suC/89MDAwtmA0B4fFS13N2UWSGmJgYGC0CtdesVoOtRgYGBgxKU8Wc1ih3YaBgXEAo9rEz9tn16WhU7U4BgbGrRh56XjFoDEZMCyYbGBgYNyV8QOtOFH3d6jH/QAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
