@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OOD-S.O.L.I.D | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP">
+    <meta name="description" content="The Single Responsibility Principle（单一职责原则 SRP）高内聚, 低耦合  单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。  单一职责原则定义为: 一个类或者模块应该有且只有一个被改变的原因。  如果一个类承担的职责过多, 就等于把这些职责 耦合 在一起了。 一个职责的变化可能会影响其他的职责, 这种耦合会导致脆弱的设计, 当发生变化时, 设">
+<meta name="keywords" content="OOP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOD-S.O.L.I.D">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="The Single Responsibility Principle（单一职责原则 SRP）高内聚, 低耦合  单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。  单一职责原则定义为: 一个类或者模块应该有且只有一个被改变的原因。  如果一个类承担的职责过多, 就等于把这些职责 耦合 在一起了。 一个职责的变化可能会影响其他的职责, 这种耦合会导致脆弱的设计, 当发生变化时, 设">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/04.png">
+<meta property="og:updated_time" content="2018-01-12T09:25:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOD-S.O.L.I.D">
+<meta name="twitter:description" content="The Single Responsibility Principle（单一职责原则 SRP）高内聚, 低耦合  单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。  单一职责原则定义为: 一个类或者模块应该有且只有一个被改变的原因。  如果一个类承担的职责过多, 就等于把这些职责 耦合 在一起了。 一个职责的变化可能会影响其他的职责, 这种耦合会导致脆弱的设计, 当发生变化时, 设">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/solid/ocp/01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OOD-S.O.L.I.D</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OOD-S.O.L.I.D</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-23T10:21:21.000Z" itemprop="datePublished" class="page-time">
+  2016-05-23
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Single-Responsibility-Principle（单一职责原则-SRP）"><span class="post-toc-number">1.</span> <span class="post-toc-text">The Single Responsibility Principle（单一职责原则 SRP）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Open-Closed-Principle（开闭原则OCP）"><span class="post-toc-number">2.</span> <span class="post-toc-text">The Open/Closed Principle（开闭原则OCP）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Liskov-Substitution-Principle（里氏替换原则LSP）"><span class="post-toc-number">3.</span> <span class="post-toc-text">The Liskov Substitution Principle（里氏替换原则LSP）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Interface-Segregation-Principle（接口分离原则ISP）"><span class="post-toc-number">4.</span> <span class="post-toc-text">The Interface Segregation Principle（接口分离原则ISP）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#The-Dependency-Inversion-Principle（依赖反转原则DIP）"><span class="post-toc-number">5.</span> <span class="post-toc-text">The Dependency Inversion Principle（依赖反转原则DIP）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-05-23-OOP-SOLID"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OOD-S.O.L.I.D</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-23 18:21:21" datetime="2016-05-23T10:21:21.000Z"  itemprop="datePublished">2016-05-23</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="The-Single-Responsibility-Principle（单一职责原则-SRP）"><a href="#The-Single-Responsibility-Principle（单一职责原则-SRP）" class="headerlink" title="The Single Responsibility Principle（单一职责原则 SRP）"></a>The Single Responsibility Principle（单一职责原则 SRP）</h2><p>高内聚, 低耦合</p>
+<ol>
+<li><p>单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。</p>
+</li>
+<li><p>单一职责原则定义为: <strong>一个类或者模块应该有且只有一个被改变的原因</strong>。</p>
+<ul>
+<li>如果一个类承担的职责过多, 就等于把这些职责 <strong>耦合</strong> 在一起了。</li>
+<li>一个职责的变化可能会影响其他的职责, 这种耦合会导致脆弱的设计, 当发生变化时, 设计会遭受到意想不到的破坏。</li>
+<li>而如果想要避免这种现象的发生, 就要尽可能的遵守单一职责原则。此原则的核心就是<strong>解耦</strong>和<strong>增强内聚性</strong>。</li>
+</ul>
+</li>
+<li><p>单一职责原则告诉我们: 一个类不能太“累”！在软件系统中，一个类（大到模块，小到方法）<strong>承担的职责越多，它被复用的可能性就越小</strong>，而且一个类承担的职责过多，就相当于将这些职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作，因此要将这些职责进行分离，将不同的职责封装在不同的类中，即,将不同的变化原因封装在不同的类中，<strong>如果多个职责总是同时发生改变则也可考虑将它们封装在同一类中</strong>。</p>
+</li>
+<li><p>遵循单一职责原的优点有:</p>
+<ul>
+<li>可以降低类的复杂度, 一个类只负责一项职责, 其逻辑肯定要比负责多项职责简单的多;</li>
+<li>提高类的可读性, 提高系统的可维护性;</li>
+<li>变更引起的风险降低, 变更是必然的, 如果单一职责原则遵守的好, 当修改一个功能时, 可以显著降低对其他功能的影响;</li>
+<li>需要说明的一点是单一职责原则不只是面向对象编程思想所特有的, 只要是模块化的程序设计, 都适用单一职责原则;</li>
+</ul>
+</li>
+</ol>
+<p>参考: <a href="http://blog.csdn.net/lovelion/article/details/7536542" target="_blank" rel="external">http://blog.csdn.net/lovelion/article/details/7536542</a></p>
+<h2 id="The-Open-Closed-Principle（开闭原则OCP）"><a href="#The-Open-Closed-Principle（开闭原则OCP）" class="headerlink" title="The Open/Closed Principle（开闭原则OCP）"></a>The Open/Closed Principle（开闭原则OCP）</h2><p>对抽象编程, 而不对具体编程</p>
+<ol>
+<li><p>开放-封闭原则: 一个软件实体应当对扩展开放，对修改关闭。即软件实体应尽量在不修改原有代码的情况下进行扩展。</p>
+<blockquote>
+<ul>
+<li>任何软件都需要面临一个很重要的问题, 即, 它们的需求会随时间的推移而发生变化。<br>当软件系统需要面对新的需求时，我们应该尽量保证系统的设计框架是稳定的。<br>如果一个软件设计符合开闭原则，那么可以非常方便地对系统进行扩展，<strong>而且在扩展时无须修改现有代码</strong>，使得软件系统在拥有适应性和灵活性的同时具备较好的稳定性和延续性。<br>随着软件规模越来越大，软件寿命越来越长，软件维护成本越来越高，设计满足开闭原则的软件系统也变得越来越重要。</li>
+</ul>
+<hr>
+<ul>
+<li>为了满足开闭原则，需要对系统进行抽象化设计，<strong>抽象化是开闭原则的关键</strong>。在Java、C#等编程语言中，可以为系统定义一个相对稳定的抽象层，而将不同的实现行为移至具体的实现层中完成。在很多面向对象编程语言中都提供了接口、抽象类等机制，可以通过它们定义系统的抽象层，再通过具体类来进行扩展。如果需要修改系统的行为，无须对抽象层进行任何改动，只需要增加新的具体类来实现新的业务功能即可，实现在不修改已有代码的基础上扩展系统的功能，达到开闭原则的要求。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>有必要用例子来简单说明一下, 假设公司开发的CRM系统可以显示各种类型的图表, 如 饼状图 和 柱状图 等, 为了支持多种图表显示方式, 原始设计方案如下图:<br> <img src="/img/oop/solid/ocp/01.png" width="556" height="229"></p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PieChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BarChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChartDisplay</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="comment">//TODO</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">($chartType)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">switch</span> ($chartType) &#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">'pie'</span> :</div><div class="line">                $piechart = <span class="keyword">new</span> PieChart();</div><div class="line">                $piechart-&gt;display();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">'bar'</span> :</div><div class="line">                $barchart = <span class="keyword">new</span> BarChart();</div><div class="line">                $barchart-&gt;display();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 问题: 现在如果需要增加一个图表类, 如折线图LineChart, 则需要修改ChartDisplay类的display()方法的源代码, 增加新的判断逻辑, 违反了开闭原则!!</p>
+</li>
+<li><p>现对该系统进行重构, 使之符合开闭原则<br> <img src="/img/oop/solid/ocp/02.png" width="491" height="218"><br> 我们引入了抽象图表类AbstractChart, 并且让ChartDisplay针对抽象图表类进行编程(依赖抽象), 在ChartDisplay的display()方法中调用chart对象的display()方法显示图表。</p>
+<p> 如果需要增加一种新的图表, 如折线图LineChart, 只需要将LineChart也作为AbstractChart的子类, 在客户端向ChartDisplay中注入一个LineChart对象即可, 无须修改现有类库的源代码。     </p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PieChart</span> <span class="keyword">extends</span> <span class="title">AbstractChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BarChart</span> <span class="keyword">extends</span> <span class="title">AbstractChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChartDisplay</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="comment">//TODO</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">(AbstractChart $chart)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        $chart-&gt;display();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$cd = <span class="keyword">new</span> ChartDisplay();</div><div class="line">$cd-&gt;display(<span class="keyword">new</span> PieChart());</div><div class="line">$cd-&gt;display(<span class="keyword">new</span> BarChart());</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>参考: <a href="http://blog.csdn.net/lovelion/article/details/7537584" target="_blank" rel="external">http://blog.csdn.net/lovelion/article/details/7537584</a></p>
+<h2 id="The-Liskov-Substitution-Principle（里氏替换原则LSP）"><a href="#The-Liskov-Substitution-Principle（里氏替换原则LSP）" class="headerlink" title="The Liskov Substitution Principle（里氏替换原则LSP）"></a>The Liskov Substitution Principle（里氏替换原则LSP）</h2><ol>
+<li>所有引用基类（父类）的地方必须能透明地使用其子类对象。</li>
+<li>子类可以实现父类的抽象方法, 但是不能覆盖父类的非抽象方法, 也就是子类可以扩展父类的功能, 但是不能改变父类原有的功能;</li>
+<li>当子类覆盖或实现父类的方法时, 方法的前置条件(即方法的形参)要比父类方法的输入参数更宽松。(PHP是弱类型语言)</li>
+<li>当子类的方法实现父类的抽象方法时, 方法的后置条件(即方法的返回值)要比父类更严格。(PHP是弱类型语言)<br>参考: <a href="http://blog.csdn.net/lovelion/article/details/7540445" target="_blank" rel="external">http://blog.csdn.net/lovelion/article/details/7540445</a><br><strong>里氏代换原则是实现开闭原则的重要方式之一, 由于使用基类对象的地方都可以使用子类对象, 因此在程序中尽量使用基类类型来对对象进行定义, 而在运行时再确定其子类类型, 用子类对象来替换父类对象。</strong></li>
+</ol>
+<h2 id="The-Interface-Segregation-Principle（接口分离原则ISP）"><a href="#The-Interface-Segregation-Principle（接口分离原则ISP）" class="headerlink" title="The Interface Segregation Principle（接口分离原则ISP）"></a>The Interface Segregation Principle（接口分离原则ISP）</h2><p>该原则比较好理解</p>
+<ol>
+<li><p>不要定义过于臃肿的接口, 接口中不要有很多<strong>不相关的逻辑方法</strong>(否则一定也违背单一职责原则);</p>
+</li>
+<li><p>过于臃肿的接口可能会强迫用户去实现接口内部用户并不需要的方法。换句话说, 使用 <code>多个专门的接口</code> 比使用 <code>一个臃肿的总接口</code> 要好很多;<br> 如果你在类中实现了你不需要使用的接口方法, 估计也是重写为空方法, 这其实已经违背了<code>接口分离原则</code>。</p>
+</li>
+<li><p>也就是说，一个接口或者类应该拥有尽可能少的行为, 就是少到恰好能完成它自身的职责, 这也是保证 “软件系统模块的粒度尽可能少, 以达到高度可重用的目的”;<br> 接口包含太多的方法会降低其可用性，像这种包含了无用方法的”胖接口”会增加类之间的耦合。<br> 如果一个类想实现该接口,那么它需要实现所有的方法,尽管有些对它来说可能完全没用，所以这样做会在系统中引入不必要的复杂度, 降低代码的可维护性或鲁棒性。<br> 接口分离原则确保实现的接口有它们共同的职责, 它们是明确的, 易理解的, 可复用的.</p>
+</li>
+</ol>
+<h2 id="The-Dependency-Inversion-Principle（依赖反转原则DIP）"><a href="#The-Dependency-Inversion-Principle（依赖反转原则DIP）" class="headerlink" title="The Dependency Inversion Principle（依赖反转原则DIP）"></a>The Dependency Inversion Principle（依赖反转原则DIP）</h2><p>要针对接口编程, 而不是针对实现编程</p>
+<ol>
+<li><p>如果说<strong>开闭原则是面向对象设计的目标</strong>的话, 那么依赖倒转原则就是面向对象设计的主要实现机制之一, 它是系统抽象化的具体实现;</p>
+</li>
+<li><p>上层不用去定义自己要依赖哪个具体的类, 而是定义自己依赖哪个 <code>抽象</code>; 然后让底层代码根据上层的要求, 去实现相应的 <code>抽象</code>; 这样就变成了底层对上层的依赖, 底层代码需要去 <code>实现</code> 上层代码定义的抽象;</p>
+<blockquote>
+<p>依赖倒转原则要求我们在程序代码中传递参数时或在关联关系中，尽量引用层次高的抽象层类，即使用接口和抽象类进行变量类型声明、参数类型声明、方法返回类型声明，以及数据类型的转换等，而不要用具体类来做这些事情。为了确保该原则的应用，一个具体类应当只实现接口或抽象类中声明过的方法，而不要给出多余的方法，否则将无法调用到在子类中增加的新方法。</p>
+</blockquote>
+</li>
+<li><p>在实现依赖倒转原则时, 我们需要针对抽象层编程，将具体类的对象通过依赖注入(DependencyInjection, DI)的方式注入到其他对象中，依赖注入是指当一个对象要与其他对象发生依赖关系时，通过抽象来注入所依赖的对象。<br>常用的注入方式有三种，分别是：<code>构造注入</code>，<code>设值注入</code>（Setter注入）和 <code>接口注入</code>。</p>
+<ul>
+<li>构造注入是指通过构造函数来传入具体类的对象</li>
+<li>设值注入是指通过Setter方法来传入具体类的对象</li>
+<li>而接口注入是指通过在接口中声明的业务方法来传入具体类的对象<br>这些方法在定义时使用的是抽象类型, 在运行时再传入具体类型的对象, 由子类对象来覆盖父类对象。</li>
+</ul>
+</li>
+<li><p>有必要用例子来简单说明一下<br> <img src="/img/oop/solid/ocp/03.png" width="550" height="280"><br> 由于CustomerDAO针对<code>具体数据转换类</code>编程, 因此在增加新的数据转换类或者更换数据转换类时都不得不修改CustomerDAO的源代码。<br> 我们可以通过引入抽象数据转换类解决该问题，在引入抽象数据转换类DataConvertor之后，CustomerDAO针对抽象类DataConvertor编程，符合依赖倒转原则。<br> 根据里氏代换原则，程序运行时，具体的数据转换类对象 将替换DataConvertor类型的对象，程序不会出现任何问题。更换具体数据转换类时无须修改源代码，只需要说明你需要哪个具体的类(可以在配置文件中配置)。<br> 如果需要增加新的具体数据转换类，只要将新增数据转换类作为DataConvertor的子类即可，原有代码无须做任何修改，满足开闭原则。<br> 重构后的结构如图2所示：<br> <img src="/img/oop/solid/ocp/04.png" width="594" height="284"></p>
+</li>
+<li><p>在上述重构过程中, 我们使用了 <code>开闭原则</code>、<code>里氏代换原则</code> 和 <code>依赖倒转原则</code> , <strong>在大多数情况下, 这三个设计原则会同时出现, 开闭原则是目标, 里氏代换原则是基础, 依赖倒转原则是手段, 它们相辅相成, 相互补充, 目标一致, 只是分析问题时所站角度不同而已</strong>。<br>参考: <a href="http://blog.csdn.net/lovelion/article/details/7562783" target="_blank" rel="external">http://blog.csdn.net/lovelion/article/details/7562783</a></p>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>开闭原则是目标, 里氏代换原则 和 依赖倒转原则 都是为了实现开闭原则! 怪不得举的例子都那么相似~~</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&title=《OOD-S.O.L.I.D》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&title=《OOD-S.O.L.I.D》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOD-S.O.L.I.D》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/26/2016-05-26-OOP-Singleton/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OOP-Singleton</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&title=《OOD-S.O.L.I.D》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&title=《OOD-S.O.L.I.D》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOD-S.O.L.I.D》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/23/2016-05-23-OOP-SOLID/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3aQU7DQAwFUO5/6SKxQoKk/3sKgpmXVZWmjV8Wznjst7f4eHwcV58/n1m5/urblx0YGBj/lvG4Pb6Gch/oVbhXwd1fmcSGgYFxDqNNsvf/UNw+vu+TmDEwMDAu0mKSoBNAnugxMDAw2oSbJN/7hWD7/xgYGCczkgQ62xTLE3F+XwwMjNMY66H83Odf7W9gYGD8ScZj4VjZemsbAE8iwcDA2JqRb4et5Lck6HzhGIWFgYGxEeNVhetsYbc+HPbkvYGBgbEFYyX5zpqOSWtz2BjAwMDYlJGk0dkg1+xBDMc1MDAwtmYkCTEJN9/uX0nTdT8WAwNjI0abcNtmQFv0tsMfGBgYJzCS6rYd3loJd3Y9BgbGrozZMm6F3TYhooeCgYGxNaMtX9tCt11irmzPYWBg7MpIisP7IGawPE8W7w0MDIzDGO2oRNFijJekRfMSAwPjAEZb0LZLt1mDIS+SMTAwTmAUW1ptfRw3AJbOY2BgbM1oR7JeMAwx2lZLFpEYGBjnMIqflcm3bQ/kDQYMDIwzGa8KqP3nWdmMgYFxAmMWxLDUzBNo2QXAwMDYlfEoj59oSbaP5ptfYWBgbM1YSXPtArE9n7wlMDAwzmHkhWvOa0vZWWOgmPXAwMDYgrGy4MuXfcN8nxTGGBgYGKPEmo+azUY6MDAwMNY3+vOF5uwaDAyM0xj5gEU7ALEyZpEkawwMjBMYbWMgCa4NNGlqtg8UAwNjC8Y74InHZcWb0rsAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
