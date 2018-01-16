@@ -13,25 +13,25 @@
     
     
     
-    <title>OOP-Abstract  Factory | Lant&#39;s Blog</title>
+    <title>OOP - Abstract  Factory | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="抽象工厂12 工厂模式 和 依赖注入容器参考参考参考">
+    <meta name="description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 抽象工厂未完待续 参考参考">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOP-Abstract  Factory">
+<meta property="og:title" content="OOP - Abstract  Factory">
 <meta property="og:url" content="http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="抽象工厂12 工厂模式 和 依赖注入容器参考参考参考">
+<meta property="og:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 抽象工厂未完待续 参考参考">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-15T07:42:16.000Z">
+<meta property="og:updated_time" content="2018-01-16T05:34:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOP-Abstract  Factory">
-<meta name="twitter:description" content="抽象工厂12 工厂模式 和 依赖注入容器参考参考参考">
+<meta name="twitter:title" content="OOP - Abstract  Factory">
+<meta name="twitter:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 抽象工厂未完待续 参考参考">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OOP-Abstract  Factory</div>
+        <div class="flex-col header-title ellipsis">OOP - Abstract  Factory</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OOP-Abstract  Factory</h1>
+        <h1 class="title">OOP - Abstract  Factory</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-06-08T12:13:17.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#抽象工厂"><span class="post-toc-number">1.</span> <span class="post-toc-text">抽象工厂</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#工厂模式-和-依赖注入容器"><span class="post-toc-number">2.</span> <span class="post-toc-text">工厂模式 和 依赖注入容器</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#抽象工厂"><span class="post-toc-number">2.</span> <span class="post-toc-text">抽象工厂</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OOP-Abstract  Factory</h1>
+        <h1 class="post-card-title">OOP - Abstract  Factory</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-06-08 20:13:17" datetime="2016-06-08T12:13:17.000Z"  itemprop="datePublished">2016-06-08</time>
 
@@ -184,8 +184,9 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<h2 id="工厂模式-和-依赖注入容器"><a href="#工厂模式-和-依赖注入容器" class="headerlink" title="工厂模式 和 依赖注入容器"></a>工厂模式 和 依赖注入容器</h2><p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9306457" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9306745" target="_blank" rel="external">参考</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p>
+<h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p>
+<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>
 
         </div>
 
@@ -222,7 +223,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP-Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -232,7 +233,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP-Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -242,7 +243,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP-Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -270,17 +271,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/06/05/2016-06-05-OOP-Factory/" id="post-prev" class="post-nav-link">
+        <a href="/2016/06/08/2016-07-13-OOP-Prototype/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">OOP-Factory Method</h4>
+          <h4 class="title">OOP - Prototype</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/06/08/2016-07-13-OOP-Prototype/" id="post-next" class="post-nav-link">
+      <a href="/2016/06/08/2016-07-15-OOP-Observer/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">OOP-Prototype</h4>
+        <h4 class="title">OOP - Observer</h4>
       </a>
     </div>
   
@@ -391,7 +392,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP-Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -401,7 +402,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP-Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -411,7 +412,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP-Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
