@@ -13,25 +13,27 @@
     
     
     
-    <title>OOP - Abstract  Factory | Lant&#39;s Blog</title>
+    <title>OOP - Facade | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+    <meta name="description" content="前言外观模式是一种使用频率非常高的结构型设计模式, 它通过引入一个外观角色来简化客户端与子系统之间的交互, 为复杂的子系统调用提供一个统一的入口, 降低子系统与客户端的耦合度, 且客户端调用非常方便; 在软件开发中, 有时候为了完成一项较为复杂的功能, 一个客户类需要和多个业务类交互, 由于涉及到的类比较多, 导致使用时代码较为复杂，此时，特别需要一个类似服务员一样的角色, 由它来负责和多个业务类">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOP - Abstract  Factory">
-<meta property="og:url" content="http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/index.html">
+<meta property="og:title" content="OOP - Facade">
+<meta property="og:url" content="http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+<meta property="og:description" content="前言外观模式是一种使用频率非常高的结构型设计模式, 它通过引入一个外观角色来简化客户端与子系统之间的交互, 为复杂的子系统调用提供一个统一的入口, 降低子系统与客户端的耦合度, 且客户端调用非常方便; 在软件开发中, 有时候为了完成一项较为复杂的功能, 一个客户类需要和多个业务类交互, 由于涉及到的类比较多, 导致使用时代码较为复杂，此时，特别需要一个类似服务员一样的角色, 由它来负责和多个业务类">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-17T02:04:49.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/facade/facade-uml.png">
+<meta property="og:updated_time" content="2018-01-17T03:08:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOP - Abstract  Factory">
-<meta name="twitter:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+<meta name="twitter:title" content="OOP - Facade">
+<meta name="twitter:description" content="前言外观模式是一种使用频率非常高的结构型设计模式, 它通过引入一个外观角色来简化客户端与子系统之间的交互, 为复杂的子系统调用提供一个统一的入口, 降低子系统与客户端的耦合度, 且客户端调用非常方便; 在软件开发中, 有时候为了完成一项较为复杂的功能, 一个客户类需要和多个业务类交互, 由于涉及到的类比较多, 导致使用时代码较为复杂，此时，特别需要一个类似服务员一样的角色, 由它来负责和多个业务类">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/facade/facade-uml.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +114,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OOP - Abstract  Factory</div>
+        <div class="flex-col header-title ellipsis">OOP - Facade</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,11 +136,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OOP - Abstract  Factory</h1>
+        <h1 class="title">OOP - Facade</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-06-08T12:13:17.000Z" itemprop="datePublished" class="page-time">
-  2016-06-08
+                <time datetime="2016-07-19T11:56:09.000Z" itemprop="datePublished" class="page-time">
+  2016-07-19
 </time>
 
 
@@ -159,17 +161,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#界面皮肤库的初始设计"><span class="post-toc-number">2.</span> <span class="post-toc-text">界面皮肤库的初始设计</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#抽象工厂"><span class="post-toc-number">3.</span> <span class="post-toc-text">抽象工厂</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#外观模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">外观模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">3.</span> <span class="post-toc-text">参考</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2016-06-08-OOP-Factory"
+<article id="post-2016-07-19-OOP-Facade"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OOP - Abstract  Factory</h1>
+        <h1 class="post-card-title">OOP - Facade</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-06-08 20:13:17" datetime="2016-06-08T12:13:17.000Z"  itemprop="datePublished">2016-06-08</time>
+            <time class="post-time" title="2016-07-19 19:56:09" datetime="2016-07-19T11:56:09.000Z"  itemprop="datePublished">2016-07-19</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
@@ -184,9 +186,33 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p>
-<h2 id="界面皮肤库的初始设计"><a href="#界面皮肤库的初始设计" class="headerlink" title="界面皮肤库的初始设计"></a>界面皮肤库的初始设计</h2><h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p>
-<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>外观模式是一种使用频率非常高的结构型设计模式, 它通过引入一个外观角色来简化客户端与子系统之间的交互, 为复杂的子系统调用提供一个统一的入口, 降低子系统与客户端的耦合度, 且客户端调用非常方便;</p>
+<p>在软件开发中, 有时候为了完成一项较为复杂的功能, 一个客户类需要和多个业务类交互, 由于涉及到的类比较多, 导致使用时代码较为复杂，此时，特别需要一个类似服务员一样的角色, 由它来负责和多个业务类进行交互, 而客户类只需与该类交互。</p>
+<h2 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h2><ol>
+<li><p>外观模式中, 一个子系统的外部与其内部的通信, 通过一个统一的外观类进行, 外观类将客户类与子系统的内部复杂性分隔开, 使得客户类只需要与外观角色打交道, 而不需要与子系统内部的很多对象打交道。(在外观模式中, 那些需要交互的业务类被称为子系统(Subsystem))</p>
+</li>
+<li><p>外观模式: 为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口, 这个接口使得这一子系统更加容易使用。</p>
+<ul>
+<li>外观模式又称为门面模式, 它是一种对象结构型模式。</li>
+<li>外观模式是迪米特法则的一种具体实现, 通过引入一个新的外观角色可以降低原有系统的复杂度, 同时降低客户类与子系统的耦合度。<blockquote>
+<p>迪米特法则(Law of Demeter)又叫作最少知道原则(Least Knowledge Principle 简写LKP)<br>就是说一个对象应当对其他对象有尽可能少的了解, 不和陌生人说话。英文简写为: LoD.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>外观模式没有一个一般化的类图描述, 通常使用下图来表示外观模式<br> <img src="/img/oop/facade/facade-uml.png" width="365" height="265/"></p>
+<p> 外观模式包含如下两个角色：</p>
+<ul>
+<li>Facade(外观角色): 在客户端可以调用它的方法, 在外观角色中可以知道相关的(一个或者多个)子系统的功能和责任; 在正常情况下, 它将所有从客户端发来的请求委派到相应的子系统去, 传递给相应的子系统对象处理。</li>
+<li>SubSystem(子系统角色): 在软件系统中可以有一个或者多个子系统角色, 每一个子系统可以不是一个单独的类, 而是一个类的集合, 它实现子系统的功能; 每一个子系统都可以被客户端直接调用, 或者被外观角色调用, 它处理由外观类传过来的请求; 子系统并不知道外观的存在, 对于子系统而言, 外观角色仅仅是另外一个客户端而已。</li>
+</ul>
+</li>
+<li><p>外观模式的主要目的在于降低系统的复杂程度, 在面向对象软件系统中, 类与类之间的关系越多, 表示系统中类之间的耦合度太大, 这样的系统在维护和修改时都缺乏灵活性, 因为一个类的改动会导致多个类发生变化, 而外观模式的引入在很大程度上降低了类与类之间的耦合关系。<br> 引入外观模式之后, 增加新的子系统或者移除子系统都非常方便, 客户类无须进行修改(或者极少的修改), 只需要在外观类中增加或移除对子系统的引用即可。<br> 从这一点来说, <strong>外观模式在一定程度上并不符合开闭原则</strong>, 增加新的子系统需要对原有系统进行一定的修改, 虽然这个修改工作量不大。</p>
+</li>
+<li><p>未完待续</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/8258121" target="_blank" rel="external">参考</a></p>
+</li>
+</ol>
 
         </div>
 
@@ -223,7 +249,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&title=《OOP - Facade》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -233,22 +259,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&title=《OOP - Facade》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Facade》 — Lant's Blog&url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -271,17 +297,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/06/05/2016-06-05-OOP-Factory/" id="post-prev" class="post-nav-link">
+        <a href="/2016/06/08/2016-07-15-OOP-Observer/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">OOP - Factory Method</h4>
+          <h4 class="title">OOP - Observer</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/06/08/2016-07-13-OOP-Prototype/" id="post-next" class="post-nav-link">
+      <a href="/2016/07/21/2016-07-21-Laravel-Facade/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">OOP - Prototype</h4>
+        <h4 class="title">Laravel-Facade</h4>
       </a>
     </div>
   
@@ -392,7 +418,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&title=《OOP - Facade》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -402,22 +428,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&title=《OOP - Facade》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Facade》 — Lant's Blog&url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/07/19/2016-07-19-OOP-Facade/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -428,7 +454,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aQQ7DIAxE0dz/0nTbqgqdGZNKmM+qqlDCy8Kysa9LXuNt6fv154yvdT2xYMCAsS1jTNf3sZRDzJ/jvmu+HwYMGOcw5kHz7tHzf5RgffdR9LPBgAEDRhYE54dT8joYMGDAyBju4fQ9fw24MGDA2JZRLz71tE95/oO1OAwYMDZkVILg078f6W/AgAFjK8Ywl37dprcts5N8PBMGDBitGWtbmO44hVISG00FGDBgNGVkh3b/11M9t0yFAQPGyYws/LkHVf6RBjhgwIBxAKMyAFG5ys8Cvd0jhQEDxuaMSjPATQ0rCWipkQkDBowWDD1B1IOm3jzIgr69FQYMGNsy3ENXLtT0gGt/AhgwYLRm6Mmc+8osP620UWHAgNGboReubsGpD2ToQdzIdmHAgNGCoZSISvhb2/IMk0IYMGAcwMguxbKd9fLVnuCAAQPGtgy9dMyu+/W2gXvo21ocBgwY7RhZqpeNUOitULulCgMGjNYMd5DLJWUrC/0wYMA4gaGMZ9lZZyG5tAtmGDBgHMbQr8P0oYpsgMMI5TBgwGjNWNWwzJLLeoMTBgwYvRmrgmNGVdqW4beHAQNGI0Z2BeaGXSUBrY9lwIABozdDD7J6G9IN6256asyMwIABoxHDbVK6IbjeePhRHsOAAQOGG/6i5FJvQtgdVBgwYBzMUF6TpZV66gkDBoxzGNnwlk7VwWE4hgEDRmtGNuKQFatueA1nRmDAgNGH8QK+82+Fmx1iOwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACM0lEQVR42u3azWrDMBBF4bz/S7vQVSFYPlejpGh0vDKG2Pq6mM7f64Wv6/d6f/L3+d39+Ffvz+9+u+CSIUPGtoxreN0d8e7J+D3k6PzNMmTIOI0xDrJ1xjjUku8+nFmGDBkyCkcff4UHXxkyZMhIAy4/HC+J/+H/hgwZMrZikHA5Drg8gFa+sqAWlyFDxoaMdDDwzfsPzjdkyJCxCeNadFXeWT+JDBkyejPGCxCViMdHC+n4AR1ChgwZTRmVNQiy8lX5c6CTy5AhozWDlJHkA+mAYfGyhQwZMpoy+EtJojZ33LngHkxEZciQsTkjbdDPJX9piZs272TIkHEOg7fD0oWJehqKviJDhoxjGJVWfhqUeWqIhhkyZMhoyvjEx9IVikpZW6rFZciQsRWDJF4kjKbJYrrecYuUIUNGawYZT/IClS9JjH+V3suQIaM3Iy0gVwH4qDIYXsqQIaMpg6RuvE0fpHGFhbBgviFDhowWDB5Y64UoH4vGz2XIkNGawQMuD6xzrbQ5sAwZMmSkIXiuGZcG/biIlSFDRiNGJY1LW2npygVq/MmQIaM1g7fvK+22tSPPACNDhozNGVd4VULn3BM07JQhQ0ZrxlyY4w2ytJ1HksvJBFGGDBmbM9J1ikpDrVLEPpxBhgwZBzDSxhkJgmsHnA+FsQwZMmTge57q8XKXNO9kyJAhgyRzPETWV9BkyJBxJuM7w4C0fA0SShkyZLRmVDY1yMCg8idLQ78MGTLaMX4AugMPLIGwQaUAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
