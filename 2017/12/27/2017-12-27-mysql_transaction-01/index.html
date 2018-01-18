@@ -20,22 +20,22 @@
     
     
     <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 并且在这个独立的工作单元中, 可以有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
+    <meta name="description" content="事务的概念 事务：可以理解为一个 独立的 工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。  仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么">
 <meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/27/2017-12-27-mysql_transaction-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 并且在这个独立的工作单元中, 可以有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
+<meta property="og:description" content="事务的概念 事务：可以理解为一个 独立的 工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。  仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-01-18T11:27:34.000Z">
+<meta property="og:updated_time" content="2018-01-18T12:39:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
-<meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 并且在这个独立的工作单元中, 可以有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
+<meta name="twitter:description" content="事务的概念 事务：可以理解为一个 独立的 工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。  仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -190,31 +190,26 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="事务的概念"><a href="#事务的概念" class="headerlink" title="事务的概念"></a>事务的概念</h2><ol>
-<li><p><code>事务</code> 可以理解为一个 <code>独立的</code>工作单元, 并且在这个独立的工作单元中, 可以有一组操作;<br> 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。</p>
+<li><p>事务：可以理解为一个 <strong>独立的</strong> 工作单元, <strong>在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败</strong>。</p>
 </li>
-<li><p>不免俗套, 通过最经典的银行<code>转账</code>应用来解释一下</p>
-<ul>
-<li><p>假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 <code>Iron Man</code> 通过该银行应用给 <code>Wolverine</code> 转账100元, 那么本次转账操作至少需要三个步骤:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure>
+<li><p>仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么本次转账操作至少需要三个步骤</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure>
 </li>
-<li><p><strong>注意</strong>: 上面的三个步骤的操作必须打包在一个事务中, 从而可以作为一个 <code>独立的工作单元</code> 来执行。在这个 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有的步骤。</p>
+<li><p><strong>注意</strong>: 上面的三个步操作，其实就需要打包在一个事务中, 这样就可以保证一组操作可以作为一个 <code>独立的工作单元</code> 来执行。并且在 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则事务就整体就是失败的, 那就必须回滚所有已经执行的步骤。<br> 假设第二步操作成功, 但是第三步操作失败, 那么整个事务也就应该是失败的, 那就必须将第二步的操作也回滚。(其实这里也体现了事务最基本的一个特性: <strong>保证数据的一致性</strong>)</p>
 </li>
-<li>假设第二步操作成功, 但是第三步操作失败, 那么整个事务也就应该是失败的, 那就必须将第二步的操作也回滚。(到这里我们也看到了事务最基本的特性之一: <strong>保证数据的一致性</strong>)</li>
-</ul>
-</li>
-<li><p>要知道, 在真实的高并发场景下, 事务需要做的事情其实很多很多, 因为高并发会出现很多意想不到的问题, 接下来会分析这些问题。</p>
+<li><p>当然, 在真实高并发场景下, 事务需要做的事情其实还很多, 因为高并发会出现很多意想不到的问题, 后面会简要分析一下可能会出现的一些问题。</p>
 </li>
 </ol>
-<h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>在分析高并发事务的问题前, 我们要先知道事务的几个标准特性, 因为一个运行良好的事务处理系统必须具备这些标准特性, 而且这些问题的解决离不开事务的这几个标准特性!!! </p>
+<h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>在分析高并发事务的问题前, 我们要先熟悉一下<strong>事务的几个标准特性</strong>, 因为一个运行良好的事务处理系统必须具备这些标准特性, 而且这些高并发问题的解决也离不开事务的这几个标准特性!!! </p>
 <ol>
-<li><p>Atomicity 原子性<br> 一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚。对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p>
+<li><p>Atomicity 原子性<br> 一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚。<br> 对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p>
 </li>
-<li><p>Consistency 一致性<br> 虽然可数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性会保证 <strong>数据库总是从一个一致性的状态 转换到 另一个一致性的状态</strong>;<br> 比如在之前的转账例子:</p>
+<li><p>Consistency 一致性<br> 你大概可以这样来理解: 虽然数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性总是能够保证 <strong>数据库总是从一个一致性的状态 转换到 另一个一致性的状态</strong>; 比如在之前的转账例子:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">转账前的一致性状态是: &apos;Iron Man&apos;(余额500), &apos;Wolverine&apos;(余额15)</div><div class="line">转账成功后的一致性状态是: &apos;Iron Man&apos;(余额400), &apos;Wolverine&apos;(余额115)</div><div class="line">转账如果失败的话, 一致性的状态应该回滚到转账前的状态: &apos;Iron Man&apos;(余额500), &apos;Wolverine&apos;(余额15)</div></pre></td></tr></table></figure>
 </li>
 <li><p><strong>Isolation 隔离性</strong></p>
 <ul>
-<li><p><strong>通常来说</strong>, 一个事务所做的修改在最终提交以前, 对其他事务是不可见的;<br>比如在之前的转账例子中, 在执行完成第二步, 但是第三步还没开始的时候, 此时有另一个账户汇总的程序开始运行, 那么这个程序所拿到的A账户余额应该是没有被 <code>-100</code> 的余额才对</p>
+<li><p><strong>通常来说</strong>, 一个事务所做的修改在最终提交以前, 对其他事务是不可见的;<br>比如在之前的转账例子中, 在执行完成第二步, 但是第三步还没开始的时候, 此时有另一个账户汇总的程序开始运行, <strong>那么这个程序所拿到的A账户余额应该是没有被减100的余额才对</strong></p>
 </li>
 <li><p>后面我们还会详细讨论事务<code>隔离性</code>的 <code>隔离级别</code>, 到时候就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (也就是还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code>, 对其他事务的可见就造成了<code>脏读问题</code>的出现)</p>
 </li>
@@ -225,7 +220,8 @@
 <li><p>Durability 持久性<br> 一旦事务被最终提交, 则在事务这个独立单元中的所有操作所做的修改将会 <code>永久保存到数据库中</code>; (这里所说的<code>永久</code>可以理解为 被事务修改的数据 是真正存放到了表中, 而不是存放在了诸如临时表之类的地方。)</p>
 </li>
 </ol>
-<h2 id="高并发事务的问题"><a href="#高并发事务的问题" class="headerlink" title="高并发事务的问题"></a>高并发事务的问题</h2><p>在并发量比较大的时候, 很容易出现 <strong>多个事务同时进行</strong> 的情况。假设有两个事务正在同时进行, <strong>值得注意的是</strong>: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境<strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以<strong>最终导致了一些问题的出现</strong>;<br>接下来, 在分析高并发事务的问题时, 你可能已经了解了一些关于锁的概念, 但是在分析这些问题的时候, 本篇暂时不会带入锁的概念, 只会列出问题, 并直接告诉你各个问题是<strong>使用事务隔离性的哪个隔离级别解决掉的</strong>;</p>
+<h2 id="高并发事务的问题"><a href="#高并发事务的问题" class="headerlink" title="高并发事务的问题"></a>高并发事务的问题</h2><p>在并发量比较大的时候, 很容易出现 <strong>多个事务同时进行</strong> 的情况。假设有两个事务正在同时进行, <strong>值得注意的是</strong>: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境<strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以<strong>最终导致了一些问题的出现</strong>;</p>
+<p>接下来, 在分析高并发事务的问题时, 你可能已经了解过一些关于锁的概念, 但是接下来分析这些高并发问题时, 暂时不会带入锁的概念, 只会列出问题, 并直接告诉你各个问题是使用事务隔离性的哪个隔离级别来解决掉的;</p>
 <h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ol>
 <li><p>如果mysql中一个事务A读取了另一个并行事务B未最终提交的写数据, 那事务A的这次读取就是<code>脏读</code>。(因为事务A读取的是’脏数据’, 是’非持久性’的数据)</p>
 <ul>
@@ -235,30 +231,34 @@
 </li>
 <li><p>事务A在T4阶段读取库存为20, 这个库存其实就属于<code>脏数据</code>, 因为事务B最终会回滚这个数据, 所以如果事务A使用库存20进行后续的操作, 就会引发问题, 因为事务A拿到的数据已经和表中的真实数据不一致了。</p>
 </li>
-<li><p>那么这个问题如何解决呢?<br> 在MySQL中, 其实事务已经用自身特性（<code>隔离性</code>的 – <code>READ COMMITED</code>或以上隔离级别）解决了这个问题;<br> <strong><code>READ COMMITED</code>级别保证了, 只要是当前语句执行前已经提交的数据都是可见的</strong>。注意和<code>REPEATABLE READ</code>级别的区!!!</p>
+<li><p>那么这个问题如何解决呢?<br> 在MySQL中, 其实事务已经用自身特性(<code>隔离性</code>的 – <code>READ COMMITED</code>或以上隔离级别)解决了这个问题;<br> <strong><code>READ COMMITED</code>级别保证了, 只要是当前语句执行前已经提交的数据都是可见的</strong>。</p>
 </li>
 </ol>
 <h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><ol>
 <li><p>假设现在上面的 <code>脏读问题</code> 已经被完全解决了, 那就意味着事务中每次读取到的数据都是 <code>持久性</code> 的数据(被别的事务最终 提交/回滚 完成后的数据)。</p>
 </li>
-<li><p>但是你还需要知道的是: 解决了脏读问题, 只是能保证你在事务中每次读到的数据都是持久性的数据而已!!!!</p>
+<li><p>但是你需要知道的是: 解决了脏读问题, 只是能保证你在事务中每次读到的数据都是持久性的数据而已!!!!</p>
 </li>
 <li><p>如果在一个事务中多次读取同一个数据, 正好在两次读取之间, 另外一个事务确实已经完成了对该数据的修改并提交, 那问题就来了: 可能会出现多次读取结果不一致的现象。<br><img src="/img/mysql/transaction/bukechongfudu.png" width="607" height="204"></p>
 </li>
-<li><p>那么这个问题如何解决呢?<br> 在MySQL中, 其实事务已经用自身特性（<code>隔离性</code>的 – <code>REPEATABLE READ</code>或以上隔离级别）解决了这个问题;<br> <strong><code>REPEATABLE READ</code>级别保证了, 只要是当前事务执行前已经提交的数据都是可见的</strong>。注意和<code>READ COMMITED</code>级别的区!!!</p>
+<li><p>那么这个问题如何解决呢?<br> 在MySQL中, 事务已经用自身特性(<code>隔离性</code>的 – <code>REPEATABLE READ</code>或以上隔离级别)解决了这个问题;<br> <strong><code>REPEATABLE READ</code>级别保证了, 只要是当前事务执行前已经提交的数据都是可见的</strong>。</p>
 </li>
 </ol>
 <h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><ol>
 <li><p>由于很多人(当然也包括本人), 容易搞混 <code>不可重复读</code> 和 <code>幻读</code>, 这两者确实非常相似。</p>
 <ul>
 <li>但 <code>不可重复读</code> 主要是说多次读取一条记录, 发现该记录中某些列值被修改过。 </li>
-<li>而 <code>幻读</code> 主要是说多次读取一个范围内的记录(包括直接查询所有记录结果或者做聚合统计), 发现结果不一致(标准档案一般指记录增多, 记录的减少应该也算是幻读)。(可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a>)</li>
+<li>而 <code>幻读</code> 主要是说多次读取一个范围内的记录(包括直接查询所有记录结果或者做聚合统计), 发现结果不一致(比如发现增加/减少了一条记录)。(可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a>)</li>
 </ul>
 </li>
-<li><p>其实对于 <code>幻读</code>, MySQL的InnoDB引擎默认的<code>RR</code>级别已经通过<code>MVCC自动帮我们解决了</code>（并非完全解决）, 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把<code>幻读</code>和<code>不可重复读</code>搞混淆, 所以这可能就是比较头痛的点吧!<br> 具体可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述, 理论上RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
+<li><p>其实对于 <code>幻读</code>, MySQL的InnoDB引擎默认的<code>RR</code>级别已经通过<code>MVCC自动帮我们解决了</code>(并非完全解决), 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把<code>幻读</code>和<code>不可重复读</code>搞混淆, 所以这可能就是比较头痛的点吧!</p>
+<p> 另外可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述 </p>
+<blockquote>
+<p>理论上RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
+</blockquote>
 </li>
 </ol>
-<h3 id="幻读的延伸"><a href="#幻读的延伸" class="headerlink" title="幻读的延伸"></a>幻读的延伸</h3><p>MVCC虽然解决了<code>幻读</code>问题, 但严格来说只能说是<strong>部分</strong>解决幻读问题, 接下来进行演示:</p>
+<h3 id="幻读的延伸"><a href="#幻读的延伸" class="headerlink" title="幻读的延伸"></a>幻读的延伸</h3><p>MVCC虽然解决了<code>幻读</code>问题, 但严格来说, MVCC只是<strong>部分</strong>解决幻读问题, 接下来进行演示:</p>
 <ol>
 <li><p>打开客户端1查看隔离级别及初始数据</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</div><div class="line">+------------------------+</div><div class="line">| @@SESSION.tx_isolation |</div><div class="line">+------------------------+</div><div class="line">| REPEATABLE-READ        |</div><div class="line">+------------------------+</div><div class="line">1 row in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
@@ -273,7 +273,7 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">Query OK, 1 row affected (0.00 sec)</div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">|  4 | 死侍    |  18 |      0 | A bad boy          |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">4 rows in set (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
 </li>
 <li><p>在客户端2事务中再次查询数据, 发现数据没有变化(表示<strong>可以重复读, 并且克服了幻读</strong>)!! <strong>但是在客户端2事务中插入一条id为4的新数据, 发现提示数据已经存在!!!</strong></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;</div><div class="line">mysql&gt; </div><div class="line"></div><div class="line">//并且, 此时`update/delete`也是可以操作这条在事务中看不到的记录的!</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;    //( 后面会看到: 其实是因为insert是当前读)</div><div class="line">mysql&gt; </div><div class="line"></div><div class="line">//并且, 此时`update/delete`也是可以操作这条在事务中看不到的记录的! //( 后面会看到: update，delete也都是当前读)</div></pre></td></tr></table></figure>
 </li>
 <li><p>那么这是什么问题呢?</p>
 <ul>
@@ -283,7 +283,7 @@
 </li>
 </ul>
 </li>
-<li><p>另外, MVCC并发控制中的读操作分为两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code></p>
+<li><p>其实, MVCC并发控制中的读操作分为两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code></p>
 <ul>
 <li><a href="https://www.cnblogs.com/cat-and-water/p/6427612.html" target="_blank" rel="external">参考</a></li>
 <li><p>在RR级别下, 快照读是通过MVVC(多版本控制)和undo log来实现的, 而当前读是通过加record lock(记录锁)和gap lock(间隙锁)来实现的。如果需要实时显示数据，还是需要通过加锁来实现。这个时候会使用next-key技术来实现。</p>
