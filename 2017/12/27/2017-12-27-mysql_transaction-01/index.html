@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-01-18T01:50:39.000Z">
+<meta property="og:updated_time" content="2018-01-18T11:26:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL(INNODB引擎)高并发事务问题及解决方案">
 <meta name="twitter:description" content="事务的概念 事务 可以理解为一个 独立的工作单元, 并且在这个独立的工作单元中, 可以有一组操作; 放在事务(独立工作单元)中的多个操作, 要么全部执行成功, 要么全部执行失败。  不免俗套, 通过最经典的银行转账应用来解释一下  假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 Iron Man 通过该银行应用给 Wolverine 转账100元,">
@@ -276,27 +276,23 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">mysql&gt; begin;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div><div class="line"> </div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from test_transaction;</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">| id | user_name | age | gender | desctiption        |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</div><div class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</div><div class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</div><div class="line">+----+-----------+-----+--------+--------------------+</div><div class="line">3 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</div><div class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;</div><div class="line">mysql&gt; </div><div class="line"></div><div class="line">//并且, 此时`update/delete`也是可以操作这条在事务中看不到的记录的!</div></pre></td></tr></table></figure>
 </li>
 <li><p>那么这是什么问题呢?</p>
-</li>
-</ol>
 <ul>
 <li>可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档 – 一致性非阻塞读</a><blockquote>
 <p>The snapshot of the database state applies to SELECT statements within a transaction, not necessarily to DML statements. If you insert or modify some rows and then commit that transaction, a DELETE or UPDATE statement issued from another concurrent REPEATABLE READ transaction could affect those just-committed rows, even though the session could not query them. If a transaction does update or delete rows committed by a different transaction, those changes do become visible to the current transaction.<br>个人认为应该翻译为: 数据库状态的快照适用于事务中的SELECT语句, 而不一定适用于所有DML语句。 如果您插入或修改某些行, 然后提交该事务, 则从另一个并发REPEATABLE READ事务发出的DELETE或UPDATE语句就可能会影响那些刚刚提交的行, 即使该事务无法查询它们。 如果事务更新或删除由不同事务提交的行, 则这些更改对当前事务变得可见。</p>
 </blockquote>
 </li>
 </ul>
-<ol>
-<li><p>因此不少资料将MVCC并发控制中的读操作分成两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code>。</p>
+</li>
+<li><p>另外, 一些资料将MVCC并发控制中的读操作分成两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code></p>
 <ul>
-<li><p>快照读, 读取专门的快照 (对于RC，快照（ReadView）会在每个语句中创建。对于RR，快照是在事务启动时创建的)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">简单的select操作即可(不需要加锁,如: select ... lock in share mode, select ... for update)</div></pre></td></tr></table></figure>
-<p>针对的也是select操作</p>
+<li><a href="https://www.cnblogs.com/cat-and-water/p/6427612.html" target="_blank" rel="external">参考</a></li>
+<li><p>在RR级别下, 快照读是通过MVVC(多版本控制)和undo log来实现的, 而当前读是通过加record lock(记录锁)和gap lock(间隙锁)来实现的。如果需要实时显示数据，还是需要通过加锁来实现。这个时候会使用next-key技术来实现。</p>
 </li>
-<li><p>当前读, 读取最新版本的记录, 没有快照。 在InnoDB中，当前读取根本不会创建任何快照。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">select ... lock in share mode</div><div class="line">select ... for update</div></pre></td></tr></table></figure>
-<p>针对如下操作, 会让如下操作阻塞:    </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">insert</div><div class="line">update</div><div class="line">delete</div></pre></td></tr></table></figure>
+<li><p>快照读, 读取专门的快照 (对于RC，快照（ReadView）会在每个语句中创建。对于RR，快照是在事务启动时创建的), 快照读的操作如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">简单的select操作 (不包括: select ... lock in share mode, select ... for update)</div></pre></td></tr></table></figure>
 </li>
-<li><p>在RR级别下, 快照读是通过MVVC(多版本控制)和undo log来实现的, 当前读是通过手动加record lock(记录锁)和gap lock(间隙锁)来实现的。所以从上面的显示来看，如果需要实时显示数据，还是需要通过加锁来实现。这个时候会使用next-key技术来实现。</p>
+<li><p>当前读, 读取最新版本的记录, 没有快照。 在InnoDB中，当前读取根本不会创建任何快照。当前读的操作如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">select ... lock in share mode</div><div class="line">select ... for update</div><div class="line">insert</div><div class="line">update</div><div class="line">delete</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
