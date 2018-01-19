@@ -19,16 +19,16 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,事务,MVCC,隔离级别与锁">
+    <meta name="keywords" content="MySQL,事务,隔离级别与锁,MVCC">
     <meta name="description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
-<meta name="keywords" content="MySQL,事务,MVCC,隔离级别与锁">
+<meta name="keywords" content="MySQL,事务,隔离级别与锁,MVCC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-02T01:32:58.000Z">
+<meta property="og:updated_time" content="2018-01-19T01:43:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC">
 <meta name="twitter:description" content="REPEATABLE READ(可重复读)  之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:  既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。 解决脏读问题:">
@@ -137,7 +137,7 @@
         <h1 class="title">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-12-31T08:01:47.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2017-12-31T08:30:11.000Z" itemprop="datePublished" class="page-time">
   2017-12-31
 </time>
 
@@ -169,7 +169,7 @@
     <div class="post-card">
         <h1 class="post-card-title">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-12-31 16:01:47" datetime="2017-12-31T08:01:47.000Z"  itemprop="datePublished">2017-12-31</time>
+            <time class="post-time" title="2017-12-31 16:30:11" datetime="2017-12-31T08:30:11.000Z"  itemprop="datePublished">2017-12-31</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>

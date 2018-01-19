@@ -45,8 +45,8 @@
     <title>mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</title>
     <link href="http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/"/>
     <id>http://blog.renyimin.com/2017/12/31/2017-12-31-mysql_transaction-05/</id>
-    <published>2017-12-31T08:01:47.000Z</published>
-    <updated>2018-01-02T01:32:58.000Z</updated>
+    <published>2017-12-31T08:30:11.000Z</published>
+    <updated>2018-01-19T01:43:29.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="REPEATABLE-READ"><a href="#REPEATABLE-READ" class="headerlink" title="REPEATABLE READ"></a>REPEATABLE READ</h3><p>(可重复读)</p><ol><li><p>之前已经了解到, 该隔离级别可以解决<code>不可重复读问题</code> (当然, 也能解决<code>脏读问题</code>), 那么如果单纯用锁来实现, 可能会是如下这样子:</p><ul><li>既然<code>REPEATABLE READ</code> 隔离级别可以解决<code>脏读</code>, <code>不可重复读</code>的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。</li><li>解决<code>脏读问题</code>:<br>  试想一下, 当在事务A中读取数据D的时候, 假设D之前已经在事务B中了, 并且事务B中对数据D做了修改, 但是事务B还没有完成(commit/rollback), 那如何让事务A无法读取数据D呢?<br>  当事务B在对数据D做写操作的时候, 假设给数据D加上了行级的排他锁(X lock), 那事务A自然只能阻塞等事务A完成后才能读取数据D了, 这样就解决了<code>脏读问题</code>。</li><li>解决 <code>不可重复读问题</code>:<br>  试想一下, 当在事务A中第一次读取了数据D之后, 直接给该数据D加S共享锁, 那其他事务自然只能阻塞等事务A完成后才能对数据D做修改操作了, 这样就解决了<code>不可重复读</code>, 在事务A中多次读取数据D, 都是一样的。</li></ul></li><li><p>上面使用<code>S锁+X锁</code>确实可以实现 <code>READ COMMITTED</code> 隔离级别的效果, 也就避免了<code>脏读问题</code>和<code>不可重复读问题</code>, 当然, 这里的问题仍然是低效！！！！</p></li><li><p>因为 MySQL 在事务隔离级别Read committed 、Repeatable Read下，InnoDB 存储引擎采用<code>非锁定</code>的<code>一致性读</code>－－即读取数据不用加锁，即采用的是MVCC中<code>一致性非锁定读</code>模式, 所以, InnoDB的做法是: <strong>读不影响写，写不影响读</strong>。</p><ul><li>读不影响写: 当数据正在执行读操作时，其他事务的写操作不会因此去等待当前事务行上S锁的释放，而是会去读取行的一个快照数据。   </li><li>写不影响读：当数据正在执行写操作时，其他事务的读操作不会因此去等待当前事务行上X锁的释放，而是会去读取行的一个快照数据。    </li></ul></li><li><p>所以总结来看, <code>READ UNCOMMITTED</code> 和 <code>REPEATABLE READ</code> 这两个隔离级别都是使用 <code>写用排他锁 + 读用MVCC</code>, 区别可以参考 <a href="/2017/12/28/2017-12-28-mysql_mvcc/">MySQL-InnoDB-MVCC多版本并发控制</a></p></li></ol><ul><li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li><li><a href="https://www.imooc.com/article/17290" target="_blank" rel="external">慕课mark_rock同学手记</a></li><li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li></ul>]]></content>
     
@@ -68,9 +68,9 @@
     
       <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
-      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
-    
       <category term="隔离级别与锁" scheme="http://blog.renyimin.com/tags/%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8E%E9%94%81/"/>
+    
+      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
     
   </entry>
   
@@ -101,9 +101,9 @@
     
       <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
-      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
-    
       <category term="隔离级别与锁" scheme="http://blog.renyimin.com/tags/%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8E%E9%94%81/"/>
+    
+      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
     
   </entry>
   
@@ -305,6 +305,31 @@
   </entry>
   
   <entry>
+    <title>OOP - Abstract  Factory</title>
+    <link href="http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/"/>
+    <id>http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/</id>
+    <published>2016-06-08T12:13:17.000Z</published>
+    <updated>2018-01-17T02:04:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p><h2 id="界面皮肤库的初始设计"><a href="#界面皮肤库的初始设计" class="headerlink" title="界面皮肤库的初始设计"></a>界面皮肤库的初始设计</h2><h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p><p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;&lt;br&gt;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会
+      
+    
+    </summary>
+    
+      <category term="OOP" scheme="http://blog.renyimin.com/categories/OOP/"/>
+    
+    
+      <category term="OOP" scheme="http://blog.renyimin.com/tags/OOP/"/>
+    
+  </entry>
+  
+  <entry>
     <title>OOP - Prototype</title>
     <link href="http://blog.renyimin.com/2016/06/08/2016-07-13-OOP-Prototype/"/>
     <id>http://blog.renyimin.com/2016/06/08/2016-07-13-OOP-Prototype/</id>
@@ -344,31 +369,6 @@
       
         &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;在日常交通中, 当红灯亮起, 来往的汽车将停止; 而绿灯亮起, 汽车可以继续前行。在这个过程中, 交通信号灯是汽车的观察目
-      
-    
-    </summary>
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/categories/OOP/"/>
-    
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/tags/OOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OOP - Abstract  Factory</title>
-    <link href="http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/"/>
-    <id>http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/</id>
-    <published>2016-06-08T12:13:17.000Z</published>
-    <updated>2018-01-17T02:04:49.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p><h2 id="界面皮肤库的初始设计"><a href="#界面皮肤库的初始设计" class="headerlink" title="界面皮肤库的初始设计"></a>界面皮肤库的初始设计</h2><h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p><p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;&lt;br&gt;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会
       
     
     </summary>
