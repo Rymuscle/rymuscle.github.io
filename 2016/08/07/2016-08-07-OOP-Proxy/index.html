@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OOP - Proxy | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP,对象结构型">
+    <meta name="description" content="前言代理模式是常用的结构型设计模式之一, 当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问, 为了保证客户端使用的透明性, 所访问的真实对象与代理对象需要实现相同的接口。根据代理模式的使用目的不同, 代理模式又可以分为多种类型, 例如 保护代理、远程代理、虚拟代理、缓冲代理等, 它们应用于不同的场合, 满足用户的不同需求。 代理模式是一种对象结构型模式。在代理模式中通过">
+<meta name="keywords" content="OOP,对象结构型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOP - Proxy">
+<meta property="og:url" content="http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言代理模式是常用的结构型设计模式之一, 当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问, 为了保证客户端使用的透明性, 所访问的真实对象与代理对象需要实现相同的接口。根据代理模式的使用目的不同, 代理模式又可以分为多种类型, 例如 保护代理、远程代理、虚拟代理、缓冲代理等, 它们应用于不同的场合, 满足用户的不同需求。 代理模式是一种对象结构型模式。在代理模式中通过">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/proxy/proxy-uml.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/proxy/proxy-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/proxy/proxy-uml-01.png">
+<meta property="og:updated_time" content="2018-01-22T03:06:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOP - Proxy">
+<meta name="twitter:description" content="前言代理模式是常用的结构型设计模式之一, 当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问, 为了保证客户端使用的透明性, 所访问的真实对象与代理对象需要实现相同的接口。根据代理模式的使用目的不同, 代理模式又可以分为多种类型, 例如 保护代理、远程代理、虚拟代理、缓冲代理等, 它们应用于不同的场合, 满足用户的不同需求。 代理模式是一种对象结构型模式。在代理模式中通过">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/proxy/proxy-uml.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OOP - Proxy</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OOP - Proxy</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-08-07T13:05:36.000Z" itemprop="datePublished" class="page-time">
+  2016-08-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代理模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">代理模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#应用实例"><span class="post-toc-number">3.</span> <span class="post-toc-text">应用实例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#各种代理参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">各种代理参考</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代理模式效果"><span class="post-toc-number">5.</span> <span class="post-toc-text">代理模式效果</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-08-07-OOP-Proxy"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OOP - Proxy</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-08-07 21:05:36" datetime="2016-08-07T13:05:36.000Z"  itemprop="datePublished">2016-08-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>代理模式是常用的结构型设计模式之一, 当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问, 为了保证客户端使用的透明性, 所访问的<strong>真实对象与代理对象需要实现相同的接口</strong>。<br>根据代理模式的使用目的不同, 代理模式又可以分为多种类型, 例如 保护代理、远程代理、虚拟代理、缓冲代理等, 它们应用于不同的场合, 满足用户的不同需求。</p>
+<p>代理模式是一种对象结构型模式。在代理模式中通过引入了一个新的代理对象, 代理对象在客户端对象和目标对象之间起到中介的作用, 它去掉客户不能看到的内容和服务或者增添客户需要的额外的新服务。</p>
+<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><ol>
+<li>代理模式的结构比较简单, 其核心是<strong>代理类</strong>, 为了让客户端能够一致性地对待<code>真实对象</code> 和 <code>代理对象</code>, 在代理模式中引入了抽象层, 代理模式结构如下:<br> <img src="/img/oop/proxy/proxy-uml.png" width="392/"></li>
+<li><p>代理模式包含如下三个角色:</p>
+<ul>
+<li><p>Subject(抽象主题角色): 它声明了真实主题和代理主题的共同接口, 这样一来在任何使用真实主题的地方都可以使用代理主题, <strong>客户端通常需要针对抽象主题角色进行编程</strong>。</p>
+</li>
+<li><p>Proxy(代理主题角色): 它包含了对真实主题的引用, 从而可以在任何时候操作真实主题对象; 在代理主题角色中提供一个与真实主题角色相同的接口, 以便在任何时候都可以替代真实主题; 代理主题角色还可以控制对真实主题的使用, 负责在需要的时候创建和删除真实主题对象, 并对真实主题对象的使用加以约束。<br>  通常, 在代理主题角色中, 客户端在调用所引用的真实主题操作之前或之后还需要执行其他操作, 而不仅仅是单纯调用真实主题对象中的操作。</p>
+</li>
+<li><p>RealSubject(真实主题角色): 它定义了代理角色所代表的真实对象, 在真实主题角色中实现了真实的业务操作, 客户端可以通过代理主题角色间接调用真实主题角色中定义的操作。</p>
+</li>
+</ul>
+</li>
+<li><p>代码实现:<br> 代理模式的结构图比较简单, 但是在真实的使用和实现过程中要复杂很多, 特别是代理类的设计和实现。</p>
+<ul>
+<li><p>抽象主题类可以是接口、抽象类或具体类, 它声明了真实主题类和代理类的公共方法, 客户端针对抽象主题类编程, 一致性地对待真实主题和代理主题, 典型的抽象主题类代码如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Subject</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Request</span><span class="params">()</span></span>;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>真实主题类继承了抽象主题类, 提供了业务方法的具体实现, 其典型代码如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RealSubject</span> <span class="keyword">implements</span> <span class="title">Subject</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Request</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="comment">//业务方法具体实现代码  </span></div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>代理类也是抽象主题类的子类，它维持一个对真实主题对象的引用，调用在真实主题中实现的业务方法，在调用时可以在原有业务方法的基础上附加一些新的方法来对功能进行扩充或约束，最简单的代理类实现代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">Subject</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">private</span> $realSubject = <span class="keyword">new</span> RealSubject(); <span class="comment">//维持一个对真实主题对象的引用  </span></div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">PreRequest</span><span class="params">()</span>   </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="comment">//</span></div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">Request</span><span class="params">()</span>   </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        PreRequest();  </div><div class="line">        $realSubject-&gt;Request(); <span class="comment">//调用真实主题对象的方法  </span></div><div class="line">        PostRequest();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">PostRequest</span><span class="params">()</span>   </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">       <span class="comment">//</span></div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>但是, 在实际开发过程中, 代理类的实现比上述代码要复杂很多, 代理模式根据其目的和实现方式不同可分为很多种类, 其中常用的几种代理模式简要说明如下:</p>
+<ul>
+<li><p>远程代理(Remote Proxy): 为一个位于不同的地址空间的对象提供一个本地的代理对象, 这个不同的地址空间可以是在同一台主机中, 也可是在另一台主机中, 远程代理又称为大使(Ambassador)。</p>
+</li>
+<li><p>虚拟代理(Virtual Proxy): 如果需要创建一个资源消耗较大的对象, 先创建一个消耗相对较小的对象来表示, 真实对象只在需要时才会被真正创建。</p>
+</li>
+<li><p>保护代理(Protect Proxy): 控制对一个对象的访问, 可以给不同的用户提供不同级别的使用权限。</p>
+</li>
+<li><p>缓冲代理(Cache Proxy): 为某一个目标操作的结果提供临时的存储空间, 以便多个客户端可以共享这些结果。</p>
+</li>
+<li><p>智能引用代理(Smart Reference Proxy): 当一个对象被引用时, 提供一些额外的操作, 例如将对象被调用的次数记录下来等。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>在这些常用的代理模式中, 有些代理类的设计非常复杂, 例如远程代理类, 它封装了底层网络通信和对远程对象的调用, 其实现较为复杂。</p>
+<h2 id="应用实例"><a href="#应用实例" class="headerlink" title="应用实例"></a>应用实例</h2><ol>
+<li><p>实例说明:</p>
+<blockquote>
+<p>某软件公司承接了某信息咨询公司的收费商务信息查询系统的开发任务, 该系统的基本需求如下:<br>(1)在进行商务信息查询之前用户需要通过身份验证, 只有合法用户才能够使用该查询系统;<br>(2)在进行商务信息查询时系统需要记录查询日志, 以便根据查询次数收取查询费用。<br>该软件公司开发人员已完成了商务信息查询模块的开发任务, 现希望能够以一种松耦合的方式向原有系统增加身份验证和日志记录功能, 客户端代码可以无区别地对待原始的商务信息查询模块和增加新功能之后的商务信息查询模块, 而且可能在将来还要在该信息查询模块中增加一些新的功能。<br>试使用代理模式设计并实现该收费商务信息查询系统。</p>
+</blockquote>
+</li>
+<li><p>实例分析及类图<br>通过分析, 可以采用一种间接访问的方式来实现该商务信息查询系统的设计, 在客户端对象和信息查询对象之间增加一个代理对象, 让代理对象来实现<code>身份验证</code>和<code>日志记录</code>等功能, 而无须直接对原有的商务信息查询对象进行修改, 如下图:<br><img src="/img/oop/proxy/proxy-01.png" width="488/"><br>在上图中, <strong>客户端对象通过代理对象间接访问具有商务信息查询功能的真实对象</strong>, 在代理对象中除了调用真实对象的商务信息查询功能外, <strong>还增加了身份验证和日志记录等功能</strong>。<br>使用代理模式设计该商务信息查询系统, 结构图如下:<br><img src="/img/oop/proxy/proxy-uml-01.png" width="452/"><br>图中:<br> 业务类AccessValidator用于验证用户身份; 它提供方法Validate()来实现身份验证;<br> 业务类Logger用于记录用户查询日志; 它提供方法Log()来保存日志;<br> Searcher充当抽象主题角色;<br> RealSearcher充当真实主题角色;<br> ProxySearcher充当代理主题角色; 维持了对RealSearcher对象、AccessValidator对象和Logger对象的引用。</p>
+</li>
+<li>代码:</li>
+</ol>
+<p>本实例是 <code>保护代理</code> 和 <code>智能引用代理</code> 的应用实例, 在代理类ProxySearcher中实现对真实主题类的权限控制和引用计数, 如果需要在访问真实主题时增加新的访问控制机制和新功能, 只需增加一个新的代理类, 再修改配置文件, 在客户端代码中使用新增代理类即可, 源代码无须修改, <strong>符合开闭原则</strong>。</p>
+<h2 id="各种代理参考"><a href="#各种代理参考" class="headerlink" title="各种代理参考"></a><a href="http://blog.csdn.net/lovelion/article/details/8228132" target="_blank" rel="external">各种代理参考</a></h2><h2 id="代理模式效果"><a href="#代理模式效果" class="headerlink" title="代理模式效果"></a>代理模式效果</h2><p>代理模式是常用的结构型设计模式之一, 它为对象的间接访问提供了一个解决方案, 可以对对象的访问进行控制。<br>代理模式类型较多, 其中远程代理、虚拟代理、保护代理等在软件开发中应用非常广泛。</p>
+<p>代理模式的共同优点如下：</p>
+<ul>
+<li>能够协调调用者和被调用者, 在一定程度上降低了系统的耦合度;</li>
+<li>客户端可以针对抽象主题角色进行编程, 增加和更换代理类无须修改源代码, 符合开闭原则, 系统具有较好的灵活性和可扩展性;</li>
+</ul>
+<p>此外, 不同类型的代理模式也具有独特的优点, 例如:</p>
+<ul>
+<li><p>远程代理为位于两个不同地址空间对象的访问提供了一种实现机制, 可以将一些消耗资源较多的对象和操作移至性能更好的计算机上, 提高系统的整体运行效率;</p>
+</li>
+<li><p>虚拟代理通过一个消耗资源较少的对象来代表一个消耗资源较多的对象, 可以在一定程度上节省系统的运行开销;</p>
+</li>
+<li><p>缓冲代理为某一个操作的结果提供临时的缓存存储空间, 以便在后续使用中能够共享这些结果, 优化系统性能, 缩短执行时间;</p>
+</li>
+<li><p>保护代理可以控制对一个对象的访问权限, 为不同用户提供不同级别的使用权限;</p>
+</li>
+</ul>
+<p>代理模式的主要缺点如下:</p>
+<ul>
+<li><p>由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢，例如保护代理。</p>
+</li>
+<li><p>实现代理模式需要额外的工作，而且有些代理模式的实现过程较为复杂，例如远程代理。</p>
+</li>
+</ul>
+<p>模式适用场景<br>代理模式的类型较多, 不同类型的代理模式有不同的优缺点, 它们应用于不同的场合:</p>
+<ul>
+<li>当客户端对象需要访问远程主机中的对象时可以使用远程代理。</li>
+<li>当需要用一个消耗资源较少的对象来代表一个消耗资源较多的对象，从而降低系统开销、缩短运行时间时可以使用虚拟代理，例如一个对象需要很长时间才能完成加载时。</li>
+<li>当需要为某一个被频繁访问的操作结果提供一个临时存储空间，以供多个客户端共享访问这些结果时可以使用缓冲代理。通过使用缓冲代理，系统无须在客户端每一次访问时都重新执行操作，只需直接从临时缓冲区获取操作结果即可。</li>
+<li>当需要控制对一个对象的访问，为不同用户提供不同级别的访问权限时可以使用保护代理。</li>
+<li>当需要为一个对象的访问（引用）提供一些额外的操作时可以使用智能引用代理。</li>
+</ul>
+<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/8227953" target="_blank" rel="external">参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象结构型/">对象结构型</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&title=《OOP - Proxy》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&title=《OOP - Proxy》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Proxy》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/07/28/2016-07-28-OOP-Iterator/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">OOP - Iterator</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/27/2017-12-27-mysql_transaction-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL(INNODB引擎)高并发事务问题及解决方案</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&title=《OOP - Proxy》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&title=《OOP - Proxy》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Proxy》 — Lant's Blog&url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/08/07/2016-08-07-OOP-Proxy/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aQW4bMQwF0Nz/0u62QDIqP6kGGOlpZXjGgp4XBCny66u8Pn+t3tPK++t9NiwMDIzXMj7L9f0oT5+fnqa7rXd4pGJgYFzAWAfK9Rbr46aBdf03PX6PgYGBsQ52hV9VnmJgYGDMGWmBmgZoDAwMjDWjUsTWr9vqJXEa6DfU4hgYGC9k1G/df//zf+lvYGBgvIrxaa00rew9Dc6DgYFxNCMNgmmI7F2u1dNTDAyMGxiVJCwtXOtBMy2PS6EWAwPjOEblcr9X1k4GL3rvYGBgnM2Yk9ID9QY7gsYABgbGQYxm1dtK4HotzFKZjYGBcSVjngLuLVD/sScGBsbRjHS4oR5A64ldPTTHWS0GBsZxjL0NgF7joRf0MTAwbmP0hi3WCd98gGzDpRsGBsbLGb0g2Buw2FXuVhJZDAyMMxhpEKwH0/m4WNAcxcDAuIxRD5STtuV8COOHFiYGBsahjEqhOOHVB856LUwMDIwbGKOL+PLamxo2i1gMDIzXMnqJWn1sIm08TBoMGBgYpzLSdLAXZNPrvPTCDgMD42zGpGFZbz1OdqiHewwMjFMZn3BNmp3zVPLxVxgYGEcz0lSv13kI2pBhgoiBgXEPYzJgERSZg+ZBBYmBgXEDo375lcLiqroV+jEwMDDSBmRajtaL21IjEwMD42LGJLGrBNn0HQwMjNsYk0v83jjFrr8MAwPjBsbkOqx36HRcY0NnAwMD462MP1LCHfNR7NnDAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
