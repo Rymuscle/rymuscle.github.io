@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP - 并行连接, 持久连接 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的Connection首部字段中有一个由,分隔的 连接标签 列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP - 并行连接, 持久连接">
+<meta property="og:url" content="http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的Connection首部字段中有一个由,分隔的 连接标签 列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-concurrence-request-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/chuanxing-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-concurrence-request-02.png">
+<meta property="og:updated_time" content="2018-01-24T10:57:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP - 并行连接, 持久连接">
+<meta name="twitter:description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的Connection首部字段中有一个由,分隔的 连接标签 列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/http-concurrence-request-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP - 并行连接, 持久连接</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HTTP - 并行连接, 持久连接</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-21T12:10:11.000Z" itemprop="datePublished" class="page-time">
+  2017-04-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常被误解的Connection首部"><span class="post-toc-number">1.</span> <span class="post-toc-text">常被误解的Connection首部</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#并行连接"><span class="post-toc-number">2.</span> <span class="post-toc-text">并行连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久连接"><span class="post-toc-number">3.</span> <span class="post-toc-text">持久连接</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017-04-21-HTTP-Connection-Keep-Alive"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP - 并行连接, 持久连接</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-21 20:10:11" datetime="2017-04-21T12:10:11.000Z"  itemprop="datePublished">2017-04-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="常被误解的Connection首部"><a href="#常被误解的Connection首部" class="headerlink" title="常被误解的Connection首部"></a>常被误解的Connection首部</h2><ol>
+<li><p>HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。</p>
+</li>
+<li><p>HTTP的Connection首部字段中有一个由,分隔的 <code>连接标签</code> 列表;</p>
+</li>
+<li><p>Connection首部可以承载3种不同类型的标签, 因此非常令人费解:</p>
+<ul>
+<li>HTTP首部字段名, 列出了只与此链接有关的首部; </li>
+<li>任意标签值, 用于描述此链接的非标准选项;</li>
+<li>close, 说空操作完成之后需要关闭这条持久连接;</li>
+</ul>
+</li>
+<li><p>如果连接标签中包含了一个HTTP首部字段的名称, 那么这个首部字段就包含了一些连接有关的信息, 不能将其转发出去, 在将报文转发出去之前, 必须删除Connection首部列出的所有首部字段。<br> 由于Connection搜捕可以防止无意中对本地首部的转发, 因此将逐跳字首部名放入Connection首部被称为”对首部的保护”。</p>
+</li>
+</ol>
+<h2 id="并行连接"><a href="#并行连接" class="headerlink" title="并行连接"></a>并行连接</h2><ol>
+<li><p>在串行请求时, 浏览器可以先完整地请求原始的HTML页面, 然后请求第一个嵌入对象, 然后请求第二个嵌入对象等, 以这种简单的方式对每个嵌入式对象进行串行处理, 很明显这样处理很慢!!</p>
+</li>
+<li><p>HTTP允许客户端打开多条连接, 并行地执行多个HTTP事务, 如下图, 并行加载了四幅嵌入式图片, 每个事务都有自己的TCP连接:<br> <img src="/img/http/http-concurrence-request-01.png" width="550/"></p>
+</li>
+<li><p>并行连接可能会提高页面的加载速度</p>
+<ul>
+<li>包含嵌入对象的组合页面如果能通过并行连接克服单条连接的空载时间和带宽限制, 加载速度也会有所提高。时延可以重叠起来, 而且如果单条连接没有充分利用客户端的因特网带宽, 可以将为用带宽分配来装载其他对象。</li>
+<li>如下图, 串行和并行的对比, 并行情况下, 先装载的是封闭的HTML页面, 然后并行处理其余3个事务, 每个事务都有自己的连接。(图片的装载是并行的, 连接的时延也是重叠的)<br><img src="/img/http/chuanxing-01.png" width="550/"><br><img src="/img/http/http-concurrence-request-02.png" width="550/"></li>
+<li>由于软件开销的存在, 每个连接请求之间总会有一些小的时延, 但连接请求和传输时间<strong>基本上</strong>都是重叠起来的!</li>
+</ul>
+</li>
+<li><p>并行连接不一定更快</p>
+<blockquote>
+<p>即使并行连接的速度可能会更快, 但是并不一定总是更快。<br> 因为在客户端的网络带宽如果不足时, 大部分的时间可能都是用来传送数据的。在这种情况下, 一个连接到速度较快服务器上的HTTP事务就会很容易耗尽所有可用的Modem带宽。<br> 如果并行加载多个对象, 每个对象都会去竞争这有限的带宽, 每个对象都会以较慢的速度按比例加载, 这样带来的性能提升就很小, 甚至没什么提升。<br> 而且打开大量连接会消耗很多内存资源, 从而引发自身性能问题。<br> 复杂的Web有可能会有数十或数百个内嵌对象, 客户端可能可以打开数百个连接, 但Web服务器通常要同时处理很多其他用户的请求, 所以很少有Web服务器希望出现这样的情况。<br> 一百个用户同时发出申请, 每个用户打开100个连接, 服务器就要负责处理1W个连接, 这会造成服务器性能的严重下降。对高负荷的代理来说也同样如此。<br> 实际上, 浏览器确实使用了并行连接, 但它们会将并行连接的总数限制为一个较小的值(通常是四个)。服务器可以随意关闭来自特定客户端的超量连接。</p>
+</blockquote>
+</li>
+<li><p>并行连接可能让人”感觉”更快一些<br>通过上面的介绍, 我们知道并行连接并不总是能使页面加载更快, 但即使实际上没有加快页面的传输速度, 并行连接通常也会让用户<code>觉得</code>页面加载的更快了,<br>因为多个组件对象同时出现屏幕上时, 用户能够看到加载的进展。如果整个屏幕上有很多动作在进行, 即使实际上整个页面的下载时间更长, 用户也会认为Web页面加载得更快一些。</p>
+</li>
+</ol>
+<h2 id="持久连接"><a href="#持久连接" class="headerlink" title="持久连接"></a>持久连接</h2><ol>
+<li><p>HTTP/1.1(以及HTTP/1.0的各种增强版本)允许HTTP设备在事务处理结束之后将TCP连接保持在打开状态, 以便未来的HTTP请求重用现存的连接。在事务处理结束之后仍然保持在打开状态的TCP连接被称为<strong>持久连接</strong>。</p>
+</li>
+<li><p>非持久连接会在每个事务结束之后关闭, 持久连接会在不同事务之间保持打开状态, 直到客户端或服务器其决定将其关闭为止。</p>
+</li>
+<li><p>重用已对目标服务器打开的空闲持久连接, 就可以避开缓慢的连接建立阶段。而且已经打开的连接还可以避免慢启动的拥塞使用阶段, 以便更快速地进行数据的传输。</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&title=《HTTP - 并行连接, 持久连接》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&title=《HTTP - 并行连接, 持久连接》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - 并行连接, 持久连接》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/04/19/2017-04-19-HTTP-cache/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTP - 缓存</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/27/2017-12-27-mysql_transaction-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL(INNODB引擎)高并发事务问题及解决方案</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2015 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&title=《HTTP - 并行连接, 持久连接》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&title=《HTTP - 并行连接, 持久连接》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - 并行连接, 持久连接》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/21/2017-04-21-HTTP-Connection-Keep-Alive/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqklEQVR42u3aQW7CQAwF0N7/0nTbCgHf9jhNpZcVaiHMy2LGfPvrK74eL66f/31+/f6zz/d59b2v7nzswsPDwzu09Odb5+98T01eJ5+NHhYeHh7eGi/flPNlJX/J75kcEnh4eHj/hZcvIln6pLzGw8PDuycv3+ITWJIe4OHh4d2T14sYkiVOSMndjmUteHh4eJ1+U7mc/avXK/09PDw8vHFXPWmGJZHElf39X5/Cw8PDW+DlG25eauePI4kSelEvHh4e3vW8aoiQf1lvaKDabMPDw8Pb4+WM3oLy7T4vygtHBR4eHt4aL9+O8yMhX0oVVlgnHh4e3gKvt5Te4iafygvxA08aDw8PL+D1woK8vM4PlerWnwQTeHh4eGd582OgiqkOBEQtrvwXAx4eHt4hXr5B5y2oXvB6uCjHw8PDW+P1Yoh8m86PkDyMiCJmPDw8vAVefhjkra/q8VAdusqjEDw8PLwreaMtuDWC0IszmvNleHh4eAPeo3j1GJOhq17LDQ8PD+9K3qRorgay83bXh/fj4eHhrfHKP+yDsKD638nQ1cuHhYeHh7fAS0rVediaR8PV46HwHjw8PLxDvCQImIQU1ePk1OPDw8PD2+Plxe5Gi2sef5Q7e3h4eHgLvDyYyIeo5vcfNdvw8PDwLufl5XVvi+/dMy/u8fDw8K7kVQOISZQwCZQ/rBAPDw9vmVctlPNxqF7wkTyOD6vCw8PDO8p7FK9qZJC01npDV9FDwcPDw1vg5dckjMhjhby8ro4s4OHh4Z3lnVr0ZCvvDYEVhq7w8PDwFnjVTbnaNqsOS/VOMDw8PLx78qrN+xwzKc3x8PDw7szLS9u8LK4Gu4WhBDw8PLw1XrVlVR0RmMQQeeE+ylrw8PDwYl7vR351EZNCfNJCw8PDwzvK+wZBNpKX+WkylQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
