@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言 HTTP/1.1 中实现的 method，见RFC2616, 有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现; 《图解http协议》中LINK,UNLINK已经被http1.1废弃;   规范中虽然是上面那样定义的,">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/postman-http-method.png">
-<meta property="og:updated_time" content="2018-01-24T06:55:36.000Z">
+<meta property="og:updated_time" content="2018-01-25T05:32:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP - 请求Method">
 <meta name="twitter:description" content="前言 HTTP/1.1 中实现的 method，见RFC2616, 有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现; 《图解http协议》中LINK,UNLINK已经被http1.1废弃;   规范中虽然是上面那样定义的,">
@@ -216,7 +216,7 @@
 </li>
 </ul>
 </li>
-<li><p><code>POST</code>: 上面已经提过了, 所以POST是非幂等的;</p>
+<li><p><code>POST</code>: 上面已经提过了, 所以<strong>POST是非幂等的</strong>;</p>
 <ul>
 <li>POST和PUT都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">再比如, 在我们的支付系统中，一个api的功能是创建收款金额二维码，它和金额相关，每个用户可以有多个二维码，如果连续调用则会创建新的二维码，这个时候就用POST</div><div class="line">还是那个例子，用户的账户二维码只和用户关联，而且是一一对应的关系，此时这个api就可以用PUT，因为每次调用它，都将刷新用户账户二维码</div></pre></td></tr></table></figure>
 </li>
