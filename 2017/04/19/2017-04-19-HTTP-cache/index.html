@@ -20,24 +20,26 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。 当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些">
+    <meta name="description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些冗">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP - 缓存">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/19/2017-04-19-HTTP-cache/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。 当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些">
+<meta property="og:description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些冗">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/expire-max-age.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-hit-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-not-hit-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cdn-public-proxy-200.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cdn-private-200.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/private-public-cache-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-01.png">
-<meta property="og:updated_time" content="2018-01-25T02:19:31.000Z">
+<meta property="og:updated_time" content="2018-02-01T10:42:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP - 缓存">
-<meta name="twitter:description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。 当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些">
+<meta name="twitter:description" content="Web缓存Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。使用缓存的优点:1.减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输, 这些冗">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/http/expire-max-age.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -166,7 +168,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Web缓存"><span class="post-toc-number">1.</span> <span class="post-toc-text">Web缓存</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存命中、未命中"><span class="post-toc-number">2.</span> <span class="post-toc-text">缓存命中、未命中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出文档过期-和-服务器再验证"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出文档过期 和 服务器再验证</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本的过期时间"><span class="post-toc-number">4.</span> <span class="post-toc-text">缓存副本的过期时间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本过期后的”再验证”"><span class="post-toc-number">5.</span> <span class="post-toc-text">缓存副本过期后的”再验证”</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证命中-缓慢命中"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">再验证命中(缓慢命中)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证未命中"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">再验证未命中</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证-–-服务器对象被删除"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">再验证 – 服务器对象被删除</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证–条件方法"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">再验证–条件方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-Modified-Since-Date-再验证"><span class="post-toc-number">5.6.</span> <span class="post-toc-text">If-Modified-Since:Date 再验证</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-None-Match-实体标签再验证"><span class="post-toc-number">5.7.</span> <span class="post-toc-text">If-None-Match 实体标签再验证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实体标签"><span class="post-toc-number">5.7.1.</span> <span class="post-toc-text">实体标签</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#弱验证器"><span class="post-toc-number">5.7.2.</span> <span class="post-toc-text">弱验证器</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体标签-和-最近修改日期"><span class="post-toc-number">5.8.</span> <span class="post-toc-text">实体标签 和 最近修改日期</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存状态码-200-和-304"><span class="post-toc-number">6.</span> <span class="post-toc-text">缓存状态码 200 和 304</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#公有和私有缓存"><span class="post-toc-number">7.</span> <span class="post-toc-text">公有和私有缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#私有缓存"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">私有缓存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#公有缓存"><span class="post-toc-number">7.2.</span> <span class="post-toc-text">公有缓存</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存控制"><span class="post-toc-number">8.</span> <span class="post-toc-text">缓存控制</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Web缓存"><span class="post-toc-number">1.</span> <span class="post-toc-text">Web缓存</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存命中、未命中"><span class="post-toc-number">2.</span> <span class="post-toc-text">缓存命中、未命中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出文档过期-和-服务器再验证"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出文档过期 和 服务器再验证</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本的过期时间"><span class="post-toc-number">4.</span> <span class="post-toc-text">缓存副本的过期时间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本过期后的”再验证”"><span class="post-toc-number">5.</span> <span class="post-toc-text">缓存副本过期后的”再验证”</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证命中-缓慢命中"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">再验证命中(缓慢命中)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证未命中"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">再验证未命中</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证-–-服务器对象被删除"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">再验证 – 服务器对象被删除</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证–条件方法"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">再验证–条件方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-Modified-Since-Date-再验证"><span class="post-toc-number">5.6.</span> <span class="post-toc-text">If-Modified-Since:Date 再验证</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-None-Match-实体标签再验证"><span class="post-toc-number">5.7.</span> <span class="post-toc-text">If-None-Match 实体标签再验证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实体标签"><span class="post-toc-number">5.7.1.</span> <span class="post-toc-text">实体标签</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#弱验证器"><span class="post-toc-number">5.7.2.</span> <span class="post-toc-text">弱验证器</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体标签-和-最近修改日期"><span class="post-toc-number">5.8.</span> <span class="post-toc-text">实体标签 和 最近修改日期</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存状态码-200-和-304"><span class="post-toc-number">6.</span> <span class="post-toc-text">缓存状态码 200 和 304</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#200-ok"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">200 ok :</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">7.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其他原因导致条件再验证"><span class="post-toc-number">8.</span> <span class="post-toc-text">其他原因导致条件再验证????</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#公有和私有缓存"><span class="post-toc-number">9.</span> <span class="post-toc-text">公有和私有缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#私有缓存"><span class="post-toc-number">9.1.</span> <span class="post-toc-text">私有缓存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#公有缓存"><span class="post-toc-number">9.2.</span> <span class="post-toc-text">公有缓存</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存控制"><span class="post-toc-number">10.</span> <span class="post-toc-text">缓存控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP过期算法测试"><span class="post-toc-number">11.</span> <span class="post-toc-text">HTTP过期算法测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#稍后…"><span class="post-toc-number">12.</span> <span class="post-toc-text">稍后….</span></a></li></ol>
         </nav>
     </aside>
     
@@ -191,7 +193,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Web缓存"><a href="#Web缓存" class="headerlink" title="Web缓存"></a>Web缓存</h2><p>Web缓存是指可以自动保存常见文档副本的HTTP设备。 当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。<br>使用缓存的优点:<br>1.减少了冗余的数据传输, 节省了你的网络费用</p>
+            <h2 id="Web缓存"><a href="#Web缓存" class="headerlink" title="Web缓存"></a>Web缓存</h2><p>Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。<br>使用缓存的优点:<br>1.减少了冗余的数据传输, 节省了你的网络费用</p>
 <blockquote>
 <p>有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。<br>这样就会导致一些相同的字节在网络中一遍遍地传输, 这些冗余的数据传输会耗尽昂贵的网络带宽, 降低传输速度, 加重Web服务器的负载。<br>有了缓存, 就可以保留第一条服务器响应的副本, 后继请求就可以由缓存的副本来应对了, 这样可以减少那些流入/流出原始服务器而被浪费掉了的重复流量。</p>
 </blockquote>
@@ -203,7 +205,7 @@
 <blockquote>
 <p>瞬间拥塞: 突发事件(爆发性新闻, 抢购等)使很多人几乎同时去访问一个Web文档时, 就会出现瞬间拥塞, 由此造成的过多流量峰值可能会使网络和Web服务器产生灾难性的崩溃。<br>而缓存在应对瞬间拥塞时就显得非常重要。</p>
 </blockquote>
-<p>4.降低了距离时延, 因为从较远的地方加载页面会更慢一些<br>即使带宽不是问题, 距离也可能成为问题。<strong>每台网络路由器都会增加因特网流量的时延</strong>。即使客户端和服务器之间没有太多的路由器, <strong>光速自身也会造成显著的时延</strong>。</p>
+<p>4.降低了<strong>距离时延</strong>, 因为从较远的地方加载页面会更慢一些<br>即使带宽不是问题, 距离也可能成为问题。<strong>每台网络路由器都会增加因特网流量的时延</strong>。即使客户端和服务器之间没有太多的路由器, <strong>光速自身也会造成显著的时延</strong>。</p>
 <blockquote>
 <p>比如波士顿到旧金山的直线距离大约为2700英里, 在最好的情况下, 以光速传输(186000英里/秒)的信号可以在大约15毫秒从波士顿传送到旧金山, 并在30毫秒内完成一个往返。<br>假设某个Web页面包含了20个小图片, 都在旧金山的一台服务器上, 如果波士顿的一个客户端打开了4条到服务器的并行连接, 而且保持着连接的活跃状态, 光速自身就要消耗大约1/4秒(240毫秒)的下载时间。如果服务器位于(距离旧金山6700英里)的东京, 时延就会变成600毫秒。<br>中等复杂的web页面会带来几秒钟的光速时延。<br>况且实际应用中, 信号的传输速度会比光速低一些, 因此距离时延会更加严重。</p>
 </blockquote>
@@ -232,14 +234,13 @@
 </li>
 <li><p>在<strong>缓存文档过期之前</strong>, 缓存设备可以随意使用这些副本, 而且无需与服务器做任何联系(<strong><em>当然, 除非客户端请求中包含”阻止提供缓存”的首部<code>Cache-Control:no-store</code>, 或者客户端请求中包含”只有经过验证才能返回缓存副本”的首部<code>Cache-Control:no-cache</code></em></strong>),<br>但是一旦已缓存文档过期, 缓存设备就必须与服务器进行核对(<strong><em>当然, 除非你设置了<code>Cache-Control:only-if-cached</code>要求只使用缓存</em></strong>),询问文档是否被修改过, 如果被修改过, 就要获取一份新鲜(带有新的过期日期)的副本。</p>
 </li>
-<li><p>注意: </p>
-<ul>
-<li>不推荐使用Expires首部, 它指定的是实际的过期日期而不是秒数。HTTP设计者后来认为, 由于很多服务器的时钟都不同步, 或者不正确, 所以最好还是用剩余秒数, 而不是绝对时间来表示过期时间。</li>
-<li>有些服务器还会回送一个Expires:0响应头,视图将文档置于永远过期的状态, 但这种语法是非法的, 可能给某个软件带来问题, 应该试着支持这种结构的输入, 但是不应该产生这种结构的输出。</li>
-</ul>
-</li>
-<li><p>另外, 注意 <code>no-cache</code> 和 <code>must-revalidate</code> 的区别</p>
-<ul>
+</ol>
+<p>3.<strong>注意</strong>: </p>
+<pre><code>- 不推荐使用Expires首部, 它指定的是实际的过期日期而不是秒数。HTTP设计者后来认为, 由于很多服务器的时钟都不同步, 或者不正确, 所以最好还是用剩余秒数, 而不是绝对时间来表示过期时间。
+- 有些服务器还会回送一个`Expires:0`响应头,视图将文档置于永远过期的状态, 但这种语法是非法的, 可能给某个软件带来问题, 应该试着支持这种结构的输入, 但是不应该产生这种结构的输出。
+- 而 `Cache-Control` 的 `max-age` 则可以设置 `Cache-Control: max-age=0`
+</code></pre><ol>
+<li>另外, 注意 <code>no-cache</code> 和 <code>must-revalidate</code> 的区别<ul>
 <li>no-cache: 告诉浏览器、缓存服务器，不管本地副本是否过期，使用资源副本前，一定要到源服务器进行副本有效性校验。</li>
 <li>must-revalidate：告诉浏览器、缓存服务器，本地副本过期前，可以使用本地副本；本地副本一旦过期，必须去源服务器进行有效性校验。(这应该是缓存系统的默认行为, 但must-revalidate指令使得这个要求是明确的<a href="https://stackoverflow.com/questions/2932890/http-cache-control-max-age-must-revalidate" target="_blank" rel="external">参考</a>)</li>
 <li><a href="https://segmentfault.com/a/1190000007317481" target="_blank" rel="external">可参考</a></li>
@@ -325,17 +326,35 @@
 <p>如果服务器回送了一个实体标签, HTTP/1.1客户端就必须使用实体标签验证器。<br>如果服务器只回送了一个Last-Modified值, 客户端就可以使用 If-Modified-Since 验证。<br>如果实体标签和最后修改日期都提供了, 客户端就应该使用这两种再验证方案, 这样HTTP1.0和HTTP1.1换成你都可以正确响应了。</p>
 </blockquote>
 <p>除非HTTP/1.1原始服务器无法生成实体标签验证器, 否则就应该发送一个出去, 如果使用弱实体标签有优势的话, 发送的可能就是个弱实体标签, 而不是强实体标签。而且最好同时发送一个最近修改值。<br>如果HTTP/1.1缓存或服务器受到的请求既带有 If-Modified-Since, 又带有实体标签条件首部, <strong>那么只有这两个条件都满足时, 才能返回 <code>304 Not Modified</code> 响应</strong>(也就是两个都做验证)。</p>
-<h2 id="缓存状态码-200-和-304"><a href="#缓存状态码-200-和-304" class="headerlink" title="缓存状态码 200 和 304"></a>缓存状态码 200 和 304</h2><p>在没有设置Cache-Control的情况下, 设置Last-Modified和ETag缓存, 会出现200（from cache）和304 交替出现的情况;<br>设置Cache-Control的情况下, 过期刷新会出现304(如果有更新内容，则是200), 之后再过期之前刷新都是200（from cache）。如果要确保要向服务端确认，可以将Cache-Contral的max-age设置为0。  </p>
+<h2 id="缓存状态码-200-和-304"><a href="#缓存状态码-200-和-304" class="headerlink" title="缓存状态码 200 和 304"></a>缓存状态码 200 和 304</h2><h3 id="200-ok"><a href="#200-ok" class="headerlink" title="200 ok :"></a><code>200 ok</code> :</h3><p>参考P176: HTTP没有为用户提供一种手段来区分响应是缓存命中的, 还是访问原始服务器得到的。<strong>在这两种情况下, 响应状态码都是200OK</strong>, 说明响应有主体部分。…..</p>
 <ol>
-<li><p><code>200 OK</code> (from cache) 是缓存没有跟服务器进行再次验证, 直接用了缓存;</p>
+<li><p>缓存命中(这里指的是公共的代理缓存命中)</p>
+<ul>
+<li>客户端第一次访问资源, 浏览器和服务器之间有代理服务器, 这样的话, 由于这个代理服务器是个公共代理, 所以里面可能已经有了 “服务器响应的资源和200 ok副本”, 所以代理服务器会直接响应 “服务器响应的资源和200 ok副本”给客户端;<br><img src="/img/http/cdn-public-proxy-200.png" width="600/"></li>
+</ul>
 </li>
-<li><p><code>304 Not Modified</code> 是浏览器和服务器多确认了一次缓存有效性检测后, 再用的缓存。</p>
+<li><p>访问原始服务器</p>
+<ul>
+<li>浏览器和服务器之间没有代理服务器, 这样的话, 客户端第一次请求资源, 则服务器直接 响应 200 ok 和 资源对象 给客户端;</li>
+<li>客户端多次访问资源, 浏览器和服务器之间有代理服务器, 但是由于种种原因, 缓存需要再验证, 并且结果发现<strong>再验证未命中</strong>, 则服务器会响应资源对象和200 ok给代理缓存, 然后代理再响应”服务器响应的资源和200 ok副本”给客户端;</li>
+</ul>
 </li>
-<li><p>304 Not Modified 比 200 OK (from cache) 慢，指的是浏览器还向服务器确认了下 “If-Not-Modified”，才用的缓存</p>
+<li><p>浏览器直接取的自己的本地缓存<br> 此处由于浏览器之前缓存了 代理缓存服务器cdn 上的缓存副本, <strong>所以浏览器缓存的副本和上面cdn代理缓存的副本一样</strong>(age缓存时间都没变), 只不过会标注”已缓存”来表示没有响应主体部分<br> <img src="/img/http/cdn-private-200.png" width="600/"></p>
+</li>
+<li><p><code>304 Not Modified</code> 是缓存和服务器多确认了一次缓存有效性检测后, 发现<strong>缓存再验证命中</strong>, 但是用的还是缓存。</p>
+</li>
+<li><p>小结:</p>
+<ul>
+<li><code>304 Not Modified</code> 比 <code>再验证未命中返回200 OK</code> 快, 但是比 <code>public缓存命中返回 200 ok</code> 慢;</li>
+<li><code>public缓存命中返回 200 ok</code> 比 <code>private 浏览器缓存命中返回 200 ok</code> 慢;</li>
+</ul>
 </li>
 <li><p>参考 http权威指南176页</p>
 </li>
 </ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>cache-control默认是public还是private??</p>
+<h2 id="其他原因导致条件再验证"><a href="#其他原因导致条件再验证" class="headerlink" title="其他原因导致条件再验证????"></a>其他原因导致<code>条件再验证</code>????</h2><p>除了缓存中的副本过期会导致<code>条件再验证</code>, 还有一些客户端行为会导致条件再验证;</p>
+<p><a href="https://www.cnblogs.com/ziyunfei/p/5642796.html" target="_blank" rel="external">https://www.cnblogs.com/ziyunfei/p/5642796.html</a><br>immutable, 反正大概就是说 在缓存过期时间内, 即使用户刷新页面(这说的是普通刷新, 不包括强制刷新), 也不会去做再验证（因为还特么没有到我设置的过期时间, 那必然没有过期, 你来验证也是白验证, 而且服务器还会响应304, 虽然字节很少, 但也架不住量大）</p>
 <h2 id="公有和私有缓存"><a href="#公有和私有缓存" class="headerlink" title="公有和私有缓存"></a>公有和私有缓存</h2><ol>
 <li><p>通用首部字段(general header fields)<code>Cache-Control</code>有两个缓存响应指令: <code>public</code> 和 <code>private</code> </p>
 </li>
@@ -365,9 +384,12 @@
 </li>
 <li><p>如下对 <code>Cache-Control</code> 的请求指令进行了小结:<br><img src="/img/http/cache-control-01.png" width="600/"><br><a href="https://stackoverflow.com/questions/33818854/what-is-difference-between-max-age-and-max-stale-in-cache-control-mechanism" target="_blank" rel="external">HTTP Cache-Control: max-age和max-stale=s的区别</a></p>
 </li>
-<li><p><code>Param:no-cache</code> 和 <code>Cache-Control:no-cache</code> 一样, 不过是为了兼容HTTP/1.0;<br>参考:<br>HTTP权威指南 – 第七章 缓存<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616#section-4.5" target="_blank" rel="external">RFC 2616</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" target="_blank" rel="external">MDN Web docs</a></p>
+<li><p><code>Pagma:no-cache</code> 和 <code>Cache-Control:no-cache</code> 一样, 不过是为了兼容HTTP/1.0;</p>
 </li>
 </ol>
+<h2 id="HTTP过期算法测试"><a href="#HTTP过期算法测试" class="headerlink" title="HTTP过期算法测试"></a>HTTP过期算法测试</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//第一次刷新</span></div><div class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_IF_MODIFIED_SINCE'</span>])) &#123;</div><div class="line">    header(<span class="string">"HTTP/1.1 200"</span>);</div><div class="line">    header(<span class="string">'Cache-Control: max-age=30'</span>); <span class="comment">// 放到下一行就不生效了(响应头还特么还有顺序?)</span></div><div class="line">    header(<span class="string">'Age:10'</span>);</div><div class="line">    <span class="comment">// 发现浏览器确实拿着这个日期去判断有没有过期</span></div><div class="line">    header(<span class="string">'Date:'</span>. date(<span class="string">'D, d M Y H:i:s'</span>, time()).<span class="string">' GMT'</span>);</div><div class="line">    header(<span class="string">'Last-Modified:'</span>. date(<span class="string">'D, d M Y H:i:s'</span>, time()<span class="number">-20000</span>).<span class="string">' GMT'</span>);</div><div class="line">    <span class="keyword">echo</span> <span class="number">123</span>;</div><div class="line">    <span class="keyword">exit</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//算法: expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</span></div><div class="line"><span class="comment">// 此处浏览器判断 当前时间 + 30 - 10 , 差别多有20秒的过期时间</span></div><div class="line"><span class="comment">//发现只有超时之后, 才会显示出下面的信息   (firefox准确无误地实现,在未过期之前, 是不会带If-Modified-Since头去请求的)</span></div><div class="line"><span class="keyword">echo</span> <span class="number">456789</span>;<span class="keyword">die</span>;</div><div class="line"><span class="comment">//chrome比较蛋疼, 会交替显示 123 和 456789</span></div></pre></td></tr></table></figure>
+<h2 id="稍后…"><a href="#稍后…" class="headerlink" title="稍后…."></a>稍后….</h2><p>稍后还需要研究一下浏览器的缓存机制, 普通刷新, 刷新, 回车 等机制的异同<br>还有强缓存 弱缓存的概念</p>
+<p>参考:<br>HTTP权威指南 – 第七章 缓存<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616#section-4.5" target="_blank" rel="external">RFC 2616</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" target="_blank" rel="external">MDN Web docs</a></p>
 
         </div>
 
