@@ -13,25 +13,25 @@
     
     
     
-    <title>04.更新包的方式(require, install, update对比) | Lant&#39;s Blog</title>
+    <title>06. 发布自己的包 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Composer">
-    <meta name="description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+    <meta name="description" content="前言 GitHub官方提供了和Packagist相关的钩子服务; Packagist主要提供Composer包发布和索引, 默认Composer从Packagist获取资源。(可以使用你的GitHub帐号登录Packagist) 也可以理解为你真正的项目代码是在Gihub仓库中, 而相关介绍及索引信息是在Packagist平台  发布步骤github仓库部分 github创建仓库  将本地目录与g">
 <meta name="keywords" content="Composer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04.更新包的方式(require, install, update对比)">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/index.html">
+<meta property="og:title" content="06. 发布自己的包">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+<meta property="og:description" content="前言 GitHub官方提供了和Packagist相关的钩子服务; Packagist主要提供Composer包发布和索引, 默认Composer从Packagist获取资源。(可以使用你的GitHub帐号登录Packagist) 也可以理解为你真正的项目代码是在Gihub仓库中, 而相关介绍及索引信息是在Packagist平台  发布步骤github仓库部分 github创建仓库  将本地目录与g">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-03T07:24:33.000Z">
+<meta property="og:updated_time" content="2018-02-03T09:18:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04.更新包的方式(require, install, update对比)">
-<meta name="twitter:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+<meta name="twitter:title" content="06. 发布自己的包">
+<meta name="twitter:description" content="前言 GitHub官方提供了和Packagist相关的钩子服务; Packagist主要提供Composer包发布和索引, 默认Composer从Packagist获取资源。(可以使用你的GitHub帐号登录Packagist) 也可以理解为你真正的项目代码是在Gihub仓库中, 而相关介绍及索引信息是在Packagist平台  发布步骤github仓库部分 github创建仓库  将本地目录与g">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04.更新包的方式(require, install, update对比)</div>
+        <div class="flex-col header-title ellipsis">06. 发布自己的包</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,11 +134,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">04.更新包的方式(require, install, update对比)</h1>
+        <h1 class="title">06. 发布自己的包</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-18T14:23:17.000Z" itemprop="datePublished" class="page-time">
-  2017-09-18
+                <time datetime="2017-09-20T10:40:17.000Z" itemprop="datePublished" class="page-time">
+  2017-09-20
 </time>
 
 
@@ -159,17 +159,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">1.</span> <span class="post-toc-text">小结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#发布步骤"><span class="post-toc-number">2.</span> <span class="post-toc-text">发布步骤</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#github仓库部分"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">github仓库部分</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Packagist部分"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Packagist部分</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2017-09-18-composer-04"
+<article id="post-2017-09-20-composer-06"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04.更新包的方式(require, install, update对比)</h1>
+        <h1 class="post-card-title">06. 发布自己的包</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-18 22:23:17" datetime="2017-09-18T14:23:17.000Z"  itemprop="datePublished">2017-09-18</time>
+            <time class="post-time" title="2017-09-20 18:40:17" datetime="2017-09-20T10:40:17.000Z"  itemprop="datePublished">2017-09-20</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
@@ -184,28 +184,53 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <ol>
-<li><p>require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!<br> <code>composer require 包名 新版本</code></p>
-</li>
-<li><p>当你手动修改了composer.json文件中包的版本之后, 可以执行 <code>composer update</code> 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建!<br> 当然, 你可以指定你需要更新的包 <code>composer update 包名, 包名...</code></p>
-</li>
-<li><p>另外, 还应该注意一下 install 和 update 的一个小细节:<br><strong>当你修改了composer.json文件, 如果不是对包做增删改(比如增加一个包, 删除一个包, 或者修改包的版本信息), 而是增删改其他信息(比如配置自动加载之类的信息), 那么你使用 install 和 update 是没有区别的!</strong></p>
-</li>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>GitHub官方提供了和Packagist相关的钩子服务;</li>
+<li>Packagist主要提供Composer包发布和索引, 默认Composer从Packagist获取资源。(可以使用你的GitHub帐号登录Packagist)<br> 也可以理解为你真正的项目代码是在Gihub仓库中, 而相关介绍及索引信息是在Packagist平台</li>
 </ol>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
-<li>install, require, update都可以做包安装</li>
-<li>require 和 update 都可以做包更新 (install不能做包版本的更新 或 新增/删除包)</li>
-<li><p>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>
+<h2 id="发布步骤"><a href="#发布步骤" class="headerlink" title="发布步骤"></a>发布步骤</h2><h3 id="github仓库部分"><a href="#github仓库部分" class="headerlink" title="github仓库部分"></a>github仓库部分</h3><ol>
+<li><p>github创建仓库</p>
 </li>
-<li><p>另外:</p>
+<li><p>将本地目录与github中仓库关联</p>
+</li>
+<li><p>在本地项目中初始化 composer.json  文件  </p>
 <ul>
-<li>install:主要是在部署阶段使用，以便在生产环境和开发环境使用的都是composer.lock文件中相同的依赖项，保证线上部署环境与本地开发环境的一致性。</li>
-<li>update: 主要是在开发阶段使用，根据我们在composer.json文件中指定的内容升级项目的依赖包。    </li>
+<li><code>composer init</code>(使用composer自带的初始化命令，创建一个composer.json描述文件)。<ul>
+<li>如果想手动编辑，可以去composer官网阅读相关文档获得帮助。</li>
 </ul>
 </li>
-<li><p>此更新非彼更新<br>比如packagist中的包现在是v2.0, 你本地的是v1.0, 你直接执行 <code>composer update</code>, <strong>不要指望composer会自动帮你更新到v2.0</strong>, 要更新你得在composer.json中指明版本号, 然后composer update才会根据composer.json文件去更新!<br>这样, 至于你的更新是升级还是降级就看你在composer.json文件中如何指定的了!</p>
+</ul>
+</li>
+<li><p>在本地开发一个功能包, 并上传到github仓库中</p>
+</li>
+<li><p>开发功能包的<strong>注意事项</strong>: 需要在composer.json文件中配置好你当前包的自动加载规则, </p>
+<ul>
+<li><p>比如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">"autoload": &#123;</div><div class="line">    "psr-4": &#123;</div><div class="line">      "Lant\\": "./"</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>否则, 即使你下载下来你的包, 并且你引入了 <code>vendor/autoload.php</code> 文件, 也无法正常自动加载到你的包代码</p>
+</li>
+<li><p><strong>如果你的包composer.json文件中指定了 <code>顶级命名空间名</code> 与 <code>目录</code> 的关系</strong>, 子命名空间和目录就不用设置了<br>  只用在子目录的类文件中声明 <code>namespace 顶级命名空间/本命名空间</code> 即可!</p>
+</li>
+<li><p><strong>如果你包中的是几个同级目录, 那你可能就需要为每个目录设置 命名空间 和 目录的对应关系!</strong></p>
+</li>
+</ul>
 </li>
 </ol>
+<h3 id="Packagist部分"><a href="#Packagist部分" class="headerlink" title="Packagist部分"></a>Packagist部分</h3><ol>
+<li><p>访问Packagist主页，确认自己已经登录，然后点击右上角大大的Submit Package，然后填入我们创建的仓库的地址，点击Check，然后没问题，再点击Submit。</p>
+</li>
+<li><p>为了让Packagist平台可以自动更新github仓库中的信息, 需要我们配置Github仓库的钩子服务</p>
+<ul>
+<li>进入仓库, 点击 “setting”</li>
+<li>点击左侧 “Integrations &amp; services”</li>
+<li>然后 “Add service” - 选择 “Packagist”</li>
+<li>然后填写表单, username为你的packagist账户名(如果使用github账户登录, 则为github账户名), Token是packagist中的Token;</li>
+</ul>
+</li>
+</ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>有时候你的包修改完之后, 发现github仓库中有了, packagist中的同步时间也有了, 那你得看一下中国全量镜像站点的同步时间是否正确 (说好的一分钟同步一次, 但..不尽然, 被坑过);</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://note.youdao.com/noteshare?id=8265aa9789dba4451ada428a95048f33" target="_blank" rel="external">http://note.youdao.com/noteshare?id=8265aa9789dba4451ada428a95048f33</a></p>
 
         </div>
 
@@ -242,7 +267,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&title=《06. 发布自己的包》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -252,22 +277,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&title=《06. 发布自己的包》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 发布自己的包》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -290,17 +315,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/18/2017-09-18-composer-03/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/20/2017-09-20-composer-05/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">03.安装包的方式(require, install, update对比)</h4>
+          <h4 class="title">05. require 和 create-project</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/20/2017-09-20-composer-05/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/22/2017-09-22-composer-07/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">05. require 和 create-project</h4>
+        <h4 class="title">07. 自动加载</h4>
       </a>
     </div>
   
@@ -411,7 +436,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&title=《06. 发布自己的包》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -421,22 +446,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&title=《06. 发布自己的包》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 发布自己的包》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/20/2017-09-20-composer-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -447,7 +472,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3aQY6DMAwF0N7/0sx2pBGdbxsWmJdV1VLCSyU3dvz5xOP4NX6/c3bN3/H9zmezXDwwMDAey0imr35aXY6zBSosDQYGxgsYSShM8PMw+n3e0/cxMDAw4iD4/Vu9QI+BgYHRC7h5MK0mpRgYGBiTJHbOS66/PRfHwMB4IGMSBO9+fcv5BgYGxqMYR3HcV247BgMDA2M3Iw9weTks2RQmS1Nt/sDAwNjK+P61SWtFNVjnrRjZT4OBgbGHUeX1bpq3lOXBffQrYWBgPIpRLcdXN4t5aG6ud+9UAQMDYxGj2jaRJK6TjWOhzQIDA2MdI98gXtuWMaoRYmBgvIaRBMrqlXkBLt+MRs+DgYGxlNFrpOi1kVXLbXnox8DA2M2YBNxe8pkvTRK4L9gaYmBgPITRK9bnjV/V4t1kA4qBgbGPcUFRPmjO6N2h3GyBgYGxlJE/St5+UU4+B/8PGBgYb2Dk1l4Rv3r/ajvapzcNBgbGoxjzgFvdXE42lNGdMTAwljLyFodeQW0UQKtFNwwMjBcwqkG2Gljzw9HqLBgYGO9h5Klpc7Kg6N9cDgwMjKWMozjyo8Q5qUDFwMBYzchHLx3tbSuTY4Z8mTAwMHYw5kF20qKRbwExMDAw8maL/DDy2iQ2SmUxMDAw4kepBuV84f7JyDEwMDBagbiasjabPDAwMF7AyEtj88POhF1eFAwMjNWMPHUctW0Vk9h5ao2BgbGC8QOEc7JQDd6KCwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACGklEQVR42u3aS27DMAwFwNz/0u66CNI+ks7C1HhVFIqs8YIQP69X/FwfnmTN+8r3X73v8PrGg4GB8VhG8voqYP6u8qfBwMA4gJGEwjwE52H008752TAwMDCSNTlmEnwxMDAweow8u+ytx8DAwJgklnkgzj9ZkjzfkItjYGA8kDEJgt/++yv9DQwMjEcxruLzd0jtldt6J/m1JwYGxmpGHuB6TcrqUEV+7cPAwDiHUR3wyklJsE54EQwDA+NgRr6+l2MmR4/AGBgYqxnJ1S0v1if7VAt5zdIbBgbGasZdaWp+xORiWhjdwMDAWMfoFdruGssY1QgxMDCOYSSBchJkJyW8alqLgYGxldFrDOSHnpTbksEODAyMExj3blRNTZNUuXBNxMDAWMqYFOuT4to8WEf/wcDAOIDRK5CVc+ViGB3NjGBgYCxi3NUAGCWfreLdP+1MDAyMpYzqkFaPWi3JNRufGBgY6xjJy6qtgrygNgncGBgYZzIm4bI6YNEbDotqhxgYGKsZeUI7GbbI1zdvtRgYGKsZyXHzAa/8Ulj9VXQ1xMDAWMG4ik/eSpyTClQMDIzVjPzJy2d5EpuPlxWGLTAwMJYy5kE2b0ZOroAYGBgYvdJ/tW05SWKjVBYDAwMjPkpy0GSH5AKKgYGBUQ2+eWNyvmYUcDEwMB7IyEtjeaDsXRmbHwUDA2M1Yx46q5vmF8dJao2BgbGC8QM6gmqY5SF42wAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
