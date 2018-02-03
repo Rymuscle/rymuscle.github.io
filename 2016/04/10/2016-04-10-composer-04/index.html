@@ -13,25 +13,25 @@
     
     
     
-    <title>OOP - Abstract  Factory | Lant&#39;s Blog</title>
+    <title>04.更新包的方式(require, install, update对比) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="OOP">
-    <meta name="description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
-<meta name="keywords" content="OOP">
+    <meta name="keywords" content="Composer">
+    <meta name="description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+<meta name="keywords" content="Composer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOP - Abstract  Factory">
-<meta property="og:url" content="http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/index.html">
+<meta property="og:title" content="04.更新包的方式(require, install, update对比)">
+<meta property="og:url" content="http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+<meta property="og:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-17T02:04:49.000Z">
+<meta property="og:updated_time" content="2018-02-03T07:07:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOP - Abstract  Factory">
-<meta name="twitter:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+<meta name="twitter:title" content="04.更新包的方式(require, install, update对比)">
+<meta name="twitter:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OOP - Abstract  Factory</div>
+        <div class="flex-col header-title ellipsis">04.更新包的方式(require, install, update对比)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OOP - Abstract  Factory</h1>
+        <h1 class="title">04.更新包的方式(require, install, update对比)</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-06-08T12:13:17.000Z" itemprop="datePublished" class="page-time">
-  2016-06-08
+                <time datetime="2016-04-10T14:23:17.000Z" itemprop="datePublished" class="page-time">
+  2016-04-10
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#界面皮肤库的初始设计"><span class="post-toc-number">2.</span> <span class="post-toc-text">界面皮肤库的初始设计</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#抽象工厂"><span class="post-toc-number">3.</span> <span class="post-toc-text">抽象工厂</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">1.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2016-06-08-OOP-Factory"
+<article id="post-2016-04-10-composer-04"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OOP - Abstract  Factory</h1>
+        <h1 class="post-card-title">04.更新包的方式(require, install, update对比)</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-06-08 20:13:17" datetime="2016-06-08T12:13:17.000Z"  itemprop="datePublished">2016-06-08</time>
+            <time class="post-time" title="2016-04-10 22:23:17" datetime="2016-04-10T14:23:17.000Z"  itemprop="datePublished">2016-04-10</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
 
 
 
@@ -184,9 +184,15 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p>
-<h2 id="界面皮肤库的初始设计"><a href="#界面皮肤库的初始设计" class="headerlink" title="界面皮肤库的初始设计"></a>界面皮肤库的初始设计</h2><h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p>
-<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>
+            <ol>
+<li><p>require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!<br> <code>composer require 包名 新版本</code></p>
+</li>
+<li><p>当你手动修改了composer.json文件中包的版本之后, 可以执行 <code>composer update</code> 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建!<br> 当然, 你可以指定你需要更新的包 <code>composer update 包名, 包名...</code></p>
+</li>
+<li><p>另外, 还应该注意一下 install 和 update 的一个小细节:<br><strong>当你修改了composer.json文件, 如果不是对包做增删改(比如增加一个包, 删除一个包, 或者修改包的版本信息), 而是增删改其他信息(比如配置自动加载之类的信息), 那么你使用 install 和 update 是没有区别的!</strong></p>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>install, require, update都可以做包安装<br>require 和 update 都可以做包更新<br>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>
 
         </div>
 
@@ -213,7 +219,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
 
 
             
@@ -223,7 +229,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -233,22 +239,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -271,17 +277,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/06/08/2016-07-13-OOP-Prototype/" id="post-prev" class="post-nav-link">
+        <a href="/2016/04/10/2016-04-10-composer-03/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">OOP - Prototype</h4>
+          <h4 class="title">03.安装包的方式(require, install, update对比)</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/06/08/2016-07-15-OOP-Observer/" id="post-next" class="post-nav-link">
+      <a href="/2016/05/23/2016-05-23-OOP-SOLID/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">OOP - Observer</h4>
+        <h4 class="title">OOD-S.O.L.I.D</h4>
       </a>
     </div>
   
@@ -392,7 +398,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -402,22 +408,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&title=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.更新包的方式(require, install, update对比)》 — Lant's Blog&url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/08/2016-06-08-OOP-Factory/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/04/10/2016-04-10-composer-04/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -428,7 +434,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aQQ7DIAxE0dz/0nTbqgqdGZNKmM+qqlDCy8Kysa9LXuNt6fv154yvdT2xYMCAsS1jTNf3sZRDzJ/jvmu+HwYMGOcw5kHz7tHzf5RgffdR9LPBgAEDRhYE54dT8joYMGDAyBju4fQ9fw24MGDA2JZRLz71tE95/oO1OAwYMDZkVILg078f6W/AgAFjK8Ywl37dprcts5N8PBMGDBitGWtbmO44hVISG00FGDBgNGVkh3b/11M9t0yFAQPGyYws/LkHVf6RBjhgwIBxAKMyAFG5ys8Cvd0jhQEDxuaMSjPATQ0rCWipkQkDBowWDD1B1IOm3jzIgr69FQYMGNsy3ENXLtT0gGt/AhgwYLRm6Mmc+8osP620UWHAgNGboReubsGpD2ToQdzIdmHAgNGCoZSISvhb2/IMk0IYMGAcwMguxbKd9fLVnuCAAQPGtgy9dMyu+/W2gXvo21ocBgwY7RhZqpeNUOitULulCgMGjNYMd5DLJWUrC/0wYMA4gaGMZ9lZZyG5tAtmGDBgHMbQr8P0oYpsgMMI5TBgwGjNWNWwzJLLeoMTBgwYvRmrgmNGVdqW4beHAQNGI0Z2BeaGXSUBrY9lwIABozdDD7J6G9IN6256asyMwIABoxHDbVK6IbjeePhRHsOAAQOGG/6i5FJvQtgdVBgwYBzMUF6TpZV66gkDBoxzGNnwlk7VwWE4hgEDRmtGNuKQFatueA1nRmDAgNGH8QK+82+Fmx1iOwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3awarjMAwF0Pz/T3dgVgND/a6khEfsk1Vp09gnCyFZuq74+vy95vd//rm+fV9d68LAwDiA8Vle/29r/et6u8nWv631AxUDA+MAxjpoThjr5dffJHvDwMDAWG89CZrJ5vLnYGBgYFQDX6/czZEYGBgY1SK2dxxWTTEfr8UxMDBeyJhv5bnPD/Y3MDAwXsL43HpNjt5G62JgYGzNyNuNk/j2XKM0muPAwMA4gDH/vnpn/loLARcDA+O1jPUCya/VTT8ybIGBgbE1o5oIJknbZLvVZ2JgYJzMmJSXvZGvPLgX0kcMDIyNGOsQmQTQ3tjEXY0EDAyMvRkJoLfpfCCsWgxjYGCcxqgukIfL/GmTBuc1WRgDA+NVjPxIK2929pLC3pAHBgbG3owkOauWsnc1HvLPGBgYezN6fyuc5BXHKfJnXtV4j4GBsR3j3oP7JJW8IXxjYGBsysinMPJhiN4rq7Y8fyhiMTAwNmL0Am7vMK7XnsyTSAwMjBMY1eJz3qRMQvno3A4DA2M7Ru9YLbmqR2nVdBMDA+MERjUtywNiOb0bvHQMDIxdGb3Q+VtNha9rYWBgbM3ohbl52M2fOQ/6GBgYezDyIDjZbh7K84B79WI5BgbGaxnVqnce3Xvl69ekEAMDA6MVFvOCs9p+aGavGBgYBzB6wxPP3YOBgXEaozoqUU3jeuVroZDGwMDYmjGZ1Hi6hbleZdTfwMDAeAfjD5J6+gjrG5W/AAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 
