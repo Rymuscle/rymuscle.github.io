@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-03T07:10:35.000Z">
+<meta property="og:updated_time" content="2018-02-03T07:24:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04.更新包的方式(require, install, update对比)">
 <meta name="twitter:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
@@ -192,7 +192,20 @@
 <li><p>另外, 还应该注意一下 install 和 update 的一个小细节:<br><strong>当你修改了composer.json文件, 如果不是对包做增删改(比如增加一个包, 删除一个包, 或者修改包的版本信息), 而是增删改其他信息(比如配置自动加载之类的信息), 那么你使用 install 和 update 是没有区别的!</strong></p>
 </li>
 </ol>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>install, require, update都可以做包安装<br>require 和 update 都可以做包更新<br>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>install, require, update都可以做包安装</li>
+<li>require 和 update 都可以做包更新 (install不能做包版本的更新 或 新增/删除包)</li>
+<li><p>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>
+</li>
+<li><p>另外:</p>
+<ul>
+<li>install:主要是在部署阶段使用，以便在生产环境和开发环境使用的都是composer.lock文件中相同的依赖项，保证线上部署环境与本地开发环境的一致性。</li>
+<li>update: 主要是在开发阶段使用，根据我们在composer.json文件中指定的内容升级项目的依赖包。    </li>
+</ul>
+</li>
+<li><p>此更新非彼更新<br>比如packagist中的包现在是v2.0, 你本地的是v1.0, 你直接执行 <code>composer update</code>, <strong>不要指望composer会自动帮你更新到v2.0</strong>, 要更新你得在composer.json中指明版本号, 然后composer update才会根据composer.json文件去更新!<br>这样, 至于你的更新是升级还是降级就看你在composer.json文件中如何指定的了!</p>
+</li>
+</ol>
 
         </div>
 
