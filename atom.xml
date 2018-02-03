@@ -43,9 +43,9 @@
     
       <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
-      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
-    
       <category term="隔离级别与锁" scheme="http://blog.renyimin.com/tags/%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8E%E9%94%81/"/>
+    
+      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
     
   </entry>
   
@@ -76,9 +76,9 @@
     
       <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
-      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
-    
       <category term="隔离级别与锁" scheme="http://blog.renyimin.com/tags/%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E4%B8%8E%E9%94%81/"/>
+    
+      <category term="MVCC" scheme="http://blog.renyimin.com/tags/MVCC/"/>
     
   </entry>
   
@@ -168,6 +168,86 @@
       <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
     
       <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>04.更新包的方式(require, install, update对比)</title>
+    <link href="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/"/>
+    <id>http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/</id>
+    <published>2017-09-18T14:23:17.000Z</published>
+    <updated>2018-02-03T07:10:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li><p>require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!<br> <code>composer require 包名 新版本</code></p></li><li><p>当你手动修改了composer.json文件中包的版本之后, 可以执行 <code>composer update</code> 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建!<br> 当然, 你可以指定你需要更新的包 <code>composer update 包名, 包名...</code></p></li><li><p>另外, 还应该注意一下 install 和 update 的一个小细节:<br><strong>当你修改了composer.json文件, 如果不是对包做增删改(比如增加一个包, 删除一个包, 或者修改包的版本信息), 而是增删改其他信息(比如配置自动加载之类的信息), 那么你使用 install 和 update 是没有区别的!</strong></p></li></ol><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>install, require, update都可以做包安装<br>require 和 update 都可以做包更新<br>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;
+&lt;li&gt;&lt;p&gt;require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!&lt;br&gt; &lt;code&gt;composer require 包名 新版本&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li
+      
+    
+    </summary>
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>03.安装包的方式(require, install, update对比)</title>
+    <link href="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-03/"/>
+    <id>http://blog.renyimin.com/2017/09/18/2017-09-18-composer-03/</id>
+    <published>2017-09-18T13:20:31.000Z</published>
+    <updated>2018-02-03T07:10:23.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="初次做包安装"><a href="#初次做包安装" class="headerlink" title="初次做包安装"></a>初次做包安装</h2><ol><li>如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是<strong>只有composer.json文件</strong>, <strong>并没有composer.lock文件</strong>, 可以, 直接执行 <code>composer require 包名 包版本</code><ul><li>该命令会帮你安装好包到 <code>vendor/</code> 目录下</li><li>会生成 <code>composer.json</code> 文件, 并将依赖信息写入文件中</li><li>会生成 <code>composer.lock</code> 文件<br>composer将会通过<code>composer.json</code>来读取需要的包和相对的版本, 然后创建composer.lock文件<br><strong>所以… 对于除了包版本之外的其他配置, 如自动加载…等, <code>composer.lock</code> 文件不会包含! (所以当改变这些信息之后, install 和 update的效果一样)</strong></li></ul></li></ol><h2 id="非初次安装"><a href="#非初次安装" class="headerlink" title="非初次安装"></a>非初次安装</h2><ol><li>如果你的项目已经安装过一些包了, 即已经有 <code>composer.json</code>, <code>composer.lock</code> 文件;</li><li><p>此时, 你有两种方式:</p><ul><li>和初次安装一样, 使用 <code>composer require 包名 包版本</code> 进行安装</li><li><p>手动在composer.json文件中进行配置, 然后运行 <code>composer update</code><br><strong>注意, 此时不能使用 <code>composer install</code>, 因为该命令是依据 composer.lock 文件来进行安装的, 而composer.lock文件又是依据composer.json文件中的包及包版本信息生成的,<br>而此时你改变了 composer.json 文件, 并且是新增了一个包(及版本对应关系), 所以你需要更新 composer.lock 文件!</strong></p><p>如果你执行的是 <code>composer install</code>, 则会警告: <code>Warning: The lock file is not up to date with the latest changes in composer.json. You may be getting outdated dependencies. Run update to update them.</code></p></li></ul></li><li><p>当然, 你也可以删除 <code>composer.lock</code> 文件, 然后手动在composer.json文件中进行配置, 最后执行 <code>composer install</code></p></li></ol><p>install, require, update都可以做包安装</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;初次做包安装&quot;&gt;&lt;a href=&quot;#初次做包安装&quot; class=&quot;headerlink&quot; title=&quot;初次做包安装&quot;&gt;&lt;/a&gt;初次做包安装&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是&lt;strong&gt;只有co
+      
+    
+    </summary>
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>02. 设置中国全量镜像</title>
+    <link href="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-02/"/>
+    <id>http://blog.renyimin.com/2017/09/18/2017-09-18-composer-02/</id>
+    <published>2017-09-18T09:40:11.000Z</published>
+    <updated>2018-02-03T07:10:11.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote><p>一般情况下,安装包的数据(主要是 zip 文件) 一般是从 github.com 上下载的, 安装包的元数据是从 packagist.org 上下载的。<br>然而，由于众所周知的原因，国外的网站连接速度很慢，并且随时可能被“墙”甚至“不存在”。<br>“Packagist 中国全量镜像”所做的就是缓存所有安装包和元数据到国内的机房并通过国内的 CDN 进行加速，这样就不必再去向国外的网站发起请求,  从而达到加速 composer install以及 composer update 的过程,  并且更加快速、稳定。因此,  即使 packagist.org、github.com 发生故障(<strong>主要是连接速度太慢和被墙</strong>),  你仍然可以下载、更新安装包。</p></blockquote><h2 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h2><p>下面是一张从网上找的图<br><img src="/img/composer/cdn.png" width="500"></p><h2 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h2><ol><li><p>修改 composer 的全局配置文件</p><ul><li>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行命令: <code>composer config -g repo.packagist composer https://packagist.phpcomposer.com</code></li></ul></li><li><p>修改当前项目的 composer.json 配置文件</p><ul><li><p>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）, 进入你的项目的根目录（也就是 composer.json 文件所在目录），执行命令: <code>composer config repo.packagist composer https://packagist.phpcomposer.com</code></p></li><li><p>命令将会在当前项目中的 composer.json 文件的末尾自动添加镜像的配置信息（你也可以自己手工添加）：</p><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"repositories": &#123;</div><div class="line">        "packagist": &#123;</div><div class="line">            "type": "composer",</div><div class="line">            "url": "https://packagist.phpcomposer.com"</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></li></ul></li></ol><p>参考: <a href="https://pkg.phpcomposer.com/" target="_blank" rel="external">https://pkg.phpcomposer.com/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;一般情况下,安装包的数据(主要是 zip 文件) 一般是从 github.com 上下载的, 安装包的元数据是从 
+      
+    
+    </summary>
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="http://blog.renyimin.com/tags/Composer/"/>
     
   </entry>
   
@@ -475,82 +555,6 @@
       
         &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;之前已经了解到: 简单工厂模式虽然降低了一定的耦合度, 但仍然存在一个严重问题: 当系统中需要引入新产品时, 由于静态工厂
-      
-    
-    </summary>
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/categories/OOP/"/>
-    
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/tags/OOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OOP - Simple Factory</title>
-    <link href="http://blog.renyimin.com/2016/06/04/2016-06-04-OOP-Factory/"/>
-    <id>http://blog.renyimin.com/2016/06/04/2016-06-04-OOP-Factory/</id>
-    <published>2016-06-04T13:11:30.000Z</published>
-    <updated>2018-01-17T03:33:36.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指<code>工厂方法模式</code>, 它也是使用频率最高的工厂模式。<br>简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。<br>此外，工厂方法模式还有一位”大哥” —— <strong>抽象工厂模式</strong>。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象软件中常用的创建对象的工具。</p><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li><p>假设公司开发的CRM系统可以显示饼状图的效果, 原始设计方案如下图: </p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($type)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">switch</span> ($chartType) &#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">'pie'</span> :</div><div class="line">                <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> PieChart();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">'bar'</span> :</div><div class="line">                <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> BarChart();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;chartObject-&gt;display();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li><li><p>客户端代码通过调用 ‘Client类’ 的构造函数来创建图表对象，根据参数 ‘type’ 可以得到不同类型的图表，然后再调用show()方法来显示相应的图表。</p></li></ol><h2 id="传统设计存在问题"><a href="#传统设计存在问题" class="headerlink" title="传统设计存在问题"></a>传统设计存在问题</h2><p><strong>不难看出，Client类是一个 “巨大的” 类, 在该类的设计中存在如下几个问题</strong>:</p><ul><li><p>Client类中包含很多 “if…else…” / “switch…case…”代码块，整个类的代码相当冗长, 阅读难度、维护难度和测试难度也越大, 而且大量条件语句的存在还将影响系统的性能，程序在执行过程中需要做大量的条件判断;</p></li><li><p>Client类的职责过重, 它将各种图表对象的创建和使用集中在一个类中实现, <strong>违反了“单一职责原则”</strong>, 不利于类的重用和维护;</p></li><li><p>当需要增加新类型的图表时，必须修改Client类的源代码，<strong>违反了’开闭原则’</strong>;</p></li><li><p>客户端只能通过new关键字来直接创建图像对象, 图像类与客户端Client类耦合度较高 (比如一旦类的名字发生变更, 你也必须修改Client代码的源代码);</p></li><li><p>客户端在创建Chart对象之前可能还需要进行大量初始化设置, 例如设置柱状图的颜色、高度等, 如果在Client类的构造函数中没有提供一个默认设置, 那就只能由客户端来完成初始设置，这些代码在每次创建图像对象时都会出现, 导致代码的重复。</p></li></ul><p>面对一个如此巨大、职责如此重，且与客户端代码耦合度非常高的类，我们应该怎么办？接下来介绍的 <code>简单工厂模式</code> 将在 一定程度上 解决上述问题。</p><h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><ol><li><p>为了将图像对象的创建和使用分离, 使用简单工厂模式对图表库进行重构, 重构后的结构如下图所示：<br> <img src="/img/oop/factory/simple-factory-02.png" width="525" height="315/"></p><p> 在图中, Chart接口充当抽象产品类, 其子类PieChart和BarChart充当具体产品类, ChartFactory充当工厂类。</p></li><li><p>现在, 我们使用工厂类的 <code>静态工厂方法</code> 来创建产品对象, 如果需要更换产品, 虽然也需要更改Client源码, 但是只需修改传递给静态工厂方法中的参数即可, 例如将柱状图改为饼状图, 只需将代码 <code>$chartObject = ChartFactory::getChart(&quot;bar&quot;);</code> 改为：<code>$chartObject = ChartFactory::getChart(&quot;pie&quot;);</code>   </p></li></ol><h2 id="改进"><a href="#改进" class="headerlink" title="改进"></a>改进</h2><ol><li><p>现在你会发现: 在创建具体图像对象时, 每更换一个图像对象, 都需要修改客户端代码中静态工厂方法的参数(<strong>虽然修改都很小</strong>), 这对于客户端而言, <strong>还是违反了“开闭原则”</strong>;</p></li><li><p>有没有一种方法能够在不修改客户端代码的前提下更换具体产品对象呢？答案是肯定的，下面将介绍一种常用的实现方式:</p><ul><li>可以将静态工厂方法的参数放到配置文件中, 在配置文件中配置即可, 这样客户端代码如下所示：<br>由<code>$chartObject = ChartFactory::getChart(&quot;bar&quot;);</code><br>改为：<pre><code class="php">$type = Config::get(<span class="string">'chartType'</span>);$chartObject = ChartFactory::getChart(<span class="string">"pie"</span>);</code></pre></li></ul></li></ol><h2 id="简单工厂模式总结"><a href="#简单工厂模式总结" class="headerlink" title="简单工厂模式总结"></a>简单工厂模式总结</h2><ol><li><p>简单工厂模式提供了专门的工厂类用于创建对象, <strong>将对象的创建和对象的使用分离开</strong>, 它作为一种最简单的工厂模式在软件开发中得到了较为广泛的应用;</p></li><li><p>主要优点</p><ul><li><p>工厂类包含必要的判断逻辑, 可以决定在什么时候创建哪一个产品类的实例, 客户端可以免除直接创建产品对象的职责, 而仅仅“消费”产品, 简单工厂模式实现了对象创建和使用的分离;</p></li><li><p>客户端无须知道所创建的具体产品类的类名，只需要知道创建具体产品类所需要对应的参数即可, 对于一些复杂的类名, 通过简单工厂模式可以在一定程度减少使用者的记忆量;</p></li><li><p><strong>通过引入配置文件</strong>, 可以在不修改任何客户端代码的情况下更换和增加新的具体产品类, 在一定程度上提高了系统的灵活性, 做到了 <strong>一定程度的”开放-封闭原则”</strong>, 下面会看到其实工厂类部分还是违反的。</p></li></ul></li><li><p>主要缺点</p><ul><li><p>由于工厂类集中了所有产品的创建逻辑, 职责过重, 一旦不能正常工作, 整个系统都要受到影响;</p></li><li><p>使用简单工厂模式势, 势必会增加系统中类的个数(引入了新的工厂类), 增加了系统的复杂度和理解难度;</p></li><li><p><strong>系统扩展困难，一旦添加新产品就不得不修改工厂逻辑, 在产品类型较多时, 有可能造成工厂逻辑过于复杂, 不利于系统的扩展和维护</strong>。(此处还是违反<strong>“开放-封闭原则”</strong>)</p></li><li><p>简单工厂模式由于使用了静态工厂方法，造成工厂角色无法形成基于继承的等级结构。</p></li></ul></li><li><p>适用场景, 在以下情况下可以考虑使用<code>简单工厂模式</code>:</p><ul><li>工厂类负责创建的对象比较少, 由于创建的对象较少, 不会造成工厂方法中的业务逻辑太过复杂。</li><li>客户端只知道传入工厂类的参数, 对于如何创建对象并不关心。</li></ul></li></ol><p><strong>总之, 仍未完全做到 “开放-封闭原则”</strong></p><p><a href="http://blog.csdn.net/lovelion/article/details/17517213）[参考](http://blog.51cto.com/haolloyin/category2.html）[参考](http://blog.csdn.net/lovelion/article/details/9300731" target="_blank" rel="external">参考</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指&lt;code&gt;工厂方法模式&lt;/code&gt;, 它也是使用频率最高的工厂模式。&lt;br&gt;简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模
-      
-    
-    </summary>
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/categories/OOP/"/>
-    
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/tags/OOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OOP - 为什么要引入工厂类?</title>
-    <link href="http://blog.renyimin.com/2016/06/03/2016-06-03-OOP-Why-Factory/"/>
-    <id>http://blog.renyimin.com/2016/06/03/2016-06-03-OOP-Why-Factory/</id>
-    <published>2016-06-03T05:10:39.000Z</published>
-    <updated>2018-01-17T03:33:56.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂模式(包括<code>简单工厂模式</code>、<code>工厂方法模式</code> 和 <code>抽象工厂模式</code> )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？</p><ol><li><p>首先要知道, 与一个对象相关的职责通常有三类:</p><ul><li>对象本身所具有的职责</li><li>创建对象的职责</li><li>使用对象的职责</li></ul></li><li><p>对象本身的职责比较容易理解, 就是对象自身所具有的一些数据和行为, 可通过一些公开的方法来实现它的职责。</p></li><li><p>接下来将简单讨论一下对象的创建职责 和 使用职责</p><h2 id="对象的-创建职责-和-使用职责"><a href="#对象的-创建职责-和-使用职责" class="headerlink" title="对象的 创建职责 和 使用职责"></a>对象的 创建职责 和 使用职责</h2></li><li><p>通常有以下几种创建对象的方式：</p><ul><li>使用new关键字直接创建对象;</li><li>通过反射机制创建对象;</li><li>通过clone()方法创建对象；</li><li>通过工厂类创建对象;</li></ul></li><li><p>在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的<strong>灵活性较差</strong>，下面通过一个简单的示例来加以说明<br> 假设公司开发的CRM系统可以显示饼状图的效果, 原始设计方案如下图:</p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">PieChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BarChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//Client</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> PieChart();</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject-&gt;display();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure><p> 在’client’类的构造函数中创建了’PieChart’类型的对象，并在’show’方法中调用了’chartObject’对象的’display()’方法, 这段代码看上去并没有什么问题;</p></li><li><p>下面我们来分析一下’Client’和’PieChart’之间的关系: ‘Client’类负责创建了一个’PieChart’类的对象, 并使用其方法’display()’来完成相应的业务处理;</p><ul><li>也就是说’Client’即负责对象的创建, 又负责对象的使用, <strong>创建对象和使用对象的职责耦合在一起</strong>;</li><li>同时, <strong>这样的设计会导致一个很严重的问题</strong>: 如果在 ‘Client’ 中希望能够使用另一个种类型的图像方案, 比如使用柱状图’BarChart’类的对象，那就必须修改’Client’类的源代码, <strong>违反了”开闭原则”</strong>。</li></ul></li><li><p>如何解决?</p></li></ol><h2 id="引出工厂类"><a href="#引出工厂类" class="headerlink" title="引出工厂类"></a>引出工厂类</h2><p>最常用的一种解决方法是将 ‘chartObject’ 对象的创建职责从 ‘Client’ 类中移除, 在 ‘Client’ 类之外创建对象, 那么谁来负责创建 ‘chartObject’ 对象呢?<br>答案是：工厂类; 通过引入工厂类, 客户类就不会再涉及对象的创建(只是对对象进行使用), 而创建对象的工厂类自然也只是负责创建对象(也不会涉及对象的使用)。<br>引入工厂类 ChartFactory 之后的结构如下图所示:<br><img src="/img/oop/factory/simple-factory-01.png" width="495" height="370/"></p><ol><li><p>工厂类的引入将降低维护工作量：</p><ul><li>如果图像类的构造函数发生变更, 或者需要添加或移除不同的图像类，你只要去维护 <code>ChartFactory</code> 的代码, 可能就不会影响到’Client’的代码;</li><li>而且如果 <code>Chart</code> 抽象接口发生改变, 例如添加、移除方法或改变方法名, 只需要修改 <code>Client</code>, 不会给 <code>ChartFactory</code> 带来任何影响;</li><li>在所有的工厂模式中, 我们都强调一点: 两个类A和B之间的关系应该仅仅是 <strong>A创建B</strong> 或是 <strong>A使用B</strong>, 而不能两种关系都有。将对象的创建和使用分离, 也使得系统更加符合 ‘单一职责原则’, 有利于对功能的复用和系统的维护;</li></ul></li><li><p>此外, 将对象的创建和使用分离还有一个好处:</p><ul><li>防止用来实例化一个类的代码在多个类中到处都是, 可以将有关创建的代码搬移到一个工厂类中。<br>因为有时候我们创建一个对象不只是简单调用其构造函数, 还需要设置一些参数, 可能还需要配置环境,<br>如果将这些代码散落在每一个创建对象的客户类中, 势必会出现代码重复、创建蔓延的问题, 而这些客户类其实无须承担对象的创建工作,<br>它们只需使用已创建好的对象就可以了。此时, 可以引入工厂类来封装对象的创建逻辑和客户代码的实例化/配置选项。</li></ul></li></ol><p><a href="http://blog.csdn.net/lovelion/article/details/17517213）[参考](http://blog.51cto.com/haolloyin/category2.html）[参考](http://blog.csdn.net/lovelion/article/details/7523392" target="_blank" rel="external">参考</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;工厂模式(包括&lt;code&gt;简单工厂模式&lt;/code&gt;、&lt;code&gt;工厂方法模式&lt;/code&gt; 和 &lt;code&gt;抽象工厂模式&lt;/code&gt; )
-      
-    
-    </summary>
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/categories/OOP/"/>
-    
-    
-      <category term="OOP" scheme="http://blog.renyimin.com/tags/OOP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>OOP - Singleton-02</title>
-    <link href="http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-Singleton/"/>
-    <id>http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-Singleton/</id>
-    <published>2016-05-27T12:07:13.000Z</published>
-    <updated>2018-01-17T03:33:24.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前已经对单例模式有了比较简单的认识<br>接下来通过一些资料在系统了解一下单例模式;</p><h2 id="单例模式动机"><a href="#单例模式动机" class="headerlink" title="单例模式动机"></a>单例模式动机</h2><ol><li><p>对于一个软件系统的某些类而言, 我们无须创建多个实例。</p><blockquote><p>举个大家都熟知的例子 —— Windows任务管理器, 当你在Windows的”任务栏”的右键弹出菜单上多次点击”启动任务管理器”。<br>通常情况下，无论我们启动任务管理多少次，Windows系统始终只能弹出一个任务管理器窗口，也就是说在一个Windows系统中，任务管理器存在唯一性。<br>为什么要这样设计呢？我们可以从以下两个方面来分析：<br>其一，如果能弹出多个窗口，且这些窗口的内容完全一致，全部是重复对象，这势必会浪费系统资源，任务管理器需要获取系统运行时的诸多信息，这些信息的获取需要消耗一定的系统资源，包括CPU资源及内存资源等，浪费是可耻的，而且根本没有必要显示多个内容完全相同的窗口;<br>其二，如果弹出的多个窗口内容不一致，问题就更加严重了，这意味着在某一瞬间系统资源使用情况和进程、服务等信息存在多个状态，例如任务管理器窗口A显示“CPU使用率”为10%，窗口B显示“CPU使用率”为15%，到底哪个才是真实的呢？这纯属”调戏”用户，给用户带来误解，更不可取。<br>由此可见，确保Windows任务管理器在系统中有且仅有一个非常重要。</p></blockquote></li><li><p>回到实际开发中, 我们也经常遇到类似的情况, 为了节约系统资源, 有时需要确保系统中某个类只有唯一一个实例, 当这个唯一实例创建成功之后, 我们无法再创建一个同类型的其他对象, 所有的操作都只能基于这个唯一实例。<br> 为了确保对象的唯一性, 我们可以通过单例模式来实现, 这就是单例模式的动机所在。</p></li></ol><h2 id="参考一个负载均衡器的例子"><a href="#参考一个负载均衡器的例子" class="headerlink" title="参考一个负载均衡器的例子"></a><a href="http://blog.csdn.net/lovelion/article/details/7420885" target="_blank" rel="external">参考一个负载均衡器的例子</a></h2><blockquote><p>Sunny软件公司承接了一个服务器负载均衡(Load Balance)软件的开发工作，该软件运行在一台负载均衡服务器上，可以将并发访问和数据流量分发到服务器集群中的多台设备上进行并发处理，提高系统的整体处理能力，缩短响应时间。<br>由于集群中的服务器需要动态删减，且客户端请求需要统一分发，因此需要确保负载均衡器的唯一性，只能有一个负载均衡器来负责服务器的管理和请求的分发，否则将会带来服务器状态的不一致以及请求分配冲突等问题。<br>如何确保负载均衡器的唯一性是该软件成功的关键。</p></blockquote><ol><li><p>Sunny公司开发人员通过分析和权衡，决定使用单例模式来设计该负载均衡器, 将负载均衡器<code>LoadBalancer</code>设计为单例类, 其中包含一个存储服务器信息的集合serverList, 每次在serverList中随机选择一台服务器来响应客户端的请求,实现代码如下:</p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoadBalancer</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> $instance = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">private</span> $serverList = <span class="keyword">array</span>();</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">null</span> === <span class="keyword">self</span>::$instance) &#123;</div><div class="line">            <span class="keyword">self</span>::$instance = <span class="keyword">new</span> <span class="keyword">self</span>();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>::$instance;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 增加一台服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addServer</span><span class="params">($server)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;serverList[] = $server;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 减少一台宕机的服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">removeServer</span><span class="params">($key)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">unset</span>(<span class="keyword">$this</span>-&gt;serverList[$key]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 随机获取一台服务器</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getServer</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        $random = mt_rand(<span class="number">0</span>, count(<span class="keyword">$this</span>-&gt;serverList)<span class="number">-1</span>);</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;serverList[$random];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> <span class="string">'&lt;pre/&gt;'</span>;</div><div class="line">$loadBalancer1 = LoadBalancer::getInstance();</div><div class="line">$loadBalancer2 = LoadBalancer::getInstance();</div><div class="line">var_dump($loadBalancer1 === $loadBalancer2);</div><div class="line">$loadBalancer1-&gt;addServer(<span class="string">"Server 1"</span>);</div><div class="line">$loadBalancer1-&gt;addServer(<span class="string">"Server 2"</span>);</div><div class="line">$loadBalancer2-&gt;addServer(<span class="string">"Server 3"</span>);</div><div class="line">$loadBalancer2-&gt;addServer(<span class="string">"Server 4"</span>);</div><div class="line"></div><div class="line"><span class="comment">//模拟客户端请求的分发</span></div><div class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i&lt;<span class="number">10</span>; $i++) &#123;</div><div class="line">    $server = $loadBalancer1-&gt;getServer();</div><div class="line">    var_dump(<span class="string">"分发请求至服务器： "</span> . $server);</div><div class="line">&#125;</div></pre></td></tr></table></figure><p> 结果:</p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">bool(<span class="keyword">true</span>)</div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 1"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 4"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 3"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 1"</span></div><div class="line">string(<span class="number">36</span>) <span class="string">"分发请求至服务器： Server 4"</span></div></pre></td></tr></table></figure></li><li><p>虽然创建了四个LoadBalancer对象，但是它们实际上是同一个对象，因此，通过使用单例模式可以确保LoadBalancer对象的唯一性。</p></li></ol><h2 id="饿汉式单例与懒汉式单例的讨论"><a href="#饿汉式单例与懒汉式单例的讨论" class="headerlink" title="饿汉式单例与懒汉式单例的讨论"></a>饿汉式单例与懒汉式单例的讨论</h2><p>涉及到多线程<br>未完待续<br>…</p><p><a href="http://blog.csdn.net/lovelion/article/details/17517213）[参考](http://blog.51cto.com/haolloyin/category2.html）[参考](http://blog.csdn.net/lovelion/article/details/7420883" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/7420886" target="_blank" rel="external">参考</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;之前已经对单例模式有了比较简单的认识&lt;br&gt;接下来通过一些资料在系统了解一下单例模式;&lt;/p&gt;
-&lt;h2 id=&quot;单例模式动机&quot;&gt;&lt;a hre
       
     
     </summary>
