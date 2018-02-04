@@ -13,25 +13,25 @@
     
     
     
-    <title>01.安装 | Lant&#39;s Blog</title>
+    <title>OOP - Abstract  Factory | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Composer">
-    <meta name="description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
-<meta name="keywords" content="Composer">
+    <meta name="keywords" content="OOP">
+    <meta name="description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
+<meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01.安装">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/index.html">
+<meta property="og:title" content="OOP - Abstract  Factory">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
+<meta property="og:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-04T03:33:08.000Z">
+<meta property="og:updated_time" content="2018-02-04T03:46:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01.安装">
-<meta name="twitter:description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
+<meta name="twitter:title" content="OOP - Abstract  Factory">
+<meta name="twitter:description" content="前言工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;此时, 我们可以考虑将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产, 这就是我们本文将要学习的抽象工厂模式的基本思想。 界面皮肤库的初始设计抽象工厂未完待续 参考参考">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01.安装</div>
+        <div class="flex-col header-title ellipsis">OOP - Abstract  Factory</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">01.安装</h1>
+        <h1 class="title">OOP - Abstract  Factory</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-18T09:10:11.000Z" itemprop="datePublished" class="page-time">
-  2017-09-18
+                <time datetime="2016-05-27T08:20:16.000Z" itemprop="datePublished" class="page-time">
+  2016-05-27
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#composer-phar文件下载"><span class="post-toc-number">1.</span> <span class="post-toc-text">composer.phar文件下载</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux-Unix-OS"><span class="post-toc-number">2.</span> <span class="post-toc-text">Linux/Unix/OS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#windows"><span class="post-toc-number">3.</span> <span class="post-toc-text">windows</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#界面皮肤库的初始设计"><span class="post-toc-number">2.</span> <span class="post-toc-text">界面皮肤库的初始设计</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#抽象工厂"><span class="post-toc-number">3.</span> <span class="post-toc-text">抽象工厂</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2017-09-18-composer-01"
+<article id="post-2016-05-27-OOP-06-Factory"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01.安装</h1>
+        <h1 class="post-card-title">OOP - Abstract  Factory</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-18 17:10:11" datetime="2017-09-18T09:10:11.000Z"  itemprop="datePublished">2017-09-18</time>
+            <time class="post-time" title="2016-05-27 16:20:16" datetime="2016-05-27T08:20:16.000Z"  itemprop="datePublished">2016-05-27</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
 
 
 
@@ -180,42 +180,9 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="composer-phar文件下载"><a href="#composer-phar文件下载" class="headerlink" title="composer.phar文件下载"></a>composer.phar文件下载</h2><p>先下载composer.phar文件, 3种方式:</p>
-<ul>
-<li><code>curl -sS https://getcomposer.org/installer | php</code></li>
-<li><code>php -r &quot;readfile(&#39;https://getcomposer.org/installer&#39;);&quot; | php</code></li>
-<li>手动下载Composer, <a href="https://getcomposer.org/composer.phar" target="_blank" rel="external">地址</a></li>
-</ul>
-<h2 id="Linux-Unix-OS"><a href="#Linux-Unix-OS" class="headerlink" title="Linux/Unix/OS"></a>Linux/Unix/OS</h2><ol>
-<li><p>全局安装 : <code>mv composer.phar /usr/local/bin/composer</code></p>
-</li>
-<li><p>局部安装 : <code>mv composer.phar /局部目录/composer</code></p>
-</li>
-</ol>
-<h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><ol>
-<li><p>全局安装 : </p>
-<ul>
-<li><p>配置composer.phar文件路径(D:\WWW\composer)到环境变量中 ;</p>
-</li>
-<li><p>接下来需要在composer.phar同级目录下新建文件composer.bat :<br>  <code>echo @php &quot;%~dp0composer.phar&quot; %*&gt;composer.bat</code></p>
-</li>
-<li><p>这就安装好了</p>
-</li>
-</ul>
-</li>
-<li><p>局部安装 : </p>
-<ul>
-<li><p>直接把下载的composer.phar文件放到项目根目录下;</p>
-</li>
-<li><p>运行命令 : <code>php composer.phar install</code></p>
-</li>
-<li><p>然后就安装成功了(每个局部目录都需要这么安装, 比较麻烦)</p>
-</li>
-</ul>
-</li>
-</ol>
-<p>推荐全局安装即可.</p>
-<p>Composer是PHP中的一个依赖管理工具, 它可以让你声明自己项目所依赖的库，然后它将会在项目中为你安装这些库。安装步骤可以到官网阅读Getting Started。在继续阅读之前，请确认composer已经安装并且可以使用。命令别名是composer，所以后续的所有如composer xxx均代表是执行composer命令。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂方法模式通过引入工厂等级结构, 解决了简单工厂模式中工厂类职责太重的问题;<br>但由于工厂方法模式中的每个工厂只生产一类产品, 可能会导致系统中存在大量的工厂类, 势必会增加系统的开销;<br>此时, 我们可以考虑<strong>将一些相关的产品组成一个 “产品族”, 由同一个工厂来统一生产</strong>, 这就是我们本文将要学习的抽象工厂模式的基本思想。</p>
+<h2 id="界面皮肤库的初始设计"><a href="#界面皮肤库的初始设计" class="headerlink" title="界面皮肤库的初始设计"></a>界面皮肤库的初始设计</h2><h2 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h2><p>未完待续</p>
+<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9319181" target="_blank" rel="external">参考</a></p>
 
         </div>
 
@@ -242,7 +209,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
 
 
             
@@ -252,7 +219,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -262,22 +229,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -300,17 +267,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/04/21/2017-12-10-HTTP-04-Connection-Keep-Alive/" id="post-prev" class="post-nav-link">
+        <a href="/2016/05/27/2016-05-27-OOP-05-Factory/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">HTTP - 并行连接, 持久连接</h4>
+          <h4 class="title">OOP - Factory Method</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/18/2017-09-18-composer-02/" id="post-next" class="post-nav-link">
+      <a href="/2016/05/28/2016-05-28-OOP-07-Prototype/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. 设置中国全量镜像</h4>
+        <h4 class="title">OOP - Prototype</h4>
       </a>
     </div>
   
@@ -412,7 +379,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -422,22 +389,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&title=《OOP - Abstract  Factory》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Abstract  Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/2017-09-18-composer-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-06-Factory/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -448,7 +415,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3aW46DQAwFUfa/abIAAqlrgxTcxdcowzR9GMnxo7cNX/vJRe453nn8q+MK2xOXDBkyXssgjz/75GwF8qzayqdPkSFDxgIMEgpJlOuHUf5cGTJkyLjeFtnu9YZ4oJchQ4aMTsDt//YvvjdkyJDxEgYPfGnKyF/ZdYl7Wy0uQ4aMFzI6QfDpnx+Zb8iQIeNVjD28+OgxbbftjUuGDBmzGTzA8XZYjZ2OEGTIkLEOIz3gxR+ZHiDjRzHYv0aGDBlzGGnzvdbwqh04i9NNGTJkDGWQm3iznqyTNvLiUCtDhoxxjH4wTQvXTuKISm4ZMmSMY9QCYrrdtDHHX5MMGTJWYJABZOdYRq2U5fv5UovLkCFjHIMvV0sWO+02EktlyJCxAuPehdLSlBwUC9JEGTJkjGakzXqSPqblMRmdBr1DGTJkDGLUmvLp57UwWjxsIUOGjKGM2kCxNkhIQzBKH2XIkLEAo3Zsgr+CTksO7VCGDBmjGaRMTYeLaUONJ5Q/VpYhQ8bCjFqS1y+M48RRhgwZCzB4eK010Xj5WnxlMmTIWICRjh7vCsF8shqnhjJkyBjB2MOLs/ukgCpDhozRDH6lgZikhnwIQdJHGTJkzGbUBgC1Vn4nBZQhQ4YM0r/qjy07RSwqZWXIkCGjVACTFcgTUUUuQ4YMGaXgmJas/J6bvzdkyJDx9wzeGuuPDXgxHIBlyJAxmtEJnelGeRFbS1hlyJAxjvEBB4Yi4FGPc1EAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aW27DMAwF0ex/0+4CHCtzSbmApNFX0ES2jgsQfPjzweu6rfu3T7+8/57s/byxZMiQsSzjGi7ym/EufoV0lwwZMk5jkFD4FBbJUUjA5XtlyJAho3M5ntilwVeGDBky5jLGe9OyVoYMGTI6gY+E1DFy3M57pRaXIUPGgoz0QP/5+ZX5hgwZMpZi9Nv96SCTB9zgVDJkyNiawQMcJ42RHMPPI0OGjL0ZPFHjZSc5UGc42spbZciQsTijcwPS6O+8CvbjPDJkyDiGQUpQEoJ5UOZlcKsXKEOGjMUZaUCMW2A4uUyTThkyZJzDIKVm+lRqyWLcI5QhQ8bxDBIc+7xaMvrlCjJkyNia0bnBrMZcLbl8nMTKkCFjOwY/XG0YwFtprdRThgwZWzNqxx3fnoP534OmmwwZMg5gdJr1acqY5rAow5UhQ8amjPQdBt5u47t4yoimsjJkyNiIMQ5n3E2uk5bHQWIqQ4aMrRmzxgC8uK29xtEqYmXIkLEdo9PKJ8dNk0Ue3GXIkHEOoxZe0zFDv/SNBwMyZMjYjlFrutVCcC18J5FYhgwZazOucNUK1FmP5sf/QYYMGZsy+OK3rCWatTFDDJMhQ8ayjFqQ5eOEN9JHGTJknMmoFbe8Vp71ntrjQ5EhQ4YMkF3ywnVW4lh82UKGDBnHMDqdLg4jaagMGTLOYdQaZ7wBx5NL8q0MGTJOY/BwOSscp+28TmktQ4aMxRl/eoD6CDt5xuwAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
