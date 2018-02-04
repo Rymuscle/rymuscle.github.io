@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OOP - Iterator | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP,对象行为型">
+    <meta name="description" content="前言我们可以将电视机看成一个存储电视频道的集合对象, 通过遥控器可以对电视机中的电视频道集合进行操作, 如返回上一个频道、跳转到下一个频道或者跳转至指定的频道。遥控器为我们操作电视频道带来很大的方便, 用户并不需要知道这些频道到底如何存储在电视机中。 而在软件开发中, 也存在大量类似电视机一样的类, 它们可以存储多个成员对象(元素), 这些类通常称为聚合类(Aggregate Classes),">
+<meta name="keywords" content="OOP,对象行为型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOP - Iterator">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言我们可以将电视机看成一个存储电视频道的集合对象, 通过遥控器可以对电视机中的电视频道集合进行操作, 如返回上一个频道、跳转到下一个频道或者跳转至指定的频道。遥控器为我们操作电视频道带来很大的方便, 用户并不需要知道这些频道到底如何存储在电视机中。 而在软件开发中, 也存在大量类似电视机一样的类, 它们可以存储多个成员对象(元素), 这些类通常称为聚合类(Aggregate Classes),">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/iterator/iterator-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/iterator/iterator-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/iterator/iterator-php-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/iterator/iterator-php-02.png">
+<meta property="og:updated_time" content="2018-02-04T03:54:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOP - Iterator">
+<meta name="twitter:description" content="前言我们可以将电视机看成一个存储电视频道的集合对象, 通过遥控器可以对电视机中的电视频道集合进行操作, 如返回上一个频道、跳转到下一个频道或者跳转至指定的频道。遥控器为我们操作电视频道带来很大的方便, 用户并不需要知道这些频道到底如何存储在电视机中。 而在软件开发中, 也存在大量类似电视机一样的类, 它们可以存储多个成员对象(元素), 这些类通常称为聚合类(Aggregate Classes),">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/iterator/iterator-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OOP - Iterator</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OOP - Iterator</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-29T13:10:02.000Z" itemprop="datePublished" class="page-time">
+  2016-05-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引用”销售管理系统中数据的遍历”"><span class="post-toc-number">2.</span> <span class="post-toc-text">引用”销售管理系统中数据的遍历”</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#迭代器模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">迭代器模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#销售管理系统的解决方案代码-参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">销售管理系统的解决方案代码 参考</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PHP迭代器"><span class="post-toc-number">5.</span> <span class="post-toc-text">PHP迭代器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-05-29-OOP-13-Iterator"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OOP - Iterator</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-29 21:10:02" datetime="2016-05-29T13:10:02.000Z"  itemprop="datePublished">2016-05-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>我们可以将电视机看成一个存储电视频道的集合对象, 通过遥控器可以对电视机中的电视频道集合进行操作, 如返回上一个频道、跳转到下一个频道或者跳转至指定的频道。<br>遥控器为我们操作电视频道带来很大的方便, 用户并不需要知道这些频道到底如何存储在电视机中。</p>
+<p>而在软件开发中, 也存在大量类似电视机一样的类, 它们可以存储多个成员对象(元素), 这些类通常称为聚合类(Aggregate Classes), 对应的对象称为聚合对象。</p>
+<p>为了更加方便地操作这些聚合对象, 同时可以很灵活地为聚合对象增加不同的遍历方法, 我们也需要类似电视机遥控器一样的角色, 可以访问一个聚合对象中的元素但又不需要暴露它的内部结构。</p>
+<p>本篇将要学习的迭代器模式将为聚合对象提供一个遥控器, 通过引入迭代器, 客户端无须了解聚合对象的内部结构即可实现对聚合对象中成员的遍历, 还可以根据需要很方便地增加新的遍历方式。</p>
+<h2 id="引用”销售管理系统中数据的遍历”"><a href="#引用”销售管理系统中数据的遍历”" class="headerlink" title="引用”销售管理系统中数据的遍历”"></a>引用”销售管理系统中数据的遍历”</h2><ol>
+<li><p>初始方案:</p>
+<blockquote>
+<p>Sunny软件公司为某商场开发了一套销售管理系统, 在对该系统进行分析和设计时, Sunny软件公司开发人员发现经常需要对系统中的商品数据、客户数据等进行遍历, 为了复用这些遍历代码, Sunny公司开发人员设计了一个抽象的数据集合类AbstractObjectList, 而将存储商品和客户等数据的类作为其子类, AbstractObjectList类结构如下图所示：<br> <img src="/img/oop/iterator/iterator-01.png" width="167" height="230"></p>
+</blockquote>
+</li>
+<li><p>问题: 违反 单一职责, 接口隔离</p>
+<blockquote>
+<p>Sunny软件公司开发人员通过对AbstractObjectList类结构进行分析, 发现该设计方案存在如下几个问题：<br> 在类图中, addObject()、removeObject() 等方法用于管理数据, 而next()、isLast()、previous()、isFirst()等方法用于遍历数据。这将导致聚合类的职责过重, 它既负责存储和管理数据, 又负责遍历数据, 违反了 “单一职责原则”, 由于聚合类非常庞大, 实现代码过长, 还将给测试和维护增加难度。<br> 如果将抽象聚合类声明为一个接口, 则在这个接口中充斥着大量方法, 不利于子类实现, 违反了 “接口隔离原则”。<br> 如果将所有的遍历操作都交给子类来实现, 将导致子类代码庞大, 而且必须暴露AbstractObjectList的内部存储细节, 向子类公开自己的私有属性, 否则子类无法实施对数据的遍历，这将破坏AbstractObjectList类的封装性。</p>
+</blockquote>
+</li>
+<li><p>如何解决上述问题?<br> 解决方案之一就是将聚合类中负责遍历数据的方法提取出来, 封装到专门的类中, 实现数据存储和数据遍历分离, 无须暴露聚合类的内部属性即可对其进行操作, 而这正是迭代器模式的意图所在。</p>
+</li>
+</ol>
+<h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><ol>
+<li><p>在软件开发中, 我们经常需要使用聚合对象来存储一系列数据。聚合对象拥有两个职责: 一是存储数据, 二是遍历数据。<br> 从依赖性来看，前者是聚合对象的基本职责；<br> 而后者既是可变化的，又是可分离的。<br> 因此，可以将遍历数据的行为从聚合对象中分离出来，封装在一个被称之为 <strong>“迭代器”</strong> 的对象中，<strong>由迭代器来提供遍历聚合对象内部数据的行为</strong>，这将简化聚合对象的设计，更符合 “单一职责原则” 的要求。</p>
+</li>
+<li><p>迭代器模式(Iterator Pattern)定义：提供一种方法来访问聚合对象, 而不用暴露这个对象的内部表示, 其别名为游标(Cursor)模式。迭代器模式是一种对象行为型模式。</p>
+</li>
+<li><p>在迭代器模式结构中包含<code>聚合</code>和<code>迭代器</code>两个层次结构, 考虑到系统的灵活性和可扩展性, 在迭代器模式中应用了工厂方法模式, 其模式结构如下所示:<br> <img src="/img/oop/iterator/iterator-02.png" width="395" height="280"></p>
+</li>
+<li><p><strong>在迭代器模式结构图中包含如下几个角色</strong>:</p>
+<ul>
+<li>Iterator(抽象迭代器): 它定义了访问和遍历元素的接口, 声明了用于遍历数据元素的方法, 例如: 用于获取第一个元素的first()方法，用于访问下一个元素的next()方法，用于判断是否还有下一个元素的hasNext()方法，用于获取当前元素的currentItem()方法等，在具体迭代器中将实现这些方法。</li>
+<li><p>ConcreteIterator(具体迭代器): 它实现了抽象迭代器接口，完成对聚合对象的遍历，同时在具体迭代器中通过游标来记录在聚合对象中所处的当前位置，在具体实现时，游标通常是一个表示位置的非负整数。</p>
+</li>
+<li><p>Aggregate(抽象聚合类):它用于存储和管理元素对象, 声明一个createIterator()方法用于创建一个迭代器对象, 充当抽象迭代器工厂角色。</p>
+</li>
+<li><p>ConcreteAggregate(具体聚合类): 它实现了在抽象聚合类中声明的createIterator()方法，该方法返回一个与该具体聚合类对应的具体迭代器ConcreteIterator实例。</p>
+<p>在迭代器模式中, 提供了一个外部的迭代器来对聚合对象进行访问和遍历, 迭代器定义了一个访问该聚合元素的接口, 并且可以跟踪当前遍历的元素, 了解哪些元素已经遍历过而哪些没有。<br>迭代器的引入, 将使得对一个复杂聚合对象的操作变得简单。</p>
+</li>
+</ul>
+</li>
+<li><p>下面我们结合代码来对迭代器模式的结构进行进一步分析, 在迭代器模式中应用了工厂方法模式, 抽象迭代器对应于抽象产品角色, 具体迭代器对应于具体产品角色, 抽象聚合类对应于抽象工厂角色, 具体聚合类对应于具体工厂角色</p>
+<ul>
+<li><p>在抽象迭代器中声明了用于遍历聚合对象中所存储元素的方法，典型代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Iterator</span> </span>&#123;  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">first</span><span class="params">()</span></span>; <span class="comment">//将游标指向第一个元素  </span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">next</span><span class="params">()</span></span>; <span class="comment">//将游标指向下一个元素  </span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span></span>; <span class="comment">//判断是否存在下一个元素  </span></div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">currentItem</span><span class="params">()</span></span>; <span class="comment">//获取游标指向的当前元素  </span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>在具体迭代器中将实现抽象迭代器声明的遍历数据的方法，如下代码所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span> </span>&#123;  </div><div class="line"></div><div class="line">    <span class="keyword">private</span> ConcreteAggregate objects; <span class="comment">//维持一个对具体聚合对象的引用，以便于访问存储在聚合对象中的数据 </span></div><div class="line">     </div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span> cursor; <span class="comment">//定义一个游标，用于记录当前访问位置  </span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteIterator</span><span class="params">(ConcreteAggregate objects)</span> </span>&#123;  </div><div class="line">        <span class="keyword">this</span>.objects=objects;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">first</span><span class="params">()</span> </span>&#123;  ......  &#125;  </div><div class="line">          </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">next</span><span class="params">()</span> </span>&#123;  ......  &#125;  </div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">hasNext</span><span class="params">()</span> </span>&#123;  ......  &#125;  </div><div class="line">      </div><div class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">currentItem</span><span class="params">()</span> </span>&#123;  ......  &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>需要注意的是抽象迭代器接口的设计非常重要:<br>  一方面需要充分满足各种遍历操作的要求, 尽量为各种遍历方法都提供声明;<br>  另一方面又不能包含太多方法, 因为接口中方法太多将给子类的实现带来麻烦;<br>  另外, 如果需要在具体迭代器中为聚合对象增加全新的遍历操作, 则必须修改抽象迭代器和具体迭代器的源代码，这将 <strong>违反“开闭原则”</strong>, 因此在设计时要考虑全面,避免之后修改接口。</p>
+</li>
+<li><p>聚合类用于存储数据并负责创建迭代器对象, 最简单的抽象聚合类代码如下所示:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Aggregate</span> </span>&#123;  </div><div class="line">    <span class="function">Iterator <span class="title">createIterator</span><span class="params">()</span></span>;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>具体聚合类作为抽象聚合类的子类，一方面负责存储数据，另一方面实现了在抽象聚合类中声明的工厂方法createIterator()，用于返回一个与该具体聚合类对应的具体迭代器对象，代码如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteAggregate</span> <span class="keyword">implements</span> <span class="title">Aggregate</span> </span>&#123;    </div><div class="line">    ......    </div><div class="line">    <span class="function"><span class="keyword">public</span> Iterator <span class="title">createIterator</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ConcreteIterator(<span class="keyword">this</span>);  </div><div class="line">    &#125;  </div><div class="line">    ......  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>理解迭代器模式中 <code>具体聚合类</code> 与 <code>具体迭代器类</code> 之间存在的<strong>依赖关系</strong>和<strong>关联关系</strong>。 迭代器模式中应用了工厂方法模式(<strong>每个具体的聚合对象都对应一个具体的迭代器</strong>);</p>
+</li>
+</ol>
+<h2 id="销售管理系统的解决方案代码-参考"><a href="#销售管理系统的解决方案代码-参考" class="headerlink" title="销售管理系统的解决方案代码 参考"></a><a href="http://blog.csdn.net/lovelion/article/details/9992679" target="_blank" rel="external">销售管理系统的解决方案代码 参考</a></h2><ol>
+<li><p>如果需要增加一个新的具体聚合类, 如客户数据集合类, 并且需要为客户数据集合类提供不同于商品数据集合类的正向遍历和逆向遍历操作, 那么只需增加一个新的聚合子类和一个新的具体迭代器类即可;原有类库代码无须修改, <strong>符合“开闭原则”</strong>; </p>
+</li>
+<li><p>如果需要为ProductList类更换一个迭代器, 只需要增加一个新的具体迭代器类作为抽象迭代器类的子类, 重新实现遍历方法, 原有迭代器代码无须修改, 也符合“开闭原则”;</p>
+</li>
+<li><p>但是如果要在迭代器中增加新的方法, 则需要修改抽象迭代器源代码, <strong>这将违背“开闭原则”</strong>。</p>
+</li>
+</ol>
+<h2 id="PHP迭代器"><a href="#PHP迭代器" class="headerlink" title="PHP迭代器"></a>PHP迭代器</h2><ol>
+<li>PHP SPL 中已经提供了迭代器接口<code>Iterator</code>和容器接口<code>IteatorAggragate</code><br> <img src="/img/oop/iterator/iterator-php-01.png" width="308/"></li>
+<li>并且PHP SPL已经提供了很多具体的迭代器对象<br> <img src="/img/oop/iterator/iterator-php-02.png" width="344/"></li>
+<li><p>当然, 如果SPL准备的迭代器还不够, 你可以为你的<code>聚合类</code>创建<code>自定义的迭代器</code></p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="comment">// 实现自己的具体迭代器</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteIterator</span> <span class="keyword">implements</span> <span class="title">Iterator</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">private</span> $position = <span class="number">0</span>;</div><div class="line">    <span class="keyword">private</span> $array = <span class="keyword">array</span>();</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($array)</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;array = $array;</div><div class="line">        <span class="keyword">$this</span>-&gt;position = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">rewind</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;position = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">current</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;array[<span class="keyword">$this</span>-&gt;position];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">key</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;position;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">next</span><span class="params">()</span> </span>&#123;</div><div class="line">        ++<span class="keyword">$this</span>-&gt;position;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">valid</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">isset</span>(<span class="keyword">$this</span>-&gt;array[<span class="keyword">$this</span>-&gt;position]);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Class MyAggregate 聚合容器</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteAggregate</span> <span class="keyword">implements</span> <span class="title">IteratorAggregate</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> $property;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * 添加属性</span></div><div class="line"><span class="comment">     *</span></div><div class="line"><span class="comment">     * <span class="doctag">@param</span> $property</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addProperty</span><span class="params">($property)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;property[] = $property;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getIterator</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ConcreteIterator(<span class="keyword">$this</span>-&gt;property);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// Class Client 客户端测试</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="comment">//创建一个容器</span></div><div class="line">        $concreteAggregate = <span class="keyword">new</span> ConcreteAggregate();</div><div class="line">        <span class="comment">// 添加属性</span></div><div class="line">        $concreteAggregate-&gt;addProperty(<span class="string">'属性1'</span>);</div><div class="line">        <span class="comment">// 添加属性</span></div><div class="line">        $concreteAggregate-&gt;addProperty(<span class="string">'属性2'</span>);</div><div class="line">        <span class="comment">//给容器创建迭代器</span></div><div class="line">        $iterator = $concreteAggregate-&gt;getIterator();</div><div class="line">        <span class="comment">//遍历</span></div><div class="line">        <span class="keyword">while</span>($iterator-&gt;valid())</div><div class="line">        &#123;</div><div class="line">            $key   = $iterator-&gt;key();</div><div class="line">            $value = $iterator-&gt;current();</div><div class="line">            <span class="keyword">echo</span> <span class="string">'键: '</span>.$key.<span class="string">' 值: '</span>.$value.<span class="string">'&lt;hr&gt;'</span>;</div><div class="line">            $iterator-&gt;next();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Client:: test();</div></pre></td></tr></table></figure>
+</li>
+<li><p>和 <code>工厂方法</code>模式非常类似,并且做到了 ‘开闭原则’, 当你具体聚合类需要更换迭代器的时候, 不用修改客户端代码, 只用维护具体的聚合类即可!<br> (工厂方法模式, 也类似, 当你的一个日志记录器需要修改, 只用修改具体的那个工厂即可, 当然, 由于是做修改而不是扩展, 所以还是符合’开闭’原则的)</p>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>迭代器模式是一种使用频率非常高的设计模式, 通过引入迭代器可以将数据的遍历功能从聚合对象中分离出来, 聚合对象只负责存储数据, 而遍历数据由迭代器来完成。</p>
+</li>
+<li><p>由于很多编程语言的类库都已经实现了迭代器模式, 因此在实际开发中，我们只需要直接使用Java、C#等语言已定义好的迭代器即可, 迭代器已经成为我们操作聚合对象的基本工具之一。</p>
+</li>
+<li><p>迭代器模式的主要优点如下：</p>
+<ul>
+<li>它支持以不同的方式遍历一个聚合对象, 在同一个聚合对象上可以定义多种遍历方式。在迭代器模式中只需要用一个不同的迭代器来替换原有迭代器即可改变遍历算法, 我们也可以自己定义迭代器的子类以支持新的遍历方式。</li>
+<li>迭代器简化了聚合类。由于引入了迭代器，在原有的聚合对象中不需要再自行提供数据遍历等方法，这样可以简化聚合类的设计。</li>
+<li><strong>在迭代器模式中，由于引入了抽象层，增加新的聚合类和迭代器类都很方便，无须修改原有代码，满足“开闭原则”的要求</strong>。</li>
+</ul>
+</li>
+<li><p>迭代器模式的主要缺点如下:</p>
+<ul>
+<li>由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。</li>
+<li>抽象迭代器的设计难度较大，需要充分考虑到系统将来的扩展，例如JDK内置迭代器Iterator就无法实现逆向遍历，如果需要实现逆向遍历，只能通过其子类ListIterator等来实现，而ListIterator迭代器无法用于操作Set类型的聚合对象。在自定义迭代器时，创建一个考虑全面的抽象迭代器并不是件很容易的事情。</li>
+</ul>
+</li>
+<li><p>在以下情况下可以考虑使用迭代器模式:</p>
+<ul>
+<li>访问一个聚合对象的内容而无须暴露它的内部表示。将聚合对象的访问与内部数据的存储分离，使得访问聚合对象时无须了解其内部实现细节。</li>
+<li>需要为一个聚合对象提供多种遍历方式。</li>
+<li>为遍历不同的聚合结构提供一个统一的接口，在该接口的实现类中为不同的聚合结构提供不同的遍历方式，而客户端可以一致性地操作该接口。</li>
+</ul>
+</li>
+</ol>
+<p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.csdn.net/lovelion/article/details/9992005" target="_blank" rel="external">参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/对象行为型/">对象行为型</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&title=《OOP - Iterator》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&title=《OOP - Iterator》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Iterator》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/05/28/2016-05-28-OOP-12-Proxy/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">OOP - Proxy</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/21/2017-12-10-HTTP-04-Connection-Keep-Alive/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP - 并行连接, 持久连接</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&title=《OOP - Iterator》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&title=《OOP - Iterator》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Iterator》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/29/2016-05-29-OOP-13-Iterator/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACt0lEQVR42u3aQW7jMBAEwPz/01lgTwEWcro5nDgLlE6BbEssHshJDz8+4uvz7/X1769X8qt/7z894exdowsPDw/vaOhP19NAn+7MwclEJGPGw8PD2+Ylm0HOe/ptOyn5cx7v4+Hh4b2VlyzQr585mSw8PDy8/5H3tJTnw20X/Tfse3h4eHgxL1mIE3Ae0ebPmbwRDw8Pb4N31gB779/r/T08PDy8o656vtBPvtO23Ipx4uHh4S3w8pZ/GzTMG2mvS/liw8DDw8Nb4+Whw+Q5Z9HwKETGw8PD+xFe/n99jmkj47MN7Jv+Hh4eHt4ybxJPnDW38mnKC3o8PDy8u7yzhT7/9PXg8qK5DXbx8PDw9nhtrHCriTWJg9sNCQ8PD2+DV7eUxke12qAhX/Qfwwg8PDy8q7yzsrhtaG3EwfVM4+Hh4Y15bSncBgTt/fzIQjRBeHh4eAu8swHlS/xZXDtpxeHh4eFt89oSti2j2wbVfHOKAlw8PDy8q7yk1XRr4W7Djra8xsPDw9vmtU2mPMjID1pN2m/flNR4eHh4y7w23n09rHaDmR+3wsPDw9vmzQ82teVv++nh1ODh4eEt8NpBJ0FtHljc2mAiJB4eHt4lXh4l5McI8uCgndZ64vDw8PAWeG0bbBLR5s+ft+UOu3x4eHh45RqeHKhKmk+TJtY8tvg4GyIeHh7eIOFMkPPv59HGJLbAw8PD2+a1RXBSFifBQXtcNdmc8PDw8PZ4n+XVRgNnk9K+8fG3eHh4eAu8s2igPQjVRhVJIJKPBw8PD2+Dd1YW58/Jt5N8gzk8OoCHh4d3lTc5CnB2OCAvwdswAg8PD++38eabSg5ONoNvRouHh4f3Vt6tZlV+lCpvwhWvwcPDw7vESxb3tnTOee0Y6gQaDw8P7yrvZxpgZ82tPBAZdfnw8PDwUt4fY91pzvi8jeAAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
