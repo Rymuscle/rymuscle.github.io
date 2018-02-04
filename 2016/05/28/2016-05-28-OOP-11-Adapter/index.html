@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>OOP - Adapter | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP,结构型">
+    <meta name="description" content="前言 我的笔记本电脑的工作电压是20V, 而我国的家庭用电是220V, 如何让20V的笔记本电脑能够在220V的电压下工作？答案是引入一个电源适配器(AC Adapter), 俗称充电器或变压器, 有了这个电源适配器, 生活用电和笔记本电脑即可兼容!  在软件开发中, 有时也存在类似这种不兼容的情况, 我们也可以像引入一个电源适配器一样引入一个称之为适配器的角色, 来协调这些存在不兼容的结构, 这">
+<meta name="keywords" content="OOP,结构型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OOP - Adapter">
+<meta property="og:url" content="http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 我的笔记本电脑的工作电压是20V, 而我国的家庭用电是220V, 如何让20V的笔记本电脑能够在220V的电压下工作？答案是引入一个电源适配器(AC Adapter), 俗称充电器或变压器, 有了这个电源适配器, 生活用电和笔记本电脑即可兼容!  在软件开发中, 有时也存在类似这种不兼容的情况, 我们也可以像引入一个电源适配器一样引入一个称之为适配器的角色, 来协调这些存在不兼容的结构, 这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/adapter/adapter-uml.png">
+<meta property="og:updated_time" content="2018-02-04T03:51:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OOP - Adapter">
+<meta name="twitter:description" content="前言 我的笔记本电脑的工作电压是20V, 而我国的家庭用电是220V, 如何让20V的笔记本电脑能够在220V的电压下工作？答案是引入一个电源适配器(AC Adapter), 俗称充电器或变压器, 有了这个电源适配器, 生活用电和笔记本电脑即可兼容!  在软件开发中, 有时也存在类似这种不兼容的情况, 我们也可以像引入一个电源适配器一样引入一个称之为适配器的角色, 来协调这些存在不兼容的结构, 这">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/adapter/adapter-uml.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">OOP - Adapter</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">OOP - Adapter</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-28T11:02:13.000Z" itemprop="datePublished" class="page-time">
+  2016-05-28
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引用玩具厂家的例子"><span class="post-toc-number">2.</span> <span class="post-toc-text">引用玩具厂家的例子</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题在出在哪里呢？"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题在出在哪里呢？</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#适配器模式"><span class="post-toc-number">4.</span> <span class="post-toc-text">适配器模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">6.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-05-28-OOP-11-Adapter"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">OOP - Adapter</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-28 19:02:13" datetime="2016-05-28T11:02:13.000Z"  itemprop="datePublished">2016-05-28</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>我的笔记本电脑的工作电压是20V, 而我国的家庭用电是220V, 如何让20V的笔记本电脑能够在220V的电压下工作？<br>答案是引入一个电源适配器(AC Adapter), 俗称充电器或变压器, 有了这个电源适配器, 生活用电和笔记本电脑即可兼容!</p>
+</blockquote>
+<p>在软件开发中, 有时也存在类似这种不兼容的情况, 我们也可以像引入一个电源适配器一样引入一个称之为适配器的角色, 来协调这些存在不兼容的结构, 这种设计方案即为适配器模式。</p>
+<h2 id="引用玩具厂家的例子"><a href="#引用玩具厂家的例子" class="headerlink" title="引用玩具厂家的例子"></a>引用玩具厂家的例子</h2><ol>
+<li><p>一开始的和谐<br>黑枣玩具公司专门生产玩具, 生产的玩具如狗,猫,狮子,鱼等动物, 每个玩具都可以进行’张嘴’与’闭嘴’操作, 分别调用 <code>openMouth</code> 与 <code>closeMouth</code> 方法。<br>在这个时候, 我们很容易想到可以定义一个抽象玩具类Toy, 甚至是接口Toy, 这些都不是问题, 然后其他的具体玩具类去继承/实现父类, 实现父类的方法。<br>到现在为止, 一切看起来都很正常, 都很和谐, 代码如下:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>平衡的破坏<br>后来为了扩大业务, 现在黑枣玩具公司与红枣遥控公司合作, 红枣遥控公司可以使用遥控设备对动物进行嘴巴控制, 不过红枣遥控公司的遥控设备是调用的动物的doMouthOpen及doMouthClose方法。<br>黑枣玩具公司的程序员现在必须要做的是对Toy系列类进行升级改造, 使Toy能调用doMouthOpen及doMouthClose方法。(又或者让红枣公司来适应自己, 但毕竟自己做的是偏底层,想做强做大)。</p>
+</li>
+</ol>
+<p>考虑实现的方法时, 我们很直接地想到, 你需要的话我再在我的父类子类里给你添加这么两个方法就好啦。于是, 代码现在可能会被改造成:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">//为红枣遥控公司控制接口增加doMouthOpen方法</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">    <span class="comment">//为红枣遥控公司控制接口增加doMouthClose方法</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//增加的方法(用来适配红枣遥控公司)</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;doMouthOpen();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//增加的方法</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;closeMouth();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Toy</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//增加的方法</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;doMouthOpen();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//增加的方法</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;closeMouth();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>当你一次又一次在父类子类里面重复添加着这两个方法的时候，总会想着如此重复的工作，但是, 当有数百个子类的时候, 这样做下去你就会觉得自己很傻。(其实我经常当这样的傻子)</p>
+<ol>
+<li>更加烦躁<br>当你刚改完上面的代码, 黑枣玩具公司又要与绿枣遥控公司合作, 因为绿枣遥控公司遥控设备更便宜稳定。<br>不过绿枣遥控公司的遥控设备是调用的动物的<code>operMouth(type)</code>方法来实现嘴巴控制。如果type为0则闭嘴,反之张嘴。<br>这下好了, 程序员又得对Toy及其子类进行升级, 这样下去搁谁都不淡定了, 你的代码可能如下:<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span>;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span>;  </div><div class="line">    </div><div class="line">    <span class="comment">//这是给之前红枣公司增加的适配方法</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span></span>;  </div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span></span>;  </div><div class="line">  </div><div class="line">    <span class="comment">//这又是为绿枣遥控公司控制接口增加的适配方法  </span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">operateMouth</span><span class="params">($type = <span class="number">0</span>)</span></span>;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">$this</span>-&gt;doMouthOpen();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">$this</span>-&gt;closeMouth();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">operateMouth</span><span class="params">($type = <span class="number">0</span>)</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">if</span> ($type == <span class="number">0</span>) &#123;  </div><div class="line">            <span class="keyword">$this</span>-&gt;closeMouth();  </div><div class="line">        &#125; <span class="keyword">else</span> &#123;  </div><div class="line">            <span class="keyword">$this</span>-&gt;operateMouth();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class"></span>&#123;  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">$this</span>-&gt;doMouthOpen();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">$this</span>-&gt;closeMouth();  </div><div class="line">    &#125;  </div><div class="line">  </div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">operateMouth</span><span class="params">($type = <span class="number">0</span>)</span>  </span></div><div class="line"><span class="function">    </span>&#123;  </div><div class="line">        <span class="keyword">if</span> ($type == <span class="number">0</span>) &#123;  </div><div class="line">            <span class="keyword">$this</span>-&gt;closeMouth();  </div><div class="line">        &#125; <span class="keyword">else</span> &#123;  </div><div class="line">            <span class="keyword">$this</span>-&gt;operateMouth();  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在这个时候, 程序员就必须要动脑子想办法了, 就算自己勤快, 万一哪天紫枣,青枣,黄枣,山枣这些遥控公司全来的时候, 忽略自己不断增多的工作量不说, 这个Toy类可是越来越大, 总有一天程序员不崩溃, 系统也会崩溃。</p>
+<h2 id="问题在出在哪里呢？"><a href="#问题在出在哪里呢？" class="headerlink" title="问题在出在哪里呢？"></a>问题在出在哪里呢？</h2><ol>
+<li><p>像上面那样编写代码, <strong>代码违反了’开-闭’原则</strong>。</p>
+</li>
+<li><p>我们现在面临的是: 新的接口方法要实现, 旧的接口(Toy抽象类)也不能动, 那就是得引入一个新的类–我们本文的主角–适配器。<br> 适配器要完成的功能很明确, 引用现有接口的方法实现新的接口的方法。</p>
+</li>
+</ol>
+<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><ol>
+<li><p>适配器模式(Adapter): 将一个类的接口转换成客户希望的另外一个接口。Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。</p>
+</li>
+<li><p>通用类图:<br> <img src="/img/oop/adapter/adapter-uml.png" width="424" height="691/"></p>
+</li>
+<li><p>代码:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">   <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span></span>;  </div><div class="line">     </div><div class="line">       <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span></span>;  </div><div class="line">   &#125;  </div><div class="line">     </div><div class="line">   <span class="class"><span class="keyword">class</span> <span class="title">Dog</span> <span class="keyword">extends</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"Dog open Mouth\n"</span>;  </div><div class="line">       &#125;  </div><div class="line">     </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"Dog close Mouth\n"</span>;  </div><div class="line">       &#125;  </div><div class="line">   &#125;  </div><div class="line">     </div><div class="line">   <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> <span class="keyword">extends</span> <span class="title">Toy</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">openMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"Cat open Mouth\n"</span>;  </div><div class="line">       &#125;  </div><div class="line">     </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">closeMouth</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"Cat close Mouth\n"</span>;  </div><div class="line">       &#125;  </div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   </div><div class="line">   <span class="comment">//目标角色:红枣遥控公司</span></div><div class="line">   <span class="class"><span class="keyword">interface</span> <span class="title">RedTarget</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span></span>;  </div><div class="line">     </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span></span>;  </div><div class="line">   &#125;  </div><div class="line">     </div><div class="line">   <span class="comment">//目标角色:绿枣遥控公司</span></div><div class="line">   <span class="class"><span class="keyword">interface</span> <span class="title">GreenTarget</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">operateMouth</span><span class="params">($type = <span class="number">0</span>)</span></span>;  </div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   </div><div class="line">   <span class="comment">//类适配器角色:红枣遥控公司  </span></div><div class="line">   <span class="class"><span class="keyword">class</span> <span class="title">RedAdapter</span> <span class="keyword">implements</span> <span class="title">RedTarget</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">private</span> $adaptee;  </div><div class="line">     </div><div class="line">       <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(Toy $adaptee)</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">$this</span>-&gt;adaptee = $adaptee;  </div><div class="line">       &#125;  </div><div class="line">     </div><div class="line">       <span class="comment">//委派调用Adaptee的sampleMethod1方法  </span></div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthOpen</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">$this</span>-&gt;adaptee-&gt;openMouth();  </div><div class="line">       &#125;  </div><div class="line">     </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">doMouthClose</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">$this</span>-&gt;adaptee-&gt;closeMouth();  </div><div class="line">       &#125;  </div><div class="line">   &#125;  </div><div class="line">     </div><div class="line">   <span class="comment">//类适配器角色:绿枣遥控公司  </span></div><div class="line">   <span class="class"><span class="keyword">class</span> <span class="title">GreenAdapter</span> <span class="keyword">implements</span> <span class="title">GreenTarget</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">private</span> $adaptee;  </div><div class="line">     </div><div class="line">       <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(Toy $adaptee)</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">$this</span>-&gt;adaptee = $adaptee;  </div><div class="line">       &#125;  </div><div class="line">     </div><div class="line">       <span class="comment">//委派调用Adaptee：GreenTarget的operateMouth方法  </span></div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">operateMouth</span><span class="params">($type = <span class="number">0</span>)</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">           <span class="keyword">if</span> ($type) &#123;  </div><div class="line">               <span class="keyword">$this</span>-&gt;adaptee-&gt;openMouth();  </div><div class="line">           &#125; <span class="keyword">else</span> &#123;  </div><div class="line">               <span class="keyword">$this</span>-&gt;adaptee-&gt;closeMouth();  </div><div class="line">           &#125;  </div><div class="line">       &#125;  </div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   <span class="class"><span class="keyword">class</span> <span class="title">testDriver</span>  </span></div><div class="line"><span class="class">   </span>&#123;  </div><div class="line">       <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">run</span><span class="params">()</span>  </span></div><div class="line"><span class="function">       </span>&#123;  </div><div class="line">            <span class="comment">//实例化一只狗玩具  </span></div><div class="line">           $adaptee_dog = <span class="keyword">new</span> Dog();  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"给狗套上红枣适配器\n"</span>;  </div><div class="line">           $adapter_red = <span class="keyword">new</span> RedAdapter($adaptee_dog);  </div><div class="line">           <span class="comment">//张嘴  </span></div><div class="line">           $adapter_red-&gt;doMouthOpen();  </div><div class="line">           <span class="comment">//闭嘴  </span></div><div class="line">           $adapter_red-&gt;doMouthClose();  </div><div class="line">           <span class="keyword">echo</span> <span class="string">"给狗套上绿枣适配器\n"</span>;  </div><div class="line">           $adapter_green = <span class="keyword">new</span> GreenAdapter($adaptee_dog);  </div><div class="line">           <span class="comment">//张嘴  </span></div><div class="line">           $adapter_green-&gt;operateMouth(<span class="number">1</span>);  </div><div class="line">           <span class="comment">//闭嘴  </span></div><div class="line">           $adapter_green-&gt;operateMouth(<span class="number">0</span>);  </div><div class="line">       &#125;  </div><div class="line">   &#125;  </div><div class="line">     </div><div class="line">   $test = <span class="keyword">new</span> testDriver();  </div><div class="line">   $test-&gt;run();</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>最后的结果就是,Toy类及其子类在不改变自身的情况下, 通过适配器实现了不同的接口。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>将一个类的接口转换成客户希望的另外一个接口, 使原本因不兼容而不能在一起工作的那些类,可以在一起工作。</p>
+<p>适配器模式核心思想：把对某些相似的类的操作转化为一个统一的’接口’(这里是比喻的说话)–适配器,或者比喻为一个’界面’统一或屏蔽了那些类的细节。<br>适配器模式还构造了一种’机制’, 使’适配’的类可以很容易的增减, 而不用修改与适配器交互的代码, 符合’减少代码间耦合’的设计原则。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://blog.csdn.net/lovelion/article/details/17517213" target="_blank" rel="external">参考</a><br><a href="http://blog.51cto.com/haolloyin/346128" target="_blank" rel="external">参考</a><br><a href="https://www.cnblogs.com/DeanChopper/p/4770572.html" target="_blank" rel="external">参考 适配器</a><br><a href="http://www.cnblogs.com/whoknows/articles/adapter_in_php.html" target="_blank" rel="external">参考 适配器</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/结构型/">结构型</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&title=《OOP - Adapter》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&title=《OOP - Adapter》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Adapter》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/05/28/2016-05-28-OOP-10-Laravel-Facade/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">Laravel-Facade</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/28/2016-05-28-OOP-12-Proxy/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OOP - Proxy</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&title=《OOP - Adapter》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&title=《OOP - Adapter》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Adapter》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/05/28/2016-05-28-OOP-11-Adapter/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMElEQVR42u3awY6DMAxFUf7/pxlpViN1oPfZoWqSm1UFFHKysOLYx4HH+Tv+/n4dV8+/Xr96/urusCFDhoxpGeftuPo8nxB/M7/7D1WGDBkbMEiQrQVQElKvvkXmJkOGDBn3kyCAdCFkyJAho8/gnycYGTJkyOAMkkx+ZrqP5+IyZMiYkFErDHzm9+P1DRkyZHw94yyNTiLKA3owHxkyZCzN4J9JD/drb0sLqPHpoAwZMqZlkFDIqZ0NJbnyZuMoQ4aMbRhpMpke0tXy0+IfZMiQsQSjk752gjK5y6/LkCFjbQZPO/lmji8WmXS8uDJkyNiAkaaUaSNXmtDGbRYyZMhYiNE59uJpKt84poFbhgwZ+zB460OnkPBc44UMGTJ2YKSNFJ3AyhcoKDzIkCFjaQYPcDyJTQ/v+EK8+aIMGTIWZYw6OKslovxtqBVMhgwZGzDSkiEJyp0mjGAJZMiQsTSDRzC+lUwLkLUSZrEeK0OGjAkZZzhqqWzabBEXO2XIkLE0Iw24/aO3AwwyaRkyZOzD4O0OaQqaJrFnaciQIWMHBi868mJArcB54IEwMmTIWIgxKsCNCtA8KKMYL0OGjCUYaZgjx/e1cgIJ3wOGDBkypmWkrRUcw6dba9QIqhwyZMhYglFrqqgdvdVCKsq/ZciQIaN0rHb/zLDDOBkyZMhoNG91tpWPBFwZMmRMy0ibJO4DKC8JpMd8w3JxGTJkTMXo77sIiW8oO0sjQ4aM5Rg/aUOjiaIYpjoAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
