@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP - 缓存 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="Web缓存简介 Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。 使用缓存的优点:  减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输,">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP - 缓存">
+<meta property="og:url" content="http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Web缓存简介 Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。 使用缓存的优点:  减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/expire-max-age.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-hit-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-not-hit-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cdn-public-proxy-200.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cdn-private-200.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/private-public-cache-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-01.png">
+<meta property="og:updated_time" content="2018-02-05T01:28:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP - 缓存">
+<meta name="twitter:description" content="Web缓存简介 Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。 使用缓存的优点:  减少了冗余的数据传输, 节省了你的网络费用  有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地传输,">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/expire-max-age.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP - 缓存</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HTTP - 缓存</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-11T13:13:21.000Z" itemprop="datePublished" class="page-time">
+  2017-12-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Web缓存简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">Web缓存简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#‘缓存命中’、’未命中’-的概念"><span class="post-toc-number">2.</span> <span class="post-toc-text">‘缓存命中’、’未命中’ 的概念</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出文档过期-和-服务器再验证"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出文档过期 和 服务器再验证</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本的过期时间"><span class="post-toc-number">4.</span> <span class="post-toc-text">缓存副本的过期时间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#副本过期算法测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">副本过期算法测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存副本过期后的”再验证”"><span class="post-toc-number">6.</span> <span class="post-toc-text">缓存副本过期后的”再验证”</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证命中-缓慢命中"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">再验证命中(缓慢命中)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证未命中"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">再验证未命中</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证-–-服务器对象被删除"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">再验证 – 服务器对象被删除</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#再验证依靠-–-条件方法"><span class="post-toc-number">6.5.</span> <span class="post-toc-text">再验证依靠 – 条件方法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-Modified-Since-Date-再验证"><span class="post-toc-number">6.6.</span> <span class="post-toc-text">If-Modified-Since:Date 再验证</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#If-None-Match-实体标签再验证"><span class="post-toc-number">6.7.</span> <span class="post-toc-text">If-None-Match 实体标签再验证</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#实体标签"><span class="post-toc-number">6.7.1.</span> <span class="post-toc-text">实体标签</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#弱验证器"><span class="post-toc-number">6.7.2.</span> <span class="post-toc-text">弱验证器</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体标签-和-最近修改日期"><span class="post-toc-number">6.8.</span> <span class="post-toc-text">实体标签 和 最近修改日期</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存状态码-200-和-304"><span class="post-toc-number">7.</span> <span class="post-toc-text">缓存状态码 200 和 304</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#公有和私有缓存"><span class="post-toc-number">8.</span> <span class="post-toc-text">公有和私有缓存</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#私有缓存"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">私有缓存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#公有缓存"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">公有缓存</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#缓存控制"><span class="post-toc-number">9.</span> <span class="post-toc-text">缓存控制</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017-12-11-HTTP-05-cache"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP - 缓存</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-11 21:13:21" datetime="2017-12-11T13:13:21.000Z"  itemprop="datePublished">2017-12-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Web缓存简介"><a href="#Web缓存简介" class="headerlink" title="Web缓存简介"></a>Web缓存简介</h2><ol>
+<li>Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。</li>
+<li><p>使用缓存的优点:</p>
+<ul>
+<li><p>减少了冗余的数据传输, 节省了你的网络费用</p>
+<blockquote>
+<p>有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。<br>这样就会导致一些相同的字节在网络中一遍遍地传输, 这些冗余的数据传输会耗尽昂贵的网络带宽, 降低传输速度, 加重Web服务器的负载。<br>有了缓存, 就可以保留第一条服务器响应的副本, 后继请求就可以由缓存的副本来应对了, 这样可以减少那些流入/流出原始服务器而被浪费掉了的重复流量。</p>
+</blockquote>
+</li>
+<li><p>缓解了网络本身的瓶颈问题, 不需要更多的带宽就能够更快地加载页面</p>
+<blockquote>
+<p>很多网络为本地网络客户端提供的带宽比为远程度服务器提供的带宽要宽。(这个大家应该有深有体会, 局域网内传输是很快的!!!)<br>如果客户端能够从一个快速局域网的缓存中得到一份副本, 那么缓存就可以提高性能—尤其是要传输比较大的文件时。</p>
+</blockquote>
+</li>
+<li><p>降低了对原始服务器的要求, 服务器可以更快地响应, 避免过载的出现</p>
+<blockquote>
+<p>瞬间拥塞: 突发事件(爆发性新闻, 抢购等)使很多人几乎同时去访问一个Web文档时, 就会出现瞬间拥塞, 由此造成的过多流量峰值可能会使网络和Web服务器产生灾难性的崩溃。<br>而缓存在应对瞬间拥塞时就显得非常重要。</p>
+</blockquote>
+</li>
+<li><p>降低了<strong>距离时延</strong>, 因为从较远的地方加载页面会更慢一些<br>即使带宽不是问题, 距离也可能成为问题。<strong>每台网络路由器都会增加因特网流量的时延</strong>。即使客户端和服务器之间没有太多的路由器, <strong>光速自身也会造成显著的时延</strong>。</p>
+<blockquote>
+<p>比如波士顿到旧金山的直线距离大约为2700英里, 在最好的情况下, 以光速传输(186000英里/秒)的信号可以在大约15毫秒从波士顿传送到旧金山, 并在30毫秒内完成一个往返。<br>假设某个Web页面包含了20个小图片, 都在旧金山的一台服务器上, 如果波士顿的一个客户端打开了4条到服务器的并行连接, 而且保持着连接的活跃状态, 光速自身就要消耗大约1/4秒(240毫秒)的下载时间。如果服务器位于(距离旧金山6700英里)的东京, 时延就会变成600毫秒。<br>中等复杂的web页面会带来几秒钟的光速时延。<br>况且实际应用中, 信号的传输速度会比光速低一些, 因此距离时延会更加严重。</p>
+</blockquote>
+<p>而将缓存放在附近的机房里可以将文件传输距离从数千英里缩短为数十米。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="‘缓存命中’、’未命中’-的概念"><a href="#‘缓存命中’、’未命中’-的概念" class="headerlink" title="‘缓存命中’、’未命中’ 的概念"></a>‘缓存命中’、’未命中’ 的概念</h2><ol>
+<li><p>如果一些请求到达缓存设备时, 缓存设备可以用本地已有的副本为这些请求提供服务, 就被称为<strong>缓存命中</strong>。</p>
+</li>
+<li><p>如果一些请求到达缓存设备时, 缓存设备本地没有副本提供给这些请求, 而将请求转发给原始服务器, 这就被称为<strong>缓存未命中</strong>。</p>
+</li>
+<li><p>后面还有 <strong>再验证命中</strong> 和 <strong>再验证未命中</strong> 的概念;</p>
+</li>
+</ol>
+<h2 id="引出文档过期-和-服务器再验证"><a href="#引出文档过期-和-服务器再验证" class="headerlink" title="引出文档过期 和 服务器再验证"></a>引出文档过期 和 服务器再验证</h2><ol>
+<li><p><strong>已缓存的数据要与服务器数据保持一致</strong>:<br> 缓存设备本地的副本 并不是时刻都与原始服务器上的文档一样, 毕竟服务器中的这些文档会随着时间发生变化(比如有些报告可能每个月都会变化, 而在线报纸每天都会变化, 财经数据可能每过几秒就会发生变化)。<br> 所以, 如果缓存提供的总是老的数据, 就会变得毫无用处。</p>
+</li>
+<li><p>HTTP通过一些简单的机制, 可以做到: 在不要求服务器记住有哪些缓存设备拥有其文档副本的情况下, 保持已缓存数据与服务器数据之间的充分一致。<br> HTTP将这些简单的机制称为 <strong>文档过期(document expiration)</strong>(也就是缓存副本的过期时间) 和 <strong>服务器再验证(server revalidation)</strong>。</p>
+</li>
+</ol>
+<h2 id="缓存副本的过期时间"><a href="#缓存副本的过期时间" class="headerlink" title="缓存副本的过期时间"></a>缓存副本的过期时间</h2><ol>
+<li><p>原始服务器通过 老式的HTTP/1.0+的实体首部字段<code>Expires</code> 或 新式的HTTP/1.1的通用首部字段<code>Cache-Control:max-age</code> 可以向每个文档附加一个<strong>过期日期</strong>。</p>
+<ul>
+<li><code>Expires</code> 和 <code>Cache-Control:max-age</code> 所做的事情本质上是一直的, 但由于 <code>Cache-Control</code> 首部使用的是相对时间而不是绝对时间, 所以我们更倾向与使用比较新的 <code>Cache-Control</code> 首部。</li>
+<li><code>Expires</code> 绝对日期依赖于计算机时钟的正确设置</li>
+<li>如下图:<br><img src="/img/http/expire-max-age.png" width="550/"></li>
+</ul>
+</li>
+<li><p><strong>在缓存文档过期之前, 缓存设备可以随意使用这些副本, 而且无需与服务器做任何联系!!</strong> 当然, 除非</p>
+<ul>
+<li>客户端请求中包含 “阻止提供缓存” 的首部 <code>Cache-Control:no-store</code>;</li>
+<li><p>或者客户端请求中包含”只有经过验证才能返回缓存副本”的首部<code>Cache-Control:no-cache</code><em>*</em>), </p>
+<p>但是一旦已缓存文档过期, 缓存设备就必须与服务器进行核对(<strong><em>当然, 除非你设置了<code>Cache-Control:only-if-cached</code>要求只使用缓存</em></strong>), 询问文档是否被修改过, 如果被修改过, 就要获取一份新鲜(带有新的过期日期)的副本。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>注意</strong>: </p>
+<ul>
+<li>不推荐使用Expires首部, 它指定的是实际的过期日期而不是秒数。HTTP设计者后来认为, 由于很多服务器的时钟都不同步, 或者不正确, 所以最好还是用剩余秒数, 而不是绝对时间来表示过期时间。</li>
+<li>有些服务器还会回送一个<code>Expires:0</code>响应头,视图将文档置于永远过期的状态, <strong>但这种语法是非法的</strong>, 可能给某个软件带来问题, 应该试着支持这种结构的输入, 但是不应该产生这种结构的输出。</li>
+<li>而 <code>Cache-Control</code> 的 <code>max-age</code> 则可以设置 <code>Cache-Control: max-age=0</code></li>
+</ul>
+</li>
+<li><p>另外, 注意 <code>no-cache</code> 和 <code>must-revalidate</code> 的区别</p>
+<ul>
+<li>no-cache: 告诉浏览器、缓存服务器，不管本地副本是否过期，使用资源副本前，一定要到源服务器进行副本有效性校验。</li>
+<li>must-revalidate：告诉浏览器、缓存服务器，本地副本过期前，可以使用本地副本；本地副本一旦过期，必须去源服务器进行有效性校验。(这应该是缓存系统的默认行为, 但must-revalidate指令使得这个要求是明确的<a href="https://stackoverflow.com/questions/2932890/http-cache-control-max-age-must-revalidate" target="_blank" rel="external">参考</a>)</li>
+<li><a href="https://segmentfault.com/a/1190000007317481" target="_blank" rel="external">可参考</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="副本过期算法测试"><a href="#副本过期算法测试" class="headerlink" title="副本过期算法测试"></a>副本过期算法测试</h2><ol>
+<li>FireFox测试过期时间算法( Date + Expire/max-age - Age) <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 主要测试浏览器确实是根据 expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</span></div><div class="line"><span class="comment"> * 来计算失效时间的</span></div><div class="line"><span class="comment"> * chrome好像不太正常(会交替显示 123 和 456789)</span></div><div class="line"><span class="comment"> * firefox 进行回车测试, 结果发现完全正常</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">if</span>(!<span class="keyword">isset</span>($_SERVER[<span class="string">'HTTP_IF_MODIFIED_SINCE'</span>])) &#123;</div><div class="line">    header(<span class="string">"HTTP/1.1 200"</span>);</div><div class="line">    header(<span class="string">'Cache-Control: max-age=30'</span>); <span class="comment">// 放到下一行就不生效了(响应头还特么还有顺序?)</span></div><div class="line">    header(<span class="string">'Age:10'</span>);</div><div class="line">    <span class="comment">// 发现浏览器确实拿着这个日期去判断有没有过期</span></div><div class="line">    header(<span class="string">'Date:'</span>. date(<span class="string">'D, d M Y H:i:s'</span>, time()<span class="number">-10</span>).<span class="string">' GMT'</span>);</div><div class="line">    header(<span class="string">'Last-Modified:'</span>. date(<span class="string">'D, d M Y H:i:s'</span>, time()<span class="number">-20000</span>).<span class="string">' GMT'</span>);</div><div class="line">    <span class="keyword">echo</span> <span class="number">123</span>;</div><div class="line">    <span class="keyword">exit</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//算法: expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</span></div><div class="line"><span class="comment">// 此处浏览器判断 date + 30 - 10 , 由于date是当前时间, 所以差不多有20秒的过期时间</span></div><div class="line"><span class="comment">// 如果是Age:0的话, date + 30 -0, 由于date是当前时间, 所以差不多有30秒的过期时间</span></div><div class="line"><span class="comment">// 如果是Date-10, Age:0的话, date-10 + 30 -10, 所以差不多有10秒的过期时间 (不太好抓, 不过肯定是10秒过期)</span></div><div class="line"></div><div class="line"><span class="comment">//发现只有超时之后, 才会显示出下面的信息   (firefox准确无误地实现,在未过期之前, 是不会带If-Modified-Since头去请求的)</span></div><div class="line"><span class="keyword">echo</span> <span class="number">456789</span>;<span class="keyword">die</span>;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="缓存副本过期后的”再验证”"><a href="#缓存副本过期后的”再验证”" class="headerlink" title="缓存副本过期后的”再验证”"></a>缓存副本过期后的”再验证”</h2><ol>
+<li><p>原始服务器上的内容可能会发生变化, 缓存要不时地对其进行检测, 看看自己保存的副本是否仍是服务器上最新的副本。这种”新鲜度检测”就被称为HTTP再验证(revalidation)。</p>
+</li>
+<li><p>虽然缓存可以在任意时刻, 以任意的频率从对副本进行再验证, 但是由于缓存中通常会包含数百万的文档, 而且网络带宽是很珍贵的, 所以大部分缓存<strong>只有在客户端发起请求</strong>,并且<strong>副本旧的足以需要再次检测的时候</strong>, 才会对副本进行再验证。</p>
+</li>
+<li><p><strong>副本旧的足以需要再次检测的时候?</strong> 也就是缓存副本的过期时间已到!!</p>
+</li>
+<li><p>但是仅仅是已缓存文档过期了, 还不能说明该过期文档和原始服务器上的文档有实际的区别, 这只是意味着<strong>到时间进行再验证了</strong>！</p>
+</li>
+</ol>
+<h3 id="再验证命中-缓慢命中"><a href="#再验证命中-缓慢命中" class="headerlink" title="再验证命中(缓慢命中)"></a>再验证命中(缓慢命中)</h3><ol>
+<li><p>缓存对副本进行再验证时, 会向原始服务器发送一个小的再验证请求。如果发现内容没有变化, 服务器会以一个小的 <code>304 Not Modified</code> 进行响应。<br> 只要缓存知道副本仍然有效, 就会再次将副本标识为暂时新鲜的, 并将副本提供给客户端, 这被称为<strong>再验证命中(revalidate hit)</strong> 或 <strong>缓慢命中(slow hit)</strong>。<br> <img src="/img/http/revalidate-hit-01.png" width="300/"></p>
+</li>
+<li><p><strong>当然, 这种方式确实还是需要与原始服务器进行核对, 所以会比单纯的缓存命中要慢, 但是它并没有从服务器中获取对象数据, 所以要比缓存未命中要快一些。</strong></p>
+</li>
+</ol>
+<h3 id="再验证未命中"><a href="#再验证未命中" class="headerlink" title="再验证未命中"></a>再验证未命中</h3><ol>
+<li><p>缓存对副本进行再验证时, 会向原始服务器发送一个小的再验证请求。如果缓存发现服务器对象与已缓存副本不同, 则服务器会向客户端发送一条普通的, 带有完整内容的 <code>HTTP 200 OK</code> 响应;<br> <img src="/img/http/revalidate-not-hit-01.png" width="300/"></p>
+</li>
+<li><p><strong>当然, 这种方式确实不仅需要与原始服务器进行核对, 而且会从服务器中获取对象数据, 所以理论上貌似要比缓存未命中要慢一些, 但其实差不多</strong></p>
+</li>
+</ol>
+<h3 id="再验证-–-服务器对象被删除"><a href="#再验证-–-服务器对象被删除" class="headerlink" title="再验证 – 服务器对象被删除"></a>再验证 – 服务器对象被删除</h3><p>如果再验证发现服务器对象已经被删除, 服务器就回送一个 <code>404 Not Found</code> 响应, 缓存也会将其副本删除。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p><strong>成功的再验证 比 缓存未命中 要快</strong><br><strong>失败的再验证 几乎和 缓存未命中 速度一样</strong></p>
+<h3 id="再验证依靠-–-条件方法"><a href="#再验证依靠-–-条件方法" class="headerlink" title="再验证依靠 – 条件方法"></a>再验证依靠 – 条件方法</h3><ol>
+<li><p>为了有效地进行再验证, HTTP定义了一些特殊的请求, <strong>不用从服务器上获取整个对象, 就可以快速检测出内容是否是最新的</strong>。</p>
+</li>
+<li><p>HTTP的<code>条件方法</code>可以高效地实现再验证。<br> HTTP允许缓存向原始服务器发送一个 “条件GET”, 请求只有在服务器文档与缓存中现有的副本不同时, web服务器才会回送对象主体;<br> 通过这种方式, 将新鲜度检测和对象获取结合成了单个条件GET。<br> 向GET请求报文中添加一些特殊的<code>条件首部</code>, 就可以发起<code>条件GET</code>。</p>
+</li>
+<li><p>HTTP定义了5个条件请求首部, 对 <code>缓存再验证</code> 来说有用的2个首部是 <code>If-Mofified-Since</code> 和 <code>If-None-Match</code>, 所有的条件首部都以前缀<code>If-</code>开头。<br> <img src="/img/http/revalidate-01.png" width="500/"></p>
+</li>
+</ol>
+<h3 id="If-Modified-Since-Date-再验证"><a href="#If-Modified-Since-Date-再验证" class="headerlink" title="If-Modified-Since:Date 再验证"></a>If-Modified-Since:Date 再验证</h3><ol>
+<li><p>最常见的缓存再验证首部是 <code>请求首部字段 If-Modified-Since</code>, <code>If-Modified-Since</code>再验证请求通常被称为IMS请求。</p>
+<ul>
+<li>如果自If-Modified-Since指定日期之后, 文档被修改了, <code>If-Modified-Since</code> 条件就为真, 通常GET就会成功执行, <strong>携带新首部的新文档</strong>会被返回给缓存, 新首部除了其他信息之外, 还包含了一个新的过期日期;</li>
+<li>如果自If-Modified-Since指定日期之后, 文档没被修改, <code>If-Modified-Since</code> 条件就为假, 会向客户端<strong>返回一个小的 304 Not Modified响应报文</strong>, 为了提高有效性, <strong>不会返回文档主体</strong>。<br>这些首部是放在响应中返回的, 但是只会返回哪些需要在源端更新的首部, 比如, Content-Type首部通常不会被修改, 所以通常不需要发送。一般会发送一个新的过期日期。</li>
+</ul>
+</li>
+<li><p>请求首部字段<code>If-Modified-Since</code> 和 实体首部字段<code>Last-Modified</code> 配合工作。</p>
+<ul>
+<li>原始服务器会将最后的修改日期附加到所提供的文档上去, 当缓存要对已缓存文档进行再验证时, 就会包含一个<code>If-Modified-Since</code>首部, 其中携带有最后修改已缓存副本的日期: <code>If-Modified-Since:&lt;cached last-modified date&gt;</code></li>
+<li>如果在此期间原始服务器文档被修改了, 最后的修改日期就会不同了, 这样<code>If-Modified-Since</code>条件就为真, 原始服务器就会回送新的文档；</li>
+<li>否则, 服务器会注意到缓存的最后修改日期与服务器文档当前的最后修改日期相符合, 则会返回一个 <code>304 Not Modified</code> 响应。</li>
+</ul>
+</li>
+<li><p>小结: 如果在验证发现原始服务器内容未发生变化, If-Modified-Since在验证会返回304响应, 如果发生了变化, 就返回带有新主体的200响应。</p>
+</li>
+</ol>
+<h3 id="If-None-Match-实体标签再验证"><a href="#If-None-Match-实体标签再验证" class="headerlink" title="If-None-Match 实体标签再验证"></a>If-None-Match 实体标签再验证</h3><h4 id="实体标签"><a href="#实体标签" class="headerlink" title="实体标签"></a>实体标签</h4><ol>
+<li><p>有些情况下使用最后修改日期进行再验证是不够的:</p>
+<ul>
+<li>有些文档可能会被周期性地重写, 但实际包含的数据常常却是一样的。<strong>尽管内容没有发生变化, 但是修改日期会发生变化</strong>。</li>
+<li>有些文档可能内容被修改了, 但是<strong>所做的修改并不重要</strong>, 不需要让世界范围内的缓存都重装数据(比如对拼写或注释的修改)。<br>  <strong>涉及到弱验证器</strong></li>
+<li>有些服务器无法准确地判定其页面的最后修改日期。</li>
+<li>有些服务器提供的文档会在亚秒间隙发生变化(比如,实时监视器), 对这些服务器来说, <strong>以秒为粒度的修改日期可能就不够用了</strong>。</li>
+</ul>
+</li>
+<li><p>为了解决上述问题, HTTP有一个被称为 <code>实体标签(ETag)</code> 的 <code>版本标识符</code>, 这个实体标签是附加到文档上的任意标签, 标签可能可能包含了文档序列号或版本名, 或是文档内容的校验及其他指纹信息。<br> 当对文档进行修改时, 可以修改文档的实体标签来说明这个新的版本。这样, 如果实体标签被修改了, 缓存就可以用 <code>If-None-Match</code> 条件首部来GET文档的新副本了。</p>
+</li>
+<li><p>假设缓存中有一个文档已经过(Expires:, Cache-Control:max-age)期, 或者其他配置导致需要再次验证, 如果缓存中有一个实体标签为v2.6, 则它会与原始服务器进行再验证:</p>
+<ul>
+<li>如果服务器上的实体标签已经发生了变化(可能变成了v3.0, 和v2.6不再匹配), 服务器则会在一个 <code>200 OK</code> 响应中返回新的内容以及新的Etag标签 ;</li>
+<li>如果标签仍然与原始服务器标签匹配, 则会返回一条304 Not Modified响应;</li>
+</ul>
+</li>
+</ol>
+<h4 id="弱验证器"><a href="#弱验证器" class="headerlink" title="弱验证器"></a>弱验证器</h4><ol>
+<li><p>只要原始服务器内容发生变化, 则实体标签就会变化, 正常情况下, 强验证器就会对比失败, 导致服务器会在一个 <code>200 OK</code> 响应中返回新的内容以及新的Etag标签;</p>
+</li>
+<li><p>有时, 服务器希望对文档进行一些不重要的修改, 并且不需要使所有已缓存副本都失效<br>HTTP1.1支持的”弱验证器”, 就允许对一些内容做修改, 此时服务器会用前缀 <code>W/</code> 来标识弱验证器。</p>
+</li>
+<li><p>不管相关的实体值以何种方式发生了变化, 强实体标签都要发生变化, 而相关实体在语义上发生了比较重要的变化时, 弱实体标签页应该发生变化。</p>
+</li>
+</ol>
+<h3 id="实体标签-和-最近修改日期"><a href="#实体标签-和-最近修改日期" class="headerlink" title="实体标签 和 最近修改日期"></a>实体标签 和 最近修改日期</h3><blockquote>
+<p>如果服务器回送了一个实体标签, HTTP/1.1客户端就必须使用实体标签验证器。<br>如果服务器只回送了一个Last-Modified值, 客户端就可以使用 If-Modified-Since 验证。<br>如果实体标签和最后修改日期都提供了, 客户端就应该使用这两种再验证方案, 这样HTTP1.0和HTTP1.1换成你都可以正确响应了。</p>
+</blockquote>
+<p>除非HTTP/1.1原始服务器无法生成实体标签验证器, 否则就应该发送一个出去, 如果使用弱实体标签有优势的话, 发送的可能就是个弱实体标签, 而不是强实体标签。而且最好同时发送一个最近修改值。<br>如果HTTP/1.1缓存或服务器受到的请求既带有 If-Modified-Since, 又带有实体标签条件首部, <strong>那么只有这两个条件都满足时, 才能返回 <code>304 Not Modified</code> 响应</strong>(也就是两个都做验证)。</p>
+<h2 id="缓存状态码-200-和-304"><a href="#缓存状态码-200-和-304" class="headerlink" title="缓存状态码 200 和 304"></a>缓存状态码 200 和 304</h2><p>参考P176: HTTP没有为用户提供一种手段来区分响应是缓存命中的, 还是访问原始服务器得到的。<strong>在这两种情况下, 响应状态码都是200OK</strong>, 说明响应有主体部分。</p>
+<ul>
+<li>你从public公共缓存中可能直接得到未过期的资源, 此时会返回 200 ok;</li>
+<li>你也可能到公共缓存后发现要再验证, 此时发现文本已变更, 服务器也会返回 200 ok;</li>
+</ul>
+<ol>
+<li><p>缓存命中(这里指的是公共的代理缓存命中) 返回 <code>200 ok</code></p>
+<ul>
+<li>客户端第一次访问资源, 浏览器和服务器之间有代理服务器, 这样的话, 由于这个代理服务器是个公共代理, 所以里面可能已经有了服务器响应的资源副本, 所以代理服务器会直接响应 资源副本和200 ok给客户端;<br><img src="/img/http/cdn-public-proxy-200.png" width="600/"></li>
+</ul>
+</li>
+<li><p>访问原始服务器, 返回 <code>200 ok</code></p>
+<ul>
+<li>浏览器和服务器之间没有代理服务器, 这样的话, 客户端第一次请求资源, 则服务器直接 响应 200 ok 和 资源对象 给客户端;</li>
+<li>客户端多次访问资源, 浏览器和服务器之间有代理服务器, 但是由于种种原因, 缓存需要再验证, 并且结果发现<strong>再验证未命中</strong>, 则服务器会响应资源对象和200 ok给代理缓存, 然后代理再响应”服务器响应的资源和200 ok副本”给客户端;</li>
+</ul>
+</li>
+<li><p>浏览器直接取的自己的本地缓存, 返回 <code>200 ok (from disk/memory cache)</code><br> 此处由于浏览器之前缓存了 代理缓存服务器cdn 上的缓存副本, <strong>所以浏览器缓存的副本和上面cdn代理缓存的副本一样</strong>(age缓存时间都没变), 只不过会标注”已缓存”来表示没有响应主体部分<br> <img src="/img/http/cdn-private-200.png" width="600/"></p>
+</li>
+<li><p><code>304 Not Modified</code> 是缓存和服务器多确认了一次缓存有效性检测后, 发现<strong>缓存再验证命中</strong>, 但是用的还是缓存。</p>
+</li>
+<li><p>小结: <code>304 Not Modified</code> 比 <code>再验证未命中返回200 OK</code> 快, 但是比 <code>private缓存命中返回 200 ok from disk/memory cache</code> 慢;</p>
+</li>
+<li><p>参考 http权威指南176页</p>
+</li>
+</ol>
+<h2 id="公有和私有缓存"><a href="#公有和私有缓存" class="headerlink" title="公有和私有缓存"></a>公有和私有缓存</h2><ol>
+<li><p>通用首部字段(general header fields)<code>Cache-Control</code>有两个缓存响应指令: <code>public</code> 和 <code>private</code> </p>
+</li>
+<li><p>缓存可以是<code>单个用户专用的</code>, 也可以是<code>数千名用户共享的</code> ;</p>
+</li>
+</ol>
+<ul>
+<li>专用缓存被称为<code>私有缓存(private cache)</code>, 私有缓存是个人的缓存, 包含了单个用户最常用的页面 ;</li>
+<li>共享缓存被称为<code>公有缓存(public cache)</code>, 公有缓存包含了某个用户团体常用页面 ;</li>
+</ul>
+<h3 id="私有缓存"><a href="#私有缓存" class="headerlink" title="私有缓存"></a>私有缓存</h3><p>私有缓存不需要很大的动力或存储空间, 这样就可以将其做的很小, 很便宜。<br>Web浏览器中就有内建的私有缓存—大多数浏览器都会将常用文档缓存在你个人电脑的磁盘和内存中, 并且允许用户去配置缓存的大小和各种设置;</p>
+<h3 id="公有缓存"><a href="#公有缓存" class="headerlink" title="公有缓存"></a>公有缓存</h3><ol>
+<li>公有缓存是特殊的共享代理服务器, 被称为缓存代理服务器(caching proxy server), 或者更常见地被称为代理缓存(proxy cache)。</li>
+<li>代理缓存会从自己本地缓存中给用户提供缓存资源, 或者代表用户与服务器进行联系。公有缓存会接受来自多个用户的访问, 所以通过它可以更好地减少冗余流量。</li>
+<li>如下图: </li>
+</ol>
+<ul>
+<li>每个客户端都会重复地访问一个(还不在私有缓存中的)新的”热门”文档。每个私有缓存都要获取同一份文档, 这样它就会多次穿过网络。</li>
+<li>而使用共享的公有缓存时, 对于这个流行的对象, 缓存只要取一次就行了, 它会用共享的副本为所有的请求服务, 以降低网络流量。<br><img src="/img/http/private-public-cache-01.png" width="416/"></li>
+</ul>
+<h2 id="缓存控制"><a href="#缓存控制" class="headerlink" title="缓存控制"></a>缓存控制</h2><ol>
+<li><p>客户端可以用 <code>Cache-Control</code> 请求首部来 <strong>强化</strong> 或 <strong>放松</strong> 对过期时间的限制。</p>
+<ul>
+<li>有些应用程序对文档的新鲜度要求很高, 对于这些应用程序, 客户端可以用 Cache-Control 首部使过期时间更严格;</li>
+<li>另一方面, 为了提高性能, 可靠性或开支的一种折中方式, 客户端可能会放松新鲜度要求;</li>
+</ul>
+</li>
+<li><p>如下对 <code>Cache-Control</code> 的请求指令进行了小结:<br><img src="/img/http/cache-control-01.png" width="600/"><br><a href="https://stackoverflow.com/questions/33818854/what-is-difference-between-max-age-and-max-stale-in-cache-control-mechanism" target="_blank" rel="external">HTTP Cache-Control: max-age和max-stale=s的区别</a></p>
+</li>
+<li><p><code>Pagma:no-cache</code> 和 <code>Cache-Control:no-cache</code> 一样, 不过是为了兼容HTTP/1.0;</p>
+</li>
+</ol>
+<p>参考:<br>HTTP权威指南 – 第七章 缓存<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616#section-4.5" target="_blank" rel="external">RFC 2616</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" target="_blank" rel="external">MDN Web docs</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&title=《HTTP - 缓存》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&title=《HTTP - 缓存》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - 缓存》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/12/10/2017-12-10-HTTP-04-Connection-Keep-Alive/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTP - 并行连接, 持久连接</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/27/2017-12-27-mysql_transaction-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL(INNODB引擎)高并发事务问题及解决方案</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&title=《HTTP - 缓存》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&title=《HTTP - 缓存》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - 缓存》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/11/2017-12-11-HTTP-05-cache/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aMY7DMAwFUd//0k4dBJHnk3YhelQFCyfSc8ElRR4HXudykSfXv/z73eOJJUOGjG0Z5IgnWLWD/vtL+vpkyJDxBgbZnmyzfp5HTn42GTJkyCDPEEwnl5MhQ4aMGiOFpTwZMmTI6G9cS/44/sFaXIYMGRsyOoXl058f6W/IkCFjK8YZrnWjMQ2mnZN8/ZoMGTJGM3iAI0lbWhKvBzXS88iQIWM2o59xpUGWNETj48qQIWMoo6asDU/wRJMPcHxluDJkyBjKWF/6dzbg5WuaPgZvV4YMGSMYadKWlq+dxDG41JMhQ8ZoBgl2pFhNL8JqgTgOvjJkyBjE4IMOPClMXw0pay9eogwZMoYy7i1W09YCTygvLulkyJAxmlFLxWqwPqY1ZiFDhoxBjH5zMS1l03v+1qWbDBkytmXwbidvJNSu7Xgpi4YtZMiQMYKRhs60VdD5bnxfKEOGjNEMHmrT8YhayyHeS4YMGaMZnUZjmkSiLDVsDBSnRWTIkLEto1Og1hqZJJQHL0uGDBkvY5x4pUleLRCj0CxDhowXMGrhLw2UnaTzYi8ZMmQMZZzh4o3JWmguUmXIkDGakZaLaQLHr9JI8UySRRkyZExl8CBb24aE5lr6KEOGjLcxSHHbaUaSYYvW2IcMGTJkgGdI7pm+mgAsQ4YMGTcNhJGkkwf32wKuDBkyNmHwZgD/aT5skaaPMmTIeBsjDaP9YrXWQuj8G5AhQ8a2jA8runRyxG32MAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
