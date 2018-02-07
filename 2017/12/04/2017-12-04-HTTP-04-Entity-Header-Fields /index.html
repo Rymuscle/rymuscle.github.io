@@ -20,24 +20,25 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。  具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
+    <meta name="description" content="主要讲解一些实体首部字段的相关知识 前言1.要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片以及软件程序等。只要你能叫出名字, HTTP就可以传送。2.更重要的是: HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理 3.具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP -- 实体和编码 (400, 411, 206)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。  具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
+<meta property="og:description" content="主要讲解一些实体首部字段的相关知识 前言1.要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片以及软件程序等。只要你能叫出名字, HTTP就可以传送。2.更重要的是: HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理 3.具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/15-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/Content-Encoding-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/accept-encoding-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/content-range_accept_ranges.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/A-IM--226.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/A-IM_IM_Delta-Base.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/IANA.png">
-<meta property="og:updated_time" content="2018-02-07T05:48:05.000Z">
+<meta property="og:updated_time" content="2018-02-07T11:34:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP -- 实体和编码 (400, 411, 206)">
-<meta name="twitter:description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。  具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
+<meta name="twitter:description" content="主要讲解一些实体首部字段的相关知识 前言1.要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片以及软件程序等。只要你能叫出名字, HTTP就可以传送。2.更重要的是: HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理 3.具体来说, HTTP要确保它所承载的”货物”满足以下条件:  符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/http/15-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -166,7 +167,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP响应报文-–-报文实体"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTP响应报文 – 报文实体</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP-1-1-的几个基本实体首部字段"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">HTTP/1.1 的几个基本实体首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体主体"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">实体主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实体首部Content-Length的必要性"><span class="post-toc-number">3.</span> <span class="post-toc-text">实体首部Content-Length的必要性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#检测截尾"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">检测截尾</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-Length与持久连接"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Content-Length与持久连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定实体长度的规则"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">确定实体长度的规则</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实体摘要"><span class="post-toc-number">4.</span> <span class="post-toc-text">实体摘要</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-MD5-数据的校验和"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Content-MD5 数据的校验和</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#媒体类型和字符集简介-Content-Type"><span class="post-toc-number">5.</span> <span class="post-toc-text">媒体类型和字符集简介(Content-Type)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内容编码-Content-Encoding"><span class="post-toc-number">6.</span> <span class="post-toc-text">内容编码 - Content-Encoding</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内容编码过程"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">内容编码过程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内容编码类型"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">内容编码类型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Accept-Encoding首部"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">Accept-Encoding首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#传输编码"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">传输编码</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#范围请求-断点续传"><span class="post-toc-number">7.</span> <span class="post-toc-text">范围请求 - 断点续传</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#accept-ranges-content-range-range"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">accept-ranges, content-range, range</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">7.2.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-–-差异编码"><span class="post-toc-number">8.</span> <span class="post-toc-text">扩展 – 差异编码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#详解"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">详解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结-1"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实例操控-差异生成器-差异应用器"><span class="post-toc-number">8.3.</span> <span class="post-toc-text">实例操控,差异生成器,差异应用器</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#报文实体"><span class="post-toc-number">2.</span> <span class="post-toc-text">报文实体</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体首部字段"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">实体首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体主体"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">实体主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Content-Length"><span class="post-toc-number">3.</span> <span class="post-toc-text">Content-Length</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#检测截尾"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">检测截尾</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-Length与持久连接"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Content-Length与持久连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定实体长度的规则"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">确定实体长度的规则</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实体摘要"><span class="post-toc-number">4.</span> <span class="post-toc-text">实体摘要</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-MD5-数据的校验和"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Content-MD5 数据的校验和</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#媒体类型和字符集简介"><span class="post-toc-number">5.</span> <span class="post-toc-text">媒体类型和字符集简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内容编码-Content-Encoding"><span class="post-toc-number">6.</span> <span class="post-toc-text">内容编码 - Content-Encoding</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内容编码过程"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">内容编码过程</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内容编码类型"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">内容编码类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Content-Encoding"><span class="post-toc-number">6.2.1.</span> <span class="post-toc-text">Content-Encoding</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Accept-Encoding"><span class="post-toc-number">6.2.2.</span> <span class="post-toc-text">Accept-Encoding</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#传输编码与分块编码"><span class="post-toc-number">7.</span> <span class="post-toc-text">传输编码与分块编码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#范围请求-断点续传"><span class="post-toc-number">8.</span> <span class="post-toc-text">范围请求 - 断点续传</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#accept-ranges-content-range-range"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">accept-ranges, content-range, range</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-–-差异编码"><span class="post-toc-number">9.</span> <span class="post-toc-text">扩展 – 差异编码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#详解"><span class="post-toc-number">9.1.</span> <span class="post-toc-text">详解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结-1"><span class="post-toc-number">9.2.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实例操控-差异生成器-差异应用器"><span class="post-toc-number">9.3.</span> <span class="post-toc-text">实例操控,差异生成器,差异应用器</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -188,11 +189,8 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <p><strong>主要讲解一些实体首部字段的相关知识</strong></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li>要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。</li>
-<li><p>HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。</p>
-</li>
-<li><p>具体来说, <strong>HTTP要确保它所承载的”货物”满足以下条件</strong>:</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>1.要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片以及软件程序等。只要你能叫出名字, HTTP就可以传送。<br>2.更重要的是: HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理</p>
+<p>3.具体来说, <strong>HTTP要确保它所承载的”货物”满足以下条件</strong>:</p>
 <ul>
 <li><strong>符合用户的需要</strong>(基于<code>Accept</code>系列的内容协商首部)</li>
 <li><strong>在网络上可以快速有效地传输</strong>(通过<code>范围请求</code>, <code>差异编码</code>以及<code>其他数据压缩方法</code>)</li>
@@ -201,70 +199,40 @@
 <li><strong>可以被正确地解包</strong>(比如:通过<code>Content-Length</code>首部和<code>Content-Encoding</code>首部)。</li>
 <li><strong>是最新的</strong>(通过实体验证码和缓存过期控制, 这一点第7章 缓存相关知识点已经介绍过)</li>
 </ul>
-</li>
-<li><p>可以看到, HTTP要保证它所承载的货物完好的话, 就得用到各种首部字段和实体首部字段;</p>
-</li>
-</ol>
-<h2 id="HTTP响应报文-–-报文实体"><a href="#HTTP响应报文-–-报文实体" class="headerlink" title="HTTP响应报文 – 报文实体"></a>HTTP响应报文 – 报文实体</h2><ol>
-<li><p>HTTP响应报文中的<strong>报文实体</strong>由 <code>实体首部</code> 和 <code>实体主体</code> 组成; </p>
+<p>可以看到, HTTP要保证它所承载的货物完好的话, 会用到各种首部字段;</p>
+<h2 id="报文实体"><a href="#报文实体" class="headerlink" title="报文实体"></a>报文实体</h2><p>1.HTTP响应报文中的报文实体由 <code>实体首部</code> 和 <code>实体主体</code> 组成; </p>
 <ul>
 <li>实体首部和实体主体之间以一个空白的CRLF行分隔;</li>
 <li>实体主体中是原始数据, 所以需要 <code>实体首部</code> 来描述数据的意义;(例如 <code>Content-Type实体首部</code> 告诉我们数据的媒体格式…)。</li>
 </ul>
-</li>
-<li><p>如下一个简单的HTTP响应报文:<br> <img src="/img/http/15-01.png" width="350"></p>
-</li>
-<li><p>上面报文中:</p>
+<p>2.如下一个简单的HTTP响应报文:<br>    <img src="/img/http/15-01.png" width="350"></p>
+<p>3.上面报文中:</p>
 <ul>
-<li><strong>实体首部Content-Type:text/plain指出这是一个纯文本文档</strong></li>
-<li><strong>Content-Length首部指出它只有18个字节</strong></li>
-<li><strong>一行空白(CRLF)把首部字段同主体的开始部分分隔开来</strong></li>
+<li>实体首部<code>Content-Type:text/plain</code>指出这是一个纯文本文档</li>
+<li><code>Content-Length</code>首部指出它只有18个字节</li>
+<li>一行空白(CRLF)把首部字段 和 主体的开始部分分隔开来</li>
 </ul>
+<h3 id="实体首部字段"><a href="#实体首部字段" class="headerlink" title="实体首部字段"></a>实体首部字段</h3><ul>
+<li>HTTP/1.1几个基本实体首部字段如下<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Content-Type : 实体中所承载对象的类型</div><div class="line">Content-Length 所传送实体主体的长度或大小</div><div class="line">Content-Encoding 对象数据所做的任意变换(比如,压缩)</div><div class="line">Content-Location 一个备用位置, 请求时可通过它获得对象</div><div class="line">Content-Range 如果这是部分实体, 这个首部说明它是整体的哪个部分</div><div class="line">Content-MD5 实体主体内容的校验和</div><div class="line">Last-Modified 所传输内容在服务器上创建或最后修改的日期时间</div><div class="line">Expires 实体数据将要失效的日期时间（为了兼容HTTP/1.0, 1.1中可以使用Cache-Control:max-age=..）</div><div class="line">Allow 该资源所允许的各种请求方法, 例如：GET和HEAD</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<h3 id="HTTP-1-1-的几个基本实体首部字段"><a href="#HTTP-1-1-的几个基本实体首部字段" class="headerlink" title="HTTP/1.1 的几个基本实体首部字段"></a>HTTP/1.1 的几个基本实体首部字段</h3><ol>
-<li>Content-Type 实体中所承载对象的类型</li>
-<li>Content-Length 所传送实体主体的长度或大小</li>
-<li>Content-Encoding 对象数据所做的任意变换(比如,压缩)</li>
-<li>Content-Location 一个备用位置, 请求时可通过它获得对象</li>
-<li>Content-Range 如果这是部分实体, 这个首部说明它是整体的哪个部分</li>
-<li>Content-MD5 实体主体内容的校验和</li>
-<li>Last-Modified 所传输内容在服务器上创建或最后修改的日期时间</li>
-<li>Expires 实体数据将要失效的日期时间（为了兼容HTTP/1.0, 1.1中可以使用Cache-Control:max-age=..）</li>
-<li>Allow 该资源所允许的各种请求方法, 例如：GET和HEAD</li>
-</ol>
-<h3 id="实体主体"><a href="#实体主体" class="headerlink" title="实体主体"></a>实体主体</h3><ol>
-<li>实体主体就是原始数据, 所以需要实体首部告诉我们如何去解释数据(content-type是图像还是文本,content-encoding是已被压缩或者重编码)</li>
-<li>实体首部字段最后一以一个空白的CRLF行结束, 随后就是实体主体的原始内容, 不管内容是什么, 文本或二进制,文档或图像,压缩的或未压缩的, 英语,法语或日语,都紧随这个CRLF之后。</li>
-</ol>
-<h2 id="实体首部Content-Length的必要性"><a href="#实体首部Content-Length的必要性" class="headerlink" title="实体首部Content-Length的必要性"></a>实体首部Content-Length的必要性</h2><ol>
-<li><p><code>实体首部 Content-Length</code> 指示出报文主中实体主体的字节大小。</p>
-</li>
-<li><p><strong>注意</strong>: 如果对文本文件进行了gzip压缩的话, Content-Length首部就是压缩后的大小, 而不是原始大小(后面在介绍<a href="http://localhost:4000/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields%20/#%E5%86%85%E5%AE%B9%E7%BC%96%E7%A0%81%E8%BF%87%E7%A8%8B" target="_blank" rel="external">内容编码过程</a>的时候还会提及)。某些HTTP应用程序在这方面搞错了, 发送的是数据编码之前的大小, 这会导致严重的错误, 尤其是用在持久连接上。</p>
-</li>
-<li><p>除非使用了<code>分块编码</code>, 否则 Content-Length 实体首部就是带有实体主体的报文必须使用的; (当然, 短连接自然也用不上content-length, 它依靠关闭连接就可以知道实体的大小)</p>
+</ul>
+<h3 id="实体主体"><a href="#实体主体" class="headerlink" title="实体主体"></a>实体主体</h3><p>1.实体主体就是原始数据, 所以需要<code>实体首部</code>告诉我们如何去解释数据(content-type是图像还是文本,content-encoding是已被压缩或者重编码)<br>2.实体首部字段最后一以一个空白的CRLF行结束, 随后就是实体主体的原始内容, 不管内容是什么, 文本或二进制,文档或图像,压缩的或未压缩的, 英语,法语或日语,都紧随这个CRLF之后。</p>
+<h2 id="Content-Length"><a href="#Content-Length" class="headerlink" title="Content-Length"></a>Content-Length</h2><p>1.<code>实体首部 Content-Length</code> 指示出报文主中实体主体的字节大小。</p>
+<p>2.<strong>注意</strong>: 如果对文本文件进行了gzip压缩的话, Content-Length首部就是压缩后的大小, 而不是原始大小(后面在介绍<a href="http://localhost:4000/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields%20/#%E5%86%85%E5%AE%B9%E7%BC%96%E7%A0%81%E8%BF%87%E7%A8%8B" target="_blank" rel="external">内容编码过程</a>的时候还会提及)。<br>    某些HTTP应用程序在这方面搞错了, 发送的是数据编码之前的大小, 这会导致严重的错误, 尤其是用在持久连接上。</p>
+<p>3.除非使用了<code>分块编码</code>, 否则 <code>Content-Length</code> 实体首部就是带有实体主体的报文必须使用的; </p>
 <ul>
+<li>当然, 短连接自然也用不上content-length, 它依靠关闭连接就可以知道实体的大小</li>
 <li><strong>使用Content-Length首部是为了能够检测出服务器崩溃而导致的<code>报文截尾</code>;</strong></li>
 <li><strong>并对共享持久连接的多个报文进行正确分段</strong>。</li>
 </ul>
-</li>
-</ol>
-<h3 id="检测截尾"><a href="#检测截尾" class="headerlink" title="检测截尾"></a>检测截尾</h3><ol>
-<li><p>HTTP早期版本采用<code>关闭连接</code>的办法来划定报文的结束; 但是, 没有 Content-Length 的话, 客户端无法区分到底是报文结束而导致正常的连接关闭, 还是在报文传输中由于服务器崩溃而导致的连接关闭; <strong>所以客户端需要 Content-Length 实体首部, 来监测报文截尾</strong></p>
-</li>
-<li><p><code>报文截尾的问题</code> 对<strong>缓存服务器</strong>来说尤其严重, 如果缓存服务器收到被截尾的报文却没有识别出截尾的话, 它可能会存储不完整的内容并多次使用它来提供服务。<br> <strong>缓存代理服务器通常不会为没有显示 Content-Length 首部的HTTP主体做缓存</strong>, 以此来减小缓存截尾报文的风险。</p>
-</li>
-</ol>
-<h3 id="Content-Length与持久连接"><a href="#Content-Length与持久连接" class="headerlink" title="Content-Length与持久连接"></a>Content-Length与持久连接</h3><ol>
-<li><p><strong>Content-Length首部对于持久链接是必不可少的</strong>: 如果响应通过持久连接传送, 就可能有另一条HTTP响应紧随其后。客户端通过Content-Length首部就可以知道报文在何处结束,下一条报文从何处开始。因为连接是持久的, 客户端无法依赖连接关闭来判断报文的结束。<strong>所以需要有Content-Length来说明实体大小</strong></p>
-</li>
-<li><p>有一种情况, <strong>使用持久连接可以没有Content-Length首部</strong>，即<code>采用分块编码(chunked encoding)时</code>。</p>
+<h3 id="检测截尾"><a href="#检测截尾" class="headerlink" title="检测截尾"></a>检测截尾</h3><p>1.HTTP早期版本采用<code>关闭连接</code>的办法来划定报文的结束; 但是, 没有 Content-Length 的话, 客户端无法区分到底是报文结束而导致正常的连接关闭, 还是在报文传输中由于服务器崩溃而导致的连接关闭; <strong>所以客户端需要 Content-Length 实体首部, 来监测报文截尾</strong></p>
+<p>2.<code>报文截尾的问题</code> 对<strong>缓存服务器</strong>来说尤其严重, 如果缓存服务器收到被截尾的报文却没有识别出截尾的话, 它可能会存储不完整的内容并多次使用它来提供服务。<br>    <strong>缓存代理服务器通常不会为没有显示 Content-Length 首部的HTTP主体做缓存</strong>, 以此来减小缓存截尾报文的风险。</p>
+<h3 id="Content-Length与持久连接"><a href="#Content-Length与持久连接" class="headerlink" title="Content-Length与持久连接"></a>Content-Length与持久连接</h3><p>1.<strong>Content-Length首部对于持久链接是必不可少的</strong>: 如果响应通过持久连接传送, 就可能有另一条HTTP响应紧随其后。客户端通过Content-Length首部就可以知道报文在何处结束,下一条报文从何处开始。因为连接是持久的, 客户端无法依赖连接关闭来判断报文的结束。<strong>所以需要有Content-Length来说明实体大小</strong></p>
+<p>2.有一种情况, <strong>使用持久连接可以没有Content-Length首部</strong>，即<code>采用分块编码(chunked encoding)时</code>。</p>
 <ul>
 <li>在分块编码的情况下, 数据是分为一系列的块来发送的, <strong>每块都有大小说明</strong>。</li>
 <li>哪怕服务器在生成首部的时候不知道整个实体的大小(通常是因为实体是动态生成的), 仍然可以使用分块编码传输若干已知大小的块。 </li>
 </ul>
-</li>
-</ol>
 <h3 id="确定实体长度的规则"><a href="#确定实体长度的规则" class="headerlink" title="确定实体长度的规则"></a>确定实体长度的规则</h3><ul>
 <li>Content-Length如果存在并且有效的话，则必须和消息内容的传输长度完全一致;</li>
 <li>如果存在Transfer-Encoding(重点是chunked), 则在header中不能有Content-Length，有也会被忽视;</li>
@@ -288,7 +256,8 @@
 <li><p>作为对HTTP的扩展, 在IETF的草案中提出了其他一些摘要算法。这些扩展建议增加新的 <code>Want-Digest</code> 首部, 它允许客户端说明期望响应中使用的摘要类型，并使用质量值来建议多种摘要算法并说明优先顺序;</p>
 </li>
 </ol>
-<h2 id="媒体类型和字符集简介-Content-Type"><a href="#媒体类型和字符集简介-Content-Type" class="headerlink" title="媒体类型和字符集简介(Content-Type)"></a>媒体类型和字符集简介(Content-Type)</h2><ol>
+<h2 id="媒体类型和字符集简介"><a href="#媒体类型和字符集简介" class="headerlink" title="媒体类型和字符集简介"></a>媒体类型和字符集简介</h2><p><strong>Content-Type</strong></p>
+<ol>
 <li><p><code>Content-Type</code>实体首部字段说明了实体主体的MIME类型。MIME类型是标椎化的名字, 用于说明作为运载实体的基本媒体类型(比如:HTML文件, Microsoft Word文档或是MPEG视频等)。客户端应用程序使用MIME类型来解释和处理其内容。</p>
 </li>
 <li><p><code>Content-Type</code> 的值就是标椎化的MIME类型, 都在互联网号码分配机构IANA中注册。MIME类型由一个主媒体类型(比如:text,image或audio等)后面跟一条斜线一级一个子类型组成, 子类型用于进一步描述媒体类型。</p>
@@ -300,18 +269,18 @@
 </li>
 <li><p>文本的字符编码</p>
 <ul>
-<li><p><code>Content-Type</code>首部还支持可选的参数来进一步说明内容的类型。charset(字符集)参数就是个例子, 它说明把实体中的比特转换为文本文件中的字符的方法:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Content-type:text/html;charset=iso-8859-4</div></pre></td></tr></table></figure>
-<p>后面会详细讨论<a href="">字符集</a></p>
-</li>
+<li><code>Content-Type</code>首部还支持可选的参数来进一步说明内容的类型。charset(字符集)参数就是个例子, 它说明把实体中的比特转换为文本文件中的字符的方法:<code>Content-type:text/html;charset=iso-8859-4</code></li>
+<li>后面会详细讨论<a href="">字符集</a></li>
 </ul>
 </li>
 </ol>
 <h2 id="内容编码-Content-Encoding"><a href="#内容编码-Content-Encoding" class="headerlink" title="内容编码 - Content-Encoding"></a>内容编码 - Content-Encoding</h2><p>HTTP应用程序有时在发送之前需要对内容进行编码。例如会把很大的HTML文档发送给通过慢速连接连上来的客户端之前, 服务器可能会对它进行<strong>压缩</strong>。</p>
-<pre><code>- 这样有助于减少传输实体的时间。
-- 服务器还可以把内容搅乱或加密,以此来防止未经授权的第三方看到文档的内容。
-- 这种类型的编码是在发送方(可能是服务器也可能是代理缓存,下篇文章会看到 &quot;缓存同时也是进行内容转码的好地方&quot; 这句话)应用到内容之上的,当内容经过内容编码之后, 编好码的数据就放在实体主体中,像往常一样发送给接收方。 
-</code></pre><h3 id="内容编码过程"><a href="#内容编码过程" class="headerlink" title="内容编码过程"></a>内容编码过程</h3><ol>
+<ul>
+<li>这样有助于减少传输实体的时间。</li>
+<li>服务器还可以把内容搅乱或加密,以此来防止未经授权的第三方看到文档的内容。</li>
+<li>这种类型的编码是在发送方(可能是服务器也可能是代理缓存,下篇文章会看到 “缓存同时也是进行内容转码的好地方” 这句话)应用到内容之上的,当内容经过内容编码之后, 编好码的数据就放在实体主体中,像往常一样发送给接收方。 <h3 id="内容编码过程"><a href="#内容编码过程" class="headerlink" title="内容编码过程"></a>内容编码过程</h3></li>
+</ul>
+<ol>
 <li>网站服务器生成原始响应报文, 其中有原始的 <code>Content-Type</code> 和 <code>Content-Length</code>首部;</li>
 <li><p>内容编码服务器(也可能就是原始的服务器或下行的代理)创建编码后的报文。(编码后的报文Content-Type仍然和编码前相同, 但是Content-Length可能不同,比如主体被压缩了)。</p>
 </li>
@@ -325,8 +294,22 @@
 </li>
 <li>可以参考下图:<br> <img src="/img/http/Content-Encoding-01.png" width="500"></li>
 </ol>
-<h3 id="内容编码类型"><a href="#内容编码类型" class="headerlink" title="内容编码类型"></a>内容编码类型</h3><h3 id="Accept-Encoding首部"><a href="#Accept-Encoding首部" class="headerlink" title="Accept-Encoding首部"></a>Accept-Encoding首部</h3><p>###<br>未完待续</p>
-<h3 id="传输编码"><a href="#传输编码" class="headerlink" title="传输编码"></a>传输编码</h3><p><a href="http://localhost:4000/2017/11/30/2017-11-30-HTTP-04-General-Header-Fields/#Transfer-Encoding" target="_blank" rel="external">已经在通用首部字段中进行过介绍了</a></p>
+<h3 id="内容编码类型"><a href="#内容编码类型" class="headerlink" title="内容编码类型"></a>内容编码类型</h3><h4 id="Content-Encoding"><a href="#Content-Encoding" class="headerlink" title="Content-Encoding"></a><code>Content-Encoding</code></h4><ol>
+<li>HTTP定义了一些标准的内容编码类型, 并允许用扩展的形式添加更多的编码。由互联网号码分配机构(IANA)对各种编码进行标准化, 它给每个内容编码算法分配了唯一的代号。</li>
+<li><code>Content-Encoding</code> 实体响应首部就用这些标准化的代号来说明编码时使用的算法;</li>
+<li><p>编码算法(Content-Encoding值)如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">gzip　　表明实体采用GNU zip编码</div><div class="line">compress 表明实体采用Unix的文件压缩程序</div><div class="line">deflate　　表明实体是用zlib的格式压缩的</div><div class="line">identity　　表明没有对实体进行编码。当没有Content-Encoding header时， 就默认为这种情况</div></pre></td></tr></table></figure>
+<p> gzip, compress, 以及deflate编码都是无损压缩算法，用于减少传输报文的大小，不会导致信息损失。 其中gzip通常效率最高， 使用最为广泛。</p>
+</li>
+</ol>
+<h4 id="Accept-Encoding"><a href="#Accept-Encoding" class="headerlink" title="Accept-Encoding"></a><code>Accept-Encoding</code></h4><ol>
+<li>为了避免服务器使用客户端不支持的编码方式, 客户端就把自己支持的内容编码方式列表放在请求的 <code>Accept-Encoding</code> 首部里面发出去。</li>
+<li>如果HTTP请求中没有包含 <code>Accept-Encoding</code> 首部, 服务器可以假设客户端能够接受任何编码方式(等价于发送<code>Accept-Encoding:*</code>)</li>
+<li>如下展示了HTTP事务中对 <code>Accept-Encoding</code> 请求首部的使用<br> <img src="/img/http/accept-encoding-01.png" width="500"></li>
+<li><code>Accept-Encoding</code> 字段包含用逗号分隔的的支持编码的列表, 下面是一些例子 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Accept-Encoding: compress,gzip</div><div class="line">Accept-Encoding: </div><div class="line">Accept-Encoding: *</div><div class="line">Accept-Encoding: compress;q=0.5, gzip;q=1.0</div><div class="line">Accept-Encoding: gzip;q=1.0, identity;q=0.5, *;q=0</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="传输编码与分块编码"><a href="#传输编码与分块编码" class="headerlink" title="传输编码与分块编码"></a>传输编码与分块编码</h2><p><a href="http://localhost:4000/2017/11/30/2017-11-30-HTTP-04-General-Header-Fields/#Transfer-Encoding" target="_blank" rel="external">已经在通用首部字段中进行过介绍了</a><br>更多参考P375</p>
 <h2 id="范围请求-断点续传"><a href="#范围请求-断点续传" class="headerlink" title="范围请求 - 断点续传"></a>范围请求 - 断点续传</h2><h3 id="accept-ranges-content-range-range"><a href="#accept-ranges-content-range-range" class="headerlink" title="accept-ranges, content-range, range"></a>accept-ranges, content-range, range</h3><ol>
 <li><p>HTTP允许客户端只请求文档的一部分或者说某个范围。假设你正通过慢速的调制解调器连接下载最新的热门软件, 已经下了四分之三, 忽然因为一个网络故障, 连接中断了。你已经为等待下载完成耽误了很久, 而现在被迫要全部重头再来, 那多倒霉。</p>
 </li>
