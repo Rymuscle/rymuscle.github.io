@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-request.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-response.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/via-01.png">
-<meta property="og:updated_time" content="2018-02-05T07:37:04.000Z">
+<meta property="og:updated_time" content="2018-02-07T05:23:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP - General Header Fields">
 <meta name="twitter:description" content="通用首部字段 general-header Cache-Control Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令  缓存响应指令    更多参考HTTP - 缓存  immutable属于缓存控制的一个扩展属性, http://www">
@@ -231,14 +231,15 @@
 <li><p>未完待续…</p>
 </li>
 </ol>
-<h2 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h2><ol>
+<h2 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h2><p><strong>传输编码</strong></p>
+<ol>
 <li>该通用首部字段规定了传输报文主体时采用的编码方式;</li>
 <li>HTTP/1.1的传输编码方式仅对分块传输编码有效, 即只能设置为 <code>Transfer-Encoding:chunked</code>;</li>
 <li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="external">MDN参考</a>;</li>
 <li><code>Content-Encoding</code> 和 <code>Transfer-Encoding</code> 二者经常会结合来用, 其实就是针对 Transfer-Encoding 的分块再进行 Content-Encoding压缩;</li>
-<li>更多请参考<a href=""></a></li>
 </ol>
-<h3 id="对比-请求首部字段Accept-encoding"><a href="#对比-请求首部字段Accept-encoding" class="headerlink" title="对比 请求首部字段Accept-encoding"></a>对比 <strong>请求首部字段Accept-encoding</strong></h3><ol>
+<h3 id="对比-请求首部字段Accept-encoding"><a href="#对比-请求首部字段Accept-encoding" class="headerlink" title="对比 请求首部字段Accept-encoding"></a>对比 <strong>请求首部字段Accept-encoding</strong></h3><p><strong>期望内容编码</strong></p>
+<ol>
 <li><p>请求首部字段Accept-encoding是将客户端用户代理(浏览器)所<strong>支持的内容编码方式</strong>(通常是某种压缩算法) 及 <strong>内容编码方式的优先级顺序</strong>, 通知给服务器;</p>
 <ul>
 <li>通过内容协商, 服务端会选择一个客户端支持的方式, 使用并在 响应报文的实体首部字段 <code>Content-Encoding</code> 中通知客户端服务器选择了哪种内容编码方式;</li>
@@ -268,7 +269,8 @@
 <li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding" target="_blank" rel="external">MDN参考</a></p>
 </li>
 </ol>
-<h3 id="对比-实体首部字段Content-encoding"><a href="#对比-实体首部字段Content-encoding" class="headerlink" title="对比 实体首部字段Content-encoding"></a>对比 <strong>实体首部字段<code>Content-encoding</code></strong></h3><ol>
+<h3 id="对比-实体首部字段Content-encoding"><a href="#对比-实体首部字段Content-encoding" class="headerlink" title="对比 实体首部字段Content-encoding"></a>对比 <strong>实体首部字段<code>Content-encoding</code></strong></h3><p><strong>内容编码</strong></p>
+<ol>
 <li>实体首部字段’Content-encoding’会告诉客户端, 服务器对实体的主体部分选用的内容编码方式, </li>
 <li>内容编码方式是指在不丢失实体信息的前提下所进行的压缩, 参考 <code>请求首部字段Accept-encoding</code> 所建议给服务器的编码方式:<ul>
 <li>gzip</li>
@@ -385,7 +387,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">&lt;HTTP权威指南&gt;学习--第15章 实体和编码 (400,411,266)</h4>
+        <h4 class="title">&lt;HTTP权威指南&gt;学习--第15章 实体和编码 (400, 411, 206)</h4>
       </a>
     </div>
   
