@@ -20,22 +20,22 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="主要讲解一些实体首部字段的相关知识 HTTP响应报文HTTP响应报文由 实体首部 和 实体主体 组成;   实体首部和实体主体之间以一个空白的CRLF行分隔; 实体主体中是原始数据, 所以需要实体首部来描述数据的意义;(例如 Content-Type实体首部 告诉我们数据是不是已经被压缩或者重编码)。  Content-Length实体首部 实体首部 Content-Length 指示出报文主中实">
+    <meta name="description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。 具体来说, HTTP要确保它锁承载的”货物”满足以下条件:   符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="&lt;HTTP权威指南&gt;学习--第15章 实体和编码 (400,411,266)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="主要讲解一些实体首部字段的相关知识 HTTP响应报文HTTP响应报文由 实体首部 和 实体主体 组成;   实体首部和实体主体之间以一个空白的CRLF行分隔; 实体主体中是原始数据, 所以需要实体首部来描述数据的意义;(例如 Content-Type实体首部 告诉我们数据是不是已经被压缩或者重编码)。  Content-Length实体首部 实体首部 Content-Length 指示出报文主中实">
+<meta property="og:description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。 具体来说, HTTP要确保它锁承载的”货物”满足以下条件:   符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/content-range_accept_ranges.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/A-IM--226.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/A-IM_IM_Delta-Base.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/IANA.png">
-<meta property="og:updated_time" content="2018-02-06T14:35:03.000Z">
+<meta property="og:updated_time" content="2018-02-07T02:09:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="&lt;HTTP权威指南&gt;学习--第15章 实体和编码 (400,411,266)">
-<meta name="twitter:description" content="主要讲解一些实体首部字段的相关知识 HTTP响应报文HTTP响应报文由 实体首部 和 实体主体 组成;   实体首部和实体主体之间以一个空白的CRLF行分隔; 实体主体中是原始数据, 所以需要实体首部来描述数据的意义;(例如 Content-Type实体首部 告诉我们数据是不是已经被压缩或者重编码)。  Content-Length实体首部 实体首部 Content-Length 指示出报文主中实">
+<meta name="twitter:description" content="主要讲解一些实体首部字段的相关知识 前言 要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。 HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。 具体来说, HTTP要确保它锁承载的”货物”满足以下条件:   符合用户的需要(基于Accept系列的内容协商首部) 在网络上可以快速有效地传输(通过范">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/http/content-range_accept_ranges.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -164,7 +164,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP响应报文"><span class="post-toc-number">1.</span> <span class="post-toc-text">HTTP响应报文</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Content-Length实体首部"><span class="post-toc-number">2.</span> <span class="post-toc-text">Content-Length实体首部</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#检测截尾"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">检测截尾</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#错误的Content-Length"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">错误的Content-Length</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-Length与持久连接"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">Content-Length与持久连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定实体长度的规则"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">确定实体长度的规则</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实体摘要"><span class="post-toc-number">3.</span> <span class="post-toc-text">实体摘要</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-MD5"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Content-MD5</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Content-Range范围请求"><span class="post-toc-number">4.</span> <span class="post-toc-text">Content-Range范围请求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#差异编码"><span class="post-toc-number">5.</span> <span class="post-toc-text">差异编码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#详解"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">详解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下表总结了差异编码使用的首部"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">下表总结了差异编码使用的首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实例操控-差异生成器-差异应用器"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">实例操控,差异生成器, 差异应用器</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP响应报文"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTP响应报文</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Content-Length实体首部"><span class="post-toc-number">3.</span> <span class="post-toc-text">Content-Length实体首部</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#检测截尾"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">检测截尾</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#错误的Content-Length"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">错误的Content-Length</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-Length与持久连接"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">Content-Length与持久连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#确定实体长度的规则"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">确定实体长度的规则</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实体摘要"><span class="post-toc-number">4.</span> <span class="post-toc-text">实体摘要</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Content-MD5"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Content-MD5</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Content-Range范围请求"><span class="post-toc-number">5.</span> <span class="post-toc-text">Content-Range范围请求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#差异编码"><span class="post-toc-number">6.</span> <span class="post-toc-text">差异编码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#详解"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">详解</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下表总结了差异编码使用的首部"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">下表总结了差异编码使用的首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实例操控-差异生成器-差异应用器"><span class="post-toc-number">6.5.</span> <span class="post-toc-text">实例操控,差异生成器, 差异应用器</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -186,6 +186,20 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <p><strong>主要讲解一些实体首部字段的相关知识</strong></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片一级软件程序等。只要你能叫出名字, HTTP就可以传送。</li>
+<li>HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理。</li>
+<li>具体来说, HTTP要确保它锁承载的”货物”满足以下条件:</li>
+</ol>
+<ul>
+<li><strong>符合用户的需要</strong>(基于Accept系列的内容协商首部)</li>
+<li><strong>在网络上可以快速有效地传输</strong>(通过范围请求, 差异编码以及其他数据压缩方法)</li>
+<li><strong>完整到达, 未被篡改</strong>(通过传输编码首部和Content-MD5校验和首部)</li>
+<li><strong>可以被正确识别</strong>(比如:通过Content-Type首部说明媒体格式, Content-Language首部说明语言), 以便浏览器和其他客户端能正确处理内容。</li>
+<li><strong>可以被正确地解包</strong>(比如:通过Content-Length首部和Content-Encoding首部)。</li>
+<li><strong>是最新的</strong>(通过实体验证码和缓存过期控制, 这一点第7章 缓存相关知识点已经介绍过)</li>
+</ul>
+<hr>
 <h2 id="HTTP响应报文"><a href="#HTTP响应报文" class="headerlink" title="HTTP响应报文"></a>HTTP响应报文</h2><p>HTTP响应报文由 <code>实体首部</code> 和 <code>实体主体</code> 组成; </p>
 <ul>
 <li>实体首部和实体主体之间以一个空白的CRLF行分隔;</li>
