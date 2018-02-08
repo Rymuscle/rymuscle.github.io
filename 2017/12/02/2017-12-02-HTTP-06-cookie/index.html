@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP -- cookie机制 (401) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP -- cookie机制 (401)">
+<meta property="og:url" content="http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/authorization-01.png">
+<meta property="og:updated_time" content="2018-02-08T03:52:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP -- cookie机制 (401)">
+<meta name="twitter:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/authorization-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar1.png">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP -- cookie机制 (401)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HTTP -- cookie机制 (401)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-02T02:27:36.000Z" itemprop="datePublished" class="page-time">
+  2017-12-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP识别用户的几种技巧"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTP识别用户的几种技巧</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP首部"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">HTTP首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端IP地址"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">客户端IP地址</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用户登录"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用户登录</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#胖URL"><span class="post-toc-number">3.</span> <span class="post-toc-text">胖URL</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017-12-02-HTTP-06-cookie"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP -- cookie机制 (401)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-02 10:27:36" datetime="2017-12-02T02:27:36.000Z"  itemprop="datePublished">2017-12-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>HTTP最初是一个 <strong>匿名</strong>, <strong>无状态</strong> 的请求/响应协议;<br> 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。</p>
+</li>
+<li><p>对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。<br> 因为现代的Web站点希望能够提供个性化的接触, 它希望对连接另一端的用户有更多的了解, 并且能在用户浏览页面时对其进行跟踪。</p>
+</li>
+<li><p>比如, Amazon.com可以通过以下几种方式实现站点的个性化:</p>
+<ul>
+<li>个性化问候 (专门为用户生成的欢迎词和页面内容, 使购物体验更加个性化)</li>
+<li><strong>有的放矢的推荐</strong> (通过了解客户的兴趣, 推荐一些他们认为客户可能会感兴趣的商品。还可以在临近客户生日或其他一些重要日子的时候提供生日特定的商品)</li>
+<li>管理信息的存档 (站点可以将用户的如地址,信用卡信息保存在一个数据库中, 只要他们识别出用户, 就可以使用该用户存档的管理信息, 而不是用户在购物时一次次地填写繁琐的地址和信用卡信息)</li>
+<li>记录会话 (HTTP事务是无状态的, 每条请求/响应都是独立进行的。而很多Web站点希望能在用户与站点交互的过程中, 比如使用在线购物车的时候, 构建增量状态。要做到这一功能, <strong>Web站点就需要有一种方式来区分来自不同用户的HTTP事务</strong>)</li>
+</ul>
+</li>
+<li><p>简而言之就是: HTTP无状态协议, 希望识别每个来自不同用户的HTTP事务; </p>
+</li>
+</ol>
+<h2 id="HTTP识别用户的几种技巧"><a href="#HTTP识别用户的几种技巧" class="headerlink" title="HTTP识别用户的几种技巧"></a>HTTP识别用户的几种技巧</h2><ol>
+<li>承载用户身份信息的HTTP首部</li>
+<li>客户端IP地址跟踪, 通过用户的IP按地址对其进行识别</li>
+<li>用户登录, 用认证方式来识别用户</li>
+<li>胖URL, 一种在URL中嵌入识别信息的技术</li>
+<li>cookie, 一种功能强大且高效的持久身份识别技术</li>
+</ol>
+<h3 id="HTTP首部"><a href="#HTTP首部" class="headerlink" title="HTTP首部"></a>HTTP首部</h3><ol>
+<li><p>下面给出了7种最常见的用来承载用户相关信息的HTTP首部, 此处先讨论前3个, 后面4个首部用于更高级的识别技术</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Form请求首部字段, 用户的Email地址</div><div class="line">User-Agent请求首部字段, 用户的浏览器软件</div><div class="line">Refer请求首部字段, 用户是从这个页面上依照连接跳转过来的</div><div class="line">Authorization请求首部字段, 用户名和密码(稍后讨论)</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>Form请求首部字段</code>: 包含了用户的Email地址, 每个用户都有不同的Email地址, 所以在理想情况下, 可以将这个地址作为可行的源端来识别用户。</p>
+<ul>
+<li>但是由于担心那些不讲道德的服务器会搜索这些E-mail地址, 用于垃圾邮件的发送, 所以<strong>很少有浏览器会发送Form首部</strong>;</li>
+<li>实际上Form首部是由自动化机器人或蜘蛛发送的, 这样在出现问题时, 网管还有个地方可以发送愤怒的投诉邮件??</li>
+</ul>
+</li>
+<li><p><code>User-Agent请求首部字段</code>：可以将用户所用的浏览器的相关信息告知服务器, 包括程序的名称和版本, 通常还包含操作系统的相关信息。</p>
+<ul>
+<li>要实现定制内容与特定的浏览器及其属性间的良好互操作时, 这个首部是非常有用的, 但<strong>它并没有为识别特定的用户提供太多有意义的帮助</strong>。</li>
+</ul>
+</li>
+<li><p><code>Referer请求首部字段</code>: 提供了用户来源页面的URL</p>
+<ul>
+<li>Referer首部自身并不能完全标识用户, 但它确实说明了用户之前访问过哪个页面。</li>
+<li>通过它可以更好地理解用户的浏览器行为, 以及用户的兴趣所在, 比如, 如果你是从一个篮球网站抵达某个Web服务器的,这个Web服务器可能会推断你是个篮球迷。</li>
+</ul>
+</li>
+<li><p>总之, <code>Form</code>，<code>User-Agent</code>, <code>Referer</code> 这几个请求首部字段都<strong>不足以实现可靠的识别特定用户</strong>。</p>
+</li>
+</ol>
+<h3 id="客户端IP地址"><a href="#客户端IP地址" class="headerlink" title="客户端IP地址"></a>客户端IP地址</h3><ol>
+<li>通常HTTP首部并不提供客户端的IP地址, 但Web服务器可以通过其他方法找到另一端的IP地址。</li>
+<li>但是, 使用客户端IP地址来识别用户存在很多缺点, 限制了将其作为用户识别技术的效能:<ul>
+<li>客户端IP地址描述的是所用的机器，而不是用户。如果多个用户共享同一台计算机，就无法对其进行区分了；</li>
+<li>很多因特网服务提供商都会在用户登录时为其动态分配IP地址。用户每次登录时，都会得到一个不同的地址，因此Web服务器不能假设IP地址可以在各登录会话之间标识用户；</li>
+<li>为了提高安全性，并对稀缺的地址资源进行管理，很多用户都是通过网络地址转换(Network Address Translation, NAT)防火墙来浏览网络内容的。这些NAT设备隐藏了防火墙后面那些实际客户端的IP地址，将实际的客户端IP地址转换成了一个共享的防火墙IP地址和不同的端口号；</li>
+<li>HTTP代理和网关通常会打开一些新的、到原始服务器的TCP连接。<strong>Web服务器看到的将是代理服务器的IP地址，而不是客户端的</strong>。有些代理为了绕过这个问题会添加特殊的<code>Client-IP</code>或<code>X-Forwarded-For</code>扩展首部来保存原始的IP地址，但并不是所有的代理都支持这种行为</li>
+</ul>
+</li>
+</ol>
+<h3 id="用户登录"><a href="#用户登录" class="headerlink" title="用户登录"></a>用户登录</h3><ol>
+<li>Web服务器无需被动地根据用户的IP地址来猜测他的身份，它可以要求用户通过用户名和密码进行认证登录来显式地询问用户是谁。</li>
+<li><p>为了使Web站点的登录更加简便，HTTP中包含了一种内建机制，可以用 <code>www-Authenticate响应首部</code> 和 <code>Authorization请求首部</code> 向Web站点传送用户的相关信息。<br> 一旦登录，浏览器就可以不断地在每条发往这个站点的请求中发送这个登录信息了。这样，就总是有登录信息可用了</p>
+</li>
+<li><p>如果服务器希望在为用户提供对站点的访问之前，先行登录，可以向浏览器回送一条HTTP响应代码 <code>401 Login Required</code>。<br> 然后，浏览器会显示一个登录对话框，并用<code>Authorization首部</code>在下一条对服务器的请求中提供这些信息</p>
+</li>
+<li><p>如下图<br> <img src="/img/http/authorization-01.png" width="600/"></p>
+<ul>
+<li>在图a中，浏览器对站点www.joes-hardware.com发起了一条请求；</li>
+<li>站点并不知道这个用户的身份，因此在图b中，服务器会返回 <code>401 Login Required HTTP响应码</code>，并添加 <code>www-Authentication响应首部</code>，要求用户登录。<br>这样浏览器就会弹出一个登录对话框；<br>只要用户输入了用户名和密码(对其身份进行完整性检査)，浏览器就会重复原来的请求。这次它会添加一个 <code>Authorization请求首部</code>，说明用户名和密码。对用户名和密码进行加密，防止那些有意无意的网络观察者看到；</li>
+<li>现在，服务器已经知道用户的身份了，今后的请求要使用用户名和密码时，浏览器会自动将存储下来的值发送出去，甚至在站点没有要求发送的时候也经常会向其发送。浏览器在每次请求中都向服务器发送Authorization首部作为一种身份的标识，这样，只要登录一次，就可以在整个会话期间维持用户的身份了</li>
+<li>但是，登录多个Web站点是很繁琐的。从一个站点浏览到另一个站点的时候，需要在每个站点上登录。更糟的是，很可能要为不同的站点记住不同的用户名和密码。访问很多站点，喜欢的用户名可能已经被其他人用过了，而且有些站点为用户名和密码的长度和组成设置了不同的规则</li>
+</ul>
+</li>
+</ol>
+<h2 id="胖URL"><a href="#胖URL" class="headerlink" title="胖URL"></a>胖URL</h2>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar1.png" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&title=《HTTP -- cookie机制 (401)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&title=《HTTP -- cookie机制 (401)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP -- cookie机制 (401)》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/11/30/2017-11-30-HTTP-05-cache/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTP -- 缓存 (200, 304)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP -- 实体和编码 (400, 411, 206)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&title=《HTTP -- cookie机制 (401)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar1.png" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&title=《HTTP -- cookie机制 (401)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP -- cookie机制 (401)》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aQW7DMAwEwPz/0ynQa2t1V3IKSB6dCjuNNDkQpMjXK17v73X1ZPz25/Orz1+9vW1hYGBsy3gP19Whx58cI8dHT/b65TsxMDAewBgH2bsCaBJM830xMDAwxoEvYbSJZhusMTAwMNpAmRe9+V4YGBgYbRE7DpQrBWry5LZaHAMDY0NGG0D/8+8P9jcwMDA2YbynVluOrgfWP74TAwPjaMY4vUvi29zRVxLH4lgYGBhHMNoxiGSD/KItL33/SFgxMDAexphrEiRv59qf0U+AgYFxNCM/VsubG//K08S6a4qBgbEtI0kNk6u0e5sK7Z0/BgbG2Yy74tVckL23tYCBgfEERh5M2+GwcarXNkcxMDCexmjHIOYan22Azhucr/zQGBgYmzPy6602sVtPJaMSGgMD42hGm8a1oTY5bh5Y6xExDAyMIxjrgw55AM0P95EeLAYGxuaMtkxdudxv/ysK5RgYGEczVjLKpExdb4jedumGgYFxECMvL9t0ME/1cgAGBsYzGXOHXg+4cyX0ZG2NgYGxOePTR2zHOAoMBgbG0YyVVC8paFt8O3KBgYFxNuNdrrY0nRuQrYtYDAyMoxltmFsZ0Vjfq73sw8DAOImxEmTnmpR5ylj8QBgYGA9grAfZdpBiLhBf/gQYGBgYU6lhWwAn13b1TSEGBsbDGO2oa7T9FBgDA+OZjKSInUvyVsYsPlKLY2BgbMhoL+vz5/mFWhvcb2hhYmBg7MH4ApLoLLpkCM43AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
