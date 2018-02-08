@@ -20,20 +20,21 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="前言 HTTP/1.1 中实现的 method，见RFC2616, 有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现; 《图解http协议》中LINK,UNLINK已经被http1.1废弃;   规范中虽然是上面那样定义的,">
+    <meta name="description" content="常见Method简要分类 HTTP/1.1 中实现的 method  见RFC2616  可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT    RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现;  《图解http协议》中LINK,UNLINK已经被http1.1废弃">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP - 请求Method">
 <meta property="og:url" content="http://blog.renyimin.com/2017/11/30/2017-11-30-HTTP-03-Method/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 HTTP/1.1 中实现的 method，见RFC2616, 有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现; 《图解http协议》中LINK,UNLINK已经被http1.1废弃;   规范中虽然是上面那样定义的,">
+<meta property="og:description" content="常见Method简要分类 HTTP/1.1 中实现的 method  见RFC2616  可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT    RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现;  《图解http协议》中LINK,UNLINK已经被http1.1废弃">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/method-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/postman-http-method.png">
-<meta property="og:updated_time" content="2018-02-05T02:01:42.000Z">
+<meta property="og:updated_time" content="2018-02-08T02:04:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP - 请求Method">
-<meta name="twitter:description" content="前言 HTTP/1.1 中实现的 method，见RFC2616, 有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现; 《图解http协议》中LINK,UNLINK已经被http1.1废弃;   规范中虽然是上面那样定义的,">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/http/postman-http-method.png">
+<meta name="twitter:description" content="常见Method简要分类 HTTP/1.1 中实现的 method  见RFC2616  可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT    RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现;  《图解http协议》中LINK,UNLINK已经被http1.1废弃">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/method-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -161,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简要分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">简要分析</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常见Method简要分类"><span class="post-toc-number">1.</span> <span class="post-toc-text">常见Method简要分类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PUT"><span class="post-toc-number">2.</span> <span class="post-toc-text">PUT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#POST"><span class="post-toc-number">3.</span> <span class="post-toc-text">POST</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PATCH-对比PUT"><span class="post-toc-number">4.</span> <span class="post-toc-text">PATCH(对比PUT)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HEAD"><span class="post-toc-number">5.</span> <span class="post-toc-text">HEAD</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GET"><span class="post-toc-number">6.</span> <span class="post-toc-text">GET</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OPTIONS"><span class="post-toc-number">7.</span> <span class="post-toc-text">OPTIONS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CONNECT"><span class="post-toc-number">8.</span> <span class="post-toc-text">CONNECT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TRACE"><span class="post-toc-number">9.</span> <span class="post-toc-text">TRACE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DELETE"><span class="post-toc-number">10.</span> <span class="post-toc-text">DELETE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PURGE"><span class="post-toc-number">11.</span> <span class="post-toc-text">PURGE</span></a></li></ol>
         </nav>
     </aside>
     
@@ -182,12 +183,18 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p>HTTP/1.1 中实现的 method，见<a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC2616</a>, 有: <code>OPTIONS</code>, <code>GET</code>, <code>HEAD</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p>
+            <h2 id="常见Method简要分类"><a href="#常见Method简要分类" class="headerlink" title="常见Method简要分类"></a>常见Method简要分类</h2><ol>
+<li><p>HTTP/1.1 中实现的 method</p>
 <ul>
-<li>RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在<a href="https://tools.ietf.org/html/rfc2068" target="_blank" rel="external">RFC 2068</a>中实现;</li>
-<li>《图解http协议》中LINK,UNLINK已经被http1.1废弃;</li>
+<li><p>见<a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">RFC2616</a><br><img src="/img/http/method-01.png" width="500"></p>
+</li>
+<li><p>可以看到有: <code>OPTIONS</code>, <code>GET</code>, <code>HEAD</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p>
+</li>
 </ul>
+</li>
+<li><p>RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在<a href="https://tools.ietf.org/html/rfc2068" target="_blank" rel="external">RFC 2068</a>中实现;</p>
+</li>
+<li><p>《图解http协议》中LINK,UNLINK已经被http1.1废弃;</p>
 </li>
 <li><p>规范中虽然是上面那样定义的, 但具体还要看不同应用各自是如何去实现的, 有些应用会完整实现, 有些还会扩展, 有些可能会实现一部分</p>
 <ul>
@@ -199,50 +206,53 @@
 </ul>
 </li>
 </ol>
-<h2 id="简要分析"><a href="#简要分析" class="headerlink" title="简要分析"></a>简要分析</h2><ol>
+<h2 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h2><ol>
 <li><p><code>PUT</code>: 对已有资源进行更新操作, 所以是 update 操作;</p>
+</li>
+<li><p>一个简单例子: 假设一个博客系统提供一个Web API(<a href="http://superblogging/blogs/post/{blog-name}" target="_blank" rel="external">http://superblogging/blogs/post/{blog-name}</a>), 可以使用PUT或者POST进行请求, HTTP的body部分就是博文内容，这是一个很简单的REST API例子。</p>
+</li>
+<li><p><strong>put和post有什么区别呢</strong>?</p>
 <ul>
-<li><strong>put和post有什么区别呢</strong>?<br>在HTTP中, PUT被定义为idempotent(幂等性)的方法，POST则不是，这是一个很重要的区别。<blockquote>
-<p>一个简单例子: 假设一个博客系统提供一个Web API(<a href="http://superblogging/blogs/post/{blog-name}" target="_blank" rel="external">http://superblogging/blogs/post/{blog-name}</a>), 可以使用PUT或者POST进行请求, HTTP的body部分就是博文内容，这是一个很简单的REST API例子。</p>
-</blockquote>
-</li>
-<li><p>我们应该用PUT还是POST？<br>取决于这个REST服务的行为是否是idempotent(幂等)的, 假如发送两个请求, 希望服务器端是产生两个博客帖子，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用POST方法。<br>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的。</p>
-</li>
-<li><p>虽然POST和PUT差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦</p>
-</li>
+<li>在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a>) 的方法，POST则不是，<strong>这是一个很重要的区别</strong></li>
+<li>我们应该用PUT还是POST？<br><strong>取决于这个REST服务的行为是否是idempotent(幂等)的</strong>, 假如发送两个请求, 希望服务器端是产生两个博客帖子，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用POST方法。<br><strong>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的。</strong></li>
+<li>虽然POST和PUT差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦</li>
 </ul>
 </li>
+</ol>
+<h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><ol>
 <li><p><code>POST</code>: 上面已经提过了, 所以<strong>POST是非幂等的</strong>;</p>
-<ul>
-<li>POST和PUT都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">再比如, 在我们的支付系统中，一个api的功能是创建收款金额二维码，它和金额相关，每个用户可以有多个二维码，如果连续调用则会创建新的二维码，这个时候就用POST</div><div class="line">还是那个例子，用户的账户二维码只和用户关联，而且是一一对应的关系，此时这个api就可以用PUT，因为每次调用它，都将刷新用户账户二维码</div></pre></td></tr></table></figure>
 </li>
+<li><p>POST和PUT都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的</p>
+</li>
+<li><p>再比如, 在我们的支付系统中，一个api的功能是创建收款金额二维码，它和金额相关，每个用户可以有多个二维码，如果连续调用则会创建新的二维码，这个时候就用POST<br>但如果用户的账户二维码只和用户关联，而且是一一对应的关系，此时这个api就可以用PUT，因为每次调用它，都将刷新用户账户二维码</p>
+</li>
+</ol>
+<h2 id="PATCH-对比PUT"><a href="#PATCH-对比PUT" class="headerlink" title="PATCH(对比PUT)"></a>PATCH(对比PUT)</h2><ol>
+<li><p>对已有资源的操作:用于资源的部分内容的更新, 例如更新某一个字段。具体比如说只更新用户信息的电话号码字段。<br> 而<code>PUT</code>则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变。</p>
+</li>
+<li><p>当资源不存在时: PATCH 可能会去创建一个新的资源, 这个意义上像是 saveOrUpdate 操作。</p>
+</li>
+<li><p>参考:</p>
+<ul>
+<li><a href="https://segmentfault.com/q/1010000005685904/" target="_blank" rel="external">https://segmentfault.com/q/1010000005685904/</a></li>
+<li><a href="https://unmi.cc/restful-http-patch-method/" target="_blank" rel="external">https://unmi.cc/restful-http-patch-method/</a></li>
+<li><a href="http://restcookbook.com/HTTP%20Methods/patch/" target="_blank" rel="external">http://restcookbook.com/HTTP%20Methods/patch/</a></li>
+<li><a href="https://tools.ietf.org/html/rfc5789" target="_blank" rel="external">https://tools.ietf.org/html/rfc5789</a></li>
 </ul>
 </li>
-<li><p><code>PATCH</code></p>
-<ul>
-<li>对已有资源的操作:用于资源的部分内容的更新, 例如更新某一个字段。具体比如说只更新用户信息的电话号码字段, 而PUT用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变。</li>
-<li>当资源不存在时: PATCH 可能会去创建一个新的资源, 这个意义上像是 saveOrUpdate 操作。</li>
-<li>参考:<br>  <a href="https://segmentfault.com/q/1010000005685904/" target="_blank" rel="external">https://segmentfault.com/q/1010000005685904/</a><br>  <a href="https://unmi.cc/restful-http-patch-method/" target="_blank" rel="external">https://unmi.cc/restful-http-patch-method/</a><br>  <a href="http://restcookbook.com/HTTP%20Methods/patch/" target="_blank" rel="external">http://restcookbook.com/HTTP%20Methods/patch/</a><br>  <a href="https://tools.ietf.org/html/rfc5789" target="_blank" rel="external">https://tools.ietf.org/html/rfc5789</a></li>
-</ul>
-</li>
-<li><p><code>HEAD</code>: HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回，而仅仅返回HTTP头信息。有的人可能觉得这个方法没什么用，其实不是这样的。想象一个业务情景: 欲判断某个资源是否存在, 我们通常使用GET, 但这里用HEAD则意义更加明确。</p>
-</li>
-<li><p><code>GET</code>: 比较简单, 直接获取资源;</p>
-</li>
-<li><p><code>OPTIONS</code>: 这个方法很有趣, 但极少使用。它用于获取当前URL所支持的方法。若请求成功, 则它会在HTTP头中包含一个名为”Allow”的头, 值是所支持的方法, 如”GET, POST”。<br> 之前[介绍跨域]时, <code>CORS方案 -- (not-so-simple request)</code>中的”预检”请求用的请求方法就是 <code>OPTIONS</code></p>
-</li>
-<li><p><code>CONNECT</code> : 要求用隧道协议连接代理, 如使用SSL</p>
-</li>
-<li><p><code>TRACE</code> : 书中谁比较少用</p>
+</ol>
+<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回，而仅仅返回HTTP头信息。<br>有的人可能觉得这个方法没什么用，其实不是这样的。想象一个业务情景: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>。</p>
+<h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>比较简单, 直接获取资源;</p>
+<h2 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h2><ol>
+<li>这个方法很有趣, 但极少使用。它用于获取当前URL所支持的方法。若请求成功, 则它会在HTTP头中包含一个名为 <code>Allow</code> 的头, 值是服务器所支持的方法, 如 GET, POST。<br> 另外, 之前[介绍跨域]时(稍后奉上,近期正在重新修正), <code>CORS方案 -- (not-so-simple request)</code>中的”预检”请求用的请求方法就是 <code>OPTIONS</code></li>
+</ol>
+<h2 id="CONNECT"><a href="#CONNECT" class="headerlink" title="CONNECT"></a>CONNECT</h2><p>要求用隧道协议连接代理, 如使用SSL</p>
+<h2 id="TRACE"><a href="#TRACE" class="headerlink" title="TRACE"></a>TRACE</h2><p>书中说比较少用</p>
 <blockquote>
 <p>TRACE_Method是HTTP（超文本传输）协议定义的一种协议调试方法，该方法会使服务器原样返回任意客户端请求的任何内容。<br>TRACE和TRACK是用来调试web服务器连接的HTTP方式。支持该方式的服务器存在跨站脚本漏洞，通常在描述各种浏览器缺陷的时候，把”Cross-Site-Tracing”简称为XST。攻击者可以利用此漏洞欺骗合法用户并得到他们的私人信息。（这个命令好怕怕，无知好吓人啊）<br>如何关闭Apache的TRACE请求<br>虚拟主机用户可以在.htaccess文件中添加如下代码过滤TRACE请求:<br>RewriteEngine on<br>RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)<br>RewriteRule .* - [F]<br>服务器用户在httpd.conf尾部添加如下指令后重启apache即可:<br>TraceEnable off </p>
 </blockquote>
-</li>
-<li><p><code>DELETE</code> : <a href="https://tools.ietf.org/html/rfc2616#section-9.7" target="_blank" rel="external">参考</a></p>
-</li>
-<li><p><code>PURGE</code> : 非规范中定义的方法</p>
-</li>
-</ol>
+<h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><p><a href="https://tools.ietf.org/html/rfc2616#section-9.7" target="_blank" rel="external">参考</a></p>
+<h2 id="PURGE"><a href="#PURGE" class="headerlink" title="PURGE"></a>PURGE</h2><p>非规范中定义的方法</p>
 
         </div>
 
