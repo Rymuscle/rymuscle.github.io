@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/authorization-01.png">
-<meta property="og:updated_time" content="2018-02-08T03:52:34.000Z">
+<meta property="og:updated_time" content="2018-02-08T07:18:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP -- cookie机制 (401)">
 <meta name="twitter:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP识别用户的几种技巧"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTP识别用户的几种技巧</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP首部"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">HTTP首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端IP地址"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">客户端IP地址</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用户登录"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用户登录</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#胖URL"><span class="post-toc-number">3.</span> <span class="post-toc-text">胖URL</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP识别用户的几种技巧"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTP识别用户的几种技巧</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#HTTP首部"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">HTTP首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端IP地址"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">客户端IP地址</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#用户登录"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">用户登录</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#胖URL"><span class="post-toc-number">3.</span> <span class="post-toc-text">胖URL</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#cookie"><span class="post-toc-number">4.</span> <span class="post-toc-text">cookie</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cookie的类型"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">cookie的类型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#工作机制"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">工作机制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cookie罐-客户端的状态"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">cookie罐: 客户端的状态</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不同的站点使用不同的cookie"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">不同的站点使用不同的cookie</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cookie的域属性"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">cookie的域属性</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#cookie路径属性"><span class="post-toc-number">5.</span> <span class="post-toc-text">cookie路径属性</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#cookie的成分"><span class="post-toc-number">6.</span> <span class="post-toc-text">cookie的成分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Cookies版本0"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">Cookies版本0</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Cookies版本1"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">Cookies版本1</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#版本1的cookie2请求首部和版本协商"><span class="post-toc-number">6.2.1.</span> <span class="post-toc-text">版本1的cookie2请求首部和版本协商</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#cookie与缓存"><span class="post-toc-number">7.</span> <span class="post-toc-text">cookie与缓存</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#cookie安全性和隐私"><span class="post-toc-number">8.</span> <span class="post-toc-text">cookie安全性和隐私</span></a></li></ol>
         </nav>
     </aside>
     
@@ -254,7 +254,94 @@
 </ul>
 </li>
 </ol>
-<h2 id="胖URL"><a href="#胖URL" class="headerlink" title="胖URL"></a>胖URL</h2>
+<h2 id="胖URL"><a href="#胖URL" class="headerlink" title="胖URL"></a>胖URL</h2><ol>
+<li><p>有些Web站点会<strong>为每个用户生成特定版本的URL来追踪用户的身份</strong>。通常, 会对真正的URL进行扩展, 在URL路径开始或结束的地方添加一些状态信息。<br> 用户浏览站点时, Web服务器会动态生成一些超链, 继续维护URL中的状态信息.</p>
+</li>
+<li><p>改动后包含了用户状态信息的URL被称为<code>胖URL(fat URL)</code>。下面是Amazon.com使用的一些胖URL实例, 每个URL后面都附加了一个用户特有的标识码, 在这个例子中就是002-1145265-8016838，这个标识码有助于在用户浏览商店内容时对其进行跟踪</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;a href=&quot;/exec/obidos/tg/browse/-/229220/ref=gr_gifts/002-1145265-8016838&quot;&gt;All Gifts&lt;/a&gt;&lt;br&gt;</div><div class="line">&lt;a href=&quot;/exec/obidos/wishlist/ref=gr_pll_/002-1145265-8016838&quot;&gt;Wish List&lt;/a&gt;&lt;br&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>可以通过胖URL将Web服务器上若干个独立的HTTP事务捆绑成一个”会话”或”访问”。<br> 用户首次访问这个Web站点时，会生成一个唯一的ID，用服务器可以识别的方式将这个ID添加到URL中去，然后服务器就会将客户端重新导向这个胖URL。<br> 不论什么时候，只要服务器收到了对胖URL的请求，就可以去査找与那个用户ID相关的所有增量状态(购物车、简介等)，然后重写所有的输出超链，使其成为胖URL，以维护用户的ID</p>
+</li>
+<li><p>可以在用户浏览站点时，用胖URL对其进行识别。但这种技术存在几个<strong>很严重的问题</strong>：</p>
+<ul>
+<li>丑陋的URL – 浏览器中显示的胖URL会给新用户带来困扰；</li>
+<li>无法共享URL – 胖URL中包含了与特定用户和会话有关的状态信息。如果将这个URL发送给其他人，可能就在无意中将个人信息都共享出去了；</li>
+<li>破坏缓存 – 为每个URL生成用户特有的版本就意味着不再有可供公共访问的URL需要缓存了；</li>
+<li>额外的服务器负荷 – 服务器需要重写HTML页面使URL变胖；</li>
+<li>逃逸口 – 用户跳转到其他站点或者请求一个特定的URL时，就很容易在无意中”逃离”胖URL会话, 只有当用户严格地追随预先修改过的链接时，胖URL才能工作。如果用户逃离此链接，就会丢失他的进展(可能是一个已经装满了东西的购物车)信息，得重新开始；</li>
+<li>在会话间是非持久的，除非用户收藏了特定的胖URL，否则用户退出登录时，所有的信息都会丢失</li>
+</ul>
+</li>
+</ol>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><ol>
+<li>cookie是当前识别用户，实现持久会话的最好方式。</li>
+<li>cookie最初是由网景公司开发的, 但现在所有主要的浏览器都支持它。</li>
+<li>cookie非常重要，而且它定义了一些新的HTTP首部。</li>
+<li>cookie的存在也影响了缓存，大多数缓存和浏览器都不允许对任何cookie的内容进行缓存。</li>
+</ol>
+<h3 id="cookie的类型"><a href="#cookie的类型" class="headerlink" title="cookie的类型"></a>cookie的类型</h3><ol>
+<li><p>可以笼统地将cookie分为两类：<code>会话cookie</code> 和 <code>持久cookie</code>。</p>
+<ul>
+<li><code>会话cookie</code> 是一种临时cookie，它记录了用户访问站点时的设置和偏好，用户退出浏览器时，会话cookie就被删除了。</li>
+<li><code>持久cookie</code> 的生存时间更长一些，它们存储在硬盘上，浏览器退出，计算机重启时它们仍然存在。</li>
+</ul>
+</li>
+<li><p>通常会用 <code>持久cookie</code> 维护某个用户会周期性访问的站点的配置文件或登录名。</p>
+</li>
+<li><p><code>会话cookie</code> 和 <code>持久cookie</code> 之间唯一的区别就是它们的过期时间。如果设置了 <code>Discard</code> 参数，或者没有设置 <code>Expires</code> 或 <code>Max-Age</code> 参数来说明扩展的过期时间，这个cookie就是一个会话cookie</p>
+</li>
+</ol>
+<h3 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h3><ol>
+<li><p>用户首次访问Web站点时, Web服务器对用户一无所知。Web服务器希望这个用户会再次回来，所以想给这个用户”拍上”一个独有的cookie, 这样以后它就可以识别出这个用户了。</p>
+</li>
+<li><p>cookie中包含了一个由 <code>名字=值(name=value)</code> 这样的信息构成的任意列表, 并通过 <code>Set-Cookie</code> 或 <code>Set-Cookie2</code> HTTP响应(扩展)首部将其贴到用户身上去</p>
+</li>
+<li><p>cookie中可以包含任意信息, 但它们通常都只包含一个服务器为了进行跟踪而产生的独特的识别码。比如, 服务器会将一个表示id=”34294”的cookie贴到用户上去。<br> 服务器可以用这个数字来查找服务器为其访问者积累的数据库信息(购物历史、地址信息等)</p>
+</li>
+<li><p>但是, cookie<strong>并不仅限于ID号</strong>, 很多Web服务器都会将信息直接保存在cookie中, 比如: <code>Cookie： name &quot;Brian Totty&quot;; phone=&quot;555-1212&quot;</code></p>
+</li>
+<li><p>浏览器会记住从服务器返回的 <code>Set-Cookie</code> 或 <code>Set-Cookie2</code> 首部中的cookie内容，并将cookie集存储在浏览器的cookie数据库中。将来用户返回同一站点时，浏览器会挑中那个服务器贴到用户上的那些cookie，并在一个cookie请求首部中将其传回去。</p>
+</li>
+</ol>
+<h3 id="cookie罐-客户端的状态"><a href="#cookie罐-客户端的状态" class="headerlink" title="cookie罐: 客户端的状态"></a>cookie罐: 客户端的状态</h3><ol>
+<li><p>cookie的基本思想就是让浏览器积累一组服务器特有的信息，每次访问服务器时都将这些信息提供给它。因为浏览器要负责存储cookie信息，所以此系统被称为<strong>客户端侧状态(client-side state)</strong>。</p>
+</li>
+<li><p>不同的浏览器会以不同的方式来存储cookie。（更多参考P218）</p>
+</li>
+</ol>
+<h3 id="不同的站点使用不同的cookie"><a href="#不同的站点使用不同的cookie" class="headerlink" title="不同的站点使用不同的cookie"></a>不同的站点使用不同的cookie</h3><ol>
+<li><p>浏览器内部的 <code>cookie罐</code> 中可以有成百上千个cookie，但<strong>浏览器不会将每个cookie都发送给所有的站点</strong>。实际上，它们通常只向每个站点发送2-3个cookie, 原因如下：</p>
+<ul>
+<li>对所有这些cookie字节进行传输会严重降低性能。浏览器实际传输的cookie字节数要比实际的内容字节数多; </li>
+<li>cookie中包含的是各服务器特有的名值对，所以对大部分站点来说，大多数cookie都是自己无法识别的无用数据;</li>
+<li><strong>将所有的cookie发送给所有站点会引发潜在的隐私问题，那些不信任的站点也会获得只想发给其他站点的信息</strong>;</li>
+</ul>
+</li>
+<li><p>总之，**浏览器只会向服务器发送由同一服务器产生的那些cookie。如：joes-hardware.com产生的cookie会被发送给joes-hardware.com, 不会发送给bobs-books.com 或 marys-movies.com</p>
+</li>
+<li><p>很多Web站点都会与第三方厂商达成协议，由其来管理广告。<br> 这些广告被做得像Web站点的一个组成部分，而且它们确实发送了持久cookie。<br> 用户访问另一个由同一广告公司提供服务的站点时，由于域是匹配的，浏览器就会再次回送早先设置的持久cookie。<br> 营销公司可以将此技术与Referer首部结合，暗地里构建一个用户档案和浏览习惯的详尽数据集。<br> 现代的浏览器都允许用户对隐私特性进行设置，以限制第三方cookie的使用</p>
+</li>
+</ol>
+<h3 id="cookie的域属性"><a href="#cookie的域属性" class="headerlink" title="cookie的域属性"></a>cookie的域属性</h3><ol>
+<li><p>产生cookie的服务器可以向 <code>Set-Cookie响应首部</code> 添加一个 <code>Domain属性</code> 来控制哪些站点可以看到那个cookie。</p>
+</li>
+<li><p>比如，下面的HTTP响应首部就是在告诉浏览器将 cookie user= “maryl7” 发送给域为 “.airtravelbargains.com” 的所有站点：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Set-cookie: user=&quot;maryl7&quot;; domain=&quot;airtravelbargains.com&quot;</div><div class="line">如果用户访问的是www.airtravelbargains.com </div><div class="line">或者 specials.airtravelbargains.com</div><div class="line">或任意以.airtravelbargains.com结尾的站点，</div><div class="line"></div><div class="line">下列Cookie首部都会被发布出去：</div><div class="line">Cookie: user=&quot;maryl7&quot;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="cookie路径属性"><a href="#cookie路径属性" class="headerlink" title="cookie路径属性"></a>cookie路径属性</h2><ol>
+<li><p>cookie规范甚至允许用户将cookie与部分Web站点关联起来, 可以通过 <code>Path属性</code> 来实现这一功能, 在这个属性列出的URL路径前缀下所有cookie都是有效的</p>
+</li>
+<li><p>例如, 某个Web服务器可能是由两个组织共享的，每个组织都有独立的cookie, 站点www.airtravelbargains.com可能会将部分Web站点用于汽车租赁<br> 比如，<a href="http://www.airtravelbargains.com`/autos/`" target="_blank" rel="external">http://www.airtravelbargains.com`/autos/`</a> – 用一个独立的cookie来记录用户喜欢的汽车尺寸, 可能会生成一个如下所示的特殊汽车租赁cookie:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Set-cookie: pref=compact; domain=&quot;airtravelbargains.com&quot;; path=/autos/</div><div class="line"></div><div class="line">如果用户访问http://www.airtravelbargains.com/specials.html，就只会获得这个cookie：</div><div class="line">Cookie: user=&quot;maryl7&quot; (结合前面域属性的例子)</div><div class="line"></div><div class="line">但如果访问http://www.airtravelbargains.com/autos/cheapo/index.html，就会获得这两个cookie:</div><div class="line">Cookie: user=&quot;maryl7&quot;</div><div class="line">Cookie: pref=compact</div></pre></td></tr></table></figure>
+</li>
+<li><p>因此，cookie就是由服务器贴到客户端上，由客户端维护的状态片段，只会回送给那些合适的站点。下面我们来更仔细地看看cookie的技术和标准。</p>
+</li>
+</ol>
+<h2 id="cookie的成分"><a href="#cookie的成分" class="headerlink" title="cookie的成分"></a>cookie的成分</h2><p>现在使用的cookie规范有两个不同的版本: <code>cookies版本0</code>(有时被称为Netscape cookies) 和 <code>cookies版本1</code>(RFC 2965)。cookies版本1 是对cookies版本0的扩展，应用不如后者广泛。</p>
+<h3 id="Cookies版本0"><a href="#Cookies版本0" class="headerlink" title="Cookies版本0"></a>Cookies版本0</h3><p>参考P284</p>
+<h3 id="Cookies版本1"><a href="#Cookies版本1" class="headerlink" title="Cookies版本1"></a>Cookies版本1</h3><p>参考P285</p>
+<h4 id="版本1的cookie2请求首部和版本协商"><a href="#版本1的cookie2请求首部和版本协商" class="headerlink" title="版本1的cookie2请求首部和版本协商"></a>版本1的cookie2请求首部和版本协商</h4><h2 id="cookie与缓存"><a href="#cookie与缓存" class="headerlink" title="cookie与缓存"></a>cookie与缓存</h2><h2 id="cookie安全性和隐私"><a href="#cookie安全性和隐私" class="headerlink" title="cookie安全性和隐私"></a>cookie安全性和隐私</h2>
         </div>
 
         <blockquote class="post-copyright">
