@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2018-02-09T05:12:32.000Z">
+<meta property="og:updated_time" content="2018-02-09T05:25:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.CORS方案 simple request">
 <meta name="twitter:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
@@ -268,17 +268,18 @@
 </li>
 <li><p>之前在介绍<code>Access-Control-Allow-Credentials</code>选项的时候提到, CORS请求默认不发送Cookie和HTTP认证信息; 如果要把Cookie发到服务器:</p>
 <ul>
-<li>一方面要 <strong>服务器同意指定Access-Control-Allow-Credentials字段</strong> :  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: <span class="keyword">true</span></div><div class="line"><span class="comment">//php中设置如下:</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
+<li><p>一方面要 <strong>服务器同意指定Access-Control-Allow-Credentials字段</strong> :</p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Credentials: <span class="keyword">true</span></div><div class="line"><span class="comment">//php中设置如下:</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
+</li>
+<li><p>另一方面, 开发者必须在AJAX请求中打开 <code>withCredentials</code> 属性 (这一点JSONP不用设置)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var xhr = new XMLHttpRequest();</div><div class="line">xhr.withCredentials = true;</div><div class="line">//jquery中设置withCredentials的代码如下:</div><div class="line">$.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>当然, cookie也是跨子域才能带上</p>
 </li>
 </ul>
 </li>
-</ol>
-<pre><code>- 另一方面, 开发者必须在AJAX请求中打开 `withCredentials` 属性 (这一点JSONP不用设置)
-    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var xhr = new XMLHttpRequest();</div><div class="line">xhr.withCredentials = true;</div><div class="line">//jquery中设置withCredentials的代码如下:</div><div class="line">$.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div></pre></td></tr></table></figure>
-
-- 当然, cookie也是跨子域才能带上
-</code></pre><ol>
-<li>需要以上3方面都做到才可以<ul>
+<li><p>需要以上3方面都做到才可以</p>
+<ul>
 <li>否则，即使服务器同意发送Cookie，浏览器也不会发送 ;</li>
 <li>但是, 如果省略 <code>withCredentials</code> 设置, 有的浏览器还是会一起发送Cookie, 这时, 可以显式关闭 <code>withCredentials</code> ;<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">xhr.withCredentials = <span class="keyword">false</span>;</div></pre></td></tr></table></figure>
 </li>
