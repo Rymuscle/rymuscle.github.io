@@ -29,7 +29,7 @@
 <meta property="og:description" content="回顾 之前学习同源策略基础知识的时候, 了解了同源策略的 三种行为 限制:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送    注意: “同源策略”的限制, 并没有限制住CSRF攻击, “同源策略的限制”并不会限制 B站点中嵌入的A站点超链接去读取A站点用户的cookie;   同源策略限制 – Cookie无法读取 准备跨域站">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/cookie-disable-01.png">
-<meta property="og:updated_time" content="2018-02-08T08:53:37.000Z">
+<meta property="og:updated_time" content="2018-02-09T01:12:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02.规避同源策略限制之&quot;Cookie无法读取&quot;">
 <meta name="twitter:description" content="回顾 之前学习同源策略基础知识的时候, 了解了同源策略的 三种行为 限制:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送    注意: “同源策略”的限制, 并没有限制住CSRF攻击, “同源策略的限制”并不会限制 B站点中嵌入的A站点超链接去读取A站点用户的cookie;   同源策略限制 – Cookie无法读取 准备跨域站">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#回顾"><span class="post-toc-number">1.</span> <span class="post-toc-text">回顾</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同源策略限制-–-Cookie无法读取"><span class="post-toc-number">2.</span> <span class="post-toc-text">同源策略限制 – Cookie无法读取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#合理规避-Cookie无法读取的限制"><span class="post-toc-number">3.</span> <span class="post-toc-text">合理规避 Cookie无法读取的限制</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#回顾"><span class="post-toc-number">1.</span> <span class="post-toc-text">回顾</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#同源策略限制-–-Cookie无法读取"><span class="post-toc-number">2.</span> <span class="post-toc-text">同源策略限制 – Cookie无法读取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#合理规避-Cookie无法读取的限制"><span class="post-toc-number">3.</span> <span class="post-toc-text">合理规避 Cookie无法读取的限制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#额外"><span class="post-toc-number">4.</span> <span class="post-toc-text">额外</span></a></li></ol>
         </nav>
     </aside>
     
@@ -217,6 +217,7 @@
 <p> // 这样你会发现, www.test.com/getCookie.php 和 test.test.com/getCookie.php 都可以正常获取 www.test.com/getCookie.php 设置的cookie</p>
 </li>
 </ol>
+<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p>当然, 合理规避cookie无法读取, 是在顶级域名一致的情况下, 顶级域名不一致的情况下, 就不要做奢望了;<br>你在设置cookie时, 如果指定的domain参数和当前域名不是同一顶级域名, 浏览器不会存储cookie, 也就是cookie设置失败;</p>
 
         </div>
 
