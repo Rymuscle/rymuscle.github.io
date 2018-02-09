@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2018-02-09T05:25:18.000Z">
+<meta property="og:updated_time" content="2018-02-09T05:26:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.CORS方案 simple request">
 <meta name="twitter:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
@@ -285,19 +285,20 @@
 </li>
 </ul>
 </li>
+<li><p><strong>需要注意的是</strong>:</p>
+<ul>
+<li>如果要发送Cookie, <code>Access-Control-Allow-Origin</code> 就不能设为星号<code>*</code>, 必须指定明确的、与请求网页一致的域名 ; </li>
+<li>同时，Cookie依然遵循同源政策，只有顶级域名一样的情况下, 的Cookie才会共享, 其他域名的Cookie并不会上传 ;</li>
+</ul>
+</li>
 </ol>
-<p>4.<strong>需要注意的是</strong>:</p>
-<pre><code>- 如果要发送Cookie, `Access-Control-Allow-Origin` 就不能设为星号`*`, 必须指定明确的、与请求网页一致的域名 ; 
-- 同时，Cookie依然遵循同源政策，只有顶级域名一样的情况下, 的Cookie才会共享, 其他域名的Cookie并不会上传 ;
-</code></pre><h3 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h3><ol>
+<h3 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h3><ol>
 <li><p>服务器前端代码 (www.test.com/index.html):</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">        $(document).ready(function()&#123;</div><div class="line">            //设置cookie</div><div class="line">            document.cookie = &quot;name=renyimin; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;age=100; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;gender=boy; domain=test.com&quot;;</div><div class="line">            //要在跨域请求服务器时在cors请求中包含cookie, 就需要开启withCredentials属性</div><div class="line">            $.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div><div class="line">            $(&quot;#btn&quot;).click(function(k) &#123;</div><div class="line">                var data = $(&quot;form&quot;).serializeArray();//序列化name/value</div><div class="line">                $.ajax(&#123;</div><div class="line">                    type: &apos;GET&apos;,  //这里用GET</div><div class="line">                    url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                    dataType: &apos;json&apos;,  //类型</div><div class="line">                    data: data,</div><div class="line">                    success: function (result) &#123;//返回的json数据</div><div class="line">                        console.log(result); //回调输出</div><div class="line">                    &#125;,</div><div class="line">                    timeout: 3000</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">    性别:&lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    年龄:&lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
 </li>
 <li><p>服务器后端代码 (test.test.com/index.php):</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="comment">//服务器允许前端在跨子域cors请求时包含cookie</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div><div class="line">var_dump($_COOKIE);</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="comment">//服务器允许前端在跨子域cors请求时包含cookie</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div><div class="line">var_dump($_COOKIE);</div></pre></td></tr></table></figure>
-<ol>
 <li><p>效果: 成功实现跨域, 并且实现跨<strong>子域cookie共享</strong>!</p>
 </li>
 <li><p>3个<strong>注意点</strong>, 经过测试发现:</p>
