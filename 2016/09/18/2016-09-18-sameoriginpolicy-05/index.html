@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2018-02-09T04:37:18.000Z">
+<meta property="og:updated_time" content="2018-02-09T05:12:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.CORS方案 simple request">
 <meta name="twitter:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
@@ -299,13 +299,15 @@
 <ol>
 <li><p>效果: 成功实现跨域, 并且实现跨<strong>子域cookie共享</strong>!</p>
 </li>
-<li><p>两个<strong>注意点</strong>, 经过测试发现:</p>
+<li><p>3个<strong>注意点</strong>, 经过测试发现:</p>
 <ul>
 <li><p>如果 www.test.com/index.html 中设置了 <code>withCredentials</code> 为 true , 那么在ajax请求的目标域test.test.com/index.php中必须设置:</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div></pre></td></tr></table></figure>
 <p>否则, 报错如下:<br><img src="/img/cross-domain/haha-server-withCredentials.png" width="500"></p>
 </li>
 <li><p>如果www.test.com/index.html中没有设置 <code>withCredentials</code> 属性,test.test.com/index.php也没设置 <code>header(&quot;Access-Control-Allow-Credentials: true&quot;);</code><br>那么即使www.test.com/index.html中设置了domain属性为 <code>.test.com</code> 的cookie键值对<br>test.test.com/index.php 中也获取不到cookie;</p>
+</li>
+<li><p>如果想跨子域携带cookie, 则<strong>服务器端</strong>需要注意: <strong>Access-Control-Allow-Origin响应首部字段不能为<code>*</code>哦!!</strong></p>
 </li>
 </ul>
 </li>
