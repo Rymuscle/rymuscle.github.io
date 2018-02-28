@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Composer">
-    <meta name="description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本 该命令会帮你安装好包到 vendor/ 目录下 会生成 composer.json 文件, 并将依赖信息写入文件中 会生成 composer.lock 文件compose">
+    <meta name="description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本  该命令会帮你安装所需的包到 vendor/ 目录下 生成 composer.json 文件, 并将依赖信息写入文件中 生成 composer.lock 文件   com">
 <meta name="keywords" content="Composer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03.安装包的方式(require, install, update对比)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本 该命令会帮你安装好包到 vendor/ 目录下 会生成 composer.json 文件, 并将依赖信息写入文件中 会生成 composer.lock 文件compose">
+<meta property="og:description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本  该命令会帮你安装所需的包到 vendor/ 目录下 生成 composer.json 文件, 并将依赖信息写入文件中 生成 composer.lock 文件   com">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-03T07:10:23.000Z">
+<meta property="og:updated_time" content="2018-02-28T08:20:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03.安装包的方式(require, install, update对比)">
-<meta name="twitter:description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本 该命令会帮你安装好包到 vendor/ 目录下 会生成 composer.json 文件, 并将依赖信息写入文件中 会生成 composer.lock 文件compose">
+<meta name="twitter:description" content="初次做包安装 如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本  该命令会帮你安装所需的包到 vendor/ 目录下 生成 composer.json 文件, 并将依赖信息写入文件中 生成 composer.lock 文件   com">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -181,18 +181,22 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="初次做包安装"><a href="#初次做包安装" class="headerlink" title="初次做包安装"></a>初次做包安装</h2><ol>
-<li>如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是<strong>只有composer.json文件</strong>, <strong>并没有composer.lock文件</strong>, 可以, 直接执行 <code>composer require 包名 包版本</code><ul>
-<li>该命令会帮你安装好包到 <code>vendor/</code> 目录下</li>
-<li>会生成 <code>composer.json</code> 文件, 并将依赖信息写入文件中</li>
-<li>会生成 <code>composer.lock</code> 文件<br>composer将会通过<code>composer.json</code>来读取需要的包和相对的版本, 然后创建composer.lock文件<br><strong>所以… 对于除了包版本之外的其他配置, 如自动加载…等, <code>composer.lock</code> 文件不会包含! (所以当改变这些信息之后, install 和 update的效果一样)</strong></li>
+<li><p>如果你的项目刚引入composer, 现在是第一次进行包的安装, 也就是<strong>只有composer.json文件</strong>, <strong>并没有composer.lock文件</strong>, 可以, 直接执行 <code>composer require 包名 包版本</code></p>
+<ul>
+<li>该命令会帮你安装所需的包到 <code>vendor/</code> 目录下</li>
+<li>生成 <code>composer.json</code> 文件, 并将依赖信息写入文件中</li>
+<li>生成 <code>composer.lock</code> 文件</li>
 </ul>
+</li>
+<li><p>composer将会通过<code>composer.json</code>来读取需要的包和相对的版本, 然后创建composer.lock文件<br> <strong>所以，对于除了包版本之外的其他配置, 如自动加载…等, <code>composer.lock</code> 文件不会包含! (所以当改变这些信息之后, install 和 update的效果一样)</strong></p>
 </li>
 </ol>
 <h2 id="非初次安装"><a href="#非初次安装" class="headerlink" title="非初次安装"></a>非初次安装</h2><ol>
 <li>如果你的项目已经安装过一些包了, 即已经有 <code>composer.json</code>, <code>composer.lock</code> 文件;</li>
 <li><p>此时, 你有两种方式:</p>
 <ul>
-<li>和初次安装一样, 使用 <code>composer require 包名 包版本</code> 进行安装</li>
+<li><p>和初次安装一样, 使用 <code>composer require 包名 包版本</code> 进行安装</p>
+</li>
 <li><p>手动在composer.json文件中进行配置, 然后运行 <code>composer update</code><br><strong>注意, 此时不能使用 <code>composer install</code>, 因为该命令是依据 composer.lock 文件来进行安装的, 而composer.lock文件又是依据composer.json文件中的包及包版本信息生成的,<br>而此时你改变了 composer.json 文件, 并且是新增了一个包(及版本对应关系), 所以你需要更新 composer.lock 文件!</strong></p>
 <p>如果你执行的是 <code>composer install</code>, 则会警告: <code>Warning: The lock file is not up to date with the latest changes in composer.json. You may be getting outdated dependencies. Run update to update them.</code></p>
 </li>

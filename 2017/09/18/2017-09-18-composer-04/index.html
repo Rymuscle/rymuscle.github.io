@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Composer">
-    <meta name="description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+    <meta name="description" content="require虽然是安装, 但也可以用来更新包到指定版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以">
 <meta name="keywords" content="Composer">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04.更新包的方式(require, install, update对比)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/18/2017-09-18-composer-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+<meta property="og:description" content="require虽然是安装, 但也可以用来更新包到指定版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-03T07:24:33.000Z">
+<meta property="og:updated_time" content="2018-02-28T08:33:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04.更新包的方式(require, install, update对比)">
-<meta name="twitter:description" content="require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以指定">
+<meta name="twitter:description" content="require虽然是安装, 但也可以用来更新包到指定版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本  当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, 你可以">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -181,7 +181,7 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <ol>
-<li><p>require虽然是安装, 但也可以用来更新包的版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!<br> <code>composer require 包名 新版本</code></p>
+<li><p>require虽然是安装, <strong>但也可以用来更新包到指定版本</strong>, 并同时更新composer.json和composer.lock文件, 如果没有则会创建!<br> <code>composer require 包名 新版本</code></p>
 </li>
 <li><p>当你手动修改了composer.json文件中包的版本之后, 可以执行 <code>composer update</code> 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建!<br> 当然, 你可以指定你需要更新的包 <code>composer update 包名, 包名...</code></p>
 </li>
@@ -191,16 +191,13 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
 <li>install, require, update都可以做包安装</li>
 <li>require 和 update 都可以做包更新 (install不能做包版本的更新 或 新增/删除包)</li>
-<li><p>install 和 update 都除了做包安装, 还可以对诸如自动加载的信息进行重新更新!!</p>
-</li>
-<li><p>另外:</p>
-<ul>
+<li>install 和 update 除了做包安装, 都还可以对诸如自动加载的信息进行重新更新!!</li>
+<li>另外:<ul>
 <li>install:主要是在部署阶段使用，以便在生产环境和开发环境使用的都是composer.lock文件中相同的依赖项，保证线上部署环境与本地开发环境的一致性。</li>
 <li>update: 主要是在开发阶段使用，根据我们在composer.json文件中指定的内容升级项目的依赖包。    </li>
 </ul>
 </li>
-<li><p>此更新非彼更新<br>比如packagist中的包现在是v2.0, 你本地的是v1.0, 你直接执行 <code>composer update</code>, <strong>不要指望composer会自动帮你更新到v2.0</strong>, 要更新你得在composer.json中指明版本号, 然后composer update才会根据composer.json文件去更新!<br>这样, 至于你的更新是升级还是降级就看你在composer.json文件中如何指定的了!</p>
-</li>
+<li>此更新非彼更新<br>比如packagist中的包现在是v2.0, 你本地的是v1.0, 你直接执行 <code>composer update</code>, <strong>不要指望composer会自动帮你更新到v2.0</strong>, 要更新你得在composer.json中指明版本号, 然后composer update才会根据composer.json文件去更新!<br>这样, 至于你的更新是<strong>升级还是降级</strong>就看你在composer.json文件中如何指定的了!</li>
 </ol>
 
         </div>
