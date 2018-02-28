@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/solid/ocp/04.png">
-<meta property="og:updated_time" content="2018-02-04T03:42:29.000Z">
+<meta property="og:updated_time" content="2018-02-28T09:08:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OOD-S.O.L.I.D">
 <meta name="twitter:description" content="The Single Responsibility Principle（单一职责原则 SRP）高内聚, 低耦合  单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。  单一职责原则定义为: 一个类或者模块应该有且只有一个被改变的原因。  如果一个类承担的职责过多, 就等于把这些职责 耦合 在一起了。 一个职责的变化可能会影响其他的职责, 这种耦合会导致脆弱的设计, 当发生变化时, 设">
@@ -198,7 +198,7 @@
 </li>
 <li><p>单一职责原则告诉我们: 一个类不能太“累”！在软件系统中，一个类（大到模块，小到方法）<strong>承担的职责越多，它被复用的可能性就越小</strong>，而且一个类承担的职责过多，就相当于将这些职责耦合在一起，当其中一个职责变化时，可能会影响其他职责的运作，因此要将这些职责进行分离，将不同的职责封装在不同的类中，即,将不同的变化原因封装在不同的类中，<strong>如果多个职责总是同时发生改变则也可考虑将它们封装在同一类中</strong>。</p>
 </li>
-<li><p>遵循单一职责原的优点有:</p>
+<li><p>遵循单一职责的优点有:</p>
 <ul>
 <li>可以降低类的复杂度, 一个类只负责一项职责, 其逻辑肯定要比负责多项职责简单的多;</li>
 <li>提高类的可读性, 提高系统的可维护性;</li>
@@ -207,23 +207,22 @@
 </ul>
 </li>
 </ol>
-<p>参考: <a href="http://blog.csdn.net/lovelion/article/details/7536542" target="_blank" rel="external">http://blog.csdn.net/lovelion/article/details/7536542</a></p>
 <h2 id="The-Open-Closed-Principle（开放封闭原则OCP）"><a href="#The-Open-Closed-Principle（开放封闭原则OCP）" class="headerlink" title="The Open/Closed Principle（开放封闭原则OCP）"></a>The Open/Closed Principle（开放封闭原则OCP）</h2><p>对抽象编程, 而不对具体编程</p>
 <ol>
 <li><p>开放-封闭原则: 一个软件实体应当对扩展开放，对修改关闭。即软件实体应尽量在不修改原有代码的情况下进行扩展。</p>
 <blockquote>
 <ul>
-<li>任何软件都需要面临一个很重要的问题, 即, 它们的需求会随时间的推移而发生变化。<br>当软件系统需要面对新的需求时，我们应该尽量保证系统的设计框架是稳定的。<br>如果一个软件设计符合开闭原则，那么可以非常方便地对系统进行扩展，<strong>而且在扩展时无须修改现有代码</strong>，使得软件系统在拥有适应性和灵活性的同时具备较好的稳定性和延续性。<br>随着软件规模越来越大，软件寿命越来越长，软件维护成本越来越高，设计满足开闭原则的软件系统也变得越来越重要。</li>
+<li>任何软件都需要面临一个很重要的问题:需求会随时间的推移而发生变化。<br>当软件系统需要面对新的需求时，我们应该尽量保证系统的设计框架是稳定的。<br>如果一个软件设计符合开闭原则，那么可以非常方便地对系统进行扩展，<strong>而且在扩展时无须修改现有代码</strong>，使得软件系统在拥有适应性和灵活性的同时具备较好的稳定性和延续性。<br>随着软件规模越来越大，软件寿命越来越长，软件维护成本越来越高，设计满足开闭原则的软件系统也变得越来越重要。</li>
 </ul>
 <hr>
 <ul>
-<li>为了满足开闭原则，需要对系统进行抽象化设计，<strong>抽象化是开闭原则的关键</strong>。在Java、C#等编程语言中，可以为系统定义一个相对稳定的抽象层，而将不同的实现行为移至具体的实现层中完成。在很多面向对象编程语言中都提供了接口、抽象类等机制，可以通过它们定义系统的抽象层，再通过具体类来进行扩展。如果需要修改系统的行为，无须对抽象层进行任何改动，只需要增加新的具体类来实现新的业务功能即可，实现在不修改已有代码的基础上扩展系统的功能，达到开闭原则的要求。</li>
+<li>为了满足开闭原则，需要对系统进行抽象化设计，<strong>抽象化是开闭原则的关键</strong>。在很多面向对象编程语言中都提供了接口、抽象类等机制，可以通过它们定义系统的抽象层，再通过具体类来进行扩展。如果需要修改系统的行为，无须对抽象层进行任何改动，只需要增加新的具体类来实现新的业务功能即可，实现在不修改已有代码的基础上扩展系统的功能，达到开闭原则的要求。</li>
 </ul>
 </blockquote>
 </li>
 <li><p>有必要用例子来简单说明一下, 假设公司开发的CRM系统可以显示各种类型的图表, 如 饼状图 和 柱状图 等, 为了支持多种图表显示方式, 原始设计方案如下图:<br> <img src="/img/oop/factory/01.png" width="556" height="229"></p>
  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PieChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">BarChart</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChartDisplay</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="comment">//TODO</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">($chartType)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">switch</span> ($chartType) &#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">'pie'</span> :</div><div class="line">                $piechart = <span class="keyword">new</span> PieChart();</div><div class="line">                $piechart-&gt;display();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">'bar'</span> :</div><div class="line">                $barchart = <span class="keyword">new</span> BarChart();</div><div class="line">                $barchart-&gt;display();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p> 问题: 现在如果需要增加一个图表类, 如折线图LineChart, 则需要修改ChartDisplay类的display()方法的源代码, 增加新的判断逻辑, 违反了开闭原则!!</p>
+<p> 问题: 现在如果需要增加一个图表类, 如折线图LineChart, 则<strong>需要修改ChartDisplay类的display()方法的源代码, 增加新的判断逻辑, 违反了开闭原则!!</strong></p>
 </li>
 <li><p>现对该系统进行重构, 使之符合开闭原则<br> <img src="/img/oop/solid/ocp/02.png" width="491" height="218"><br> 我们引入了抽象图表类AbstractChart, 并且让ChartDisplay针对抽象图表类进行编程(依赖抽象), 在ChartDisplay的display()方法中调用chart对象的display()方法显示图表。</p>
 <p> 如果需要增加一种新的图表, 如折线图LineChart, 只需要将LineChart也作为AbstractChart的子类, 在客户端向ChartDisplay中注入一个LineChart对象即可, 无须修改现有类库的源代码。     </p>

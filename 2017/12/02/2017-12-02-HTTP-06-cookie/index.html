@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+    <meta name="description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这些服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。因为现">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HTTP -- cookie机制 (401)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/02/2017-12-02-HTTP-06-cookie/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+<meta property="og:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这些服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。因为现">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/authorization-01.png">
-<meta property="og:updated_time" content="2018-02-08T07:18:22.000Z">
+<meta property="og:updated_time" content="2018-02-28T08:56:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HTTP -- cookie机制 (401)">
-<meta name="twitter:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。 因为">
+<meta name="twitter:description" content="前言 HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。  对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这些服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。因为现">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/http/authorization-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -183,9 +183,9 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p>HTTP最初是一个 <strong>匿名</strong>, <strong>无状态</strong> 的请求/响应协议;<br> 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。</p>
+<li><p>HTTP最初是一个 <strong>匿名</strong>, <strong>无状态</strong> 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。</p>
 </li>
-<li><p>对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这写服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。<br> 因为现代的Web站点希望能够提供个性化的接触, 它希望对连接另一端的用户有更多的了解, 并且能在用户浏览页面时对其进行跟踪。</p>
+<li><p>对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这些服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。因为现代的Web站点希望能够提供个性化的接触, 它希望对连接另一端的用户有更多的了解, 并且能在用户浏览页面时对其进行跟踪。</p>
 </li>
 <li><p>比如, Amazon.com可以通过以下几种方式实现站点的个性化:</p>
 <ul>
@@ -248,7 +248,7 @@
 <li><p>如下图<br> <img src="/img/http/authorization-01.png" width="600/"></p>
 <ul>
 <li>在图a中，浏览器对站点www.joes-hardware.com发起了一条请求；</li>
-<li>站点并不知道这个用户的身份，因此在图b中，服务器会返回 <code>401 Login Required HTTP响应码</code>，并添加 <code>www-Authentication响应首部</code>，要求用户登录。<br>这样浏览器就会弹出一个登录对话框；<br>只要用户输入了用户名和密码(对其身份进行完整性检査)，浏览器就会重复原来的请求。这次它会添加一个 <code>Authorization请求首部</code>，说明用户名和密码。对用户名和密码进行加密，防止那些有意无意的网络观察者看到；</li>
+<li>站点并不知道这个用户的身份，因此在图b中，服务器会返回 <code>401 Login Required HTTP响应码</code>，并添加 <code>www-Authentication响应首部</code>，要求用户登录。<br>这样浏览器就会弹出一个登录对话框；<br>只要用户输入了用户名和密码(对其身份进行完整性检査)，浏览器就会继续原来的请求。这次它会添加一个 <code>Authorization请求首部</code>，说明用户名和密码。对用户名和密码进行加密，防止那些有意无意的网络观察者看到；</li>
 <li>现在，服务器已经知道用户的身份了，今后的请求要使用用户名和密码时，浏览器会自动将存储下来的值发送出去，甚至在站点没有要求发送的时候也经常会向其发送。浏览器在每次请求中都向服务器发送Authorization首部作为一种身份的标识，这样，只要登录一次，就可以在整个会话期间维持用户的身份了</li>
 <li>但是，登录多个Web站点是很繁琐的。从一个站点浏览到另一个站点的时候，需要在每个站点上登录。更糟的是，很可能要为不同的站点记住不同的用户名和密码。访问很多站点，喜欢的用户名可能已经被其他人用过了，而且有些站点为用户名和密码的长度和组成设置了不同的规则</li>
 </ul>
