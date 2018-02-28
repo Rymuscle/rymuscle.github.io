@@ -20,20 +20,20 @@
     
     
     <meta name="keywords" content="CrossDomain">
-    <meta name="description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
+    <meta name="description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置 Access-Control-Allow-Ori">
 <meta name="keywords" content="CrossDomain">
 <meta property="og:type" content="article">
 <meta property="og:title" content="05.CORS方案 simple request">
 <meta property="og:url" content="http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
+<meta property="og:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置 Access-Control-Allow-Ori">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2018-02-09T05:26:45.000Z">
+<meta property="og:updated_time" content="2018-02-28T07:51:45.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.CORS方案 simple request">
-<meta name="twitter:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置Access-Control-Allow-Orig">
+<meta name="twitter:description" content="CORS说明 CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求;  众所周知，在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了CORS ;  CORS在最初接触的时候只大概了解到，通过服务器端设置 Access-Control-Allow-Ori">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -188,7 +188,7 @@
 </li>
 <li><p>众所周知，在以前，跨域可以采用 <code>代理</code>、<code>JSONP</code> 等方式，而在Modern浏览器面前，这些终将成为过去式，因为有了<code>CORS</code> ;</p>
 </li>
-<li><p>CORS在最初接触的时候只大概了解到，通过服务器端设置<code>Access-Control-Allow-Origin</code>响应头，即可使指定来源像访问同源接口一样访问跨域接口，但其实CORS的规范定义远不止这些 ;</p>
+<li><p>CORS在最初接触的时候只大概了解到，通过服务器端设置 <code>Access-Control-Allow-Origin</code> 响应头，可使指定来源像访问同源接口一样访问跨域接口，但其实CORS的规范定义远不止这些 ;</p>
 <ul>
 <li>它允许浏览器向<strong>跨源</strong>服务器发出XMLHttpRequest请求, 也就是克服了AJAX只能同源使用的限制 ;</li>
 <li>CORS<strong>需要浏览器和服务器同时支持</strong> (目前, 所有浏览器都支持该功能, IE浏览器不能低于IE10) ;</li>
@@ -198,7 +198,7 @@
 <ul>
 <li><p>对于开发者来说, CORS通信与同源的AJAX通信没有差别, 代码完全一样, 浏览器一旦发现AJAX的请求是跨源的, 就会自动添加一些附加的头信息, 有时还会多出一次附加的请求, 但用户不会有感觉;</p>
 </li>
-<li><p>之所以<code>CORS通信与同源的AJAX通信的代码没有差别</code>, 是因为: <strong>其实实现CORS通信的关键是服务器, 只要服务器实现了CORS接口，就可以跨源通信 </strong></p>
+<li><p>之所以<code>CORS通信与同源的AJAX通信的代码没有差别</code>, 是因为: <strong>其实实现CORS通信的关键是服务器, 只要服务器实现了CORS接口，就可以跨源通信</strong></p>
 </li>
 </ul>
 </li>
@@ -400,7 +400,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2016/09/17/2016-09-17-sameoriginpolicy-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">04. JSONP方案</h4>
+          <h4 class="title">04.JSONP方案</h4>
         </a>
       </div>
     

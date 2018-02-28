@@ -29,7 +29,7 @@
 <meta property="og:description" content="回顾 之前学习同源策略基础知识的时候, 了解了同源策略的 三种行为 限制:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送    注意: “同源策略”的限制, 并没有限制住CSRF攻击, “同源策略的限制”并不会限制 B站点中嵌入的A站点超链接去读取A站点用户的cookie;   同源策略限制 – Cookie无法读取 准备跨域站">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/cookie-disable-01.png">
-<meta property="og:updated_time" content="2018-02-09T01:12:14.000Z">
+<meta property="og:updated_time" content="2018-02-28T07:41:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02.规避同源策略限制之&quot;Cookie无法读取&quot;">
 <meta name="twitter:description" content="回顾 之前学习同源策略基础知识的时候, 了解了同源策略的 三种行为 限制:  Cookie、LocalStorage 和 IndexDB 无法读取 DOM 无法获得  AJAX 请求不能发送    注意: “同源策略”的限制, 并没有限制住CSRF攻击, “同源策略的限制”并不会限制 B站点中嵌入的A站点超链接去读取A站点用户的cookie;   同源策略限制 – Cookie无法读取 准备跨域站">
@@ -214,10 +214,10 @@
 <li>比如: 如果两个站点的顶级域名相同, 只是二级域名不同的话, 浏览器其实是允许你通过设置 <code>document.domain</code> 来共享 Cookie 的;</li>
 <li><p>例子: 还是之前的例子, 如果www.test.com/setCookie.php代码改为:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">setcookie(&quot;name&quot;, &apos;renyimin&apos;, 0, &apos;&apos;, &apos;test.com&apos;);</div></pre></td></tr></table></figure>
-<p> // 这样你会发现, www.test.com/getCookie.php 和 test.test.com/getCookie.php 都可以正常获取 www.test.com/getCookie.php 设置的cookie</p>
+<p> // 这样你会发现, www.test.com/getCookie.php 和 test.test.com/getCookie.php 都可以正常获取 www.test.com/setCookie.php 设置的cookie</p>
 </li>
 </ol>
-<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p>当然, 合理规避cookie无法读取, 是在顶级域名一致的情况下, 顶级域名不一致的情况下, 就不要做奢望了;<br>你在设置cookie时, 如果指定的domain参数和当前域名不是同一顶级域名, 浏览器不会存储cookie, 也就是cookie设置失败;</p>
+<h2 id="额外"><a href="#额外" class="headerlink" title="额外"></a>额外</h2><p>当然, 合理规避同源策略导致的cookie无法读取问题, 有个前提是, 跨域双方需在<strong>顶级域名一致</strong>的情况下, 顶级域名不一致的情况下, 是无法跨域共享cookie的;<br>你在设置cookie时, 如果指定的domain参数和当前域名不是同一顶级域名, 浏览器不会存储cookie, 也就是cookie设置失败;</p>
 
         </div>
 
