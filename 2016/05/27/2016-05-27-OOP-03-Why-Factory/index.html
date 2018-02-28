@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？  首先要知道, 与一个对象相关的职责通常有三类:  对象本身所具有的职责 创建对象的职责 使用对象的职责   对象本身的职责比较容易理解, 就是对象自身所具有的一些数据和行为, 可通过一些公开的方法来实现它的职责。  接下来将简单讨论一下对象的创建职责 和">
+    <meta name="description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OOP - 为什么要引入工厂类?">
 <meta property="og:url" content="http://blog.renyimin.com/2016/05/27/2016-05-27-OOP-03-Why-Factory/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？  首先要知道, 与一个对象相关的职责通常有三类:  对象本身所具有的职责 创建对象的职责 使用对象的职责   对象本身的职责比较容易理解, 就是对象自身所具有的一些数据和行为, 可通过一些公开的方法来实现它的职责。  接下来将简单讨论一下对象的创建职责 和">
+<meta property="og:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-01.png">
-<meta property="og:updated_time" content="2018-02-04T03:44:41.000Z">
+<meta property="og:updated_time" content="2018-02-28T09:46:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OOP - 为什么要引入工厂类?">
-<meta name="twitter:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？  首先要知道, 与一个对象相关的职责通常有三类:  对象本身所具有的职责 创建对象的职责 使用对象的职责   对象本身的职责比较容易理解, 就是对象自身所具有的一些数据和行为, 可通过一些公开的方法来实现它的职责。  接下来将简单讨论一下对象的创建职责 和">
+<meta name="twitter:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对象的-创建职责-和-使用职责"><span class="post-toc-number">2.</span> <span class="post-toc-text">对象的 创建职责 和 使用职责</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出工厂类"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出工厂类</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对象的创建"><span class="post-toc-number">2.</span> <span class="post-toc-text">对象的创建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出工厂类"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出工厂类</span></a></li></ol>
         </nav>
     </aside>
     
@@ -183,18 +183,7 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂模式(包括<code>简单工厂模式</code>、<code>工厂方法模式</code> 和 <code>抽象工厂模式</code> )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？</p>
-<ol>
-<li><p>首先要知道, 与一个对象相关的职责通常有三类:</p>
-<ul>
-<li>对象本身所具有的职责</li>
-<li>创建对象的职责</li>
-<li>使用对象的职责</li>
-</ul>
-</li>
-<li><p>对象本身的职责比较容易理解, 就是对象自身所具有的一些数据和行为, 可通过一些公开的方法来实现它的职责。</p>
-</li>
-<li><p>接下来将简单讨论一下对象的创建职责 和 使用职责</p>
-<h2 id="对象的-创建职责-和-使用职责"><a href="#对象的-创建职责-和-使用职责" class="headerlink" title="对象的 创建职责 和 使用职责"></a>对象的 创建职责 和 使用职责</h2></li>
+<h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><ol>
 <li><p>通常有以下几种创建对象的方式：</p>
 <ul>
 <li>使用new关键字直接创建对象;</li>
@@ -213,8 +202,6 @@
 <li>同时, <strong>这样的设计会导致一个很严重的问题</strong>: 如果在 ‘Client’ 中希望能够使用另一个种类型的图像方案, 比如使用柱状图’BarChart’类的对象，那就必须修改’Client’类的源代码, <strong>违反了”开闭原则”</strong>。</li>
 </ul>
 </li>
-<li><p>如何解决?</p>
-</li>
 </ol>
 <h2 id="引出工厂类"><a href="#引出工厂类" class="headerlink" title="引出工厂类"></a>引出工厂类</h2><p>最常用的一种解决方法是将 ‘chartObject’ 对象的创建职责从 ‘Client’ 类中移除, 在 ‘Client’ 类之外创建对象, 那么谁来负责创建 ‘chartObject’ 对象呢?<br>答案是：工厂类; 通过引入工厂类, 客户类就不会再涉及对象的创建(只是对对象进行使用), 而创建对象的工厂类自然也只是负责创建对象(也不会涉及对象的使用)。<br>引入工厂类 ChartFactory 之后的结构如下图所示:<br><img src="/img/oop/factory/simple-factory-01.png" width="495" height="370/"></p>
 <ol>
@@ -222,7 +209,7 @@
 <ul>
 <li>如果图像类的构造函数发生变更, 或者需要添加或移除不同的图像类，你只要去维护 <code>ChartFactory</code> 的代码, 可能就不会影响到’Client’的代码;</li>
 <li>而且如果 <code>Chart</code> 抽象接口发生改变, 例如添加、移除方法或改变方法名, 只需要修改 <code>Client</code>, 不会给 <code>ChartFactory</code> 带来任何影响;</li>
-<li>在所有的工厂模式中, 我们都强调一点: 两个类A和B之间的关系应该仅仅是 <strong>A创建B</strong> 或是 <strong>A使用B</strong>, 而不能两种关系都有。将对象的创建和使用分离, 也使得系统更加符合 ‘单一职责原则’, 有利于对功能的复用和系统的维护;</li>
+<li>在所有的工厂模式中, 我们都强调一点: 两个类A和B之间的关系应该仅仅是 <strong>A创建B</strong> 或是 <strong>A使用B</strong>, 而不能两种关系都有。<br>将对象的创建和使用分离, 也使得系统更加符合 ‘单一职责原则’, 有利于对功能的复用和系统的维护;</li>
 </ul>
 </li>
 <li><p>此外, 将对象的创建和使用分离还有一个好处:</p>

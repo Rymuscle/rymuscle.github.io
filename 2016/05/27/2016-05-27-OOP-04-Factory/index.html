@@ -29,7 +29,7 @@
 <meta property="og:description" content="工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指工厂方法模式, 它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位”大哥” —— 抽象工厂模式。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-02.png">
-<meta property="og:updated_time" content="2018-02-04T03:45:11.000Z">
+<meta property="og:updated_time" content="2018-02-28T09:48:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OOP - Simple Factory">
 <meta name="twitter:description" content="工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指工厂方法模式, 它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位”大哥” —— 抽象工厂模式。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象">
@@ -217,7 +217,7 @@
 <li><p>有没有一种方法能够在不修改客户端代码的前提下更换具体产品对象呢？答案是肯定的，下面将介绍一种常用的实现方式:</p>
 <ul>
 <li>可以将静态工厂方法的参数放到配置文件中, 在配置文件中配置即可, 这样客户端代码如下所示：<br>由<code>$chartObject = ChartFactory::getChart(&quot;bar&quot;);</code><br>改为：<pre><code class="php">$type = Config::get(<span class="string">'chartType'</span>);
-$chartObject = ChartFactory::getChart(<span class="string">"pie"</span>);
+$chartObject = ChartFactory::getChart($type);
 </code></pre>
 </li>
 </ul>
