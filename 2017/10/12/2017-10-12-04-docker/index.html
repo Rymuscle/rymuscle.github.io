@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile 是一个文本文件，其内包含了一条条的指">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T07:18:15.000Z">
+<meta property="og:updated_time" content="2018-03-01T09:13:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04.镜像 - Dockerfile脚本定制镜像">
 <meta name="twitter:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile 是一个文本文件，其内包含了一条条的指">
@@ -221,6 +221,7 @@
 
 - 从命令的输出结果中，我们可以清晰的看到镜像的构建过程。在 Step 2 中，如同我们之前 所说的那样， RUN 指令启动了一个容器 9cdc27646c7b ，执行了所要求的命令，并最后提交 了这一层 44aa4490ce2c ，随后删除了所用到的这个容器 9cdc27646c7b 。
 </code></pre><p>2.这里我们使用了 <code>docker build</code> 命令进行镜像构建。其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code><br>在这里我们指定了最终镜像的名称 <code>-t nginx:v3</code> ，构建成功后，我们可以像之前运行 nginx:v2 那样来运行这个镜像，其结果会和 nginx:v2 一样。</p>
+<p>3.可以结合<a href="/2017/10/17/2017-10-17-07-docker/#构建镜像">07.镜像/容器 – 导入导出</a></p>
 <h3 id="镜像构建上下文（Context）"><a href="#镜像构建上下文（Context）" class="headerlink" title="镜像构建上下文（Context）"></a>镜像构建上下文（Context）</h3><h3 id="其它-docker-build-的用法"><a href="#其它-docker-build-的用法" class="headerlink" title="其它 docker build 的用法"></a>其它 docker build 的用法</h3><p>更多参考: <a href="https://yeasy.gitbooks.io/docker_practice/content/image/build.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/build.html</a><br>… 未完待续 </p>
 <p>参考 : <a href="https://yeasy.gitbooks.io/docker_practice/content/image/commit.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/commit.html</a></p>
 

@@ -20,21 +20,21 @@
     
     
     <meta name="keywords" content="Docker读书笔记">
-    <meta name="description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
+    <meta name="description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03.镜像 - 分层存储">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
+<meta property="og:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_03.png">
-<meta property="og:updated_time" content="2018-03-01T07:16:02.000Z">
+<meta property="og:updated_time" content="2018-03-01T09:13:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03.镜像 - 分层存储">
-<meta name="twitter:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
+<meta name="twitter:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/docker/nginx_test_01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -185,14 +185,14 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="分层存储"><a href="#分层存储" class="headerlink" title="分层存储"></a>分层存储</h2><p>严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。<br>镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。</p>
-<h2 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h2><p>1.当运行一个容器的后(如果不使用<code>数据卷</code>的话), 你所做的任何文件修改都会被记录于 <code>容器存储层</code> 里(<strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡</strong>)</p>
+<p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong></p>
+<h2 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h2><p>1.当运行一个容器的后(如果不使用<code>数据卷</code>的话), 你所做的任何文件修改都会被记录于 <code>容器存储层</code> 里(<strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong>)</p>
 <p>2.而Docker提供了一个 <code>docker commit</code> 命令，可以将 容器的存储层 保存下来成为镜像</p>
 <ul>
 <li>换句话说，就是在原有镜像的基础上，再<strong>叠加上容器的存储层</strong>，并构成新的镜像。</li>
 <li>以后我们运行这个新镜像的时候, 就会拥有原有容器最后的文件变化。</li>
 </ul>
-<p>3.docker commit 的语法格式为: <code>docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</code></p>
-<p>, 如下:</p>
+<p>3.docker commit 的语法格式为: <code>docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</code>, 如下:</p>
 <ul>
 <li>其中 <code>--author</code> 是指定修改的作者，而 <code>--message</code> 则是记录本次修改的内容。这点和 git 版本控制相似，不过这里这些信息可以省略留空  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker commit --author &quot;Tao Wang &lt;twang2218@gmail.com&gt;&quot; --message &quot;修改了默认网页&quot; webserver nginx:v2</div></pre></td></tr></table></figure>
 </li>
@@ -222,10 +222,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker history nginx:v1</div><div class="line">IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT</div><div class="line">fe3e3a4c47b8        About a minute ago   nginx -g daemon off;                            1.4MB               在/home下添加了一个index.html文件</div><div class="line">e548f1a579cf        8 days ago           /bin/sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daem...   0B                  </div><div class="line">&lt;missing&gt;           8 days ago           /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B                  </div><div class="line">&lt;missing&gt;           8 days ago           /bin/sh -c #(nop)  EXPOSE 80/tcp                0B                  </div><div class="line">.....</div><div class="line">.....</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
 </li>
 <li><p>新的镜像定制好后，就可以来运行这个镜像</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker run -d -p 8089:80 --name nginx_v1 nginx:v1</div><div class="line">d5d17a25cc35837c64f446a6623afa0a23b6c543593276979ebb7c5ced1e7e1d</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8089-&gt;80/tcp   nginx_v1</div><div class="line">785d252f5c94        nginx               &quot;nginx -g &apos;daemon ...&quot;   4 minutes ago       Up 3 minutes        0.0.0.0:8088-&gt;80/tcp   nginx_test</div><div class="line">// 会发现新的镜像启动后, 容器中的/home目录下包含我们提交的index.html个文件, 当然, localhost:8089和localhost:8088不同, 8089访问的还是默认欢迎页</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker exec -it nginx_v1 /bin/sh</div><div class="line"># cd /home</div><div class="line"># ls</div><div class="line">index.html</div><div class="line">#</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker run -d -p 8089:80 --name nginx_v1 nginx:v1</div><div class="line">d5d17a25cc35837c64f446a6623afa0a23b6c543593276979ebb7c5ced1e7e1d</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8089-&gt;80/tcp   nginx_v1</div><div class="line">785d252f5c94        nginx               &quot;nginx -g &apos;daemon ...&quot;   4 minutes ago       Up 3 minutes        0.0.0.0:8088-&gt;80/tcp   nginx_test</div><div class="line">// 会发现使用新的镜像启动容器后, 容器中的/home目录下包含我们提交的index.html个文件, 当然, localhost:8089和localhost:8088不同, 8089访问的还是默认欢迎页</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker exec -it nginx_v1 /bin/sh</div><div class="line"># cd /home</div><div class="line"># ls</div><div class="line">index.html</div><div class="line">#</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>3.至此，我们第一次完成了定制镜像，使用的是 <code>docker commit</code> 命令，<strong>手动操作给旧的镜像添加了新的一层，形成新的镜像，对镜像多层存储应该有了更直观的感觉</strong>。</p>
+<p>4.可以结合<a href="/2017/10/17/2017-10-17-07-docker/#构建镜像">07.镜像/容器 – 导入导出</a></p>
 <h2 id="慎用-docker-commit"><a href="#慎用-docker-commit" class="headerlink" title="慎用 docker commit"></a>慎用 docker commit</h2><p>使用 docker commit 命令虽然可以比较直观的帮助理解镜像分层存储的概念, <strong>但是实际环境中并不会这样使用</strong>。<br>1.首先，如果仔细观察之前的 <code>docker diff nginx_test</code> 的结果，你会发现除了真正想要的 /home/index.html 文件外，由于命令的执行，还有很多文件被改动或添加了。<br>这还仅仅是最简单的操作，如果是安装软件包、编译构建，那会有大量的无关内容被添加进来，如果不小心清理，将会导致镜像极为臃肿。</p>
 <p>2.此外，使用 <code>docker commit</code> 意味着所有对镜像的操作都是<strong>黑箱操作</strong>，生成的镜像也被称为<strong>黑箱镜像</strong>，换句话说，就是除了制作镜像的人知道执行过什么命令、怎么生成的镜像，别人根本无从得知。而且，即使是这个制作镜像的人，过一段时间后也无法记清具体在操作的。虽然 docker diff 或许可以告诉得到一些线索，但是远远不到可以确保生成一致镜像的地步。这种黑箱镜像的维护工作是非常痛苦的。</p>
 <p>3.而且，回顾之前提及的镜像所使用的分层存储的概念，除当前层外，之前的每一层都是不会发生改变的，换句话说，任何修改的结果仅仅是在当前层进行标记、添加、修改，而不会改动上一层。如果使用 docker commit 制作镜像，以及后期修改的话，每一次修改都会让镜像更加臃肿一次，所删除的上一层的东西并不会丢失，会一直如影随形的跟着这个镜像，即使根本无法访问到。这会让镜像更加臃肿。</p>
