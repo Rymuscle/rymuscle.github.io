@@ -147,423 +147,6 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-2017-12-29-mysql_transaction-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-29 19:12:11" datetime="2017-12-29T11:12:11.000Z"  itemprop="datePublished">2017-12-29</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/29/2017-12-29-mysql_transaction-02/">mysql(InnoDB)事务隔离级别(READ UNCOMMITTED) 与 锁</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言先针对自己以前错误的思维做个记录, 可以直接跳过
-
-由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?;
-而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死...
-    
-
-        <a href="/2017/12/29/2017-12-29-mysql_transaction-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-12-28-mysql_mvcc"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-28 21:07:12" datetime="2017-12-28T13:07:12.000Z"  itemprop="datePublished">2017-12-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/28/2017-12-28-mysql_mvcc/">MySQL-InnoDB-MVCC多版本并发控制</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        (Multiversion Concurrency Control)
-前言最近正在啃《高性能MySQL》这本书, 当看到事务相关知识时, 决定对该知识点稍微深入一下, 这里主要先说一下本人在啃相关知识点时的曲折之路:1.首先是事务相关ACID特性, 之前已经有相关笔记进行过介绍, 这里不再重复;
-2.接下来是高并发事务相关的问题, 像是 脏读, 不可重复读, 幻读, 更新丢失等问题之前也有介...
-    
-
-        <a href="/2017/12/28/2017-12-28-mysql_mvcc/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-12-27-mysql_transaction-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-27 21:01:07" datetime="2017-12-27T13:01:07.000Z"  itemprop="datePublished">2017-12-27</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/27/2017-12-27-mysql_transaction-01/">MySQL(INNODB引擎)高并发事务问题及解决方案</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        事务的概念
-事务：可以理解为一个 独立的 工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。
-
-仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元,...
-    
-
-        <a href="/2017/12/27/2017-12-27-mysql_transaction-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-12-06-HTTP-06-内容协商与转码 "
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-06 18:50:27" datetime="2017-12-06T10:50:27.000Z"  itemprop="datePublished">2017-12-06</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/06/2017-12-06-HTTP-06-内容协商与转码 /">&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言
-一个URL常常需要代表若干不同的资源: 例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。
-
-HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，单...
-    
-
-        <a href="/2017/12/06/2017-12-06-HTTP-06-内容协商与转码 /" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-12-04-HTTP-04-Entity-Header-Fields "
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-04 12:50:27" datetime="2017-12-04T04:50:27.000Z"  itemprop="datePublished">2017-12-04</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /">HTTP -- 实体和编码 (400, 411, 206)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        主要讲解一些实体首部字段的相关知识
-前言1.要知道, 每天都有数以万计的各种媒体对象经由HTTP传送, 如图像, 文本, 影片以及软件程序等。只要你能叫出名字, HTTP就可以传送。2.更重要的是: HTTP还会确保它的报文被正确传送, 识别, 提取以及适当处理
-3.具体来说, HTTP要确保它所承载的”货物”满足以下条件:
-
-符合用户的需要(基于Accept系列的内容协商首部)
-在网络上可...
-    
-
-        <a href="/2017/12/04/2017-12-04-HTTP-04-Entity-Header-Fields /" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-12-02-HTTP-06-cookie"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-02 10:27:36" datetime="2017-12-02T02:27:36.000Z"  itemprop="datePublished">2017-12-02</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/02/2017-12-02-HTTP-06-cookie/">HTTP -- cookie机制 (401)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言
-HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来自客户端的请求, 然后向客户端回送一条响应。Web服务器几乎没有什么信息可以用来判断是哪个用户发送的消息, 也无法记录来访用户的请求序列。
-
-对于现代的Web站点我们, 我们知道, Web服务器可能会同时与成千上万个不同的客户端进行对话, 这些服务器通常都要记录下它们与谁交谈, 而不会认为所有的请求都来自匿名的客户端。...
-    
-
-        <a href="/2017/12/02/2017-12-02-HTTP-06-cookie/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-11-30-HTTP-05-cache"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-11-30 14:27:36" datetime="2017-11-30T06:27:36.000Z"  itemprop="datePublished">2017-11-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/2017-11-30-HTTP-05-cache/">HTTP -- 缓存 (200, 304)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Web缓存简介
-Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。
-使用缓存的优点:
-
-减少了冗余的数据传输, 节省了你的网络费用
-
-有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地...
-    
-
-        <a href="/2017/11/30/2017-11-30-HTTP-05-cache/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-2017-11-30-HTTP-04-General-Header-Fields"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-11-30 11:50:02" datetime="2017-11-30T03:50:02.000Z"  itemprop="datePublished">2017-11-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/2017-11-30-HTTP-04-General-Header-Fields/">HTTP - General Header Fields</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        通用首部字段 general-header
-Cache-Control
-Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;
-
-缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
-
-可以按请求和响应分为:
-
-缓存请求指令
-
-缓存响应指令
-
-
-
-更多参考HTTP - 缓存
-
-immutable属于缓存控制的一个扩展属性, http://...
-    
-
-        <a href="/2017/11/30/2017-11-30-HTTP-04-General-Header-Fields/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-2017-11-30-HTTP-03-Method"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -614,6 +197,423 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-19-06-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-19 18:15:23" datetime="2017-10-19T10:15:23.000Z"  itemprop="datePublished">2017-10-19</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/19/2017-10-19-06-docker/">06.Docker中的网络功能</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        外部访问容器端口映射
+容器中可以运行一些网络应用, 要让外部也可以访问这些应用, 可以通过 -P 或 -p 参数来指定端口映射。
+1$ docker run -d -p 8090:80 --name testVip --mount type=bind,source=/Users/renyimin/Desktop/testVip,target=/haha,readonly vipservice...
+    
+
+        <a href="/2017/10/19/2017-10-19-06-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-17-08-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-17 21:32:08" datetime="2017-10-17T13:32:08.000Z"  itemprop="datePublished">2017-10-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/17/2017-10-17-08-docker/">08.Dockerfile 定制镜像</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+Dockerfile 是一个文本文件, 其内包含了一条条的指令(Instruction), 每一条指令构建一层, 因此每一条指令的内容, 就是描述该层应当如何构建。
+
+
+
+
+    
+
+        <a href="/2017/10/17/2017-10-17-08-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-17-07-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-17 15:20:31" datetime="2017-10-17T07:20:31.000Z"  itemprop="datePublished">2017-10-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/17/2017-10-17-07-docker/">06.高级网络配置</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        参考: https://yeasy.gitbooks.io/docker_practice/content/advanced_network/
+
+    
+
+        <a href="/2017/10/17/2017-10-17-07-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-17-05-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-17 14:40:23" datetime="2017-10-17T06:40:23.000Z"  itemprop="datePublished">2017-10-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/17/2017-10-17-05-docker/">05.Docker数据管理</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts)
+数据卷(Volumes)
+数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:
+数据卷 可以在容器之间共享和重用
+对 数据卷 的修改会立马生效
+对 数据卷 的更新，不会影响镜像
+数据卷 默认会一直存在，即使容器被删除
+
+
+注意: 数据卷 的使用, 类似于 ...
+    
+
+        <a href="/2017/10/17/2017-10-17-05-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-17-04-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-17 11:30:08" datetime="2017-10-17T03:30:08.000Z"  itemprop="datePublished">2017-10-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/17/2017-10-17-04-docker/">04.容器</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        容器
+镜像(Image)和容器(Container)的关系, 就像是面向对象程序设计中的 类 和 实例 的关系一样, 镜像是静态的定义, 容器是镜像运行时的实体。容器可以被 创建、启动、停止、删除、暂停等。
+
+容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间。 因此容器可以拥有自己的 root 文件系统、自己的网络配置、自己的进程空间，甚至自己的用户ID...
+    
+
+        <a href="/2017/10/17/2017-10-17-04-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-14-03-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-14 20:15:28" datetime="2017-10-14T12:15:28.000Z"  itemprop="datePublished">2017-10-14</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/14/2017-10-14-03-docker/">03.仓库(私有仓库)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Docker Registry 公开服务1.Docker Registry 公开服务是开放给用户使用、允许用户管理镜像的 Registry 服务。
+
+一般这类公开服务允许用户免费上传、下载公开的镜像，并可能提供收费服务供用户管理私有镜像。
+最常使用的Registry公开服务是官方的 Docker Hub, 这也是默认的 Registry，并拥有大量的高质量的官方镜像。
+除此以外，还有 Cor...
+    
+
+        <a href="/2017/10/14/2017-10-14-03-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-12-02-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-12 19:40:07" datetime="2017-10-12T11:40:07.000Z"  itemprop="datePublished">2017-10-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/12/2017-10-12-02-docker/">02.镜像</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Docker 运行容器前需要本地存在对应的镜像，如果本地不存在该镜像，Docker 会从镜像仓库下载该镜像;
+基础部分获取镜像
+Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢?
+
+从Docker镜像仓库获取镜像的命令是 docker pull, 其命令格式为：docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]
+
+d...
+    
+
+        <a href="/2017/10/12/2017-10-12-02-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-2017-10-12-01-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-12 19:30:41" datetime="2017-10-12T11:30:41.000Z"  itemprop="datePublished">2017-10-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/12/2017-10-12-01-docker/">01.认识Docker</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        简介
+Docker使用Google公司推出的Go语言实现; 属于操作系统层面的虚拟化技术; 也称其为容器; 
+
+docker 和 传统虚拟机技术 对比
+
+
+
+传统虚拟机技术是: 虚拟出一套硬件后; 在其上运行一个完整操作系统; 最后在该系统上再运行所需应用进程;
+
+而容器内的应用进程直接运行于宿主的内核, 容器内没有自己的内核, 而且也没有进行硬件虚拟。因此容器要比传统虚拟机更为轻便;
+
+如...
+    
+
+        <a href="/2017/10/12/2017-10-12-01-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《Docker从入门到实战》/">《Docker从入门到实战》</a></li></ul>
 
     </div>
     
