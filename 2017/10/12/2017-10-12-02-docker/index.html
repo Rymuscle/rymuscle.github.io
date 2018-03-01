@@ -13,27 +13,27 @@
     
     
     
-    <title>02.镜像 | Lant&#39;s Blog</title>
+    <title>02.镜像-01 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Docker读书笔记">
-    <meta name="description" content="Docker 运行容器前需要本地存在对应的镜像，如果本地不存在该镜像，Docker 会从镜像仓库下载该镜像; 基础部分获取镜像 Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢?  从Docker镜像仓库获取镜像的命令是 docker pull, 其命令格式为：docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]  dock">
+    <meta name="description" content="前言镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样, 镜像是静态的定义, 容器是镜像运行时的实体。所以 Docker 运行容器前首先需要本地存在对应的镜像, 如果本地不存在该镜像, Docker 会从镜像仓库下载该镜像。 镜像的获取Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢? 1.从Docker镜像仓库获取镜像的命令是 do">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02.镜像">
+<meta property="og:title" content="02.镜像-01">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Docker 运行容器前需要本地存在对应的镜像，如果本地不存在该镜像，Docker 会从镜像仓库下载该镜像; 基础部分获取镜像 Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢?  从Docker镜像仓库获取镜像的命令是 docker pull, 其命令格式为：docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]  dock">
+<meta property="og:description" content="前言镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样, 镜像是静态的定义, 容器是镜像运行时的实体。所以 Docker 运行容器前首先需要本地存在对应的镜像, 如果本地不存在该镜像, Docker 会从镜像仓库下载该镜像。 镜像的获取Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢? 1.从Docker镜像仓库获取镜像的命令是 do">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/jiasuqi-error-macOS.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/jiasuqi-macOS.png">
-<meta property="og:updated_time" content="2018-03-01T02:58:20.000Z">
+<meta property="og:updated_time" content="2018-03-01T03:29:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02.镜像">
-<meta name="twitter:description" content="Docker 运行容器前需要本地存在对应的镜像，如果本地不存在该镜像，Docker 会从镜像仓库下载该镜像; 基础部分获取镜像 Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢?  从Docker镜像仓库获取镜像的命令是 docker pull, 其命令格式为：docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]  dock">
+<meta name="twitter:title" content="02.镜像-01">
+<meta name="twitter:description" content="前言镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样, 镜像是静态的定义, 容器是镜像运行时的实体。所以 Docker 运行容器前首先需要本地存在对应的镜像, 如果本地不存在该镜像, Docker 会从镜像仓库下载该镜像。 镜像的获取Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢? 1.从Docker镜像仓库获取镜像的命令是 do">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/docker/jiasuqi-error-macOS.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -115,7 +115,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02.镜像</div>
+        <div class="flex-col header-title ellipsis">02.镜像-01</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -137,7 +137,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">02.镜像</h1>
+        <h1 class="title">02.镜像-01</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-10-12T11:40:07.000Z" itemprop="datePublished" class="page-time">
@@ -162,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础部分"><span class="post-toc-number">1.</span> <span class="post-toc-text">基础部分</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#获取镜像"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">获取镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置镜像加速器"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">配置镜像加速器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#列出已存在镜像"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">列出已存在镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#注意"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#删除镜像"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">删除镜像</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分层存储"><span class="post-toc-number">2.</span> <span class="post-toc-text">分层存储</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#docker-commit"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">docker commit</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#慎用-docker-commit"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">慎用 docker commit</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#定制镜像"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">定制镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#慎用-docker-commit-1"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">慎用 docker commit</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#FROM-指定基础镜像"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">FROM 指定基础镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RUN-执行命令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">RUN 执行命令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">构建镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文（Context）"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">镜像构建上下文（Context）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其它-docker-build-的用法"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">其它 docker build 的用法</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像的获取"><span class="post-toc-number">2.</span> <span class="post-toc-text">镜像的获取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置镜像加速器"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置镜像加速器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像相关基础操作"><span class="post-toc-number">4.</span> <span class="post-toc-text">镜像相关基础操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#列出已存在镜像"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">列出已存在镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#删除镜像"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">删除镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像更名"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">镜像更名</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -170,7 +170,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02.镜像</h1>
+        <h1 class="post-card-title">02.镜像-01</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-10-12 19:40:07" datetime="2017-10-12T11:40:07.000Z"  itemprop="datePublished">2017-10-12</time>
 
@@ -183,176 +183,40 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>Docker 运行容器前需要本地存在对应的镜像，如果本地不存在该镜像，Docker 会从镜像仓库下载该镜像;</p>
-<h2 id="基础部分"><a href="#基础部分" class="headerlink" title="基础部分"></a>基础部分</h2><h3 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h3><ol>
-<li><p><a href="https://hub.docker.com/explore/" target="_blank" rel="external">Docker Hub</a>上有大量的高质量的镜像可以用, 如何获取这些镜像呢?</p>
-</li>
-<li><p>从Docker镜像仓库获取镜像的命令是 <code>docker pull</code>, 其命令格式为：<code>docker pull [选项] [Docker Registry 地址[:端口号]/]仓库名[:标签]</code></p>
-</li>
-<li><p>docker pull命令的具体选项可以通过 <code>docker pull --help</code> 命令看到，这里我们说一下镜像名称的格式;</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样, 镜像是静态的定义, 容器是镜像运行时的实体。<br>所以 Docker 运行容器前首先需要本地存在对应的镜像, 如果本地不存在该镜像, Docker 会从镜像仓库下载该镜像。</p>
+<h2 id="镜像的获取"><a href="#镜像的获取" class="headerlink" title="镜像的获取"></a>镜像的获取</h2><p><a href="https://hub.docker.com/explore/" target="_blank" rel="external">Docker Hub</a>上有大量的高质量的镜像可以用, 如何获取这些镜像呢?</p>
+<p>1.从Docker镜像仓库获取镜像的命令是 <code>docker pull</code>, 其命令格式为：<code>docker pull [选项] [Docker Registry地址[:端口号]/]仓库名[:标签]</code></p>
 <ul>
-<li><p><strong>Docker镜像仓库地址</strong>: 地址的格式一般是 <code>&lt;域名/IP&gt;[:端口号]</code> (默认地址是 Docker Hub)</p>
-</li>
-<li><p><strong>仓库名</strong>: 仓库名是<strong>两段式名称</strong>, 即 <code>&lt;用户名&gt;/&lt;软件名&gt;</code><br>对于 Docker Hub, 如果不给出用户名, 则默认为 library, 也就是官方镜像。<br>(//TODO 难道自己也能注册账号, 然后创建自己的镜像仓库, 并传上自己的镜像文件??)</p>
-</li>
-<li><p>比如 <code>$ docker pull ubuntu:16.04</code> :<br>由于没有给出Docker镜像仓库地址, 因此将会从Docker Hub获取镜像, 而镜像名称是 <code>ubuntu:16.04</code>(没有用户名), 因此将会获取官方镜像 <code>library/ubuntu</code> 仓库中标签为 <code>16.04</code> 的镜像;</p>
-</li>
+<li>docker pull命令的具体选项可以通过 <code>docker pull --help</code> 命令看到</li>
+<li>镜像名称的格式:<br><strong>Docker镜像仓库地址</strong>: 地址的格式一般是 <code>&lt;域名/IP&gt;[:端口号]</code> (默认地址是 Docker Hub 仓库地址)<br><strong>仓库名</strong>: 仓库名是<strong>两段式名称</strong>, 即 <code>&lt;用户名&gt;/&lt;软件名&gt;</code> (对于 Docker Hub, 如果不给出用户名, 则默认为 library, 也就是官方镜像。)</li>
+<li>比如 <code>$ docker pull ubuntu:16.04</code>: 由于没有给出Docker镜像仓库地址, 因此将会从Docker Hub获取镜像, 而镜像名称是 <code>ubuntu:16.04</code>(没有用户名), 因此将会获取官方镜像 <code>library/ubuntu</code> 仓库中标签为 <code>16.04</code> 的镜像;</li>
 </ul>
-</li>
-<li><p>另外, 如果从 Docker Hub 下载镜像非常缓慢，可以<code>配置加速器</code>。</p>
-</li>
-</ol>
-<h3 id="配置镜像加速器"><a href="#配置镜像加速器" class="headerlink" title="配置镜像加速器"></a>配置镜像加速器</h3><ol>
-<li>国内从 Docker Hub 拉取镜像有时会遇到困难, 此时可以配置镜像加速器, Docker 官方和国内很多云服务商都提供了<strong>国内加速器服务</strong>, 例如:<ul>
+<p>2.另外, 如果从 Docker Hub 下载镜像非常缓慢，可以 配置镜像加速器。</p>
+<h2 id="配置镜像加速器"><a href="#配置镜像加速器" class="headerlink" title="配置镜像加速器"></a>配置镜像加速器</h2><p>1.国内从 Docker Hub 拉取镜像有时会遇到困难, 此时可以配置镜像加速器, Docker 官方和国内很多云服务商都提供了<strong>国内加速器服务</strong>, 例如:</p>
+<ul>
 <li><a href="https://docs.docker.com/registry/recipes/mirror/#use-case-the-china-registry-mirror" target="_blank" rel="external">Docker 官方提供的中国 registry mirror</a></li>
 <li><a href="https://cr.console.aliyun.com/?accounttraceid=d520cfad-1577-4905-91cd-09aa8b4964cd#/imageSearch" target="_blank" rel="external">阿里云加速器</a></li>
 <li><a href="https://www.daocloud.io/mirror#accelerator-doc" target="_blank" rel="external">DaoCloud 加速器</a></li>
 </ul>
-</li>
-<li>此处以 Docker 官方加速器为例进行介绍(由于本人使用macOS系统,下面只列出macOS上如何配置镜像加速器, 其他系统请<a href="https://yeasy.gitbooks.io/docker_practice/content/install/mirror.html" target="_blank" rel="external">参考</a>)<ul>
+<p>2.此处以 Docker 官方加速器为例进行介绍(由于本人使用macOS系统,下面只列出macOS上如何配置镜像加速器, 其他系统请<a href="https://yeasy.gitbooks.io/docker_practice/content/install/mirror.html" target="_blank" rel="external">参考</a>)</p>
+<ul>
 <li>在任务栏点击<code>Docker for mac</code> 应用图标 -&gt; <code>Perferences</code>… -&gt; <code>Daemon</code> -&gt; <code>Registry mirrors</code></li>
-<li>在列表中填写加速器地址即可, 修改完成之后，点击 <code>Apply &amp; Restart</code> 按钮，Docker 就会重启并应用配置的镜像地址了   </li>
+<li>在列表中填写加速器地址即可, 修改完成之后，点击 <code>Apply &amp; Restart</code> 按钮，Docker 就会重启并应用配置的镜像地址了</li>
 </ul>
-</li>
-<li>如果在添加加速器地址后出现 <code>registry-mirrors no certs for egistry.docker-....</code><br> <img src="/img/docker/jiasuqi-error-macOS.png" width="300">  </li>
-<li>网上查找资料后, <a href="https://yq.aliyun.com/articles/29941" target="_blank" rel="external">有人说是证书问题</a>, 尝试修改https为http后正常<br> <img src="/img/docker/jiasuqi-macOS.png" width="300"> </li>
-<li>检查加速器是否生效<ul>
+<p>3.如果在添加加速器地址后出现 <code>registry-mirrors no certs for egistry.docker-....</code><br><img src="/img/docker/jiasuqi-error-macOS.png" width="300">  </p>
+<p>4.网上查找资料后, <a href="https://yq.aliyun.com/articles/29941" target="_blank" rel="external">有人说是证书问题</a>, 尝试修改https为http后正常<br><img src="/img/docker/jiasuqi-macOS.png" width="300"> </p>
+<p>5.检查加速器是否生效</p>
+<ul>
 <li>配置加速器之后,如果拉取镜像仍然十分缓慢,请手动检查加速器配置是否生效,在命令行执行 <code>docker info</code></li>
-<li>由于我配置的是docker hub提供的中国镜像站点, 所以如果从结果中看到了如下内容，说明配置成功(你看到的可能和我的不一样)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Registry Mirrors:</div><div class="line">http://registry.docker-cn.com/</div></pre></td></tr></table></figure>
+<li>由于我配置的是docker hub提供的中国镜像站点, 所以如果从结果中看到了如下内容，说明配置成功(你看到的可能和我的不一样)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Registry Mirrors:</div><div class="line">http://registry.docker-cn.com/</div><div class="line">//如果添加了多个加速站点, 此处也会有多个</div></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-</ol>
-<h3 id="列出已存在镜像"><a href="#列出已存在镜像" class="headerlink" title="列出已存在镜像"></a>列出已存在镜像</h3><ol>
-<li><p><code>docker images</code> ：列表包含了 <code>仓库名</code>、<code>标签</code>、<code>镜像 ID</code>、<code>创建时间</code> 以及 <code>所占用的空间</code>;</p>
-</li>
-<li><p>虽然 <code>镜像 ID</code> 是镜像的唯一标识, 但是一个镜像可以对应多个标签 (所以有些镜像的ID一样, 但是tag会不一样);</p>
-</li>
-</ol>
-<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p>在 Docker 1.13+ 版本中推荐使用 <code>docker image</code> 来管理镜像。 (比如 <code>docker image ls</code> 会列出所有镜像);</p>
-<h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><ol>
-<li>如果要删除本地的镜像, 可以使用 <code>docker image rm 镜像名</code> 命令; (<code>$ docker image rm [选项] &lt;镜像1&gt; [&lt;镜像2&gt; ...]</code>)</li>
-</ol>
-<h2 id="分层存储"><a href="#分层存储" class="headerlink" title="分层存储"></a>分层存储</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol>
-<li>严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。</li>
-<li>镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。</li>
-</ol>
-<h3 id="docker-commit"><a href="#docker-commit" class="headerlink" title="docker commit"></a>docker commit</h3><ol>
-<li><p>当我们运行一个容器的时候(如果不使用卷的话), 我们做的任何文件修改都会被记录于 <code>容器存储</code> 层里。后面会知道: <strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡</strong>;</p>
-</li>
-<li><p>而 Docker 提供了一个 <code>docker commit</code> 命令，可以将容器的存储层保存下来成为镜像。</p>
-<ul>
-<li>换句话说，就是在原有镜像的基础上，再<strong>叠加上容器的存储层</strong>，并构成新的镜像。</li>
-<li>以后我们运行这个新镜像的时候, 就会拥有原有容器最后的文件变化。</li>
-</ul>
-</li>
-<li><p>docker commit 的语法格式为: <code>docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</code></p>
-</li>
-<li><p>我们可以用下面的命令将容器保存为镜像:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker commit --author &quot;Tao Wang &lt;twang2218@gmail.com&gt;&quot; --message &quot;修改了默认网页&quot; webserver nginx:v2</div></pre></td></tr></table></figure>
-<p> 其中 <code>--author</code> 是指定修改的作者，而 <code>--message</code> 则是记录本次修改的内容。这点和 git 版本控制相似，不过这里这些信息可以省略留空。</p>
-</li>
-</ol>
-<h3 id="慎用-docker-commit"><a href="#慎用-docker-commit" class="headerlink" title="慎用 docker commit"></a>慎用 docker commit</h3><ol>
-<li><p>注意: <code>docker commit</code> 命令除了学习之外，还有一些特殊的应用场合，比如被入侵后保存现场等。但是，<strong>不要使用 docker commit 定制镜像，定制镜像应该使用 Dockerfile 来完成</strong>。</p>
-</li>
-<li><p>镜像是容器的基础, 每次执行 <code>docker run</code> 的时候都会指定哪个镜像作为容器运行的基础。在之前的例子中, 我们所使用的都是来自于Docker Hub的镜像, 直接使用这些镜像是可以满足一定的需求, 而当这些镜像无法直接满足需求时, 我们就需要定制这些镜像。<br> 接下来将讲解如何定制镜像。</p>
-</li>
-</ol>
-<h3 id="定制镜像"><a href="#定制镜像" class="headerlink" title="定制镜像"></a>定制镜像</h3><ol>
-<li><p>回顾一下之前我们学到的知识，镜像是多层存储，每一层是在前一层的基础上进行的修改; 而容器同样也是多层存储，是在以镜像为基础层，<strong>在其基础上加一层作为容器运行时的存储层</strong>。</p>
-</li>
-<li><p>现在让我们以定制一个 Web 服务器为例子, 来讲解镜像是如何构建的:</p>
-<ul>
-<li><code>$ docker run --name webserver -d -p 80:80 nginx</code> 这条命令会用 nginx 镜像启动一个容器，命名为 webserver，并且映射了 80 端口，这样我们可以用浏览器去访问这个 nginx 服务器。(直接用浏览器访问的话，我们会看到默认的 Nginx 欢迎页面)</li>
-<li>现在，假设我们非常不喜欢这个欢迎页面，我们希望改成欢迎 Docker 的文字，我们可以使用 docker exec 命令进入容器，修改其内容。之后, 我们再刷新浏览器的话，会发现内容被改变了。</li>
-<li>我们修改了容器的文件，也就是改动了容器的存储层。我们可以通过 <code>docker diff</code> 命令看到具体的改动。</li>
-</ul>
-</li>
-<li><p>现在我们定制好了变化，我们希望能<strong>将其保存下来形成我们自己的一个新镜像</strong></p>
-<ul>
-<li>要知道，当我们运行一个容器的时候(如果不使用卷的话)，我们做的任何文件修改都会被记录于<strong>容器存储层里</strong>。</li>
-<li>而 Docker 提供了一个 <code>docker commit</code> 命令，可以将容器的存储层保存下来成为镜像。换句话说，就是在原有镜像的基础上，再叠加上容器的存储层，并构成新的镜像。以后我们运行这个新镜像的时候，就会拥有原有容器最后的文件变化。</li>
-<li>我们可以在 <code>docker image ls</code> 中看到这个新定制的镜像：</li>
-<li><p>我们还可以用 <code>docker history</code> 具体查看镜像内的历史记录，如果比较 nginx:latest 的历史记录，我们会发现新增了我们刚刚提交的这一层。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">$ docker history nginx:v2</div><div class="line">    IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT</div><div class="line">    07e334659748        54 seconds ago      nginx -g daemon off;                            95 B                修改了默认网页</div><div class="line">    e43d811ce2f4        4 weeks ago         /bin/sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daemon    0 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c #(nop)  EXPOSE 443/tcp 80/tcp        0 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c ln -sf /dev/stdout /var/log/nginx/   22 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c apt-key adv --keyserver hkp://pgp.   58.46 MB</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c #(nop)  ENV NGINX_VERSION=1.11.5-1   0 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c #(nop)  MAINTAINER NGINX Docker Ma   0 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c #(nop)  CMD [&quot;/bin/bash&quot;]            0 B</div><div class="line">    &lt;missing&gt;           4 weeks ago         /bin/sh -c #(nop) ADD file:23aa4f893e3288698c   123 MB</div></pre></td></tr></table></figure>
-</li>
-<li><p>新的镜像定制好后，我们也可以来运行这个镜像。至此，我们第一次完成了定制镜像，使用的是 <code>docker commit</code> 命令，<strong>手动操作给旧的镜像添加了新的一层，形成新的镜像，对镜像多层存储应该有了更直观的感觉</strong>。</p>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="慎用-docker-commit-1"><a href="#慎用-docker-commit-1" class="headerlink" title="慎用 docker commit"></a>慎用 docker commit</h3><p>使用 docker commit 命令虽然可以比较直观的帮助理解镜像分层存储的概念, <strong>但是实际环境中并不会这样使用</strong>。</p>
-<ol>
-<li>首先，如果仔细观察之前的 <code>docker diff webserver</code> 的结果，你会发现除了真正想要修改的 /usr/share/nginx/html/index.html 文件外，由于命令的执行，还有很多文件被改动或添加了。这还仅仅是最简单的操作，如果是安装软件包、编译构建，那会有大量的无关内容被添加进来，如果不小心清理，将会导致镜像极为臃肿。</li>
-<li>此外，使用 <code>docker commit</code> 意味着所有对镜像的操作都是<strong>黑箱操作</strong>，生成的镜像也被称为<strong>黑箱镜像</strong>，换句话说，就是除了制作镜像的人知道执行过什么命令、怎么生成的镜像，别人根本无从得知。而且，即使是这个制作镜像的人，过一段时间后也无法记清具体在操作的。虽然 docker diff 或许可以告诉得到一些线索，但是远远不到可以确保生成一致镜像的地步。这种黑箱镜像的维护工作是非常痛苦的。</li>
-<li>而且，回顾之前提及的镜像所使用的分层存储的概念，除当前层外，之前的每一层都是不会发生改变的，换句话说，任何修改的结果仅仅是在当前层进行标记、添加、修改，而不会改动上一层。如果使用 docker commit 制作镜像，以及后期修改的话，每一次修改都会让镜像更加臃肿一次，所删除的上一层的东西并不会丢失，会一直如影随形的跟着这个镜像，即使根本无法访问到。这会让镜像更加臃肿。</li>
-</ol>
-<h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><ol>
-<li>从上面的 docker commit 的学习中，我们可以了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</li>
-<li>Dockerfile 是一个文本文件，其内包含了一条条的指令(Instruction)，<strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</li>
-<li><p>还以之前定制 nginx 镜像为例，这次我们使用 Dockerfile 来定制。</p>
-<ul>
-<li><p>在一个空白目录中，建立一个文本文件，并命名为 Dockerfile, 其内容为如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FROM nginx</div><div class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div></pre></td></tr></table></figure>
-</li>
-<li><p>这个 Dockerfile 很简单，一共就两行。涉及到了两条指令，<code>FROM</code> 和 <code>RUN</code></p>
-</li>
-</ul>
-</li>
-</ol>
-<h3 id="FROM-指定基础镜像"><a href="#FROM-指定基础镜像" class="headerlink" title="FROM 指定基础镜像"></a>FROM 指定基础镜像</h3><ol>
-<li><p>所谓定制镜像, 是以一个镜像为基础, 在其上进行定制。而 FROM 就是指定基础镜像, 因此一个 Dockerfile 中 <code>FROM</code> 是必备的指令，并且必须是第一条指令。</p>
-<ul>
-<li>在 Docker Store 上有非常多的高质量的官方镜像, 有可以直接拿来使用的服务类的镜像, 如 nginx、redis、mongo、mysql、httpd、php、tomcat 等, 也有一些方便开发、构建、运行各种语言应用的镜像, 如 node、openjdk、python、ruby、golang 等。可以在其中寻找一个最符合我们最终目标的镜像<strong>做为基础镜像</strong>进行定制。</li>
-<li>如果没有找到对应服务的镜像，官方镜像中还提供了一些更为基础的操作系统镜像，如 ubuntu、debian、centos、fedora、alpine 等，这些操作系统的软件库为我们提供了更广阔的扩展空间。</li>
-<li><p>除了选择现有镜像为基础镜像外，<strong>Docker 还存在一个特殊的镜像，名为 scratch</strong>。这个镜像是虚拟的概念，并不实际存在，它表示一个空白的镜像。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FROM scratch</div></pre></td></tr></table></figure>
-<p>如果你以 scratch 为基础镜像的话，意味着你不以任何镜像为基础，接下来所写的指令将作为镜像第一层开始存在。</p>
-</li>
-</ul>
-</li>
-<li>不以任何系统为基础，直接将可执行文件复制进镜像的做法并不罕见，比如 swarm、coreos/etcd。<br> 对于 Linux 下静态编译的程序来说，并不需要有操作系统提供运行时支持，所需的一切库都已经在可执行文件里了，因此直接 FROM scratch 会让镜像体积更加小巧。<br> <strong>使用 Go 语言 开发的应用很多会使用这种方式来制作镜像，这也是为什么有人认为 Go 是特别适合容器微服务架构的语言的原因之一</strong>。</li>
-</ol>
-<h3 id="RUN-执行命令"><a href="#RUN-执行命令" class="headerlink" title="RUN 执行命令"></a>RUN 执行命令</h3><ol>
-<li><p>RUN 指令是用来执行命令行命令的。由于命令行的强大能力，RUN 指令在定制镜像时是最常用的指令之一。其格式有两种：</p>
-<ul>
-<li>shell 格式：<code>RUN &lt;命令&gt;</code>，就像直接在命令行中输入的命令一样。之前写的 Dockerfile 中的 RUN 指令就是这种格式。</li>
-<li>exec 格式：<code>RUN [&quot;可执行文件&quot;, &quot;参数1&quot;, &quot;参数2&quot;]</code>，这更像是函数调用中的格式。</li>
-</ul>
-</li>
-<li><p>既然 RUN 就像 Shell 脚本一样可以执行命令，那么我们是否就可以像 Shell 脚本一样把每个命令对应一个 RUN 呢？比如这样：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN apt-get update</div><div class="line">RUN apt-get install -y gcc libc6-dev make</div><div class="line">RUN wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot;</div><div class="line">RUN mkdir -p /usr/src/redis</div><div class="line">RUN tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1</div><div class="line">RUN make -C /usr/src/redis</div><div class="line">RUN make -C /usr/src/redis install</div></pre></td></tr></table></figure>
-</li>
-<li><p>之前说过，Dockerfile 中每一个指令都会建立一层，RUN 也不例外。每一个 RUN 的行为，就和刚才我们手工建立镜像的过程一样：新建立一层，在其上执行这些命令，执行结束后，commit 这一层的修改，构成新的镜像。</p>
-<ul>
-<li>而上面的这种写法，创建了 7 层镜像。这是完全没有意义的，而且很多运行时不需要的东西，都被装进了镜像里，比如编译环境、更新的软件包等等。结果就是产生非常臃肿、非常多层的镜像，不仅仅增加了构建部署的时间，也很容易出错。<strong>这是很多初学 Docker 的人常犯的一个错误</strong>。</li>
-<li>Union FS 是有最大层数限制的，比如 AUFS，曾经是最大不得超过 42 层，现在是不得超过 127 层。</li>
-</ul>
-</li>
-<li><p>上面的 Dockerfile 正确的写法应该是这样：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN buildDeps=&apos;gcc libc6-dev make&apos; \</div><div class="line">    &amp;&amp; apt-get update \</div><div class="line">    &amp;&amp; apt-get install -y $buildDeps \</div><div class="line">    &amp;&amp; wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot; \</div><div class="line">    &amp;&amp; mkdir -p /usr/src/redis \</div><div class="line">    &amp;&amp; tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1 \</div><div class="line">    &amp;&amp; make -C /usr/src/redis \</div><div class="line">    &amp;&amp; make -C /usr/src/redis install \</div><div class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* \</div><div class="line">    &amp;&amp; rm redis.tar.gz \</div><div class="line">    &amp;&amp; rm -r /usr/src/redis \</div><div class="line">    &amp;&amp; apt-get purge -y --auto-remove $buildDeps</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li>首先，之前所有的命令只有一个目的，就是编译、安装 redis 可执行文件。因此没有必要建立很多层，这只是一层的事情。因此，这里没有使用很多个 RUN 对一一对应不同的命令，而是仅仅使用一个 RUN 指令，并使用 &amp;&amp; 将各个所需命令串联起来。将之前的 7 层，简化为了 1 层。<strong>在撰写 Dockerfile 的时候，要经常提醒自己，这并不是在写 Shell 脚本，而是在定义每一层该如何构建</strong>。<ul>
-<li>并且，这里为了格式化还进行了换行。Dockerfile 支持 Shell 类的行尾添加 \ 的命令换行方式，以及行首 # 进行注释的格式。<br>良好的格式，比如换行、缩进、注释等，会让维护、排障更为容易，这是一个比较好的习惯。</li>
-<li>此外，还可以看到这一组命令的最后添加了清理工作的命令，删除了为了编译构建所需要的软件，清理了所有下载、展开的文件，并且还清理了 apt 缓存文件。<br>这是很重要的一步，我们之前说过，<strong>镜像是多层存储，每一层的东西并不会在下一层被删除</strong>，会一直跟随着镜像。<br>因此镜像构建时，一定要确保每一层只添加真正需要添加的东西，任何无关的东西都应该清理掉。<br>很多人初学 Docker 制作出了很臃肿的镜像的原因之一，就是忘记了每一层构建的最后一定要清理掉无关文件。</li>
-</ul>
-</li>
-</ol>
-<h3 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h3><ol>
-<li><p>在 Dockerfile 文件所在目录执行:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ docker build -t nginx:v3 .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM nginx</div><div class="line">---&gt; e43d811ce2f4</div><div class="line">Step 2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 9cdc27646c7b</div><div class="line"> ---&gt; 44aa4490ce2c</div><div class="line">Removing intermediate container 9cdc27646c7b</div><div class="line">Successfully built 44aa4490ce2c</div></pre></td></tr></table></figure>
-<ul>
-<li>从命令的输出结果中，我们可以清晰的看到镜像的构建过程。在 Step 2 中，如同我们之前 所说的那样， RUN 指令启动了一个容器 9cdc27646c7b ，执行了所要求的命令，并最后提交 了这一层 44aa4490ce2c ，随后删除了所用到的这个容器 9cdc27646c7b 。</li>
-</ul>
-</li>
-<li><p>这里我们使用了 <code>docker build</code> 命令进行镜像构建。其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code><br> 在这里我们指定了最终镜像的名称 <code>-t nginx:v3</code> ，构建成功后，我们可以像之前运行 nginx:v2 那样来运行这个镜像，其结果会和 nginx:v2 一样。</p>
-</li>
-</ol>
-<h3 id="镜像构建上下文（Context）"><a href="#镜像构建上下文（Context）" class="headerlink" title="镜像构建上下文（Context）"></a>镜像构建上下文（Context）</h3><h3 id="其它-docker-build-的用法"><a href="#其它-docker-build-的用法" class="headerlink" title="其它 docker build 的用法"></a>其它 docker build 的用法</h3><p>更多参考: <a href="https://yeasy.gitbooks.io/docker_practice/content/image/build.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/build.html</a><br>… 未完待续 </p>
-<p>参考 : <a href="https://yeasy.gitbooks.io/docker_practice/content/image/commit.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/commit.html</a></p>
+<h2 id="镜像相关基础操作"><a href="#镜像相关基础操作" class="headerlink" title="镜像相关基础操作"></a>镜像相关基础操作</h2><h3 id="列出已存在镜像"><a href="#列出已存在镜像" class="headerlink" title="列出已存在镜像"></a>列出已存在镜像</h3><p>1.<code>docker images</code>：列表包含了 <code>仓库名</code>、<code>标签</code>、<code>镜像ID</code>、<code>创建时间</code> 以及 <code>所占用的空间</code>;</p>
+<p>2.虽然 <code>镜像ID</code> 是镜像的唯一标识, 但是一个镜像可以打包出多个不同标签的镜像 (所以有些镜像的ID一样, 但是tag会不一样);</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">127.0.0.1:5000/registry                               latest              d1fd7d86a825        7 weeks ago         33.3MB</div><div class="line">registry                                              latest              d1fd7d86a825        7 weeks ago         33.3MB</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$</div></pre></td></tr></table></figure>
+</code></pre><h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><p>如果要删除本地的镜像, 可以使用 <code>$ docker image rm [选项] &lt;镜像名1&gt; [&lt;镜像名2&gt; ...]</code> 命令; (因为镜像ID可能会一样, 所以删除镜像用的是镜像名)</p>
+<h3 id="镜像更名"><a href="#镜像更名" class="headerlink" title="镜像更名"></a>镜像更名</h3><p>镜像更改名称也很简单, 直接 <code>$ docker tag 镜像名 新镜像名:标签</code></p>
+<p>在 Docker 1.13+ 版本中推荐使用 <code>docker image</code> 来管理镜像。 (比如 <code>docker image ls</code> 会列出所有镜像);</p>
 
         </div>
 
@@ -389,7 +253,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像-01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -399,7 +263,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像-01》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -409,7 +273,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.镜像》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.镜像-01》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -445,9 +309,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/10/14/2017-10-14-03-docker/" id="post-next" class="post-nav-link">
+      <a href="/2017/10/12/2017-10-12-03-docker/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03.仓库(私有仓库)</h4>
+        <h4 class="title">03.镜像 - 02</h4>
       </a>
     </div>
   
@@ -549,7 +413,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像-01》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -559,7 +423,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&title=《02.镜像-01》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -569,7 +433,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.镜像》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.镜像-01》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-02-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
