@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前, 所有浏览器都实行这个政策; 最初，它的含义是指，A站点设置的Cookie，B站点不能打开，除非这两个站点属 同源，所谓同源指的是 “三个相同”:  1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ；  2.域名完全相同http://blog">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T09:36:31.000Z">
+<meta property="og:updated_time" content="2018-03-01T12:08:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01.同源策略(Same origin policy)">
 <meta name="twitter:description" content="同源策略1995年，同源政策由 Netscape 公司引入浏览器。目前, 所有浏览器都实行这个政策; 最初，它的含义是指，A站点设置的Cookie，B站点不能打开，除非这两个站点属 同源，所谓同源指的是 “三个相同”:  1.协议相同http://blog.renyimin.com 和 https://blog.renyimin.com 就不是同一个源 ；  2.域名完全相同http://blog">
@@ -206,7 +206,7 @@
 <h2 id="同源策略和CSRF安全问题"><a href="#同源策略和CSRF安全问题" class="headerlink" title="同源策略和CSRF安全问题"></a>同源策略和CSRF安全问题</h2><p>需要注意一点: <strong>同源策略的限制, 并没有限制住CSRF攻击</strong></p>
 <p>上面同源策略的几个限制中, 并没有限制 <code>从B站点中通过超链接去跳转到A站点时, A站点去读取自身的cookie</code>, 这样就会存在问题: 假如你当前已经登录了邮箱，或bbs，同时你又访问了另外一个站点，假设这就是一个钓鱼网站(站点中伪装了很多诱导用户去点击的超链接, 而这些超链接都是其他站点的一些敏感操作, 就这样放好诱饵等待曾经登陆过那些站点的用户去点击, 等鱼儿上钩); </p>
 <blockquote>
-<p>假设这个网站上面可能因为某个图片吸引你，你去点击一下，而这个点击正是去往你的bbs站点进行一个发帖操作，<br>由于当前你的浏状态已经是登陆了bbs站点，此时你点击这个钓鱼网站的连接是就会使用你之前登陆bbs站点在浏览器cookie罐中保存的信息, 就和正常的请求一样。<br>于是钓鱼站点就纯天然的利用了其他站点的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; </p>
+<p>假设这个网站上面可能因为某个图片吸引你，你去点击一下，而这个点击正是去往你的bbs站点进行一个发帖操作，<br>由于当前你的浏览器状态已经是登陆了bbs站点，此时你点击这个钓鱼网站的连接是就会使用你之前登陆bbs站点在浏览器cookie罐中保存的信息, 就和正常的请求一样。<br>于是钓鱼站点就纯天然的利用了其他站点的登陆状态，让用户在不知情的情况下，帮你发帖或干其他事情; </p>
 </blockquote>
 <p>这也就是我们通常所说的CSRF攻击, CSRF攻击的主要目的是让用户在不知情的情况下攻击自己已登录的一个系统;</p>
 <h2 id="引出跨域问题"><a href="#引出跨域问题" class="headerlink" title="引出跨域问题"></a>引出跨域问题</h2><p>由于同源策略的这些限制都是为了安全考虑, 自然是必要的; 但是有时很不方便, 可能会导致合理的用途也受到影响, 接下来将详细介绍如何在需要的时候合理地去 <strong>规避”同源政策”的限制</strong>;</p>

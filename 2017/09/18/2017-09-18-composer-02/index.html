@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言 一般情况下,安装包的数据(主要是 zip 文件) 一般是从 github.com 上下载的, 安装包的元数据是从 packagist.org 上下载的。然而，由于众所周知的原因，国外的网站连接速度很慢，并且随时可能被“墙”甚至“不存在”。“Packagist 中国全量镜像”所做的就是缓存所有安装包和元数据到国内的机房并通过国内的 CDN 进行加速，这样就不必再去向国外的网站发起请求,  从而">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/composer/cdn.png">
-<meta property="og:updated_time" content="2018-02-03T07:10:11.000Z">
+<meta property="og:updated_time" content="2018-03-01T09:54:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02. 设置中国全量镜像">
 <meta name="twitter:description" content="前言 一般情况下,安装包的数据(主要是 zip 文件) 一般是从 github.com 上下载的, 安装包的元数据是从 packagist.org 上下载的。然而，由于众所周知的原因，国外的网站连接速度很慢，并且随时可能被“墙”甚至“不存在”。“Packagist 中国全量镜像”所做的就是缓存所有安装包和元数据到国内的机房并通过国内的 CDN 进行加速，这样就不必再去向国外的网站发起请求,  从而">
@@ -186,22 +186,13 @@
 <p>一般情况下,安装包的数据(主要是 zip 文件) 一般是从 github.com 上下载的, 安装包的元数据是从 packagist.org 上下载的。<br>然而，由于众所周知的原因，国外的网站连接速度很慢，并且随时可能被“墙”甚至“不存在”。<br>“Packagist 中国全量镜像”所做的就是缓存所有安装包和元数据到国内的机房并通过国内的 CDN 进行加速，这样就不必再去向国外的网站发起请求,  从而达到加速 composer install以及 composer update 的过程,  并且更加快速、稳定。因此,  即使 packagist.org、github.com 发生故障(<strong>主要是连接速度太慢和被墙</strong>),  你仍然可以下载、更新安装包。</p>
 </blockquote>
 <h2 id="原理图"><a href="#原理图" class="headerlink" title="原理图"></a>原理图</h2><p>下面是一张从网上找的图<br><img src="/img/composer/cdn.png" width="500"></p>
-<h2 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h2><ol>
-<li><p>修改 composer 的全局配置文件</p>
+<h2 id="配置方法"><a href="#配置方法" class="headerlink" title="配置方法"></a>配置方法</h2><p>1.修改 composer 的全局配置文件<br>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行命令: <code>composer config -g repo.packagist composer https://packagist.phpcomposer.com</code></p>
+<p>2.修改当前项目的 composer.json 配置文件</p>
 <ul>
-<li>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）并执行命令: <code>composer config -g repo.packagist composer https://packagist.phpcomposer.com</code></li>
-</ul>
-</li>
-<li><p>修改当前项目的 composer.json 配置文件</p>
-<ul>
-<li><p>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）, 进入你的项目的根目录（也就是 composer.json 文件所在目录），执行命令: <code>composer config repo.packagist composer https://packagist.phpcomposer.com</code></p>
-</li>
-<li><p>命令将会在当前项目中的 composer.json 文件的末尾自动添加镜像的配置信息（你也可以自己手工添加）：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"repositories": &#123;</div><div class="line">        "packagist": &#123;</div><div class="line">            "type": "composer",</div><div class="line">            "url": "https://packagist.phpcomposer.com"</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<li>打开命令行窗口（windows用户）或控制台（Linux、Mac 用户）, 进入你的项目的根目录（也就是 composer.json 文件所在目录），执行命令: <code>composer config repo.packagist composer https://packagist.phpcomposer.com</code></li>
+<li>上述操作将会在 当前项目的 composer.json 文件的末尾自动添加镜像的配置信息（你也可以自己手工添加）：  <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">"repositories": &#123;</div><div class="line">        "packagist": &#123;</div><div class="line">            "type": "composer",</div><div class="line">            "url": "https://packagist.phpcomposer.com"</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-</ol>
 <p>参考: <a href="https://pkg.phpcomposer.com/" target="_blank" rel="external">https://pkg.phpcomposer.com/</a></p>
 
         </div>
