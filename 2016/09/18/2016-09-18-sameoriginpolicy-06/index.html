@@ -20,13 +20,13 @@
     
     
     <meta name="keywords" content="CrossDomain">
-    <meta name="description" content="预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ;  浏览器先询问服务器, 当前网页所在的域名是否在">
+    <meta name="description" content="预检请求 preflight 说明非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ; 非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight)  浏览器先询问服务器, 当前网页所在的域名是否在服务器的">
 <meta name="keywords" content="CrossDomain">
 <meta property="og:type" content="article">
 <meta property="og:title" content="06.CORS方案 not-so-simple request">
 <meta property="og:url" content="http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-06/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ;  浏览器先询问服务器, 当前网页所在的域名是否在">
+<meta property="og:description" content="预检请求 preflight 说明非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ; 非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight)  浏览器先询问服务器, 当前网页所在的域名是否在服务器的">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error02.png">
@@ -34,10 +34,10 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/preflight01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/preflight02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/no-simple-error01.png">
-<meta property="og:updated_time" content="2018-02-09T05:09:56.000Z">
+<meta property="og:updated_time" content="2018-03-01T02:14:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06.CORS方案 not-so-simple request">
-<meta name="twitter:description" content="预检请求 preflight 说明 非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ;  非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight) ;  浏览器先询问服务器, 当前网页所在的域名是否在">
+<meta name="twitter:description" content="预检请求 preflight 说明非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 PUT 或 DELETE, 或者 Content-Type 字段的类型是 application/json ; 非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 &amp;quot;预检&amp;quot;请求(preflight)  浏览器先询问服务器, 当前网页所在的域名是否在服务器的">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/cross-domain/not-simple-error01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -187,32 +187,23 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="预检请求-preflight-说明"><a href="#预检请求-preflight-说明" class="headerlink" title="预检请求 preflight 说明"></a>预检请求 <code>preflight</code> 说明</h2><ol>
-<li><p>非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 <code>PUT</code> 或 <code>DELETE</code>, 或者 <code>Content-Type</code> 字段的类型是 <code>application/json</code> ;</p>
-</li>
-<li><p>非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 <code>&quot;预检&quot;请求(preflight)</code> ;</p>
+            <h2 id="预检请求-preflight-说明"><a href="#预检请求-preflight-说明" class="headerlink" title="预检请求 preflight 说明"></a>预检请求 <code>preflight</code> 说明</h2><p>非简单请求是那种对服务器有特殊要求的请求, 比如请求方法是 <code>PUT</code> 或 <code>DELETE</code>, 或者 <code>Content-Type</code> 字段的类型是 <code>application/json</code> ;</p>
+<p>非简单请求的CORS请求, 会在正式通信之前, 增加一次HTTP查询请求, 称为 <code>&quot;预检&quot;请求(preflight)</code></p>
 <ul>
 <li>浏览器先询问服务器, 当前网页所在的域名是否在服务器的许可名单之中, 以及可以使用哪些HTTP动词和头信息字段;</li>
 <li>只有得到肯定答复, 浏览器才会发出正式的XMLHttpRequest请求, 否则就报错 ;</li>
 </ul>
-</li>
-<li><p><strong>非简单请求会导致原先的一次请求变成两次, 第一次请求是 <code>预检请求</code></strong>;</p>
-</li>
-<li><p>“预检”请求用的请求方法是 <code>OPTIONS</code>，表示这个请求是用来<code>询问</code>的，头信息里面关键字段是Origin，表示请求来自哪个源 ;</p>
-</li>
-</ol>
-<h2 id="非简单请求的例子"><a href="#非简单请求的例子" class="headerlink" title="非简单请求的例子"></a>非简单请求的例子</h2><ol>
-<li><p>服务器前端代码: www.test.com/index.html</p>
+<p><strong>非简单请求会导致原先的一次请求变成两次, 第一次请求是 <code>预检请求</code></strong>;<br>“预检”请求用的请求方法是 <code>OPTIONS</code>，表示这个请求是用来<code>询问</code>的，头信息里面关键字段是Origin，表示请求来自哪个源 ;</p>
+<h2 id="非简单请求的例子"><a href="#非简单请求的例子" class="headerlink" title="非简单请求的例子"></a>非简单请求的例子</h2><p>1.服务器前端代码: www.test.com/index.html</p>
 <ul>
 <li>本例子使用 <code>PUT</code> 来进行ajax请求, 满足 <code>非简单请求</code> 的条件 ;</li>
-<li>另外, 本例还<code>自定义了请求时的 header 首部字段</code>, 也满足 <code>非简单请求</code> 的条件 ;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">        $(document).ready(function()&#123;</div><div class="line">            //设置cookie</div><div class="line">            document.cookie = &quot;name=renyimin; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;age=100; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;gender=boy; domain=test.com&quot;;</div><div class="line">            //跨子域带cookie和简单请求的设置方法一样</div><div class="line">            $.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div><div class="line">            $(&quot;#btn&quot;).click(function() &#123;</div><div class="line">                //序列化name/value</div><div class="line">                var data = $(&quot;form&quot;).serializeArray();</div><div class="line">                $.ajax(&#123;</div><div class="line">                    //这里用PUT, 则为 `非简单` 请求</div><div class="line">                    type: &apos;PUT&apos;,</div><div class="line">                    url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                    dataType: &apos;json&apos;,</div><div class="line">                    data: data,</div><div class="line">                    //或者如果你自定义了一些请求时的 header 首部字段, 那么请求就也是 复杂请求</div><div class="line">                    headers: &#123;&quot;custom-header-field&quot; : &quot;test&quot;&#125;,</div><div class="line">                    success: function (result) &#123;</div><div class="line">                        console.log(result);</div><div class="line">                    &#125;,</div><div class="line">                    timeout: 3000</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">    性别:&lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    年龄:&lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<li><p>另外, 本例还<code>自定义了请求时的 header 首部字段</code>, 也满足 <code>非简单请求</code> 的条件 ;</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;Title&lt;/title&gt;</div><div class="line">    &lt;script src=&quot;https://cdn.staticfile.org/jquery/3.1.1/jquery.min.js&quot;&gt;&lt;/script&gt;</div><div class="line">    &lt;script type=&quot;text/javascript&quot; &gt;</div><div class="line">        $(document).ready(function()&#123;</div><div class="line">            //设置cookie</div><div class="line">            document.cookie = &quot;name=renyimin; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;age=100; domain=test.com&quot;;</div><div class="line">            document.cookie = &quot;gender=boy; domain=test.com&quot;;</div><div class="line">            //跨子域带cookie和简单请求的设置方法一样</div><div class="line">            $.ajaxSetup(&#123;crossDomain: true, xhrFields: &#123;withCredentials: true&#125;&#125;);</div><div class="line">            $(&quot;#btn&quot;).click(function() &#123;</div><div class="line">                //序列化name/value</div><div class="line">                var data = $(&quot;form&quot;).serializeArray();</div><div class="line">                $.ajax(&#123;</div><div class="line">                    //这里用PUT, 则为 `非简单` 请求</div><div class="line">                    type: &apos;PUT&apos;,</div><div class="line">                    url: &apos;http://test.test.com/index.php&apos;,</div><div class="line">                    dataType: &apos;json&apos;,</div><div class="line">                    data: data,</div><div class="line">                    //或者如果你自定义了一些请求时的 header 首部字段, 那么请求就也是 复杂请求</div><div class="line">                    headers: &#123;&quot;custom-header-field&quot; : &quot;test&quot;&#125;,</div><div class="line">                    success: function (result) &#123;</div><div class="line">                        console.log(result);</div><div class="line">                    &#125;,</div><div class="line">                    timeout: 3000</div><div class="line">                &#125;);</div><div class="line">            &#125;);</div><div class="line">        &#125;);</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line">&lt;form name=&quot;form&quot;&gt;</div><div class="line">    性别:&lt;input type=&quot;text&quot; name=&quot;sex&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    年龄:&lt;input type=&quot;text&quot; name=&quot;age&quot;&gt;</div><div class="line">    &lt;br/&gt;</div><div class="line">    &lt;input type=&quot;button&quot; id=&quot;btn&quot; value=&quot;button&quot; /&gt;</div><div class="line">&lt;/form&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-<li><p>服务器后端代码: test.test.com/index.php</p>
- <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//服务器允许的 Origin</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="comment">//服务器允许的 methods</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Methods: PUT, GET, POST"</span>);</div><div class="line"><span class="comment">//服务器允许设置的头部字段</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Headers: custom-header-field"</span>);</div><div class="line"><span class="comment">//跨子域带cookie和简单请求的设置方法一样</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div><div class="line"></div><div class="line">var_dump($_COOKIE);</div><div class="line">var_dump($_SERVER[<span class="string">'HTTP_CUSTOM_HEADER_FIELD'</span>]);</div></pre></td></tr></table></figure>
-</li>
-<li><p>注意: 像上面例子的复杂跨域请求</p>
+<p>2.服务器后端代码: test.test.com/index.php</p>
+<pre><code><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">//服务器允许的 Origin</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Origin: http://www.test.com"</span>);</div><div class="line"><span class="comment">//服务器允许的 methods</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Methods: PUT, GET, POST"</span>);</div><div class="line"><span class="comment">//服务器允许设置的头部字段</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Headers: custom-header-field"</span>);</div><div class="line"><span class="comment">//跨子域带cookie和简单请求的设置方法一样</span></div><div class="line">header(<span class="string">"Access-Control-Allow-Credentials: true"</span>);</div><div class="line"></div><div class="line">var_dump($_COOKIE);</div><div class="line">var_dump($_SERVER[<span class="string">'HTTP_CUSTOM_HEADER_FIELD'</span>]);</div></pre></td></tr></table></figure>
+</code></pre><p>3.注意: 像上面例子的复杂跨域请求</p>
 <ul>
 <li><p>必须: 首先和简单请求一样, 服务器端的 <code>Access-Control-Allow-Origin</code> 是必须设置的, 不然首先就跨不了域;</p>
 </li>
@@ -221,37 +212,22 @@
 <li><p>可选: 如果你自定义了 <code>自定义首部字段</code> 的 <code>复杂请求</code>, 那么也要在服务端有对应的 <code>Access-Control-Allow-Headers</code>, 否则:<br><img src="/img/cross-domain/not-simple-error02.png"></p>
 </li>
 </ul>
-</li>
-<li><p>另外需要关注的是: 如果在ajax跨域的情况下, 你设置了自定义的首部字段, 那么即使你的请求类型是get, post, head, 也会变成也是复杂请求, 随意仍然会发出预请求;</p>
-</li>
-</ol>
-<h2 id="分析预检请求"><a href="#分析预检请求" class="headerlink" title="分析预检请求"></a>分析预检请求</h2><ol>
-<li><p>上面<code>www.test.com/index.php</code>代码进行ajax请求的时候, HTTP请求的方法是<code>PUT</code>, 所以浏览器会发现, 这是一个非简单请求, 就自动发出一个”预检”请求, 要求服务器确认可以这样请求 ;</p>
-</li>
-<li><p>所以请求应该是包括 <code>预检请求</code>和 <code>真正的请求</code> 两个请求的:<br> <img src="/img/cross-domain/2times_request.png"></p>
-</li>
-<li><p>下面是这个”预检”请求的HTTP头信息 和 响应信息:<br> <img src="/img/cross-domain/preflight01.png" width="700" height="500" alt="preflight01" align="center"></p>
-</li>
-<li><p>可以看到, “预检”请求用的HTTP请求方法是<code>OPTIONS</code>方法, 表示这个请求是用来<strong>进行询问的</strong>, 头信息里面, 关键字段是Origin, 表示请求来自哪个源;</p>
+<p>4.另外需要关注的是: 如果在ajax跨域的情况下, 你设置了自定义的首部字段, 那么即使你的请求类型是get, post, head, 也会变成也是复杂请求, 所以仍然会发出预请求;</p>
+<h2 id="分析预检请求"><a href="#分析预检请求" class="headerlink" title="分析预检请求"></a>分析预检请求</h2><p>1.上面<code>www.test.com/index.php</code>代码进行ajax请求的时候, HTTP请求的方法是<code>PUT</code>, 所以浏览器会发现, 这是一个非简单请求, 就自动发出一个”预检”请求, 要求服务器确认可以这样请求 ;</p>
+<p>2.所以请求应该是包括 <code>预检请求</code>和 <code>真正的请求</code> 两个请求的:<br><img src="/img/cross-domain/2times_request.png"></p>
+<p>3.下面是这个”预检”请求的HTTP头信息 和 响应信息:<br><img src="/img/cross-domain/preflight01.png" width="700" height="500" alt="preflight01" align="center"></p>
+<p>4.可以看到, “预检”请求用的HTTP请求方法是<code>OPTIONS</code>方法, 表示这个请求是用来<strong>进行询问的</strong>, 头信息里面, 关键字段是Origin, 表示请求来自哪个源;</p>
 <ul>
 <li><p>除了Origin字段，”预检”请求的头信息包括两个特殊字段:<br>(1)<code>Access-Control-Request-Method</code> ：该字段是必须的，用来列出浏览器的CORS请求会用到哪些HTTP方法，上例是PUT ;<br>(2)<code>Access-Control-Request-Headers</code>：该字段是一个逗号分隔的字符串，指定浏览器CORS请求会额外发送的头信息字段, 上例是X-Custom-Header ;</p>
 </li>
-<li><p><code>Access-Control-Allow-Credentials</code> 响应首部字段, 和简单请求一样, 都是为了做跨子域cookie共享;</p>
+<li><p>另外可以看到<code>Access-Control-Allow-Credentials</code> 响应首部字段, 和简单请求一样, 都是为了做跨子域cookie共享;</p>
 </li>
 </ul>
-</li>
-</ol>
-<h2 id="分析预检响应"><a href="#分析预检响应" class="headerlink" title="分析预检响应"></a>分析预检响应</h2><ol>
-<li><p>从之前的图中还可以看到, 在预检请求的响应中, 服务器收到”预检”请求以后, 检查了 <code>Origin</code>,<code>Access-Control-Request-Method</code>,<code>Access-Control-Request-Headers</code>,<code>Access-Control-Allow-Credentials</code> 字段以后，确认允许跨源请求，就可以做出回应 ;</p>
-</li>
-<li><p>并且预检请求部分是不会真的发送数据的:<br> <img src="/img/cross-domain/preflight02.png"><br> 二第二次真实请求就会有真正数据!</p>
-</li>
-<li><p>上面的HTTP回应中，关键的是 <code>Access-Control-Allow-Origin</code> 字段，表示 <code>http://www.test.com</code> 可以请求数据, <strong>该字段也可以设为星号</strong>，表示同意任意跨源请求 ;</p>
- <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Origin: http:<span class="comment">//www.test.com</span></div><div class="line">或者</div><div class="line">Access-Control-Allow-Origin: *</div></pre></td></tr></table></figure>
-</li>
-<li><p>如果服务器否定了”预检”请求，会返回一个正常的HTTP回应, 浏览器会认定服务器不同意预检请求，因此触发一个错误，被 <code>XMLHttpRequest</code> 对象的 <code>onerror</code> 回调函数捕获;控制台会打印出如下的报错信息 ;<br> <img src="/img/cross-domain/no-simple-error01.png"></p>
-</li>
-</ol>
+<h2 id="分析预检响应"><a href="#分析预检响应" class="headerlink" title="分析预检响应"></a>分析预检响应</h2><p>1.从之前的图中还可以看到, 在预检请求的响应中, 服务器收到”预检”请求以后, 检查了 <code>Origin</code>,<code>Access-Control-Request-Method</code>,<code>Access-Control-Request-Headers</code>,<code>Access-Control-Allow-Credentials</code> 字段以后，确认允许跨源请求，就可以做出回应 ;</p>
+<p>2.并且预检请求部分是不会真的发送数据的:<br><img src="/img/cross-domain/preflight02.png"><br>而第二次真实请求就会有真正数据!</p>
+<p>3.上面的HTTP回应中，关键的是 <code>Access-Control-Allow-Origin</code> 字段，表示 <code>http://www.test.com</code> 可以请求数据, <strong>该字段也可以设为星号</strong>，表示同意任意跨源请求 ;</p>
+<pre><code><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Origin: http:<span class="comment">//www.test.com</span></div><div class="line">或者</div><div class="line">Access-Control-Allow-Origin: *</div></pre></td></tr></table></figure>
+</code></pre><p>4.如果服务器否定了”预检”请求，会返回一个正常的HTTP回应, 浏览器会认定服务器不同意预检请求，因此触发一个错误，被 <code>XMLHttpRequest</code> 对象的 <code>onerror</code> 回调函数捕获;控制台会打印出如下的报错信息 ;<br><img src="/img/cross-domain/no-simple-error01.png"></p>
 <h2 id="其他CORS相关字段分析"><a href="#其他CORS相关字段分析" class="headerlink" title="其他CORS相关字段分析"></a>其他CORS相关字段分析</h2><ol>
 <li>Access-Control-Allow-Methods: GET, POST, PUT<br> 该字段必需，它的值是逗号分隔的一个字符串，表明服务器支持的所有跨域请求的方法。注意，返回的是所有支持的方法，而不单是浏览器请求的那个方法。这是为了避免多次”预检”请求。</li>
 <li>Access-Control-Allow-Headers: X-Custom-Header<br> 如果浏览器请求包括Access-Control-Request-Headers字段，则Access-Control-Allow-Headers字段是必需的。它也是一个逗号分隔的字符串，表明服务器支持的所有头信息字段，不限于浏览器在”预检”中请求的字段。</li>
@@ -353,7 +329,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2016/09/21/2016-09-21-sameoriginpolicy-07/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">07.小结 &#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34;</h4>
+        <h4 class="title">07.&#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34;</h4>
       </a>
     </div>
   
