@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/ajax-simple-cors02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/cross-domain/haha-server-withCredentials.png">
-<meta property="og:updated_time" content="2018-03-01T02:10:36.000Z">
+<meta property="og:updated_time" content="2018-03-01T12:13:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.CORS方案 simple request">
 <meta name="twitter:description" content="CORS说明CORS 是一个W3C标准, 全称是 跨域资源共享(Cross-origin resource sharing), 通俗说就是我们所熟知的跨域请求; 在以前，跨域可以采用 代理、JSONP 等方式，而在Modern浏览器面前, 这些终将成为过去式, 因为有了CORS ; CORS允许浏览器向跨源服务器发出XMLHttpRequest请求, 也就是克服了AJAX只能同源使用的限制; 另外">
@@ -221,7 +221,7 @@
 <ul>
 <li><p><code>Access-Control-Allow-Origin</code><br>服务器要设置ajax请求可以跨域, 该字段是必须的, 它的值要么是请求时Origin字段的值，要么是一个*，表示接受任意域名的请求;</p>
 </li>
-<li><p><code>Access-Control-Allow-Credentials</code><br>该字段可选, 它的值是一个布尔值，表示是否允许发送Cookie, <strong>默认情况下，Cookie不包括在CORS请求之中</strong>, 设为true，即表示服务器明确许可，Cookie可以包含在请求中，一起发给服务器;<br>注意, 这个值也只能设为true，如果服务器不要浏览器发送Cookie，删除该字段即可。<br><strong>当然, 如果带了cookie, 那貌似也只能是跨子域了</strong>;</p>
+<li><p><code>Access-Control-Allow-Credentials</code><br>该字段可选, 它的值是一个布尔值，表示是否允许发送Cookie, <strong>默认情况下，Cookie不包括在CORS请求之中</strong>; 如果设置为true，即表示服务器明确许可，Cookie可以包含在请求中，一起发给服务器;<br>注意, 这个值也只能设为true，如果服务器不要浏览器发送Cookie，删除该字段即可。<br><strong>当然, 如果带了cookie, 那貌似也只能是跨子域了</strong>;</p>
 </li>
 <li><p><code>Access-Control-Expose-Headers</code><br>该字段可选, CORS请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma;<br>如果想拿到其他字段，就必须在<code>Access-Control-Expose-Headers</code>里面指定;<br>之前提到的 <code>Access-Control-Expose-Headers: FooBar</code> 就可以让getResponseHeader(‘FooBar’)获取额外返回的FooBar字段的值。</p>
 </li>
