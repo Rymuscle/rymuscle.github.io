@@ -13,7 +13,7 @@
     
     
     
-    <title>03.镜像 - 02 | Lant&#39;s Blog</title>
+    <title>03.镜像 - 分层存储 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,15 +23,19 @@
     <meta name="description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="03.镜像 - 02">
+<meta property="og:title" content="03.镜像 - 分层存储">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T03:46:11.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/docker/nginx_test_03.png">
+<meta property="og:updated_time" content="2018-03-01T07:11:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="03.镜像 - 02">
+<meta name="twitter:title" content="03.镜像 - 分层存储">
 <meta name="twitter:description" content="分层存储严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由多层文件系统联合组成。镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。 docker commit1.当运行一个容器的后(如果不使用数据卷的话), 你所做的任何文件修改都会被">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/docker/nginx_test_01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +116,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">03.镜像 - 02</div>
+        <div class="flex-col header-title ellipsis">03.镜像 - 分层存储</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +138,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">03.镜像 - 02</h1>
+        <h1 class="title">03.镜像 - 分层存储</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-10-12T13:50:07.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +163,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分层存储"><span class="post-toc-number">1.</span> <span class="post-toc-text">分层存储</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#docker-commit"><span class="post-toc-number">2.</span> <span class="post-toc-text">docker commit</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#定制镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">定制镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#慎用-docker-commit"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">慎用 docker commit</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分层存储"><span class="post-toc-number">1.</span> <span class="post-toc-text">分层存储</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#docker-commit"><span class="post-toc-number">2.</span> <span class="post-toc-text">docker commit</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#手动定制镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">手动定制镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#先看使用数据卷的问题"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">先看使用数据卷的问题</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#重新定制镜像"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">重新定制镜像</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#慎用-docker-commit"><span class="post-toc-number">4.</span> <span class="post-toc-text">慎用 docker commit</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +171,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">03.镜像 - 02</h1>
+        <h1 class="post-card-title">03.镜像 - 分层存储</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-10-12 21:50:07" datetime="2017-10-12T13:50:07.000Z"  itemprop="datePublished">2017-10-12</time>
 
@@ -187,27 +191,44 @@
 <li>换句话说，就是在原有镜像的基础上，再<strong>叠加上容器的存储层</strong>，并构成新的镜像。</li>
 <li>以后我们运行这个新镜像的时候, 就会拥有原有容器最后的文件变化。</li>
 </ul>
-<p>3.docker commit 的语法格式为: <code>docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</code>, 如下:</p>
+<p>3.docker commit 的语法格式为: <code>docker commit [选项] &lt;容器ID或容器名&gt; [&lt;仓库名&gt;[:&lt;标签&gt;]]</code></p>
+<p>, 如下:</p>
 <ul>
 <li>其中 <code>--author</code> 是指定修改的作者，而 <code>--message</code> 则是记录本次修改的内容。这点和 git 版本控制相似，不过这里这些信息可以省略留空  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ docker commit --author &quot;Tao Wang &lt;twang2218@gmail.com&gt;&quot; --message &quot;修改了默认网页&quot; webserver nginx:v2</div></pre></td></tr></table></figure>
 </li>
 </ul>
-<h2 id="定制镜像"><a href="#定制镜像" class="headerlink" title="定制镜像"></a>定制镜像</h2><p><strong>镜像是容器的基础, 每次执行 <code>docker run</code> 的时候都会指定哪个镜像作为容器运行的基础</strong>。在之前的例子中, 我所使用的都是来自于Docker Hub的镜像, 直接使用这些镜像是可以满足一定的需求, 而当这些镜像无法直接满足需求时, 我们就需要定制这些镜像。<br>1.镜像是多层存储，每一层是在前一层的基础上进行的修改; 而容器同样也是多层存储，是在以镜像为基础层，<strong>在其基础上加一层作为容器运行时的存储层</strong>。</p>
-<p>2.现在以定制一个 Web 服务器为例子, 来讲解镜像是如何构建的:</p>
+<h2 id="手动定制镜像"><a href="#手动定制镜像" class="headerlink" title="手动定制镜像"></a>手动定制镜像</h2><p><strong>镜像是容器的基础, 每次执行 <code>docker run</code> 的时候都会指定哪个镜像作为容器运行的基础</strong>。在之前的例子中, 我所使用的都是来自于Docker Hub的镜像, 直接使用这些镜像是可以满足一定的需求, 而当这些镜像无法直接满足需求时, 我们就需要定制这些镜像。</p>
+<p>镜像是多层存储，每一层是在前一层的基础上进行的修改; 而容器同样也是多层存储，是在以镜像为基础层，<strong>在其基础上加一层作为容器运行时的存储层</strong>。</p>
+<h3 id="先看使用数据卷的问题"><a href="#先看使用数据卷的问题" class="headerlink" title="先看使用数据卷的问题"></a>先看使用数据卷的问题</h3><p>1.之前已经配置了docker中国加速镜像, 现在通过<code>git pull nginx</code>获取一个<a href="https://hub.docker.com/_/nginx/" target="_blank" rel="external">nginx基础镜像</a>;</p>
+<p>2.直接运行这个nginx基础镜像为一个容器(由于该镜像非常基础,甚至没有像vi的工具,因此在启动时可以将nginx的项目根目录<code>/usr/share/nginx/html</code>映射出来, 以便于测试)</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker run -d -p 8088:80 --mount type=bind,source=/Users/renyimin/Desktop/nginx_test,target=/usr/share/nginx/html --name nginx_test nginx</div><div class="line">1c39a78311e579482a2334347f80ba479555097d869a1254a27c9ac581c13eed</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</div><div class="line">1c39a78311e5        nginx               &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8088-&gt;80/tcp   nginx_test</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$</div></pre></td></tr></table></figure>
+</code></pre><p>3.通过 <code>localhost:8088</code> 会看到nginx的欢迎界面<br><img src="/img/docker/nginx_test_01.png" width="300/"></p>
+<p>4.现在，假设需要更改欢迎界面文字(本应该使用 <code>docker exec -it nginx_test /bin/sh</code> 命令进入容器修改其内容, 但后来发现该进行非常基础,很多基础工具如vi都没有, 所以最终采用挂载主机目录方式启动, 然后在主机新增一个index.html文件)<br><img src="/img/docker/nginx_test_02.png" width="300/"></p>
+<p>5.之后直接刷新浏览器的话，会发现内容被改变了<br><img src="/img/docker/nginx_test_03.png" width="300/"></p>
+<p>6.现在修改了容器的文件，也就是改动了容器的存储层。我们可以通过 <code>docker diff</code> 命令看到具体的改动, 你会发现自己的改动并没有体现出来, 其实这主要是因为<strong>你将目录挂载出来了</strong>, 如果不是挂载出来,而是直接在容器中修改的话, 则会体现出来</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker diff nginx_test</div><div class="line">C /run</div><div class="line">A /run/nginx.pid</div><div class="line">C /var/cache/nginx</div><div class="line">A /var/cache/nginx/client_temp</div><div class="line">A /var/cache/nginx/fastcgi_temp</div><div class="line">A /var/cache/nginx/proxy_temp</div><div class="line">A /var/cache/nginx/scgi_temp</div><div class="line">A /var/cache/nginx/uwsgi_temp</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$</div></pre></td></tr></table></figure>
+</code></pre><p>7.当运行一个容器的时候(如果不使用卷的话)，我们做的任何文件修改都会被记录于<strong>容器存储层里</strong>, 可以使用 <code>docker diff</code> 命令看到容器存储层中的变动, 但是如果使用了数据卷, 则挂载目录中的改动无法体现出来;</p>
+<h3 id="重新定制镜像"><a href="#重新定制镜像" class="headerlink" title="重新定制镜像"></a>重新定制镜像</h3><p>1.既然数据卷中的内容无法使用<code>docker diff</code>来查看差异, 我们可以将index.html文件复制到容器的<code>/home</code>下, 然后使用 <code>docker diff</code> 命令就可以看到容器存储层中的改动</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker diff nginx_test</div><div class="line">C /home</div><div class="line">A /home/index.html</div><div class="line">C /run</div><div class="line">A /run/nginx.pid</div><div class="line">C /var/cache/nginx</div><div class="line">A /var/cache/nginx/client_temp</div><div class="line">A /var/cache/nginx/fastcgi_temp</div><div class="line">A /var/cache/nginx/proxy_temp</div><div class="line">A /var/cache/nginx/scgi_temp</div><div class="line">A /var/cache/nginx/uwsgi_temp</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$</div></pre></td></tr></table></figure>
+</code></pre><p>2.小结</p>
 <ul>
-<li><code>$ docker run --name webserver -d -p 80:80 nginx</code> 这条命令会用 nginx 镜像启动一个容器，命名为 webserver，并且映射了 80 端口，这样我们可以用浏览器去访问这个 nginx 服务器。(直接用浏览器访问的话，我们会看到默认的 Nginx 欢迎页面)</li>
-<li>现在，假设需要更改环境欢迎界面文字，可以使用 <code>docker exec</code> 命令进入容器，修改其内容。之后, 再刷新浏览器的话，会发现内容被改变了。</li>
-<li>我们修改了容器的文件，也就是改动了容器的存储层。我们可以通过 <code>docker diff</code> 命令看到具体的改动。</li>
+<li><strong>要知道，当运行一个容器的时候(如果不使用卷的话)，我们做的任何文件修改都会被记录于<code>容器存储层里</code></strong>。</li>
+<li><p>而 Docker 提供了一个 <code>docker commit</code> 命令，可以将容器的存储层保存下来成为镜像。换句话说，就是在原有镜像的基础上，再叠加上容器的存储层，并构成新的镜像。以后我们运行这个新镜像的时候，就会拥有原有容器最后的文件变化(新镜像启动后就会在/home下有index.html文件)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">docker commit --author &apos;renyimin&apos; --message &quot;在/home下添加了一个index.html文件&quot; nginx_test nginx:v1</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>docker images</code> 可以看到这个新定制的镜像</p>
+</li>
+<li><p>我们还可以用 <code>docker history</code> 具体查看镜像内的历史记录，如果比较 nginx:latest 的历史记录，我们会发现新增了我们刚刚提交的这一层</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker history nginx:v1</div><div class="line">IMAGE               CREATED              CREATED BY                                      SIZE                COMMENT</div><div class="line">fe3e3a4c47b8        About a minute ago   nginx -g daemon off;                            1.4MB               在/home下添加了一个index.html文件</div><div class="line">e548f1a579cf        8 days ago           /bin/sh -c #(nop)  CMD [&quot;nginx&quot; &quot;-g&quot; &quot;daem...   0B                  </div><div class="line">&lt;missing&gt;           8 days ago           /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]         0B                  </div><div class="line">&lt;missing&gt;           8 days ago           /bin/sh -c #(nop)  EXPOSE 80/tcp                0B                  </div><div class="line">.....</div><div class="line">.....</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>新的镜像定制好后，就可以来运行这个镜像</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker run -d -p 8089:80 --name nginx_v1 nginx:v1</div><div class="line">d5d17a25cc35837c64f446a6623afa0a23b6c543593276979ebb7c5ced1e7e1d</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                  NAMES</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8089-&gt;80/tcp   nginx_v1</div><div class="line">785d252f5c94        nginx               &quot;nginx -g &apos;daemon ...&quot;   4 minutes ago       Up 3 minutes        0.0.0.0:8088-&gt;80/tcp   nginx_test</div><div class="line">// 会发现新的镜像启动后, 容器中的/home目录下包含我们提交的index.html个文件, 当然, localhost:8089和localhost:8088不同, 8089访问的还是默认欢迎页</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker exec -it nginx_v1 /bin/sh</div><div class="line"># cd /home</div><div class="line"># ls</div><div class="line">index.html</div><div class="line">#</div></pre></td></tr></table></figure>
+</li>
 </ul>
-<p>3.现在定制好了变化，如果我们希望能<strong>将其保存下来形成自己的一个新镜像</strong></p>
-<ul>
-<li>要知道，当运行一个容器的时候(如果不使用卷的话)，我们做的任何文件修改都会被记录于<strong>容器存储层里</strong>。</li>
-<li>而 Docker 提供了一个 <code>docker commit</code> 命令，可以将容器的存储层保存下来成为镜像。换句话说，就是在原有镜像的基础上，再叠加上容器的存储层，并构成新的镜像。以后我们运行这个新镜像的时候，就会拥有原有容器最后的文件变化。</li>
-<li>可以在 <code>docker image ls</code> 中看到这个新定制的镜像：</li>
-<li>我们还可以用 <code>docker history</code> 具体查看镜像内的历史记录，如果比较 nginx:latest 的历史记录，我们会发现新增了我们刚刚提交的这一层。</li>
-<li>新的镜像定制好后，就可以来运行这个镜像。<br>至此，我们第一次完成了定制镜像，使用的是 <code>docker commit</code> 命令，<strong>手动操作给旧的镜像添加了新的一层，形成新的镜像，对镜像多层存储应该有了更直观的感觉</strong>。</li>
-</ul>
-<h3 id="慎用-docker-commit"><a href="#慎用-docker-commit" class="headerlink" title="慎用 docker commit"></a>慎用 docker commit</h3><p>使用 docker commit 命令虽然可以比较直观的帮助理解镜像分层存储的概念, <strong>但是实际环境中并不会这样使用</strong>。<br>1.首先，如果仔细观察之前的 <code>docker diff webserver</code> 的结果，你会发现除了真正想要修改的 /usr/share/nginx/html/index.html 文件外，由于命令的执行，还有很多文件被改动或添加了。这还仅仅是最简单的操作，如果是安装软件包、编译构建，那会有大量的无关内容被添加进来，如果不小心清理，将会导致镜像极为臃肿。<br>2.此外，使用 <code>docker commit</code> 意味着所有对镜像的操作都是<strong>黑箱操作</strong>，生成的镜像也被称为<strong>黑箱镜像</strong>，换句话说，就是除了制作镜像的人知道执行过什么命令、怎么生成的镜像，别人根本无从得知。而且，即使是这个制作镜像的人，过一段时间后也无法记清具体在操作的。虽然 docker diff 或许可以告诉得到一些线索，但是远远不到可以确保生成一致镜像的地步。这种黑箱镜像的维护工作是非常痛苦的。<br>3.而且，回顾之前提及的镜像所使用的分层存储的概念，除当前层外，之前的每一层都是不会发生改变的，换句话说，任何修改的结果仅仅是在当前层进行标记、添加、修改，而不会改动上一层。如果使用 docker commit 制作镜像，以及后期修改的话，每一次修改都会让镜像更加臃肿一次，所删除的上一层的东西并不会丢失，会一直如影随形的跟着这个镜像，即使根本无法访问到。这会让镜像更加臃肿。</p>
+<p>3.至此，我们第一次完成了定制镜像，使用的是 <code>docker commit</code> 命令，<strong>手动操作给旧的镜像添加了新的一层，形成新的镜像，对镜像多层存储应该有了更直观的感觉</strong>。</p>
+<h2 id="慎用-docker-commit"><a href="#慎用-docker-commit" class="headerlink" title="慎用 docker commit"></a>慎用 docker commit</h2><p>使用 docker commit 命令虽然可以比较直观的帮助理解镜像分层存储的概念, <strong>但是实际环境中并不会这样使用</strong>。<br>1.首先，如果仔细观察之前的 <code>docker diff webserver</code> 的结果，你会发现除了真正想要修改的 /usr/share/nginx/html/index.html 文件外，由于命令的执行，还有很多文件被改动或添加了。这还仅仅是最简单的操作，如果是安装软件包、编译构建，那会有大量的无关内容被添加进来，如果不小心清理，将会导致镜像极为臃肿。</p>
+<p>2.此外，使用 <code>docker commit</code> 意味着所有对镜像的操作都是<strong>黑箱操作</strong>，生成的镜像也被称为<strong>黑箱镜像</strong>，换句话说，就是除了制作镜像的人知道执行过什么命令、怎么生成的镜像，别人根本无从得知。而且，即使是这个制作镜像的人，过一段时间后也无法记清具体在操作的。虽然 docker diff 或许可以告诉得到一些线索，但是远远不到可以确保生成一致镜像的地步。这种黑箱镜像的维护工作是非常痛苦的。</p>
+<p>3.而且，回顾之前提及的镜像所使用的分层存储的概念，除当前层外，之前的每一层都是不会发生改变的，换句话说，任何修改的结果仅仅是在当前层进行标记、添加、修改，而不会改动上一层。如果使用 docker commit 制作镜像，以及后期修改的话，每一次修改都会让镜像更加臃肿一次，所删除的上一层的东西并不会丢失，会一直如影随形的跟着这个镜像，即使根本无法访问到。这会让镜像更加臃肿。</p>
 
         </div>
 
@@ -244,7 +265,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 02》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 分层存储》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -254,7 +275,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 02》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 分层存储》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -264,7 +285,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.镜像 - 02》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.镜像 - 分层存储》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -294,7 +315,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/10/12/2017-10-12-02-docker/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">02.镜像-01</h4>
+          <h4 class="title">02.镜像 - 基础</h4>
         </a>
       </div>
     
@@ -302,7 +323,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/10/12/2017-10-12-04-docker/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">04.镜像 - 03</h4>
+        <h4 class="title">04.镜像 - Dockerfile脚本定制镜像</h4>
       </a>
     </div>
   
@@ -404,7 +425,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 02》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 分层存储》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -414,7 +435,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 02》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&title=《03.镜像 - 分层存储》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -424,7 +445,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.镜像 - 02》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.镜像 - 分层存储》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-03-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

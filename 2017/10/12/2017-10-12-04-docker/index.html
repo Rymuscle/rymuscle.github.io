@@ -13,25 +13,25 @@
     
     
     
-    <title>04.镜像 - 03 | Lant&#39;s Blog</title>
+    <title>04.镜像 - Dockerfile脚本定制镜像 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Docker读书笔记">
-    <meta name="description" content="使用Dockerfile定制镜像 从上面的 docker commit 的学习中，我们可以了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 Dockerfile 是一个文本文件，其内包含了">
+    <meta name="description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile 是一个文本文件，其内包含了一条条的指">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04.镜像 - 03">
+<meta property="og:title" content="04.镜像 - Dockerfile脚本定制镜像">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="使用Dockerfile定制镜像 从上面的 docker commit 的学习中，我们可以了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 Dockerfile 是一个文本文件，其内包含了">
+<meta property="og:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile 是一个文本文件，其内包含了一条条的指">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T03:46:42.000Z">
+<meta property="og:updated_time" content="2018-03-01T05:47:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04.镜像 - 03">
-<meta name="twitter:description" content="使用Dockerfile定制镜像 从上面的 docker commit 的学习中，我们可以了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 Dockerfile 是一个文本文件，其内包含了">
+<meta name="twitter:title" content="04.镜像 - Dockerfile脚本定制镜像">
+<meta name="twitter:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile 是一个文本文件，其内包含了一条条的指">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04.镜像 - 03</div>
+        <div class="flex-col header-title ellipsis">04.镜像 - Dockerfile脚本定制镜像</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">04.镜像 - 03</h1>
+        <h1 class="title">04.镜像 - Dockerfile脚本定制镜像</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-10-12T15:05:07.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#FROM-指定基础镜像"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">FROM 指定基础镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RUN-执行命令"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">RUN 执行命令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">构建镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文（Context）"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">镜像构建上下文（Context）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其它-docker-build-的用法"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">其它 docker build 的用法</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#FROM-指定基础镜像"><span class="post-toc-number">2.</span> <span class="post-toc-text">FROM 指定基础镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RUN-执行命令"><span class="post-toc-number">3.</span> <span class="post-toc-text">RUN 执行命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文（Context）"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">镜像构建上下文（Context）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其它-docker-build-的用法"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">其它 docker build 的用法</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04.镜像 - 03</h1>
+        <h1 class="post-card-title">04.镜像 - Dockerfile脚本定制镜像</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-10-12 23:05:07" datetime="2017-10-12T15:05:07.000Z"  itemprop="datePublished">2017-10-12</time>
 
@@ -180,10 +180,9 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><ol>
-<li>从上面的 docker commit 的学习中，我们可以了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</li>
-<li>Dockerfile 是一个文本文件，其内包含了一条条的指令(Instruction)，<strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</li>
-<li><p>还以之前定制 nginx 镜像为例，这次我们使用 Dockerfile 来定制。</p>
+            <h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><p>1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</p>
+<p>2.Dockerfile 是一个文本文件，其内包含了一条条的指令(Instruction)，<strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+<p>3.还以之前定制 nginx 镜像为例，这次我们使用 Dockerfile 来定制。</p>
 <ul>
 <li><p>在一个空白目录中，建立一个文本文件，并命名为 Dockerfile, 其内容为如下:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FROM nginx</div><div class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div></pre></td></tr></table></figure>
@@ -191,57 +190,38 @@
 <li><p>这个 Dockerfile 很简单，一共就两行。涉及到了两条指令，<code>FROM</code> 和 <code>RUN</code></p>
 </li>
 </ul>
-</li>
-</ol>
-<h3 id="FROM-指定基础镜像"><a href="#FROM-指定基础镜像" class="headerlink" title="FROM 指定基础镜像"></a>FROM 指定基础镜像</h3><ol>
-<li><p>所谓定制镜像, 是以一个镜像为基础, 在其上进行定制。而 FROM 就是指定基础镜像, 因此一个 Dockerfile 中 <code>FROM</code> 是必备的指令，并且必须是第一条指令。</p>
+<h2 id="FROM-指定基础镜像"><a href="#FROM-指定基础镜像" class="headerlink" title="FROM 指定基础镜像"></a>FROM 指定基础镜像</h2><p>所谓定制镜像, <strong>是以一个镜像为基础, 在其上进行定制</strong>。而 FROM 就是指定基础镜像, 因此一个 Dockerfile 中 <code>FROM</code> 是必备的指令，并且必须是第一条指令。</p>
+<p>在 Docker Store 上有非常多的高质量的官方镜像, 有可以直接拿来使用的服务类的镜像, 如 nginx、redis、mongo、mysql、httpd、php、tomcat 等, 也有一些方便开发、构建、运行各种语言应用的镜像, 如 node、openjdk、python、ruby、golang 等。可以在其中寻找一个最符合我们最终目标的镜像<strong>做为基础镜像</strong>进行定制。<br>如果没有找到对应服务的镜像，官方镜像中还提供了一些更为基础的操作系统镜像，如 ubuntu、debian、centos、fedora、alpine 等，这些操作系统的软件库为我们提供了更广阔的扩展空间。<br>除了选择现有镜像为基础镜像外，<strong>Docker 还存在一个特殊的镜像，名为 scratch</strong>。这个镜像是虚拟的概念，并不实际存在，它表示一个空白的镜像。(<code>FROM scratch</code>)</p>
+<p>如果你以 scratch 为基础镜像的话，意味着你不以任何镜像为基础，接下来所写的指令将作为镜像第一层开始存在。<br>不以任何系统为基础，直接将可执行文件复制进镜像的做法并不罕见，比如 swarm、coreos/etcd。</p>
 <ul>
-<li>在 Docker Store 上有非常多的高质量的官方镜像, 有可以直接拿来使用的服务类的镜像, 如 nginx、redis、mongo、mysql、httpd、php、tomcat 等, 也有一些方便开发、构建、运行各种语言应用的镜像, 如 node、openjdk、python、ruby、golang 等。可以在其中寻找一个最符合我们最终目标的镜像<strong>做为基础镜像</strong>进行定制。</li>
-<li>如果没有找到对应服务的镜像，官方镜像中还提供了一些更为基础的操作系统镜像，如 ubuntu、debian、centos、fedora、alpine 等，这些操作系统的软件库为我们提供了更广阔的扩展空间。</li>
-<li><p>除了选择现有镜像为基础镜像外，<strong>Docker 还存在一个特殊的镜像，名为 scratch</strong>。这个镜像是虚拟的概念，并不实际存在，它表示一个空白的镜像。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">FROM scratch</div></pre></td></tr></table></figure>
-<p>如果你以 scratch 为基础镜像的话，意味着你不以任何镜像为基础，接下来所写的指令将作为镜像第一层开始存在。</p>
-</li>
+<li>对于 Linux 下静态编译的程序来说，并不需要有操作系统提供运行时支持，所需的一切库都已经在可执行文件里了，因此直接 FROM scratch 会让镜像体积更加小巧。</li>
+<li><strong>使用 Go 语言 开发的应用很多会使用这种方式来制作镜像，这也是为什么有人认为 Go 是特别适合容器微服务架构的语言的原因之一</strong>。</li>
 </ul>
-</li>
-<li>不以任何系统为基础，直接将可执行文件复制进镜像的做法并不罕见，比如 swarm、coreos/etcd。<br> 对于 Linux 下静态编译的程序来说，并不需要有操作系统提供运行时支持，所需的一切库都已经在可执行文件里了，因此直接 FROM scratch 会让镜像体积更加小巧。<br> <strong>使用 Go 语言 开发的应用很多会使用这种方式来制作镜像，这也是为什么有人认为 Go 是特别适合容器微服务架构的语言的原因之一</strong>。</li>
-</ol>
-<h3 id="RUN-执行命令"><a href="#RUN-执行命令" class="headerlink" title="RUN 执行命令"></a>RUN 执行命令</h3><ol>
-<li><p>RUN 指令是用来执行命令行命令的。由于命令行的强大能力，RUN 指令在定制镜像时是最常用的指令之一。其格式有两种：</p>
+<h2 id="RUN-执行命令"><a href="#RUN-执行命令" class="headerlink" title="RUN 执行命令"></a>RUN 执行命令</h2><p>1.RUN指令是用来执行 命令行命令 的。由于命令行的强大能力, RUN指令在定制镜像时是最常用的指令之一。其格式有两种：</p>
 <ul>
 <li>shell 格式：<code>RUN &lt;命令&gt;</code>，就像直接在命令行中输入的命令一样。之前写的 Dockerfile 中的 RUN 指令就是这种格式。</li>
-<li>exec 格式：<code>RUN [&quot;可执行文件&quot;, &quot;参数1&quot;, &quot;参数2&quot;]</code>，这更像是函数调用中的格式。</li>
+<li>exec 格式：<code>RUN [&quot;可执行文件&quot;, &quot;参数1&quot;, &quot;参数2&quot;]</code>, 这更像是函数调用中的格式。</li>
 </ul>
-</li>
-<li><p>既然 RUN 就像 Shell 脚本一样可以执行命令，那么我们是否就可以像 Shell 脚本一样把每个命令对应一个 RUN 呢？比如这样：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN apt-get update</div><div class="line">RUN apt-get install -y gcc libc6-dev make</div><div class="line">RUN wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot;</div><div class="line">RUN mkdir -p /usr/src/redis</div><div class="line">RUN tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1</div><div class="line">RUN make -C /usr/src/redis</div><div class="line">RUN make -C /usr/src/redis install</div></pre></td></tr></table></figure>
-</li>
-<li><p>之前说过，Dockerfile 中每一个指令都会建立一层，RUN 也不例外。每一个 RUN 的行为，就和刚才我们手工建立镜像的过程一样：新建立一层，在其上执行这些命令，执行结束后，commit 这一层的修改，构成新的镜像。</p>
+<p>2.既然 RUN 就像 Shell 脚本一样可以执行命令，那么我们是否就可以像 Shell 脚本一样把每个命令对应一个 RUN 呢？比如这样：</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN apt-get update</div><div class="line">RUN apt-get install -y gcc libc6-dev make</div><div class="line">RUN wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot;</div><div class="line">RUN mkdir -p /usr/src/redis</div><div class="line">RUN tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1</div><div class="line">RUN make -C /usr/src/redis</div><div class="line">RUN make -C /usr/src/redis install</div></pre></td></tr></table></figure>
+</code></pre><p>3.之前说过，Dockerfile 中每一个指令都会建立一层，RUN 也不例外。每一个 RUN 的行为，就和刚才我们手工建立镜像的过程一样：新建立一层，在其上执行这些命令，执行结束后，commit 这一层的修改，构成新的镜像。</p>
 <ul>
-<li>而上面的这种写法，创建了 7 层镜像。这是完全没有意义的，而且很多运行时不需要的东西，都被装进了镜像里，比如编译环境、更新的软件包等等。结果就是产生非常臃肿、非常多层的镜像，不仅仅增加了构建部署的时间，也很容易出错。<strong>这是很多初学 Docker 的人常犯的一个错误</strong>。</li>
+<li>而上面的这种写法，创建了 7 层镜像。这是完全没有意义的，而且很多运行时不需要的东西，都被装进了镜像里，比如编译环境、更新的软件包等等。<strong>结果就是产生非常臃肿、非常多层的镜像，不仅仅增加了构建部署的时间，也很容易出错。这是很多初学 Docker 的人常犯的一个错误</strong>。</li>
 <li>Union FS 是有最大层数限制的，比如 AUFS，曾经是最大不得超过 42 层，现在是不得超过 127 层。</li>
 </ul>
-</li>
-<li><p>上面的 Dockerfile 正确的写法应该是这样：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN buildDeps=&apos;gcc libc6-dev make&apos; \</div><div class="line">    &amp;&amp; apt-get update \</div><div class="line">    &amp;&amp; apt-get install -y $buildDeps \</div><div class="line">    &amp;&amp; wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot; \</div><div class="line">    &amp;&amp; mkdir -p /usr/src/redis \</div><div class="line">    &amp;&amp; tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1 \</div><div class="line">    &amp;&amp; make -C /usr/src/redis \</div><div class="line">    &amp;&amp; make -C /usr/src/redis install \</div><div class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* \</div><div class="line">    &amp;&amp; rm redis.tar.gz \</div><div class="line">    &amp;&amp; rm -r /usr/src/redis \</div><div class="line">    &amp;&amp; apt-get purge -y --auto-remove $buildDeps</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<ol>
-<li>首先，之前所有的命令只有一个目的，就是编译、安装 redis 可执行文件。因此没有必要建立很多层，这只是一层的事情。因此，这里没有使用很多个 RUN 对一一对应不同的命令，而是仅仅使用一个 RUN 指令，并使用 &amp;&amp; 将各个所需命令串联起来。将之前的 7 层，简化为了 1 层。<strong>在撰写 Dockerfile 的时候，要经常提醒自己，这并不是在写 Shell 脚本，而是在定义每一层该如何构建</strong>。<ul>
-<li>并且，这里为了格式化还进行了换行。Dockerfile 支持 Shell 类的行尾添加 \ 的命令换行方式，以及行首 # 进行注释的格式。<br>良好的格式，比如换行、缩进、注释等，会让维护、排障更为容易，这是一个比较好的习惯。</li>
-<li>此外，还可以看到这一组命令的最后添加了清理工作的命令，删除了为了编译构建所需要的软件，清理了所有下载、展开的文件，并且还清理了 apt 缓存文件。<br>这是很重要的一步，我们之前说过，<strong>镜像是多层存储，每一层的东西并不会在下一层被删除</strong>，会一直跟随着镜像。<br>因此镜像构建时，一定要确保每一层只添加真正需要添加的东西，任何无关的东西都应该清理掉。<br>很多人初学 Docker 制作出了很臃肿的镜像的原因之一，就是忘记了每一层构建的最后一定要清理掉无关文件。</li>
-</ul>
-</li>
-</ol>
-<h3 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h3><ol>
-<li><p>在 Dockerfile 文件所在目录执行:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ docker build -t nginx:v3 .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM nginx</div><div class="line">---&gt; e43d811ce2f4</div><div class="line">Step 2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 9cdc27646c7b</div><div class="line"> ---&gt; 44aa4490ce2c</div><div class="line">Removing intermediate container 9cdc27646c7b</div><div class="line">Successfully built 44aa4490ce2c</div></pre></td></tr></table></figure>
+<p>4.上面的 Dockerfile 正确的写法应该是这样：</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">FROM debian:jessie</div><div class="line"></div><div class="line">RUN buildDeps=&apos;gcc libc6-dev make&apos; \</div><div class="line">    &amp;&amp; apt-get update \</div><div class="line">    &amp;&amp; apt-get install -y $buildDeps \</div><div class="line">    &amp;&amp; wget -O redis.tar.gz &quot;http://download.redis.io/releases/redis-3.2.5.tar.gz&quot; \</div><div class="line">    &amp;&amp; mkdir -p /usr/src/redis \</div><div class="line">    &amp;&amp; tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1 \</div><div class="line">    &amp;&amp; make -C /usr/src/redis \</div><div class="line">    &amp;&amp; make -C /usr/src/redis install \</div><div class="line">    &amp;&amp; rm -rf /var/lib/apt/lists/* \</div><div class="line">    &amp;&amp; rm redis.tar.gz \</div><div class="line">    &amp;&amp; rm -r /usr/src/redis \</div><div class="line">    &amp;&amp; apt-get purge -y --auto-remove $buildDeps</div></pre></td></tr></table></figure>
+</code></pre><p>5.首先，之前所有的命令只有一个目的，就是编译、安装 redis 可执行文件。因此没有必要建立很多层, 这只是一层的事情。因此，这里没有使用很多个RUN去一一对应不同的命令，而是仅仅使用一个 RUN 指令，并使用 &amp;&amp; 将各个所需命令串联起来。将之前的 7 层，简化为了 1 层。<strong>在撰写 Dockerfile 的时候，要经常提醒自己，这并不是在写 Shell 脚本，而是在定义每一层该如何构建</strong>。</p>
 <ul>
-<li>从命令的输出结果中，我们可以清晰的看到镜像的构建过程。在 Step 2 中，如同我们之前 所说的那样， RUN 指令启动了一个容器 9cdc27646c7b ，执行了所要求的命令，并最后提交 了这一层 44aa4490ce2c ，随后删除了所用到的这个容器 9cdc27646c7b 。</li>
+<li>并且，这里为了格式化还进行了换行。Dockerfile 支持 Shell 类的行尾添加 \ 的命令换行方式，以及行首 # 进行注释的格式。<br>良好的格式，比如换行、缩进、注释等，会让维护、排障更为容易，这是一个比较好的习惯。</li>
+<li>此外，还可以看到这一组命令的最后添加了清理工作的命令，删除了为了编译构建所需要的软件，清理了所有下载、展开的文件，并且还清理了 apt 缓存文件。这是很重要的一步，因为<strong>镜像是多层存储，每一层的东西并不会在下一层被删除</strong>，会一直跟随着镜像。<br>因此镜像构建时，一定要确保每一层只添加真正需要添加的东西，任何无关的东西都应该清理掉。Docker初学者制作出很臃肿的镜像的原因之一，就是忘记了每一层构建的最后一定要清理掉无关文件。</li>
 </ul>
-</li>
-<li><p>这里我们使用了 <code>docker build</code> 命令进行镜像构建。其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code><br> 在这里我们指定了最终镜像的名称 <code>-t nginx:v3</code> ，构建成功后，我们可以像之前运行 nginx:v2 那样来运行这个镜像，其结果会和 nginx:v2 一样。</p>
-</li>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>1.在 Dockerfile 文件所在目录执行:</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ docker build -t nginx:v3 .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM nginx</div><div class="line">---&gt; e43d811ce2f4</div><div class="line">Step 2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 9cdc27646c7b</div><div class="line"> ---&gt; 44aa4490ce2c</div><div class="line">Removing intermediate container 9cdc27646c7b</div><div class="line">Successfully built 44aa4490ce2c</div></pre></td></tr></table></figure>
+
+- 从命令的输出结果中，我们可以清晰的看到镜像的构建过程。在 Step 2 中，如同我们之前 所说的那样， RUN 指令启动了一个容器 9cdc27646c7b ，执行了所要求的命令，并最后提交 了这一层 44aa4490ce2c ，随后删除了所用到的这个容器 9cdc27646c7b 。
+</code></pre><ol>
+<li>这里我们使用了 <code>docker build</code> 命令进行镜像构建。其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code><br> 在这里我们指定了最终镜像的名称 <code>-t nginx:v3</code> ，构建成功后，我们可以像之前运行 nginx:v2 那样来运行这个镜像，其结果会和 nginx:v2 一样。</li>
 </ol>
 <h3 id="镜像构建上下文（Context）"><a href="#镜像构建上下文（Context）" class="headerlink" title="镜像构建上下文（Context）"></a>镜像构建上下文（Context）</h3><h3 id="其它-docker-build-的用法"><a href="#其它-docker-build-的用法" class="headerlink" title="其它 docker build 的用法"></a>其它 docker build 的用法</h3><p>更多参考: <a href="https://yeasy.gitbooks.io/docker_practice/content/image/build.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/build.html</a><br>… 未完待续 </p>
 <p>参考 : <a href="https://yeasy.gitbooks.io/docker_practice/content/image/commit.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/commit.html</a></p>
@@ -281,7 +261,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - 03》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -291,7 +271,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - 03》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -301,7 +281,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.镜像 - 03》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -331,7 +311,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/10/12/2017-10-12-03-docker/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">03.镜像 - 02</h4>
+          <h4 class="title">03.镜像 - 分层存储</h4>
         </a>
       </div>
     
@@ -441,7 +421,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - 03》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -451,7 +431,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - 03》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&title=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -461,7 +441,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.镜像 - 03》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.镜像 - Dockerfile脚本定制镜像》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
