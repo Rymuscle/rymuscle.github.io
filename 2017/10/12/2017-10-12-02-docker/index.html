@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/jiasuqi-error-macOS.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/jiasuqi-macOS.png">
-<meta property="og:updated_time" content="2018-03-01T05:31:52.000Z">
+<meta property="og:updated_time" content="2018-03-02T14:19:22.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02.镜像 - 基础">
 <meta name="twitter:description" content="前言镜像(Image)和容器(Container)的关系，就像是面向对象程序设计中的类和实例一样, 镜像是静态的定义, 容器是镜像运行时的实体。所以 Docker 运行容器前首先需要本地存在对应的镜像, 如果本地不存在该镜像, Docker 会从镜像仓库下载该镜像。 镜像的获取Docker Hub上有大量的高质量的镜像可以用, 如何获取这些镜像呢? 1.从Docker镜像仓库获取镜像的命令是 do">
@@ -162,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像的获取"><span class="post-toc-number">2.</span> <span class="post-toc-text">镜像的获取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置镜像加速器"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置镜像加速器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像相关基础操作"><span class="post-toc-number">4.</span> <span class="post-toc-text">镜像相关基础操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#列出已存在镜像"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">列出已存在镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#删除镜像"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">删除镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像更名"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">镜像更名</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像的获取"><span class="post-toc-number">2.</span> <span class="post-toc-text">镜像的获取</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置镜像加速器"><span class="post-toc-number">3.</span> <span class="post-toc-text">配置镜像加速器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像相关基础操作"><span class="post-toc-number">4.</span> <span class="post-toc-text">镜像相关基础操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#列出已存在镜像"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">列出已存在镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#删除镜像"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">删除镜像</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像更名"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">镜像更名</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#理解分层存储"><span class="post-toc-number">5.</span> <span class="post-toc-text">理解分层存储</span></a></li></ol>
         </nav>
     </aside>
     
@@ -217,6 +217,10 @@
 </code></pre><h3 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h3><p>如果要删除本地的镜像, 可以使用 <code>$ docker image rm [选项] &lt;镜像名1&gt; [&lt;镜像名2&gt; ...]</code> 命令; (因为镜像ID可能会一样, 所以删除镜像用的是镜像名)</p>
 <h3 id="镜像更名"><a href="#镜像更名" class="headerlink" title="镜像更名"></a>镜像更名</h3><p>镜像更改名称也很简单, 直接 <code>$ docker tag 镜像名 新镜像名:标签</code></p>
 <p>在 Docker 1.13+ 版本中推荐使用 <code>docker image</code> 来管理镜像。 (比如 <code>docker image ls</code> 会列出所有镜像);</p>
+<h2 id="理解分层存储"><a href="#理解分层存储" class="headerlink" title="理解分层存储"></a>理解分层存储</h2><p>1.严格来说，镜像并非是像一个ISO那样的打包文件, 镜像只是一个虚拟的概念, 其实际体现并非由一个文件组成, 而是由一组文件系统组成, 或者说, 由<code>多层文件系统</code>联合组成。</p>
+<p>2.镜像是多层存储，每一层是在前一层的基础上进行的修改; 而容器同样也是多层存储，是在以镜像为基础层，<strong>在其基础上加一层作为容器运行时的存储层</strong>。</p>
+<p>3.镜像构建时, 会一层层构建, 前一层是后一层的基础。每一层构建完就不会再发生改变，后一层上的任何改变只发生在自己这一层。</p>
+<p>4.<strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong>。</p>
 
         </div>
 
@@ -311,7 +315,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/10/12/2017-10-12-03-docker/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03.镜像 - 分层存储</h4>
+        <h4 class="title">03.定制镜像 - docker commit手动定制</h4>
       </a>
     </div>
   
