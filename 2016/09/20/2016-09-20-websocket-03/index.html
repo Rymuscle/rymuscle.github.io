@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03.跨站点WebSocket劫持漏洞 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="WebSocket">
+    <meta name="description" content="跨站点WebSocket劫持漏洞原理是劫持而非简单的伪造1.为了创建全双工通信, 客户端需要基于HTTP进行握手切换到WebSocket协议, 正是这个升级协议的握手过程存在着潜在的问题。2.示例:  客户端伪造 与服务端同顶级域名 的跨子域cookie   12345678910111213&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;">
+<meta name="keywords" content="WebSocket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03.跨站点WebSocket劫持漏洞">
+<meta property="og:url" content="http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="跨站点WebSocket劫持漏洞原理是劫持而非简单的伪造1.为了创建全双工通信, 客户端需要基于HTTP进行握手切换到WebSocket协议, 正是这个升级协议的握手过程存在着潜在的问题。2.示例:  客户端伪造 与服务端同顶级域名 的跨子域cookie   12345678910111213&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/websocket/ws-cookie-01.png">
+<meta property="og:updated_time" content="2018-03-02T06:50:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03.跨站点WebSocket劫持漏洞">
+<meta name="twitter:description" content="跨站点WebSocket劫持漏洞原理是劫持而非简单的伪造1.为了创建全双工通信, 客户端需要基于HTTP进行握手切换到WebSocket协议, 正是这个升级协议的握手过程存在着潜在的问题。2.示例:  客户端伪造 与服务端同顶级域名 的跨子域cookie   12345678910111213&amp;lt;!DOCTYPE html&amp;gt;&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/websocket/ws-cookie-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03.跨站点WebSocket劫持漏洞</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">03.跨站点WebSocket劫持漏洞</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-09-20T09:30:42.000Z" itemprop="datePublished" class="page-time">
+  2016-09-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#跨站点WebSocket劫持漏洞原理"><span class="post-toc-number">1.</span> <span class="post-toc-text">跨站点WebSocket劫持漏洞原理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#检测跨站点-WebSocket-劫持漏洞"><span class="post-toc-number">2.</span> <span class="post-toc-text">检测跨站点 WebSocket 劫持漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#防范跨站点WebSocket劫持攻击"><span class="post-toc-number">3.</span> <span class="post-toc-text">防范跨站点WebSocket劫持攻击</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务端Origin检查"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">服务端Origin检查</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#WebSocket令牌机制"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">WebSocket令牌机制</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2016-09-20-websocket-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03.跨站点WebSocket劫持漏洞</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-09-20 17:30:42" datetime="2016-09-20T09:30:42.000Z"  itemprop="datePublished">2016-09-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="跨站点WebSocket劫持漏洞原理"><a href="#跨站点WebSocket劫持漏洞原理" class="headerlink" title="跨站点WebSocket劫持漏洞原理"></a>跨站点WebSocket劫持漏洞原理</h2><p>是<strong>劫持</strong>而非简单的<strong>伪造</strong><br>1.为了创建全双工通信, 客户端需要基于HTTP进行<code>握手</code>切换到WebSocket协议, 正是这个<code>升级协议</code>的握手过程存在着潜在的问题。<br>2.示例:</p>
+<ul>
+<li><p>客户端伪造 <code>与服务端同顶级域名</code> 的跨子域cookie</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ws&lt;/title&gt;</div><div class="line">    &lt;script&gt;</div><div class="line">        document.cookie = &quot;name=renyimin; domain=websocket.org&quot;;</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line"></div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>客户端与websocket.org网站的Echo测试服务建立连接</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">&lt;!DOCTYPE html&gt;</div><div class="line">&lt;html lang=&quot;en&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;&gt;</div><div class="line">    &lt;title&gt;ws&lt;/title&gt;</div><div class="line">    &lt;script&gt;</div><div class="line">        var ws = new WebSocket(&quot;ws://echo.websocket.org&quot;);</div><div class="line">        ws.onopen = function(evt) &#123;</div><div class="line">            console.log(&quot;Connection open ...&quot;);</div><div class="line">            ws.send(&quot;Hello WebSockets!&quot;);</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        ws.onmessage = function(evt) &#123;</div><div class="line">            console.log( &quot;Received Message: &quot; + evt.data);</div><div class="line">            ws.close();</div><div class="line">        &#125;;</div><div class="line"></div><div class="line">        ws.onclose = function(evt) &#123;</div><div class="line">            console.log(&quot;Connection closed.&quot;);</div><div class="line">        &#125;;</div><div class="line">    &lt;/script&gt;</div><div class="line">&lt;/head&gt;</div><div class="line">&lt;body&gt;</div><div class="line"></div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>此时, 握手(升级协议)阶段的请求头中就携带了伪造的cookie<br><img src="/img/websocket/ws-cookie-01.png" width="600/"></p>
+</li>
+</ul>
+<p>3.上面握手阶段Get请求头中可以看到, Cookie头部把同顶级域名下的Cookie信息发送到服务器端。</p>
+<ul>
+<li>WebSocket协议没有规定服务器在握手阶段应该如何认证客户端身份。服务器可以采用任何HTTP服务器的客户端身份认证机制, 譬如<code>cookie</code>, <code>HTTP基础认证</code>, <code>TLS身份认证</code>等。</li>
+<li>而对于绝大多数Web应用来说, 客户端身份认证应该都是 SessionID 等 Cookie 或者 HTTP Auth 头部参数等。</li>
+</ul>
+<p>4.所有的浏览器都会发送 <code>Origin</code> 请求头, 如果服务器端没有针对Origin头部进行验证可能会导致跨站点 WebSocket 劫持攻击。</p>
+<ul>
+<li>假设某个用户已经在浏览器登录过一个目标站点, 接下来假设他被诱骗访问某个恶意网站, 一旦点击某个诱导性的按钮, 恶意网页在这个操作中植入一个WebSocket握手请求申请跟目标应用建立WebSocket连接</li>
+<li>此时, 这个websocket握手请求将会携带浏览器cookie罐中之前存储的目标站点cookie;</li>
+<li><p>请注意, <code>Origin</code> 和 <code>Sec-WebSocket-Key</code> 都是由浏览器自动生成, Cookie等身份认证参数也都是由浏览器自动上传到目标应用服务器端。<br>如果服务器端疏于检查<code>Origin</code>, 该请求伪造的cookie可能就会成功握手切换到 WebSocket 协议，恶意网页就可以成功绕过身份认证连接到 WebSocket 服务器，进而窃取到服务器端发来的信息，抑或发送伪造信息到服务器端篡改服务器端数据。</p>
+</li>
+<li><p>此时, 熟悉cors跨域的你, 可能会认为服务器端没有指定<code>Access-Control-Allow-Origin</code>的话， 浏览器端的脚本是无法访问跨域资源的, 这确实也是 HTML5 带来的新特性之一。<strong>但是很不幸，CORS不适应于 WebSocket, WebSocket 没有明确规定跨域处理的方法。</strong></p>
+</li>
+</ul>
+<ol>
+<li>CSRF主要是通过恶意网页悄悄发起数据修改请求, 而跨站点WebSocket伪造攻击不仅可以修改服务器数据, 还可以控制整个读取/修改双向沟通通道。正是因为这个原因, Christian 将这个漏洞命名为劫持(Hijacking), 而不是请求伪造(Request Forgery)。</li>
+</ol>
+<h2 id="检测跨站点-WebSocket-劫持漏洞"><a href="#检测跨站点-WebSocket-劫持漏洞" class="headerlink" title="检测跨站点 WebSocket 劫持漏洞"></a>检测跨站点 WebSocket 劫持漏洞</h2><p>1.明白跨站点 WebSocket 劫持漏洞原理后, 检测该漏洞也就容易了, 先撇开cookie伪造, 首先检测服务端是否能拒绝不同源origin</p>
+<p>2.简单来说就是针对WebSocket握手请求地址, 修改请求中的 <code>Origin</code> 为其他来源(本地可以随意配置虚拟域名的), 然后发送这个请求, 看看服务器是否能够成功返回<code>101</code>响应。</p>
+<ul>
+<li>如果连接失败, 那么说明这个 WebSocket 是安全的, 因为它可以正确拒绝来自不同源(Origin)的连接请求。</li>
+<li>如果连接成功, 就说明服务器端没有执行源检查, 为了严谨起见, 最好进一步测试是否可以发送 WebSocket 消息, 如果这个 WebSocket 连接能够发送/接受消息的话, 则完全证明跨站点 WebSocket 劫持漏洞的存在。</li>
+</ul>
+<h2 id="防范跨站点WebSocket劫持攻击"><a href="#防范跨站点WebSocket劫持攻击" class="headerlink" title="防范跨站点WebSocket劫持攻击"></a>防范跨站点WebSocket劫持攻击</h2><h3 id="服务端Origin检查"><a href="#服务端Origin检查" class="headerlink" title="服务端Origin检查"></a>服务端Origin检查</h3><p>前文介绍了跨站点 WebSocket 劫持漏洞原理和检测, 接下来我们谈谈如何防范这个漏洞。这个漏洞的原理听起来略微复杂, 但幸运的是测试起来相对比较简单, 那么修复会不会也很简单?</p>
+<ul>
+<li>很多读者会想到, 不就是在服务器代码中检查 Origin 参数嘛, 是的, 检查<code>Origin</code>很有必要，但不充分。</li>
+<li>推荐在服务器端的代码中增加<strong>Origin检查</strong>, 如果客户端发来的 Origin 信息来自不同域, 建议服务器端拒绝这个请求, 发回 <code>403</code> 错误响应拒绝连接。</li>
+</ul>
+<h3 id="WebSocket令牌机制"><a href="#WebSocket令牌机制" class="headerlink" title="WebSocket令牌机制"></a>WebSocket令牌机制</h3><p>1.仅仅检查 Origin 远远不够, 别忘记了, 如果 WebSocket 的客户端不是浏览器, 非浏览器的客户端发来的请求不会项浏览器那样自动设置Origin, 恶意客户端也就可能伪造 Origin 头信息。</p>
+<p>2.所以更彻底的解决方案还是要借鉴CSRF的解决方案 – <code>令牌机制</code></p>
+<ul>
+<li>服务器端为每个 WebSocket 客户端生成唯一的一次性 Token;</li>
+<li>客户端将Token作为 WebSocket 连接 URL 的参数(譬如 ws://echo.websocket.org/?token＝randomOneTimeToken), 发送到服务器端进行 WebSocket 握手连接;</li>
+<li>服务器端验证 Token 是否正确, <strong>一旦正确则将这个 Token 标示为废弃不再重用</strong>, 同时确认 WebSocket 握手连接成功; 如果 Token 验证失败或者身份认证失败, 则返回 <code>403</code> 错误;</li>
+</ul>
+<p>3.这个方案里的 Token 设计是关键</p>
+<ul>
+<li>推荐的方案是为登录用户生成一个 Secure Random 存储在 Session 中，然后利用对称加密(譬如 AES GCM)加密这个Secure Random值作为令牌, 将加密后的令牌发送给客户端用来进行连接。</li>
+<li>这样每个 Session 有一个唯一的随机数, 每个随机数可以通过对称加密生成若干份一次性令牌。用户即便通过不同终端通过 WebSocket 连接到服务器, 服务器可以在保障令牌唯一且一次性使用的前提下, 依然能将不同通道中的信息关联到同一用户中。</li>
+</ul>
+<p><a href="https://www.ibm.com/developerworks/cn/java/j-lo-websocket-cross-site/index.html" target="_blank" rel="external">参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&title=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&title=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/09/20/2016-09-20-websocket-02/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02.WebSocket简单示例分析</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/21/2017-08-21-Git/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Git</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&title=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&title=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03.跨站点WebSocket劫持漏洞》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/20/2016-09-20-websocket-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACO0lEQVR42u3aS27DMAxF0ex/0y7QUSZW7iOVoqauR0GbWjoqQPCj1ws/1+/z/vn9J3ffuXvP3d/e/XbbI0OGjMcyruXDt7V+A1l9fWQf3ixDhowDGCTIrhfmTxrc19+RIUOGjHXqxre7BtQCvQwZMmSkARctdvPz9VoyZMiQwYtYHkxJAF2v8sVaXIYMGQ9k1AYDf/P56/MNGTJk/HvGVXr4ILMT0IP9yJAhYzRjvSE+dFxvpTYo5aWyDBkyTmDwNj25JJEeR+dyWPD/kSFDxsMZJMmrJYWkQOXrBoMBGTJkDGKk6VqnZUbekx6cDBkyTmDwUrbTxOcla63nL0OGjNkMHl5rg4H123YNEmTIkDGbkTbO1uG1Q+rwZMiQMZtRS+x4Etlv56FUUoYMGUcy0tZYWojuKoY/BFwZMmQMYpArXASQXrbgIwEUcGXIkDGU0bkKtuvKBRlkBkcjQ4aMcYzOAJIkjimYJ4sbanEZMmQ8nFEbCaRXu/iQ8gNPhgwZoxnpVnhbrZYadg5FhgwZsxmkUOws1hkn8LadDBkyTmDwCxa1zZG0r9b4kyFDxgmMzgULMoyspZLF9p8MGTLGMa7wSXm8xZY22mTIkHEOo1YhkvEkCawkraw1/mTIkDGP0Qmy6SCBX8LgjTwZMmScw+BDx/Raxq7Wf1yFy5Ah42BGelWLbLdW7sqQIUMGH1XyJJIMTfl3ZMiQcRojvVSRNvTTQ0nDugwZMmYz+oOBdGBQOzJUysqQIWMa4wfuHxkG5z/FMAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
