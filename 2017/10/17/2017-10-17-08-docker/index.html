@@ -13,25 +13,25 @@
     
     
     
-    <title>08.Docker数据管理 | Lant&#39;s Blog</title>
+    <title>08.镜像/容器 -- 导入导出 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Docker读书笔记">
-    <meta name="description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes) 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性: 数据卷 可以在容器之间共享和重用 对 数据卷 的修改会立马生效 对 数据卷 的更新，不会影响镜像 数据卷 默认会一直存在，即使容器被删除   注意: 数据卷 的使用, 类似于 Lin">
+    <meta name="description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
-<meta property="og:title" content="08.Docker数据管理">
+<meta property="og:title" content="08.镜像&#x2F;容器 -- 导入导出">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes) 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性: 数据卷 可以在容器之间共享和重用 对 数据卷 的修改会立马生效 对 数据卷 的更新，不会影响镜像 数据卷 默认会一直存在，即使容器被删除   注意: 数据卷 的使用, 类似于 Lin">
+<meta property="og:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T08:46:26.000Z">
+<meta property="og:updated_time" content="2018-03-02T09:54:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="08.Docker数据管理">
-<meta name="twitter:description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes) 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性: 数据卷 可以在容器之间共享和重用 对 数据卷 的修改会立马生效 对 数据卷 的更新，不会影响镜像 数据卷 默认会一直存在，即使容器被删除   注意: 数据卷 的使用, 类似于 Lin">
+<meta name="twitter:title" content="08.镜像&#x2F;容器 -- 导入导出">
+<meta name="twitter:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">08.Docker数据管理</div>
+        <div class="flex-col header-title ellipsis">08.镜像/容器 -- 导入导出</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,10 +134,10 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">08.Docker数据管理</h1>
+        <h1 class="title">08.镜像/容器 -- 导入导出</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-10-17T06:40:23.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2017-10-17T04:01:08.000Z" itemprop="datePublished" class="page-time">
   2017-10-17
 </time>
 
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷-Volumes"><span class="post-toc-number">1.</span> <span class="post-toc-text">数据卷(Volumes)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷操作"><span class="post-toc-number">2.</span> <span class="post-toc-text">数据卷操作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建并启动容器时-挂载数据卷"><span class="post-toc-number">3.</span> <span class="post-toc-text">创建并启动容器时,挂载数据卷</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#挂载主机目录"><span class="post-toc-number">4.</span> <span class="post-toc-text">挂载主机目录</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像-save-load"><span class="post-toc-number">1.</span> <span class="post-toc-text">镜像 (save/load)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器-export-import"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器(export/import)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">参考</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -167,9 +167,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">08.Docker数据管理</h1>
+        <h1 class="post-card-title">08.镜像/容器 -- 导入导出</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-10-17 14:40:23" datetime="2017-10-17T06:40:23.000Z"  itemprop="datePublished">2017-10-17</time>
+            <time class="post-time" title="2017-10-17 12:01:08" datetime="2017-10-17T04:01:08.000Z"  itemprop="datePublished">2017-10-17</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
@@ -180,74 +180,30 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>容器中管理数据主要有两种方式：<code>数据卷(Volumes)</code> 和 <code>挂载主机目录(Bind mounts)</code></p>
-<h2 id="数据卷-Volumes"><a href="#数据卷-Volumes" class="headerlink" title="数据卷(Volumes)"></a>数据卷(Volumes)</h2><ol>
-<li>数据卷 是一个可供<strong>一个或多个</strong>容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:<ul>
-<li>数据卷 可以在容器之间共享和重用</li>
-<li>对 数据卷 的修改会立马生效</li>
-<li>对 数据卷 的更新，不会影响镜像</li>
-<li>数据卷 默认会一直存在，即使容器被删除</li>
+            <h2 id="镜像-save-load"><a href="#镜像-save-load" class="headerlink" title="镜像 (save/load)"></a>镜像 (save/load)</h2><p>1.<code>docker save nginx:v1 &gt; alpine-latest.tar.gz</code>：将指定<strong>镜像</strong>导出为 <code>镜像存储文件</code>;</p>
+<p>2.再使用 <code>docker load -i alpine-latest.tar.gz</code> 命令将 <code>镜像存储文件</code> 导入到本地镜像库;</p>
+<h2 id="容器-export-import"><a href="#容器-export-import" class="headerlink" title="容器(export/import)"></a>容器(export/import)</h2><p>1.<code>docker export container_id &gt; my_container.tar</code>：将一个<strong>容器</strong>导出为 <code>容器快照文件</code>;<br>2.再使用 <code>docker import my_container.tar imageName:tag</code> 命令将 <code>容器快照文件</code> 导入为一个新的镜像到本地镜像库;<br>3.测试, 将nginx_v1容器导出, 并在本地重新生成nginx:v3镜像, 然后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 运行中的nginx_v1容器</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   2 hours ago         Up 11 minutes       0.0.0.0:8089-&gt;80/tcp     nginx_v1</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   26 hours ago        Up About an hour    0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">//导出容器为 容器快照文件</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker export nginx_v1 &gt; nginx_v1.tar</div><div class="line">//将 nginx_v1的容器快照文件, 重新导入为一个新的本地镜像 nginx:v3</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker import nginx_v1.tar nginx:v3</div><div class="line">sha256:985fba7fd176d79685322d184bc79b81ca4365619bc0a773672e5c87cfc701cd</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">nginx                                                 v3                  985fba7fd176        10 seconds ago      107MB</div><div class="line">nginx                                                 v1                  8b748aee8b23        2 hours ago         109MB</div><div class="line">nginx                                                 latest              e548f1a579cf        8 days ago          109MB</div><div class="line">// 运行新镜像, 发现报错</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker run -d --name nginx_v3 nginx:v3</div><div class="line">docker: Error response from daemon: No command specified.</div><div class="line">See &apos;docker run --help&apos;.</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure></p>
+<p>4.解决方案, 通过<code>docker import 导入容器快照文件</code>生成的镜像, 在初次创建并启动(run)时, 需要提供快照文件所对应的容器的<code>COMMAND</code>字段, 可以通过<code>docker ps</code>查看, 如果命令太长, 则需要使用 <code>docker inspect 容器名</code> 查看 <code>cmd</code> 字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker run -d --name nginx_v3 nginx:v3 nginx &apos;-g&apos; &apos;daemon off;&apos;</div><div class="line">0fb30bafe266248bbb58e31d9dcab7479f4a59494fcc636f7f7dfd2df498066d</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">0fb30bafe266        nginx:v3            &quot;nginx -g &apos;daemon ...&quot;   2 seconds ago       Up 1 second                                  nginx_v3</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   2 hours ago         Up 19 minutes       0.0.0.0:8089-&gt;80/tcp     nginx_v1</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   26 hours ago        Up About an hour    0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.可以使用 <code>docker load</code> 来导入<code>镜像存储文件</code>到本地镜像库。<br>2.也可以使用 <code>docker import</code> 来导入一个<code>容器快照文件</code>到本地镜像库。<br>3.这两者的区别在于:</p>
+<ul>
+<li><code>镜像存储文件</code>将保存完整记录, 体积也要大</li>
+<li>而<code>容器快照文件</code>将丢弃所有的历史记录和元数据信息(即仅保存容器当时的快照状态)</li>
+<li>此外，从容器快照文件导入时可以<strong>重新指定标签</strong>等元数据信息</li>
 </ul>
-</li>
-<li>注意: 数据卷 的使用, 类似于 Linux 下对目录或文件进行 <code>mount</code>，镜像中的被指定为挂载点的目录中的文件会隐藏掉, 能显示看的是挂载的数据卷。</li>
-</ol>
-<h2 id="数据卷操作"><a href="#数据卷操作" class="headerlink" title="数据卷操作"></a>数据卷操作</h2><p>(在主机里使用)</p>
 <ol>
-<li>创建一个数据卷: <code>docker volume create my-vol</code> (其实还有一种方式就是在docker run的时候直接指定一个数据卷名, 就会自动帮你创建数据卷)</li>
-<li>查看所有数据卷: <code>docker volume ls</code></li>
-<li>查看指定数据卷的信息: <code>docker volume inspect my-vol</code><br> 查看容器的数据卷挂载信息: <code>docker inspect 容器名</code></li>
-<li><p>删除数据卷 <code>$ docker volume rm my-vol</code></p>
-<ul>
-<li>数据卷 是被设计用来<strong>持久化</strong>数据的, 它的生命周期独立于容器, Docker不会在容器被删除后自动删除数据卷, 并且<strong>也不存在垃圾回收这样的机制来处理没有任何容器引用的数据卷</strong>。</li>
-<li>如果需要在删除容器的同时移除数据卷, 可以在删除容器的时候使用 <code>docker rm -v</code> 这个命令, <strong>这个命令貌似只是移除该容器和数据卷之间的关系</strong>, 除非这个数据卷没有任何容器引用了, 才可以使用下面介绍的命令来删除掉。</li>
-</ul>
-</li>
-<li><p><strong>无主的数据卷</strong>可能会占据很多空间，要清理请使用命令 <code>$ docker volume prune</code></p>
-<ul>
-<li>可以看到清除时会提醒你 <code>WARNING! This will remove all volumes not used by at least one container</code></li>
-<li>清除的是没有被<strong>至少一个</strong>容器使用的数据卷!</li>
-</ul>
-</li>
+<li>另外, 使用<code>docker save</code>保存的<code>镜像存储文件</code>, 不能使用 <code>docker import</code> 来导入成镜像, 这样导入的镜像无法运行起来</li>
 </ol>
-<h2 id="创建并启动容器时-挂载数据卷"><a href="#创建并启动容器时-挂载数据卷" class="headerlink" title="创建并启动容器时,挂载数据卷"></a>创建并启动容器时,挂载数据卷</h2><ol>
-<li>在使用 <code>docker run</code> 命令的时候, 还可以使用 <code>--mount</code> 参数来将<code>数据卷</code>挂载到容器里, 另外, 在一次 <code>docker run</code> 中可以挂载多个数据卷。</li>
-<li><p>下面创建一个名为 <code>my-first-vol</code> 的数据卷</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">localhost:~ renyimin$ docker volume create my-first-vol</div><div class="line">my-first-vol</div><div class="line">localhost:~ renyimin$ </div><div class="line">localhost:~ renyimin$ docker volume inspect my-first-vol</div><div class="line">[</div><div class="line">    &#123;</div><div class="line">        &quot;CreatedAt&quot;: &quot;2017-04-26T13:43:16Z&quot;,</div><div class="line">        &quot;Driver&quot;: &quot;local&quot;,</div><div class="line">        &quot;Labels&quot;: &#123;&#125;,</div><div class="line">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/my-first-vol/_data&quot;,</div><div class="line">        &quot;Name&quot;: &quot;my-first-vol&quot;,</div><div class="line">        &quot;Options&quot;: &#123;&#125;,</div><div class="line">        &quot;Scope&quot;: &quot;local&quot;</div><div class="line">    &#125;</div><div class="line">]</div><div class="line">localhost:~ renyimin$</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建并运行一个名为 <code>web</code> 的容器, 同时加载上面的<code>数据卷</code>到容器内的 <code>/test-vol</code> 目录</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">localhost:~ renyimin$ docker run -d -p 5000:5000 --name myFirstRegistry --mount source=my-first1-vol,target=/test-vol registry</div><div class="line">45e2da7a8ee3c51ae682ff78d02c9779531a79fe2f7a58739023cd19ab48b09d</div><div class="line">localhost:~ renyimin$ docker exec -it myFirstRegistry /bin/sh</div><div class="line">/ # ls</div><div class="line">bin            entrypoint.sh  home           linuxrc        mnt            root           sbin           sys            tmp            var</div><div class="line">dev            etc            lib            media          proc           run            srv            test-vol       usr</div><div class="line">/ #</div></pre></td></tr></table></figure>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>在初次为公司内部准备镜像时, 可以启动一个基础镜像, 然后在容器中做好软件安装, 完成各种配置工作之后:</p>
 <ul>
-<li>容器中会自动创建虚拟机中的挂载目录;</li>
-<li>另外, 之前我们创建的数据卷是 <code>my-first-vol</code>, 此次运行容器时, 加载的数据卷<strong>却是</strong> <code>my-first1-vol</code>,<br>后面通过查看容器在<code>&quot;Mounts&quot;</code>key下面的数据卷信息, 会发现在启动容器时如果指定的数据卷不存在, 则会自动创建;<br>通过<code>docker volume ls</code>也可以看到现在有<code>my-first-vol</code> 和 <code>my-first1-vol</code> 这两个我们创建的数据卷;</li>
+<li>可以手动commit成功新的 <code>镜像:tag</code>, 然后将镜像push到私有仓库供给大家下载使用;</li>
+<li>可以简单将容器直接export成容器快照文件, 然后import为新的 <code>镜像:tag</code>, 然后push到私有仓库供给大家下载使用; </li>
+<li>或者通过Dockerfile定制脚本及<code>docker build</code>来构建新的 <code>镜像:tag</code>, 然后push到私有仓库供给大家下载使用; </li>
 </ul>
-</li>
-<li><p>可以在主机里使用以下命令查看 <code>myFirstRegistry</code> 容器的信息, 数据卷信息在 <code>&quot;Mounts&quot;</code> Key 下面</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">$ docker inspect myFirstRegistry</div><div class="line">&quot;Mounts&quot;: [</div><div class="line">    &#123;</div><div class="line">        &quot;Type&quot;: &quot;volume&quot;,</div><div class="line">        &quot;Name&quot;: &quot;my-first1-vol&quot;,</div><div class="line">        &quot;Source&quot;: &quot;/var/lib/docker/volumes/my-first1-vol/_data&quot;,</div><div class="line">        &quot;Destination&quot;: &quot;/test-vol&quot;,</div><div class="line">        &quot;Driver&quot;: &quot;local&quot;,</div><div class="line">        &quot;Mode&quot;: &quot;z&quot;,</div><div class="line">        &quot;RW&quot;: true,</div><div class="line">        &quot;Propagation&quot;: &quot;&quot;</div><div class="line">    &#125;,</div><div class="line">    &#123;</div><div class="line">        &quot;Type&quot;: &quot;volume&quot;,</div><div class="line">        &quot;Name&quot;: &quot;4fde6460059e4f0f07bc1c91ed852da7884b872dffc66bc4e237a260c7248250&quot;,</div><div class="line">        &quot;Source&quot;: &quot;/var/lib/docker/volumes/4fde6460059e4f0f07bc1c91ed852da7884b872dffc66bc4e237a260c7248250/_data&quot;,</div><div class="line">        &quot;Destination&quot;: &quot;/var/lib/registry&quot;,</div><div class="line">        &quot;Driver&quot;: &quot;local&quot;,</div><div class="line">        &quot;Mode&quot;: &quot;&quot;,</div><div class="line">        &quot;RW&quot;: true,</div><div class="line">        &quot;Propagation&quot;: &quot;&quot;</div><div class="line">    &#125;</div><div class="line">],</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<h2 id="挂载主机目录"><a href="#挂载主机目录" class="headerlink" title="挂载主机目录"></a>挂载主机目录</h2><ol>
-<li><p>挂载一个主机目录作为数据卷: 使用 <code>--mount</code> 标记可以指定挂载一个本地主机的目录到容器中去</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ docker run -d -p 8090:80 --name testVip --mount type=bind,source=/Users/renyimin/Desktop/testVip,target=/haha vipservice</div><div class="line">2dea428aa379aaf415e5eff38b76f43d64e77b6b34d25bb5e353354ba897cee6</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker exec -it 2dea428aa379aaf415e5eff38b76f43d64e77b6b34d25bb5e353354ba897cee6 /bin/sh</div><div class="line">sh-4.2# cd /</div><div class="line">sh-4.2# ls</div><div class="line">anaconda-post.log  bin	data  dev  etc	haha  home  lib  lib64	lost+found  media  mnt	opt  proc  root  run  run.sh  sbin  srv  sys  tmp  usr	var</div><div class="line">sh-4.2# cd haha</div><div class="line">sh-4.2# ls</div><div class="line">myfirstregistry  registry.tar</div><div class="line">sh-4.2#</div></pre></td></tr></table></figure>
-</li>
-<li><p>上面的命令会加载主机的 <code>/Users/renyimin/Desktop/testVip</code> 目录到容器的 <code>/haha</code> 目录, 这个功能在进行测试的时候十分方便, 比如, 你可以放置一些程序到本地目录中,来查看容器是否正常工作。<strong>本地目录的路径必须是绝对路径</strong>, 以前使用 <code>-v</code> 参数时, 如果本地目录不存在 Docker 会自动为你创建一个文件夹，现在使用 <code>--mount</code> 参数时如果本地目录不存在, Docker 会报错。</p>
-</li>
-<li><p>查看容器的挂载信息, 发现和数据卷相比, <code>Type</code>信息是<code>bind</code>而不是<code>volume</code>, 并且没有数据卷的<code>name</code>信息, <code>docker volume ls</code> 也不会看到有新的数据卷被创建, 所以…可以认为只是一次简单的目录绑定</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker inspect testVip</div><div class="line">&quot;Mounts&quot;: [</div><div class="line">    &#123;</div><div class="line">        &quot;Type&quot;: &quot;bind&quot;,</div><div class="line">        &quot;Source&quot;: &quot;/Users/renyimin/Desktop/testVip&quot;,</div><div class="line">        &quot;Destination&quot;: &quot;/haha&quot;,</div><div class="line">        &quot;Mode&quot;: &quot;&quot;,</div><div class="line">        &quot;RW&quot;: true,</div><div class="line">        &quot;Propagation&quot;: &quot;rprivate&quot;</div><div class="line">    &#125;</div><div class="line">]</div></pre></td></tr></table></figure>
-</li>
-<li><p>选择 <code>-v</code> 还是 <code>--mount</code> 参数?<br> Docker 新用户应该选择 <code>--mount</code> 参数，经验丰富的 Docker 使用者对 <code>-v</code> 或者 <code>--volume</code> 已经很熟悉了，但是推荐使用 <code>--mount</code> 参数, 可以理解为, <strong><code>--mount</code> 参数应该可以挂载数据卷, 也可以代替-v来进行目录关联</strong>。</p>
-</li>
-<li><p>Docker 挂载主机目录的默认权限是 <code>读写</code>，用户也可以通过增加 <code>readonly</code> 指定为 <strong>只读</strong></p>
-<ul>
-<li><p>加了 readonly 之后，就挂载为 只读 了。如果你在容器内 /haha 目录新建文件，会显示如下错误</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker run -d -p 8090:80 --name testVip --mount type=bind,source=/Users/renyimin/Desktop/testVip,target=/haha,readonly vipservice</div><div class="line">27863a3a8f70fa4bddb9c97fabfee2db7f35d5615d4b90ad0be13717dc23d092</div><div class="line">renyimindeMacBook-Pro:testVip renyimin$ docker exec -it 27863a3a8f70fa4bddb9c97fabfee2db7f35d5615d4b90ad0be13717dc23d092 /bin/sh</div><div class="line">sh-4.2# </div><div class="line">sh-4.2# cd /</div><div class="line">sh-4.2# ls</div><div class="line">anaconda-post.log  bin	data  dev  etc	haha  home  lib  lib64	lost+found  media  mnt	opt  proc  root  run  run.sh  sbin  srv  sys  tmp  usr	var</div><div class="line">sh-4.2# cd haha</div><div class="line">sh-4.2# ls</div><div class="line">myfirstregistry  registry.tar</div><div class="line">// 可以看到报错了</div><div class="line">sh-4.2# touch a.txt</div><div class="line">touch: cannot touch &apos;a.txt&apos;: Read-only file system</div><div class="line">sh-4.2#</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看数据卷的具体信息 <code>$ docker inspect testVip</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&quot;Mounts&quot;: [</div><div class="line">    &#123;</div><div class="line">        &quot;Type&quot;: &quot;bind&quot;,</div><div class="line">        &quot;Source&quot;: &quot;/Users/renyimin/Desktop/testVip&quot;,</div><div class="line">        &quot;Destination&quot;: &quot;/haha&quot;,</div><div class="line">        &quot;Mode&quot;: &quot;&quot;,</div><div class="line">        &quot;RW&quot;: false,</div><div class="line">        &quot;Propagation&quot;: &quot;rprivate&quot;</div><div class="line">    &#125;</div><div class="line">],</div></pre></td></tr></table></figure>
-</li>
+<p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/content/image/other.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/other.html</a></li>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html</a></li>
 </ul>
-</li>
-</ol>
-<p>参考: <a href="https://yeasy.gitbooks.io/docker_practice/content/data_management/" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/data_management/</a></p>
 
         </div>
 
@@ -284,7 +240,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.Docker数据管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.镜像/容器 -- 导入导出》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -294,7 +250,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.Docker数据管理》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.镜像/容器 -- 导入导出》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -304,7 +260,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08.Docker数据管理》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08.镜像/容器 -- 导入导出》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -334,7 +290,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/10/17/2017-10-17-07-docker/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">07.镜像/容器 -- 导入导出</h4>
+          <h4 class="title">07.容器--基本操作</h4>
         </a>
       </div>
     
@@ -342,7 +298,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/10/17/2017-10-17-09-docker/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">09.Docker中的网络功能</h4>
+        <h4 class="title">09.Docker数据管理</h4>
       </a>
     </div>
   
@@ -444,7 +400,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.Docker数据管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.镜像/容器 -- 导入导出》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -454,7 +410,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.Docker数据管理》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&title=《08.镜像/容器 -- 导入导出》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -464,7 +420,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08.Docker数据管理》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08.镜像/容器 -- 导入导出》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/17/2017-10-17-08-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
