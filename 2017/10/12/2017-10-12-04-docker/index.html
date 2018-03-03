@@ -20,18 +20,20 @@
     
     
     <meta name="keywords" content="Docker读书笔记">
-    <meta name="description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile是一个文本文件，其内包含了一条条的指令">
+    <meta name="description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
 <meta name="keywords" content="Docker读书笔记">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04.定制镜像 - Dockerfile脚本">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/12/2017-10-12-04-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile是一个文本文件，其内包含了一条条的指令">
+<meta property="og:description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-02T14:32:43.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/docker/dockerfile_test_01.png">
+<meta property="og:updated_time" content="2018-03-03T03:14:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04.定制镜像 - Dockerfile脚本">
-<meta name="twitter:description" content="使用Dockerfile定制镜像1.通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。 2.Dockerfile是一个文本文件，其内包含了一条条的指令">
+<meta name="twitter:description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/docker/dockerfile_test_01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -159,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Dockerfile指令详解"><span class="post-toc-number">2.</span> <span class="post-toc-text">Dockerfile指令详解</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">构建镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像-1"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文-Context"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">镜像构建上下文(Context)</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Dockerfile指令详解"><span class="post-toc-number">2.</span> <span class="post-toc-text">Dockerfile指令详解</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文-Context"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">镜像构建上下文(Context)</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -180,48 +182,79 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><p>1.通过之前<code>docker commit</code>的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</p>
-<p>2.Dockerfile是一个文本文件，其内包含了一条条的指令, <strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</p>
-<p>3.在使用Dockerfile脚本定制镜像时, 有很多指令可以使用;</p>
+            <h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><ol>
+<li><p>通过之前<code>docker commit</code>的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</p>
+</li>
+<li><p>Dockerfile是一个文本文件，其内包含了一条条的指令, <strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+</li>
+<li><p>在使用Dockerfile脚本定制镜像时, 有很多指令可以使用;</p>
+</li>
+</ol>
 <h2 id="Dockerfile指令详解"><a href="#Dockerfile指令详解" class="headerlink" title="Dockerfile指令详解"></a>Dockerfile指令详解</h2><p>参考下一篇博文<a href="/2017/10/13/2017-10-13-05-docker/">05.Dockerfile指令详解</a></p>
-<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>1.还以之前定制 nginx 镜像为例，这次我们使用 Dockerfile 来定制</p>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>1.还以之前定制 nginx 镜像为例，下面使用Dockerfile来定制</p>
 <ul>
 <li><p>在一个空白目录中，建立一个文本文件，并命名为 Dockerfile, 其内容为如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FROM nginx</div><div class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div></pre></td></tr></table></figure>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FROM nginx</div><div class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div></pre></td></tr></table></figure>
 </li>
 <li><p>这个 Dockerfile 很简单，一共就两行。涉及到了两条指令，<code>FROM</code> 和 <code>RUN</code></p>
 </li>
 </ul>
-<h2 id="构建镜像-1"><a href="#构建镜像-1" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>1.在 Dockerfile 文件所在目录执行:</p>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ docker build -t nginx:v3 .</div><div class="line">Sending build context to Docker daemon 2.048 kB</div><div class="line">Step 1 : FROM nginx</div><div class="line">---&gt; e43d811ce2f4</div><div class="line">Step 2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 9cdc27646c7b</div><div class="line"> ---&gt; 44aa4490ce2c</div><div class="line">Removing intermediate container 9cdc27646c7b</div><div class="line">Successfully built 44aa4490ce2c</div></pre></td></tr></table></figure>
-
-- 从命令的输出结果中，我们可以清晰的看到镜像的构建过程。在 Step 2 中，如同我们之前 所说的那样， RUN 指令启动了一个容器 9cdc27646c7b ，执行了所要求的命令，并最后提交 了这一层 44aa4490ce2c ，随后删除了所用到的这个容器 9cdc27646c7b 。
-</code></pre><p>2.这里我们使用了 <code>docker build</code> 命令进行镜像构建。其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code><br>在这里我们指定了最终镜像的名称 <code>-t nginx:v3</code> ，构建成功后，我们可以像之前运行 nginx:v2 那样来运行这个镜像，其结果会和 nginx:v2 一样。</p>
-<p>3.可以结合<a href="/2017/10/17/2017-10-17-07-docker/#构建镜像">07.镜像/容器 – 导入导出</a></p>
-<h3 id="镜像构建上下文-Context"><a href="#镜像构建上下文-Context" class="headerlink" title="镜像构建上下文(Context)"></a>镜像构建上下文(Context)</h3><p>1.如果注意, 会看到 <code>docker build</code> 命令最后有一个 <code>.</code>, 表示当前目录, 而 <code>Dockerfile</code> 就在当前目录, 因此不少初学者以为这个路径是在指定Dockerfile所在的路径, 但这么理解其实是不准确的。<br>2.这是是在指定<code>上下文路径</code>, 那么什么是上下文呢?</p>
+<p>2.在 Dockerfile 文件所在目录执行</p>
 <ul>
-<li><p>首先我们要理解 docker build 的工作原理<br>Docker 在运行时分为<code>Docker引擎</code>(也就是服务端守护进程)和<code>客户端工具</code>;<br>Docker 的引擎提供了一组REST API, 被称为Docker Remote API, 而如docker命令这样的客户端工具, 则是通过这组 API 与 Docker 引擎交互, 从而完成各种功能, 因此, 虽然表面上我们好像是在本机执行各种 docker 功能, 但实际上, 一切都是使用的远程调用形式在服务端(Docker 引擎)完成。也因为这种 C/S 设计, 让我们操作远程服务器的 Docker 引擎变得轻而易举。</p>
+<li><p>从命令的输出结果如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker build -t nginx:v5 .</div><div class="line">Sending build context to Docker daemon  2.048kB</div><div class="line">Step 1/2 : FROM nginx</div><div class="line"> ---&gt; e548f1a579cf</div><div class="line">Step 2/2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 5dc1025063e7</div><div class="line"> ---&gt; 65c15ffa7c7c</div><div class="line">Removing intermediate container 5dc1025063e7</div><div class="line">Successfully built 65c15ffa7c7c</div><div class="line">Successfully tagged nginx:v5</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$</div></pre></td></tr></table></figure>
 </li>
-<li><p>当我们进行镜像构建的时候, 并非所有定制都会通过RUN指令完成, <strong>经常会需要将一些主机本地文件复制进镜像</strong>, 比如通过<code>COPY</code>、<code>ADD</code> 指令等<br>而 <code>docker build</code> 命令构建镜像, 其实并非在本地构建, 而是在服务端, 也就是 Docker 引擎中构建的。那么在这种客户端/服务端的架构中, 如何才能让服务端获得本地文件呢?</p>
+<li><p>可以看到镜像的构建过程: 在Step2中, RUN指令重新启动了一个容器 <code>5dc1025063e7</code>，执行了所要求的命令，并最后提交了新的层 <code>65c15ffa7c7c</code>, 随后删除了所用到的容器<code>5dc1025063e7</code></p>
 </li>
 </ul>
-<p>3.这就引入了上下文的概念, 当构建的时候, 用户会指定构建镜像上下文的路径, <code>docker build</code> 命令得知这个路径后, 会将路径下的所有内容打包, 然后上传给Docker引擎。这样 Docker 引擎收到这个上下文包后, 展开就会获得构建镜像所需的一切文件。</p>
-<p>4.如果在 Dockerfile 中 <code>COPY ./package.json</code> 这么写:</p>
+<p>3.这里我们使用了 <code>docker build</code> 命令进行镜像构建, 其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code></p>
+<ul>
+<li>在这里我们指定了最终镜像的名称 <code>-t nginx:v5</code>，构建成功后, <code>docker images</code> 就会看到这个新镜像  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">nginx                                                 v5                  65c15ffa7c7c        5 minutes ago       109MB</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4.启动这个新镜像: <code>docker run -d -p 8098:80 --name nginx_v5 nginx:v5</code></p>
+<ul>
+<li><p>执行过程</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker run -d -p 8098:80 --name nginx_v5 nginx:v5</div><div class="line">247dfedcf52c3cbfd652302a8f2226274661cea77200092b54044d37e0a2ae25</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$ </div><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">247dfedcf52c        nginx:v5            &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8098-&gt;80/tcp     nginx_v5</div><div class="line">d762abfc1ab6        nginx:latest        &quot;nginx -g &apos;daemon ...&quot;   8 minutes ago       Up 8 minutes        0.0.0.0:8090-&gt;80/tcp     nginx_l</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   2 days ago          Up 39 hours         0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>对比定制前后<br><img src="/img/docker/dockerfile_test_01.png" width="400/"></p>
+</li>
+</ul>
+<h3 id="镜像构建上下文-Context"><a href="#镜像构建上下文-Context" class="headerlink" title="镜像构建上下文(Context)"></a>镜像构建上下文(Context)</h3><p>上面在构建镜像时, 如果注意, 会看到 <code>docker build</code> 命令最后有一个 <code>.</code>, 表示当前目录, 而 <code>Dockerfile</code> 就在当前目录, 因此不少初学者以为这个路径是在指定Dockerfile所在的路径, 但这么理解其实是不准确的。<br>这是在指定<code>上下文路径</code>, 那么什么是上下文呢?</p>
+<ol>
+<li><p>首先我们要理解 <code>docker build</code> 的工作原理</p>
+<ul>
+<li><p>Docker 在运行时分为<code>Docker引擎</code>(也就是服务端守护进程)和<code>客户端工具</code>;</p>
+</li>
+<li><p>Docker 的引擎提供了一组REST API, 被称为Docker Remote API, 而如docker命令这样的客户端工具, 则是通过这组 API 与 Docker 引擎交互, 从而完成各种功能, 因此, 虽然表面上我们好像是在本机执行各种docker功能, 但实际上, 一切都是使用的远程调用形式在服务端(Docker 引擎)完成。<br>也因为这种C/S设计, 让我们操作远程服务器的 Docker 引擎变得轻而易举。</p>
+</li>
+</ul>
+</li>
+<li><p>当我们进行镜像构建的时候, 并非所有定制都会通过RUN指令完成, <strong>经常会需要将一些主机本地文件复制进镜像</strong>, 比如通过<code>COPY</code>、<code>ADD</code> 指令等。而 <code>docker build</code> 命令构建镜像, 其实并非在本地构建, 而是在服务端, 也就是Docker引擎中构建的。那么在这种客户端/服务端的架构中, 如何才能让服务端获得本地文件呢?</p>
+</li>
+<li><p>这就引入了上下文的概念, 当构建的时候, 用户会指定构建镜像上下文的路径, <code>docker build</code> 命令得知这个路径后, 会将路径下的所有内容打包, 然后上传给Docker引擎。这样 Docker 引擎收到这个上下文包后, 展开就会获得构建镜像所需的一切文件。</p>
+</li>
+<li><p>如果在 Dockerfile 中 <code>COPY ./package.json</code> 这么写:</p>
 <ul>
 <li>这并不是要复制你执行 <code>docker build</code> 命令时, 所在的目录下的 package.json, 也不是复制 Dockerfile 所在目录下的 package.json, 而是复制上下文(context)目录下的 package.json</li>
 <li><strong>COPY 这类指令中的源文件的路径都是相对上下文路径的</strong></li>
 </ul>
-<p>5.理解构建上下文对于镜像构建是很重要的, 避免犯一些不应该的错误, 比如有些初学者在发现 <code>COPY /opt/xxxx /app</code> 不工作后, 于是干脆将 <code>Dockerfile</code> 放到了硬盘根目录去构建, 结果发现 <code>docker build</code> 执行后, 在发送一个几十GB的东西, 极为缓慢而且很容易构建失败(因为这种做法是在让 docker build 打包整个硬盘, 这显然是使用错误)。</p>
-<p>6.一般来说, 应该将 <code>Dockerfile</code> 置于一个空目录下, 或者项目根目录下。</p>
+</li>
+<li><p>理解构建上下文对于镜像构建是很重要的, 避免犯一些不应该的错误, 比如有些初学者在发现 <code>COPY /opt/xxxx /app</code> 不工作后, 于是干脆将 <code>Dockerfile</code> 放到了硬盘根目录去构建, 结果发现 <code>docker build</code> 执行后, 在发送一个几十GB的东西, 极为缓慢而且很容易构建失败(因为这种做法是在让 docker build 打包整个硬盘, 这显然是使用错误)。</p>
+</li>
+<li><p>一般来说, 应该将 <code>Dockerfile</code> 置于一个空目录下, 或者项目根目录下。</p>
 <ul>
 <li>如果该目录下没有所需文件, 那么应该把所需文件复制一份过来。</li>
 <li>如果目录下有些东西确实不希望构建时传给 Docker 引擎, 那么可以用 <code>.gitignore</code> 一样的语法写一个 <code>.dockerignore</code>, 该文件是用于剔除不需要作为上下文传递给 Docker 引擎的。</li>
 </ul>
-<p>7.那么为什么会有人误以为 <code>.</code> 是指定 Dockerfile 所在目录呢?</p>
+</li>
+<li><p>那么为什么会有人误以为 <code>.</code> 是指定 Dockerfile 所在目录呢?</p>
 <ul>
 <li>这是因为在默认情况下, 如果不额外指定 Dockerfile 的话, 会将上下文目录下的名为 Dockerfile 的文件作为 Dockerfile。</li>
-<li>这只是默认行为, 实际上 Dockerfile 的文件名并不要求必须为 Dockerfile ，而且并不要求 必须位于上下文目录中，比如可以用 <code>-f ../Dockerfile.php</code> 参数指定某个文件作为Dockerfile。</li>
+<li>这只是默认行为, 实际上Dockerfile的文件名并不要求必须为Dockerfile, 而且并不要求 必须位于上下文目录中，比如可以用 <code>-f ../Dockerfile.php</code> 参数指定某个文件作为Dockerfile。</li>
 </ul>
+</li>
+</ol>
 <p>参考 : <a href="https://yeasy.gitbooks.io/docker_practice/content/image/commit.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/commit.html</a></p>
 
         </div>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>13.Compose模板文件 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker读书笔记">
+    <meta name="description" content="Compose模板文件 模板文件是使用 Compose 的核心, 涉及到的指令关键字也比较多, 但大部分指令跟 docker run 相关参数的含义都是类似的。   模板文件默认名称为 docker-compose.yml, 格式为 YAML 格式。  在旧版本(版本1)中, 其中每个顶级元素为服务名称, 次级元素为服务容器的配置信息，例如:  123456webapp:  image: exam">
+<meta name="keywords" content="Docker读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13.Compose模板文件">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Compose模板文件 模板文件是使用 Compose 的核心, 涉及到的指令关键字也比较多, 但大部分指令跟 docker run 相关参数的含义都是类似的。   模板文件默认名称为 docker-compose.yml, 格式为 YAML 格式。  在旧版本(版本1)中, 其中每个顶级元素为服务名称, 次级元素为服务容器的配置信息，例如:  123456webapp:  image: exam">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-03T01:50:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="13.Compose模板文件">
+<meta name="twitter:description" content="Compose模板文件 模板文件是使用 Compose 的核心, 涉及到的指令关键字也比较多, 但大部分指令跟 docker run 相关参数的含义都是类似的。   模板文件默认名称为 docker-compose.yml, 格式为 YAML 格式。  在旧版本(版本1)中, 其中每个顶级元素为服务名称, 次级元素为服务容器的配置信息，例如:  123456webapp:  image: exam">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">13.Compose模板文件</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">13.Compose模板文件</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-20T14:10:09.000Z" itemprop="datePublished" class="page-time">
+  2017-10-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Compose模板文件"><span class="post-toc-number">1.</span> <span class="post-toc-text">Compose模板文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#各指令用法"><span class="post-toc-number">2.</span> <span class="post-toc-text">各指令用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#build"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">build</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#command"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">command</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#container-name"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">container_name</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cap-add-cap-drop"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">cap_add, cap_drop</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#cgroup-parent"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">cgroup_parent</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#devices"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">devices</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#dns"><span class="post-toc-number">2.7.</span> <span class="post-toc-text">dns</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#dns-search"><span class="post-toc-number">2.8.</span> <span class="post-toc-text">dns_search</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#dockerfile"><span class="post-toc-number">2.9.</span> <span class="post-toc-text">dockerfile</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#env-file"><span class="post-toc-number">2.10.</span> <span class="post-toc-text">env_file</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#environment"><span class="post-toc-number">2.11.</span> <span class="post-toc-text">environment</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#depends-on"><span class="post-toc-number">2.12.</span> <span class="post-toc-text">depends_on</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#tmpfs"><span class="post-toc-number">2.13.</span> <span class="post-toc-text">tmpfs</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#extra-hosts"><span class="post-toc-number">2.14.</span> <span class="post-toc-text">extra_hosts</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#healthcheck"><span class="post-toc-number">2.15.</span> <span class="post-toc-text">healthcheck</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#labels"><span class="post-toc-number">2.16.</span> <span class="post-toc-text">labels</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#links"><span class="post-toc-number">2.17.</span> <span class="post-toc-text">links</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#logging"><span class="post-toc-number">2.18.</span> <span class="post-toc-text">logging</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#network-mode"><span class="post-toc-number">2.19.</span> <span class="post-toc-text">network_mode</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#networks"><span class="post-toc-number">2.20.</span> <span class="post-toc-text">networks</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#pid"><span class="post-toc-number">2.21.</span> <span class="post-toc-text">pid</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ports"><span class="post-toc-number">2.22.</span> <span class="post-toc-text">ports</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#secrets"><span class="post-toc-number">2.23.</span> <span class="post-toc-text">secrets</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#security-opt"><span class="post-toc-number">2.24.</span> <span class="post-toc-text">security_opt</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#stop-signal"><span class="post-toc-number">2.25.</span> <span class="post-toc-text">stop_signal</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#sysctls"><span class="post-toc-number">2.26.</span> <span class="post-toc-text">sysctls</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ulimits"><span class="post-toc-number">2.27.</span> <span class="post-toc-text">ulimits</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#volumes"><span class="post-toc-number">2.28.</span> <span class="post-toc-text">volumes</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-2017-10-20-13-docker"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">13.Compose模板文件</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-20 22:10:09" datetime="2017-10-20T14:10:09.000Z"  itemprop="datePublished">2017-10-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Compose模板文件"><a href="#Compose模板文件" class="headerlink" title="Compose模板文件"></a>Compose模板文件</h2><ol>
+<li><p><code>模板文件</code>是使用 <code>Compose</code> 的核心, 涉及到的指令关键字也比较多, 但大部分指令跟 <code>docker run</code> 相关参数的含义都是类似的。 </p>
+</li>
+<li><p>模板文件默认名称为 <code>docker-compose.yml</code>, 格式为 <code>YAML</code> 格式。</p>
+</li>
+<li><p>在旧版本(版本1)中, 其中每个顶级元素为<code>服务</code>名称, 次级元素为<code>服务容器</code>的配置信息，例如:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">webapp:</div><div class="line">  image: examples/web</div><div class="line">  ports:</div><div class="line">    - &quot;80:80&quot;</div><div class="line">  volumes:</div><div class="line">- &quot;/data&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>版本2扩展了Compose的语法, 同时尽量保持跟版本1的兼容, 除了可以声明”网络” 和 “存储信息” 外, 最大的不同: </p>
+<ul>
+<li>一是添加了版本信息</li>
+<li>另一个是需要将所有的服务放到 <code>services</code> 根下面</li>
+<li>例如, 上面例子改写为版本 2，内容为<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">version: &quot;2&quot;</div><div class="line">services:</div><div class="line">  webapp:</div><div class="line">    image: examples/web</div><div class="line">    ports:</div><div class="line">      - &quot;80:80&quot;</div><div class="line">    volumes:</div><div class="line">- &quot;/data&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>注意:</p>
+<ul>
+<li>每个服务都必须通过<code>image</code>指令指定镜像 或 <code>build</code>指令(需要 Dockerfile)等来自动构建生成镜像。</li>
+<li>如果使用 <code>build</code> 指令, 在 Dockerfile 中设置的选项(例如: CMD , EXPOSE , VOLUME , ENV 等)将会自动被获取, 无需在 <code>docker-compose.yml</code> 中再次设置。</li>
+</ul>
+</li>
+</ol>
+<h2 id="各指令用法"><a href="#各指令用法" class="headerlink" title="各指令用法"></a>各指令用法</h2><h3 id="build"><a href="#build" class="headerlink" title="build"></a>build</h3><p>指定 <code>Dockerfile</code> 所在文件夹的路径(可以是绝对路径, 或者相对 <code>docker-compose.yml</code> 文件的路径)。Compose 将会利用它自动构建这个镜像，然后使用这个镜像。(如:<code>build: /path/to/build/dir</code>)</p>
+<h3 id="command"><a href="#command" class="headerlink" title="command"></a>command</h3><p>覆盖容器启动后默认执行的命令 (如:<code>command: echo &quot;hello world&quot;</code>)</p>
+<h3 id="container-name"><a href="#container-name" class="headerlink" title="container_name"></a>container_name</h3><p>指定容器名称, 默认将会使用 <code>项目名称_服务名称_序号</code> 这样的格式, 例如: <code>container_name: docker-web-container</code><br>需要注意:指定容器名称后,该服务将无法进行扩展(scale), 因为 Docker 不允许多个容器具有相同的名称。</p>
+<h3 id="cap-add-cap-drop"><a href="#cap-add-cap-drop" class="headerlink" title="cap_add, cap_drop"></a>cap_add, cap_drop</h3><ol>
+<li><p>指定容器的内核能力(capacity)分配</p>
+<ul>
+<li><p>例如, 让容器拥有所有能力可以指定为: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cap_add:</div><div class="line">    - ALL</div></pre></td></tr></table></figure>
+</li>
+<li><p>去掉 NET_ADMIN 能力可以指定为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">cap_drop:</div><div class="line">    - NET_ADMIN</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="cgroup-parent"><a href="#cgroup-parent" class="headerlink" title="cgroup_parent"></a>cgroup_parent</h3><p>指定父 <code>cgroup</code> 组, 意味着将继承该组的资源限制, 例如, 创建了一个cgroup组名称为cgroups_1: <code>cgroup_parent: cgroups_1</code></p>
+<h3 id="devices"><a href="#devices" class="headerlink" title="devices"></a>devices</h3><ol>
+<li>指定设备映射关系。<ul>
+<li>例如<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">devices:</div><div class="line">    - &quot;/dev/ttyUSB1:/dev/ttyUSB0&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="dns"><a href="#dns" class="headerlink" title="dns"></a>dns</h3><p>自定义 DNS 服务器, 可以是一个值, 也可以是一个列表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dns: 8.8.8.8</div><div class="line">    dns:</div><div class="line">      - 8.8.8.8</div><div class="line">      - 9.9.9.9</div></pre></td></tr></table></figure></p>
+<h3 id="dns-search"><a href="#dns-search" class="headerlink" title="dns_search"></a>dns_search</h3><p>配置 DNS 搜索域, 可以是一个值, 也可以是一个列表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dns_search: example.com</div><div class="line">dns_search:</div><div class="line">  - domain1.example.com</div><div class="line">  - domain2.example.com</div></pre></td></tr></table></figure></p>
+<h3 id="dockerfile"><a href="#dockerfile" class="headerlink" title="dockerfile"></a>dockerfile</h3><p>如果需要指定额外的编译镜像的 Dockefile 文件, 可以通过该指令来指定, 例如 <code>dockerfile: Dockerfile-alternate</code><br>注意,该指令不能跟 image 同时使用, 否则 Compose 将不知道根据哪个指令来生成最终的服务镜像。</p>
+<h3 id="env-file"><a href="#env-file" class="headerlink" title="env_file"></a>env_file</h3><ol>
+<li><p>从文件中获取环境变量, 可以为单独的文件路径或列表。</p>
+<ul>
+<li>如果通过 <code>docker-compose -f FILE</code> 方式来指定Compose模板文件, 则 <code>env_file</code> 中变量的路径会基于模板文件路径。</li>
+<li>如果有变量名称与 <code>environment</code> 指令冲突, 则按照惯例, 以后者为准<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">env_file: .env</div><div class="line">env_file:</div><div class="line">  - ./common.env</div><div class="line">  - ./apps/web.env</div><div class="line">  - /opt/secrets.env</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>环境变量文件中每一行必须符合格式，支持 <code>#</code> 开头的注释行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># common.env: Set development environment</div><div class="line">PROG_ENV=development</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="environment"><a href="#environment" class="headerlink" title="environment"></a>environment</h3><ol>
+<li>设置环境变量, 你可以使用数组或字典两种格式。</li>
+<li><p>只给定名称的变量会自动获取运行 Compose 主机上对应变量的值, 可以用来防止泄露不必要的数据。例如:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">environment:</div><div class="line">  RACK_ENV: development</div><div class="line">  SESSION_SECRET:</div></pre></td></tr></table></figure>
+<p> 或者</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">environment:</div><div class="line">  - RACK_ENV=development</div><div class="line">  - SESSION_SECRET</div></pre></td></tr></table></figure>
+</li>
+<li><p>注意, 如果变量名称或者值中用到 true|false, yes|no 等表达布尔含义的词汇, 最好放到引号里, 避免 YAML 自动解析某些内容为对应的布尔语义。</p>
+<ul>
+<li><a href="http://yaml.org/type/bool.html" target="_blank" rel="external">http://yaml.org/type/bool.html</a> 中给出了这些特定词汇，包括<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">y|Y|yes|Yes|YES|n|N|no|No|NO</div><div class="line">|true|True|TRUE|false|False|FALSE</div><div class="line">|on|On|ON|off|Off|OFF</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="depends-on"><a href="#depends-on" class="headerlink" title="depends_on"></a>depends_on</h3><p>解决容器的依赖、启动先后的问题。以下例子中会先启动 redis db 再启动 web:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">version: &apos;3&apos;</div><div class="line"></div><div class="line">services:</div><div class="line">  web:</div><div class="line">    build: .</div><div class="line">    depends_on:</div><div class="line">      - db</div><div class="line">      - redis</div><div class="line"></div><div class="line">  redis:</div><div class="line">    image: redis</div><div class="line"></div><div class="line">  db:</div><div class="line">    image: postgres</div></pre></td></tr></table></figure></p>
+<p>注意：web 服务不会等待 redis db 「完全启动」之后才启动。</p>
+<h3 id="tmpfs"><a href="#tmpfs" class="headerlink" title="tmpfs"></a>tmpfs</h3><p>挂载一个 <code>tmpfs</code> 文件系统到容器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">tmpfs: /run</div><div class="line">tmpfs:</div><div class="line">  - /run</div><div class="line">  - /tmp</div></pre></td></tr></table></figure></p>
+<h3 id="extra-hosts"><a href="#extra-hosts" class="headerlink" title="extra_hosts"></a>extra_hosts</h3><p>类似 Docker 中的 <code>--add-host</code> 参数, 指定额外的 host 名称映射信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">extra_hosts:</div><div class="line"> - &quot;googledns:8.8.8.8&quot;</div><div class="line"> - &quot;dockerhub:52.1.157.61&quot;</div><div class="line">```  </div><div class="line">会在启动后的服务容器中 `/etc/hosts` 文件中添加如下两条条目。</div><div class="line">```    </div><div class="line">8.8.8.8 googledns</div><div class="line">52.1.157.61 dockerhub</div></pre></td></tr></table></figure></p>
+<h3 id="healthcheck"><a href="#healthcheck" class="headerlink" title="healthcheck"></a>healthcheck</h3><p>通过命令检查容器是否健康运行。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">healthcheck:</div><div class="line">  test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost&quot;]</div><div class="line">  interval: 1m30s</div><div class="line">  timeout: 10s</div><div class="line">  retries: 3</div><div class="line">```  </div><div class="line"></div><div class="line">### image</div><div class="line">指定为镜像名称或镜像ID, 如果镜像在本地不存在, Compose 将会尝试拉去这个镜像。</div><div class="line">```    </div><div class="line">image: ubuntu</div><div class="line">image: orchardup/postgresql</div><div class="line">image: a4bc65fd</div></pre></td></tr></table></figure></p>
+<h3 id="labels"><a href="#labels" class="headerlink" title="labels"></a>labels</h3><p>为容器添加 Docker 元数据(metadata)信息, 例如可以为容器添加辅助说明信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">labels:</div><div class="line">  com.startupteam.description: &quot;webapp for a startup team&quot;</div><div class="line">  com.startupteam.department: &quot;devops department&quot;</div><div class="line">  com.startupteam.release: &quot;rc3 for v1.0&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="links"><a href="#links" class="headerlink" title="links"></a>links</h3><p>注意：不推荐使用该指令。</p>
+<h3 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h3><p>配置日志选项<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">logging:</div><div class="line">  driver: syslog</div><div class="line">  options:</div><div class="line">    syslog-address: &quot;tcp://192.168.0.42:123&quot;</div></pre></td></tr></table></figure></p>
+<p>目前支持三种日志驱动类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">driver: &quot;json-file&quot;</div><div class="line">driver: &quot;syslog&quot;</div><div class="line">driver: &quot;none&quot;</div></pre></td></tr></table></figure></p>
+<p>options 配置日志驱动的相关参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">options:</div><div class="line">  max-size: &quot;200k&quot;</div><div class="line">  max-file: &quot;10&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="network-mode"><a href="#network-mode" class="headerlink" title="network_mode"></a>network_mode</h3><p>设置网络模式, 使用和 <code>docker run</code> 的 <code>--network</code> 参数一样的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">network_mode: &quot;bridge&quot;</div><div class="line">network_mode: &quot;host&quot;</div><div class="line">network_mode: &quot;none&quot;</div><div class="line">network_mode: &quot;service:[service name]&quot;</div><div class="line">network_mode: &quot;container:[container name/id]&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="networks"><a href="#networks" class="headerlink" title="networks"></a>networks</h3><p>配置容器连接的网络<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">version: &quot;3&quot;</div><div class="line">services:</div><div class="line"></div><div class="line">  some-service:</div><div class="line">    networks:</div><div class="line">     - some-network</div><div class="line">     - other-network</div><div class="line"></div><div class="line">networks:</div><div class="line">  some-network:</div><div class="line">  other-network:</div></pre></td></tr></table></figure></p>
+<h3 id="pid"><a href="#pid" class="headerlink" title="pid"></a>pid</h3><p>跟主机系统共享进程命名空间, 打开该选项的容器之间, 以及容器和宿主机系统之间可以通过进程 ID 来相互访问和操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pid: &quot;host&quot;</div></pre></td></tr></table></figure></p>
+<h3 id="ports"><a href="#ports" class="headerlink" title="ports"></a>ports</h3><p>暴露端口信息<br>使用宿主端口: 容器端口(HOST:CONTAINER)格式, 或者仅仅指定容器的端口(宿主将会随机选择端口)都可以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ports:</div><div class="line"> - &quot;3000&quot;</div><div class="line"> - &quot;8000:8000&quot;</div><div class="line"> - &quot;49100:22&quot;</div><div class="line"> - &quot;127.0.0.1:8001:8001&quot;</div></pre></td></tr></table></figure></p>
+<p><strong>注意: 当使用 <code>HOST:CONTAINER</code> 格式来映射端口时, 如果你使用的容器端口小于 60 并且没放到引号里, 可能会得到错误结果, 因为 YAML 会自动解析 <code>xx:yy</code> 这种数字格式为 60 进制。为避免出现这种问题，建议数字串都采用引号包括起来的字符串格式</strong>。</p>
+<h3 id="secrets"><a href="#secrets" class="headerlink" title="secrets"></a>secrets</h3><p>存储敏感数据, 例如 mysql 服务密码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">version: &quot;3&quot;</div><div class="line">services:</div><div class="line"></div><div class="line">mysql:</div><div class="line">  image: mysql</div><div class="line">  environment:</div><div class="line">    MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password</div><div class="line">  secrets:</div><div class="line">    - db_root_password</div><div class="line">    - my_other_secret</div><div class="line"></div><div class="line">secrets:</div><div class="line">  my_secret:</div><div class="line">    file: ./my_secret.txt</div><div class="line">  my_other_secret:</div><div class="line">    external: true</div></pre></td></tr></table></figure></p>
+<h3 id="security-opt"><a href="#security-opt" class="headerlink" title="security_opt"></a>security_opt</h3><p>指定容器模板标签（label）机制的默认属性（用户、角色、类型、级别等）。例如配置标签的用户名和角色名。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">security_opt:</div><div class="line">    - label:user:USER</div><div class="line">    - label:role:ROLE</div></pre></td></tr></table></figure></p>
+<h3 id="stop-signal"><a href="#stop-signal" class="headerlink" title="stop_signal"></a>stop_signal</h3><p>设置另一个信号来停止容器。在默认情况下使用的是 SIGTERM 停止容器。<code>stop_signal: SIGUSR1</code></p>
+<h3 id="sysctls"><a href="#sysctls" class="headerlink" title="sysctls"></a>sysctls</h3><p>配置容器内核参数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">sysctls:</div><div class="line">  net.core.somaxconn: 1024</div><div class="line">  net.ipv4.tcp_syncookies: 0</div><div class="line"></div><div class="line">sysctls:</div><div class="line">  - net.core.somaxconn=1024</div><div class="line">  - net.ipv4.tcp_syncookies=0</div></pre></td></tr></table></figure></p>
+<h3 id="ulimits"><a href="#ulimits" class="headerlink" title="ulimits"></a>ulimits</h3><p>指定容器的 ulimits 限制值<br>例如，指定最大进程数为 65535，指定文件句柄数为 20000（软限制，应用可以随时修改，不能超过硬限制） 和 40000（系统硬限制，只能 root 用户提高）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ulimits:</div><div class="line">nproc: 65535</div><div class="line">nofile:</div><div class="line">  soft: 20000</div><div class="line">  hard: 40000</div></pre></td></tr></table></figure></p>
+<h3 id="volumes"><a href="#volumes" class="headerlink" title="volumes"></a>volumes</h3><p>数据卷所挂载路径设置, 可以设置宿主机路径(<code>HOST:CONTAINER</code>) 或加上访问模式(<code>HOST:CONTAINER:ro</code>)。<br>该指令中路径支持相对路径<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">volumes:</div><div class="line"> - /var/lib/mysql</div><div class="line"> - cache/:/tmp/cache</div><div class="line"> - ~/configs:/etc/configs/:ro</div></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&title=《13.Compose模板文件》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&title=《13.Compose模板文件》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《13.Compose模板文件》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/20/2017-10-20-12-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">12.Docker三剑客 之 Compose 项目</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/30/2017-11-30-HTTP-03-Method/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP - 请求Method</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&title=《13.Compose模板文件》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&title=《13.Compose模板文件》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《13.Compose模板文件》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/20/2017-10-20-13-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3aQXLEIAwEwPz/08k1qdR6ZwR7MG6fUl4HaA4qCfH1FT/fv57/b5LneuRXs2x+MDAwbstIpr9eVrvoZK78ewwMjOcwklCYTNOG0Vebkq8NAwMDow2CM3wyAgYGBsZKwE2qy7YaxcDAwNhVWF6nd9dpX1IGf6QWx8DAuCFjJQh++u+P9DcwMDBuxdjbhpwdt81W8mdMDAyMoxltIborKUxaoe3lDwwMjFMZ+bJmi15pORQwDAyMBzPy61952ZkstD7yw8DAOJrRDnRdcCaXKlaC79IOYWBg3JaRJ3brbcWVbSquWWBgYBzKyK9BzJK8Nk7WX2JgYDyM0SZqs6XMrp29/C8MDIyjGbsuPeQpYJuGDhsGGBgYD2C0hWh7qNe2TusQj4GBcRBjw0WHUZBNFlq8wcDAOJqRH7rlk62QlopqDAyMxzBa2N5m57YEEQMD4yDGylHa7Lh/dqj35ioGBgbG0Yy2JZAMtyuYts0DDAyMsxl5eG1/3RBA27NDDAyMoxl5k7JtJ7Tla96iwMDAeBqjXe7KJYwiY52VrxgYGAcxVo69lnaubHxuqL8xMDBuy5gta1hkjt60aSsGBsapjCTI5s3Ldpw8WBdFLAYGxqGMpDRtY/b1yLPU800pi4GBgREf4ueMZMaodYqBgYExKkd3tR+ihigGBsYDGEnxmV+hyINyuxEbjtswMDBuyMhLx/ybvHxtw/dSUxMDA+N+jB8nwGqY0GknAgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

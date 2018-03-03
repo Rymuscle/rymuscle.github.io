@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="FROM 指定基础镜像 所谓定制镜像, 是以一个镜像为基础, 在其上进行定制。FROM 就用来指定基础镜像, 因此一个 Dockerfile 中 FROM 是必备的指令，并且必须是第一条指令。 格式: FROM 镜像名[:标签]  MAINTAINER 指定镜像的作者和联系方式信息(执行docker inspect image 输出中有相应的字段记录该信息) 格式:MAINTAINER autho">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-02T14:58:38.000Z">
+<meta property="og:updated_time" content="2018-03-03T03:18:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05.镜像 - Dockerfile常见指令详解">
 <meta name="twitter:description" content="FROM 指定基础镜像 所谓定制镜像, 是以一个镜像为基础, 在其上进行定制。FROM 就用来指定基础镜像, 因此一个 Dockerfile 中 FROM 是必备的指令，并且必须是第一条指令。 格式: FROM 镜像名[:标签]  MAINTAINER 指定镜像的作者和联系方式信息(执行docker inspect image 输出中有相应的字段记录该信息) 格式:MAINTAINER autho">
@@ -362,7 +362,52 @@
 <li><p>另外需要注意的是，ADD 指令会令镜像构建缓存失效，从而可能会令镜像构建变得比较缓慢。因此在 COPY 和 ADD 指令中选择的时候，可以遵循这样的原则，所有的文件复制均使用 COPY 指令，仅在需要自动解压缩的场合使用 ADD 。</p>
 </li>
 </ol>
-<h2 id="HEALTHCHECK-健康检查"><a href="#HEALTHCHECK-健康检查" class="headerlink" title="HEALTHCHECK 健康检查"></a>HEALTHCHECK 健康检查</h2><h2 id="ONBUILD-为他人做嫁衣裳"><a href="#ONBUILD-为他人做嫁衣裳" class="headerlink" title="ONBUILD 为他人做嫁衣裳"></a>ONBUILD 为他人做嫁衣裳</h2>
+<h2 id="HEALTHCHECK-健康检查"><a href="#HEALTHCHECK-健康检查" class="headerlink" title="HEALTHCHECK 健康检查"></a>HEALTHCHECK 健康检查</h2><h2 id="ONBUILD-为他人做嫁衣裳"><a href="#ONBUILD-为他人做嫁衣裳" class="headerlink" title="ONBUILD 为他人做嫁衣裳"></a>ONBUILD 为他人做嫁衣裳</h2><ol>
+<li><p>格式：<code>ONBUILD &lt;其它指令&gt;</code></p>
+</li>
+<li><p><code>ONBUILD</code> 是一个特殊的指令, 它后面跟的是其它指令, 比如 RUN, COPY 等, 而这些指令, 在当前镜像构建时并不会被执行。只有当以当前镜像为基础镜像, 去构建下一级镜像的时候才会被执行。</p>
+</li>
+<li><p>Dockerfile 中的其它指令都是为了定制当前镜像而准备的, 唯有 <code>ONBUILD</code> 是为了帮助别人定制自己而准备的。</p>
+</li>
+<li><p>假设我们要制作Node.js所写的应用的镜像, 我们都知道Node.js使用npm进行包管理, 所有依赖、配置、启动信息等会放到package.json文件里。</p>
+<ul>
+<li>在拿到程序代码后, 需要先进行 <code>npm install</code> 才可以获得所有需要的依赖。</li>
+<li><p>然后就可以通过 <code>npm start</code> 来启动应用, 因此, 一般来说会这样写 Dockerfile:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FROM node:slim</div><div class="line">RUN mkdir /app</div><div class="line">WORKDIR /app</div><div class="line">COPY ./package.json /app</div><div class="line">RUN [ &quot;npm&quot;, &quot;install&quot; ]</div><div class="line">COPY . /app/</div><div class="line">CMD [ &quot;npm&quot;, &quot;start&quot; ]</div></pre></td></tr></table></figure>
+</li>
+<li><p>把这个 Dockerfile 放到 Node.js 项目的根目录, 构建好镜像后, 就可以直接拿来启动容器运行。</p>
+</li>
+</ul>
+</li>
+<li><p>但是如果我们还有第二个 Node.js 项目也差不多呢？好吧, 那就再把这个Dockerfile复制到第二个项目里。那如果有第三个项目呢?再复制么?文件的副本越多,版本控制就越困难,让我们继续看这样的场景维护的问题。</p>
+<ul>
+<li>如果第一个Node.js项目在开发过程中, 发现这个Dockerfile里存在问题,比如敲错字了、或者需要安装额外的包, 然后开发人员修复了这个 Dockerfile, 再次构建, 问题解决。</li>
+<li>第一个项目没问题了,但是第二个项目呢?虽然最初 Dockerfile 是复制、粘贴自第一个项目的,但是并不会因为第一个项目修复了 Dockerfile, 而第二个项目的 Dockerfile 就会被自动修复。</li>
+</ul>
+</li>
+<li><p>那么我们可不可以做一个基础镜像, 然后各个项目使用这个基础镜像呢? 这样基础镜像更新, 各个项目不用同步Dockerfile的变化, 重新构建后就继承了基础镜像的更新?</p>
+<ul>
+<li><p>其实是可以的, 那么上面的这个 Dockerfile 就会变为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FROM node:slim</div><div class="line">RUN mkdir /app</div><div class="line">WORKDIR /app</div><div class="line">CMD [ &quot;npm&quot;, &quot;start&quot; ]</div></pre></td></tr></table></figure>
+</li>
+<li><p>这里我们把项目相关的构建指令拿出来, 放到子项目里去。假设这个基础镜像的名字为my-node的话, 各个项目内的自己的 Dockerfile 就变为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">FROM my-node</div><div class="line">COPY ./package.json /app</div><div class="line">RUN [ &quot;npm&quot;, &quot;install&quot; ]</div><div class="line">COPY . /app/</div></pre></td></tr></table></figure>
+<p>基础镜像变化后, 各个项目都用这个 Dockerfile 重新构建镜像, 会继承基础镜像的更新。</p>
+</li>
+</ul>
+</li>
+<li><p>此时问题只解决了一半, 如果这个Dockerfile里面有些东西需要调整, 比如 npm install 都需要加一些参数, 那怎么办?</p>
+<ul>
+<li>这一行 RUN 是不可能放入基础镜像的, 因为涉及到了当前项目的 ./package.json, 难道又要一个个修改么?</li>
+<li>所以说, 这样制作基础镜像, 只解决了原来的 Dockerfile 的前4条指令的变化问题, 而后面三条指令的变化则完全没办法处理。</li>
+</ul>
+</li>
+<li><p><code>ONBUILD</code> 可以解决这个问题, 用ONBUILD重新写一下基础镜像的 Dockerfile:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FROM node:slim</div><div class="line">RUN mkdir /app</div><div class="line">WORKDIR /app</div><div class="line">ONBUILD COPY ./package.json /app</div><div class="line">ONBUILD RUN [ &quot;npm&quot;, &quot;install&quot; ]</div><div class="line">ONBUILD COPY . /app/</div><div class="line">CMD [ &quot;npm&quot;, &quot;start&quot; ]</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这次我们回到原始的 Dockerfile，但是这次将项目相关的指令加上 ONBUILD，这样在构建基础镜像的时候，这三行并不会被执行。然后各个项目的 Dockerfile 就变成了简单地：<code>FROM my-node</code>, 只有这么一行。<br>当在各个项目目录中, 用这个只有一行的 Dockerfile 构建镜像时, 之前基础镜像的那三行 ONBUILD 就会开始执行, 成功的将当前项目的代码复制进镜像、并且针对本项目执行 <code>npm install</code>, 生成应用镜像。</p>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -454,9 +499,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/2017-11-30-HTTP-03-Method/" id="post-next" class="post-nav-link">
+      <a href="/2017/10/14/2017-10-14-06-docker/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">HTTP - 请求Method</h4>
+        <h4 class="title">06.Docker Registry 仓库</h4>
       </a>
     </div>
   
