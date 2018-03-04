@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>04.定制镜像 - Dockerfile脚本 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker读书笔记">
+    <meta name="description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
+<meta name="keywords" content="Docker读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04.定制镜像 - Dockerfile脚本">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/docker/dockerfile_test_01.png">
+<meta property="og:updated_time" content="2018-03-03T03:14:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="04.定制镜像 - Dockerfile脚本">
+<meta name="twitter:description" content="使用Dockerfile定制镜像 通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。  Dockerfile是一个文本文件，其内包含了一条条的指令,">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/docker/dockerfile_test_01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">04.定制镜像 - Dockerfile脚本</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">04.定制镜像 - Dockerfile脚本</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-12T15:05:07.000Z" itemprop="datePublished" class="page-time">
+  2017-10-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Dockerfile定制镜像"><span class="post-toc-number">1.</span> <span class="post-toc-text">使用Dockerfile定制镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Dockerfile指令详解"><span class="post-toc-number">2.</span> <span class="post-toc-text">Dockerfile指令详解</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#镜像构建上下文-Context"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">镜像构建上下文(Context)</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-docker/2017-10-12-04-docker"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">04.定制镜像 - Dockerfile脚本</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-12 23:05:07" datetime="2017-10-12T15:05:07.000Z"  itemprop="datePublished">2017-10-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="使用Dockerfile定制镜像"><a href="#使用Dockerfile定制镜像" class="headerlink" title="使用Dockerfile定制镜像"></a>使用Dockerfile定制镜像</h2><ol>
+<li><p>通过之前<code>docker commit</code>的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 <code>Dockerfile</code>。</p>
+</li>
+<li><p>Dockerfile是一个文本文件，其内包含了一条条的指令, <strong>每一条指令构建一层</strong>，因此每一条指令的内容，就是描述该层应当如何构建。</p>
+</li>
+<li><p>在使用Dockerfile脚本定制镜像时, 有很多指令可以使用;</p>
+</li>
+</ol>
+<h2 id="Dockerfile指令详解"><a href="#Dockerfile指令详解" class="headerlink" title="Dockerfile指令详解"></a>Dockerfile指令详解</h2><p>参考下一篇博文<a href="/2017/10/13/2017-10-13-05-docker/">05.Dockerfile指令详解</a></p>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>1.还以之前定制 nginx 镜像为例，下面使用Dockerfile来定制</p>
+<ul>
+<li><p>在一个空白目录中，建立一个文本文件，并命名为 Dockerfile, 其内容为如下:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">FROM nginx</div><div class="line">RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div></pre></td></tr></table></figure>
+</li>
+<li><p>这个 Dockerfile 很简单，一共就两行。涉及到了两条指令，<code>FROM</code> 和 <code>RUN</code></p>
+</li>
+</ul>
+<p>2.在 Dockerfile 文件所在目录执行</p>
+<ul>
+<li><p>从命令的输出结果如下</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker build -t nginx:v5 .</div><div class="line">Sending build context to Docker daemon  2.048kB</div><div class="line">Step 1/2 : FROM nginx</div><div class="line"> ---&gt; e548f1a579cf</div><div class="line">Step 2/2 : RUN echo &apos;&lt;h1&gt;Hello, Docker!&lt;/h1&gt;&apos; &gt; /usr/share/nginx/html/index.html</div><div class="line"> ---&gt; Running in 5dc1025063e7</div><div class="line"> ---&gt; 65c15ffa7c7c</div><div class="line">Removing intermediate container 5dc1025063e7</div><div class="line">Successfully built 65c15ffa7c7c</div><div class="line">Successfully tagged nginx:v5</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>可以看到镜像的构建过程: 在Step2中, RUN指令重新启动了一个容器 <code>5dc1025063e7</code>，执行了所要求的命令，并最后提交了新的层 <code>65c15ffa7c7c</code>, 随后删除了所用到的容器<code>5dc1025063e7</code></p>
+</li>
+</ul>
+<p>3.这里我们使用了 <code>docker build</code> 命令进行镜像构建, 其格式为: <code>docker build [选项] &lt;上下文路径/URL/-&gt;</code></p>
+<ul>
+<li>在这里我们指定了最终镜像的名称 <code>-t nginx:v5</code>，构建成功后, <code>docker images</code> 就会看到这个新镜像  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">nginx                                                 v5                  65c15ffa7c7c        5 minutes ago       109MB</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>4.启动这个新镜像: <code>docker run -d -p 8098:80 --name nginx_v5 nginx:v5</code></p>
+<ul>
+<li><p>执行过程</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker run -d -p 8098:80 --name nginx_v5 nginx:v5</div><div class="line">247dfedcf52c3cbfd652302a8f2226274661cea77200092b54044d37e0a2ae25</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$ </div><div class="line">renyimindeMacBook-Pro:image_build renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">247dfedcf52c        nginx:v5            &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8098-&gt;80/tcp     nginx_v5</div><div class="line">d762abfc1ab6        nginx:latest        &quot;nginx -g &apos;daemon ...&quot;   8 minutes ago       Up 8 minutes        0.0.0.0:8090-&gt;80/tcp     nginx_l</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   2 days ago          Up 39 hours         0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">renyimindeMacBook-Pro:image_build renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>对比定制前后<br><img src="/img/docker/dockerfile_test_01.png" width="400/"></p>
+</li>
+</ul>
+<h3 id="镜像构建上下文-Context"><a href="#镜像构建上下文-Context" class="headerlink" title="镜像构建上下文(Context)"></a>镜像构建上下文(Context)</h3><p>上面在构建镜像时, 如果注意, 会看到 <code>docker build</code> 命令最后有一个 <code>.</code>, 表示当前目录, 而 <code>Dockerfile</code> 就在当前目录, 因此不少初学者以为这个路径是在指定Dockerfile所在的路径, 但这么理解其实是不准确的。<br>这是在指定<code>上下文路径</code>, 那么什么是上下文呢?</p>
+<ol>
+<li><p>首先我们要理解 <code>docker build</code> 的工作原理</p>
+<ul>
+<li><p>Docker 在运行时分为<code>Docker引擎</code>(也就是服务端守护进程)和<code>客户端工具</code>;</p>
+</li>
+<li><p>Docker 的引擎提供了一组REST API, 被称为Docker Remote API, 而如docker命令这样的客户端工具, 则是通过这组 API 与 Docker 引擎交互, 从而完成各种功能, 因此, 虽然表面上我们好像是在本机执行各种docker功能, 但实际上, 一切都是使用的远程调用形式在服务端(Docker 引擎)完成。<br>也因为这种C/S设计, 让我们操作远程服务器的 Docker 引擎变得轻而易举。</p>
+</li>
+</ul>
+</li>
+<li><p>当我们进行镜像构建的时候, 并非所有定制都会通过RUN指令完成, <strong>经常会需要将一些主机本地文件复制进镜像</strong>, 比如通过<code>COPY</code>、<code>ADD</code> 指令等。而 <code>docker build</code> 命令构建镜像, 其实并非在本地构建, 而是在服务端, 也就是Docker引擎中构建的。那么在这种客户端/服务端的架构中, 如何才能让服务端获得本地文件呢?</p>
+</li>
+<li><p>这就引入了上下文的概念, 当构建的时候, 用户会指定构建镜像上下文的路径, <code>docker build</code> 命令得知这个路径后, 会将路径下的所有内容打包, 然后上传给Docker引擎。这样 Docker 引擎收到这个上下文包后, 展开就会获得构建镜像所需的一切文件。</p>
+</li>
+<li><p>如果在 Dockerfile 中 <code>COPY ./package.json</code> 这么写:</p>
+<ul>
+<li>这并不是要复制你执行 <code>docker build</code> 命令时, 所在的目录下的 package.json, 也不是复制 Dockerfile 所在目录下的 package.json, 而是复制上下文(context)目录下的 package.json</li>
+<li><strong>COPY 这类指令中的源文件的路径都是相对上下文路径的</strong></li>
+</ul>
+</li>
+<li><p>理解构建上下文对于镜像构建是很重要的, 避免犯一些不应该的错误, 比如有些初学者在发现 <code>COPY /opt/xxxx /app</code> 不工作后, 于是干脆将 <code>Dockerfile</code> 放到了硬盘根目录去构建, 结果发现 <code>docker build</code> 执行后, 在发送一个几十GB的东西, 极为缓慢而且很容易构建失败(因为这种做法是在让 docker build 打包整个硬盘, 这显然是使用错误)。</p>
+</li>
+<li><p>一般来说, 应该将 <code>Dockerfile</code> 置于一个空目录下, 或者项目根目录下。</p>
+<ul>
+<li>如果该目录下没有所需文件, 那么应该把所需文件复制一份过来。</li>
+<li>如果目录下有些东西确实不希望构建时传给 Docker 引擎, 那么可以用 <code>.gitignore</code> 一样的语法写一个 <code>.dockerignore</code>, 该文件是用于剔除不需要作为上下文传递给 Docker 引擎的。</li>
+</ul>
+</li>
+<li><p>那么为什么会有人误以为 <code>.</code> 是指定 Dockerfile 所在目录呢?</p>
+<ul>
+<li>这是因为在默认情况下, 如果不额外指定 Dockerfile 的话, 会将上下文目录下的名为 Dockerfile 的文件作为 Dockerfile。</li>
+<li>这只是默认行为, 实际上Dockerfile的文件名并不要求必须为Dockerfile, 而且并不要求 必须位于上下文目录中，比如可以用 <code>-f ../Dockerfile.php</code> 参数指定某个文件作为Dockerfile。</li>
+</ul>
+</li>
+</ol>
+<p>参考 : <a href="https://yeasy.gitbooks.io/docker_practice/content/image/commit.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/commit.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&title=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&title=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/12/docker/2017-10-12-03-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03.定制镜像 - docker commit手动定制</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/13/docker/2017-10-13-05-docker/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">05.镜像 - Dockerfile常见指令详解</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&title=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&title=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04.定制镜像 - Dockerfile脚本》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/12/docker/2017-10-12-04-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqklEQVR42u3awW7bMBAE0Pz/T6dATwVS2zO7pI0WT6dAUSQ+BuAuhvz6iq/v39fPn/+88/OZn9ejN+dPft248PDw8EZDf/6ZRx/OqbOBJuN5MTV4eHh413hJMWiRz4fbTsfzZx7ex8PDw/sob9a1Pl/cnxcePDw8vP+Dly/ubQHYTzceHh7eO3n5Ip403LPn26JyOGvBw8PDi3mbDbBP/fym/T08PDy8QyHCZrlPmuBjJQQPDw/vVnf6lbfR7efz7f/ZSJ5HvXh4eHg3ePulvz0slUS6yZujt+Hh4eFd5uWLeDvopCS0B7MiKh4eHt5lXvvSdvNp0/XP2ms8PDy8e7x20ytvmjcNcRuL1DOKh4eHN+JtYKemqX3PgeKBh4eHd4jXDnq2Am8OJSRBBh4eHt57eG10m5eNvBFv/yoPQfDw8PDO8mbFIBlWu1U2i4lf3MHDw8O7xtsHBLNgd8ZYHbrCw8PDO8S7HdfmW1ltPPFi8wwPDw/vAm/Tzs7C1rNLf32kAA8PD+8oL/nk8NhoWSpmk/uCjYeHh3eN1241tccL2gLQbtS9KAx4eHh4a95+6W8b6PadbayMh4eH9x7ephjkB7M2v50VHjw8PLwbvNmy20aryf18c+tASo2Hh4d3gZcv5XmByVvtfCLaZ/Dw8PD2vHut8yZQaCfl4ajw8PDwPsRLBr0hzSYlaqnx8PDwLvBmQzwV124a6HbkeHh4eKd43+XVLvHF7JatdhTv4uHh4V3gbbbk91tWbZyxb+vx8PDwTvFmEW1eDNpWOJmg4v+Dh4eHd43Xfj4Pf9shHs5a8PDw8D7KmzXWSVy733jDw8PD+7d4eTTQHtKaTcFfwgg8PDy8C7xNGJE000l0m2/CFfkDHh4e3gXeqQ2w/UGufUEaXnh4eHgp7xcGXLtgB2MxnAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

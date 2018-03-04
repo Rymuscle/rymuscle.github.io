@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>06.其他方法定制 -- (镜像/容器 的 导入导出) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker读书笔记">
+    <meta name="description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
+<meta name="keywords" content="Docker读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="06.其他方法定制 -- (镜像&#x2F;容器 的 导入导出)">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-03T03:36:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="06.其他方法定制 -- (镜像&#x2F;容器 的 导入导出)">
+<meta name="twitter:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">06.其他方法定制 -- (镜像/容器 的 导入导出)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">06.其他方法定制 -- (镜像/容器 的 导入导出)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-14T12:15:28.000Z" itemprop="datePublished" class="page-time">
+  2017-10-14
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像-save-load"><span class="post-toc-number">1.</span> <span class="post-toc-text">镜像 (save/load)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器-export-import"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器(export/import)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">参考</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-docker/2017-10-14-06-docker"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">06.其他方法定制 -- (镜像/容器 的 导入导出)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-14 20:15:28" datetime="2017-10-14T12:15:28.000Z"  itemprop="datePublished">2017-10-14</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="镜像-save-load"><a href="#镜像-save-load" class="headerlink" title="镜像 (save/load)"></a>镜像 (save/load)</h2><p>1.<code>docker save nginx:v1 &gt; alpine-latest.tar.gz</code>：将指定<strong>镜像</strong>导出为 <code>镜像存储文件</code>;</p>
+<p>2.再使用 <code>docker load -i alpine-latest.tar.gz</code> 命令将 <code>镜像存储文件</code> 导入到本地镜像库;</p>
+<h2 id="容器-export-import"><a href="#容器-export-import" class="headerlink" title="容器(export/import)"></a>容器(export/import)</h2><p>1.<code>docker export container_id &gt; my_container.tar</code>：将一个<strong>容器</strong>导出为 <code>容器快照文件</code>;<br>2.再使用 <code>docker import my_container.tar imageName:tag</code> 命令将 <code>容器快照文件</code> 导入为一个新的镜像到本地镜像库;<br>3.测试, 将nginx_v1容器导出, 并在本地重新生成nginx:v3镜像, 然后运行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 运行中的nginx_v1容器</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   2 hours ago         Up 11 minutes       0.0.0.0:8089-&gt;80/tcp     nginx_v1</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   26 hours ago        Up About an hour    0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">//导出容器为 容器快照文件</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker export nginx_v1 &gt; nginx_v1.tar</div><div class="line">//将 nginx_v1的容器快照文件, 重新导入为一个新的本地镜像 nginx:v3</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker import nginx_v1.tar nginx:v3</div><div class="line">sha256:985fba7fd176d79685322d184bc79b81ca4365619bc0a773672e5c87cfc701cd</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">nginx                                                 v3                  985fba7fd176        10 seconds ago      107MB</div><div class="line">nginx                                                 v1                  8b748aee8b23        2 hours ago         109MB</div><div class="line">nginx                                                 latest              e548f1a579cf        8 days ago          109MB</div><div class="line">// 运行新镜像, 发现报错</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker run -d --name nginx_v3 nginx:v3</div><div class="line">docker: Error response from daemon: No command specified.</div><div class="line">See &apos;docker run --help&apos;.</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure></p>
+<p>4.解决方案, 通过<code>docker import 导入容器快照文件</code>生成的镜像, 在初次创建并启动(run)时, 需要提供快照文件所对应的容器的<code>COMMAND</code>字段, 可以通过<code>docker ps</code>查看, 如果命令太长, 则需要使用 <code>docker inspect 容器名</code> 查看 <code>cmd</code> 字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker run -d --name nginx_v3 nginx:v3 nginx &apos;-g&apos; &apos;daemon off;&apos;</div><div class="line">0fb30bafe266248bbb58e31d9dcab7479f4a59494fcc636f7f7dfd2df498066d</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">0fb30bafe266        nginx:v3            &quot;nginx -g &apos;daemon ...&quot;   2 seconds ago       Up 1 second                                  nginx_v3</div><div class="line">d5d17a25cc35        nginx:v1            &quot;nginx -g &apos;daemon ...&quot;   2 hours ago         Up 19 minutes       0.0.0.0:8089-&gt;80/tcp     nginx_v1</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   26 hours ago        Up About an hour    0.0.0.0:5000-&gt;5000/tcp   registry</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p>1.可以使用 <code>docker load</code> 来导入<code>镜像存储文件</code>到本地镜像库。<br>2.也可以使用 <code>docker import</code> 来导入一个<code>容器快照文件</code>到本地镜像库。<br>3.这两者的区别在于:</p>
+<ul>
+<li><code>镜像存储文件</code>将保存完整记录, 体积也要大</li>
+<li>而<code>容器快照文件</code>将丢弃所有的历史记录和元数据信息(即仅保存容器当时的快照状态)</li>
+<li>此外，从容器快照文件导入时可以<strong>重新指定标签</strong>等元数据信息</li>
+</ul>
+<ol>
+<li>另外, 使用<code>docker save</code>保存的<code>镜像存储文件</code>, 不能使用 <code>docker import</code> 来导入成镜像, 这样导入的镜像无法运行起来</li>
+</ol>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>在初次为公司内部准备镜像时, 可以启动一个基础镜像, 然后在容器中做好软件安装, 完成各种配置工作之后:</p>
+<ul>
+<li>可以手动commit成功新的 <code>镜像:tag</code>, 然后将镜像push到私有仓库供给大家下载使用;</li>
+<li>可以简单将容器直接export成容器快照文件, 然后import为新的 <code>镜像:tag</code>, 然后push到私有仓库供给大家下载使用; </li>
+<li>或者通过Dockerfile定制脚本及<code>docker build</code>来构建新的 <code>镜像:tag</code>, 然后push到私有仓库供给大家下载使用; </li>
+</ul>
+<p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong></p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/content/image/other.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/other.html</a></li>
+<li><a href="https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&title=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&title=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/13/docker/2017-10-13-05-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">05.镜像 - Dockerfile常见指令详解</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/17/docker/2017-10-17-07-docker/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">07.Docker Registry 仓库</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&title=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&title=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06.其他方法定制 -- (镜像/容器 的 导入导出)》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/14/docker/2017-10-14-06-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuklEQVR42u3awW7bMBAE0Pz/T6dATwUSOTO7ZGsUT6fAkiw+BhDp2f34iI/P38fT53+e/Xrl12ueziZXftw48PDw8EZDf/2Ypwe//iS/Kx9bPmY8PDy827zXL+J2AXgN23xzPmY8PDy8d+AlQ0zO5ksIHh4e3v/BS7bFh1/uwXjw8PDw/j4vebknkUEbUrTHxawFDw8PL+a1BbB3+PtifQ8PDw9vUVVvQ4Qk2M033weWEDw8PLxbu9MoZs2L+rPy/2YkPwTBeHh4eEd5ScFpE9e2DQSHA2I8PDy8C7xZjJs/Pm8FaBuzcioeHh7eWV6LaYeVtxrkjPx78PDw8G7w2g10Dm5D2ySkmE0ZHh4e3j1eGyXMSlxt0JD/G34II/Dw8PAO8drXcX5N2wSQT0oRLuPh4eFd4LUNBJslYfaUZGpWvxvw8PDwRrxZGJEMMW8dyDHJ9OHh4eHd4yUDarez+bzOGMOeMjw8PLwLvP3WNgks8sWgrWR983Q8PDy8C7zNV2yKZ5vwd9XghYeHh3eUt2m9apeE2fIzGwMeHh7eWV7y2k2Wh/xoY4U8Pn4MI/Dw8PCO8vJWqpxUPHi98ET34uHh4V3jzdqk2uBgdjaf4sffCnh4eHiHePnNefzaRrftNBUxLh4eHt4FXr61nZX/c/BscdrE0Hh4eHgz3mxAeSF/9uJuJ+VxbHh4eHiXeZvi/azVYBMiF78Y8PDw8I7yZjdvSl95UDubuMfr8fDw8A7xPsujDknz2S232lG8i4eHh3eBNxviqfJY/kke9c7+AXh4eHgtL18M2gas2YKRvPSHFTw8PDy8o7x2K5yHv+0QD2cteHh4eP+UN9sWJ9PRhg75J3h4eHjvxmujgXYjPpuCb8IIPDw8vAu8WdzQFqLaltNZAIGHh4d3m7fPQmdxxtlpWh14eHh4Ke8XDjuccdAVVgcAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

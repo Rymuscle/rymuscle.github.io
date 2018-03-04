@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>15.实战compose编排集成环境 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Docker读书笔记">
+    <meta name="description" content="Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境 先定义好目录结构 (命名基本做到见名知意)123456789101112131415161718192021222324252627├── docker-compose.yml  # compose模板文件├── host                # 站点根目录├── mongo">
+<meta name="keywords" content="Docker读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="15.实战compose编排集成环境">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境 先定义好目录结构 (命名基本做到见名知意)123456789101112131415161718192021222324252627├── docker-compose.yml  # compose模板文件├── host                # 站点根目录├── mongo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-04T06:30:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="15.实战compose编排集成环境">
+<meta name="twitter:description" content="Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境 先定义好目录结构 (命名基本做到见名知意)123456789101112131415161718192021222324252627├── docker-compose.yml  # compose模板文件├── host                # 站点根目录├── mongo">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">15.实战compose编排集成环境</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">15.实战compose编排集成环境</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-21T03:50:08.000Z" itemprop="datePublished" class="page-time">
+  2017-10-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#先定义好目录结构-命名基本做到见名知意"><span class="post-toc-number">1.</span> <span class="post-toc-text">先定义好目录结构 (命名基本做到见名知意)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备各容器镜像"><span class="post-toc-number">2.</span> <span class="post-toc-text">准备各容器镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动上面所有容器"><span class="post-toc-number">3.</span> <span class="post-toc-text">启动上面所有容器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nginx-容器启动"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">nginx 容器启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#mysql-容器启动"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">mysql 容器启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-fpm5-6容器的启动"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">php:fpm5.6容器的启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php-fpm7-2容器的启动"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">php:fpm7.2容器的启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#mongo容器的启动"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">mongo容器的启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#redis容器的启动"><span class="post-toc-number">3.6.</span> <span class="post-toc-text">redis容器的启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查看结果"><span class="post-toc-number">3.7.</span> <span class="post-toc-text">查看结果</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#docker-cp"><span class="post-toc-number">4.</span> <span class="post-toc-text">docker cp</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#拷贝mongo默认数据库文件到设定的-mongo-data-目录-mongo容器的-data有configdb和db两个目录"><span class="post-toc-number"></span> <span class="post-toc-text">拷贝mongo默认数据库文件到设定的 mongo/data 目录 (mongo容器的/data有configdb和db两个目录)</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#拷贝mongo默认日志文件到设定的-mongo-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可"><span class="post-toc-number"></span> <span class="post-toc-text">拷贝mongo默认日志文件到设定的 mongo/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#拷贝redis默认数据库文件到设定的-redis-data-目录"><span class="post-toc-number"></span> <span class="post-toc-text">拷贝redis默认数据库文件到设定的 redis/data 目录</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#拷贝redis默认配置文件到设定的-redis-conf-目录"><span class="post-toc-number"></span> <span class="post-toc-text">拷贝redis默认配置文件到设定的 redis/conf 目录</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#拷贝redis默认日志文件到设定的-redis-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可"><span class="post-toc-number"></span> <span class="post-toc-text">拷贝redis默认日志文件到设定的 redis/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</span></a>
+        </nav>
+    </aside>
+    
+<article id="post-docker/2017-10-21-15-docker"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">15.实战compose编排集成环境</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-21 11:50:08" datetime="2017-10-21T03:50:08.000Z"  itemprop="datePublished">2017-10-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Docker-Composer编排<code>nginx+phpfpm+mysql+redis+mongo</code>集成环境</p>
+<h2 id="先定义好目录结构-命名基本做到见名知意"><a href="#先定义好目录结构-命名基本做到见名知意" class="headerlink" title="先定义好目录结构 (命名基本做到见名知意)"></a>先定义好目录结构 (命名基本做到见名知意)</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">├── docker-compose.yml  # compose模板文件</div><div class="line">├── host                # 站点根目录</div><div class="line">├── mongo               # mongo容器相关目录</div><div class="line">│   ├── Dockerfile      # 用于定制mongo镜像</div><div class="line">│   ├── data            # 挂载到mongo数据库文件存放目录</div><div class="line">│   └── log</div><div class="line">├── mysql               # mysql容器相关目录</div><div class="line">│   ├── Dockerfile      # 用于定制mysql镜像</div><div class="line">│   ├── conf</div><div class="line">│   ├── data            # 挂载到mysql数据库文件存放目录</div><div class="line">│   └── log</div><div class="line">├── nginx               # nginx容器相关目录</div><div class="line">│   ├── Dockerfile      # 用于定制nginx镜像</div><div class="line">│   ├── conf</div><div class="line">│   └── log</div><div class="line">├── php                 # php多版本容器目录</div><div class="line">│   ├── php56</div><div class="line">│   │    └── Dockerfile  # php5.6镜像定制</div><div class="line">│   │    └── html        # php5.6 项目文件根目录</div><div class="line">│   └── php72</div><div class="line">│       └── Dockerfile   # php7.2镜像定制</div><div class="line">│       └── html         # php7.2 项目文件根目录</div><div class="line">└── redis</div><div class="line">    ├── Dockerfile</div><div class="line">    ├── data</div><div class="line">    ├── conf</div><div class="line">    └── log</div></pre></td></tr></table></figure>
+</code></pre><h2 id="准备各容器镜像"><a href="#准备各容器镜像" class="headerlink" title="准备各容器镜像"></a>准备各容器镜像</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ docker pull nginx:1.12.2</div><div class="line">$ docker pull mongo:3.2</div><div class="line">$ docker pull redis:3.2</div><div class="line">$ docker pull mysql:5.6</div><div class="line">$ docker pull php:5.6-fpm</div><div class="line">$ docker pull php:7.2-fpm</div></pre></td></tr></table></figure>
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">renyimindembp:php56 renyimin$ docker images</div><div class="line">REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE</div><div class="line">mysql                                                 5.6                 0248eeb807c7        4 days ago          256MB</div><div class="line">nginx                                                 1.12.2              a810e4ccb26c        2 weeks ago         108MB</div><div class="line">php                                                   5.6-fpm             aaf299648ff3        2 weeks ago         367MB</div><div class="line">php                                                   7.2-fpm             60245f64ed12        2 weeks ago         367MB</div><div class="line">redis                                                 3.2                 3859b0a6622a        2 weeks ago         99.7MB</div><div class="line">mongo                                                 3.2                 56d7fa068c3d        2 weeks ago         300MB</div></pre></td></tr></table></figure>
+</code></pre><h2 id="启动上面所有容器"><a href="#启动上面所有容器" class="headerlink" title="启动上面所有容器"></a>启动上面所有容器</h2><h3 id="nginx-容器启动"><a href="#nginx-容器启动" class="headerlink" title="nginx 容器启动"></a>nginx 容器启动</h3><p><code>$ docker run -d --name nginx nginx:1.12.2</code></p>
+<h3 id="mysql-容器启动"><a href="#mysql-容器启动" class="headerlink" title="mysql 容器启动"></a>mysql 容器启动</h3><p><code>$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=renyimin -d mysql:5.6</code></p>
+<h3 id="php-fpm5-6容器的启动"><a href="#php-fpm5-6容器的启动" class="headerlink" title="php:fpm5.6容器的启动"></a>php:fpm5.6容器的启动</h3><p><code>docker run -d --name php-5.6-fpm php:5.6-fpm</code> 即可启动</p>
+<h3 id="php-fpm7-2容器的启动"><a href="#php-fpm7-2容器的启动" class="headerlink" title="php:fpm7.2容器的启动"></a>php:fpm7.2容器的启动</h3><p><code>docker run -d --name php-7.2-fpm php:7.2-fpm</code> 即可启动</p>
+<h3 id="mongo容器的启动"><a href="#mongo容器的启动" class="headerlink" title="mongo容器的启动"></a>mongo容器的启动</h3><p><code>docker run -d --name mg mongo:3.2</code></p>
+<h3 id="redis容器的启动"><a href="#redis容器的启动" class="headerlink" title="redis容器的启动"></a>redis容器的启动</h3><p><code>docker run -d --name redis redis:3.2</code></p>
+<h3 id="查看结果"><a href="#查看结果" class="headerlink" title="查看结果"></a>查看结果</h3><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">renyimindembp:php56 renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                                NAMES</div><div class="line">145a629c84be        nginx:1.12.2        &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago        Up 2 seconds        80/tcp                               nginx</div><div class="line">72390d1e2aa1        mysql:5.6           &quot;docker-entrypoint...&quot;   56 seconds ago       Up 56 seconds       3306/tcp                             mysql</div><div class="line">6b5019214fc1        mongo:3.2           &quot;docker-entrypoint...&quot;   About a minute ago   Up About a minute   27017/tcp                            mg</div><div class="line">7524ffe44739        redis:3.2           &quot;docker-entrypoint...&quot;   About a minute ago   Up About a minute   6379/tcp                             redis</div><div class="line">8716df7a08fb        php:7.2-fpm         &quot;docker-php-entryp...&quot;   About an hour ago    Up 27 minutes       9000/tcp                             php-7.2-fpm</div><div class="line">2d2d5bb12a68        php:5.6-fpm         &quot;docker-php-entryp...&quot;   About an hour ago    Up About an hour    9000/tcp                             php-5.6-fpm</div></pre></td></tr></table></figure>
+</code></pre><h2 id="docker-cp"><a href="#docker-cp" class="headerlink" title="docker cp"></a><code>docker cp</code></h2><p>拷贝数据卷挂载位置的文件到本地设定目录(由于拷贝会将目录直接放到本地目录下, 为了避免层次过深, 可以将拷贝的目录层中内容直接已出到本地设定好的期望目录下);</p>
+<p>要在各容器中找到你所需要的信息的路径, 可以在 Docker Hub 站点查看容器详情 或者就参考<a href="https://www.awaimai.com/2120.html" target="_blank" rel="external">该站点</a>/<a href="https://github.com/yeszao/dnmp" target="_blank" rel="external">github</a>;</p>
+<ul>
+<li><p>nginx</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 拷贝nginx默认站点根目录到设定的 host 目录</div><div class="line">docker cp 8d572e88f735:/usr/share/nginx/html /Users/renyimin/Desktop/docker-compose/host</div><div class="line"># 拷贝nginx默认配置文件到设定的 nginx/conf 目录</div><div class="line">docker cp 8d572e88f735:/etc/nginx/ /Users/renyimin/Desktop/docker-compose/nginx/conf/</div><div class="line"># 拷贝nginx默认日志文件到设定的 nginx/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</div><div class="line">docker cp 8d572e88f735:/var/log/nginx/ /Users/renyimin/Desktop/docker-compose/nginx/log/</div></pre></td></tr></table></figure>
+<p>  最后手动调整一下目录结构即可</p>
+</li>
+<li><p>mysql</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 拷贝mysql默认数据库文件到设定的 mysql/data 目录</div><div class="line">docker cp 72390d1e2aa1:/var/lib/mysql /Users/renyimin/Desktop/docker-compose/mysql/data</div><div class="line"># 拷贝mysql默认配置文件到设定的 mysql/conf 目录</div><div class="line">docker cp 72390d1e2aa1:/etc/mysql/ /Users/renyimin/Desktop/docker-compose/mysql/conf/</div><div class="line"># 拷贝mysql默认日志文件到设定的 mysql/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</div><div class="line">docker cp 72390d1e2aa1:/var/log/mysql/ /Users/renyimin/Desktop/docker-compose/mysql/log/</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>php56</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 拷贝php56默认配置文件到设定的 php56/conf 目录</div><div class="line">docker cp 2d2d5bb12a68:/usr/local/etc/php/ /Users/renyimin/Desktop/docker-compose/php/php56/conf/</div><div class="line">docker cp 2d2d5bb12a68:/usr/local/etc/php-fpm.d/ /Users/renyimin/Desktop/docker-compose/php/php56/conf/</div><div class="line"># 拷贝php56默认根目录文件到设定的 php56/html 目录</div><div class="line">docker cp 2d2d5bb12a68:/var/www/html/ /Users/renyimin/Desktop/docker-compose/php/php56/html/</div><div class="line"># 拷贝php56默认日志文件到设定的 php56/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</div><div class="line">docker cp 2d2d5bb12a68:/var/log/ /Users/renyimin/Desktop/docker-compose/php/php56/log/</div></pre></td></tr></table></figure>
+</li>
+<li><p>php72</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">    # 拷贝php72默认配置文件到设定的 php72/conf 目录</div><div class="line">    docker cp 8716df7a08fb:/usr/local/etc/php/ /Users/renyimin/Desktop/docker-compose/php/php72/conf/</div><div class="line">    docker cp 8716df7a08fb:/usr/local/etc/php-fpm.d/ /Users/renyimin/Desktop/docker-compose/php/php72/conf/</div><div class="line">    # 拷贝php72默认根目录文件到设定的 php56/html 目录</div><div class="line">    docker cp 8716df7a08fb:/var/www/html/ /Users/renyimin/Desktop/docker-compose/php/php72/html/</div><div class="line">    # 拷贝php72默认日志文件到设定的 php72/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</div><div class="line">    docker cp 8716df7a08fb:/var/log/ /Users/renyimin/Desktop/docker-compose/php/php72/log/</div><div class="line">    ```      </div><div class="line">- mongo</div></pre></td></tr></table></figure>
+<h1 id="拷贝mongo默认数据库文件到设定的-mongo-data-目录-mongo容器的-data有configdb和db两个目录"><a href="#拷贝mongo默认数据库文件到设定的-mongo-data-目录-mongo容器的-data有configdb和db两个目录" class="headerlink" title="拷贝mongo默认数据库文件到设定的 mongo/data 目录 (mongo容器的/data有configdb和db两个目录)"></a>拷贝mongo默认数据库文件到设定的 mongo/data 目录 (mongo容器的/data有configdb和db两个目录)</h1><p>  docker cp 6b5019214fc1:/data/ /Users/renyimin/Desktop/docker-compose/mongo/</p>
+<h1 id="拷贝mongo默认日志文件到设定的-mongo-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可"><a href="#拷贝mongo默认日志文件到设定的-mongo-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可" class="headerlink" title="拷贝mongo默认日志文件到设定的 mongo/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)"></a>拷贝mongo默认日志文件到设定的 mongo/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</h1><p>  docker cp 6b5019214fc1:/var/log/mongodb/ /Users/renyimin/Desktop/docker-compose/mongo/log/</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- redis</div></pre></td></tr></table></figure>
+<h1 id="拷贝redis默认数据库文件到设定的-redis-data-目录"><a href="#拷贝redis默认数据库文件到设定的-redis-data-目录" class="headerlink" title="拷贝redis默认数据库文件到设定的 redis/data 目录"></a>拷贝redis默认数据库文件到设定的 redis/data 目录</h1><p>  docker cp 7524ffe44739:/data /Users/renyimin/Desktop/docker-compose/redis/data</p>
+<h1 id="拷贝redis默认配置文件到设定的-redis-conf-目录"><a href="#拷贝redis默认配置文件到设定的-redis-conf-目录" class="headerlink" title="拷贝redis默认配置文件到设定的 redis/conf 目录"></a>拷贝redis默认配置文件到设定的 redis/conf 目录</h1><p>  docker cp 7524ffe44739:/usr/local/etc/redis/ /Users/renyimin/Desktop/docker-compose/redis/conf/</p>
+<h1 id="拷贝redis默认日志文件到设定的-redis-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可"><a href="#拷贝redis默认日志文件到设定的-redis-log-目录-日志文件其实前期没必要拷贝-只要后面映射正确即可" class="headerlink" title="拷贝redis默认日志文件到设定的 redis/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)"></a>拷贝redis默认日志文件到设定的 redis/log 目录 (日志文件其实前期没必要拷贝, 只要后面映射正确即可)</h1><p>  docker cp 7524ffe44739:/var/log/ /Users/renyimin/Desktop/docker-compose/redis/log/</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">## 整理各个服务的Dockerfile</div><div class="line">首先, 每个服务的 `FROM` 和 `MAINTAINER` 需要写在Dockerfile的开头;</div><div class="line"></div><div class="line"></div><div class="line">## 编写docker-compose.yml</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>version: “3”</p>
+<p>services:<br>  nginx:<br>    build:<br>      context: ./nginx/<br>      dockerfile: Dockerfile</p>
+<pre><code>  #args:
+ports:
+  - &quot;8090:80&quot;
+volumes:
+  - ./host/:/usr/share/nginx/html/:rw
+  - ./nginx/conf/conf.d:/etc/nginx/conf.d/:ro
+  - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+  - ./nginx/log/:/var/log/nginx/:rw
+depends_on:
+  - php
+networks:
+  - frontend
+</code></pre><p>  php:<br>    build: ./php/php72/<br>    expose:</p>
+<pre><code>  - &quot;9000&quot;
+volumes:
+  - ./php/php72/html/:/var/www/html/:rw
+  - ./php/php72/conf/php/:/usr/local/etc/php/
+  - ./php/php72/conf/php-fpm.d/:/usr/local/etc/php-fpm.d/:rw
+  - ./php/php72/log/php-fpm/:/var/log/:rw
+depends_on:
+  - mysql
+  - redis
+  - mongo
+networks:
+  - frontend
+  - backend
+</code></pre><p>  mysql:<br>    build: ./mysql/<br>    ports:</p>
+<pre><code>  - &quot;3307:3306&quot;
+volumes:
+  - ./mysql/conf/:/etc/mysql/:rw
+  - ./mysql/data/:/var/lib/mysql/:rw
+  - ./mysql/log/:/var/log/mysql/:rw
+env_file: ./mysql/env_config.env
+environment:
+  TZ: &apos;Asia/Shanghai&apos;
+  MYSQL_ROOT_PASSWORD: &quot;renyimin&quot;
+networks:
+  - backend
+</code></pre><p>  mongo:<br>      build: ./mongo/<br>      ports:</p>
+<pre><code>  - 27018:27017
+volumes:
+  - ./mongo/data:/data:rw
+  - ./mongo/data:/var/log/mongodb/:rw
+</code></pre><p>  redis:<br>    build: ./redis/<br>    volumes:</p>
+<pre><code>  - ./redis/conf/:/usr/local/etc/redis
+  - ./redis/data/:/data:rw
+  - ./redis/log/:/var/log/
+ports:
+  - &quot;6380:6379&quot;
+</code></pre><p>networks:<br>    frontend:<br>    backend:<br>```</p>
+<p>参考:<a href="https://github.com/twang2218/docker-lnmp" target="_blank" rel="external">https://github.com/twang2218/docker-lnmp</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker读书笔记/">Docker读书笔记</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&title=《15.实战compose编排集成环境》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&title=《15.实战compose编排集成环境》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《15.实战compose编排集成环境》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/19/docker/2017-10-19-14-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">14.Compose模板文件</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/30/2017-11-30-HTTP-03-Method/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP - 请求Method</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&title=《15.实战compose编排集成环境》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&title=《15.实战compose编排集成环境》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《15.实战compose编排集成环境》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/21/docker/2017-10-21-15-docker/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3aS44CMQwFQO5/aUaaFRJD82zHgpGqV6i/riySYPt2i4/77/H4+/HM8z3P55OryZ23jQMPDw+vFfr1Z65J12FNAk3ieRMDHh4e3hovXwx6n8kH7vrZPGY8PDy8b+BVF5IEVt124+Hh4f13XrIVPhDiZTx4eHh4n+LlE33y1HWS9z44FnMteHh4eDGvVwD77O/1+h4eHh5eq6qeT7jzRMPKEoKHh4e3tTuN0qx5QL3iWS+SqLULDw8P7ygv/1h+f9KMlTybN2y9fBseHh7eAi9ZHqrTcf672iiQL0h4eHh4e7xe6Ws+KNVdf297jYeHh7fHyxMT1caCyYa4lxYpfAwPDw+vxZvU3Dem9ckiVFg88PDw8Aa83njkrQB5E0DvPeV/DHh4eHiHeL30ayEpUGxTqKZrX0aCh4eHt8abl/bz9qlqASxfuv44g4eHh7fAm0y71aRD8pVeOuNN2hcPDw/vKK+arj2VSuilaJOFp9B0hYeHh3eUV9229gZoPvW/GVw8PDy8ZV6vZ2mSDq4OVrmFCw8PD2+BlxTmk6u9ktg8vVvOteDh4eGNedXSfm+jnCQjkkk/fwMeHh7eHq8XYjW46y1ycjWP5EADFh4eHt4lr1dwqk79eTktOX8gjYuHh4c34M2n8l7bVp4IrjaBvbwHDw8P7xCvl3TIz/QSCr0WKzw8PLzP8uYb62patjoozX8MeHh4eGNe/nC+RZ6kGDbaEfDw8PDO8u7FI9kE9zbZ1a12tJjh4eHhLfAmrQDVcPN0cPKtySDi4eHhzXmTDXFSMJsMWR7DLV9P8PDw8A7xzi4GvWFaybXg4eHhfZRXTcUmZ/I0bu8reHh4eN/Am6QG8ndOhuCPZAQeHh7eAi/fCueMJNxTRbiXawEeHh7eAm+eC+2VrPI35AtG88DDw8NLeT97vJKXYNPfwAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
