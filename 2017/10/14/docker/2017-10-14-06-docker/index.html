@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-03T03:36:04.000Z">
+<meta property="og:updated_time" content="2018-03-05T02:08:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06.其他方法定制 -- (镜像&#x2F;容器 的 导入导出)">
 <meta name="twitter:description" content="镜像 (save/load)1.docker save nginx:v1 &amp;gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件; 2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库; 容器(export/import)1.docker export container_id &amp;gt; my_con">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像-save-load"><span class="post-toc-number">1.</span> <span class="post-toc-text">镜像 (save/load)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器-export-import"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器(export/import)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">参考</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#镜像-save-load"><span class="post-toc-number">1.</span> <span class="post-toc-text">镜像 (save/load)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容器-export-import"><span class="post-toc-number">2.</span> <span class="post-toc-text">容器(export/import)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">3.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构建镜像"><span class="post-toc-number">4.</span> <span class="post-toc-text">构建镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#参考"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">参考</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -200,6 +200,17 @@
 <li>或者通过Dockerfile定制脚本及<code>docker build</code>来构建新的 <code>镜像:tag</code>, 然后push到私有仓库供给大家下载使用; </li>
 </ul>
 <p><strong>容器存储层的生存周期和容器一样，容器消亡时，容器存储层也随之消亡, 这里的消亡是指容器被删除, 而不是stop容器, stop容器后, 容器中发生的改变不会被忽略, 除非容器被删除掉</strong></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>如果只是做集成环境的镜像, 比如lnmp全部在一个镜像中运行, 自己觉着可以:</p>
+<ul>
+<li>使用一个基础镜像运行起容器, 然后自己安装各种环境, 最后可以直接 <code>export</code> 导出容器为快照文件, 然后分发给组员;(如果需要再次修改环境信息, 直接修改好, 然后导出新的容器快找文件给组员即可)</li>
+<li>可以在容器中构建好各环境之后, <code>commit</code> 手动构建好镜像, 然后将镜像 <code>push</code> 到仓库中, 供组员使用 (变动频次较高的时候不方便, 因为这样会导致容器变得越来越臃肿); </li>
+<li>可以使用<code>Dockerfile</code>对镜像进行定制(如果镜像比较基础, 可能编写的比较多), 然后将镜像 <code>push</code> 到仓库中, 供组员使用</li>
+</ul>
+</li>
+<li><p>如果做多容器部署, 需要使用到docker-compose….<br>未完待续~~</p>
+</li>
+</ol>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
 <li><a href="https://yeasy.gitbooks.io/docker_practice/content/image/other.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/image/other.html</a></li>
 <li><a href="https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/container/import_export.html</a></li>
