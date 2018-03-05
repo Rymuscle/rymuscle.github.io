@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境Github仓库地址:https://github.com/rymuscle/docker-composer-lnmp 定义项目目录结构 为了在项目启动后, 能方便地对各项服务服务进行配置, 观察日志, 持久化数据, 并且保证容器不过于臃肿; 我们在项目中的各服务在启动时, 我们就需要将诸如: 服">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-05T03:16:48.000Z">
+<meta property="og:updated_time" content="2018-03-05T03:19:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="15.实战compose编排集成环境">
 <meta name="twitter:description" content="Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境Github仓库地址:https://github.com/rymuscle/docker-composer-lnmp 定义项目目录结构 为了在项目启动后, 能方便地对各项服务服务进行配置, 观察日志, 持久化数据, 并且保证容器不过于臃肿; 我们在项目中的各服务在启动时, 我们就需要将诸如: 服">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#定义项目目录结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">定义项目目录结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">2.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备各容器镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">准备各容器镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从容器中获取配置文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">从容器中获取配置文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动上面所有容器"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">启动上面所有容器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#docker-cp-获取配置文件"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">docker cp 获取配置文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#整理各个服务的Dockerfile"><span class="post-toc-number">5.</span> <span class="post-toc-text">整理各个服务的Dockerfile</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编写docker-compose-yml"><span class="post-toc-number">6.</span> <span class="post-toc-text">编写docker-compose.yml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编排"><span class="post-toc-number">7.</span> <span class="post-toc-text">编排</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小细节问题"><span class="post-toc-number">8.</span> <span class="post-toc-text">小细节问题</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#定义项目目录结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">定义项目目录结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">2.</span> <span class="post-toc-text">注意</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备各容器镜像"><span class="post-toc-number">3.</span> <span class="post-toc-text">准备各容器镜像</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从容器中获取配置文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">从容器中获取配置文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#启动上面所有容器"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">启动上面所有容器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#docker-cp-获取配置文件"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">docker cp 获取配置文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#整理各个服务的Dockerfile"><span class="post-toc-number">5.</span> <span class="post-toc-text">整理各个服务的Dockerfile</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编写docker-compose-yml"><span class="post-toc-number">6.</span> <span class="post-toc-text">编写docker-compose.yml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编排"><span class="post-toc-number">7.</span> <span class="post-toc-text">编排</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小细节问题"><span class="post-toc-number">8.</span> <span class="post-toc-text">小细节问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#pecl扩展安装问题"><span class="post-toc-number">9.</span> <span class="post-toc-text">pecl扩展安装问题</span></a></li></ol>
         </nav>
     </aside>
     
@@ -293,16 +293,13 @@
 </li>
 </ol>
 <ol>
-<li><p>每次 <code>docker-compose up</code> 会重新构建所有容器</p>
-<ul>
+<li>每次 <code>docker-compose up</code> 会重新构建所有容器<ul>
 <li>但是只构建<code>docker-compose.yml</code>中配置发生变化的容器<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindembp:docker-compose renyimin$ docker-compose up -d</div><div class="line">dockercompose_mongo_1 is up-to-date</div><div class="line">dockercompose_redis_1 is up-to-date</div><div class="line">dockercompose_mysql_1 is up-to-date</div><div class="line">dockercompose_php_1 is up-to-date</div><div class="line">dockercompose_nginx_1 is up-to-date</div><div class="line">renyimindembp:docker-compose renyimin$</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
-<li><p>pecl扩展安装代理问题<br> 参考<a href="https://www.awaimai.com/2120.html讨论" target="_blank" rel="external">https://www.awaimai.com/2120.html讨论</a></p>
-</li>
 </ol>
-<p>未完待续~~</p>
+<h2 id="pecl扩展安装问题"><a href="#pecl扩展安装问题" class="headerlink" title="pecl扩展安装问题"></a>pecl扩展安装问题</h2><p>代理问题:  参考<a href="https://www.awaimai.com/2120.html讨论" target="_blank" rel="external">https://www.awaimai.com/2120.html讨论</a><br>未完待续~~ (安装mongo, redis, memcached 扩展)</p>
 <p>参考:<a href="https://yeasy.gitbooks.io/docker_practice/content/compose/commands.html#up" target="_blank" rel="external">https://yeasy.gitbooks.io/docker_practice/content/compose/commands.html#up</a><br>参考:<a href="https://github.com/twang2218/docker-lnmp" target="_blank" rel="external">https://github.com/twang2218/docker-lnmp</a></p>
 
         </div>
