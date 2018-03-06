@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>02. MySQL高并发事务问题 及 解决方案 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL,事务">
+    <meta name="description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
+<meta name="keywords" content="MySQL,事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02. MySQL高并发事务问题 及 解决方案">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
+<meta property="og:updated_time" content="2018-03-06T14:31:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="02. MySQL高并发事务问题 及 解决方案">
+<meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">02. MySQL高并发事务问题 及 解决方案</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">02. MySQL高并发事务问题 及 解决方案</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-16T05:40:53.000Z" itemprop="datePublished" class="page-time">
+  2017-09-16
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高并发的事务问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">高并发的事务问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读-区分不可重复读取"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">幻读 (区分不可重复读取)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新丢失"><span class="post-toc-number">3.</span> <span class="post-toc-text">更新丢失</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-09-16-mysql-21"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">02. MySQL高并发事务问题 及 解决方案</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-16 13:40:53" datetime="2017-09-16T05:40:53.000Z"  itemprop="datePublished">2017-09-16</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上一篇<a href="/2017/09/16/mysql/2017-09-16-mysql-20/">MySQL事务简介</a>简单介绍了MySQL事务的相关概念及特性;</p>
+<p>但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了; </p>
+<h2 id="高并发的事务问题"><a href="#高并发的事务问题" class="headerlink" title="高并发的事务问题"></a>高并发的事务问题</h2><p>在并发量比较大的时候, 很容易出现 <strong>多个事务同时进行</strong> 的情况。</p>
+<p>假设有两个事务正在同时进行, <strong>值得注意的是</strong>: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境<strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以<strong>最终导致了一些问题的出现</strong>;</p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ol>
+<li><p>Mysql中, 如果 事务A 读取了另一个并行 事务B <strong>未最终提交的写数据</strong>, 那事务A的这次读取操作就叫 <code>脏读</code>。</p>
+<ul>
+<li>因为 ‘事务A’ 此时读取到的是 <code>尚未被持久化</code> 的数据 (事务B中修改的数据还不具备事务的<code>持久性</code>特性)</li>
+<li>事务A此时读取的数据也叫 <code>脏数据</code><br>事务B 最终可能会因为内部其他后续操作的失败或者系统后续突然崩溃等原因, 导致事务B最终整体提交失败, 从而导致事务A读取的数据被回滚;<br>那么最终 事务A 拿到的自然就是<code>脏的数据</code>了, 因为 事务A 拿到的数据已经和数据表中持久化的真实数据不一致了。</li>
+</ul>
+</li>
+<li><p>图示:<br><img src="/img/mysql/transaction/dirty_read.png" width="500"></p>
+</li>
+<li><p><strong>解决方案</strong> : <code>RC+</code></p>
+</li>
+</ol>
+<ul>
+<li>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 – <code>READ COMMITED</code>或<code>以上隔离级别</code> 解决了这个问题;</li>
+<li><code>READ COMMITED</code> 级别保证了: 在事务中, 某条语句执行前, 已经被其他事务提交的数据, 对该语句都是可见的。</li>
+</ul>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><ol>
+<li><p>现在, 上面的 <code>脏读问题</code> 已经被解决了, 那就意味着事务中每次读取到的数据都是 <code>持久性</code> 的数据(被别的事务最终 提交/回滚 的落地数据)。</p>
+</li>
+<li><p>但脏读问题的解决, 也仅仅只能保证你在事务中每次读到的数据都是持久性的数据而已。</p>
+</li>
+<li><p>试想, 如果在一个事务中多次读取同一个数据, 正好在两次读取之间, 另外一个事务已经完成了对该数据的修改并提交, 那问题就来了: <strong>两次读取的结果不一样了</strong>;<br><img src="/img/mysql/transaction/bukechongfudu.png" width="500/"></p>
+</li>
+<li><p><strong>那么, 多次读取数据不一致, 有什么危害呢?</strong></p>
+<ul>
+<li>首先, 一个事务中为什么要多次读取同一数据, 什么场景下需要这么做? 实在没想出来</li>
+<li>其次, 即便是在一个事务中进行了多次读取, 并且在两次读取之间, 有其他事务对数据进行了修改并提交落地了, 那么读取不一致按理说是正常的呀, 有什么危害么, 也没想出来?</li>
+</ul>
+</li>
+<li><p><strong>解决方案</strong> : <code>RR+</code></p>
+<ul>
+<li>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 – <code>REPEATABLE READ</code>或<code>以上隔离级别</code> 解决了这个问题;</li>
+<li><code>REPEATABLE READ</code> 级别保证了:<br>1.在事务中, 某条语句执行前, 已经被其他事务 提交/回滚 的落地数据, 对该语句都是可见的;<br>2.在事务中, 多次读取同一个数据 (在两次读取操作之间, 无论数据被 提交/回滚 多少次(即无论落地过多少遍), 每次读取的结果都应该是一样的;  </li>
+</ul>
+</li>
+</ol>
+<h3 id="幻读-区分不可重复读取"><a href="#幻读-区分不可重复读取" class="headerlink" title="幻读 (区分不可重复读取)"></a>幻读 (区分不可重复读取)</h3><p>1.之前经常搞混 <code>不可重复读</code> 和 <code>幻读</code> 这两个概念（这两者确实非常相似）</p>
+<ul>
+<li>但 <code>不可重复读</code> 主要是说多次读取同一条记录, 发现该记录中某些列值被其他事务修改过; </li>
+<li>而 <code>幻读</code> 主要是说多次读取一个范围内的记录(包括直接查询所有记录结果或者做聚合统计), 发现结果不一致(比如发现增加/减少了一条记录)。<br>(可以参考 <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a> )</li>
+</ul>
+<p>2.<strong>解决方案</strong>: <code>RR + MVCC</code></p>
+<ul>
+<li>其实对于 <code>幻读</code>, 在Mysql的InnoDB存储引擎中, 事务默认的 <code>RR</code> 级别已经通过 <code>MVCC机制</code> 帮我们解决了(并非完全解决), 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把 <code>幻读</code> 和 <code>不可重复读</code> 搞混淆, 所以这可能就是比较头痛的点吧!  </li>
+<li>另外可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述 <blockquote>
+<p>理论上, RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
+</blockquote>
+</li>
+</ul>
+<p>3.想了解更多, 可以参考下一篇<a href="/2017/09/16/mysql/2017-09-16-mysql-22/">幻读的延伸</a></p>
+<h2 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h2><ol>
+<li><p>最后聊一下 <code>高并发事务</code> 的另一个问题: <code>丢失更新问题</code>, 该问题和之前几个问题需要区分开, 因为解决方案不是一类!</p>
+</li>
+<li><p>第一类丢失更新: A事务撤销时, 把已经提交的B事务的更新数据覆盖了<br><img src="/img/mysql/transaction/diushigengxin_01.png" width="608" height="243"><br>不过这种情况应该只在Mysql事务的最低隔离级别(READ UNCOMMITED)才会出现, <strong><code>RC</code> 及 <code>以上隔离级别</code> 已经保证了不会出现脏读, 也就不会出现该情况</strong>!</p>
+</li>
+<li><p><strong>第二类丢失更新</strong>: A事务 覆盖 B事务 已经提交的数据，造成B事务所做操作丢失</p>
+<ul>
+<li><p>下图可以看到, <strong>搞笑的是</strong>: 也正是因为RR隔离级别所保证的<code>可重复读</code>, 给此类问题的出现提供了基础条件;<br><img src="/img/mysql/transaction/diushigengxin_02.png" width="608" height="246"></p>
+</li>
+<li><p>这种丢失更新, 无法依靠前三种隔离级别来解决, 只能用最高隔离级别 <code>Serializable</code> 或者手动使用 <code>乐观锁</code>(在修改时, where判断数据是否为你读取时的数据; 或者提供数据版本字段来控制), <code>悲观锁</code> 来解决。<br>当然, 更新操作不是在所有情况下都会导致丢失更新问题, 如果你更改的最终结果是确定值的(比如直接更新某个数据为100), 而不是类似递减或者递增, 那是不会造成丢失更新问题的!!</p>
+</li>
+</ul>
+</li>
+<li><p>最高隔离级别<code>Serializable</code>在实际应用场景中并不被采用, 对于手动使用<code>乐观锁</code>, <code>悲观锁</code>的方案, 将会在以后关于锁的文章中一并给出!</p>
+</li>
+</ol>
+<p>参考资料:</p>
+<ul>
+<li><a href="http://mysql.taobao.org/monthly/2017/06/07/" target="_blank" rel="external">淘宝数据库内核6月报</a></li>
+<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank" rel="external">MySQL官方文档</a></li>
+<li>《高性能MySQL》</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&title=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&title=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/09/16/mysql/2017-09-16-mysql-20/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. MySQL事务简介</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/16/mysql/2017-09-16-mysql-22/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. 幻读的延伸 - 快照读 (snapshot read) 与 当前读 (current read)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&title=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&title=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. MySQL高并发事务问题 及 解决方案》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNklEQVR42u3aSW7DQAwFUd//0gqQVQBrqE/KRsSuXhmyFPXzosPp9cJr+11/P79fOb//6Nn36+/f3rZkyJDxWMZ2us63fnSFMNL3XlBlyJCxAIMcsumRml4n7z28LkOGDBmnId3R8d0PNGXIkCHjLgZJazlbhgwZMjpJLMHzFLcWUN6Qi8uQIeOBjFpj4DufP97fkCFDxr9nbKVFjleS0NYaBjv7kSFDxmgGL+vzl/ERiruaBzJkyJjNIGlqJ2hL25xpu1SGDBmrMTrJJB8IqzU7L3YiQ4aM0Yy0fkVCOnKkdqqDwVMyZMgYwSAbSpudtaS31sLcqRrKkCFjKCNNYnlAyVsC5P6LaREZMmQMZZwXwtIYs3OMdoY8ZMiQsSYjHZjg7cZaekyelSFDxlRGWg5LS2zpsAX5KXeQMmTIWICRPpwOfvE2QK0JIUOGjNmMWhJb6xvWUtNg2EKGDBnLMGojX7VBjU5Rb+ceGTJkDGWQwy79oyTE5Gkt+VFkyJCxDqMGIKX8ThMU/VgyZMgYzUhDuk+MgvE9yJAhY00GD+Z4ua32mR+7MmTIWI1Rq67fkHam20oxMmTIGMTYwpUelDzII09djFnIkCFjKIMvXu7nz3ZSYhkyZKzG4IcsKdyniW7nID7MyGXIkDGUkQ5S9LPn9H9CMf+WIUPGkow+j98Th4YyZMhYnsEbjelRW7tHhgwZqzFqSWytqZA2G+LJERkyZIxjdOKuTurLt3JbI1OGDBnPY/wAORmtY2FOUDkAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

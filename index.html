@@ -147,258 +147,6 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-mysql/2017-12-31-mysql_transaction-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-31 16:30:11" datetime="2017-12-31T08:30:11.000Z"  itemprop="datePublished">2017-12-31</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/31/mysql/2017-12-31-mysql_transaction-05/">mysql(InnoDB)事务隔离级别(REPEATABLE READ) 与 锁,MVCC</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        REPEATABLE READ(可重复读)
-
-之前已经了解到, 该隔离级别可以解决不可重复读问题 (当然, 也能解决脏读问题), 那么如果单纯用锁来实现, 可能会是如下这样子:
-
-既然REPEATABLE READ 隔离级别可以解决脏读, 不可重复读的问题, 也就是它既可以让事务只能读其他事务已提交的的记录, 又能在同一事务中保证多次读取的数据即使被其他事务修改, 也是一致的。
-解决脏读问题...
-    
-
-        <a href="/2017/12/31/mysql/2017-12-31-mysql_transaction-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-12-31-mysql_transaction-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-31 10:01:47" datetime="2017-12-31T02:01:47.000Z"  itemprop="datePublished">2017-12-31</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/31/mysql/2017-12-31-mysql_transaction-04/">mysql(InnoDB)事务隔离级别(READ COMMITTED) 与 锁,MVCC</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        READ COMMITTED(提交读)
-
-了解了之前 READ UNCOMMITTED 隔离级别是如何加锁的, 并且在文章中, 已经知道 READ COMMITTED 隔离级别可以解决脏读的问题, 那接下来, 对于 READ COMMITTED 隔离级别, 试想一下如果让你用锁来设计, 你会怎么做?
-
-既然READ COMMITTED 隔离级别可以解决脏读的问题, 也就是他可以让事务只能读其...
-    
-
-        <a href="/2017/12/31/mysql/2017-12-31-mysql_transaction-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-12-29-mysql_transaction-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-29 19:12:11" datetime="2017-12-29T11:12:11.000Z"  itemprop="datePublished">2017-12-29</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/29/mysql/2017-12-29-mysql_transaction-02/">mysql(InnoDB)事务隔离级别(READ UNCOMMITTED) 与 锁</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言先针对自己以前错误的思维做个记录, 可以直接跳过
-
-由于以前看到很多资料在谈到并发控制的时候, 都会提到用锁来控制并发, MySQL也不例外, 也有很多和锁相关的概念(留到后面会单独整理一篇笔记出来), 所以一提到高并发产生的问题, 我会不自觉地提出一个疑问: 现在并发出问题了, 那怎么用锁的相关知识来解决?;
-而且近期一段时间也一直在看很多有关MySQL锁相关的资料,书籍, 于是乎 死...
-    
-
-        <a href="/2017/12/29/mysql/2017-12-29-mysql_transaction-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/隔离级别与锁/">隔离级别与锁</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-12-28-mysql_mvcc"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-28 21:07:12" datetime="2017-12-28T13:07:12.000Z"  itemprop="datePublished">2017-12-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/28/mysql/2017-12-28-mysql_mvcc/">MySQL-InnoDB-MVCC多版本并发控制</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        (Multiversion Concurrency Control)
-前言最近正在啃《高性能MySQL》这本书, 当看到事务相关知识时, 决定对该知识点稍微深入一下, 这里主要先说一下本人在啃相关知识点时的曲折之路:1.首先是事务相关ACID特性, 之前已经有相关笔记进行过介绍, 这里不再重复;
-2.接下来是高并发事务相关的问题, 像是 脏读, 不可重复读, 幻读, 更新丢失等问题之前也有介...
-    
-
-        <a href="/2017/12/28/mysql/2017-12-28-mysql_mvcc/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-12-27-mysql_transaction-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-27 21:01:07" datetime="2017-12-27T13:01:07.000Z"  itemprop="datePublished">2017-12-27</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/27/mysql/2017-12-27-mysql_transaction-01/">MySQL(INNODB引擎)高并发事务问题及解决方案</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        事务的概念
-事务：可以理解为一个 独立的 工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。
-
-仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元,...
-    
-
-        <a href="/2017/12/27/mysql/2017-12-27-mysql_transaction-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-http/2017-12-06-HTTP-06-内容协商与转码 "
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -666,12 +414,271 @@ immutable属于缓存控制的一个扩展属性, http://...
 
         </li>
     
+        <li class="post-list-item fade">
+            <article id="post-http/2017-11-30-HTTP-03-Method"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-11-30 11:25:12" datetime="2017-11-30T03:25:12.000Z"  itemprop="datePublished">2017-11-30</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-03-Method/">HTTP - 请求Method</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        常见Method简要分类
+HTTP/1.1 中实现的 method
+
+见RFC2616
+
+可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+
+
+
+RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在RFC 2068中实现;
+
+《图解http协议》中LINK,UNLINK已经被http1....
+    
+
+        <a href="/2017/11/30/http/2017-11-30-HTTP-03-Method/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-docker/2017-10-21-15-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-21 11:50:08" datetime="2017-10-21T03:50:08.000Z"  itemprop="datePublished">2017-10-21</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker学习/">Docker学习</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/21/docker/2017-10-21-15-docker/">15.实战compose编排集成环境</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Docker-Composer编排nginx+phpfpm+mysql+redis+mongo集成环境Github仓库地址:https://github.com/rymuscle/docker-composer-lnmp
+定义项目目录结构
+为了在项目启动后, 能方便地对各项服务服务进行配置, 观察日志, 持久化数据, 并且保证容器不过于臃肿; 我们在项目中的各服务在启动时, 我们就需要将诸如...
+    
+
+        <a href="/2017/10/21/docker/2017-10-21-15-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker学习/">Docker学习</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-docker/2017-10-19-14-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-19 18:50:08" datetime="2017-10-19T10:50:08.000Z"  itemprop="datePublished">2017-10-19</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker学习/">Docker学习</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-14-docker/">14.Compose模板文件</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        docker-compose.yml
+
+    
+
+        <a href="/2017/10/19/docker/2017-10-19-14-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker学习/">Docker学习</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-docker/2017-10-19-13-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-19 14:27:53" datetime="2017-10-19T06:27:53.000Z"  itemprop="datePublished">2017-10-19</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker学习/">Docker学习</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-13-docker/">13.Compose命令学习</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Compose命令说明
+命令作用的对象: 对于Compose来说, 大部分命令所作用的对象既可以是项目本身, 也可以指定为项目中的服务或者容器。如果没有特别的说明, 命令针对的对象将是项目, 这意味着项目中所有的服务都会受到命令影响。
+
+命令格式: 
+
+docker-compose 命令的基本的使用格式是: docker-compose [-f=&lt;arg&gt;...] [option...
+    
+
+        <a href="/2017/10/19/docker/2017-10-19-13-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker学习/">Docker学习</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-docker/2017-10-19-12-docker"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-10-19 11:07:53" datetime="2017-10-19T03:07:53.000Z"  itemprop="datePublished">2017-10-19</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker学习/">Docker学习</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-12-docker/">12.Docker三剑客 之 Compose</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Compose简介
+Compose 项目是Docker官方的开源项目, 负责快速在集群中部署分布式应用。
+
+Compose定位是「定义和运行多个Docker容器的应用(Defining and running multi-container Docker applications)」。
+
+通过之前的学习，已经知道使用一个Dockerfile模板文件, 可以让用户很方便的定义一个单独的应用容器...
+    
+
+        <a href="/2017/10/19/docker/2017-10-19-12-docker/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker学习/">Docker学习</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
     </ul>
 
     
 <nav id="page-nav">
     <div class="inner">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
     </div>
 </nav>
 
