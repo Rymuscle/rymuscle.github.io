@@ -13,25 +13,25 @@
     
     
     
-    <title>07.&#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34; | Lant&#39;s Blog</title>
+    <title>05.实战聊天室的实现 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="CrossDomain">
-    <meta name="description" content="Jsonp 对比 CORS简单/非简单请求都可以方便实现跨域; Jsonp 简单适用, 老式浏览器全部支持, 服务器端改动很小;  但是JSONP只能发GET请求;  JSONP跨域发送Cookie的话, 只用设置 cookie的domain属性 为相同的顶级域名即可;   CORS简单请求 服务端需要设置一些允许选项; 请求方法比较简单, 如 GET, POST, HEAD ; 跨子域共享coo">
-<meta name="keywords" content="CrossDomain">
+    <meta name="keywords" content="WebSocket">
+    <meta name="description" content="WebSocket服务器的实现">
+<meta name="keywords" content="WebSocket">
 <meta property="og:type" content="article">
-<meta property="og:title" content="07.&quot;Jsonp&quot; 对比 &quot;CORS简单&#x2F;非简单请求&quot;">
-<meta property="og:url" content="http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/index.html">
+<meta property="og:title" content="05.实战聊天室的实现">
+<meta property="og:url" content="http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Jsonp 对比 CORS简单/非简单请求都可以方便实现跨域; Jsonp 简单适用, 老式浏览器全部支持, 服务器端改动很小;  但是JSONP只能发GET请求;  JSONP跨域发送Cookie的话, 只用设置 cookie的domain属性 为相同的顶级域名即可;   CORS简单请求 服务端需要设置一些允许选项; 请求方法比较简单, 如 GET, POST, HEAD ; 跨子域共享coo">
+<meta property="og:description" content="WebSocket服务器的实现">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-02T06:52:27.000Z">
+<meta property="og:updated_time" content="2018-03-06T01:37:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="07.&quot;Jsonp&quot; 对比 &quot;CORS简单&#x2F;非简单请求&quot;">
-<meta name="twitter:description" content="Jsonp 对比 CORS简单/非简单请求都可以方便实现跨域; Jsonp 简单适用, 老式浏览器全部支持, 服务器端改动很小;  但是JSONP只能发GET请求;  JSONP跨域发送Cookie的话, 只用设置 cookie的domain属性 为相同的顶级域名即可;   CORS简单请求 服务端需要设置一些允许选项; 请求方法比较简单, 如 GET, POST, HEAD ; 跨子域共享coo">
+<meta name="twitter:title" content="05.实战聊天室的实现">
+<meta name="twitter:description" content="WebSocket服务器的实现">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">07.&#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34;</div>
+        <div class="flex-col header-title ellipsis">05.实战聊天室的实现</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">07.&#34;Jsonp&#34; 对比 &#34;CORS简单/非简单请求&#34;</h1>
+        <h1 class="title">05.实战聊天室的实现</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-09-18T13:20:16.000Z" itemprop="datePublished" class="page-time">
-  2016-09-18
+                <time datetime="2016-10-19T14:09:10.000Z" itemprop="datePublished" class="page-time">
+  2016-10-19
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Jsonp-对比-CORS简单-非简单请求"><span class="post-toc-number">1.</span> <span class="post-toc-text">Jsonp 对比 CORS简单/非简单请求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Jsonp"><span class="post-toc-number">2.</span> <span class="post-toc-text">Jsonp</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CORS简单请求"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CORS简单请求</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CORS非简单请求"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">CORS非简单请求</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#WebSocket服务器的实现"><span class="post-toc-number">1.</span> <span class="post-toc-text">WebSocket服务器的实现</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-2016-09-18-sameoriginpolicy-07"
+<article id="post-WebSocket/2017-10-29-websocket-06"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">07."Jsonp" 对比 "CORS简单/非简单请求"</h1>
+        <h1 class="post-card-title">05.实战聊天室的实现</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-09-18 21:20:16" datetime="2016-09-18T13:20:16.000Z"  itemprop="datePublished">2016-09-18</time>
+            <time class="post-time" title="2016-10-19 22:09:10" datetime="2016-10-19T14:09:10.000Z"  itemprop="datePublished">2016-10-19</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
 
 
 
@@ -180,29 +180,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Jsonp-对比-CORS简单-非简单请求"><a href="#Jsonp-对比-CORS简单-非简单请求" class="headerlink" title="Jsonp 对比 CORS简单/非简单请求"></a>Jsonp 对比 CORS简单/非简单请求</h2><p>都可以方便实现跨域;</p>
-<h2 id="Jsonp"><a href="#Jsonp" class="headerlink" title="Jsonp"></a>Jsonp</h2><ul>
-<li><p>简单适用, 老式浏览器全部支持, 服务器端改动很小;</p>
-</li>
-<li><p>但是JSONP只能发GET请求;</p>
-</li>
-<li><p>JSONP跨域发送Cookie的话, 只用设置 <code>cookie的domain属性</code> 为相同的顶级域名即可;</p>
-</li>
-</ul>
-<h3 id="CORS简单请求"><a href="#CORS简单请求" class="headerlink" title="CORS简单请求"></a>CORS简单请求</h3><ul>
-<li>服务端需要设置一些允许选项;</li>
-<li>请求方法比较简单, 如 GET, POST, HEAD ;</li>
-<li>跨子域共享cookie的话, 服务端和客户端都要对<code>Credentials</code> header属性进行设置;</li>
-<li>另外, 跨子域的话, 如果想同时共享cookie的话, 服务端 <code>Access-Control-Allow-Origin</code> 不能设置为 *, 否则会提示 :<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Failed to load http:<span class="comment">//test.test.com/index.php?sex=renyimin&amp;age=100: </span></div><div class="line">The value of the <span class="string">'Access-Control-Allow-Origin'</span> header in the response must not be the wildcard <span class="string">'*'</span> when the request<span class="string">'s credentials mode is '</span><span class="keyword">include</span><span class="string">'. </span></div><div class="line"><span class="string">Origin '</span>http:<span class="comment">//www.test.com' is therefore not allowed access. The credentials mode of requests initiated by the XMLHttpRequest is controlled by the withCredentials attribute.</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="CORS非简单请求"><a href="#CORS非简单请求" class="headerlink" title="CORS非简单请求"></a>CORS非简单请求</h3><ul>
-<li>服务端需要设置一些允许选项;</li>
-<li>其他请求方法 PUT, DELETE….</li>
-<li>可以设置自定义header头</li>
-<li>跨子域共享cookie方面 和 CORS简单请求一样</li>
-</ul>
-
+            <h2 id="WebSocket服务器的实现"><a href="#WebSocket服务器的实现" class="headerlink" title="WebSocket服务器的实现"></a>WebSocket服务器的实现</h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -228,7 +206,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CrossDomain/">CrossDomain</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
 
 
             
@@ -238,7 +216,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&title=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&title=《05.实战聊天室的实现》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -248,22 +226,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&title=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&title=《05.实战聊天室的实现》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05.实战聊天室的实现》 — Lant's Blog&url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -286,17 +264,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/09/18/2016-09-18-sameoriginpolicy-06/" id="post-prev" class="post-nav-link">
+        <a href="/2016/10/19/WebSocket/2017-10-29-websocket-05/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">06.CORS方案 not-so-simple request</h4>
+          <h4 class="title">05.WebSocket - 服务端的实现</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/10/17/WebSocket/2017-10-28-websocket-01/" id="post-next" class="post-nav-link">
+      <a href="/2017/08/21/2017-08-21-Git/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01.引出WebSocket</h4>
+        <h4 class="title">Git</h4>
       </a>
     </div>
   
@@ -398,7 +376,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&title=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&title=《05.实战聊天室的实现》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -408,22 +386,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&title=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&title=《05.实战聊天室的实现》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07."Jsonp" 对比 "CORS简单/非简单请求"》 — Lant's Blog&url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05.实战聊天室的实现》 — Lant's Blog&url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/09/18/2016-09-18-sameoriginpolicy-07/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/10/19/WebSocket/2017-10-29-websocket-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -434,7 +412,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtElEQVR42u3awW4bMQwE0Pz/T6fXFO26M6TkpMDbk2E7kp4CiDTFj4/4+fzyJO8/ffrn63zkp1kOPHh4eHiLpT9N+XoRyfjJ0vPZkzXj4eHh3ea9Xlb7nWjiRfhJ1oOHh4f303htCMkxSYDBw8PD+794STDIE+gcj4eHh/fTeEk5oD2+91vz1loLHh4eXszbpLPf9frK/R4eHh7e+lY9CRJJGt1+py0NP46Ah4eHd4HXXv+36fIqzR0FBjw8PLzbvM3R315ltWWOvPXq8TUeHh7eBV670PzTUyny4fCDh4eHt+a1E7epbRJmZkd/FMDw8PDwLvPy5HjTUNVe+bdFkKiLAQ8PD+8CLz9883DyepZ8riSl/q3WgoeHh3eUl5RZ2+N4dsTnVZNknKKKjIeHh7fg5ZMNE9xRwr1PyvHw8PDu8TbJ9O0r/3ZD/3EZhoeHh7fgzY7pJC0u9nWUOkfbgYeHh3eZl6TCbSl230zQjlNn6Hh4eHgLXl6SaKltc8AmGPyl6QoPDw/vLbzk+J5txB5fIPHw8PAu8JKkedb8lLBnheO85QsPDw/vBm9fgMjLu/mW5dsRpdR4eHh4R3mzReRJdh42kvCQ/wDAw8PDu83LL/XzZe1btWYBqfjFgIeHh7fg5aXYvGVqX+ptiyB4eHh438vbNDxtgke+kmLleHh4eNd4+R/P3m9bEDbbEdWq8fDw8A7xkqFnxdmiLjJK2R//VXh4eHhHeZ/l0xZe26JG3kAQpf54eHh4F3izUuzZK67ZyMMGAjw8PLxDvPrnfVli2GxiWyDGw8PDeydvdt2VN0idbUcokmk8PDy8H8NLgkGecO+r0YcDAx4eHt5RXluMyEPF5sqtiRV4eHh4Z3j55VNebsgvq9rGrNfrx8PDw7vNm6Wzs0v9/PsHFo2Hh4d3nvcLoRDPFKhe0kYAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuUlEQVR42u3awW7bMBAE0Pz/T7dATwUSOTO7pNMCTydBtkM+BtASw/34iK9ff66/7z8/+Xz/9P18rOT5gQsPDw9vNPWn6+k7r9kJOFmCfKzHRcTDw8O7xmuLQVIkXr+lE3y+ZI/P8fDw8H6Uly/BpqjMFgUPDw/v3+fNCkBeQvbLjYeHh3ebl4QRs1h2FiXMPsXDw8N7D2/zUv6p++vne3h4eHijU/XkpdyOcraEfDNbPDw8vAu8zSHT7NBr00YwXEQ8PDy8o7xk4Dww3RxotQFxtOnHw8PDewsvj27bY7O2hSv//uPC4eHh4V3j5XFA8mSfJSclJ/oLeHh4eNd4bWFowW30sIlFogMwPDw8vEO8zUTzoPb1pE/FwV8UBjw8PLwLvLZIJC/ovAmgDTWiUoGHh4d3jddGA22b1GYh8tYrPDw8vHfy2kC2nXS7yc5LyDdLj4eHh3eZl1+zWKENcPOx6gMwPDw8vAUvP3BKBp5Ft5vCkxzO4eHh4d3g7cOFPGxNhm+38nWAgoeHh7fm5e0C7Yu4beeaNV19s3x4eHh4R3nJMVJ7HJVHxm29qmeLh4eH93ZeO9E8qM3Lz2YJ8PDw8G7wNifs+4aA/NOWd6CBAA8PDy/mnd3g5pHurIFgmLXg4eHhHeK1jP2x2X4his4IPDw8vEO82dFXG09sSs4s2sDDw8N7P28WMXyMrjyMyP8N0Xrg4eHhjXjJwPnkNtHDbBO/uvDw8PCOvpTzhqr8Jb7ZTA/jXTw8PLwLvFmRaCOJvIS0G/pj5QQPDw+v5CXFIC8V7Xa8va+DZjw8PLxrvHb4zfZ39tth0cLDw8P7Ud5sY922Amy20Xh4eHj/Cy9vq2oj11k71xdhBB4eHt4FXh5GvGa8fk3njQVt/PE4Kzw8PLwLvNkP8i3ybAs+KwzDCw8PDy/l/QYSkVS5Bo21UAAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
