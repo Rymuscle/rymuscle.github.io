@@ -205,6 +205,62 @@ docker 和 传统虚拟机技术 对比
         </li>
     
         <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-24-mysql-41"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-24 15:40:19" datetime="2017-09-24T07:40:19.000Z"  itemprop="datePublished">2017-09-24</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-41/">43. 索引优点</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        简介
+当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;
+
+MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)
+
+存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:
+
+MyISAM使用 前缀压缩技术 使得索引更小
+InnoDB则按照原数据格式进行存储
+MyISAM的索引是通过 数据的...
+    
+
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-mysql/2017-09-24-mysql-42"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -261,11 +317,11 @@ docker 和 传统虚拟机技术 对比
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-24-mysql-41"
+            <article id="post-mysql/2017-09-24-mysql-43"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-09-24 14:32:19" datetime="2017-09-24T06:32:19.000Z"  itemprop="datePublished">2017-09-24</time>
+        <time class="post-time" title="2017-09-24 14:40:31" datetime="2017-09-24T06:40:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -279,7 +335,7 @@ docker 和 传统虚拟机技术 对比
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-41/">41. B-Tree索引</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-43/">42. 哈希索引</a>
     </h3>
   
 
@@ -290,18 +346,18 @@ docker 和 传统虚拟机技术 对比
 
     
         简介
-当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;
+哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;
 
-MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)
+对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):
 
-存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:
+哈希索引将所有的哈希码存储在索引中
+同时在哈希表中保存指向每个数据行的指针
 
-MyISAM使用 前缀压缩技术 使得索引更小
-InnoDB则按照原数据格式进行存储
-MyISAM的索引是通过 数据的...
+
+在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tr...
     
 
-        <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -348,9 +404,13 @@ MyISAM的索引是通过 数据的...
         索引基础
 索引是存储引擎用于快速找到记录的一种数据结构; 
 索引优化是对查询性能优化最有效的手段了;
-如查询语句 select first_name from actor where actor_id = 5; : 如果在 actor_id 列上创建了索引, 则MySQL会先在索引上按值进行查找, 然后才返回包含该值的数据行;
 索引可以包含 一个 或 多个列 的值; 
-如果如果索引包含多个列...
+如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列;
+创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;
+
+
+在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现:
+...
     
 
         <a href="/2017/09/24/mysql/2017-09-24-mysql-40/" class="post-more waves-effect waves-button">
@@ -612,58 +672,6 @@ require虽然是安装, 但也可以用来更新包到指定版本, 并同时更
     
 
         <a href="/2017/09/18/composer/2017-09-18-composer-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-composer/2017-09-18-composer-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-18 21:20:31" datetime="2017-09-18T13:20:31.000Z"  itemprop="datePublished">2017-09-18</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/18/composer/2017-09-18-composer-03/">03.安装包的方式(require, install, update)对比</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        初次做包安装
-如果你的项目刚引入composer (composer init), 现在是第一次进行包的安装, 也就是只有composer.json文件, 并没有composer.lock文件, 可以, 直接执行 composer require 包名 包版本
-
-该命令会帮你安装所需的包到 vendor/ 目录下
-生成 composer.json 文件, 并将依赖信息写入文件中
-生成 com...
-    
-
-        <a href="/2017/09/18/composer/2017-09-18-composer-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>

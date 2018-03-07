@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,索引优化">
-    <meta name="description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 如查询语句 select first_name from actor where actor_id = 5; : 如果在 actor_id 列上创建了索引, 则MySQL会先在索引上按值进行查找, 然后才返回包含该值的数据行; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索">
+    <meta name="description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现: 索引有">
 <meta name="keywords" content="MySQL,索引优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="40. 索引基础">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 如查询语句 select first_name from actor where actor_id = 5; : 如果在 actor_id 列上创建了索引, 则MySQL会先在索引上按值进行查找, 然后才返回包含该值的数据行; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索">
+<meta property="og:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现: 索引有">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T09:21:20.000Z">
+<meta property="og:updated_time" content="2018-03-07T10:00:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="40. 索引基础">
-<meta name="twitter:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 如查询语句 select first_name from actor where actor_id = 5; : 如果在 actor_id 列上创建了索引, 则MySQL会先在索引上按值进行查找, 然后才返回包含该值的数据行; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索">
+<meta name="twitter:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;  索引优化是对查询性能优化最有效的手段了; 索引可以包含 一个 或 多个列 的值;  如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现: 索引有">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">1.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL支持的索引类型"><span class="post-toc-number">2.</span> <span class="post-toc-text">MySQL支持的索引类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#B-Tree索引"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">B-Tree索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希索引"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">哈希索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据空间索引"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">数据空间索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全文索引"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">全文索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他索引类别"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">其他索引类别</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">1.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL支持的索引类型"><span class="post-toc-number">2.</span> <span class="post-toc-text">MySQL支持的索引类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#B-Tree索引"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">B-Tree索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希索引"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">哈希索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据空间索引"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">数据空间索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全文索引"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">全文索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他索引类别"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">其他索引类别</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引优点"><span class="post-toc-number">3.</span> <span class="post-toc-text">索引优点</span></a></li></ol>
         </nav>
     </aside>
     
@@ -183,9 +183,8 @@
             <h2 id="索引基础"><a href="#索引基础" class="headerlink" title="索引基础"></a>索引基础</h2><ol>
 <li><code>索引</code>是存储引擎用于快速找到记录的一种数据结构; </li>
 <li>索引优化是对查询性能优化最有效的手段了;</li>
-<li>如查询语句 <code>select first_name from actor where actor_id = 5;</code> : 如果在 <code>actor_id</code> 列上创建了索引, 则MySQL会先在索引上按值进行查找, 然后才返回包含该值的数据行;</li>
 <li>索引可以包含 <code>一个</code> 或 <code>多个列</code> 的值; <ul>
-<li>如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列;</li>
+<li>如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的<code>最左前缀列</code>;</li>
 <li>创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;</li>
 </ul>
 </li>
@@ -196,7 +195,12 @@
 </ul>
 </li>
 </ol>
-<h2 id="MySQL支持的索引类型"><a href="#MySQL支持的索引类型" class="headerlink" title="MySQL支持的索引类型"></a>MySQL支持的索引类型</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-41/">B-Tree索引</a></h3><h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-42/">哈希索引</a></h3><h3 id="数据空间索引"><a href="#数据空间索引" class="headerlink" title="数据空间索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-43/">数据空间索引</a></h3><h3 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-44/">全文索引</a></h3><h3 id="其他索引类别"><a href="#其他索引类别" class="headerlink" title="其他索引类别"></a>其他索引类别</h3>
+<h2 id="MySQL支持的索引类型"><a href="#MySQL支持的索引类型" class="headerlink" title="MySQL支持的索引类型"></a>MySQL支持的索引类型</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-41/"><code>B-Tree索引</code></a></h3><h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-42/"><code>哈希索引</code></a></h3><h3 id="数据空间索引"><a href="#数据空间索引" class="headerlink" title="数据空间索引"></a>数据空间索引</h3><h3 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a>全文索引</h3><h3 id="其他索引类别"><a href="#其他索引类别" class="headerlink" title="其他索引类别"></a>其他索引类别</h3><h2 id="索引优点"><a href="#索引优点" class="headerlink" title="索引优点"></a>索引优点</h2><p>索引可以让服务器快速地定位到表的指定位置; 但这并不是索引的唯一作用, 到现在可以看到, 根据创建索引的数据结构不同, 索引也有一些其他的附加组作用</p>
+<ul>
+<li>最常见的B-Tree索引, 按照顺序存储数据, 所以MySQL可以用来做 <code>ORDER BY</code> 和 <code>GROUP BY</code> 操作;<br>  因为数据是有序的, 所以B-Tree也就会将相关的列值都存储在一起</li>
+<li>因为B-Tree索引中存储了实际的列值, 所以某些查询(说的是<code>覆盖索引</code>)可能只使用索引就能够完成查询工作了</li>
+</ul>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -288,9 +292,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">41. B-Tree索引</h4>
+        <h4 class="title">42. 哈希索引</h4>
       </a>
     </div>
   
