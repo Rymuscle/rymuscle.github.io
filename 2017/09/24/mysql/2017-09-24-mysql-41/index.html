@@ -13,27 +13,27 @@
     
     
     
-    <title>43. 索引优点 | Lant&#39;s Blog</title>
+    <title>41. B-Tree索引 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,索引优化">
-    <meta name="description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储 MyISAM的索引是通过 数据的物理位">
-<meta name="keywords" content="MySQL,索引优化">
+    <meta name="keywords" content="MySQL,索引">
+    <meta name="description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储  MyISAM的索引是通过 数据的物理">
+<meta name="keywords" content="MySQL,索引">
 <meta property="og:type" content="article">
-<meta property="og:title" content="43. 索引优点">
+<meta property="og:title" content="41. B-Tree索引">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储 MyISAM的索引是通过 数据的物理位">
+<meta property="og:description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储  MyISAM的索引是通过 数据的物理">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/b-tree-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/b-tree-02.png">
-<meta property="og:updated_time" content="2018-03-07T09:56:07.000Z">
+<meta property="og:updated_time" content="2018-03-07T11:41:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="43. 索引优点">
-<meta name="twitter:description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储 MyISAM的索引是通过 数据的物理位">
+<meta name="twitter:title" content="41. B-Tree索引">
+<meta name="twitter:description" content="简介 当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;  MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)  存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:  MyISAM使用 前缀压缩技术 使得索引更小 InnoDB则按照原数据格式进行存储  MyISAM的索引是通过 数据的物理">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/index/b-tree-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -115,7 +115,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">43. 索引优点</div>
+        <div class="flex-col header-title ellipsis">41. B-Tree索引</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -137,10 +137,10 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">43. 索引优点</h1>
+        <h1 class="title">41. B-Tree索引</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-24T07:40:19.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2017-09-24T06:50:19.000Z" itemprop="datePublished" class="page-time">
   2017-09-24
 </time>
 
@@ -170,9 +170,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">43. 索引优点</h1>
+        <h1 class="post-card-title">41. B-Tree索引</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-24 15:40:19" datetime="2017-09-24T07:40:19.000Z"  itemprop="datePublished">2017-09-24</time>
+            <time class="post-time" title="2017-09-24 14:50:19" datetime="2017-09-24T06:50:19.000Z"  itemprop="datePublished">2017-09-24</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -191,12 +191,16 @@
 <li><p><strong>存储引擎以不同的方式使用 <code>B-Tree</code> 索引, 性能也各有优劣</strong>:</p>
 <ul>
 <li>MyISAM使用 <code>前缀压缩技术</code> 使得索引更小</li>
-<li>InnoDB则按照原数据格式进行存储</li>
-<li>MyISAM的索引是通过 <code>数据的物理位置</code> 引用被索引的行<br><code>叶子页中的值</code>指向被索引的行的<code>物理地址</code></li>
+<li><p>InnoDB则按照原数据格式进行存储</p>
+</li>
+<li><p>MyISAM的索引是通过 <code>数据的物理位置</code> 引用被索引的行<br><code>叶子页中的值</code>指向被索引的行的<code>物理地址</code></p>
+</li>
 <li>InnoDB的索引则是通过 <code>主键</code> 引用被索引的行<br><code>叶子页中的值</code>指向被索引的行的<code>主键</code></li>
 </ul>
 </li>
 <li><p>建立在B-Tree结构(从技术上来说是B+Tree)上的索引<br><img src="/img/mysql/index/b-tree-01.png" width="400"></p>
+</li>
+<li><p><strong>注意</strong>: B-Tree索引中存储了 <code>被索引的列实际的列值</code>, <code>指向数据行的指针</code> (上面的图可能没体现出来, 结合下面多列索引的图找找感觉~~)</p>
 </li>
 <li><p>B-Tree 通常意味着:</p>
 <ul>
@@ -232,7 +236,7 @@
 </li>
 <li><p>精确匹配第一列 并 范围匹配第二列: 查找 ‘姓为Allen并且名字以K开头’ 的人, 这样就可以利用到上面创建的索引</p>
 </li>
-<li><p><strong>只用访问索引的查询</strong> : 这种查询只需要访问索引, 而无需访问数据行; 后面会单独讨论这种 <code>覆盖索引</code> 的优化。</p>
+<li><p><strong>只用访问索引的查询</strong> : 这种查询只需要访问索引, 而无需访问数据行; 后面会单独讨论这种 <code>覆盖索引</code> 的优化。<br> <strong>B-Tree索引中存储了实际的列值, 所以某些查询(说的是<code>覆盖索引</code>)可能只使用索引就能够完成查询工作了</strong></p>
 </li>
 </ol>
 <h2 id="B-tree索引的限制"><a href="#B-tree索引的限制" class="headerlink" title="B-tree索引的限制"></a>B-tree索引的限制</h2><ol>
@@ -282,7 +286,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
 
             
@@ -292,7 +296,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《43. 索引优点》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《41. B-Tree索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -302,7 +306,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《43. 索引优点》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《41. B-Tree索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -312,7 +316,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 索引优点》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《41. B-Tree索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -340,17 +344,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/24/mysql/2017-09-24-mysql-42/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-40/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">42. 哈希索引</h4>
+          <h4 class="title">40. 索引基础</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/10/12/docker/2017-10-12-01-docker/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/24/mysql/2017-09-24-mysql-42/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01.认识Docker</h4>
+        <h4 class="title">42. 哈希索引</h4>
       </a>
     </div>
   
@@ -452,7 +456,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《43. 索引优点》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《41. B-Tree索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -462,7 +466,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《43. 索引优点》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&title=《41. B-Tree索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -472,7 +476,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 索引优点》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《41. B-Tree索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-41/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

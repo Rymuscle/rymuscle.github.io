@@ -205,11 +205,11 @@ docker 和 传统虚拟机技术 对比
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-24-mysql-41"
+            <article id="post-mysql/2017-09-24-mysql-45"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-09-24 15:40:19" datetime="2017-09-24T07:40:19.000Z"  itemprop="datePublished">2017-09-24</time>
+        <time class="post-time" title="2017-09-24 20:10:31" datetime="2017-09-24T12:10:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -223,7 +223,7 @@ docker 和 传统虚拟机技术 对比
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-41/">43. 索引优点</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-45/">45. 聚簇索引</a>
     </h3>
   
 
@@ -234,25 +234,126 @@ docker 和 传统虚拟机技术 对比
 
     
         简介
-当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;
+聚簇索引并不是一种单独的索引类型, 而是一种 数据存储方式; 
 
-MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)
+因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 InnoDB引擎的聚簇索引;
 
-存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:
+InnoDB的 聚簇索引 实际上在同一个结构中保存了 B-Tree索引 和 数据行
 
-MyISAM使用 前缀压缩技术 使得索引更小
-InnoDB则按照原数据格式进行存储
-MyISAM的索引是通过 数据的...
+当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 全部列数据)
+因为无法同时把数据行存...
     
 
-        <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-45/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-24-mysql-44"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-24 17:25:31" datetime="2017-09-24T09:25:31.000Z"  itemprop="datePublished">2017-09-24</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-44/">44. 高性能索引策略 -- 多列索引</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言
+在多个列上建立独立的单列索引, 在大部分情况下并不能提高MySQL的查询性能; 
+
+例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择
+select film_id, actor_id from actor where actor_id=1 OR film_id=1;
+
+
+对...
+    
+
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-44/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-24-mysql-43"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-24 17:20:31" datetime="2017-09-24T09:20:31.000Z"  itemprop="datePublished">2017-09-24</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-43/">43. 高性能索引策略 - 独立的列, 前缀索引</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言前面已经对常见的索引类型及其对应的优缺点有了一定的了解, 接下来要考虑的就是如何 高效正确地选择并使用索引
+独立的列独立的列是指: 在查询条件中, 索引列 不能是表达式的一部分, 也不能是函数的参数; (如: select actor_id from actor where actor_id+1=5; 就无法使用索引, 应该始终将索引列单独放在比较符号的一侧, select actor_...
+    
+
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -265,7 +366,7 @@ MyISAM的索引是通过 数据的...
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-09-24 14:40:31" datetime="2017-09-24T06:40:31.000Z"  itemprop="datePublished">2017-09-24</time>
+        <time class="post-time" title="2017-09-24 15:01:31" datetime="2017-09-24T07:01:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -308,7 +409,7 @@ MyISAM的索引是通过 数据的...
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
     </div>
     
@@ -317,11 +418,11 @@ MyISAM的索引是通过 数据的...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-24-mysql-43"
+            <article id="post-mysql/2017-09-24-mysql-41"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-09-24 14:40:31" datetime="2017-09-24T06:40:31.000Z"  itemprop="datePublished">2017-09-24</time>
+        <time class="post-time" title="2017-09-24 14:50:19" datetime="2017-09-24T06:50:19.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -335,7 +436,7 @@ MyISAM的索引是通过 数据的...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-43/">42. 哈希索引</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-41/">41. B-Tree索引</a>
     </h3>
   
 
@@ -346,25 +447,26 @@ MyISAM的索引是通过 数据的...
 
     
         简介
-哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;
+当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;
 
-对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):
+MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)
 
-哈希索引将所有的哈希码存储在索引中
-同时在哈希表中保存指向每个数据行的指针
+存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:
 
+MyISAM使用 前缀压缩技术 使得索引更小
+InnoDB则按照原数据格式进行存储
 
-在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tr...
+MyISAM的索引是通过 数据...
     
 
-        <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
     </div>
     
@@ -403,14 +505,16 @@ MyISAM的索引是通过 数据的...
     
         索引基础
 索引是存储引擎用于快速找到记录的一种数据结构; 
+
 索引优化是对查询性能优化最有效的手段了;
+
 索引可以包含 一个 或 多个列 的值; 
+
 如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列;
 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;
 
 
-在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现:
-...
+在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实...
     
 
         <a href="/2017/09/24/mysql/2017-09-24-mysql-40/" class="post-more waves-effect waves-button">
@@ -420,7 +524,7 @@ MyISAM的索引是通过 数据的...
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引优化/">索引优化</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
     </div>
     
@@ -569,109 +673,6 @@ github创建仓库
     
 
         <a href="/2017/09/20/composer/2017-09-20-composer-06/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-composer/2017-09-20-composer-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-20 18:21:46" datetime="2017-09-20T10:21:46.000Z"  itemprop="datePublished">2017-09-20</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/20/composer/2017-09-20-composer-05/">05. require 和 create-project</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        
-require是在当前项目目录下进行包安装, 一般安装到vendor/下;
-
-create-project 是指把包当成一个项目来安装, 也就是如果你创建的这个包是一个完整的项目, 你就可以来直接把这个包当成项目来创建 composer create-project lant/packagist_test 项目在本地的目录名 项目版本(如:dev-master)
-
-
-
-    
-
-        <a href="/2017/09/20/composer/2017-09-20-composer-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-composer/2017-09-18-composer-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-18 22:23:17" datetime="2017-09-18T14:23:17.000Z"  itemprop="datePublished">2017-09-18</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/18/composer/2017-09-18-composer-04/">04.更新包的方式(require, install, update)对比</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        
-require虽然是安装, 但也可以用来更新包到指定版本, 并同时更新composer.json和composer.lock文件, 如果没有则会创建! composer require 包名 新版本
-
-当你手动修改了composer.json文件中包的版本之后, 可以执行 composer update 来重新安装该包, 并更新composer.lock文件, 如果没有则会创建! 当然, ...
-    
-
-        <a href="/2017/09/18/composer/2017-09-18-composer-04/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>

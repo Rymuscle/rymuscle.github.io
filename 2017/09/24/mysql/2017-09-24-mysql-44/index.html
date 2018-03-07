@@ -13,25 +13,25 @@
     
     
     
-    <title>40. 索引基础 | Lant&#39;s Blog</title>
+    <title>44. 高性能索引策略 -- 多列索引 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,索引">
-    <meta name="description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;   索引优化是对查询性能优化最有效的手段了;  索引可以包含 一个 或 多个列 的值;   如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现:">
-<meta name="keywords" content="MySQL,索引">
+    <meta name="keywords" content="MySQL,索引,高性能索引策略">
+    <meta name="description" content="前言 在多个列上建立独立的单列索引, 在大部分情况下并不能提高MySQL的查询性能;   例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择 select film_id, actor_id from actor where actor_id=1 OR film_id=1;   对于上面">
+<meta name="keywords" content="MySQL,索引,高性能索引策略">
 <meta property="og:type" content="article">
-<meta property="og:title" content="40. 索引基础">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/index.html">
+<meta property="og:title" content="44. 高性能索引策略 -- 多列索引">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;   索引优化是对查询性能优化最有效的手段了;  索引可以包含 一个 或 多个列 的值;   如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现:">
+<meta property="og:description" content="前言 在多个列上建立独立的单列索引, 在大部分情况下并不能提高MySQL的查询性能;   例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择 select film_id, actor_id from actor where actor_id=1 OR film_id=1;   对于上面">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T11:37:16.000Z">
+<meta property="og:updated_time" content="2018-03-07T12:23:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="40. 索引基础">
-<meta name="twitter:description" content="索引基础 索引是存储引擎用于快速找到记录的一种数据结构;   索引优化是对查询性能优化最有效的手段了;  索引可以包含 一个 或 多个列 的值;   如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的最左前缀列; 创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;   在MySQL中, 索引是在 存储引擎层实现, 而不是在服务器层实现:">
+<meta name="twitter:title" content="44. 高性能索引策略 -- 多列索引">
+<meta name="twitter:description" content="前言 在多个列上建立独立的单列索引, 在大部分情况下并不能提高MySQL的查询性能;   例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择 select film_id, actor_id from actor where actor_id=1 OR film_id=1;   对于上面">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">40. 索引基础</div>
+        <div class="flex-col header-title ellipsis">44. 高性能索引策略 -- 多列索引</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,10 +134,10 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">40. 索引基础</h1>
+        <h1 class="title">44. 高性能索引策略 -- 多列索引</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-24T06:30:25.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2017-09-24T09:25:31.000Z" itemprop="datePublished" class="page-time">
   2017-09-24
 </time>
 
@@ -159,17 +159,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引基础"><span class="post-toc-number">1.</span> <span class="post-toc-text">索引基础</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL支持的索引类型"><span class="post-toc-number">2.</span> <span class="post-toc-text">MySQL支持的索引类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#B-Tree索引"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">B-Tree索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#哈希索引"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">哈希索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据空间索引"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">数据空间索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全文索引"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">全文索引</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他索引类别"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">其他索引类别</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引优点"><span class="post-toc-number">3.</span> <span class="post-toc-text">索引优点</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#选择合适的索引列顺序"><span class="post-toc-number">2.</span> <span class="post-toc-text">选择合适的索引列顺序</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-mysql/2017-09-24-mysql-40"
+<article id="post-mysql/2017-09-24-mysql-44"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">40. 索引基础</h1>
+        <h1 class="post-card-title">44. 高性能索引策略 -- 多列索引</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-24 14:30:25" datetime="2017-09-24T06:30:25.000Z"  itemprop="datePublished">2017-09-24</time>
+            <time class="post-time" title="2017-09-24 17:25:31" datetime="2017-09-24T09:25:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -180,30 +180,32 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="索引基础"><a href="#索引基础" class="headerlink" title="索引基础"></a>索引基础</h2><ol>
-<li><p><code>索引</code>是存储引擎用于快速找到记录的一种数据结构; </p>
-</li>
-<li><p>索引优化是对查询性能优化最有效的手段了;</p>
-</li>
-<li><p>索引可以包含 <code>一个</code> 或 <code>多个列</code> 的值; </p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>在多个列上建立独立的<code>单列索引</code>, 在大部分情况下并不能提高MySQL的查询性能; </p>
 <ul>
-<li>如果如果索引包含多个列, 索引中列的顺序也非常重要, 因为MySQL只能高效地使用索引的<code>最左前缀列</code>;</li>
-<li>创建一个包含两个列的索引 和 创建两个只包含一个列的索引 是大不相同的;</li>
+<li>例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择</li>
+<li><code>select film_id, actor_id from actor where actor_id=1 OR film_id=1;</code></li>
 </ul>
 </li>
-<li><p>在MySQL中, 索引是在 <code>存储引擎层</code>实现, 而不是在服务器层实现:</p>
+<li><p>对于上面的查询</p>
 <ul>
-<li>索引有很多种类型, 可以为不同场景提供更好的性能; </li>
-<li>但并不是每个存储引擎都支持所有的索引类型; </li>
-<li>不同存储引擎的索引, 其工作方式和底层实现也可能是不一样的;</li>
+<li>老版本的MySQL会使用全表扫描;</li>
+<li>而新版本会使用 <code>索引合并策略</code>(参考P158) 来进行优化, 但这更说明了表上的索引建的很糟糕</li>
 </ul>
+</li>
+<li><p>接下来除了 之前已经在<a href="/2017/09/24/mysql/2017-09-24-mysql-41/#%E6%9C%80%E5%B7%A6%E5%89%8D%E7%BC%80%E6%95%88%E5%BA%94">博文: B-Tree索引</a>中介绍过的多列索引的 <strong>左前缀策略</strong>;<br> 你还需要关注的是创建索引时, <strong>索引列的顺序</strong></p>
 </li>
 </ol>
-<h2 id="MySQL支持的索引类型"><a href="#MySQL支持的索引类型" class="headerlink" title="MySQL支持的索引类型"></a>MySQL支持的索引类型</h2><h3 id="B-Tree索引"><a href="#B-Tree索引" class="headerlink" title="B-Tree索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-41/"><code>B-Tree索引</code></a></h3><h3 id="哈希索引"><a href="#哈希索引" class="headerlink" title="哈希索引"></a><a href="/2017/09/24/mysql/2017-09-24-mysql-42/"><code>哈希索引</code></a></h3><h3 id="数据空间索引"><a href="#数据空间索引" class="headerlink" title="数据空间索引"></a>数据空间索引</h3><h3 id="全文索引"><a href="#全文索引" class="headerlink" title="全文索引"></a>全文索引</h3><h3 id="其他索引类别"><a href="#其他索引类别" class="headerlink" title="其他索引类别"></a>其他索引类别</h3><h2 id="索引优点"><a href="#索引优点" class="headerlink" title="索引优点"></a>索引优点</h2><p>索引可以让服务器快速地定位到表的指定位置; 但这并不是索引的唯一作用, 到现在可以看到, 根据创建索引的数据结构不同, 索引也有一些其他的附加组作用</p>
-<ul>
-<li>最常见的B-Tree索引, 按照顺序存储数据, 所以MySQL可以用来做 <code>ORDER BY</code> 和 <code>GROUP BY</code> 操作;<br>  因为数据是有序的, 所以B-Tree也就会将相关的列值都存储在一起</li>
-<li>因为B-Tree索引中存储了实际的列值, 所以某些查询(说的是<code>覆盖索引</code>)可能只使用索引就能够完成查询工作了</li>
-</ul>
+<h2 id="选择合适的索引列顺序"><a href="#选择合适的索引列顺序" class="headerlink" title="选择合适的索引列顺序"></a>选择合适的索引列顺序</h2><ol>
+<li><p>在一个多列索引中, 索引列的顺序首先决定了最左前缀策略在查询时是如何进行的; 其次还意味着索引首先按照最左列进行排序, 其次是第二列, 等等; 所以<strong>多列索引的列顺序至关重要</strong>;</p>
+</li>
+<li><p>在不需要考虑排序和分组的时候, <strong>将选择性最高的列放在前面</strong>通常是很好的, 这时候索引的作用只是用于优化where条件的查找。</p>
+</li>
+<li><p>然而, 性能不知是依赖于所有索引列的选择性(整体基数), 也和查询条件的具体值有关, 也就是和值的分布有关;</p>
+</li>
+<li><p>~~未完待续</p>
+</li>
+</ol>
 
         </div>
 
@@ -230,7 +232,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
 
             
@@ -240,7 +242,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&title=《40. 索引基础》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&title=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -250,22 +252,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&title=《40. 索引基础》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&title=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《40. 索引基础》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -288,17 +290,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/22/composer/2017-09-22-composer-08/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">08.</h4>
+          <h4 class="title">43. 高性能索引策略 - 独立的列, 前缀索引</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/24/mysql/2017-09-24-mysql-45/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">41. B-Tree索引</h4>
+        <h4 class="title">45. 聚簇索引</h4>
       </a>
     </div>
   
@@ -400,7 +402,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&title=《40. 索引基础》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&title=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -410,22 +412,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&title=《40. 索引基础》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&title=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《40. 索引基础》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《44. 高性能索引策略 -- 多列索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-40/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-44/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -436,7 +438,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNklEQVR42u3aS27DMAxFUe9/0+60QGv1PlJBIfp6FMSK4uMBwY+uC1/3w/X97s/1T5+f1j/d3XbJkCHjWMa9vPhjrX9Lrtr+MmTIeA/jKYKtQ2rK4JGTP5sMGTJkkDVr5HqHdWooQ4YMGSkjXblG/lvAlSFDxrGMNL3jiWMaWD9ei8uQIeNARqew/PTnj8w3ZMiQcRTjDq8Ob1eQ/WU3GTJkjGbsHWHyxhwfHvCXKEOGjKkM/pe1UMvTzdrhMBkyZLyHwVv5JOFLa8xOKilDhoz3MHgvi6RxnUHmhna/DBkyXsDgSWFnJQ/fQddQhgwZQxnpsYk0jO4aWKKyVoYMGaMZ6cGvYNNwMFAL0zJkyJjNIAUqmoKW0sdaQvnHDFaGDBlDGbU2XL8DRlJSlCbKkCFjNKPT1ucFcOcVpMFahgwZ8xi1P+4/Om+9xf1CGTJkjGPUhgG1BllnqICeXIYMGUMZ/NBDp3DtlLUoBMuQIWM0g9zmRWythVdLBx/XyJAhYyiDB9n0wCtPBzt3ZciQ8TbG+sf8oFi6W/rQwbk2GTJkjGB0jjiQV5DySKkcHLmQIUPG4YxaE5+HQlIA18L9xecYMmTIOJyRNv3TpI0042q71UYXMmTIOJfBg2x8jgPvzwMxqsVlyJAxlLF+IAKrtee21eIyZMiQ0W7Z19bwwxwyZMiQwZtf/eFl8biYDBkyXsDgRSwvPtNhAw+vG9ptMmTIOIrBS8f0G1KIpklha6gpQ4aM8xhf4sutY3WmZI0AAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3aSW7EMAwF0dz/0s62AaeF+qQcwGJ51fD8HIDhoJ8fvF0f2+ee++/10ft97vvvR7dtMmTIeC3jWm78tfg56bPW58uQIWMO41sE2/VaPIyuQ/nX/TJkyJCxPGed6q3vwAO3DBkyZBDGulhdh2PyxH8KuDJkyHgtI03veABNA+vjtbgMGTJeyOgUlk//fmS+IUOGjFcxrnDrUHcF2T/uJkOGjKMZe0eYvDHHhwfrjyhDhow5DN6mry0RIwG6tjhMhgwZcxi8lU8SvrTG7KSSMmTImMNI0zhexKaDzM39QhkyZBzB6CyG6IdaHmSDrqEMGTKOY9SiFm+37RpYBgssZMiQcTSjluqliWOtiCVXyZAh41QGGSWSQExa/DwBjf8OMmTIGMCIJ5z4VWoBlyNlyJAxjcGXPvBytFZ2puFehgwZcxi8sVVL+EhaWXsfGTJknM3ojx7TRJDfJ/0cMmTIOJvRT+nSJJKXtUEIliFDxgAGuaDTnqs15oLlFzJkyBjDSF901yCzc1SGDBkzGbWCky/zSkcRqMSVIUPG0Qye5PH0kZe1aesfXSVDhoyDGFe41ZZl8IWqaYCO/2PIkCHjhYxa67/fSuN7SLCWIUPGBAYPsmniyO/fH4jKkCFjAoM0/Z8Il9tqcRkyZMgoDQzStn7tw8mQIUMGGVJyfDpg4IW0DBkyJjB4EVsrVmtFMnmWDBkyJjB46ZiGSD5m4KTWUFOGDBnvY/wCAs6OdDWvNMoAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

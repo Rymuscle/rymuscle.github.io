@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>45. 聚簇索引 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL,索引,高性能索引策略">
+    <meta name="description" content="简介 聚簇索引并不是一种单独的索引类型, 而是一种 数据存储方式;   因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 InnoDB引擎的聚簇索引;  InnoDB的 聚簇索引 实际上在同一个结构中保存了 B-Tree索引 和 数据行  当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 全部列数据) 因为无法同时把数据行存放在两">
+<meta name="keywords" content="MySQL,索引,高性能索引策略">
+<meta property="og:type" content="article">
+<meta property="og:title" content="45. 聚簇索引">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="简介 聚簇索引并不是一种单独的索引类型, 而是一种 数据存储方式;   因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 InnoDB引擎的聚簇索引;  InnoDB的 聚簇索引 实际上在同一个结构中保存了 B-Tree索引 和 数据行  当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 全部列数据) 因为无法同时把数据行存放在两">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/jucusuoyin.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_duibi.png">
+<meta property="og:updated_time" content="2018-03-07T13:32:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="45. 聚簇索引">
+<meta name="twitter:description" content="简介 聚簇索引并不是一种单独的索引类型, 而是一种 数据存储方式;   因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 InnoDB引擎的聚簇索引;  InnoDB的 聚簇索引 实际上在同一个结构中保存了 B-Tree索引 和 数据行  当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 全部列数据) 因为无法同时把数据行存放在两">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/index/jucusuoyin.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">45. 聚簇索引</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">45. 聚簇索引</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-24T12:10:31.000Z" itemprop="datePublished" class="page-time">
+  2017-09-24
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#聚簇索引的优点"><span class="post-toc-number">2.</span> <span class="post-toc-text">聚簇索引的优点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#聚簇索引缺点"><span class="post-toc-number">3.</span> <span class="post-toc-text">聚簇索引缺点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#InnoDB-和-MyISAM-索引对比"><span class="post-toc-number">4.</span> <span class="post-toc-text">InnoDB 和 MyISAM 索引对比</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#上图总结"><span class="post-toc-number">5.</span> <span class="post-toc-text">上图总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-09-24-mysql-45"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">45. 聚簇索引</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-24 20:10:31" datetime="2017-09-24T12:10:31.000Z"  itemprop="datePublished">2017-09-24</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li><p>聚簇索引并不是一种单独的索引类型, 而是一种 <strong>数据存储方式</strong>; </p>
+</li>
+<li><p>因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 <code>InnoDB引擎的聚簇索引</code>;</p>
+</li>
+<li><p>InnoDB的 <code>聚簇索引</code> 实际上在同一个结构中保存了 <code>B-Tree索引</code> 和 <code>数据行</code></p>
+<ul>
+<li>当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 <code>全部列数据</code>)</li>
+<li>因为无法同时把数据行存放在两个不同的地方, 所以一个表只能有一个聚簇索引</li>
+<li>不过<code>覆盖索引</code>, 可以模拟多个聚簇索引的情况</li>
+</ul>
+</li>
+<li><p><strong>InnoDB默认会创建聚簇索引</strong>: InnoDB通过主键来作为聚簇索引, 如果没有定义主键, 则会选择一个唯一的非空索引代替, 如果连非空索引都没有, <strong>InnoDB会隐式定义一个主键来作为聚簇索引</strong>;</p>
+<ul>
+<li>将主键组织到一棵B+树中, 而行数据就储存在叶子节点上，若使用<code>where id = 14</code>这样的条件查找数据;<br><img src="/img/mysql/index/jucusuoyin.png" width="500"></li>
+<li>则按照B+树的检索算法即可查找到对应的叶节点，之后获得行数据;</li>
+</ul>
+</li>
+<li><p>InnoDB只聚集 在同一个磁盘页面中的记录, 因此, 如果数据在物理上是相邻的, 那么在索引上就也是相邻的;</p>
+<ul>
+<li>聚簇索引的数据的物理存放顺序与索引顺序是一致的，即：只要索引是相邻的，那么对应的数据一定也是相邻地存放在磁盘上的;</li>
+<li>但是包含相邻键值的页面可能物理上会相距甚远;</li>
+</ul>
+</li>
+</ol>
+<h2 id="聚簇索引的优点"><a href="#聚簇索引的优点" class="headerlink" title="聚簇索引的优点"></a>聚簇索引的优点</h2><ol>
+<li>访问速度更快: 聚簇索引将索引和数据保存在同一个B-Tree中, 因此从聚簇索引中获取数据通常比在非聚簇索引中查询要快;</li>
+<li>使用覆盖索引的查询, 可以直接使用页节点中的<strong>主键值</strong>;</li>
+</ol>
+<h2 id="聚簇索引缺点"><a href="#聚簇索引缺点" class="headerlink" title="聚簇索引缺点"></a>聚簇索引缺点</h2><ol>
+<li>聚簇索引最大限度地提高了I/O密集型应用的性能, 但如果数据全部都放在内存中, 则访问顺序就没那么重要了, 聚簇索引也就没什么优势了;</li>
+<li>插入速度严重依赖于插入顺序, 按照主键的顺序插入是速度最快的方式, 但如果不是按照主键顺序, 在完成操作后最好执行 <code>OPTIMIZE TABLE</code> 命令重新组织一下表;</li>
+<li>更新聚簇索引的代价很高, 因为会强制InnoDB将每个被更新的行移动到新的位置;<br> 基于聚簇索引的表在插入新行, 或者主键被更新导致需要移动行的时候, 可能面临 “页分裂” 问题;<br> 当前主键值要求必须将这一行插入到某个已满的页中时, 存储引擎会将该页分裂成两个页面来容纳该行, 这就是一次页分裂操作。<br> 页分裂操作会导致表占用更多的磁盘空间</li>
+<li>聚簇索引会导致全表扫描变慢, 尤其是行比较稀疏, 或者由于页分裂导致数据存储不连续的时候;</li>
+<li>二级索引(非聚簇索引)可能比想象的要更大, 因为在二级索引的叶子节点包含了引用行的主键列;</li>
+<li><strong>二级索引访问需要两次索引查找, 而不是一次</strong><ul>
+<li>二级索引叶子几点保存的 “行指针” 是行的主键; 这意味着通过二级索引查找行, 存储引擎需要找到二级索引叶子节点获得对应的主键值;</li>
+<li>然后根据这个主键值去聚簇索引中查找对应的行数据;</li>
+<li>这里做了重复工作, 两次 B-Tree 查找, 而不是一次。</li>
+</ul>
+</li>
+</ol>
+<h2 id="InnoDB-和-MyISAM-索引对比"><a href="#InnoDB-和-MyISAM-索引对比" class="headerlink" title="InnoDB 和 MyISAM 索引对比"></a>InnoDB 和 MyISAM 索引对比</h2><ol>
+<li>InnoDB支持聚簇索引, 而MyISAM不支持;</li>
+<li>MyISAM中主键索引和其他索引在索引结构上没有区别; 而InnoDB中 <code>(主键)聚簇索引</code> 和 <code>二级索引(普通索引)</code> 是有区别的;(P167)</li>
+</ol>
+<h2 id="上图总结"><a href="#上图总结" class="headerlink" title="上图总结"></a>上图总结</h2><p><img src="/img/mysql/index/index_duibi.png" width="600"></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&title=《45. 聚簇索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&title=《45. 聚簇索引》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《45. 聚簇索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-44/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">44. 高性能索引策略 -- 多列索引</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/12/docker/2017-10-12-01-docker/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01.认识Docker</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&title=《45. 聚簇索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&title=《45. 聚簇索引》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《45. 聚簇索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-45/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3auY7kMAwFwP7/n/YAGy0wUM8jaQeWSlHD7ascEDz0+cTr+rdWR/J/r//W7/NX/962MDAwXsu4vq7Vi65eKzny/dVX1/5BxcDAOIDxPcjOA+j3M/NQvjyOgYGBcVMgzvM6DAwMjEnAza/Ny9EkuGNgYGAkRWyS2OWpZHLPR2pxDAyMFzLuCohP/H5wvoGBgfESxtVa+T2rR3pvhYGBsTdjUnBWm3HVhK/asMPAwNibkbfp83BZTTeT5+bNPgwMjJ0Yk61avRFCtekfDQYwMDAOY+SJ44SaDwmi5BUDA+MwRvIqeQKXN8vy48uuIQYGxqaMXkjNxwa97Rq90QIGBsZpjCfSwd7msMJVGBgYmzLmgTIpO/NQWx1wfvJYjoGB8XJGb2vXvVsxensnlrU4BgbGRoxqGlctR5PXzdPN6BNgYGBsyiiLiyG4+smaT8HAwNiUUW14TQYGvZFA8iEwMDD2ZvSGiNUtGnkKWG60YWBgHMPIRwK9RLBa4lY3nGFgYJzASB6Qn5OH1OqGjBu+EwYGxssZk7Z+b5wwSQeXRSwGBsamjDz4VsNuLwRXt1xgYGDszbiKq1p2VoNsNYnEwMA4gTFvls3bcPOtGBgYGCcwqkG2Ssq3X/QacxgYGOcw5q20at18cxWOgYGB0SJNmm7VMI2BgYGRjCR7jDyIY2BgYMyb9ck9q4PPQiMPAwNja8Z8MPBE6+0RJAYGxvsYPxmVIuBqqUjDAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
