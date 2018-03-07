@@ -223,7 +223,7 @@ docker 和 传统虚拟机技术 对比
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-42/">42. 索引</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-42/">42. 哈希索引</a>
     </h3>
   
 
@@ -233,7 +233,16 @@ docker 和 传统虚拟机技术 对比
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
+        简介
+哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;
+
+对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):
+
+哈希索引将所有的哈希码存储在索引中
+同时在哈希表中保存指向每个数据行的指针
+
+
+在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tr...
     
 
         <a href="/2017/09/24/mysql/2017-09-24-mysql-42/" class="post-more waves-effect waves-button">

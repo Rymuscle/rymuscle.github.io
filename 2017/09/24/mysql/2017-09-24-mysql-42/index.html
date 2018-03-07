@@ -13,25 +13,25 @@
     
     
     
-    <title>42. 索引 | Lant&#39;s Blog</title>
+    <title>42. 哈希索引 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="MySQL,索引优化">
-    <meta name="description" content="前言">
+    <meta name="description" content="简介 哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;  对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):  哈希索引将所有的哈希码存储在索引中 同时在哈希表中保存指向每个数据行的指针   在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tree索">
 <meta name="keywords" content="MySQL,索引优化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="42. 索引">
+<meta property="og:title" content="42. 哈希索引">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言">
+<meta property="og:description" content="简介 哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;  对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):  哈希索引将所有的哈希码存储在索引中 同时在哈希表中保存指向每个数据行的指针   在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tree索">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T09:19:10.000Z">
+<meta property="og:updated_time" content="2018-03-07T09:51:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="42. 索引">
-<meta name="twitter:description" content="前言">
+<meta name="twitter:title" content="42. 哈希索引">
+<meta name="twitter:description" content="简介 哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;  对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):  哈希索引将所有的哈希码存储在索引中 同时在哈希表中保存指向每个数据行的指针   在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tree索">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">42. 索引</div>
+        <div class="flex-col header-title ellipsis">42. 哈希索引</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">42. 索引</h1>
+        <h1 class="title">42. 哈希索引</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-09-24T06:40:31.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#哈希索引的限制"><span class="post-toc-number">2.</span> <span class="post-toc-text">哈希索引的限制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#哈希冲突"><span class="post-toc-number">3.</span> <span class="post-toc-text">哈希冲突</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">42. 索引</h1>
+        <h1 class="post-card-title">42. 哈希索引</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-09-24 14:40:31" datetime="2017-09-24T06:40:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
@@ -180,7 +180,37 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3>
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li><p>哈希索引(hash index)基于哈希表实现, <strong>只有精确匹配索引中所有列的查询才有效</strong>;</p>
+</li>
+<li><p>对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):</p>
+<ul>
+<li>哈希索引将所有的哈希码存储在索引中</li>
+<li><strong>同时在哈希表中保存指向每个数据行的指针</strong></li>
+</ul>
+</li>
+<li><p>在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tree索引。</p>
+<ul>
+<li>Memory引擎支持 <code>非唯一哈希索引</code>, 也就是同样的索引, 不同的数据可能产生相同的哈希码, 如果出现这种情况, 索引会以<strong>链表</strong>的方式存放多个行指针到同一个哈希条目中</li>
+<li>查找时, 会1. 先在索引中按照哈希码来找到指向数据行的指针, 2. 然后比较数据行的值是否是你查找的行</li>
+</ul>
+</li>
+</ol>
+<h2 id="哈希索引的限制"><a href="#哈希索引的限制" class="headerlink" title="哈希索引的限制"></a>哈希索引的限制</h2><p>因为索引自身只要存储对应的哈希值和行指针, 所以索引的结构十分紧凑, 这也让哈希索引的查找速度非常快, 然而哈希索引也有它的限制:</p>
+<ul>
+<li><p>哈希索引只包含哈希值和行指针, 而不存储字段值, 所以不能使用索引中的值来避免读取行, 不过, 访问内存中的行的速度很快;</p>
+</li>
+<li><p>哈希索引数据并不是按照索引值顺序排序的, 所以无法用于排序;</p>
+</li>
+<li><p>不支持 <code>部分索引列匹配查找</code> , 因为哈希索引始终是使用索引列的全部内容来计算哈希值的;</p>
+</li>
+<li><p>不支持范围查询 (只支持如 <code>=</code>, <code>&lt;&gt;</code>, <code>in</code> 等一些 等值比较)</p>
+</li>
+<li><p>哈希索引数据非常快, 除非有很多哈希冲突 (因为memory引擎支持非唯一索引, 也就是同样的索引, 不同的数据可能产生相同的哈希码)<br><strong>当出现哈希冲突时</strong>, 存储引擎必须遍历 冲突的哈希值 所对应的 <code>链表</code> 中所有的行指针, 逐行到表中进行比较, 直到找到所有符合条件的行;</p>
+</li>
+</ul>
+<h2 id="哈希冲突"><a href="#哈希冲突" class="headerlink" title="哈希冲突"></a>哈希冲突</h2><p>如果哈希冲突很多的话, 一些索引维护操作的代价也为很高, <strong>如果表中删除一行数据, 存储引擎需要遍历对应哈希值的链表中的每一行, 找到并删除对应行的指针, 冲突越多代价越大</strong>;</p>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -216,7 +246,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 哈希索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -226,7 +256,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 索引》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 哈希索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -236,7 +266,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《42. 索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《42. 哈希索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -376,7 +406,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 哈希索引》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -386,7 +416,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 索引》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&title=《42. 哈希索引》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -396,7 +426,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《42. 索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《42. 哈希索引》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
