@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题 演示 打开 客户端1 查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+-----------">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-07T06:26:16.000Z">
+<meta property="og:updated_time" content="2018-03-07T06:29:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. 幻读的延伸 - 快照读 (snapshot read) 与 当前读 (current read)">
 <meta name="twitter:description" content="前言RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题 演示 打开 客户端1 查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+-----------">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#演示"><span class="post-toc-number">2.</span> <span class="post-toc-text">演示</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题的出现"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题的出现</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">4.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#当前读-和-快照度"><span class="post-toc-number">5.</span> <span class="post-toc-text">当前读 和 快照度</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#演示"><span class="post-toc-number">2.</span> <span class="post-toc-text">演示</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题的出现"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题的出现</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">4.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#当前读-和-快照读"><span class="post-toc-number">5.</span> <span class="post-toc-text">当前读 和 快照读</span></a></li></ol>
         </nav>
     </aside>
     
@@ -214,7 +214,8 @@
 <li>也就是RR隔离级别, 在同一事务中多次读取的话, 只是对 <code>select</code> 克服了<code>幻读</code>; 但是对其他DML并没有做到(其他DML能察觉到数据被别的事务提交过了)!</li>
 <li>这就引出了新的两个概念</li>
 </ol>
-<h2 id="当前读-和-快照度"><a href="#当前读-和-快照度" class="headerlink" title="当前读 和 快照度"></a>当前读 和 快照度</h2><ol>
+<h2 id="当前读-和-快照读"><a href="#当前读-和-快照读" class="headerlink" title="当前读 和 快照读"></a>当前读 和 快照读</h2><p>通常在RC,RR隔离级别下, 不做特殊处理, 使用的<code>select</code>都是快照读, 其他dml就算是当前读; (MVCC写阻塞写)</p>
+<ol>
 <li><p>其实, MVCC并发控制中的读操作分为两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code>; <a href="https://www.cnblogs.com/cat-and-water/p/6427612.html" target="_blank" rel="external">参考</a></p>
 </li>
 <li><p>在RR级别下</p>
