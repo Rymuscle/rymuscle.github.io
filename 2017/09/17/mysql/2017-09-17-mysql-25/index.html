@@ -13,25 +13,25 @@
     
     
     
-    <title>01.安装 | Lant&#39;s Blog</title>
+    <title>6. READ COMMITTED | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Composer">
-    <meta name="description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
-<meta name="keywords" content="Composer">
+    <meta name="keywords" content="MySQL,事务">
+    <meta name="description" content="前言 READ COMMITTED 隔离级别可以解决高并发场景下, 事务 脏读 的问题; 也就是可以让事务只能读其他事务已完成(提交/回滚)的落地数据;  如果让你用 锁 来设计该隔离级别 ?假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 尚未落地的脏数据 呢?    当事务B在对数据做写操作的时候, 给数">
+<meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01.安装">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/index.html">
+<meta property="og:title" content="6. READ COMMITTED">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
+<meta property="og:description" content="前言 READ COMMITTED 隔离级别可以解决高并发场景下, 事务 脏读 的问题; 也就是可以让事务只能读其他事务已完成(提交/回滚)的落地数据;  如果让你用 锁 来设计该隔离级别 ?假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 尚未落地的脏数据 呢?    当事务B在对数据做写操作的时候, 给数">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-28T08:16:31.000Z">
+<meta property="og:updated_time" content="2018-03-07T04:16:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01.安装">
-<meta name="twitter:description" content="composer.phar文件下载先下载composer.phar文件, 3种方式:  curl -sS https://getcomposer.org/installer | php php -r &amp;quot;readfile(&amp;#39;https://getcomposer.org/installer&amp;#39;);&amp;quot; | php 手动下载Composer, 地址  Linux/Uni">
+<meta name="twitter:title" content="6. READ COMMITTED">
+<meta name="twitter:description" content="前言 READ COMMITTED 隔离级别可以解决高并发场景下, 事务 脏读 的问题; 也就是可以让事务只能读其他事务已完成(提交/回滚)的落地数据;  如果让你用 锁 来设计该隔离级别 ?假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 尚未落地的脏数据 呢?    当事务B在对数据做写操作的时候, 给数">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01.安装</div>
+        <div class="flex-col header-title ellipsis">6. READ COMMITTED</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">01.安装</h1>
+        <h1 class="title">6. READ COMMITTED</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-18T09:10:11.000Z" itemprop="datePublished" class="page-time">
-  2017-09-18
+                <time datetime="2017-09-17T06:50:52.000Z" itemprop="datePublished" class="page-time">
+  2017-09-17
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
             
         </h5>
@@ -159,20 +159,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#composer-phar文件下载"><span class="post-toc-number">1.</span> <span class="post-toc-text">composer.phar文件下载</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux-Unix-OS"><span class="post-toc-number">2.</span> <span class="post-toc-text">Linux/Unix/OS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#windows"><span class="post-toc-number">3.</span> <span class="post-toc-text">windows</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#composer自我更新-self-update"><span class="post-toc-number">4.</span> <span class="post-toc-text">composer自我更新 self-update</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方案"><span class="post-toc-number">2.</span> <span class="post-toc-text">方案</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-composer/2017-09-18-composer-01"
+<article id="post-mysql/2017-09-17-mysql-25"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01.安装</h1>
+        <h1 class="post-card-title">6. READ COMMITTED</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-18 17:10:11" datetime="2017-09-18T09:10:11.000Z"  itemprop="datePublished">2017-09-18</time>
+            <time class="post-time" title="2017-09-17 14:50:52" datetime="2017-09-17T06:50:52.000Z"  itemprop="datePublished">2017-09-17</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Composer/">Composer</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -180,53 +180,29 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="composer-phar文件下载"><a href="#composer-phar文件下载" class="headerlink" title="composer.phar文件下载"></a>composer.phar文件下载</h2><p>先下载composer.phar文件, 3种方式:</p>
-<ul>
-<li><code>curl -sS https://getcomposer.org/installer | php</code></li>
-<li><code>php -r &quot;readfile(&#39;https://getcomposer.org/installer&#39;);&quot; | php</code></li>
-<li>手动下载Composer, <a href="https://getcomposer.org/composer.phar" target="_blank" rel="external">地址</a></li>
-</ul>
-<h2 id="Linux-Unix-OS"><a href="#Linux-Unix-OS" class="headerlink" title="Linux/Unix/OS"></a>Linux/Unix/OS</h2><ol>
-<li><p>全局安装 : <code>mv composer.phar /usr/local/bin/composer</code></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p><code>READ COMMITTED</code> 隔离级别可以解决高并发场景下, 事务 <code>脏读</code> 的问题; 也就是可以让事务只能读其他事务已完成(<code>提交/回滚</code>)的落地数据;</p>
 </li>
-<li><p>局部安装 : <code>mv composer.phar /局部目录/composer</code></p>
+<li><p>如果让你用 <code>锁</code> 来设计该隔离级别 ?<br>假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 <code>尚未落地的脏数据</code> 呢?</p>
 </li>
 </ol>
-<h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><ol>
-<li><p>全局安装 : </p>
 <ul>
-<li><p>配置composer.phar文件路径(D:\WWW\composer)到环境变量中 ;</p>
-</li>
-<li><p>接下来需要在composer.phar同级目录下新建文件composer.bat :<br>  <code>echo @php &quot;%~dp0composer.phar&quot; %*&gt;composer.bat</code></p>
-</li>
-<li><p>这就安装好了</p>
-</li>
+<li>当事务B在对数据做写操作的时候, 给数据加上行级的<code>排他锁(X lock)</code>(读取的时候也别忘了加上<code>共享锁(S lock)</code>), <strong>注意两种锁都要使用</strong>;<br>  那事务A由于加不上<code>共享锁/排他锁</code>, 自然只能阻塞等事务A完成后才能读取/修改数据了</li>
+<li>这样做的话确实实现了效果, 也就避免了<code>脏读</code>, 事实上, 也解决可了 <code>不可重复读</code>(因为一旦加了共享锁, 其他事务也无法加排他锁进行修改), 但问题是这是一种<strong>很低效</strong>的传统思路, 因为对于大部分应用来说, 读操作是多于写操作的, 当写操作加锁时, 那么读操作全部被阻塞, 这样在大用户量高并发的情况下, 会直接降低数据库的读效率。</li>
+<li>所以, 为了提高并发性, MySQL是自然不会简单地使用传统思路(直接加锁)来解决的问题</li>
 </ul>
+<ol>
+<li><p>注意: 如果只是 <code>写操作加排他锁的话</code> 是无法避免<code>脏读</code>的;</p>
 </li>
-<li><p>局部安装 : </p>
-<ul>
-<li><p>直接把下载的composer.phar文件放到项目根目录下;</p>
-</li>
-<li><p>运行命令 : <code>php composer.phar install</code></p>
-</li>
-<li><p>然后就安装成功了(每个局部目录都需要这么安装, 比较麻烦)</p>
-</li>
-</ul>
+<li><p>事实上, MySQL是使用 <code>写操作加排他锁</code>(读操作不加锁), 结合<a href="/2017/09/17/mysql/2017-09-17-mysql-26/">MVCC 多版本并发控制</a> 来实现该隔离级别;</p>
 </li>
 </ol>
-<p>推荐全局安装即可.</p>
-<h2 id="composer自我更新-self-update"><a href="#composer自我更新-self-update" class="headerlink" title="composer自我更新 self-update"></a>composer自我更新 self-update</h2><ol>
-<li><p>将 Composer 自身升级到最新版本, 只需要运行 composer self-update 命令。它将替换你的 composer.phar 文件到最新版本。</p>
-</li>
-<li><p>如果你想要升级到一个特定的版本，可以  composer self-update 1.0.0-alpha7</p>
-</li>
-<li><p>自我更新还可以跟参数</p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>MySQL 在事务隔离级别<code>Read committed</code> 、<code>Repeatable Read</code>下，InnoDB 存储引擎采用 <code>非锁定 的 一致性读</code>－－即<strong>读取数据不用加锁</strong>，而是采用的是MVCC中<code>一致性非锁定读</code>模式; 从而做到: <strong>写不影响读，读不影响写，写只影响写, 只有写写会阻塞!!!</strong></p>
 <ul>
-<li><code>--rollback (-r)</code>: 回滚到你已经安装的最后一个版本。</li>
-<li><code>--clean-backups</code>: 在更新过程中删除旧的备份，这使得更新过后的当前版本是唯一可用的备份。</li>
+<li>读不影响写: 当事务A中正在执行读操作时，事务B的写操作不会因此去等待当前事务A上S锁的释放(因为事务A读取压根就没加锁)，而是直接可以对数据加X锁进行操作。   </li>
+<li>写不影响读: 当事务A中正在执行写操作时, 虽然对数据加了X锁, 但是事务B的读操作不会因此去等待当前事务行上X锁的释放，而是会去读取快照数据 (RC和RR因快照产生时机不同, 导致了隔离级别不一样, 读取的落地数据也不相同)。    </li>
 </ul>
-</li>
-</ol>
+<p>所以总结来看, <code>READ UNCOMMITTED</code> 和 <code>REPEATABLE READ</code> 这两个隔离级别都是使用 <code>写用排他锁 + 读用MVCC</code>, 区别可以参考 <a href="/2017/09/17/2017-09-17-mysql-26/">MVCC 多版本并发控制</a></p>
 
         </div>
 
@@ -253,7 +229,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
 
             
@@ -263,7 +239,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&title=《6. READ COMMITTED》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -273,22 +249,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&title=《6. READ COMMITTED》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《6. READ COMMITTED》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -311,17 +287,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/17/mysql/2017-09-17-mysql-27/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/17/mysql/2017-09-17-mysql-24/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">8. REPEATABLE READ 可重复读</h4>
+          <h4 class="title">5. READ UNCOMMITTED 未提交读</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/18/composer/2017-09-18-composer-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/17/mysql/2017-09-17-mysql-26/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. 设置中国全量镜像</h4>
+        <h4 class="title">7. MVCC 多版本并发控制</h4>
       </a>
     </div>
   
@@ -423,7 +399,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&title=《6. READ COMMITTED》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -433,22 +409,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&title=《01.安装》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&title=《6. READ COMMITTED》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《6. READ COMMITTED》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/18/composer/2017-09-18-composer-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-25/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -459,7 +435,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvUlEQVR42u3aUW5qMQwFQPa/6b7vpwI9x05QK02+EL0ETyolxs7jEY+vt+P7k/lnvz///VOvZj428PDw8C6EngT0Cpm/zheuWCw8PDy8a7w8xOQASJZvvxzvY8bDw8P7K7z8nTyxxsPDw/vrvCQtbp9sixF4eHh4v4GXFCOSBHoTbpKUX6y14OHh4XX9pii43/P6Sn8PDw8Pb91VzzfrfUD5bEW0eHh4eBd4eRB5+WBfpEjYRZx4eHh4R3mzn/ezQyJ/p/2ul3Pi4eHhXePlranZBdY2xCSG6Nvx8PDwLvDy5lO9KR+9IpAsQdHfw8PDw1vw9kXYWc+t3dyTRTx2bwsPDw8v5uUXm/ZtsHy2/DAo+nt4eHh4C96wPFoeIXnra7aUUfqOh4eHd4iXJLV52362fW9Kw/W5h4eHh7fmzcqmyZFQNKiC0kbblqu7dnh4eHgj3qzJNDsw2gXKSxVP5sTDw8O7wGsbS7NEfFa6nUX42HwYDw8PL+DtL11tGmn7awQ/pN14eHh4R3l5uny2mJvPOWvF/VelxsPDw/sIb79xbzb3WSnkyWs8PDy8C7x2tNNtWmuzEsljM/Dw8PAC3vuiarsd539tC7XJfwYPDw/vM7zZ1rxvmO1LEkUCjYeHh3eBN+ubJUWKzSWt5KAqUnM8PDy8o7z2ElWecM+S5v2cw3MPDw8Pr+TVjfky9PbaQVs+Lk48PDw8vEO82da8KbNuiiDFM3h4eHhHeV/laIsIbRssL/hGy42Hh4d3gbcvp24uE7RLcOBCKh4eHt4hXnIYzK4F5MdATno/25No8fDw8K7x8rT4azRmBdzZAVbcicDDw8P7OG+WlJ9Nzev+Hh4eHt7HeXlDa5Yu5xcRouMHDw8P7xpv1nzKn8kLFm1BJDoY8PDw8I7yZj/y29Jtu623sAP9PTw8PLyfef8AYhXFOlUlf2AAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACO0lEQVR42u3aO27DMBBFUe9/00qTIkBA+r4ZqiB5VRmxHPPIwGB+nw++nsH1993/949ej+4fvbvskiFDxraMZ3qNDjr/+tHR0+8i98uQIeMexuiIPICmQXYeOfnZZMiQIYMH3Pnf54xaoJchQ4aMWtAkaRwhyZAhQ0atiK0F0Fq6+WItLkOGjA0ZncLy7devzDdkyJCxFeMJrzSN4wlibZDw+ykZMmQczaiNMGspY5p6kuJZhgwZNzDSFYo0WeTpJv9eGTJk3Mwgh04DYiegBwscMmTIuIbBW/zpyJMPMhe0+2XIkHEcI03yakVmOiJNW28yZMi4h0FKSp4Irh1YorJWhgwZRzP4SLLWFCMpZppWfnkEMmTIOIhRW4PgixS8xdb6rAwZMi5g8OFip5GXkoIRhQwZMq5h8NUHXoLWGv18XUyGDBk3MGrNr3lRGqxzhY9yQYtNhgwZGzJqA8hOIsjXL+IFVhkyZBzKqA0XO4tiaVkbhGAZMmQczSAZF/936dS0dtA485UhQ8bmjFoR2xlkdh4WGmTKkCHjUEan4CQpJh9bFktcGTJkHM1Iu+t86EjCZWcR9stvIkOGjCMYT3h1Qi1/runCqwwZMs5mrC1WeSutk2IWxwMyZMjYnMGDbC3k8cKYB9y4FpchQ8YRjLQ0JekaL18X1OIyZMiQ0W7Z1+7haagMGTJk8FDbH17ye2TIkHEbgxexfP0rHTakjbxWu02GDBlbMXjpmIZIUoimSWFrqClDhoz9GD/weeAG5WP7igAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 

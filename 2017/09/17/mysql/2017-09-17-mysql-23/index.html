@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>4. 事务隔离级别(READ UNCOMMITTED) 与 锁 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL,事务">
+    <meta name="description" content="前言 之前几篇博文已经介绍了 Mysql事务, 高并发下事务将会面对的问题 及 解决方案;从之前的博文中可以了解到: MySQL在高并发场景下, 主要采用 事务隔离性中的4种隔离级别 及 MVCC机制 来解决事务可能会面临的一些问题;  接下来主要探讨一下, 在MySQL中, 事务的各隔离级别是如何实现的, 如何解决问题的, 隔离级别和锁之间是什么关系?   隔离级别 和 锁的关系 对于事务中各隔">
+<meta name="keywords" content="MySQL,事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4. 事务隔离级别(READ UNCOMMITTED) 与 锁">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 之前几篇博文已经介绍了 Mysql事务, 高并发下事务将会面对的问题 及 解决方案;从之前的博文中可以了解到: MySQL在高并发场景下, 主要采用 事务隔离性中的4种隔离级别 及 MVCC机制 来解决事务可能会面临的一些问题;  接下来主要探讨一下, 在MySQL中, 事务的各隔离级别是如何实现的, 如何解决问题的, 隔离级别和锁之间是什么关系?   隔离级别 和 锁的关系 对于事务中各隔">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-07T03:50:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="4. 事务隔离级别(READ UNCOMMITTED) 与 锁">
+<meta name="twitter:description" content="前言 之前几篇博文已经介绍了 Mysql事务, 高并发下事务将会面对的问题 及 解决方案;从之前的博文中可以了解到: MySQL在高并发场景下, 主要采用 事务隔离性中的4种隔离级别 及 MVCC机制 来解决事务可能会面临的一些问题;  接下来主要探讨一下, 在MySQL中, 事务的各隔离级别是如何实现的, 如何解决问题的, 隔离级别和锁之间是什么关系?   隔离级别 和 锁的关系 对于事务中各隔">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">4. 事务隔离级别(READ UNCOMMITTED) 与 锁</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">4. 事务隔离级别(READ UNCOMMITTED) 与 锁</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-17T06:20:52.000Z" itemprop="datePublished" class="page-time">
+  2017-09-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#隔离级别-和-锁的关系"><span class="post-toc-number">2.</span> <span class="post-toc-text">隔离级别 和 锁的关系</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ UNCOMMITTED 未提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-提交读"><span class="post-toc-number">4.</span> <span class="post-toc-text">READ UNCOMMITTED 提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-多版本并发控制"><span class="post-toc-number">5.</span> <span class="post-toc-text">MVCC 多版本并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">6.</span> <span class="post-toc-text">REPEATABLE READ 可重复读</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-09-17-mysql-23"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">4. 事务隔离级别(READ UNCOMMITTED) 与 锁</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-17 14:20:52" datetime="2017-09-17T06:20:52.000Z"  itemprop="datePublished">2017-09-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>之前几篇博文已经介绍了 <code>Mysql事务</code>, <code>高并发下事务将会面对的问题 及 解决方案</code>;<br>从之前的博文中可以了解到: MySQL在高并发场景下, 主要采用 <code>事务隔离性中的4种隔离级别</code> 及 <code>MVCC机制</code> 来解决事务可能会面临的一些问题;</p>
+</li>
+<li><p>接下来主要探讨一下, 在MySQL中, <code>事务的各隔离级别是如何实现的, 如何解决问题的</code>, <code>隔离级别和锁之间是什么关系</code>?</p>
+</li>
+</ol>
+<h2 id="隔离级别-和-锁的关系"><a href="#隔离级别-和-锁的关系" class="headerlink" title="隔离级别 和 锁的关系"></a>隔离级别 和 锁的关系</h2><ol>
+<li><p>对于事务中各隔离级别与锁的关系, 先看下一<a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">参考美团技术博客</a>中对事务隔离级别的介绍:</p>
+<blockquote>
+<p>在数据库操作中，为了有效保证并发读取数据的正确性，提出的事务隔离级别。我们的数据库锁，也是为了构建这些隔离级别存在的。</p>
+</blockquote>
+</li>
+<li><p>从上面的博文大概可以了解到: <strong>事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略</strong>。</p>
+</li>
+<li><p>接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的。</p>
+</li>
+</ol>
+<h2 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED 未提交读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-24/">READ UNCOMMITTED 未提交读</a></h2><h2 id="READ-UNCOMMITTED-提交读"><a href="#READ-UNCOMMITTED-提交读" class="headerlink" title="READ UNCOMMITTED 提交读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-25/">READ UNCOMMITTED 提交读</a></h2><h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-26/">MVCC 多版本并发控制</a></h2><h2 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ 可重复读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-27/">REPEATABLE READ 可重复读</a></h2><p>参考资料:<br>-《高性能MySQL》</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
+<li><a href="https://www.imooc.com/article/17291" target="_blank" rel="external">慕课mark_rock同学手记</a></li>
+<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&title=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&title=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/09/16/mysql/2017-09-16-mysql-22/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03. 幻读的延伸 - 快照读 (snapshot read) 与 当前读 (current read)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/17/mysql/2017-09-17-mysql-24/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">5. READ UNCOMMITTED 未提交读</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&title=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&title=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《4. 事务隔离级别(READ UNCOMMITTED) 与 锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3ay26DMBAF0P7/T1Opq0otyb0eqgpzvIoIBJ8sRvPwx0e8jq91diX/9vi2ft5/9u1lCwMD47aM4+V6vdHk/nbrZ8++oWJgYDyA8TrItiEyf30byk+vY2BgYJyExdfPJhvKgy8GBgZGG3DztK8tkjEwMDAmRey120qSxT+pxTEwMG7IuHZb137+w/kGBgbGTRjH0mrB7eCh3g8GBsbWjEnat7a5STL6ZocYGBibMpImWtuMWyt08/f+8gsYGBhbMyaF5Vorv236L843MDAwNmK0rflJ2G2PwBbJKwYGxtaMa5PCebmbXI/SRwwMjO0YbTKXH8Vo70nee/prGBgYD2CspYMtIw/udbKIgYGxKaMNlG3Jmg84R89iYGA8gNEmhZPEbm3Y+aY9h4GB8RhGcoQrAeSntpLRZhTiMTAwtmZMBgNt6TsZfLahGQMDYyfGWoE6KWLX2nbFsTAMDIztGJNCNClT2xRw0qTDwMDYm5Eni3lpmpeya2G3znwxMDBuzmhLyknjrG2uJSkmBgbG0xhthM7HCXm6maSDURGLgYGxEaMlzcvdvPRdG11gYGDsxDjKtVagtglf+xdgYGDszZg0yy5o1l90FAMDA+MJjLaMzMvatcbZ4hEQDAyMBzDmgS8BTKapb/4CDAwMjDzwLYXOtXIXAwMDIxlA5k+1IbsO0BgYGA9grDXr81CbNOzagQQGBsZzGGuDgck44d+QGBgY92N8Alhrk2ExwwweAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
