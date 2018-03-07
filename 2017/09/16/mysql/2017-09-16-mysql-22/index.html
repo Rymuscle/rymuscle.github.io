@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="RR+MVCC 虽然解决了幻读问题, 但严格来说, MVCC只是部分解决幻读问题, 接下来进行演示  打开客户端1查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+--------">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-06T14:48:47.000Z">
+<meta property="og:updated_time" content="2018-03-07T01:06:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. 幻读的延伸 - 快照读 (snapshot read) 与 当前读 (current read)">
 <meta name="twitter:description" content="RR+MVCC 虽然解决了幻读问题, 但严格来说, MVCC只是部分解决幻读问题, 接下来进行演示  打开客户端1查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+--------">
@@ -198,7 +198,10 @@
 </li>
 </ul>
 </li>
-<li><p>小结: 也就是RR的可重复读机制, 只是对select不可见, 但是对其他DML就可见了(能察觉到数据被别的事务提交过了)!</p>
+<li><p>小结: 也就是RR的可重复读机制:</p>
+<ul>
+<li>多次读取的话, 只是对select做到了可重复读; 但是对其他DML并没有做到(能察觉到数据被别的事务提交过了)!</li>
+</ul>
 </li>
 <li><p>其实, MVCC并发控制中的读操作分为两类: <code>快照读 (snapshot read)</code> 与 <code>当前读 (current read)</code></p>
 <ul>
