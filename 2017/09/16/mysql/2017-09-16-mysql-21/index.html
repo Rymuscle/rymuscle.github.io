@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-03-07T09:19:15.000Z">
+<meta property="og:updated_time" content="2018-03-08T10:54:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL高并发事务问题 及 解决方案">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
@@ -214,8 +214,8 @@
 </li>
 <li><p><strong>那么, 多次读取数据不一致, 有什么危害呢?</strong></p>
 <ul>
-<li>首先, 一个事务中为什么要多次读取同一数据, 什么场景下需要这么做? 实在没想出来</li>
-<li>其次, 即便是在一个事务中进行了多次读取, 并且在两次读取之间, 有其他事务对数据进行了修改并提交落地了, 那么读取不一致按理说是正常的呀, 有什么危害么, 也没想出来?</li>
+<li>首先, 一个事务中为什么要多次读取同一数据, 什么场景下需要这么做? <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">查询余额: 100</div><div class="line">给别人汇款: 20</div><div class="line">记录日志: ....</div><div class="line">展示余额(你可以直接计算然后返回80, 但如果你是查询的话, 就应该保证你查到的是80, 而不受其他事务干扰)</div></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
 <li><p><strong>解决方案</strong> : <code>RR+</code></p>
