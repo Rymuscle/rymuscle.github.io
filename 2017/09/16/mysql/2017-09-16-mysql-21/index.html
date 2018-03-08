@@ -32,7 +32,8 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/bukechongfudu.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:updated_time" content="2018-03-08T10:54:39.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
+<meta property="og:updated_time" content="2018-03-08T14:04:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL高并发事务问题 及 解决方案">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
@@ -164,7 +165,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高并发的事务问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">高并发的事务问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读-区分不可重复读取"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">幻读 (区分不可重复读取)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新丢失"><span class="post-toc-number">3.</span> <span class="post-toc-text">更新丢失</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高并发的事务问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">高并发的事务问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读-区分不可重复读取"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">幻读 (区分不可重复读取)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新丢失"><span class="post-toc-number">3.</span> <span class="post-toc-text">更新丢失</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">4.</span> <span class="post-toc-text">注意</span></a></li></ol>
         </nav>
     </aside>
     
@@ -248,13 +249,16 @@
 <ul>
 <li><p>下图可以看到, <strong>搞笑的是</strong>: 也正是因为RR隔离级别所保证的<code>可重复读</code>, 给此类问题的出现提供了基础条件;<br><img src="/img/mysql/transaction/diushigengxin_02.png" width="608" height="246"></p>
 </li>
-<li><p>这种丢失更新, 无法依靠前三种隔离级别来解决, 只能用最高隔离级别 <code>Serializable</code> 或者手动使用 <code>乐观锁</code>(在修改时, where判断数据是否为你读取时的数据; 或者提供数据版本字段来控制), <code>悲观锁</code> 来解决。<br>当然, 更新操作不是在所有情况下都会导致丢失更新问题, 如果你更改的最终结果是确定值的(比如直接更新某个数据为100), 而不是类似递减或者递增, 那是不会造成丢失更新问题的!!</p>
+<li><p>这种丢失更新, 无法依靠前三种隔离级别来解决, 只能手动使用 <code>乐观锁</code>(在修改时, where判断数据是否为你读取时的数据; 或者提供数据版本字段来控制), <code>悲观锁</code> 来解决。    </p>
 </li>
 </ul>
 </li>
-<li><p>最高隔离级别<code>Serializable</code>在实际应用场景中并不被采用, 对于手动使用<code>乐观锁</code>, <code>悲观锁</code>的方案, 将会在以后关于锁的文章中一并给出!</p>
-</li>
 </ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p><strong>注意: 最高隔离级别<code>Serializable</code>在实际应用场景中并不被采用 (并且, 它也无法解决更新丢失的问题)</strong></p>
+<ul>
+<li>因为虽然serialize将事务串行化了, 但是它貌似只能保证将 <code>事务最终的提交/回滚操作</code> 串行化了, 事务A,B,C假设并行到来, 这个隔离级别可能在他们同时进行提交时, 对这个提交操作进行串行化, 但是问题是, 事务中的一个个具体的操作没有被串行化;<br><img src="/img/mysql/transaction/serialize.png" width="500/"></li>
+<li>可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></li>
+</ul>
 <p>参考资料:</p>
 <ul>
 <li><a href="http://mysql.taobao.org/monthly/2017/06/07/" target="_blank" rel="external">淘宝数据库内核6月报</a></li>

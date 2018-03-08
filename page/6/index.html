@@ -201,53 +201,6 @@ Redis的主从复制架构中, 一类是主数据库(master),  一类是从数�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-Redis/2017-06-18-redis-15"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-15 22:37:42" datetime="2017-06-15T14:37:42.000Z"  itemprop="datePublished">2017-06-15</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/15/Redis/2017-06-18-redis-15/">15. redis集群</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        
-    
-
-        <a href="/2017/06/15/Redis/2017-06-18-redis-15/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-Redis/2017-06-15-redis-11"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -308,6 +261,110 @@ RDB 默认是开启的, 关闭方式有:
         </li>
     
         <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-12-redis-08"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-11 21:14:46" datetime="2017-06-11T13:14:46.000Z"  itemprop="datePublished">2017-06-11</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-12-redis-08/">07. redis原子锁</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Redis事务与单线程
+因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;
+
+但是对于事务, 因为它最终提交(exec)才会算做被执行, 所以假设有多个客户端A发起事务(其中要修改数据A)
+在客户端的事务没有最终exec之前, 客户端B是可以直接操作数据A的, 因为串行化只是串行化 执行 这个动作, 它把整个事务当成了一个比较慢的命令, 既然你...
+    
+
+        <a href="/2017/06/11/Redis/2017-06-12-redis-08/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-11-redis-07"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-11 21:14:46" datetime="2017-06-11T13:14:46.000Z"  itemprop="datePublished">2017-06-11</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-07/">07. redis事务与WATCH乐观锁</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Redis事务与单线程
+因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;
+
+和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题; 
+
+mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案
+而redis的事务也是通过与WATCH(乐观锁)的结合才得...
+    
+
+        <a href="/2017/06/11/Redis/2017-06-11-redis-07/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-Redis/2017-06-11-redis-06"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -353,54 +410,6 @@ redis事务的ACID特性在redis中, 事务具有 原子...
     
 
         <a href="/2017/06/11/Redis/2017-06-11-redis-06/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-Redis/2017-06-11-redis-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-11 14:03:17" datetime="2017-06-11T06:03:17.000Z"  itemprop="datePublished">2017-06-11</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-05/">05. redis乐观锁WATCH</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        WATCH介绍## 
-
-    
-
-        <a href="/2017/06/11/Redis/2017-06-11-redis-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
