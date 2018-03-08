@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,索引,高性能索引策略">
-    <meta name="description" content="只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需要亲">
+    <meta name="description" content="简介 只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需">
 <meta name="keywords" content="MySQL,索引,高性能索引策略">
 <meta property="og:type" content="article">
 <meta property="og:title" content="47. 使用索引扫描来做排序">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/25/mysql/2017-09-25-mysql-47/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需要亲">
+<meta property="og:description" content="简介 只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-08T02:30:08.000Z">
+<meta property="og:updated_time" content="2018-03-08T05:38:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="47. 使用索引扫描来做排序">
-<meta name="twitter:description" content="只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需要亲">
+<meta name="twitter:description" content="简介 只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;  如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;  ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -156,6 +156,13 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#当查询同时有-ORDER-BY-和-LIMIT-子句的时候"><span class="post-toc-number">2.</span> <span class="post-toc-text">当查询同时有 ORDER BY 和 LIMIT 子句的时候</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-mysql/2017-09-25-mysql-47"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -173,7 +180,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <ol>
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
 <li><p>只有<strong>当索引的列顺序 和 ORDER BY 子句的顺序完全一致</strong>, 并且<strong>所有列的排序方向都一样时(要么都是正序, 要么都是倒序)</strong>, MySQL才能够使用索引来对结果做排序;</p>
 </li>
 <li><p>如果查询需要关联多张表, 则只有当 <strong>ORDER BY 子句引用的字段全部为第一个表时</strong>, 才能使用索引做排序;</p>
@@ -182,11 +189,19 @@
 </li>
 <li><p>有一种情况下, ORDER BY 子句可以不用满足最左前缀的要求, 那就是前导列为常量的时候;<br> 比如一张表的索引是 <code>key(a,b,c)</code> , 而 查询语句是 <code>... where a=100 order by b,c</code>, 即使 order by 不满足最左前缀的要求, 也可以<strong>使用索引做排序</strong>;</p>
 </li>
-<li><p>P177列出了很多不可以使用索引做排序的查询;</p>
-</li>
-<li><p>当查询同时有 ORDER BY 和 LIMIT 子句的时候</p>
+<li><p>P177 列出了很多不可以使用索引做排序的查询;</p>
 </li>
 </ol>
+<h2 id="当查询同时有-ORDER-BY-和-LIMIT-子句的时候"><a href="#当查询同时有-ORDER-BY-和-LIMIT-子句的时候" class="headerlink" title="当查询同时有 ORDER BY 和 LIMIT 子句的时候"></a>当查询同时有 ORDER BY 和 LIMIT 子句的时候</h2><ol>
+<li><p>像<code>select &lt;col...&gt; from profiles where sex=&#39;m&#39; order by rating limit 10;</code>这种查询语句, 同时使用了<code>order by</code>和<code>limit</code>, 如果没有索引就会很慢;<br> 即使有索引, 如果用户界面有翻页, 翻页比较靠后时, 也会非常慢, 因为随着偏移量的增加, MySQL需要花费大量的时间来扫描需要丢弃的数据;</p>
+</li>
+<li><p>但是sex的选择性又很低, 如何优化呢?</p>
+</li>
+</ol>
+<ul>
+<li>对于选择性非常低的列, 如果要做排序的话, 可以增加一些特殊的索引来做排序, 例如, 可以创建 (sex, rating)索引</li>
+<li>然后采用 <code>延迟关联</code> , 通过覆盖索引先查询返回需要的主键, 在根据这些主键关联原表获得需要的行;<br><code>select &lt;col...&gt; from profiles INNER JOIN (select &lt;primart key&gt; from profiles where x.sex=&#39;m&#39; order by rating limit 100000, 10) as x using(primary key)</code></li>
+</ul>
 
         </div>
 

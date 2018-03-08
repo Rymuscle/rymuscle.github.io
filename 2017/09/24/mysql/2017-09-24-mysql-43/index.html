@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_xuanzexing_03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_xuanzexing_04.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index_xuanzexing_05.png">
-<meta property="og:updated_time" content="2018-03-07T12:23:01.000Z">
+<meta property="og:updated_time" content="2018-03-08T05:22:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="43. 高性能索引策略 - 独立的列, 前缀索引">
 <meta name="twitter:description" content="前言前面已经对常见的索引类型及其对应的优缺点有了一定的了解, 接下来要考虑的就是如何 高效正确地选择并使用索引 独立的列独立的列是指: 在查询条件中, 索引列 不能是表达式的一部分, 也不能是函数的参数; (如: select actor_id from actor where actor_id+1=5; 就无法使用索引, 应该始终将索引列单独放在比较符号的一侧, select actor_id">
@@ -219,10 +219,12 @@
 <li>有无法使用前缀索引做覆盖扫描</li>
 </ul>
 </li>
-</ol>
-<ol>
 <li>创建前缀索引: <code>alter table city add key(city(7))</code>, 表示以 city 字段的前7个字符 来创建索引;</li>
 </ol>
+<p>参考p189:</p>
+<ul>
+<li>根据传统经验, 不应该在选择性低的裂伤创建索引, 但是如果很过查询都用到该列, 比如一个表中的 <code>gender</code> 列, 考虑到使用的频率, 还是建议在创建不同组合的索引时, 将 (sex) 作为前缀!</li>
+</ul>
 
         </div>
 
