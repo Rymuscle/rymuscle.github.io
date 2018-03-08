@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Redis的两种持久化模式介绍 RDB(Redis DB)简介 RDB持久化功能可以将redis服务器包含的所有数据库数据以二进制文件(.rdb文件)的形式保存到硬盘;  RDB 默认是开启的, 关闭方式有:  注释掉配置文件中save策略行;  在所有save策略下添加save &amp;quot;&amp;quot;;   创建RDB文件, 常见的三种方式  给redis服务器发送SAVE命令; 给redis">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-08T07:50:14.000Z">
+<meta property="og:updated_time" content="2018-03-08T09:48:55.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="11. 了解redis持久化">
 <meta name="twitter:description" content="Redis的两种持久化模式介绍 RDB(Redis DB)简介 RDB持久化功能可以将redis服务器包含的所有数据库数据以二进制文件(.rdb文件)的形式保存到硬盘;  RDB 默认是开启的, 关闭方式有:  注释掉配置文件中save策略行;  在所有save策略下添加save &amp;quot;&amp;quot;;   创建RDB文件, 常见的三种方式  给redis服务器发送SAVE命令; 给redis">
@@ -202,13 +202,12 @@
 </li>
 </ol>
 <h3 id="三种方式的区别"><a href="#三种方式的区别" class="headerlink" title="三种方式的区别"></a>三种方式的区别</h3><ol>
-<li>通过使用客户端向redis服务器发送<code>SAVE</code>命令, 可以命令服务器去创建一个新的RDB文件;<ul>
+<li><p>通过使用客户端向redis服务器发送<code>SAVE</code>命令, 可以命令服务器去创建一个新的RDB文件;</p>
+<ul>
 <li><strong>注意:</strong> 在redis服务器执行SAVE命令的过程中(也即创建RDB文件的过程中), redis服务器将被阻塞, 服务器端无法再去处理客户端发送的命令请求, 只有在SAVE命令执行完毕之后(也即RDB文件创建完毕之后), 服务器才会重新开始处理客户端发送的命令请求;</li>
 <li><strong>注意:</strong> 如果rdb文件已经存在, 服务器会自动使用新的rdb文件去代替旧的rdb文件;<br>所以: 之前的rdb文件你可以用定时脚本定时地拷走, 可以防止外一执行了<code>flush db</code>并且服务器进行了<code>save</code>, 此时旧的rdb会被新的rdb文件覆盖掉, 那就完蛋了!!!  </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>通过使用客户端向redis服务器发送<code>BGSAVE</code>命令,也可以命令服务器去创建一个新的RDB文件;</p>
 <ul>
 <li><p><strong>注意:</strong> BGSAVE命令不会造成服务器阻塞, 也就是说redis服务器在执行BGSAVE命令的过程中, redis服务器仍然可以正常的处理其他客户端发送的命令请求;<br>BGSAVE命令不会造成服务器阻塞的原因在于:</p>
@@ -229,9 +228,9 @@
 </li>
 </ol>
 <h3 id="RDB持久化问题"><a href="#RDB持久化问题" class="headerlink" title="RDB持久化问题"></a>RDB持久化问题</h3><ol>
-<li><p>redis关机持久化: 当你正常关闭redis的时候, redis服务器不会参考配置中的save策略; 而是会直接先调用save命令, 将redis所有数据持久化到磁盘之后才会真正进行退出;</p>
+<li><p><strong>redis关机持久化</strong>: 当你正常关闭redis的时候, redis服务器不会参考配置中的save策略; 而是会直接先调用save命令, 将redis所有数据持久化到磁盘之后才会真正进行退出;</p>
 </li>
-<li><p>redis - crash不持久化问题: 而当redis服务器意外断电宕机的时候, 你会发现从上一次快照之后的数据将全部丢失;</p>
+<li><p><strong>redis - crash不持久化问题</strong>: 而当redis服务器意外断电宕机的时候, 你会发现从上一次快照之后的数据将全部丢失;</p>
 </li>
 </ol>
 <h3 id="rdb持久化的优点"><a href="#rdb持久化的优点" class="headerlink" title="rdb持久化的优点"></a>rdb持久化的优点</h3><ol>
