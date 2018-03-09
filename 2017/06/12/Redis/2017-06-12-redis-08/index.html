@@ -13,28 +13,25 @@
     
     
     
-    <title>07. redis事务与WATCH乐观锁 | Lant&#39;s Blog</title>
+    <title>08. redis原子锁 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Redis">
-    <meta name="description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
+    <meta name="description" content="##">
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="07. redis事务与WATCH乐观锁">
-<meta property="og:url" content="http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/index.html">
+<meta property="og:title" content="08. redis原子锁">
+<meta property="og:url" content="http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
+<meta property="og:description" content="##">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/redis/transaction_10.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/redis/watch_01.png">
-<meta property="og:updated_time" content="2018-03-08T14:37:55.000Z">
+<meta property="og:updated_time" content="2018-03-09T00:50:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="07. redis事务与WATCH乐观锁">
-<meta name="twitter:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/redis/transaction_10.png">
+<meta name="twitter:title" content="08. redis原子锁">
+<meta name="twitter:description" content="##">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -115,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">07. redis事务与WATCH乐观锁</div>
+        <div class="flex-col header-title ellipsis">08. redis原子锁</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -137,11 +134,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">07. redis事务与WATCH乐观锁</h1>
+        <h1 class="title">08. redis原子锁</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-06-11T13:14:46.000Z" itemprop="datePublished" class="page-time">
-  2017-06-11
+                <time datetime="2017-06-12T08:35:08.000Z" itemprop="datePublished" class="page-time">
+  2017-06-12
 </time>
 
 
@@ -159,20 +156,13 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis事务与单线程"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis事务与单线程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis事务与WATCH"><span class="post-toc-number">2.</span> <span class="post-toc-text">Redis事务与WATCH</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#WATCH介绍"><span class="post-toc-number">3.</span> <span class="post-toc-text">WATCH介绍</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-Redis/2017-06-11-redis-07"
+<article id="post-Redis/2017-06-12-redis-08"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">07. redis事务与WATCH乐观锁</h1>
+        <h1 class="post-card-title">08. redis原子锁</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-06-11 21:14:46" datetime="2017-06-11T13:14:46.000Z"  itemprop="datePublished">2017-06-11</time>
+            <time class="post-time" title="2017-06-12 16:35:08" datetime="2017-06-12T08:35:08.000Z"  itemprop="datePublished">2017-06-12</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
@@ -183,34 +173,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Redis事务与单线程"><a href="#Redis事务与单线程" class="headerlink" title="Redis事务与单线程"></a>Redis事务与单线程</h2><ol>
-<li><p>因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;</p>
-</li>
-<li><p>和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 <code>更新丢失</code> 问题; </p>
-<ul>
-<li>mysql是使用乐观锁, 悲观锁来解决的 参考<a href="/2017/09/16/mysql/2017-09-16-mysql-21/">MySQL高并发事务问题 及 解决方案</a></li>
-<li>而redis的事务也是通过与<code>WATCH</code>(<code>乐观锁</code>)的结合才得以解决这个问题</li>
-</ul>
-</li>
-</ol>
-<h2 id="Redis事务与WATCH"><a href="#Redis事务与WATCH" class="headerlink" title="Redis事务与WATCH"></a>Redis事务与WATCH</h2><ol>
-<li><p>演示Redis事务在客户端高并发时出现的 <code>丢失更新</code> 问题<br> <img src="/img/redis/transaction_10.png" width="400"></p>
-</li>
-<li><p>redis 为了解决高并发事务时这种 <code>丢失更新</code> 的问题, 提供了 <code>WATCH</code></p>
-</li>
-</ol>
-<h2 id="WATCH介绍"><a href="#WATCH介绍" class="headerlink" title="WATCH介绍"></a>WATCH介绍</h2><ol>
-<li><p>redis 并没有实现典型的加锁功能(比如MySQL中, 在访问以写入为目的数据时 <code>SELECT FOR UPDATE</code>), 因为加这种<code>悲观锁</code>可能会造成长时间的等待;</p>
-</li>
-<li><p>所以redis为了尽可能地减少客户端的等待时间, 采用了<code>WATCH监控</code>机制, 如果某个客户端A在事务开始之前 WATCH 了一个key, 那么其实就相当于对该key加了<code>乐观锁</code></p>
-<ul>
-<li>事务中正常执行你要执行的操作 (乐观地认为不会有其他客户端抢在你前面去改动那个key)</li>
-<li>直到当客户端A真正exec的时候, 才会验证客户端A之前WATCH(监控)的key是否被变动过, 如果变动过, 则客户端A可以进行重试;</li>
-</ul>
-</li>
-<li><p>测试:<br> <img src="/img/redis/watch_01.png" width="200"></p>
-</li>
-</ol>
+            <p>## </p>
 
         </div>
 
@@ -247,7 +210,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&title=《07. redis事务与WATCH乐观锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&title=《08. redis原子锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -257,22 +220,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&title=《07. redis事务与WATCH乐观锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&title=《08. redis原子锁》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. redis事务与WATCH乐观锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. redis原子锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -295,17 +258,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/06/11/Redis/2017-06-11-redis-06/" id="post-prev" class="post-nav-link">
+        <a href="/2017/06/11/Redis/2017-06-11-redis-07/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">06. redis 事务</h4>
+          <h4 class="title">07. redis事务与WATCH乐观锁</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/06/12/Redis/2017-06-12-redis-08/" id="post-next" class="post-nav-link">
+      <a href="/2017/06/15/Redis/2017-06-15-redis-11/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">08. redis原子锁</h4>
+        <h4 class="title">11. 了解redis持久化</h4>
       </a>
     </div>
   
@@ -407,7 +370,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&title=《07. redis事务与WATCH乐观锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&title=《08. redis原子锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -417,22 +380,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&title=《07. redis事务与WATCH乐观锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&title=《08. redis原子锁》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. redis事务与WATCH乐观锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. redis原子锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/12/Redis/2017-06-12-redis-08/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -443,7 +406,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACN0lEQVR42u3ay67CMAxF0f7/T/dKjC5CbfdxwqPO7ggBoV4dGDvOtuFrf1z/X7++c/79o7Wv779+Ou2SIUPGbRn76XUeKF/LQz9ae0GVIUPGAgySZHmK5LfnyfoiZhkyZMjA6ZWXj2nylSFDhow04fKOkjO+8L8hQ4aMWzHGG9E0LL52ci8uQ4aMGzJqg4HPvH77fEOGDBk/z9hLF9ksS9emDfPTb8qQIaM147xESxtUMowcKUYvIpQhQ0ZTxvlm1jmPF3Z8yyxtU5/+N2TIkLEMoxbcrG+muXT7ZHAyZMj4EqNWCJLSjYc4MpaQIUPGygyyLP0OD3RkC0+GDBm9GenRB3779J30vjJkyFiBwcMi22SkfU2TLEr3MmTIaMoYaSDTEPlIMr6jDBkyFmCkxynS5Jsy0pZYhgwZvRm8mZw8bSgNGKYdEZMhQ8YNGSMHINJjr+nr4JHJkCGjKYM3omnxR8q4dIvtMH4ZMmQsw6ilQlJc8hKQtLuoF5chQ0YjBq+sZqXItHnmxy9kyJCxDoMnUJ6I+XiAP9Ch5yFDhoxGjDSl1krDtPVFgwEZMmS0Y6Sh1FrTCRMMvkqGDBmNGHt4vXuEkBaRMmTIWIExsinGU2dxMDne1sqQIaMRo5Zka4+AN6h8Y06GDBnrMNLEN55wJ3fhMmTIkMETHwaQ9MpHBTJkyJAxvik2crwVJWgZMmQswKht1pNbpr9f3BeUIUNGa0ZtMMAfDX9wfI4xbYQpQ4aMX2f8ASXI5PM5LWOiAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNklEQVR42u3a0WrDMAwF0P7/T2ewp0EbcyUndLGPn0YbbJ8UNEvy6xWP43ecfXL8GWffnj35/vn7t5cNDAyMxzKO4RhvZbyt3taTtT5QMTAwNmCMg+z4mXzhMbi6LgYGBkYz8AWHxeRch4GBgTEfcPNt5c9/4f8GBgbGoxhJEpsXwu5IgC/LxTEwMB7ImN/WfX/f2N/AwMB4CONojavKbb1mwIfZMDAwlmbMHPvGC89stJcGY2BgrM3Iy/S9AlleMqumqYXfBwMD4+GMZiG+1UKoBtBmfwMDA2MhRvWaxbUls2q6ezonBgbG0oyZrSRT9zaaHBlPy20YGBiLMnpFtOq1iZkUtxCCMTAwFmXMNCzzLVaLa8laGBgYOzCSQJm0J6uHwiTUFl4KBgbGBozeREkYnXkR+avBwMDYh5Fc4Src12htrtl4wMDA2ICRF+jzwNrrMPZ2goGBsQ+j2lDMk97qPHko/1Buw8DAWJSRx66ZW1jJETBZPcrFMTAwFmJUj4lXJa7VyxZ5ao2BgbEqo5p2RsX6YqZZXbH5PjAwMJZgzFzPminP5anvKQYDA2NpRl7qyq9W9BLX3pULDAyMtRlHcfQS0WrboFp0w8DAWJsxUxTLk89mYzKeGQMDYwdGHgTztDa/ijFfmMPAwNiHcVXgywPuLVk4BgYGRvGkOQYk4bWQTmNgYGAMD2ozB8F8fgwMDIxesT4/xuXzN+uCGBgYSzN6jYGckSPzo+dlLUwMDIz/zvgBmBsD8bjPjD8AAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

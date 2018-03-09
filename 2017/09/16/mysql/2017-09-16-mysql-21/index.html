@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
-<meta property="og:updated_time" content="2018-03-08T14:04:14.000Z">
+<meta property="og:updated_time" content="2018-03-09T00:47:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL高并发事务问题 及 解决方案">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
@@ -256,7 +256,8 @@
 </ol>
 <h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p><strong>注意: 最高隔离级别<code>Serializable</code>在实际应用场景中并不被采用 (并且, 它也无法解决更新丢失的问题)</strong></p>
 <ul>
-<li>因为虽然serialize将事务串行化了, 但是它貌似只能保证将 <code>事务最终的提交/回滚操作</code> 串行化了, 事务A,B,C假设并行到来, 这个隔离级别可能在他们同时进行提交时, 对这个提交操作进行串行化, 但是问题是, 事务中的一个个具体的操作没有被串行化;<br><img src="/img/mysql/transaction/serialize.png" width="500/"></li>
+<li>因为虽然serialize将事务串行化了, 但对于事务, 只要开启事务的条件都满足, 事务A,B,C假设并行到来, 他们都会顺利依次开启事务(只不过以前是并行开启));<br>  但是开启之后, 虽然读写都会互相阻塞(经过测试), 但是这只是代表事务之间需要等待, 但最终都会执行, 所以还会造成<strong>超卖</strong>!;</li>
+<li>所以还是会出现 <code>更新丢失</code> 的高并发事务问题:<br><img src="/img/mysql/transaction/serialize.png" width="500/"></li>
 <li>可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></li>
 </ul>
 <p>参考资料:</p>
