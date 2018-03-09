@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="前言 一个URL常常需要代表若干不同的资源: 例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。  HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，单一的U">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300)">
+<meta property="og:url" content="http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 一个URL常常需要代表若干不同的资源: 例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。  HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，单一的U">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/内容协商.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cache-beiyong-error.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/vary-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/vary-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/zhuanma-01.png">
+<meta property="og:updated_time" content="2018-02-06T14:30:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300)">
+<meta name="twitter:description" content="前言 一个URL常常需要代表若干不同的资源: 例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。  HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，单一的U">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/内容协商.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">&lt;HTTP权威指南&gt;学习--第17章 内容协商与转码 (300)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-06T10:50:27.000Z" itemprop="datePublished" class="page-time">
+  2017-12-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内容协商技术"><span class="post-toc-number">2.</span> <span class="post-toc-text">内容协商技术</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端驱动-300"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">客户端驱动 (300)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务器驱动"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">服务器驱动</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端内容协商首部集"><span class="post-toc-number">2.2.1.</span> <span class="post-toc-text">客户端内容协商首部集</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#内容协商首部中的质量值"><span class="post-toc-number">2.2.2.</span> <span class="post-toc-text">内容协商首部中的质量值</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#客户端其它请求首部集"><span class="post-toc-number">2.2.3.</span> <span class="post-toc-text">客户端其它请求首部集</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#透明协商-vary首部"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">透明协商(vary首部)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Vary首部"><span class="post-toc-number">2.3.1.</span> <span class="post-toc-text">Vary首部</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#转码"><span class="post-toc-number">4.</span> <span class="post-toc-text">转码</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#格式转换"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">格式转换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#信息综合"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">信息综合</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#内容注入"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">内容注入</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转码与静态预生成的对比"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">转码与静态预生成的对比</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">5.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2016-12-06-HTTP-06-内容协商与转码 "
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title"><HTTP权威指南>学习--第17章 内容协商与转码 (300)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-06 18:50:27" datetime="2017-12-06T10:50:27.000Z"  itemprop="datePublished">2017-12-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p><strong>一个URL常常需要代表若干不同的资源</strong>: 例如那种需要以多种语言提供其内容的网站站点。<br> 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息;<br> 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。</p>
+</li>
+<li><p>HTTP提供了 <code>内容协商</code> 方法，允许客户端和服务器作这样的决定。<br> 通过这些方法，单一的URL就可以代表不同的资源(比如，同一个网站页面的法语版和英语版)，这些不同的版本称为<code>变体</code>。</p>
+</li>
+<li><p>除了根据 <code>内容协商</code> 来决定URL代表的是那种版本的资源。另外, 对于有些特定的URL来说, 服务器还可以根据一些<strong>其他原则</strong>来决定发送什么内容给客户端最合适。在有些场合下, 服务器甚至可以自动生成定制的页面。比如，服务器可以为手持设备把HTML页面转换成WML页面，这类动态内容变换被称为<strong>转码</strong>。这些变换动作是HTTP客户端和服务器之间进行内容协商的结果。</p>
+</li>
+</ol>
+<h2 id="内容协商技术"><a href="#内容协商技术" class="headerlink" title="内容协商技术"></a>内容协商技术</h2><ol>
+<li><p>共有3种不同的方法可以决定服务器上哪个页面最适合客户端: <code>让客户端来选择</code>, <code>服务器自动判定</code>, 或 <code>让中间代理来选</code>。这3种技术分别称为<code>客户端驱动的协商</code>、<code>服务器驱动的协商</code> 以及 <code>透明协商</code></p>
+</li>
+<li><p>内容协商技术摘要如下:<br><img src="/img/http/内容协商.png" width="600"></p>
+</li>
+</ol>
+<h3 id="客户端驱动-300"><a href="#客户端驱动-300" class="headerlink" title="客户端驱动 (300)"></a>客户端驱动 (300)</h3><p>1.对于服务器来说，收到客户端请求时只是发回响应，在其中列出可用的页面，让客户端决定要看哪个，这是最容易的事情。</p>
+<ul>
+<li>很显然，这是服务器最容易实现的方式，而且客户端很可能选择到最佳的版本(只要列表中有让客户端选择的足够信息)。</li>
+<li>不利之处是<strong>每个页面都需要两次请求</strong>: <strong>第一次获取列表</strong>，<strong>第二次获取选择的副本</strong>。<br>这种技术速度很慢且过程枯燥乏味，让用户厌烦。</li>
+</ul>
+<p>2.从实现原理上来说，服务器实际上有两种方法为客户端提供选项:</p>
+<ul>
+<li>一是发送回一个HTML文档，里面有到该页面的各种版本的链接和每个版本的描述信息;</li>
+<li>另一种方法是发送回HTTP/1.1响应时，使用 <code>300 Multiple Choices</code> 响应代码。客户端浏览器收到这种响应时，在前一种情况下(发回html文档的情况)，会显示一个带有链接的页面; 在后一种情况下，可能会弹出对话窗口，让用户做选择。不管怎么样，决定是由客户端的浏览器用户作出的</li>
+</ul>
+<p>3.除了增加时延并且对每个页面都要进行繁琐的多次请求之外, 这种方法<strong>还有一个缺点</strong>: 它需要多个URL, 公共页面要一个, 其他每种特殊页面也都要一个。</p>
+<h3 id="服务器驱动"><a href="#服务器驱动" class="headerlink" title="服务器驱动"></a>服务器驱动</h3><p>1.之前已经知道了客户端驱动的协商存在的若干缺点。大部分缺点都涉及客户端和服务器之间通信量的增长, 这些通信量用来决定什么页面才是对请求的最佳响应。</p>
+<p>2.而减少额外通信量的一种方法是<strong>让服务器来决定发送哪个页面回去</strong>，但为了做到这一点，<strong>客户端必须发送有关客户偏好的足够信息</strong>，以便服务器能够作出准确的决策。服务器通过 <code>客户端请求的首部集</code> 来获得这方面的信息(客户偏好)!! 有以下两种机制可供HTTP服务器评估发送什么响应给客户端比较合适：</p>
+<ul>
+<li>检査 客户端请求中的<code>内容协商首部集</code>: 服务器察看客户端发送的 <code>Accept内容协商首部集</code>, 设法用相应的响应首部与之匹配;</li>
+<li>根据其他(非内容协商)首部进行变通, 例如，服务器可以根据客户端发送的 <code>User-Agent</code> 首部来发送响应</li>
+</ul>
+<h4 id="客户端内容协商首部集"><a href="#客户端内容协商首部集" class="headerlink" title="客户端内容协商首部集"></a>客户端内容协商首部集</h4><p>1.客户端可以用下面列出的HTTP首部集发送用户的偏好信息</p>
+<blockquote>
+<p>Accept : 告知服务器发送何种媒体类型<br>Accept-Language : 告知服务器发送何种语言<br>Accept-Charset : 告知服务器发送何种字符集<br>Accept-Encoding : 告知服务器采用何种编码</p>
+</blockquote>
+<p>2.<strong>实体首部集</strong> 和 <strong>内容协商首部集</strong></p>
+<ul>
+<li><strong>注意</strong>: 内容协商首部集与实体首部非常类似(比如 <code>Accept-Encoding</code> 和 <code>Content-Encoding</code>)。不过, 这两种首部的用途截然不同:</li>
+<li><p><code>实体首部集</code>,像运输标签,它们描述了把报文从服务器传输给客户端的过程中必须的各种报文主体属性; 如下列出的实体首部集来匹配客户端的<code>Accept内容协商首部集</code></p>
+  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Accet首部            实体首部</div><div class="line">Accept    　　　　　　Content-Type</div><div class="line">Accept-Language     Content-Language</div><div class="line">Accept-Charset      Content-Type</div><div class="line">Accept-Encoding     Content-Encoding</div></pre></td></tr></table></figure>
+<p>  （由于HTTP是无状态的协议，表示服务器不会在不同的请求之间追踪客户端的偏好，所以客户端必须在每个请求中都发送其偏好信息）</p>
+</li>
+<li><p>而<code>内容协商首部集</code>是由客户端发送给服务器用来告知其偏好信息的, 以便服务器可以从文档的不同版本中选择出最符合客户端偏好的那个来提供服务;</p>
+</li>
+</ul>
+<p>3.如果两个客户端都发送了 <code>Accept-Language</code> 首部来描述它们感兴趣的语言信息, 服务器就能够决定发送www.joes-hardware.com的何种版本给哪个客户端了。<strong>让服务器选择发送回去的文档</strong>，减少了往返通信的时延，这种时延是<code>客户端驱动模型中</code>无法避免的。</p>
+<p>4.然而, 假设某个客户端偏好西班牙文，那服务器应当回送哪个版本的页面呢？英语还是法语？<br>服务器只有两种选择：猜测 或 回退到客户端驱动模型,问客户端选择哪个。假如这个西班牙人碰巧懂一点英语，他可能会选择英文页面，这不是最理想的，但它能解决问题。<br>在这种情况下，这个西班牙人需要有办法传达更多与其偏好有关的信息，也就是他的确对英语略知一二，在没有西班牙语的时候，英语也行。</p>
+<p>5.幸运的是，HTTP提供了一种机制，可以让与这个西班牙人情况类似的客户端更详细地描述其偏好。这种机制就是<strong>质量值(简称q值)</strong></p>
+<h4 id="内容协商首部中的质量值"><a href="#内容协商首部中的质量值" class="headerlink" title="内容协商首部中的质量值"></a>内容协商首部中的质量值</h4><p>1.HTTP协议中定义了质量值，允许客户端为每种偏好类别列出多种选项，并为每种偏好选项关联一个优先次序。</p>
+<ul>
+<li>例如，客户端可以发送下列形式的<code>Accept-Language</code>首部：<code>Accept-Language: en; q=0.5, fr; q=0.0 , nl; q=1.0, tr; q=0.0</code><br>  其中q值的范围从0.0-1.0(0.0是优先级最低的，而1.0是优先级最高的)。<br>  上面列出的那个首部，说明该客户端最愿意接收荷兰语(缩写为nl)文档，但英语(缩写为en)文档也行; 无论如何，这个客户端都不愿意收到法语(缩写为fr)或土耳 其语(缩写为tr)的版本;</li>
+</ul>
+<p>2.<strong>注意</strong>: 偏好的排列顺序并不重要，只有与偏好相关的<code>q值</code>才是重要的;</p>
+<h4 id="客户端其它请求首部集"><a href="#客户端其它请求首部集" class="headerlink" title="客户端其它请求首部集"></a>客户端其它请求首部集</h4><p>1.服务器也可以根据客户端其他请求首部集来匹配响应, 比如 <code>User-Agent</code> 首部。例如, 服务器知道老版本的浏览器不支持JavaScript语言，这样就可以向其发送不含有JavaScript的页面版本。</p>
+<p>2.在这种情况下，没有q值机制可供査找”最近似”的匹配。服务器或者去找完全匹配，或者简单地有什么就给什么，这取决于服务器的实现。</p>
+<p>3.由于缓存需要尽力提供所缓存文档中正确的”最佳”版本，HTTP协议定义了服务器在响应中发送的 <code>Vary</code> 首部。这个首部告知<strong>缓存</strong>,<strong>客户端</strong>,和<strong>所有下游的代理</strong>, 服务器根据哪些首部来决定发送响应的最佳版本。</p>
+<h3 id="透明协商-vary首部"><a href="#透明协商-vary首部" class="headerlink" title="透明协商(vary首部)"></a>透明协商(vary首部)</h3><p>1.了支持<strong>透明内容协商</strong>，服务器必须有能力告知代理，服务器需要检査哪些请求首部，以便对客户端的请求进行最佳匹配。但是HTTP/1.1规范中没有定义任何透明协商机制, 不过却定义了 <code>Vary</code> 首部。服务器在响应中发送了Vary首部，以告知中间节点需要使用哪些请求首部进行内容协商<br>2.代理缓存可以为通过单个URL访问的文档保存不同的副本, <strong>如果服务器把它们的决策过程传给代理,这些代理就能代表服务器与客户端进行协商</strong>。<br>（缓存同时也是进行内容转码的好地方，因为部署在缓存里的通用转码器能对任意服务器，而不仅仅是一台服务器传来的内容进行转码）</p>
+<p>3.对内容进行缓存的时候是假设内容以后还可以重用。然而，为了确保对客户端请求回送的是正确的已缓存响应, 缓存必须应用服务器在回送响应时所用到的大部分决策逻辑;</p>
+<p>4.之前我们已经了解了客户端发送的<code>Accept内容协商首部集</code>; 也了解到, 为了给每条请求选择最佳的响应, 服务器使用了哪些与这些首部集匹配的相应<code>实体首部集</code>。其实, 代理缓存也必须使用相同的首部集来决定回送哪个已缓存的响应。</p>
+<p>5.<strong>下图展示了涉及缓存的正确及错误的操作序列</strong>。</p>
+<ul>
+<li>缓存把第一个请求转发给服务器，并存储其响应。</li>
+<li>对于第二个请求，缓存根据URL査找到了匹配的文档。但是，这份文档是法语版的，而请求者想要的是西班牙语版的。如果缓存只是把文档的法语版本发给请求者的话，它就犯了错误;</li>
+<li>像上面2中提到的, 代理缓存也必须要根据客户端发送来的<code>内容协商首部</code>来给客户端返回正确的响应<br>  <img src="/img/http/cache-beiyong-error.png" width="550"></li>
+</ul>
+<h4 id="Vary首部"><a href="#Vary首部" class="headerlink" title="Vary首部"></a>Vary首部</h4><p>1.下面是浏览器和服务器发送的一些典型的请求及响应首部:<br>    <img src="/img/http/vary-01.png" width="490"></p>
+<p>2.然而, 如果服务器的决策不是依据<code>Accept</code>首部集，而是比如<code>User-Agent</code>首部的话，情况会如何？<br>例如, 服务器可能知道老版本的浏览器不支持JavaScript语言, 因此可能会回送不包含JavaScript的页面版本。<br>如果服务器是根据其他首部来决定发送哪个页面的话, <strong>和Accept首部集一样, 缓存也必须知道这些首部是什么, 这样才能在选择回送的页面时做出同样的逻辑判断</strong>。</p>
+<p>3.HTTP的 <code>Vary</code> 响应首部中列出了所有客户端请求首部, 服务器可用这些首部来选择文档或产生定制的内容(在常规的内容协商首部集之外的内容)。例如, 若所提供的文档取决于<code>User-Agent</code>首部, <code>Vary首部</code>就必须包含<code>User-Agent</code>;</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>当新的请求到达时, 代理缓存会根据<code>内容协商首部集</code>来寻找最佳匹配。但在把文档提供给客户端之前, <strong>它还必须检査服务器有没有在已缓存响应中发送Vary首部</strong>。</li>
+<li>如果有Vary首部, 那么新请求中那些首部的值必须与旧的已缓存的响应的请求首部相同。(也就是说,代理缓存也会保存旧的请求的请求首部和响应首部, 下面一句话更加肯定这一点)</li>
+<li>因为服务器可能会根据客户端请求的首部来改变响应, 为了实现透明协商, 代理缓存就必须为每个已缓存变体保存<strong>客户端请求首部</strong>和<strong>相应的服务器响应首部</strong>)<br> <img src="/img/http/vary-02.png" width="650"></li>
+<li>如果某服务器的Vary首部看起来像 <code>Vary: User-Agent, Cookie</code> 这样，大量不同的User-Agent和Cookie值将会产生非常多的变体, 而代理缓存必须为每个变体保存其相应的文档版本。当缓存执行査找时，首先会对内容协商首部集进行内容匹配，然后比较请求的变体与缓存的变体。如果无法匹配，缓存就从原始服务器获取文档</li>
+</ol>
+<h2 id="转码"><a href="#转码" class="headerlink" title="转码"></a>转码</h2><ol>
+<li><p>我们已经讨论了一个机制, 该机制可以让客户端和服务器从某个URL的一系列文档中挑选出最适合客户端的文档。但是, 实现这些机制的前提是，存在一些满足客户端需求的文档—不管是完全满足还是在一定程度上满足;</p>
+</li>
+<li><p>然而, 如果服务器没有能满足客户端需求的文档会怎么样呢？服务器可以给出一个错误响应。但理论上，服务器可以把现存的文档转换成某种客户端可用的文档, 这种选项称为<strong>转码</strong>;</p>
+</li>
+<li><p>下面列出了一些假设的转码</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">转换之前 　　　　　　　　　　　　转换之后</div><div class="line">HTML文档    　　　　　　　　　　WML文档</div><div class="line">高分辨率图像    　　　　　　　　低分辨率图像</div><div class="line">彩色图像    　　　　　　　　　　黑白图像</div><div class="line">有多个框架的复杂页面    　　　　没有很多框架或图像的简单文本页面</div><div class="line">有Java小应用程序的HTML页面    没有Java小应用程序的HTML页面</div><div class="line">有广告的页面    　　　　　　　　去除广告的页面</div></pre></td></tr></table></figure>
+</li>
+<li><p>有3种类别的转码: <strong>格式转换</strong>、<strong>信息综合</strong>以及<strong>内容注入</strong></p>
+</li>
+</ol>
+<h3 id="格式转换"><a href="#格式转换" class="headerlink" title="格式转换"></a>格式转换</h3><ol>
+<li><p>格式转换是指将数据从一种格式转换成另一种格式, 使之可以被客户端査看。通过HTML到WML的转换, 无线设备就可以访问通常供桌面客户端査看的文档了。通过慢速连接访问Web页面的客户端并不需要接收高分辨率图像, 如果通过格式转换降低图像分辨率和颜色来减小图像文件大小的话, 这类客户端就能更容易地査看图像比较丰富的页面了。</p>
+</li>
+<li><p>格式转换可以由如下<code>内容协商首部集</code>来驱动, 但也能由 <code>User-Agent</code> 首部来驱动。注意: <code>内容转换或转码</code> 与 <code>内容编码</code> 或 <code>传输编码</code> 是不同的, 后两者一般用于更高效或安全地传输内容, 而前两者则可使访问设备能够査看内容;</p>
+<pre><code class="php">Accet首部            实体首部
+Accept    　　　　　　Content-Type
+Accept-Language     Content-Language
+Accept-Charset      Content-Type
+Accept-Encoding     Content-Encoding
+</code></pre>
+</li>
+</ol>
+<h3 id="信息综合"><a href="#信息综合" class="headerlink" title="信息综合"></a>信息综合</h3><ol>
+<li><p>从文档中提取关键的信息片段称为信息综合(information synthesis), 这是一种有用的转码操作。这种操作的例子包括根据小节标题生成文档的大纲，或者从页面中删除广告和商标</p>
+</li>
+<li><p>根据内容中的关键字对页面分类是更精细的技术, 有助于总结文档的精髓。这种技术常用于Web页面分类系统中，比如门户网站的Web页面目录</p>
+</li>
+</ol>
+<h3 id="内容注入"><a href="#内容注入" class="headerlink" title="内容注入"></a>内容注入</h3><p>参见P423</p>
+<h3 id="转码与静态预生成的对比"><a href="#转码与静态预生成的对比" class="headerlink" title="转码与静态预生成的对比"></a>转码与静态预生成的对比</h3><ol>
+<li><p>转码的替代做法是在Web服务器上建立Web页面的不同副本, 例如一个是HTML, 一个是WML, 一个图像分辨率高，一个图像分辨率低；一个有多媒体内容，一个没有。</p>
+</li>
+<li><p>但是，这种方法不是很切合实际，原因很多：</p>
+<ul>
+<li>某个页面中的任何小改动都会牵扯很多页面，需要很多空间来存储各页面的不同版本，而且使页面编目和Web服务器编程(以提供正确的版本)变得更加困难。</li>
+<li>有些转码操作，比如广告插入(尤其是定向广告插入)，就不能静态实现, 因为插入什么广告和请求页面的用户有关</li>
+</ul>
+</li>
+<li><p>对单一的根页面进行即时转换，是比静态的预生成更容易的解决方案。<br> 但这样会在提供内容时增加时延。不过有时候其中一些计算可以由第三方进行，这样就减少了Web服务器上的计算负荷——比如可以由代理或缓存中的外部Agent完成转换</p>
+</li>
+<li><p>下图显示了在代理缓存中进行的转码<br> <img src="/img/http/zhuanma-01.png" width="430"></p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><http权威指南></http权威指南>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&title=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&title=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/21/docker/2017-10-21-15-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">15.实战compose编排集成环境</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&title=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&title=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《<HTTP权威指南>学习--第17章 内容协商与转码 (300)》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-06-内容协商与转码 /" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACt0lEQVR42u3a0W7jMAwEwP7/T+eAPh1wtbMrSm4OGD0ZbmppHEBiSH59xeP1Pa7uvP4a+V//HVfz3n9mw8DDw8NbWvr9lFe8q4mTJ9y/rPtZkjXj4eHhneYlU07uTA6G++s3Fjw8PLxf5SWLnsS6eViPh4eH97/w7u+0S2mpeHh4eJ/GS5IRaxO3Kdr8enOuBQ8PDy/mtQWwT7g+WN/Dw8PDG1TV2zC3LY/lbQqLq8XDw8M7wNsbBLetBnk7wtqMeHh4eCd4k60/39Z3tVvlh8HluYeHh4d3mDdP4yap1V1p3B+ehoeHh/cIr01J5C8lYeSBOB4eHt5n8lrG2mHQHhtFoI+Hh4d3gNdOn9yZMObNDYvfKh4eHl7My6tkay0Fu9IcbSL4h5AaDw8PbytvUp5PUq4nAuXoRePh4eE9yMuTEXmjVXLwtEfRm6fh4eHhHeBNchhtq9ZauWutyWBDigYPDw8v4OUphvnWn4fpeTsCHh4e3vO8+eY7Sbm2gDZpgoeHh7eLtyvxmm/N7Sx5qveydQAPDw9vK2+SdMiLZ2tLbAtyb74qPDw8vK28/EEtvmUXbQHBLHh4eHinefk0k8A32dAnmDe/G/Dw8PAO8PJkQR5qr5XQ8k6H6LcCHh4e3ibeKx51IFumJNrPRK8DDw8P7xgvD2fzrX/eJjUpuV22DuDh4eGNee2G3iYR8m6vll0H1nh4eHibeGvJ2QSZv4i1lG6UnsDDw8N7kDcJf/MWhCIsPp1rwcPDw5tWlKIiUxso5wHxWhIkKeDh4eHh7eJN2qrWWgHaJq3RwYCHh4d3jDc/DPIkxaSZoG4Fw8PDw/tV3gSTB+vtjG+OFjw8PLwP4+UheJ7sSJ5QlM3w8PDwjvGS5SYBcfK/9/cnqWE8PDy8Z3jzAljy6LY1oQ3NRwMPDw8vHX8AZwIr8CVTewoAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

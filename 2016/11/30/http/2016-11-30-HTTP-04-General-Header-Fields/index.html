@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP - General Header Fields | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="通用首部字段 general-header Cache-Control Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令  缓存响应指令    更多参考HTTP - 缓存  immutable属于缓存控制的一个扩展属性, http://www">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP - General Header Fields">
+<meta property="og:url" content="http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="通用首部字段 general-header Cache-Control Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令  缓存响应指令    更多参考HTTP - 缓存  immutable属于缓存控制的一个扩展属性, http://www">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-request.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-response.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/via-01.png">
+<meta property="og:updated_time" content="2018-03-09T10:08:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP - General Header Fields">
+<meta name="twitter:description" content="通用首部字段 general-header Cache-Control Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令  缓存响应指令    更多参考HTTP - 缓存  immutable属于缓存控制的一个扩展属性, http://www">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/cache-control-request.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP - General Header Fields</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">HTTP - General Header Fields</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-11-30T03:50:02.000Z" itemprop="datePublished" class="page-time">
+  2016-11-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Cache-Control"><span class="post-toc-number">1.</span> <span class="post-toc-text">Cache-Control</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Date"><span class="post-toc-number">2.</span> <span class="post-toc-text">Date</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Pragma"><span class="post-toc-number">3.</span> <span class="post-toc-text">Pragma</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">4.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Via"><span class="post-toc-number">5.</span> <span class="post-toc-text">Via</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Transfer-Encoding"><span class="post-toc-number">6.</span> <span class="post-toc-text">Transfer-Encoding</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-encoding"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">对比 请求首部字段Accept-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-实体首部字段Content-encoding"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">对比 实体首部字段Content-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-charset"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">对比 请求首部字段Accept-charset</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Trailer"><span class="post-toc-number">7.</span> <span class="post-toc-text">Trailer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Upgrade"><span class="post-toc-number">8.</span> <span class="post-toc-text">Upgrade</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Warning"><span class="post-toc-number">9.</span> <span class="post-toc-text">Warning</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">10.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2016-11-30-HTTP-04-General-Header-Fields"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP - General Header Fields</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-11-30 11:50:02" datetime="2016-11-30T03:50:02.000Z"  itemprop="datePublished">2016-11-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>通用首部字段 general-header</p>
+<h2 id="Cache-Control"><a href="#Cache-Control" class="headerlink" title="Cache-Control"></a>Cache-Control</h2><ol>
+<li><p><code>Cache-Control</code> 的指令是可选的,可以有多个, 多个指令之间通过 <code>,</code> 分隔;</p>
+</li>
+<li><p>缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;</p>
+</li>
+<li><p>可以按请求和响应分为:</p>
+<ul>
+<li><p>缓存请求指令<br><img src="/img/http/cache-control-request.png" width="600/"></p>
+</li>
+<li><p>缓存响应指令<br><img src="/img/http/cache-control-response.png" width="600/"></p>
+</li>
+</ul>
+</li>
+<li><p>更多参考<a href="/2017/11/30/2017-11-30-HTTP-05-cache/">HTTP - 缓存</a></p>
+</li>
+<li><p><code>immutable</code><br>属于缓存控制的一个扩展属性, <a href="http://www.jdon.com/performance/cache-control-immutable.html" target="_blank" rel="external">http://www.jdon.com/performance/cache-control-immutable.html</a></p>
+<blockquote>
+<p>当一个支持immutable的客户端浏览器看到这个属性时, 它应该知道, 如果没有超过过期时间，那么服务器端该页面内容将不会改变, 这样浏览器就不应该再发送有条件的重新验证请求(比如通过If-None-Match 或 If-Modified-Since等条件再向服务器端发出更新检查);<br>也就是说, 通常过去我们使用304回复客户端该页面内容没有变化，但是如果用户按浏览器的刷新或F5键，浏览器会再次向服务器端发出该页面内容请求，服务器端如果确认该页面没有变化，那么发回304给客户端，不再发送该页面的实体内容，虽然这样节省了来回流量，但是如果大型网站的很多用户为了得到及时信息，经常会刷新浏览器，这就造成了大量刷新请求，向服务器端求证该页面是否改变，这会影响网站的带宽，也增加服务器端验证压力。<br><strong>而新的选项immutable可以杜绝这种现象</strong>。<br>immutable可以节省HTTP请求,缩短请求时间,这是因为服务器不必再处理304响应了。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h2><ol>
+<li>简单来说就是HTTP报文的创建日期, 它会参与到缓存控制的 过期时间运算中;</li>
+<li>公式: <code>expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</code></li>
+<li>而响应首部字段中额 <code>Age</code> 头字段, 是告诉客户端, 源服务器在多久之前创建了响应, 字段的单位为秒;<br> 如果创建该响应的服务器是缓存服务器, Age值是指缓存后的响应再次发起认证到认证完成的时间值, 代理创建响应时必须加上首部字段Age。</li>
+</ol>
+<h2 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h2><ol>
+<li>Pragma是HTTP1.1之前版本的历史遗留字段, 仅作为与HTTP1.0做向后兼容;</li>
+<li>也属于和缓存相关的通用首部字段, 但只用在客户端发送的请求当中, 客户端会要求所有的中间服务器不返回缓存的资源(参考Cache-Control:no-cache), 但是并不专用于缓存, 最常用的是<code>Pragma:no-cache</code>;</li>
+</ol>
+<h2 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h2><ol>
+<li>该首部字段具备两个作用: <code>控制不再转发给代理的首部字段</code> 和 <code>管理持久连接</code>;</li>
+<li>更多参考<a href="/2017-04-21-HTTP-Connection-Keep-Alive/">HTTP - 并行连接, 持久连接</a></li>
+<li>未完待续…</li>
+</ol>
+<h2 id="Via"><a href="#Via" class="headerlink" title="Via"></a>Via</h2><ol>
+<li><p>使用首部字段Via, 是为了追踪客户端与服务器之间的请求和响应报文的传输路径;<br>报文在经过代理或者网关时, 会先在首部字段Via中附加该服务器的信息, 然后再进行转发。</p>
+<blockquote>
+<p>Via首部是为了追踪传输路径, 所以也经常会和TRACE方法一起使用, 比如代理服务器受到由TRACE方法发送过来的请求(其中Max-Forward:0)时, 代理服务器就不能再转发该请求了,<br>这种情况下, 代理服务器会将自身的信息附加到Via首部后, 返回该请求的响应。</p>
+</blockquote>
+</li>
+<li><p>Via通用首部字段不仅用于报文的转发, 还可避免请求回环的发生, 所以必须在经过代理时附加该首部字段;<br> <img src="/img/http/via-01.png" width="300"></p>
+</li>
+<li><p>未完待续…</p>
+</li>
+</ol>
+<h2 id="Transfer-Encoding"><a href="#Transfer-Encoding" class="headerlink" title="Transfer-Encoding"></a>Transfer-Encoding</h2><p><strong>传输编码</strong></p>
+<ol>
+<li>该通用首部字段规定了传输报文主体时采用的编码方式;</li>
+<li>HTTP/1.1的传输编码方式仅对分块传输编码有效, 即只能设置为 <code>Transfer-Encoding:chunked</code>;</li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="external">MDN参考</a>;</li>
+<li><code>Content-Encoding</code> 和 <code>Transfer-Encoding</code> 二者经常会结合来用, 其实就是针对 Transfer-Encoding 的分块再进行 Content-Encoding压缩;</li>
+</ol>
+<h3 id="对比-请求首部字段Accept-encoding"><a href="#对比-请求首部字段Accept-encoding" class="headerlink" title="对比 请求首部字段Accept-encoding"></a>对比 <strong>请求首部字段Accept-encoding</strong></h3><p><strong>期望内容编码</strong></p>
+<ol>
+<li><p>请求首部字段Accept-encoding是将客户端用户代理(浏览器)所<strong>支持的内容编码方式</strong>(通常是某种压缩算法) 及 <strong>内容编码方式的优先级顺序</strong>, 通知给服务器;</p>
+<ul>
+<li>通过内容协商, 服务端会选择一个客户端支持的方式, 使用并在 响应报文的实体首部字段 <code>Content-Encoding</code> 中通知客户端服务器选择了哪种内容编码方式;</li>
+<li>另外, 可以一次性指定多种内容编码! </li>
+<li>也可以使用权重q值来表示相对优先级;</li>
+</ul>
+</li>
+<li><p>正常情况下, 主要采用以下4种编码方式:</p>
+<ul>
+<li>gzip</li>
+<li>compress</li>
+<li>deflate</li>
+<li>identity: 不执行压缩或不会变化的默认编码格式;</li>
+</ul>
+</li>
+<li><p>即使客户端和服务器都支持某些相同的压缩算法，但如果<code>Accept-encoding:identity</code>, 表示客户端告诉服务器对响应主体不要进行压缩。导致这种情况出现的两种常见的情形是：</p>
+<ul>
+<li>要发送的数据已经经过压缩, 再次进行压缩不会导致被传输的数据量更小, 一些图像格式的文件会存在这种情况;</li>
+<li>服务器超载, 无法承受压缩需求导致的计算开销, 通常, 如果服务器使用超过80%的计算能力, 微软建议不要压缩;</li>
+</ul>
+</li>
+<li><p>只要 identity(表示不需要进行任何编码)没有被明确禁止使用, 即, 没有通过 <code>identity;q=0</code>或是<code>*;q=0</code>指令明确设置 identity 的权重值，<strong>则服务器禁止返回表示客户端错误的 <code>406 Not Acceptable</code> 响应</strong>。</p>
+<ul>
+<li>也就是只有你通过设置identity的权重为0, 服务器才可以返回表示客户端错误的<code>406 Not Acceptable</code></li>
+</ul>
+</li>
+<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding" target="_blank" rel="external">MDN参考</a></p>
+</li>
+</ol>
+<h3 id="对比-实体首部字段Content-encoding"><a href="#对比-实体首部字段Content-encoding" class="headerlink" title="对比 实体首部字段Content-encoding"></a>对比 <strong>实体首部字段<code>Content-encoding</code></strong></h3><p><strong>内容编码</strong></p>
+<ol>
+<li>实体首部字段’Content-encoding’会告诉客户端, 服务器对实体的主体部分选用的内容编码方式, </li>
+<li>内容编码方式是指在不丢失实体信息的前提下所进行的压缩, 参考 <code>请求首部字段Accept-encoding</code> 所建议给服务器的编码方式:<ul>
+<li>gzip</li>
+<li>compress</li>
+<li>deflate</li>
+<li>identity</li>
+</ul>
+</li>
+</ol>
+<h3 id="对比-请求首部字段Accept-charset"><a href="#对比-请求首部字段Accept-charset" class="headerlink" title="对比 请求首部字段Accept-charset"></a>对比 <strong>请求首部字段<code>Accept-charset</code></strong></h3><ol>
+<li>请求首部字段’Accept-charset’会告诉服务器, 用户代理(浏览器)所支持的<code>字符集</code>和<code>字符集的相对优先顺序</code>。<ul>
+<li>可以一次性指定多种字符集;</li>
+<li>也可以使用权重q值来表示相对优先级;</li>
+</ul>
+</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ol>
+<li>请求首部字段<code>Accept-encoding</code> 和 实体首部字段<code>Content-encoding</code>来决定压缩方式;</li>
+<li>通用首部字段<code>Transfer-Encoding</code>用来决定响应实体是否分块;</li>
+<li>请求首部字段<code>Accept-charset</code>是客户端高速服务端自己能支持的编码方式;</li>
+</ol>
+<h2 id="Trailer"><a href="#Trailer" class="headerlink" title="Trailer"></a>Trailer</h2><h2 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h2><h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《HTTP权威指南》<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">https://tools.ietf.org/html/rfc2616</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&title=《HTTP - General Header Fields》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&title=《HTTP - General Header Fields》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - General Header Fields》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/11/30/http/2016-11-30-HTTP-03-Method/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTP - Request Method</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/11/30/http/2016-11-30-HTTP-05-cache/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTP -- 缓存 (200, 304)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&title=《HTTP - General Header Fields》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&title=《HTTP - General Header Fields》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP - General Header Fields》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3awW7DIBAE0P7/T6dSr62dGRaSVHo+RYmL/TgAnd2vr/h6/Fz3n69+Tb75PcL9X22+8PDw8JZe/erKX+t+UtbuTN7n6h48PDy807xkM2jvXJuC/CnRNOHh4eG9lZdsEsnyvTZ9eHh4eP+XVz9gU16Ch4eH92m8fBG/f938mzzwfVHWgoeHhxfzdhXAXvn5DfU9PDw8vGB5zUOEpGTVxrjzCw8PD+8ELynP56tuG0a0cUa+C4xeFA8PDy/mzU+keUCQt3blm83lxOHh4eFt5bXNAfcRbfLrZAtpY188PDy8E7y1aGCtLWByT8vAw8PDO8fLF/p8C2mDhnzRr6cMDw8P7wAvWXbzdqvJMTofuT7c4+Hh4W3ltY9fCyDa4la+eTwZAQ8PD+8Yb9IKkBTM1uKGthT3x/h4eHh4h3l5SLFrk8ibqNamCQ8PD+80L48k7jePeVTRxh/FkRoPDw/vAG8euc7xbb9D/R8DHh4e3pjXtplOjrx53NBuKlFKjYeHhzfmJYfpdtuYt20lcXBeKsPDw8Pby2th80aBSWNBPfV4eHh4B3hJYT5fvouAtWzDai88PDy8c7y15qo8tG2X9WS0ZDrw8PDwzvHWYtkWkx+m2xiiwOPh4eFt5bWRQVKUyqdp0r4QPRcPDw9vK+8RXHlDQFvoyo/pSSByWQDDw8PDO8Zrhxg9uAx227B49Fp4eHh4gwJSftTeu2GsldaKchoeHh7egPcor0lgMS9u1ePg4eHhvW6caD/Z1XS1VjabTDceHh7enJdsBmubxN4mg8WjNh4eHt4xXhsftMHrWgEsv//SgoeHh/dW3uSbdvvJp/XJRODh4eF9AK993eT43jYN5BOEh4eHd47XLtlrRam1qVw7lOPh4eGd480LYG3DVjJyHm3UGDw8PLx13jfAVhbb8Na/YQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
