@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言 之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。  之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题, 这">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-10T12:05:56.000Z">
+<meta property="og:updated_time" content="2018-03-10T12:12:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="31. Lua脚本">
 <meta name="twitter:description" content="前言 之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。  之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题, 这">
@@ -263,7 +263,10 @@
 </li>
 <li><p>laravel中实现如下</p>
 <ul>
-<li><p>定义脚本</p>
+<li><p>出现超卖的代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 使用redis模拟并发超卖</div><div class="line"> * 由于check和set是分两步执行的</div><div class="line"> */</div><div class="line">public function redisOversell()</div><div class="line">&#123;</div><div class="line">    $good = Redis::get(&apos;num&apos;);</div><div class="line">    if ($good &gt; 0) &#123;</div><div class="line">        Redis::multi();</div><div class="line">        usleep(500000);</div><div class="line">        //预先已经设置好库存为10个了</div><div class="line">        Redis::decr(&apos;num&apos;);</div><div class="line">        Redis::exec();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>定义脚本: 将check 和 set放到一个脚本里(但这个脚本由于没有设置sleep, 所以只能得出理论上是没有问题的)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">protected $lua = &quot;</div><div class="line">    local good = redis.call(&apos;get&apos;, &apos;num&apos;);&quot; .</div><div class="line">        &quot; if tonumber(good) &gt; 0 then&quot; .</div><div class="line">            &quot; redis.call(&apos;decr&apos;, &apos;num&apos;)&quot; .</div><div class="line">        &quot; end&quot; .</div><div class="line">    &quot; return &apos;ok&apos;&quot;;</div></pre></td></tr></table></figure>
 </li>
 <li><p>执行</p>
