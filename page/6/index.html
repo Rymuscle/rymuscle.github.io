@@ -147,6 +147,54 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-12-redis-08"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-12 16:35:08" datetime="2017-06-12T08:35:08.000Z"  itemprop="datePublished">2017-06-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/12/Redis/2017-06-12-redis-08/">08. redis锁 -- 不太安全?</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言一般来说, 在对数据进行”加锁”时, 程序首先需要获取锁来得到对数据进行排他性访问的能力, 然后才能对数据执行一系列操作, 最后还要将锁释放给其他程序;之前已经了解过, Redis使用WATCH命令来代替对数据进行加锁, 因为WATCH只会在数据被其他客户端抢先修改了的情况下通知执行了这个命令的客户端, 所以这个命令被称为乐观锁;
+SETEX 实现锁介绍为了对数据进行排他性访问, 程序首...
+    
+
+        <a href="/2017/06/12/Redis/2017-06-12-redis-08/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-Redis/2017-06-11-redis-07"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -218,7 +266,7 @@ mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-06/">06. redis 事务</a>
+      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-06/">06. Redis 事务</a>
     </h3>
   
 
@@ -245,6 +293,58 @@ redis事务的ACID特性在redis中, 事务具有 原子...
     
 
         <a href="/2017/06/11/Redis/2017-06-11-redis-06/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-07-redis-03"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-07 21:31:47" datetime="2017-06-07T13:31:47.000Z"  itemprop="datePublished">2017-06-07</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/07/Redis/2017-06-07-redis-03/">03. 一些规范点</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+将格式约定: 表名:字符串1:字符串2:·····
+
+不要使用keys正则匹配操作, 包括但不限于各种形式的模糊匹配操作 因为Redis是单线程处理, 在线上KEY数量较多时, 操作效率极低(时间复杂度为O(N)), 该命令一旦执行会严重阻塞线上其它命令的正常请求, 而且在高QPS情况下会直接造成Redis服务崩溃
+
+可靠的消息队列服务Redis List经常被用于消息队列服务;假设消费者...
+    
+
+        <a href="/2017/06/07/Redis/2017-06-07-redis-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -434,7 +534,7 @@ HTTP最初是一个 匿名, 无状态 的请求/响应协议; 服务器处理来
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">HTTP -- 缓存 (200, 304)</a>
+      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">05. 缓存 (200, 304)</a>
     </h3>
   
 
@@ -487,7 +587,7 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/">HTTP - General Header Fields</a>
+      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/">04. General-Header-Fields(通用首部字段)</a>
     </h3>
   
 
@@ -497,23 +597,20 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        通用首部字段 general-header
-Cache-Control
-Cache-Control 的指令是可选的,可以有多个, 多个指令之间通过 , 分隔;
+        Cache-Control 缓存指令
+Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;
 
 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
 
 可以按请求和响应分为:
 
 缓存请求指令
-
 缓存响应指令
 
 
+更多参考后面的博文缓存(200, 304)中的介绍
 
-更多参考HTTP - 缓存
-
-immutable属于缓存控制的一个扩展属性, http://...
+immutable属于缓存控制的一个扩展属性, http://www.j...
     
 
         <a href="/2016/11/30/http/2016-11-30-HTTP-04-General-Header-Fields/" class="post-more waves-effect waves-button">
@@ -576,106 +673,6 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-29-websocket-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-19 22:09:10" datetime="2016-10-19T14:09:10.000Z"  itemprop="datePublished">2016-10-19</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/19/WebSocket/2017-10-29-websocket-05/">05.WebSocket - 实战</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        ThinkPHP + WorkerMan + WebSocket 实现节本聊天室功能:
-
-    
-
-        <a href="/2016/10/19/WebSocket/2017-10-29-websocket-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-19 20:50:52" datetime="2016-10-19T12:50:52.000Z"  itemprop="datePublished">2016-10-19</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/19/WebSocket/2017-10-28-websocket-04/">04.WebSocket - 客户端API</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        WebSocket客户端API如下WebSocket 构造函数
-WebSocket对象作为一个构造函数, 用于新建 WebSocket 实例, 执行 var ws = new WebSocket(&#39;ws://localhost:8080&#39;); 之后, 客户端就会与服务器进行连接。
-
-ws.readyState: readyState属性返回实例对象的当前状态,共有四种:
-
-C...
-    
-
-        <a href="/2016/10/19/WebSocket/2017-10-28-websocket-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
 
     </div>
     

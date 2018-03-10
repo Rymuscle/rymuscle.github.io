@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>31. Lua脚本 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis">
+    <meta name="description" content="前言 之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。  之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题, 这">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="31. Lua脚本">
+<meta property="og:url" content="http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。  之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题, 这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-10T12:05:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="31. Lua脚本">
+<meta name="twitter:description" content="前言 之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。  之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题, 这">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">31. Lua脚本</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">31. Lua脚本</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-29T10:40:07.000Z" itemprop="datePublished" class="page-time">
+  2017-06-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#脚本的原子性"><span class="post-toc-number">2.</span> <span class="post-toc-text">脚本的原子性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Redis中执行Lua脚本的好处"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Redis中执行Lua脚本的好处</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不应该使用Lua"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不应该使用Lua</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Lua-基础"><span class="post-toc-number">3.</span> <span class="post-toc-text">Lua 基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#hello-lua"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">hello.lua</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#EVAL-指令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">EVAL 指令</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#带宽和-EVALSHA"><span class="post-toc-number">4.</span> <span class="post-toc-text">带宽和 EVALSHA</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SCRIPT-LOAD"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">SCRIPT LOAD</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lua调用redis命令"><span class="post-toc-number">5.</span> <span class="post-toc-text">lua调用redis命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#lua-脚本文件"><span class="post-toc-number">6.</span> <span class="post-toc-text">.lua 脚本文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#演示"><span class="post-toc-number">7.</span> <span class="post-toc-text">演示</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">8.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Redis/2017-06-29-redis-31"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">31. Lua脚本</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-29 18:40:07" datetime="2017-06-29T10:40:07.000Z"  itemprop="datePublished">2017-06-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 <code>watch</code> 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。</p>
+</li>
+<li><p>之前的这种方案是在解决一种叫做 <code>CAS(check-and-set)</code> (检查后再设置) 的问题, 这种问题也可以使用 <code>Lua</code> 脚本来进行解决;</p>
+<blockquote>
+<p>Lua 脚本功能是<code>Reids 2.6</code>版本的最大亮点, 通过内嵌对<code>Lua</code>环境的支持, Redis解决了长久以来不能高效地处理<code>CAS(check-and-set检查后再设置)</code> 命令的缺点, 并且可以通过组合使用多个命令, 轻松实现以前很难实现或者不能高效实现的模式。</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="脚本的原子性"><a href="#脚本的原子性" class="headerlink" title="脚本的原子性"></a>脚本的原子性</h2><p>Redis 使用单个 Lua 解释器去运行所有脚本,并且Redis 也保证脚本会以原子性(atomic)的方式执行;(当某个脚本正在运行的时候,会有其他脚本或 Redis 命令被执行, 这和使用 <code>MULTI / EXEC</code> 包围的事务很类似, 在其他别的客户端看来，脚本的效果要么是不可见的，要么就是已完成的;<br>另一方面其实也意味着, 执行一个运行缓慢的脚本并不是一个好主意, 写一个跑得很快很顺溜的脚本并不难, 因为脚本的运行开销(overhead)非常少, 但是当你不得不使用一些跑得比较慢的脚本时, 请小心, 因为当这些蜗牛脚本在慢吞吞地运行的时候, 其他客户端会因为服务器正忙而无法执行命令;</p>
+<h3 id="Redis中执行Lua脚本的好处"><a href="#Redis中执行Lua脚本的好处" class="headerlink" title="Redis中执行Lua脚本的好处"></a>Redis中执行Lua脚本的好处</h3><ol>
+<li>Lua脚本在Redis中是原子执行的，执行过程中间不会插入其他命令; (一个Lua脚本中的命令, 就相当于类似Redis中<code>GETSET</code>这种原生命令, 是具备原子性的)</li>
+<li>Lua脚本可以帮助开发和运维人员创造出自己定制的命令，并可以将这些命令常驻在Redis内存中，实现复用的效果;</li>
+<li>Lua脚本可以将多条命令一次性打包，有效地减少网络开销;</li>
+</ol>
+<h3 id="不应该使用Lua"><a href="#不应该使用Lua" class="headerlink" title="不应该使用Lua"></a>不应该使用Lua</h3><p>什么时候不应该把脚本嵌入到Redis里面?<br>因为Redis的实现是堵塞的, 即, 一个Redis server, 在同一时候, 只能执行一个脚本;<br>因此, 如果你写了一个逻辑非常复杂的脚本, 这个脚本的执行时间非常长, 这样, 这个时候如果有别的请求进来, 就只能排队, 等待这个脚本结束了, 这个Redis server才能处理下一个请求。<br>在这个时候, 就连仅仅是获取数据的命令都会被堵住。这个Redis-Server的效率就会被大大的拖慢, 因此, 如果你的脚本执行非常<strong>复杂耗时</strong>, 那么这个时候你是不应该把它放在Redis里面执行的。</p>
+<h2 id="Lua-基础"><a href="#Lua-基础" class="headerlink" title="Lua 基础"></a>Lua 基础</h2><h3 id="hello-lua"><a href="#hello-lua" class="headerlink" title="hello.lua"></a>hello.lua</h3><ul>
+<li><p>hello.lua: 这个Lua脚本比较简单, 仅仅返回一个字符串, 没有与redis-Server进行比较有意义的操作(比如获取或设置数据)</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">local msg = &quot;Hello, world!&quot; --定义了一个本地变量msg存储我们的信息</div><div class="line">return msg</div></pre></td></tr></table></figure>
+</li>
+<li><p>保存这个文件到<code>hello.lua</code>, 运行: </p>
+  <figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    renyimindembp:test renyimin$ redis-cli eval <span class="string">"$(cat /Users/renyimin/Desktop/test/test.lua)"</span> <span class="number">0</span></div><div class="line">    <span class="string">"Hello, world!"</span></div><div class="line"><span class="comment">-- 下面这种方法也行</span></div><div class="line">    renyimindembp:test renyimin$ redis-cli <span class="comment">--eval /Users/renyimin/Desktop/test/test.lua 0</span></div><div class="line">    <span class="string">"Hello, world!"</span></div><div class="line">    renyimindembp:test renyimin$</div></pre></td></tr></table></figure>
+<p>  运行这段代码会打印”Hello,world!”</p>
+</li>
+</ul>
+<h3 id="EVAL-指令"><a href="#EVAL-指令" class="headerlink" title="EVAL 指令"></a><code>EVAL</code> 指令</h3><ol>
+<li>语法: <code>VAL script numkeys key [key ...] arg [arg ...]</code><ul>
+<li>script 参数: 是一段lua脚本程序, 它会被运行在Redis服务器上下文中, 可以直接写在命令行, 也可以引入<code>.lua文件</code>;</li>
+<li>numkeys 参数: 指定即将传入lua脚本中的key的个数 (如果没有参数的话, 也需要指明参数个数为0, 否则会报错)</li>
+<li>从第三个参数开始的<code>numkerys</code>个参数, 就是你要传入脚本的键名参数, 这些键名参数可以在Lua脚本中通过全局变量<code>KEYS</code>数组(索引从1开始)的形式访问(如:<code>KEYS[1]</code>, <code>KEYS[2]</code>);</li>
+<li>剩下的在命令最后的附加参数 <code>arg [arg ...]</code>, 可以在Lua中通过全局变量 <code>ARGV</code> 数组访问, 访问的形式和KEYS变量类似;</li>
+</ul>
+</li>
+<li>例子: (<code>..</code>是lua中的字符串拼接语法) <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; EVAL &apos;return &quot;K1: &quot;..KEYS[1]..&quot; K2: &quot;..KEYS[2]..&quot; A1: &quot;..ARGV[1]..&quot; A2: &quot;..ARGV[2]&apos; 3 k1 k2 k3 a1 a2 a3 a4</div><div class="line">&quot;K1: k1 K2: k2 A1: a1 A2: a2&quot;</div><div class="line">127.0.0.1:6379&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="带宽和-EVALSHA"><a href="#带宽和-EVALSHA" class="headerlink" title="带宽和 EVALSHA"></a>带宽和 EVALSHA</h2><ol>
+<li><p><code>EVAL</code> 命令要求你在每次执行脚本的时候都发送一次脚本, 但是Redis有一个内部的缓存机制, 因此它不会每次都重新编译脚本, 这样, eval发送脚本主体就是在浪费带宽了;</p>
+</li>
+<li><p>为了减少带宽的消耗, Redis实现了 <code>EVALSHA</code> 命令, 它的作用和<code>EVAL</code>一样, 都用于对脚本求值但它接受的第一个参数不是脚本, 而是脚本的<code>SHA1校验和(sum)</code>(<code>SHA1校验和</code> 的生成看下一节<code>SCRIPT LOAD</code>);</p>
+</li>
+<li><p>EVALSHA执行后, 如果服务器还记得给定的 <code>SHA1校验和</code> 所代表的脚本, 那么执行这个脚本; 如果服务器不记得给定的 <code>SHA1校验和</code> 所代表的脚本, 那么它返回一个特殊的错误, 提醒用户使用<code>EVAL</code>代替<code>EVALSHA</code>以下是示例：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 现在是有a这个key的</div><div class="line">127.0.0.1:6379&gt; get a</div><div class="line">&quot;haha&quot;</div><div class="line">// 开始测试</div><div class="line">127.0.0.1:6379&gt; SCRIPT LOAD &quot;return redis.call(&apos;GET&apos;,&apos;a&apos;)&quot;</div><div class="line">&quot;8a2f221803757b26fc7d283bec7ba834d91202c9&quot;</div><div class="line">127.0.0.1:6379&gt; evalsha 8a2f221803757b26fc7d283bec7ba834d91202c9 0</div><div class="line">&quot;haha&quot;</div><div class="line">// 如下瞎写的 sha1校验和, 服务器就不认识了, 要你使用 eval 命令来直接使用脚本</div><div class="line">127.0.0.1:6379&gt; evalsha lalalala 0</div><div class="line">(error) NOSCRIPT No matching script. Please use EVAL.</div><div class="line">127.0.0.1:6379&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="SCRIPT-LOAD"><a href="#SCRIPT-LOAD" class="headerlink" title="SCRIPT LOAD"></a>SCRIPT LOAD</h3><p>如果使用 EVALSHA 发送校验和给服务器, 从而调用正确脚本的话, 这个 <code>校验和</code> 如何生成? 这就要用到 <strong>SCRIPT LOAD</strong> 命令了;<br>SCRIPT LOAD: </p>
+<ul>
+<li>将脚本加载到脚本缓存, 而不执行它 (在将指定的命令加载到脚本缓存中之后, 之后你将需要使用<code>EVALSHA</code>命令和脚本的正确<code>SHA1</code>摘要来调用它)</li>
+<li>该脚本被保证永远留在脚本缓存中(除非调用SCRIPT FLUSH)</li>
+</ul>
+<h2 id="lua调用redis命令"><a href="#lua调用redis命令" class="headerlink" title="lua调用redis命令"></a>lua调用redis命令</h2><ol>
+<li><p>Lua脚本中可以使用两个不同的Lua函数来调用Redis的命令</p>
+<ul>
+<li><code>redis.call()</code>  </li>
+<li>redis.pcall()</li>
+</ul>
+</li>
+<li><p><code>redis.call()</code> 与 <code>redis.pcall()</code>的区别</p>
+<ul>
+<li>这两个命令很类似, 他们唯一的区别是当redis命令执行结果返回错误时, redis.call()将返回给调用者一个错误;</li>
+<li>而redis.pcall()会将捕获的错误以Lua表的形式返回;</li>
+</ul>
+</li>
+<li><p>测试 (redis.call() 和 redis.pcall() 两个函数的参数可以是任意的 Redis 命令)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; eval &quot;return redis.call(&apos;set&apos;,&apos;foo&apos;,&apos;bar&apos;)&quot; 0</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt; eval &quot;return redis.call(&apos;get&apos;,&apos;foo&apos;)&quot; 0</div><div class="line">&quot;bar&quot;</div><div class="line">127.0.0.1:6379&gt;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="lua-脚本文件"><a href="#lua-脚本文件" class="headerlink" title=".lua 脚本文件"></a><code>.lua</code> 脚本文件</h2><ol>
+<li>其实写lua脚本还是有很多注意点的, 可以<a href="http://www.redis.cn/commands/eval.html" target="_blank" rel="external">参考</a>中<code>纯函数脚本</code>这一小节;</li>
+<li>本篇学习主要是将来能写一些简单的原子命令, 并不会涉及一些复杂的逻辑操作, 所以只是简单了解了一下上面那些注意点;</li>
+</ol>
+<h2 id="演示"><a href="#演示" class="headerlink" title="演示"></a>演示</h2><p>在redis设置一个num为10的库存 <code>set num 10</code>;</p>
+<ol>
+<li><p>下面通过lua脚本写一个原子操作, 将检测库存和最终减少库存放在一起</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">local good = redis.call(&apos;get&apos;, &apos;num&apos;);</div><div class="line">if tonumber(good) &gt; 0</div><div class="line">then</div><div class="line">    redis.call(&apos;decr&apos;, &apos;num&apos;)</div><div class="line">end</div><div class="line">return &apos;ok&apos;</div></pre></td></tr></table></figure>
+</li>
+<li><p>调用该脚本</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindembp:test renyimin$ redis-cli --eval /Users/renyimin/Desktop/test/test.lua 0</div><div class="line">&quot;ok&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>会正常减少数字</p>
+</li>
+<li><p>laravel中实现如下</p>
+<ul>
+<li><p>定义脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">protected $lua = &quot;</div><div class="line">    local good = redis.call(&apos;get&apos;, &apos;num&apos;);&quot; .</div><div class="line">        &quot; if tonumber(good) &gt; 0 then&quot; .</div><div class="line">            &quot; redis.call(&apos;decr&apos;, &apos;num&apos;)&quot; .</div><div class="line">        &quot; end&quot; .</div><div class="line">    &quot; return &apos;ok&apos;&quot;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * lua脚本解决超卖</div><div class="line"> */</div><div class="line">public function redisLua()</div><div class="line">&#123;</div><div class="line">    Redis::eval($this-&gt;lua, 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://segmentfault.com/a/1190000009811453#articleHeader0" target="_blank" rel="external">https://segmentfault.com/a/1190000009811453#articleHeader0</a><br><a href="https://www.cnblogs.com/huangxincheng/p/6230129.html" target="_blank" rel="external">https://www.cnblogs.com/huangxincheng/p/6230129.html</a><br><a href="https://segmentfault.com/a/1190000007615411" target="_blank" rel="external">https://segmentfault.com/a/1190000007615411</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&title=《31. Lua脚本》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&title=《31. Lua脚本》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《31. Lua脚本》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/06/24/Redis/2017-06-24-redis-23/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">23. redis 主从, 哨兵</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/21/2017-08-21-Git/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Git</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&title=《31. Lua脚本》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&title=《31. Lua脚本》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《31. Lua脚本》 — Lant's Blog&url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/29/Redis/2017-06-29-redis-31/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aQU7EMAwFUO5/6UFihTRM59sOiCYvq6q0JK9Ixo7z8RGPx9f4fv185/r5V+8+33/+6bKBgYFxW8bjclxPM3+mOu9LKgYGxgGMJMhWQ2r1fjLvy/sYGBgYQUp3/WQv0cTAwMBYxcgDdP4hMDAwMHpFbLKs/PleQrmgFsfAwLgho9cY+JvrX+9vYGBg/HvGozWqW3LzwPpmPRgYGFsz8hQtnyx5foKManEMDIztGL1jE72cLf9YeVjHwMA4gTHflM8DZd4qyBuiGBgYezOSCXpNgmoBPGk5YGBg7M3Ig2+13K0WvZPiGQMDY29GHkzz1G1+naee0TkODAyMmzPypfdSwDyM5vXpm78JBgbG1oxqqdkLwb3tucJhCwwMjO0Y+cZW76hEL+BW2RgYGHszei9X87G8m1r9WOVcEgMD4+aMaiLYa0z2tt6itiUGBsamjHnrsdrgzBdXOIqBgYFxDKPamFy859f6DRgYGGcyJovrpYOT1ikGBsYJjFXbXr0CNS+PMTAwTmZUS82kYZkHykkJjYGBcQ5jtMkVp4BrOxjRWxgYGBsxHsWRZJf5Qnvh/ofZMTAwtmb0DmGsanBONuYwMDBOY+RB9jp0VgvdeSB+U5FjYGBsx8iD7OQQ2OR/wqj+xsDAOIxxHXDz5HK0aAwMDIxi2dnDVw9+LQu4GBgYt2X0ith8G67X+MxLXAwMjL0Zq/KuaFMsCKDJxlyz74GBgXE/xieQqQo/jNesvgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
