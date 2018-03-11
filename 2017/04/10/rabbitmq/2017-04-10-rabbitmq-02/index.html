@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>02. 在Laravel中使用RabbitMQ | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+<meta name="keywords" content="RabbitMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02. 在Laravel中使用RabbitMQ">
+<meta property="og:url" content="http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-11T08:27:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="02. 在Laravel中使用RabbitMQ">
+<meta name="twitter:description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">02. 在Laravel中使用RabbitMQ</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">02. 在Laravel中使用RabbitMQ</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-10T04:21:07.000Z" itemprop="datePublished" class="page-time">
+  2017-04-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者"><span class="post-toc-number">2.</span> <span class="post-toc-text">生产者</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2017-04-10-rabbitmq-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">02. 在Laravel中使用RabbitMQ</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
+<li>Mac安装rabbitmq比较简单, 自行搜索;</li>
+<li><p>Laravel中推荐使用<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external">php-amqplib</a>来使用RabbitMQ;</p>
+<ul>
+<li>composer安装扩展包 <code>composer require php-amqplib/php-amqplib 2.6.*</code></li>
+<li>如下引入即可使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>更多细节查看<a href="http://www.rabbitmq.com/getstarted.html" target="_blank" rel="external">php-qmqp 用法</a>;</p>
+</li>
+</ol>
+<h2 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h2><ol>
+<li>基本步骤为<ul>
+<li>创建connection(TCP)连接</li>
+<li>基于connection连接创建channle信道</li>
+<li>通过channel信道向rabbit-server发出声明队列的请求</li>
+<li>创建exchange并绑定队列,设置bindgingkey (这一步可以省略, 将会使用默认的名为<code>(AMQP default)</code>的<code>隐式</code>exchange, (<code>direct</code> 且 <code>持久化</code>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Http\Controllers\Test;</div><div class="line"></div><div class="line">use App\Http\Controllers\Controller;</div><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div><div class="line"></div><div class="line">class RabbitController extends Controller</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * 生产者demo</div><div class="line">     */</div><div class="line">    public function producer()</div><div class="line">    &#123;</div><div class="line">        // 创建connection(TCP)连接</div><div class="line">        $connection = new AMQPStreamConnection(</div><div class="line">            &apos;localhost&apos;,</div><div class="line">            5672,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            &apos;/&apos; // 默认使用的就是 / 这个vhost</div><div class="line">            // 还有多达9个其他属性稍后分析</div><div class="line">        );</div><div class="line">        // 基于TCP连接创建channel(信道, 一个connection可以创建很多信道)</div><div class="line">        $channel = $connection-&gt;channel();</div><div class="line">        // 接下来将通过信道和rabbit-server进行交互</div><div class="line"></div><div class="line">        // 通过信道, 想rabbit-server申请创建队列</div><div class="line">        $channel-&gt;queue_declare(</div><div class="line">            &apos;hello&apos;,        // 队列名 (接下来如果不绑定exchange的话, 则默认bindingkey与queue同名, 也为hello)</div><div class="line">            false,          // 如果为true, 表示消极的创建队列, 所谓消极:rabbit-server会查看有没有名为hello的queue, 如果有就把名字什么的信息告诉你, 如果没有声明过该队列就直接报错。这个参数比较鸡肋, 你可以用来确认queue是否存在</div><div class="line">                                    // 默认为false, 表示积极创建队列, 无则创建, 有则不创建</div><div class="line">                                    // 也叫惰性</div><div class="line">            false,          // 队列的持久型</div><div class="line">            false,         // 队列的排他性(如果启用，队列只能被声明它的消费者使用)</div><div class="line">            false);     // 自动删除(如果启用,那么队列将会在所有的消费者停止使用之后自动删除掉自身)</div><div class="line">            // 其余三个参数稍后讨论</div><div class="line"></div><div class="line">        // 接下来如果不声明 exchange, 也不绑定对列名, 不设置bindingkey</div><div class="line">        // 你会发现, 队列默认会被绑定到一个名为`(AMQP default)`的默认隐式exchange上, 并且该exchange是direct类型的, 也是持久化的</div><div class="line">        // 默认交换被隐式绑定到每个队列，其中路由密钥等于队列名称 无法显式绑定或取消绑定默认交换 它也不能被删除</div><div class="line"></div><div class="line">        // 创建消息对象</div><div class="line">        $msg = new AMQPMessage(</div><div class="line">            &apos;Hello World!&apos;</div><div class="line">            // 第二个数组参数稍后讨论</div><div class="line">        );</div><div class="line"></div><div class="line">        $channel-&gt;basic_publish(</div><div class="line">            $msg,   // 发送的消息对象</div><div class="line">            &apos;&apos;, // 选择的exchange路由</div><div class="line">            &apos;hello&apos; // routingkey 用于和bingkey进行匹配</div><div class="line">            // 其余三个参数稍后讨论</div><div class="line">        );</div><div class="line"></div><div class="line">        // 关闭信道</div><div class="line">        $channel-&gt;close();</div><div class="line">        // 关闭connection</div><div class="line">        $connection-&gt;close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>使用默认的vhost, 默认的Exchange(默认的bindingKey, routingKey将需要和queue同名), </p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. RabbitMQ简介</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. RabbitMQ 持久化</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqUlEQVR42u3aS04jQRAFQN//0mYzCyQw8/JnZqToVQuDO6MXVcXLfDzi6/nlSj59xtfPT/z8k8fFhYeHhzcu/aLQ6v2rl5jXjIeHh3fNy8tK1uFyET/Wk28SeHh4eP8mr3qf46svDg8PD+//4s2LS2KIyevDw8PDu+YlYcTW8Xrr0+WsBQ8PD6+TA5SPs791f9Lfw8PDwxt31ZNm2Fazf7cJ9+ev8PDw8A54eRGTJlZ+QM/HuZI68fDw8O54SXg6iW4TQF5oUgkeHh7e+3lJY2lriCo5ss/bb3h4eHhbvOSXkiW4urjnm0f1FXzzvwIeHh7eKi8aWhq0xy6ijVFjDA8PD2/My5tY8xh3HjSUa8PDw8M74OVbQj4WkCzi1QCit+bj4eHh3fEmy/H1Qp+/pkKYi4eHhzfgzQeneqReFJJsRYVpMjw8PLwWrxqzNrPh4DCdH+KT74naYHh4eHhLvGr8mh+LexvJwjaAh4eHt8rLB56qBVUX9MkYwctq8fDw8N7Cm49SzcPffMjgL8/Fw8PDO+BV2045KS9o/oKirBoPDw/vgDdvNeUH9ORIXY1oC9NkeHh4eANe8o99ngRXg4zJ9+Dh4eH9Lq96mE6C3Tz27UUSyRaFh4eHd8FLvq4XHCRl5ZtN72iOh4eHd8fbih7mrbIkjKiOFODh4eHd8XqNq/lwQO8phdgCDw8P75g33zB6W0v1qN2MHvDw8PDGvGfx6j2yehyfpCkvp3Hx8PDwlnhbcWrOuLhfuPDw8PCKvF6Qmg9sVdtjvY2hkLXg4eHhLfHyY3HviLyQmuxmFXh4eHhv5OWH5ny5n7TBljcGPDw8vDNePkYwafzn41knM2V4eHh4rQ579aurEcMkEFnOWvDw8PCWuuq95lP1BU2euBBh4OHh4aW8D0JRFtsfa71IAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

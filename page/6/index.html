@@ -147,6 +147,54 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-12-redis-08"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-12 16:35:08" datetime="2017-06-12T08:35:08.000Z"  itemprop="datePublished">2017-06-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/12/Redis/2017-06-12-redis-08/">08. redis锁 -- 不太安全?</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言一般来说, 在对数据进行”加锁”时, 程序首先需要获取锁来得到对数据进行排他性访问的能力, 然后才能对数据执行一系列操作, 最后还要将锁释放给其他程序;之前已经了解过, Redis使用WATCH命令来代替对数据进行加锁, 因为WATCH只会在数据被其他客户端抢先修改了的情况下通知执行了这个命令的客户端, 所以这个命令被称为乐观锁;
+SETEX 实现锁介绍为了对数据进行排他性访问, 程序首...
+    
+
+        <a href="/2017/06/12/Redis/2017-06-12-redis-08/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-Redis/2017-06-11-redis-07"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -312,14 +360,14 @@ redis事务的ACID特性在redis中, 事务具有 原子...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-mysql/2017-02-18-mysql-05"
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-02-18 18:51:28" datetime="2017-02-18T10:51:28.000Z"  itemprop="datePublished">2017-02-18</time>
+        <time class="post-time" title="2017-04-10 15:30:21" datetime="2017-04-10T07:30:21.000Z"  itemprop="datePublished">2017-04-10</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -330,7 +378,7 @@ redis事务的ACID特性在redis中, 事务具有 原子...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/02/18/mysql/2017-02-18-mysql-05/">05. 主从复制</a>
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/">03. RabbitMQ 持久化</a>
     </h3>
   
 
@@ -340,24 +388,122 @@ redis事务的ACID特性在redis中, 事务具有 原子...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        主从复制原理
-master服务器上进行sql写操作的时候, 是会引起磁盘变化的; 所以slave服务器要想和master上的数据保持一致, 可以有两种办法:
+        ## 
+使用默认的vhost, 默认的Exchange(默认的bindingKey, routingKey将需要和queue同名), 
 
-slave按照master服务器上每次的sql写语句来执行一遍;
-slave按照master服务器磁盘上的变化来做一次变化 ;
-
-
-主服务器master上的写操作都会被记录到binlog二进制日志中, 从服务器slave去读主服务器的...
     
 
-        <a href="/2017/02/18/mysql/2017-02-18-mysql-05/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-02"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/">02. 在Laravel中使用RabbitMQ</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        准备
+Mac安装rabbitmq比较简单, 自行搜索;
+Laravel中推荐使用php-amqplib来使用RabbitMQ;
+
+composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.*
+如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib...
+    
+
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-01"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-10 11:50:02" datetime="2017-04-10T03:50:02.000Z"  itemprop="datePublished">2017-04-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/">01. RabbitMQ简介</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;
+
+AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 
+
+应用场景接下来简单了解一下:...
+    
+
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -523,159 +669,6 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-29-websocket-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-19 22:09:10" datetime="2016-10-19T14:09:10.000Z"  itemprop="datePublished">2016-10-19</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/19/WebSocket/2017-10-29-websocket-05/">05.WebSocket - 实战</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        ThinkPHP + WorkerMan + WebSocket 实现节本聊天室功能:
-
-    
-
-        <a href="/2016/10/19/WebSocket/2017-10-29-websocket-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-19 20:50:52" datetime="2016-10-19T12:50:52.000Z"  itemprop="datePublished">2016-10-19</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/19/WebSocket/2017-10-28-websocket-04/">04.WebSocket - 客户端API</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        WebSocket客户端API如下WebSocket 构造函数
-WebSocket对象作为一个构造函数, 用于新建 WebSocket 实例, 执行 var ws = new WebSocket(&#39;ws://localhost:8080&#39;); 之后, 客户端就会与服务器进行连接。
-
-ws.readyState: readyState属性返回实例对象的当前状态,共有四种:
-
-C...
-    
-
-        <a href="/2016/10/19/WebSocket/2017-10-28-websocket-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-17 17:30:42" datetime="2016-10-17T09:30:42.000Z"  itemprop="datePublished">2016-10-17</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/17/WebSocket/2017-10-28-websocket-03/">03.跨站点WebSocket劫持漏洞</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        跨站点WebSocket劫持漏洞原理是劫持而非简单的伪造
-
-为了创建全双工通信, 客户端需要基于HTTP进行握手切换到WebSocket协议, 正是这个升级协议的握手过程存在着潜在的问题。
-示例:
-
-客户端伪造 与服务端同顶级域名 的跨子域cookie
-12345678910111213&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;...
-    
-
-        <a href="/2016/10/17/WebSocket/2017-10-28-websocket-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
 
     </div>
     
