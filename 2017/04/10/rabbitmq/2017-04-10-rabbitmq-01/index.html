@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景接下来简单了解一下: Ra">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-11T08:21:49.000Z">
+<meta property="og:updated_time" content="2018-03-11T10:33:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. RabbitMQ简介">
 <meta name="twitter:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景接下来简单了解一下: Ra">
@@ -256,9 +256,12 @@
 <h3 id="RoutingKey-BindingKey"><a href="#RoutingKey-BindingKey" class="headerlink" title="RoutingKey, BindingKey"></a>RoutingKey, BindingKey</h3><p>真实情况下, 参数名都是<code>RoutingKey</code>，并没有BindingKey这个参数，为了区别 <code>生产者发送消息时</code> 和 <code>Exchange-Queue绑定时</code> 的概念, 我们才说RoutingKey和BindingKey;</p>
 <ol>
 <li><code>bindingKey</code>: 在绑定(Binding)Exchange与Queue的时候, 一般会指定一个RoutingKey, 为了区分下面的RoutingKey, 此时这个RoutingKey叫<code>BindingKey</code>;</li>
-<li><code>routingKey</code>: 消费者将消息发送给Exchange时, 一般会指定一个RoutingKey, 当BindingKey与RoutingKey相匹配时，生产者发送的消息才将会被路由到对应的Queue中;</li>
-<li>在bind多个Queue到同一个Exchange的时候, 这些Binding允许使用相同的BindingKey;</li>
-<li>BindingKey并不是在所有情况下都生效, 它依赖于Exchange Type, 比如fanout类型的Exchange就会无视绑定时的BindingKey, 会直接将消息路由到所有绑定到该fanout-Exchange的Queues。</li>
+<li><p><code>routingKey</code>: 消费者将消息发送给Exchange时, 一般会指定一个RoutingKey, 当BindingKey与RoutingKey相匹配时，生产者发送的消息才将会被路由到对应的Queue中;</p>
+</li>
+<li><p>在bind多个Queue到同一个Exchange的时候, 这些Binding允许使用相同的BindingKey (<a href="https://joursion.gitbooks.io/rabbitmq-tutorials-zh/content/4.Routing.html" target="_blank" rel="external">多重绑定</a>);</p>
+</li>
+<li><p>BindingKey并不是在所有情况下都生效, 它依赖于Exchange Type, 比如fanout类型的Exchange就会无视绑定时的BindingKey, 会直接将消息路由到所有绑定到该fanout-Exchange的Queues。</p>
+</li>
 <li>RabbitMQ中 <code>用户</code> 和 <code>vhost</code> 之间的关系: <ul>
 <li>可以创建用户并且给用户分配vhost作用域, 用户和vhost作用域之间是多对多的分配关系 可以在连接Rabbit服务的时候指定用户和作用域, 如下 :<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 主机地址, 端口, Rabbit用户, 密码, 分配给Rabbit用户的vhost域</div><div class="line">$connection = new AMQPStreamConnection(&apos;localhost&apos;, &apos;5672&apos;, &apos;tt&apos;, &apos;tt&apos;, &apos;test&apos;);</div></pre></td></tr></table></figure></li>
 </ul>
@@ -356,9 +359,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/06/07/Redis/2017-06-07-redis-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. 在Laravel中使用RabbitMQ</h4>
+        <h4 class="title">03. 一些规范点</h4>
       </a>
     </div>
   
