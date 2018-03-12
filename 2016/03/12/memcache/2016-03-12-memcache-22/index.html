@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>22. 分布式 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="memcached">
+    <meta name="description" content="前言 memcached虽然称为分布式缓存服务器, 但服务器端并没有分布式功能。服务器端仅包括内存存储功能，其实现非常简单。至于其分布式特性，则是完全由客户端程序库实现的, 这种分布式是memcached的最大特点。  好在php语言已经在memcache/memcached扩展中实现了分布式算法, 可以适当的配置或使用正确的参数来使用算法;    理解Memcached的分布式 假设memcac">
+<meta name="keywords" content="memcached">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22. 分布式">
+<meta property="og:url" content="http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 memcached虽然称为分布式缓存服务器, 但服务器端并没有分布式功能。服务器端仅包括内存存储功能，其实现非常简单。至于其分布式特性，则是完全由客户端程序库实现的, 这种分布式是memcached的最大特点。  好在php语言已经在memcache/memcached扩展中实现了分布式算法, 可以适当的配置或使用正确的参数来使用算法;    理解Memcached的分布式 假设memcac">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/memcache/fenbushi_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/memcache/fenbushi_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/memcache/hash_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/memcache/virtual_node.png">
+<meta property="og:updated_time" content="2018-03-12T05:58:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="22. 分布式">
+<meta name="twitter:description" content="前言 memcached虽然称为分布式缓存服务器, 但服务器端并没有分布式功能。服务器端仅包括内存存储功能，其实现非常简单。至于其分布式特性，则是完全由客户端程序库实现的, 这种分布式是memcached的最大特点。  好在php语言已经在memcache/memcached扩展中实现了分布式算法, 可以适当的配置或使用正确的参数来使用算法;    理解Memcached的分布式 假设memcac">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/memcache/fenbushi_01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">22. 分布式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">22. 分布式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-03-12T13:30:31.000Z" itemprop="datePublished" class="page-time">
+  2016-03-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/memcached/">memcached</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#理解Memcached的分布式"><span class="post-toc-number">2.</span> <span class="post-toc-text">理解Memcached的分布式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分布式算法"><span class="post-toc-number">3.</span> <span class="post-toc-text">分布式算法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#取模-取余-算法"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">取模(取余)算法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性hash算法"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">一致性hash算法</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#虚拟节点"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">虚拟节点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#php实现一致性hash"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">php实现一致性hash</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用memcache扩展的一致性算法"><span class="post-toc-number">4.</span> <span class="post-toc-text">使用memcache扩展的一致性算法</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-memcache/2016-03-12-memcache-22"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">22. 分布式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-03-12 21:30:31" datetime="2016-03-12T13:30:31.000Z"  itemprop="datePublished">2016-03-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/memcached/">memcached</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>memcached虽然称为<code>分布式</code>缓存服务器, 但服务器端并没有<code>分布式</code>功能。服务器端仅包括内存存储功能，其实现非常简单。至于其分布式特性，则是完全由客户端程序库实现的, 这种分布式是memcached的最大特点。</p>
+</li>
+<li><p>好在php语言已经在memcache/memcached扩展中实现了分布式算法, 可以适当的配置或使用正确的参数来使用算法; </p>
+</li>
+</ol>
+<h2 id="理解Memcached的分布式"><a href="#理解Memcached的分布式" class="headerlink" title="理解Memcached的分布式"></a>理解Memcached的分布式</h2><ol>
+<li><p>假设memcached服务器有node1～node3三台, 应用程序要保存键名为’tokyo’, ‘beijing’…等的数据<br> <img src="/img/memcache/fenbushi_01.png" width="350/"></p>
+</li>
+<li><p>存储: 要向memcached服务中添加key, 首先就需要将key传给客户端程序，然后客户端实现的算法就会根据key来决定数据应该保存到哪台memcached服务器, 服务器选定后，则会在该服务器上它保存key及其值<br> <img src="/img/memcache/fenbushi_02.png" width="350/"></p>
+</li>
+<li><p>获取: 获取保存的key时, 也要将要key传递给客户端程序, 客户端程序要通过与设置key时相同的算法, 根据key选择服务器。<br> 使用的算法相同, 就能选中与保存key时相同的服务器, 然后发送get命令, 就能获得保存的值</p>
+</li>
+</ol>
+<p>这样分布式部署后, 就将一台memcached的工作平均分配给多个memcache来分担, 所存储的键值对就会分散, 即使一台memcached服务器发生故障无法连接, 也不会影响其他的缓存数据, 系统依然能继续运行。</p>
+<h2 id="分布式算法"><a href="#分布式算法" class="headerlink" title="分布式算法"></a>分布式算法</h2><h3 id="取模-取余-算法"><a href="#取模-取余-算法" class="headerlink" title="取模(取余)算法"></a>取模(取余)算法</h3><ol>
+<li><p>这是一个比较简单的分布式算法, 计算方法比较简单: <code>key%memcache节点数量</code></p>
+</li>
+<li><p>向上面这样, 取模的结果为几, 就把数据缓存到第几台memcached服务器上, 数据的分散性也相当优秀, 但也有其缺点, 那就是当<strong>添加或者移除</strong>服务器的时候, 缓存重组的代价相当巨大, 因为添加服务器之后, 余数就会产生剧变, 这样就无法获取与保存时相同的服务器, 从而影响缓存的命中率;<br> 假设一个节点掉线, 就会导致其他节点也无法正常命中</p>
+</li>
+<li><p>并且通过运算可以得出, 服务器的节点数越大, 在出现故障时, 后果越严重, 结果就是你买越多的服务器, 花了越多的钱, 却造成了越大的后果; </p>
+</li>
+<li><p>取模算法很不适合用作memcached服务的分布式算法;</p>
+</li>
+</ol>
+<h3 id="一致性hash算法"><a href="#一致性hash算法" class="headerlink" title="一致性hash算法"></a>一致性hash算法</h3><ol>
+<li><p>首先求出memcached服务器(节点)的哈希值并将其分配到0～2^32的圆(continuum)上;<br> 一般情况下对机器的hash计算是采用机器的IP或者机器唯一的别名作为输入值</p>
+</li>
+<li><p>然后采用同样的方法求出存储数据的键的哈希值, 并映射到相同的圆上;</p>
+</li>
+<li><p>然后从数据映射到的位置开始顺时针查找, 将数据保存到找到的第一个服务器(节点)上; 如果超过2^32仍然找不到服务器, 就会保存到第一台memcached服务器上 ;</p>
+</li>
+<li><p>如下图<br> <img src="/img/memcache/hash_01.png" width="350/"></p>
+<ul>
+<li>从上图可以看出, 如果node3失效, 造成的结果就是node4到node3之间的键会跑到node1上去寻找, 那自然就找不到了, 然后mysql就会把这个key和值重新查询出来, 再次写入到node1中即可;<br>这样就只影响了node4到node3之间的节点, 只有node4到node3之间的节点需要到数据库中重新查询并写入node1中, 其他缓存数据的查询都没有受到影响 ;<br>当然, 添加节点也是一样的, 影响都很小 ;</li>
+</ul>
+</li>
+<li><p>一致性hash在增加/减少一台机器后, 命中率为: (N-1)/N, 也就是会有1/N节点未命中;<br> 这样服务器越多, 在添加服务器的时候, 命中率就越高了 ;</p>
+</li>
+</ol>
+<h3 id="虚拟节点"><a href="#虚拟节点" class="headerlink" title="虚拟节点"></a>虚拟节点</h3><ol>
+<li>一致性hash的影响虽然已经比取模分布式算法小很多了, 但是仍有一个问题, 那就是我们希望在node3丢失之后, node4-node3之间的这些缓存数据能够平均分配到剩余所有节点上, 而不是全部压在node1节点上, 导致node1节点压力很大，这就引入了虚拟节点的概念;</li>
+<li><p><code>虚拟节点</code>(virtual node)其实就是实际节点(机器)在hash空间的复制品</p>
+<ul>
+<li>一个实际节点(机器)对应了若干个”虚拟节点”, 这个对应个数也称为”复制个数” ;</li>
+<li>之前由于只部署了node1,node2,node3,node4四个实际节点, 之前的key在机器上的分布很不均衡, 现在我们以2个副本(复制个数)为例, 这样整个hash环中就存在了8个虚拟节点<br>这样, key就不只是分布到node1,node2,node3,node4四个节点中了, 而是会更加均匀地分布到node1-1,node1-2,node2-1,node2-2,node3-1,node3-2,node4-1,node4-2这八个节点中了</li>
+</ul>
+</li>
+<li><p>如下图, 蓝色服务器宕机之后, 原本在蓝色服务器上的key会均匀地丢给其他几个节点, 而其他阶段不会受影响 :<br> <img src="/img/memcache/virtual_node.png" width="350/"></p>
+</li>
+</ol>
+<h3 id="php实现一致性hash"><a href="#php实现一致性hash" class="headerlink" title="php实现一致性hash"></a>php实现一致性hash</h3><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">interface hash</div><div class="line">&#123;</div><div class="line">    public function _hash($str);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">interface distribution</div><div class="line">&#123;</div><div class="line">    public function lookUp($key);</div><div class="line"></div><div class="line">    public function addNode($node);</div><div class="line"></div><div class="line">    public function removeNode($node);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 一致性hash</div><div class="line">class Consistent implements hash, distribution</div><div class="line">&#123;</div><div class="line">    // 设置一个节点会增加64个虚拟节点</div><div class="line">    protected $_mul = 64;</div><div class="line">    // 虚拟节点的位置</div><div class="line">    protected $position = [];</div><div class="line"></div><div class="line">    // 把字符串转换成32位无符号整数</div><div class="line">    public function _hash($node)</div><div class="line">    &#123;</div><div class="line">        return sprintf(&apos;%u&apos;, crc32($node));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // 添加虚拟节点</div><div class="line">    public function addNode($node)</div><div class="line">    &#123;</div><div class="line">        for ($i = 0; $i &lt; $this-&gt;_mul; $i++) &#123;</div><div class="line">            $virtualNode = $node . &apos;-&apos; . $i;</div><div class="line">            $this-&gt;position[$this-&gt;_hash($virtualNode)] = $node;</div><div class="line">        &#125;</div><div class="line">        // 然后排序虚拟节点</div><div class="line">        ksort($this-&gt;position);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function lookUp($key)</div><div class="line">    &#123;</div><div class="line">        $key = $this-&gt;_hash($key);</div><div class="line">        // 先取圆环上最小的节点作为结果</div><div class="line">        $point = current($this-&gt;position);</div><div class="line">        foreach ($this-&gt;position as $k =&gt; $val) &#123;</div><div class="line">            if ($key &lt;= $k) &#123;</div><div class="line">                $point = $k;</div><div class="line">                break;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 返回key所应该存放的位置</div><div class="line">        return $point;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function getNodes()</div><div class="line">    &#123;</div><div class="line">        echo &apos;&lt;pre/&gt;&apos;;</div><div class="line">        print_r($this-&gt;position);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function removeNode($node)</div><div class="line">    &#123;</div><div class="line">        foreach ($this-&gt;position as $k =&gt; $v) &#123;</div><div class="line">            if ($v == $node) &#123;</div><div class="line">                unset($this-&gt;position[$k]);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$c = new Consistent();</div><div class="line">$c-&gt;addNode(&apos;a&apos;);</div><div class="line">$c-&gt;addNode(&apos;b&apos;);</div><div class="line">$c-&gt;addNode(&apos;c&apos;);</div><div class="line">$c-&gt;getNodes();</div><div class="line">echo $c-&gt;_hash(&apos;title&apos;), &apos;&lt;br/&gt;&apos;;</div><div class="line">echo $c-&gt;lookUp(&apos;title&apos;);</div><div class="line">$c-&gt;removeNode(&apos;b&apos;);</div><div class="line">$c-&gt;getNodes();</div><div class="line"></div><div class="line">/*$m = new Moder();</div><div class="line">$m-&gt;addNode(&apos;a&apos;);</div><div class="line">$m-&gt;addNode(&apos;b&apos;);</div><div class="line">$m-&gt;addNode(&apos;c&apos;);</div><div class="line"></div><div class="line">$m-&gt;getNodes();</div><div class="line"></div><div class="line">echo $m-&gt;lookup(&apos;a&apos;);</div><div class="line">echo $m-&gt;lookup(&apos;b&apos;);</div><div class="line">echo $m-&gt;lookup(&apos;c&apos;);*/</div></pre></td></tr></table></figure>
+</code></pre><h2 id="使用memcache扩展的一致性算法"><a href="#使用memcache扩展的一致性算法" class="headerlink" title="使用memcache扩展的一致性算法"></a>使用memcache扩展的一致性算法</h2><p>可以在php.ini中配置 :<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[Memcache] </div><div class="line">Memcache.allow_failover = 1 </div><div class="line">Memcache.hash_strategy =consistent </div><div class="line">Memcache.hash_function =crc32</div></pre></td></tr></table></figure></p>
+<p>也可以动态配置 :<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ini_set(&apos;memcache.hash_function&apos;,&apos;crc32&apos;);</div><div class="line">ini_set(&apos;memcache.hash_strategy&apos;,&apos;consistent&apos;); // standard为取模分布式算法</div></pre></td></tr></table></figure></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/memcached/">memcached</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&title=《22. 分布式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&title=《22. 分布式》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 分布式》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/03/10/memcache/2016-03-10-memcache-21/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">21. 过期数据删除机制</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/27/OOP/2016-05-27-OOP-00-SOLID/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">OOD-S.O.L.I.D</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&title=《22. 分布式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&title=《22. 分布式》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 分布式》 — Lant's Blog&url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/03/12/memcache/2016-03-12-memcache-22/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3aQU7EMAwFUO5/aZBYsaCd/52kA9Lrquq0IS+L2Nj5+Iivz+/r5/3Vk5/Pr96/Gvnqyf3zDRceHh7eaOpXVw5IFmKFdD+fy0XEw8PDO8bLg0E+uftd+n6iyVdR8MDDw8N7Ky+htsEmnwkeHh7e/+XNChD3y7E+Hzw8PLzneSub+Mr9LNU+UmvBw8PDi3mzBth774/39/Dw8PBGXfVkU84T7tnRgc+FCw8PD+8E776sMCuq5scO2jfb1hoeHh7eM7x2uu1E1w8i1IVgPDw8vK282SaeTy4PCesh5MV/DHh4eHhbeW0VtD0KkG/3K0t2GRjw8PDwHuHlf2DlnTZBr9NrPDw8vAO8/HBAnmrnI58IHi+KuXh4eHjLvLbJ1Lap2uJvu9xRGRcPDw9vK29X+XXWoLoH5Gl3NEM8PDy8Y7wkYc0Lvu1o+ThtERkPDw9vFy+f7uzbtoC7MvIvoQUPDw/vAG/WmM+38raMu7IQlzPHw8PDe5y3nl7n37a8aAQ8PDy8rbw2/W2LsO19lCLnC4GHh4d3gNdu5W0CnR8IyL9NmmF4eHh4T/LaVn27TecpdYuPAgMeHh7eVt7sQEDb5p/92pYk8PDw8J7h7SpA5NNqwcPjCHh4eHjHeO0//3VqW/7aljCiowN4eHh4y7z2iFVSGpg1rvJiRLFweHh4eG/irYSH2TLNEvcXh67w8PDwNvFyTFKSyFtf6822pbXEw8PDW+DNGlp56rzy5ixEvUip8fDw8JZ5pxPfPADsarnh4eHhPcNrD07NjhfkASMBF2UIPDw8vGO8lVS4Bc8Kx8OUHQ8PD++tvLyp3x5X3ZVG4+Hh4f1NXt51moWNZLRiKfHw8PCO8fLNvX2zxSfjF0VnPDw8vAO8WQMsT6bz8JMHpM0nzvDw8PBS3hfMz+Qp56U+3wAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
