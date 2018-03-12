@@ -13,25 +13,28 @@
     
     
     
-    <title>02. 在Laravel中使用RabbitMQ | Lant&#39;s Blog</title>
+    <title>02. php-amqplib库实例 详细剖析各参数属性(全网独一哦) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+    <meta name="description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02. 在Laravel中使用RabbitMQ">
+<meta property="og:title" content="02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+<meta property="og:description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-11T08:27:46.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/exchange_arguments.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/queue_arguments.png">
+<meta property="og:updated_time" content="2018-03-12T14:41:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02. 在Laravel中使用RabbitMQ">
-<meta name="twitter:description" content="准备 Mac安装rabbitmq比较简单, 自行搜索; Laravel中推荐使用php-amqplib来使用RabbitMQ;  composer安装扩展包 composer require php-amqplib/php-amqplib 2.6.* 如下引入即可使用12use PhpAmqpLib\Connection\AMQPStreamConnection;use PhpAmqpLib\Me">
+<meta name="twitter:title" content="02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)">
+<meta name="twitter:description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/exchange_arguments.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +115,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02. 在Laravel中使用RabbitMQ</div>
+        <div class="flex-col header-title ellipsis">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,7 +137,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">02. 在Laravel中使用RabbitMQ</h1>
+        <h1 class="title">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-04-10T04:21:07.000Z" itemprop="datePublished" class="page-time">
@@ -159,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者"><span class="post-toc-number">2.</span> <span class="post-toc-text">生产者</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">基础准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#核心步骤"><span class="post-toc-number">3.</span> <span class="post-toc-text">核心步骤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者"><span class="post-toc-number">4.</span> <span class="post-toc-text">生产者</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编写一个消费者"><span class="post-toc-number">5.</span> <span class="post-toc-text">编写一个消费者</span></a></li></ol>
         </nav>
     </aside>
     
@@ -167,7 +170,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02. 在Laravel中使用RabbitMQ</h1>
+        <h1 class="post-card-title">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
 
@@ -180,29 +183,47 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><ol>
-<li>Mac安装rabbitmq比较简单, 自行搜索;</li>
-<li><p>Laravel中推荐使用<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external">php-amqplib</a>来使用RabbitMQ;</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 <code>生产者--消费者</code> demo, 并详细介绍一下常见属性的作用 (<strong>可以说非常详尽了</strong>);</li>
+<li>在编写中, 你会发现<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external"><code>php-amqplib</code></a> 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可<a href="https://www.rabbitmq.com/specification.html" target="_blank" rel="external">参考</a>;</li>
+</ol>
+<h2 id="基础准备"><a href="#基础准备" class="headerlink" title="基础准备"></a>基础准备</h2><ol>
+<li><p>Mac安装rabbitmq比较简单, 自行搜索;</p>
+</li>
+<li><p>Laravel中通过<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external">php-amqplib</a>包来使用RabbitMQ;</p>
 <ul>
 <li>composer安装扩展包 <code>composer require php-amqplib/php-amqplib 2.6.*</code></li>
-<li>如下引入即可使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div></pre></td></tr></table></figure>
-</li>
-</ul>
+<li><p>如下引入即可使用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div></pre></td></tr></table></figure>
 </li>
 <li><p>更多细节查看<a href="http://www.rabbitmq.com/getstarted.html" target="_blank" rel="external">php-qmqp 用法</a>;</p>
 </li>
-</ol>
-<h2 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h2><ol>
-<li>基本步骤为<ul>
-<li>创建connection(TCP)连接</li>
-<li>基于connection连接创建channle信道</li>
-<li>通过channel信道向rabbit-server发出声明队列的请求</li>
-<li>创建exchange并绑定队列,设置bindgingkey (这一步可以省略, 将会使用默认的名为<code>(AMQP default)</code>的<code>隐式</code>exchange, (<code>direct</code> 且 <code>持久化</code>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Http\Controllers\Test;</div><div class="line"></div><div class="line">use App\Http\Controllers\Controller;</div><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div><div class="line"></div><div class="line">class RabbitController extends Controller</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * 生产者demo</div><div class="line">     */</div><div class="line">    public function producer()</div><div class="line">    &#123;</div><div class="line">        // 创建connection(TCP)连接</div><div class="line">        $connection = new AMQPStreamConnection(</div><div class="line">            &apos;localhost&apos;,</div><div class="line">            5672,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            &apos;/&apos; // 默认使用的就是 / 这个vhost</div><div class="line">            // 还有多达9个其他属性稍后分析</div><div class="line">        );</div><div class="line">        // 基于TCP连接创建channel(信道, 一个connection可以创建很多信道)</div><div class="line">        $channel = $connection-&gt;channel();</div><div class="line">        // 接下来将通过信道和rabbit-server进行交互</div><div class="line"></div><div class="line">        // 通过信道, 想rabbit-server申请创建队列</div><div class="line">        $channel-&gt;queue_declare(</div><div class="line">            &apos;hello&apos;,        // 队列名 (接下来如果不绑定exchange的话, 则默认bindingkey与queue同名, 也为hello)</div><div class="line">            false,          // 如果为true, 表示消极的创建队列, 所谓消极:rabbit-server会查看有没有名为hello的queue, 如果有就把名字什么的信息告诉你, 如果没有声明过该队列就直接报错。这个参数比较鸡肋, 你可以用来确认queue是否存在</div><div class="line">                                    // 默认为false, 表示积极创建队列, 无则创建, 有则不创建</div><div class="line">                                    // 也叫惰性</div><div class="line">            false,          // 队列的持久型</div><div class="line">            false,         // 队列的排他性(如果启用，队列只能被声明它的消费者使用)</div><div class="line">            false);     // 自动删除(如果启用,那么队列将会在所有的消费者停止使用之后自动删除掉自身)</div><div class="line">            // 其余三个参数稍后讨论</div><div class="line"></div><div class="line">        // 接下来如果不声明 exchange, 也不绑定对列名, 不设置bindingkey</div><div class="line">        // 你会发现, 队列默认会被绑定到一个名为`(AMQP default)`的默认隐式exchange上, 并且该exchange是direct类型的, 也是持久化的</div><div class="line">        // 默认交换被隐式绑定到每个队列，其中路由密钥等于队列名称 无法显式绑定或取消绑定默认交换 它也不能被删除</div><div class="line"></div><div class="line">        // 创建消息对象</div><div class="line">        $msg = new AMQPMessage(</div><div class="line">            &apos;Hello World!&apos;</div><div class="line">            // 第二个数组参数稍后讨论</div><div class="line">        );</div><div class="line"></div><div class="line">        $channel-&gt;basic_publish(</div><div class="line">            $msg,   // 发送的消息对象</div><div class="line">            &apos;&apos;, // 选择的exchange路由</div><div class="line">            &apos;hello&apos; // routingkey 用于和bingkey进行匹配</div><div class="line">            // 其余三个参数稍后讨论</div><div class="line">        );</div><div class="line"></div><div class="line">        // 关闭信道</div><div class="line">        $channel-&gt;close();</div><div class="line">        // 关闭connection</div><div class="line">        $connection-&gt;close();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
 </ul>
 </li>
 </ol>
-<p>使用默认的vhost, 默认的Exchange(默认的bindingKey, routingKey将需要和queue同名), </p>
+<h2 id="核心步骤"><a href="#核心步骤" class="headerlink" title="核心步骤"></a>核心步骤</h2><ul>
+<li><p><strong>创建connection(TCP)连接</strong></p>
+</li>
+<li><p><strong>基于connection连接创建channle信道</strong><br>接下来就是通过channel信道与rabbit-server交互,向rabbit-server发出一些请求</p>
+</li>
+<li><p><strong>声明exchange</strong><br>这一步可以省略但是不推荐, 如果省略, 将会使用默认的名为<code>(AMQP default)</code> 的 <code>隐式</code> exchange, <code>direct</code> 且 <code>持久化</code>)<br>默认交换被隐式绑定到每个队列，其中路由密钥等于队列名称 无法显式绑定或取消绑定默认交换 它也不能被删除</p>
+</li>
+<li><p><strong>声明queue</strong></p>
+</li>
+<li><p><strong>注意: 以上步骤最好在生产者和消费者中都实现</strong>, 因为你可能会在使用生产者发布消息之前启动消费者，所以也需要在使用消息之前确保队列已存在</p>
+</li>
+<li><p>接下来, 可以决定代码作为生产者来发送消息, 或者作为消费者来处理消息</p>
+</li>
+</ul>
+<h2 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Http\Controllers\Test;</div><div class="line"></div><div class="line">use App\Http\Controllers\Controller;</div><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div><div class="line">use PhpAmqpLib\Wire\AMQPTable;</div><div class="line"></div><div class="line">class RabbitController extends Controller</div><div class="line">&#123;</div><div class="line">    public function producer()</div><div class="line">    &#123;</div><div class="line">        // 1. 创建connection(TCP)连接</div><div class="line">        $connection = new AMQPStreamConnection(</div><div class="line">            &apos;localhost&apos;,</div><div class="line">            5672,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            &apos;guest&apos;,</div><div class="line">            // 默认使用的就是 / 这个vhost</div><div class="line">            &apos;/&apos;,</div><div class="line">            // 下面的这九个参数基本不会用到, 以后用到再做补充</div><div class="line">            false,</div><div class="line">            &apos;AMQPLAIN&apos;,</div><div class="line">            null,</div><div class="line">            &apos;en_US&apos;,</div><div class="line">            3.0,</div><div class="line">            3.0,</div><div class="line">            null,</div><div class="line">            false,</div><div class="line">            0</div><div class="line">        );</div><div class="line"></div><div class="line">        // 2. 基于TCP连接创建channel(信道, 一个connection可以创建很多信道)</div><div class="line">        $channel = $connection-&gt;channel();</div><div class="line"></div><div class="line">        // 接下来将通过信道和rabbit-server进行交互</div><div class="line"></div><div class="line">        // 3. 通过信道, 向rabbit-server申请创建交换机</div><div class="line">        // 可以给交换机设置一些额外的信息 (会在浏览器界面上 每个交换机详情下的&quot;details&quot;中显示出来)</div><div class="line">        // 注意: arguments需要是AMQPTable对象;</div><div class="line">        // 另外, 第一次创建的时候设置好了额外信息, 如果想修改额外信息, 则需要删除交换机重新创建才行</div><div class="line">        // 因为在创建队列时, 如果发现已经有了该队列, 是不会去重新创建的</div><div class="line">        $arguments = new AMQPTable([</div><div class="line">                &apos;arguments1&apos; =&gt; &apos;想写什么信息都行&apos;,</div><div class="line">                &apos;arguments2&apos; =&gt; [</div><div class="line">                    &apos;想写什么信息都行, 比如声明是那条业务线的&apos;,</div><div class="line">                    &apos;想写什么信息都行, 比如连接信息....&apos;,</div><div class="line">                ]</div><div class="line">            ]</div><div class="line">        );</div><div class="line">        $res = $channel-&gt;exchange_declare(</div><div class="line">            &apos;test&apos;,</div><div class="line">            &apos;direct&apos;,</div><div class="line">            // 如果passive设置为true:</div><div class="line">            // rabbit-server会查看有没有名为test的exchange, 如果有就把名字什么的信息告诉你;没有就会直接报错</div><div class="line">            // 这个参数比较鸡肋, 不过倒是可以用来检查exchange是否存在</div><div class="line">            false,</div><div class="line">            // 将exchange设置为持久的, 持久交换机在rabbit-server重启后会存在, 非持久的则会被清除</div><div class="line">            // 在使用中推荐设置为 true</div><div class="line">            true,</div><div class="line">            // 如果auto_delete设置为true, 当所有队列完成使用后, exchange将会被删除</div><div class="line">            // 注意, 没有队列绑定不算, 只有在绑定了队列,并且之后队列又被全部删除(队列也有该属性), 才会自动删除自己 (和durable无关)</div><div class="line">            false,</div><div class="line">            // 如果设置为true, 表示将该路由设置为内部路由, 生产者将无法直接使用该交换机进行消息发布(发布就会报错)</div><div class="line">            // 因为交换机还可以再绑定交换机 (可以参考:http://www.rabbitmq.com/e2e.html)</div><div class="line">            false,</div><div class="line">            // 默认是false, 则这个函数会有响应结果; 如果为true的话, 则没有响应结果, $res为null;</div><div class="line">            false,</div><div class="line">            //</div><div class="line">            $arguments</div><div class="line">            // ticket 先不解释</div><div class="line">        );</div><div class="line">        // var_dump($res);  // 和nowait的设置有关</div><div class="line"></div><div class="line">        // 可以给队列设置一些额外的信息 (会在浏览器界面上&quot;queues&quot;下的&quot;details&quot;中显示出来)</div><div class="line">        // 注意: arguments需要是AMQPTable对象;</div><div class="line">        // 另外, 第一次创建的时候设置好了额外信息, 如果想修改额外信息, 则需要删除队列重新创建才行</div><div class="line">        // 因为在创建队列时, 如果发现已经有了该队列, 是不会去重新创建的</div><div class="line">        $arguments = new AMQPTable([</div><div class="line">                &apos;arguments1&apos; =&gt; &apos;想写什么信息都行&apos;,</div><div class="line">                &apos;arguments2&apos; =&gt; [</div><div class="line">                    &apos;想写什么信息都行, 比如声明是那条业务线的&apos;,</div><div class="line">                    &apos;想写什么信息都行, 比如连接信息....&apos;,</div><div class="line">                ]</div><div class="line">            ]</div><div class="line">        );</div><div class="line"></div><div class="line">        // 4. 通过信道, 向rabbit-server申请创建队列</div><div class="line">        $res = $channel-&gt;queue_declare(</div><div class="line">        // 队列名(后面来如果不显示绑定exchange与queue的话, 则默认将queue绑定到名为 (AMQP default) 的默认隐式交换机 (direct并且持久)</div><div class="line">        // bindingkey与queue同名, 也为hello</div><div class="line">            &apos;hello&apos;,</div><div class="line">            // 如果为true: rabbit-server会查看有没有名为hello的queue, 如果有就把名字什么的信息告诉你; 如果没有就直接报错。(这个参数比较鸡肋, 不过倒是可以用来检查queue是否存在)</div><div class="line">            // 而false就是没有则创建, 有就什么也不做</div><div class="line">            false,</div><div class="line">            // true: 将queue设置为持久的, 持久队列在rabbit-server重启后会存在, 非持久的则会被清除</div><div class="line">            // 在使用中推荐为true</div><div class="line">            true,</div><div class="line">            //  如果设置为true, 则创建的为`排他队列`</div><div class="line">            // 如果一个队列被声明为排他队列, 该队列仅对首次声明它的连接可见, 并在连接断开时自动删除。也就是说, 如果你在生产者中创建排他队列, 则连接结束, 队列就没了, 所以你可能一直看不到创建的队列;</div><div class="line">            // 另外需要注意三点:</div><div class="line">            // 1.排他队列是基于连接可见的, 同一连接的不同信道是可以同时访问同一个连接创建的排他队列的</div><div class="line">            // 2.首次，如果一个连接已经声明了一个排他队列, 其他连接是不允许建立同名的排他队列的, 这个与普通队列不同(普通队列可以,无则创建,有则不报错)</div><div class="line">            // 3.即使该队列是持久化的,一旦连接关闭或者客户端退出,该排他队列都会被自动删除的</div><div class="line">            // 所以, 排他队列只能由消费者创建, 而且这种队列适用于只有一个消费者消费消息的场景</div><div class="line">            false,</div><div class="line">            // 自动删除(如果启用,那么队列将会在所有的消费者停止使用之后自动删除掉自身, 注意: 没有消费者不算, 只有在有了消费之后, 所有的消费者又断开后, 就会自动删除自己, 和durable无关)</div><div class="line">            false,</div><div class="line">            // 如果为false, 则这个函数会有响应结果; 如果为true的话, 则没有响应结果,$res为null</div><div class="line">            false,</div><div class="line">            // 传递给队列的一些详细信息 (可以在图形控制页 &quot;queues&quot;&gt;&quot;details&quot;中看到效果)</div><div class="line">            $arguments</div><div class="line">            //sticket 先不解释</div><div class="line">        );</div><div class="line">        // var_dump($res);  // 和nowait的设置有关</div><div class="line"></div><div class="line">        // 5. 将queue与exchange使用 bindingkey 进行绑定</div><div class="line">        // 绑定的时候也可以设置一些额外绑定信息</div><div class="line">        $arguments = new AMQPTable([</div><div class="line">                &apos;arguments1&apos; =&gt; &apos;想写什么信息都行&apos;,</div><div class="line">                &apos;arguments2&apos; =&gt; [</div><div class="line">                    &apos;想写什么信息都行, 比如声明是那条业务线的&apos;,</div><div class="line">                    &apos;想写什么信息都行, 比如连接信息....&apos;,</div><div class="line">                ]</div><div class="line">            ]</div><div class="line">        );</div><div class="line">        $res = $channel-&gt;queue_bind(</div><div class="line">            &apos;hello&apos;,</div><div class="line">            &apos;test&apos;,</div><div class="line">            &apos;hello&apos;,</div><div class="line">            false,</div><div class="line">            $arguments</div><div class="line">            //ticket 先不解释</div><div class="line">        );</div><div class="line">        // var_dump($res);  //和nowait的设置有关</div><div class="line"></div><div class="line">        // 6. 一切准备就绪, 接下来该准备消息, 发布消息了</div><div class="line">        // 创建消息对象</div><div class="line">        $msg = new AMQPMessage(</div><div class="line">            // 消息内容, 使用时可以发送json</div><div class="line">            &apos;Hello World!&apos;</div><div class="line">            // 第二个数组参数稍微复杂</div><div class="line">        );</div><div class="line"></div><div class="line">        $res = $channel-&gt;basic_publish(</div><div class="line">            // 发送的消息对象</div><div class="line">            $msg,</div><div class="line">            // 选择的exchange路由</div><div class="line">            &apos;test&apos;,</div><div class="line">            // routingkey 用于和 bingkey 进行匹配</div><div class="line">            &apos;hello&apos;,</div><div class="line">            // 当mandatory设置为true时，如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue, 那么会调用`basic.return`方法将消息返回给生产者；</div><div class="line">            // 生产者需要使用set_return_listener来监听返回, 而且生产者也要做成像消费者那样是阻塞的,并且命令行启动, 否则接收不到 (所以综合来看, 这个选项目前来说, 没啥用)</div><div class="line">            //当mandatory设置为false时, 出现上述情形broker会直接将消息扔掉</div><div class="line"></div><div class="line">            // immediate, ticket 以后再说</div><div class="line">            false</div><div class="line"></div><div class="line">        );</div><div class="line">        var_dump($res);</div><div class="line"></div><div class="line">        // 如果在上面发布消息时, 设置了mandastory属性为true, 生产者要阻塞监听回调, 如下</div><div class="line">//        $returnListener = function ($replyCode, $replyText, $exchange, $routingKey, $message) &#123;</div><div class="line">//            echo &quot;return: &quot;,</div><div class="line">//            $replyCode, &quot;\n&quot;,</div><div class="line">//            $replyText, &quot;\n&quot;,</div><div class="line">//            $exchange, &quot;\n&quot;,</div><div class="line">//            $routingKey, &quot;\n&quot;,</div><div class="line">//            $message-&gt;body, &quot;\n&quot;;</div><div class="line">//        &#125;;</div><div class="line">//        $channel-&gt;set_return_listener($returnListener);</div><div class="line">//        while (true) &#123;</div><div class="line">//            $channel-&gt;wait();</div><div class="line">//        &#125;</div><div class="line"></div><div class="line">        // 关闭信道</div><div class="line">        $channel-&gt;close();</div><div class="line">        // 关闭connection</div><div class="line">        $connection-&gt;close();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>效果<br><img src="/img/rabbitmq/exchange_arguments.png" width="450/"><br><img src="/img/rabbitmq/queue_arguments.png" width="450/"></p>
+<h2 id="编写一个消费者"><a href="#编写一个消费者" class="headerlink" title="编写一个消费者"></a>编写一个消费者</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure>
+</code></pre><p>官方文档:<br><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html" target="_blank" rel="external">http://www.rabbitmq.com/amqp-0-9-1-reference.html</a></p>
+<p><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html" target="_blank" rel="external">http://www.rabbitmq.com/amqp-0-9-1-reference.html</a><br><a href="http://www.rabbitmq.com/amqp-0-9-1-quickref.html" target="_blank" rel="external">http://www.rabbitmq.com/amqp-0-9-1-quickref.html</a></p>
+<p>命令行操作： <a href="https://www.rabbitmq.com/manpages.html" target="_blank" rel="external">https://www.rabbitmq.com/manpages.html</a><br>文档: <a href="http://www.rabbitmq.com/documentation.html" target="_blank" rel="external">http://www.rabbitmq.com/documentation.html</a>  <a href="http://blog.csdn.net/column/details/rabbitmq.html" target="_blank" rel="external">http://blog.csdn.net/column/details/rabbitmq.html</a><br>Lazy Queues: <a href="http://www.rabbitmq.com/lazy-queues.html" target="_blank" rel="external">http://www.rabbitmq.com/lazy-queues.html</a><br>订阅发布: <a href="http://laravelacademy.org/tags/rabbitmq" target="_blank" rel="external">http://laravelacademy.org/tags/rabbitmq</a><br>队列参数: <a href="https://www.cnblogs.com/LiangSW/p/6218886.html" target="_blank" rel="external">https://www.cnblogs.com/LiangSW/p/6218886.html</a><br>使用默认的vhost, 默认的Exchange(默认的bindingKey, routingKey将需要和queue同名), </p>
+<p>customer-tag 相关:<a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html#domain.consumer-tag" target="_blank" rel="external">http://www.rabbitmq.com/amqp-0-9-1-reference.html#domain.consumer-tag</a></p>
+<p>事务: <a href="http://blog.csdn.net/u013256816/article/details/55515234" target="_blank" rel="external">http://blog.csdn.net/u013256816/article/details/55515234</a></p>
+<p><a href="http://rabbitmq.mr-ping.com/AMQP/amqp-0-9-1-quickref.html" target="_blank" rel="external">http://rabbitmq.mr-ping.com/AMQP/amqp-0-9-1-quickref.html</a></p>
 
         </div>
 
@@ -239,7 +260,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -249,7 +270,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -259,7 +280,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -295,9 +316,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" id="post-next" class="post-nav-link">
+      <a href="/2017/06/07/Redis/2017-06-07-redis-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03. RabbitMQ 持久化</h4>
+        <h4 class="title">03. 一些规范点</h4>
       </a>
     </div>
   
@@ -399,7 +420,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -409,7 +430,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -419,7 +440,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 在Laravel中使用RabbitMQ》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
