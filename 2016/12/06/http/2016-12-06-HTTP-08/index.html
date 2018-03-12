@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>08. 并行连接, 持久连接 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="08. 并行连接, 持久连接">
+<meta property="og:url" content="http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/connection-not-field.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-concurrence-request-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/chuanxing-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-concurrence-request-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/keep-alive-vs-chuanxing.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/blind-relay.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/pipeline-persistent-connections.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/close-shutdown-pipeline.png">
+<meta property="og:updated_time" content="2018-03-12T04:14:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="08. 并行连接, 持久连接">
+<meta name="twitter:description" content="常被误解的Connection首部 HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。  HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;  Connection首部可以承载3种不同类型的标签, 因此非常令人费解:  HTTP首部字">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/connection-not-field.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">08. 并行连接, 持久连接</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">08. 并行连接, 持久连接</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-12-06T12:10:11.000Z" itemprop="datePublished" class="page-time">
+  2016-12-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#常被误解的Connection首部"><span class="post-toc-number">1.</span> <span class="post-toc-text">常被误解的Connection首部</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#并行连接"><span class="post-toc-number">2.</span> <span class="post-toc-text">并行连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久连接"><span class="post-toc-number">3.</span> <span class="post-toc-text">持久连接</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP-1-0-keep-alive连接"><span class="post-toc-number">4.</span> <span class="post-toc-text">HTTP/1.0+keep-alive连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Keep-Alive操作"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Keep-Alive操作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#还有keep-alive首部"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">还有keep-alive首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#keep-alive连接的限制和规则"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">keep-alive连接的限制和规则</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Keep-Alive和哑代理"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">Keep-Alive和哑代理</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HTTP-1-1-persistent连接"><span class="post-toc-number">5.</span> <span class="post-toc-text">HTTP/1.1 persistent连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#persistent连接的限制和规则"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">persistent连接的限制和规则 (??)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#管道化连接"><span class="post-toc-number">6.</span> <span class="post-toc-text">管道化连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对管道化连接的限制"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">对管道化连接的限制</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关闭连接"><span class="post-toc-number">7.</span> <span class="post-toc-text">关闭连接</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#“任意”解除连接"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">“任意”解除连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Conetent-Length-及-截尾操作"><span class="post-toc-number">7.2.</span> <span class="post-toc-text">Conetent-Length 及 截尾操作</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#连接关闭容限-重试及幂等性"><span class="post-toc-number">7.3.</span> <span class="post-toc-text">连接关闭容限,重试及幂等性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#正常关闭连接"><span class="post-toc-number">7.4.</span> <span class="post-toc-text">正常关闭连接</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">8.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2016-12-06-HTTP-08"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">08. 并行连接, 持久连接</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-12-06 20:10:11" datetime="2016-12-06T12:10:11.000Z"  itemprop="datePublished">2016-12-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="常被误解的Connection首部"><a href="#常被误解的Connection首部" class="headerlink" title="常被误解的Connection首部"></a>常被误解的<code>Connection</code>首部</h2><ol>
+<li><p>HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。</p>
+</li>
+<li><p>HTTP的 <code>Connection</code> 首部字段中有一个由<code>,</code>分隔的连接标签列表;</p>
+</li>
+<li><p>Connection首部可以承载3种不同类型的标签, 因此非常令人费解:</p>
+<ul>
+<li>HTTP首部字段名, 列出了只与此链接有关的首部; </li>
+<li>任意标签值, 用于描述此链接的非标准选项;</li>
+<li>close, 说明操作完成之后需要关闭这条持久连接;</li>
+</ul>
+</li>
+<li><p>如果连接标签中包含了一个HTTP首部字段的名称, 那么这个首部字段就包含了一些连接有关的信息, 不能将其转发出去, 在将报文转发出去之前, 必须删除Connection首部列出的所有首部字段。</p>
+<ul>
+<li>由于Connection首部可以防止无意中对本地首部的转发, 因此将逐跳字首部名放入Connection首部被称为”对首部的保护”。<br>(<strong>Connection首部是个逐跳首部, 只适用于单条传输链路, 不应该沿着传输链路向下传输</strong> (参考P101))<br><img src="/img/http/connection-not-field.png" width="550/"></li>
+</ul>
+</li>
+</ol>
+<h2 id="并行连接"><a href="#并行连接" class="headerlink" title="并行连接"></a>并行连接</h2><ol>
+<li><p>在串行请求时, 浏览器可以先完整地请求原始的HTML页面, 然后请求第一个嵌入对象, 然后请求第二个嵌入对象等, 以这种简单的方式对每个嵌入式对象进行串行处理, 很明显这样处理很慢!!</p>
+</li>
+<li><p>HTTP允许客户端打开多条连接, 并行地执行多个HTTP事务, 如下图, 并行加载了四幅嵌入式图片, 每个事务都有自己的TCP连接:<br> <img src="/img/http/http-concurrence-request-01.png" width="550/"></p>
+</li>
+<li><p>并行连接可能会提高页面的加载速度</p>
+<ul>
+<li>包含嵌入对象的组合页面如果能通过并行连接克服单条连接的空载时间和带宽限制, 加载速度也会有所提高。时延可以重叠起来, 而且如果单条连接没有充分利用客户端的因特网带宽, 可以将为用带宽分配来装载其他对象。</li>
+<li>如下图, 串行和并行的对比, 并行情况下, 先装载的是封闭的HTML页面, 然后并行处理其余3个事务, 每个事务都有自己的连接。(图片的装载是并行的, 连接的时延也是重叠的)<br><img src="/img/http/chuanxing-01.png" width="550/"><br><img src="/img/http/http-concurrence-request-02.png" width="550/"></li>
+<li>由于软件开销的存在, 每个连接请求之间总会有一些小的时延, 但连接请求和传输时间<strong>基本上</strong>都是重叠起来的!</li>
+</ul>
+</li>
+<li><p>并行连接不一定更快<br> <strong>即使并行连接的速度可能会更快, 但是并不一定总是更快</strong></p>
+<blockquote>
+<p>因为在客户端的网络带宽如果不足时, 大部分的时间可能都是用来传送数据的。在这种情况下, 一个连接到速度较快服务器上的HTTP事务就会很容易耗尽所有可用的Modem带宽。<br> 如果并行加载多个对象, 每个对象都会去竞争这有限的带宽, 每个对象都会以较慢的速度按比例加载, 这样带来的性能提升就很小, 甚至没什么提升。<br> 而且打开大量连接会消耗很多内存资源, 从而引发自身性能问题。<br> 复杂的Web有可能会有数十或数百个内嵌对象, 客户端可能可以打开数百个连接, 但Web服务器通常要同时处理很多其他用户的请求, 所以很少有Web服务器希望出现这样的情况。<br> 一百个用户同时发出申请, 每个用户打开100个连接, 服务器就要负责处理1W个连接, 这会造成服务器性能的严重下降。对高负荷的代理来说也同样如此。<br> 实际上, 浏览器确实使用了并行连接, 但它们会将并行连接的总数限制为一个较小的值(通常是四个)。服务器可以随意关闭来自特定客户端的超量连接。</p>
+</blockquote>
+</li>
+<li><p><strong>并行连接可能让人”感觉”更快一些</strong><br>通过上面的介绍, 我们知道并行连接并不总是能使页面加载更快, 但即使实际上没有加快页面的传输速度, 并行连接通常也会让用户<code>觉得</code>页面加载的更快了,<br>因为多个组件对象同时出现屏幕上时, 用户能够看到加载的进展。如果整个屏幕上有很多动作在进行, 即使实际上整个页面的下载时间更长, 用户也会认为Web页面加载得更快一些。</p>
+</li>
+</ol>
+<h2 id="持久连接"><a href="#持久连接" class="headerlink" title="持久连接"></a>持久连接</h2><ol>
+<li><p>HTTP/1.1(以及HTTP/1.0的各种增强版本)允许HTTP设备在事务处理结束之后将TCP连接保持在打开状态, 以便未来的HTTP请求能够重用现存的连接。在事务处理结束之后仍然保持在打开状态的TCP连接被称为<strong>持久连接</strong>。</p>
+</li>
+<li><p>非持久连接会在每个事务结束之后关闭, 持久连接会在不同事务之间保持打开状态, 直到客户端或服务器其决定将其关闭为止。</p>
+</li>
+<li><p>重用已对目标服务器打开的空闲持久连接, 就可以避开缓慢的连接建立阶段。而且已经打开的连接还可以避免慢启动的拥塞使用阶段, 以便更快速地进行数据的传输。</p>
+</li>
+<li><p>持久连接和并行连接</p>
+<blockquote>
+<p>之前已经了解过”并行连接可以提高复合页面的传输速度, 但并行连接也有一些缺点”;<br>而持久连接有一些比并行连接更好的地方,持久连接降低了时延和连接建立的开销, 将连接保持在已调谐状态, 而且减少了打开连接的潜在数量。<br>但是, 管理持久连接时要特别小心, 不然就会积累大量的空闲连接, 耗费本地以及远程客户端和服务器上的资源。</p>
+</blockquote>
+<p> 持久连接与并行连接配合使用可能是更高效的方式。现在, 很多Web应用程序都会打开少量的并行连接, 其中的每一个都是持久连接。</p>
+</li>
+<li><p>持久连接有两种类型: 比较老的 <code>HTTP/1.0+&quot;keep-alive&quot;</code> 连接, 以及现代的 <code>HTTP/1.1 &quot;persistent&quot;</code> 连接。</p>
+</li>
+</ol>
+<h2 id="HTTP-1-0-keep-alive连接"><a href="#HTTP-1-0-keep-alive连接" class="headerlink" title="HTTP/1.0+keep-alive连接"></a>HTTP/1.0+keep-alive连接</h2><ol>
+<li><p>前言:<br>大约从1996年开始, 很多HTTP/1.0浏览器和服务器都进行了扩展, 以支持一种被称为keep-alive连接的早期实验型持久连接。<br>这些早期的持久连接收到了一些互操作性设计方面问题的困扰, 这些问题在后期的HTTP/1.1版本中都得到了修正, 但很多客户端和服务器仍然在使用这些早期的keep-alive连接。</p>
+</li>
+<li><p>下图在”串行连接上实现了4个HTTP事务的时间线” 与 “在一条持久连接上实现同样事务” 所需的时间线进行了比较, <strong>显示了keep-alive连接的一些性能优点</strong><br> <strong>由于去除了创建连接和关闭连接的开销, 所以时间线有所缩减</strong><br> <img src="/img/http/keep-alive-vs-chuanxing.png" width="500/"></p>
+</li>
+</ol>
+<h3 id="Keep-Alive操作"><a href="#Keep-Alive操作" class="headerlink" title="Keep-Alive操作"></a><strong>Keep-Alive操作</strong></h3><p>客户端和服务器要配合</p>
+<ol>
+<li><p>keep-alive已经不再使用了, 而且在当前的HTTP/1.1规范中也已经没有了对它的说明了。但浏览器和服务器对keep-alive握手的使用仍然相当广泛, 因此HTTP的实现者应该做好与之进行交互操作的准备.</p>
+</li>
+<li><p>实现HTTP/1.0 keep alive连接的客户端可以通过包含<code>Connection: Keep-Alive</code>首部请求将一条连接保持在打开状态。</p>
+</li>
+<li><p>如果服务器愿意为下一条请求将连接保持在打开状态, 就在响应中包含相同的首部。如果响应中没有<code>Connection: Keep-Alive</code>首部, 客户端就认为服务器不支持keep-alive, 会在发回响应报文之后关闭连接。</p>
+</li>
+</ol>
+<h3 id="还有keep-alive首部"><a href="#还有keep-alive首部" class="headerlink" title="还有keep-alive首部"></a>还有keep-alive首部</h3><ol>
+<li><p>注意, keep-Alive首部只是请求将连接保持在活跃状态。发出keep-alive请求之后, 客户端和服务器并不一定会同意进行keep-alive会话。<br> 它们可以在任意时刻关闭空闲的keep-alive连接, 并可随意限制keep-alive连接所处理事务的数量。</p>
+</li>
+<li><p>可以用<code>Keep-Alive通用首部字段</code>中指定的, 有逗号分隔的选项来调节keep-alive的行为:</p>
+<ul>
+<li>参数timeout: 是在Keep-Alive响应首部发送的, 它估计了服务器希望将连接保持在活跃状态的时间。这并不是一个承诺值。</li>
+<li>参数max: 是在Keep-Alive响应首部发送的, 它估计了服务器还希望为多少个事务保持此连接的活跃状态。这并不是一个承诺值。</li>
+<li>Keep-Alive首部还可以支持任意未经处理的属性, 这些属性主要用于诊断和调试。语法为 <code>name [=value]</code>。</li>
+</ul>
+</li>
+<li><p>Keep-Alive首部完全是可选的, 但只有在提供了 Connection:Keep-Alive 时才能使用它。<br> 下面这个例子说明服务器最多还会为另外5个事务保持连接的打开状态, 或者将打开状态保持到连接空闲了2分钟之后。</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Connection: Keep-Alive</div><div class="line">Keep-Alive: max=<span class="number">5</span>, timeout=<span class="number">120</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="keep-alive连接的限制和规则"><a href="#keep-alive连接的限制和规则" class="headerlink" title="keep-alive连接的限制和规则"></a>keep-alive连接的限制和规则</h3><ol>
+<li><p>在HTTP/1.0中, keep-alive并不是默认使用的。客户端必须发送一个 <code>Connection: Keep-Alive</code> 请求首部来激活keep-alive连接。</p>
+</li>
+<li><p>Connection: Keep-Alive 首部必须随所有希望保持持久连接的报文一起发送。<br> 如果客户端没有发送Connection: Keep-Alive首部, 服务器就会在那条请求之后关闭连接。</p>
+</li>
+<li><p>客户端如果探明响应中没有Connection: Keep-Alive响应首部, 就可以知道服务器发出响应之后是否会关闭连接了。</p>
+</li>
+<li><p>一般都是在检测到连接关闭之后, 就可以确定报文实体主体部分的长度。如果想”无需检测到连接关闭 就能确定报文实体主体部分的长度”,<br> 那你的响应报文的实体主体部分必须有正确的Connect-Length, 有多部件媒体类型, 或者用分块传输编码的方式进行了编码。<br> 在一条keep-alive信道中回送错误的 Connection-Length 是很糟糕的事, 这样的话, 事务处理的另一端就无法精确地检测出一条报文的结束和另一条报文的开始了。</p>
+</li>
+<li><p>代理和网关必须执行Connection首部的规则, 代理或网关必须在将报文转发出去或将其高速缓存之前, 删除在Connection首部中命名的所有首部字段以及Connection首部本身。</p>
+</li>
+<li><p>严格来说, 不应该与无法确定是否支持Connection首部的代理服务器建立keep-alive连接, 以防止出现下面要介绍的<code>哑代理</code>问题, 在实际应用中不是总能做到这一点的。 </p>
+</li>
+<li><p>从技术上来讲, 应该忽略所有来自HTTP/1.0设备的Connection首部字段(包括Connection:Keep-Alive), 因为他们可能是由比较老的代理服务器误转发的。<br>但是实际上, 尽管可能会有在老代理上挂起的危险, 有些客户端和服务器还是会违反这条规则。</p>
+</li>
+<li><p>除非重复发送请求会产生其他副作用, 否则 “如果在客户端受到完整响应之前连接就关闭了, 那么客户端一定要做好重试请求的准备”。 </p>
+</li>
+</ol>
+<h3 id="Keep-Alive和哑代理"><a href="#Keep-Alive和哑代理" class="headerlink" title="Keep-Alive和哑代理"></a>Keep-Alive和哑代理</h3><ol>
+<li><p>正常情况下, 如果客户端与一台服务器对话, 客户端可以发送一个 Connection:Keep-Alive 首部来告知服务器它希望保持连接的活跃状态, 如果服务器支持keep-alive, 就回送一个 Connection:Keep-Alive 首部, 否则就不回送。</p>
+</li>
+<li><p>问题是出在代理上 — 尤其是那些不理解Connection首部, 而且不知道在沿着转发链路将报文转发出去之前应该将Connection首部删除的代理。<br> 很多老式或简单的代理都是<code>盲中继(blind relay)</code>, 他们只是将字节从一个连接转发到两一个连接中去, 不对Connection首部进行特殊处理。</p>
+</li>
+<li><p>下图就是一个Web客户端通过一个作为盲中继使用的哑代理与Web服务器进行对话的例子:<br> <img src="/img/http/blind-relay.png" width="500/"><br> 更多参考: P101<br> 盲中继的更多问题参考 4.5.7 (??)</p>
+</li>
+<li><p>为了防止此类代理通信问题的发生, 现在的代理都决不能转发Connection首部和所有名字出现在Connection值中的首部。<br> 另外还有几个不能作为Connection首部的值, 并且也不能被代理转发或作为缓存响应使用的首部:<br> Proxy-Authenticate, Proxy-Connection, Transfer-Encoding 和 Upgrade;</p>
+</li>
+</ol>
+<h2 id="HTTP-1-1-persistent连接"><a href="#HTTP-1-1-persistent连接" class="headerlink" title="HTTP/1.1 persistent连接"></a>HTTP/1.1 persistent连接</h2><ol>
+<li>HTTP/1.1主键停止了对keep-alive连接的支持, 用一种名为持久连接(persistent connection)的改进型设计取代了它。<br> 持久连接的目的与keep-alive连接的目的相同, 但机制更优一些。</li>
+<li><p>与HTTP/1.0的keep-alive连接不同, HTTP/1.1持久连接在默认情况下是激活的。除非特别指明, 否则HTTP/1.1假定所有连接都是持久的。<br> 要在事务处理结束之后将连接关闭, HTTP/1.1应用程序必须向报文中显示地添加一个<code>Connection:close</code>首部。<br> 这是与以前的HTTP协议很重要的区别, 在以前的版本中, keep-alive连接要么是可选的, 要么根本就不支持。</p>
+</li>
+<li><p>HTTP/1.1客户端假定在收到响应后, 除非响应中包含了 <code>Connection:close</code>首部, 不然HTTP/1.1连接就仍维持在打开状态。<br> 但是, 客户端和服务器仍然可以随时关闭空闲的连接。 不发送 <code>Connection:close</code> 并不以为这服务器承诺永远将连接保持在打开状态。</p>
+</li>
+</ol>
+<h3 id="persistent连接的限制和规则"><a href="#persistent连接的限制和规则" class="headerlink" title="persistent连接的限制和规则 (??)"></a>persistent连接的限制和规则 (??)</h3><ol>
+<li>发送了 <code>Connection:close</code> 请求首部之后, 客户端就无法在那条连接上发送更多的请求了。</li>
+<li>如果客户端不想在连接上发送其他请求了, 就应该在最后一条请求中发送一个 <code>Connection:close</code>  请求首部。</li>
+<li>只有当连接上所有的报文都有正确的, 自定义报文长度时 – 也就是, 实体主体部分的长度都和响应 Connect-Length 一致, 或者是用分块传输编码方式编码的 — 连接才能持久保持。</li>
+<li>HTTP/1.1的代理必须能够分别管理与客户端和服务器的持久连接 — 每个持久连接都值适用于一跳传输。</li>
+<li>(由于较老的代理会转发Connection首部, 所以)HTTP/1.1的代理服务器不应该与HTTP/1.0客户端建立持久连接, 除非他们了解客户端的处理能力。<br> 实际上, 这一点是很难做到的, 很多厂商都违背了这一原则。</li>
+<li>尽管服务器不应该试图在传输报文的过程中关闭连接, 而且在关闭连接之前至少应该响应一条请求, 但不管Connection首部取了什么值, HTTP/1.1设备都可以在任意时刻关闭连接。</li>
+<li>HTTP/1.1应用程序必须能够从异步的关闭中恢复出来, 只要不存在可能会累积起来的副作用, 客户端都应该重试这条请求。(??)</li>
+<li>除非重复发送请求会产生其他副作用, 否则 “如果在客户端收到完整响应之前连接就关闭了, 那么客户端必须要重新发送请求”</li>
+<li>一个用户客户端对任何服务器或代理, 最多只能维护两条持久连接, 以防服务器过载。<br> 代理可能需要更多到服务器的连接来支持并发用户的通信, 所以如果有N个用户试图访问服务器的话, 代理最多要维持2N条到任意服务器或父代理的连接。</li>
+</ol>
+<h2 id="管道化连接"><a href="#管道化连接" class="headerlink" title="管道化连接"></a>管道化连接</h2><ol>
+<li>HTTP/1.1允许在持久连接上可选地会用<strong>请求管道</strong>。这是在keep-alive连接上的进一步性能优化。在相应到达之前, 可以将多条请求放入队列。<br> 当第一条请求通过网络流向地球另一端的服务器时, 第二条和第三条也可以开始发送了。<br> 在高时延网络条件下, 这样做可以降低网络的回环时间, 提高性能。</li>
+<li>如下图:<br> <img src="/img/http/pipeline-persistent-connections.png" width="550/"><h3 id="对管道化连接的限制"><a href="#对管道化连接的限制" class="headerlink" title="对管道化连接的限制"></a>对管道化连接的限制</h3></li>
+<li><strong>如果HTTP客户端无法确认连接是持久的, 就不应该使用管道</strong>。</li>
+<li>必须按照与请求相同的顺序回送HTTP响应。<strong>HTTP报文中没有序列号标签, 因此如果收到的响应失序了, 就没办法将其与请求匹配起来了</strong>。</li>
+<li>HTTP客户端必须做好连接会在任意时刻关闭的准备, 还要准备好重发所有未完成的管道化请求。<br> 如果客户端打开了一条持久连接, 并立即发出了10条请求, 服务器可能在只处理了5条请求后关闭了连接, 剩下的5条请求会失败, 客户端必须能够应对这些过早关闭连接的情况, 重新发出这些请求。</li>
+<li>HTTP客户端不应该用管道化的方式发送回产生副作用的请求(比如POST)。<br> 总之, 出错的时候, 管道化方式会阻塞客户端了解服务器执行的是一系列管道化请求中的哪一些。由于无法安全地重试<strong>POST这样的非幂等请求</strong>, 所以出错时, 就存在某些方法永远不会被执行的风险。</li>
+</ol>
+<h2 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h2><h3 id="“任意”解除连接"><a href="#“任意”解除连接" class="headerlink" title="“任意”解除连接"></a>“任意”解除连接</h3><p>所有HTTP客户端, 服务器或代理都可以在任意时刻关闭一条TCP传输连接, 通常会在一条报文结束时关闭连接, 但出错的时候, 也可能在首部行中间, 或其他奇怪的地方关闭连接。<br>对管道化持久连接来说, 这种情形是很常见的。HTTP应用程序可以在经过任意一段时间之后，关闭持久连接。比如，在持久连接空闲一段时间之后，服务器可能会决定将其关闭。<br>但是，服务器永远都无法确定在它关闭”空闲”连接的那一刻，在线路的那一头的客户端有没有数据要发送。如果出现这种情况，客户端就会在写入半截请求报文时发现出现了连接错误。</p>
+<h3 id="Conetent-Length-及-截尾操作"><a href="#Conetent-Length-及-截尾操作" class="headerlink" title="Conetent-Length 及 截尾操作"></a>Conetent-Length 及 截尾操作</h3><p>每条HTTP响应都应该有精确的Content-Length首部，用来描述响应主体的尺寸。<strong>如果老的HTTP服务器省略了Content-Length或者包含错误的长度指示，这样就要一来服务器发出连接关闭来说明数据的真是末尾</strong>。</p>
+<h3 id="连接关闭容限-重试及幂等性"><a href="#连接关闭容限-重试及幂等性" class="headerlink" title="连接关闭容限,重试及幂等性"></a>连接关闭容限,重试及幂等性</h3><p>即使在非错误情况下,连接也可以在任意时刻关闭。<br>HTTP应用程序要做好正确处理非预期关闭的准备。<br>如果在客户端执行事务的过程中, 传输连接关闭了, 那么, 除非事务处理会带来一些副作用, 否则客户端就应该重新打开连接, 并重试一次。<br>对管道化连接来说, 这种情况更加严重一些。客户端可以将大量请求放入队列中排队, 但源端服务器可以关闭连接, 这样就会留下大量未处理的请求, 需要重新调度。</p>
+<p>副作用是很重要的问题, 如果在发送出一些请求数据之后, 收到返回结果之前, 连接关闭了, 客户端就无法百分之百地确定服务器端实际激活了多少事务。<br>有些事务, 比如GET一个静态的HTML页面, 可以反复执行多次, 也不会有什么变化。而其他一些事务, 比如向一个在线书店POST一张订单, 就不能重复执行, 不然会有下多张订单的危险。</p>
+<p>如果一个事务， 不管是执行一次还是很多次，得到的结果都相同, <strong>这个事务就是幂等的</strong>。实现者们可以认为GET、HEAD、PUT、DELETE、TRACE和OPTIONS方法都共享这一特性。客户端不应该以管道化方式传送非幂等请求(比如POST)。<br>否则，传输连接的过早终止就会造成一些不确定的后果。要发送一条非幂等请求，就需要等待来自前一条清求的响应状态。</p>
+<p>尽管用户Agent代理可能会让操作员来选择是否对请求进行重试，但一定不能自动重试非幂等方法或序列。<br><strong>比如，大多数浏览器都会在重载一个缓存的POST响应时提供一个对话框，询问用户是否希望再次发起事务处理</strong>。</p>
+<h3 id="正常关闭连接"><a href="#正常关闭连接" class="headerlink" title="正常关闭连接"></a>正常关闭连接</h3><ol>
+<li><p>正常关闭连接<br>TCP连接是双向的。TCP连接的每一端都有一个输入队列和一个输出队列, 用于数据的读或写。放入一端输出队列中的数据最终会出现在另一端的输入队列中。</p>
+</li>
+<li><p>完全关闭与半关闭<br>应用程序可以关闭TCP输入和输出信道中的任意一个, 或者将两者都关闭了。<br>套接字调用close()会将TCP连接的输入和输出信道都关闭了, 这被称作 “完全关闭”。<br>还可以用套接字调用shutdown()单独关闭输入或输出信道。这被称为”半关闭”。<br><img src="/img/http/close-shutdown-pipeline.png" width="350/"></p>
+</li>
+<li><p>TCP关闭及重置错误<br>….</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《HTTP权威指南》– 第四章<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">https://tools.ietf.org/html/rfc2616</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&title=《08. 并行连接, 持久连接》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&title=《08. 并行连接, 持久连接》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 并行连接, 持久连接》 — Lant's Blog&url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2016/11/30/http/2016-11-30-HTTP-05/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">05. 缓存 (200, 304)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. RabbitMQ简介</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&title=《08. 并行连接, 持久连接》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&title=《08. 并行连接, 持久连接》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 并行连接, 持久连接》 — Lant's Blog&url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/12/06/http/2016-12-06-HTTP-08/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aS47CQAxFUfa/6bTECAmR3GenW419a4SAJHVqYPmTxwOv47leP79+8+k/6bWffr1tyZAh42sZx+l63wq/lm+LsC/uKUOGjAUMfusahtyHP1eGDBkySEp3/g1JB0lqKEOGDBm1gMvTvhpShgwZMjpFbFqUki2mQfyGWlyGDBlfyKgNBv7m86/PN2TIkPHvGUdppUlbLR0M9iNDhozRDN4O42lf+mutuL3YlgwZMsYxajw+AOgfEElYZciQMZvRafHz7dbaZMXBgAwZMgYxSMP9vCjttMw6aSK6kQwZMkYweLkYxO/SUzqlrwwZMmYzeKP/PBzzwWQaiNE3MmTIGM3gQ8f0JQxeBqcpqQwZMrYxak20/sCAp4noyGTIkLGGUWvxp0lh5+UJVMTKkCFjKIM0uTqF7r3HgUaYMmTIGMdIX7moDRr5ccTltAwZMhYwaokgL1zTTafJogwZMmYz+MWcmgbo9CDippsMGTJGMPiD+334u9LBi//IkCFjHKPzagUfNHYOJQ6yMmTIGMrghWu/ccbbdvzFWRkyZMxm8OZXmq6lTbrO4FOGDBlTGUe40q3wYFprtMmQIWMDozYsJA39TnuOl68yZMjYw+BBsD9ISIM4arTJkCFjDYMHPg6otfNuq8JlyJCxmNFPDUmjPy2nZciQIYOPEtPGWXocMmTI2MzgzXqyXXJtJ92UIUPGNkZtMFDbRK21F6eJMmTImMP4AeOq2xlb+bYmAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
