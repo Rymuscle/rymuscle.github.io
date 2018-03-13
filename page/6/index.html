@@ -360,11 +360,11 @@ redis事务的ACID特性在redis中, 事务具有 原子...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-10-rabbitmq-02"
+            <article id="post-rabbitmq/2017-04-12-rabbitmq-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
+        <time class="post-time" title="2017-04-12 21:30:39" datetime="2017-04-12T13:30:39.000Z"  itemprop="datePublished">2017-04-12</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -378,7 +378,7 @@ redis事务的ACID特性在redis中, 事务具有 原子...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</a>
+      <a class="post-title-link" href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-08/">08. RPC远程调用及注意事项</a>
     </h3>
   
 
@@ -388,17 +388,19 @@ redis事务的ACID特性在redis中, 事务具有 原子...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);
-在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;
+        RabbitMQ中实现RPC的机制
+客户端发送请求(消息)时, 在消息的属性(MessageProperties)中设置两个值: 
 
-基础准备
-Mac安装rabbitmq比较简单, 自行搜索;
+replyTo: Queue名称, 用于告诉服务器处理完成后将通知我的消息发送到这个Queue中
+correlationId: 此次请求的标识号, 服务器处理完成后需要将此属性返还, 客户端将根据这个id了解哪条请求被执行了; 
 
-Laravel中...
+
+服务器端收到消息并处理
+
+...
     
 
-        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -414,11 +416,11 @@ Laravel中...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-10-rabbitmq-01"
+            <article id="post-rabbitmq/2017-04-12-rabbitmq-07"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-10 11:50:02" datetime="2017-04-10T03:50:02.000Z"  itemprop="datePublished">2017-04-10</time>
+        <time class="post-time" title="2017-04-12 13:15:49" datetime="2017-04-12T05:15:49.000Z"  itemprop="datePublished">2017-04-12</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -432,7 +434,7 @@ Laravel中...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/">01. RabbitMQ简介</a>
+      <a class="post-title-link" href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-07/">07. 发布订阅</a>
     </h3>
   
 
@@ -442,14 +444,10 @@ Laravel中...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;
-
-AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 
-
-应用场景接下来简单了解一下:...
+        
     
 
-        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-07/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -465,14 +463,14 @@ AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-12-06-HTTP-08"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-06"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-12-06 20:10:11" datetime="2016-12-06T12:10:11.000Z"  itemprop="datePublished">2016-12-06</time>
+        <time class="post-time" title="2017-04-11 22:10:51" datetime="2017-04-11T14:10:51.000Z"  itemprop="datePublished">2017-04-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -483,7 +481,7 @@ AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/12/06/http/2016-12-06-HTTP-08/">08. 并行连接, 持久连接</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/">06. Priority(队列设定消息最大优先级, 消息优先级)</a>
     </h3>
   
 
@@ -493,24 +491,19 @@ AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        常被误解的Connection首部
-HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。
-
-HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;
-
-Connection首部可以承载3种不同类型的标签, 因此非常令人费解:
-
-HTTP...
+        前言在系统应用中会根据业务的优先级来决定哪些内容优先被解决, 在RabbitMQ 3.5+版本中支持了队列优先级 和 消息优先级。
+队列优先级
+您可以使用 x-max-priority 参数声明优先级队列, 这个参数应该是一个整数, 指出队列应该支持的最大优先级 在使用 php-amqplib 中, 即: 在 query_declare() 方法的 arguments参数 中加上 x-max...
     
 
-        <a href="/2016/12/06/http/2016-12-06-HTTP-08/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -519,14 +512,14 @@ HTTP...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-05"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-05"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 20:27:36" datetime="2016-11-30T12:27:36.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-11 20:21:07" datetime="2017-04-11T12:21:07.000Z"  itemprop="datePublished">2017-04-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -537,7 +530,7 @@ HTTP...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-05/">05. 缓存 (200, 304)</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/">05. Persistent (持久化)</a>
     </h3>
   
 
@@ -547,23 +540,21 @@ HTTP...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Web缓存简介
-Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。
-使用缓存的优点:
+        要做到消息持久化, 其实只用设置:
 
-减少了冗余的数据传输, 节省了你的网络费用
-
-有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地...
+exchange: durable属性为true
+queue: durable属性为true
+message对象: 12345678$msg = new AMQPMessage(    &apos;Hello World!&apos;,    [        // 持久化标志: 如果你要持久化消息, 则需要设置如下配置项        &apos;de...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-05/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -572,14 +563,14 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-04"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-04"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 11:50:02" datetime="2016-11-30T03:50:02.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-11 19:28:16" datetime="2017-04-11T11:28:16.000Z"  itemprop="datePublished">2017-04-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -590,7 +581,7 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04/">04. General-Header-Fields(通用首部字段)</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/">04. Exclusive Queue (排他队列)</a>
     </h3>
   
 
@@ -600,30 +591,21 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Cache-Control 缓存指令
-Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;
+        Queue的Exclusive你使用消费者创建的排他队列需要注意:
 
-缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
-
-可以按请求和响应分为:
-
-缓存请求指令
-缓存响应指令
-
-
-更多参考后面的博文缓存(200, 304)中的介绍
-
-immutable属于缓存控制的一个扩展属性, http://www.j...
+由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了 (和持久化无关);
+排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错;
+排他队列通过消费者创建之后,...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-04/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -632,14 +614,14 @@ immutable属于缓存控制的一个扩展属性, http://www.j...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-03"
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 11:25:12" datetime="2016-11-30T03:25:12.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-10 17:35:32" datetime="2017-04-10T09:35:32.000Z"  itemprop="datePublished">2017-04-10</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -650,7 +632,7 @@ immutable属于缓存控制的一个扩展属性, http://www.j...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-03/">03. Request Method</a>
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/">03. Exchange Type</a>
     </h3>
   
 
@@ -660,22 +642,18 @@ immutable属于缓存控制的一个扩展属性, http://www.j...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        比较简单~~~稍后补充
 
-RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&lt;图解http协议&gt;中也提到 LINK, UNLINK已经被http1.1废弃);
-
-具体还...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-03/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
