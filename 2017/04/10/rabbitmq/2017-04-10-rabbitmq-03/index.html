@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="比较简单~~~稍后补充">
+    <meta name="description" content="RabbitMQ常用的Exchange Type有  fanout direct topic headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)   下面分别介绍前三种Exchange   fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey)">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="03. Exchange Type">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="比较简单~~~稍后补充">
+<meta property="og:description" content="RabbitMQ常用的Exchange Type有  fanout direct topic headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)   下面分别介绍前三种Exchange   fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-13T04:24:32.000Z">
+<meta property="og:updated_time" content="2018-03-13T09:34:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. Exchange Type">
-<meta name="twitter:description" content="比较简单~~~稍后补充">
+<meta name="twitter:description" content="RabbitMQ常用的Exchange Type有  fanout direct topic headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)   下面分别介绍前三种Exchange   fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey)">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -156,6 +156,13 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#fanout"><span class="post-toc-number">1.</span> <span class="post-toc-text">fanout</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#direct"><span class="post-toc-number">2.</span> <span class="post-toc-text">direct</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#topic"><span class="post-toc-number">3.</span> <span class="post-toc-text">topic</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码"><span class="post-toc-number">4.</span> <span class="post-toc-text">代码</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -173,7 +180,31 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>比较简单<br>~~~稍后补充</p>
+            <ol>
+<li><p>RabbitMQ常用的Exchange Type有</p>
+<ul>
+<li>fanout</li>
+<li>direct</li>
+<li>topic</li>
+<li>headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)</li>
+</ul>
+</li>
+<li><p>下面分别介绍前三种Exchange</p>
+</li>
+</ol>
+<h3 id="fanout"><a href="#fanout" class="headerlink" title="fanout"></a>fanout</h3><p>fanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey);</p>
+<h3 id="direct"><a href="#direct" class="headerlink" title="direct"></a>direct</h3><p>direct类型的Exchange路由规则也很简单，它会把消息路由到那些Binding key与Routing key完全匹配的Queue中 ;</p>
+<h3 id="topic"><a href="#topic" class="headerlink" title="topic"></a>topic</h3><p>前面讲到direct类型的Exchange路由规则是完全匹配binding key与routing key; 但这种严格的匹配方式在很多情况下不能满足实际业务需求。<br>topic类型的Exchange在匹配规则上进行了扩展, 它与direct类型的Exchage相似, 也是将消息路由到binding key与routing key相匹配的Queue中, 但这里的匹配规则有些不同, 它约定:</p>
+<ol>
+<li>routing key为一个句点号<code>.</code>分隔的字符串(我们将被句点号<code>.</code>分隔开的每一段独立的字符串称为一个单词,如’stock.usd.nyse’、’nyse.vmw’、’quick.orange.rabbit’)</li>
+<li>binding key与routing key一样也是句点号’.’分隔的字符串</li>
+<li><code>binding key</code>中(注意不是routingkey)可以存在两种特殊字符 <code>*</code> 与 <code>#</code>, 用于做模糊匹配<ul>
+<li>其中 <code>*</code> 用于匹配一个单词</li>
+<li><code>#</code>” 用于匹配多个单词(可以是零个)</li>
+</ul>
+</li>
+</ol>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>可参考<a href="https://github.com/rymuscle/TechBlogbak/blob/master/source/_posts/2017-03-18-rabbitmq-03.markdown" target="_blank" rel="external">本人github</a></p>
 
         </div>
 

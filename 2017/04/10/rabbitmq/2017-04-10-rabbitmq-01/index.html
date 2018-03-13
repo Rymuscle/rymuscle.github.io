@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景接下来简单了解一下: Ra">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-11T10:33:40.000Z">
+<meta property="og:updated_time" content="2018-03-13T07:10:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. RabbitMQ简介">
 <meta name="twitter:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景接下来简单了解一下: Ra">
@@ -247,7 +247,7 @@
 <ul>
 <li>如果开发人员在处理完业务逻辑后, 忘记发送回执给RabbitMQ, 这将会导致严重的bug——<strong>Queue中堆积的消息会越来越多</strong>; 消费者重启后会重复消费这些消息并重复执行业务逻辑。</li>
 <li>消息确认中<code>no-ack</code>属性的设置为false: 此时为手动应答, 在这种情况下, 要求consumer在处理完接收到的Basic.Deliver + Content-Header + Content-Body之后才回复Ack, 而这个Ack是AMQP协议中的Basic.Ack, 此Ack的回复是和业务处理相关的, 所以具体的回复时间应该要取决于业务处理的耗时。</li>
-<li>如果是自动应答, consumer会在接收到Basic.Deliver + Content-Header + Content-Body之后, 立即回复Ack, 而这个Ack是TCP协议中的Ack, 此Ack的回复不关心consumer是否对接收到的数据进行了处理，当然也不关心处理数据所需要的耗时;</li>
+<li>如果是自动应答, consumer会在接收到Basic.Deliver,Content-Header,Content-Body之后, 立即回复Ack, 而这个Ack是TCP协议中的Ack, 此Ack的回复不关心consumer是否对接收到的数据进行了处理，当然也不关心处理数据所需要的耗时;</li>
 </ul>
 </li>
 <li><p>消息拒绝reject: 既然RabbitMQ提供了ACK某一个消息的命令, 当然也提供了Reject某一个消息的命令<br> 当客户端发生错误, 调用<code>basic.reject</code>命令拒绝某一个消息时, 可以设置一个requeue的属性: 如果为true, 则消息服务器会重传该消息给下一个订阅者;<br> 如果为false, 则会直接删除该消息; 当然,也可以通过ack,让消息服务器直接删除该消息并且不会重传。</p>

@@ -360,11 +360,11 @@ redis事务的ACID特性在redis中, 事务具有 原子...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-12-rabbitmq-08"
+            <article id="post-rabbitmq/2017-04-13-rabbitmq-09"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-12 21:30:39" datetime="2017-04-12T13:30:39.000Z"  itemprop="datePublished">2017-04-12</time>
+        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -378,7 +378,7 @@ redis事务的ACID特性在redis中, 事务具有 原子...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-08/">08. RPC远程调用及注意事项</a>
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/">09. RPC远程调用及注意事项</a>
     </h3>
   
 
@@ -400,7 +400,7 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
 ...
     
 
-        <a href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-08/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -416,11 +416,11 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-12-rabbitmq-07"
+            <article id="post-rabbitmq/2017-04-15-rabbitmq-10"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-12 13:15:49" datetime="2017-04-12T05:15:49.000Z"  itemprop="datePublished">2017-04-12</time>
+        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -434,7 +434,7 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-07/">07. 发布订阅</a>
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/">10. 事务机制 VS PublisherConfirm</a>
     </h3>
   
 
@@ -444,10 +444,13 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
+        背景之前已经了解过, 在使用RabbitMQ的时候, 我们可以通过 消息持久化 来解决因为服务器的异常奔溃导致的消息丢失;
+除此之外我们还会遇到一个问题, 那就是当消息的发布者在一次发布多条消息时, 将消息发送出去之后, 消息到底有没有正确到达服务器呢?
+
+如果不进行特殊配置的话, 默认情况下发布操作是不会返回任何信息给生产者的, 即, 默认情况下我们的生产者是不知道消息有没有正确到达服务器...
     
 
-        <a href="/2017/04/12/rabbitmq/2017-04-12-rabbitmq-07/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -481,7 +484,7 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/">06. Priority(队列设定消息最大优先级, 消息优先级)</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/">06. Persistent (持久化)</a>
     </h3>
   
 
@@ -491,9 +494,16 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言在系统应用中会根据业务的优先级来决定哪些内容优先被解决, 在RabbitMQ 3.5+版本中支持了队列优先级 和 消息优先级。
-队列优先级
-您可以使用 x-max-priority 参数声明优先级队列, 这个参数应该是一个整数, 指出队列应该支持的最大优先级 在使用 php-amqplib 中, 即: 在 query_declare() 方法的 arguments参数 中加上 x-max...
+        
+RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失
+
+要做到消息持久化, 其实只用设置:
+
+
+
+exchange: durable属性为true
+queue: durable属性为true
+message对象: 12345678$msg = new AMQPM...
     
 
         <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/" class="post-more waves-effect waves-button">
@@ -530,7 +540,7 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/">05. Persistent (持久化)</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/">05. Priority(队列设定消息最大优先级, 消息优先级)</a>
     </h3>
   
 
@@ -540,11 +550,9 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        要做到消息持久化, 其实只用设置:
-
-exchange: durable属性为true
-queue: durable属性为true
-message对象: 12345678$msg = new AMQPMessage(    &apos;Hello World!&apos;,    [        // 持久化标志: 如果你要持久化消息, 则需要设置如下配置项        &apos;de...
+        前言在系统应用中会根据业务的优先级来决定哪些内容优先被解决, 在RabbitMQ 3.5+版本中支持了队列优先级 和 消息优先级。
+队列优先级
+您可以使用 x-max-priority 参数声明优先级队列, 这个参数应该是一个整数, 指出队列应该支持的最大优先级 在使用 php-amqplib 中, 即: 在 query_declare() 方法的 arguments参数 中加上 x-max...
     
 
         <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/" class="post-more waves-effect waves-button">
@@ -642,8 +650,19 @@ message对象: 12345678$msg = new AMQPMessage(    &apos;Hello World!&apos;,    [
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        比较简单~~~稍后补充
+        
+RabbitMQ常用的Exchange Type有
 
+fanout
+direct
+topic
+headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)
+
+
+下面分别介绍前三种Exchange
+
+
+fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingk...
     
 
         <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" class="post-more waves-effect waves-button">
