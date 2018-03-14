@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&amp;#123;    $connection = new AMQPStreamConnection(&amp;apos;127.0.0.1&amp;apos;, 5672, &amp;apos;guest&amp;apos;, &amp;apos;guest&amp;apos;);    $chann">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-13T14:33:12.000Z">
+<meta property="og:updated_time" content="2018-03-14T01:23:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="11. basic_qos, prefetch_count">
 <meta name="twitter:description" content="正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&amp;#123;    $connection = new AMQPStreamConnection(&amp;apos;127.0.0.1&amp;apos;, 5672, &amp;apos;guest&amp;apos;, &amp;apos;guest&amp;apos;);    $chann">
@@ -191,6 +191,7 @@
 <li><p>而消费者1(Consumer4) 还在缓慢的打印 0,2,4,6,8</p>
 </li>
 </ol>
+<p><strong>上面情况在实际场景中比较常见, 由于消费者自身处理能力有限, 从rabbitmq获取一定数量的消息后, 希望rabbitmq不再将队列中的消息推送过来, 当对消息处理完后(即对消息进行了ack, 并且有能力处理更多的消息)再接收来自队列的消息。<br>在这种场景下, 我们可以通过设置basic.qos信令中的prefetch_count来达到这种效果</strong></p>
 <h2 id="basic-qos"><a href="#basic-qos" class="headerlink" title="basic_qos"></a>basic_qos</h2><ol>
 <li>rabbitmq对basic.qos信令的处理</li>
 </ol>

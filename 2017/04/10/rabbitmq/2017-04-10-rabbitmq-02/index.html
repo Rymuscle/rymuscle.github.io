@@ -13,27 +13,27 @@
     
     
     
-    <title>02. php-amqplib库实例 详细剖析各参数属性(全网独一哦) | Lant&#39;s Blog</title>
+    <title>02.php-amqplib库实例, 详细剖析各参数属性 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
+    <meta name="description" content="接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考; 基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过php-amqplib包来使用RabbitMQ;  compose">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)">
+<meta property="og:title" content="02.php-amqplib库实例, 详细剖析各参数属性">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
+<meta property="og:description" content="接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考; 基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过php-amqplib包来使用RabbitMQ;  compose">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/exchange_arguments.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/queue_arguments.png">
-<meta property="og:updated_time" content="2018-03-13T04:19:35.000Z">
+<meta property="og:updated_time" content="2018-03-14T01:12:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)">
-<meta name="twitter:description" content="前言 之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了); 在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;  基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过p">
+<meta name="twitter:title" content="02.php-amqplib库实例, 详细剖析各参数属性">
+<meta name="twitter:description" content="接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考; 基础准备 Mac安装rabbitmq比较简单, 自行搜索;  Laravel中通过php-amqplib包来使用RabbitMQ;  compose">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/exchange_arguments.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -115,7 +115,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</div>
+        <div class="flex-col header-title ellipsis">02.php-amqplib库实例, 详细剖析各参数属性</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -137,7 +137,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</h1>
+        <h1 class="title">02.php-amqplib库实例, 详细剖析各参数属性</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-04-10T04:21:07.000Z" itemprop="datePublished" class="page-time">
@@ -162,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">基础准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#核心步骤"><span class="post-toc-number">3.</span> <span class="post-toc-text">核心步骤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者-各参数详解"><span class="post-toc-number">4.</span> <span class="post-toc-text">生产者 (各参数详解)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消费者-各参数详解"><span class="post-toc-number">5.</span> <span class="post-toc-text">消费者 (各参数详解)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">6.</span> <span class="post-toc-text">参考</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础准备"><span class="post-toc-number">1.</span> <span class="post-toc-text">基础准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#核心步骤"><span class="post-toc-number">2.</span> <span class="post-toc-text">核心步骤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者-各参数详解"><span class="post-toc-number">3.</span> <span class="post-toc-text">生产者 (各参数详解)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消费者-各参数详解"><span class="post-toc-number">4.</span> <span class="post-toc-text">消费者 (各参数详解)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">5.</span> <span class="post-toc-text">参考</span></a></li></ol>
         </nav>
     </aside>
     
@@ -170,7 +170,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)</h1>
+        <h1 class="post-card-title">02.php-amqplib库实例, 详细剖析各参数属性</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
 
@@ -183,10 +183,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li>之前已经对Rabbitmq的基础知识有了一定的了解, 接下来尝试写一个完整的基础版本的 <code>生产者--消费者</code> demo, 并详细介绍一下常见属性的作用 (<strong>可以说非常详尽了</strong>);</li>
-<li>在编写中, 你会发现<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external"><code>php-amqplib</code></a> 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可<a href="https://www.rabbitmq.com/specification.html" target="_blank" rel="external">参考</a>;</li>
-</ol>
+            <p>接下来尝试写一个完整的基础版本的 <code>生产者--消费者</code> demo, 并详细介绍一下常见属性的作用 (<strong>可以说非常详尽了</strong>);<br>在编写中, 你会发现<a href="https://github.com/php-amqplib/php-amqplib" target="_blank" rel="external"><code>php-amqplib</code></a> 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可<a href="https://www.rabbitmq.com/specification.html" target="_blank" rel="external">参考</a>;</p>
 <h2 id="基础准备"><a href="#基础准备" class="headerlink" title="基础准备"></a>基础准备</h2><ol>
 <li><p>Mac安装rabbitmq比较简单, 自行搜索;</p>
 </li>
@@ -206,9 +203,13 @@
 </li>
 <li><p><strong>基于connection连接创建channle信道</strong><br>接下来就是通过channel信道与rabbit-server交互,向rabbit-server发出一些请求</p>
 </li>
+<li><p><strong>设置信道消费投递策略</strong><br>这一步可根据需要选择有还是没有(通过使用basic_qos()的prefetch_count参数控制)</p>
+</li>
 <li><p><strong>声明exchange</strong><br>这一步可以省略但是不推荐, 如果省略, 将会使用默认的名为<code>(AMQP default)</code> 的 <code>隐式</code> exchange, <code>direct</code> 且 <code>持久化</code>)<br>默认交换被隐式绑定到每个队列，其中路由密钥等于队列名称 无法显式绑定或取消绑定默认交换 它也不能被删除</p>
 </li>
 <li><p><strong>声明queue</strong></p>
+</li>
+<li><p><strong>绑定队列</strong></p>
 </li>
 <li><p><strong>注意: 以上步骤最好在生产者和消费者中都实现</strong>, 因为你可能会在使用生产者发布消息之前启动消费者，所以也需要在使用消息之前确保队列已存在</p>
 </li>
@@ -255,7 +256,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -265,7 +266,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -275,7 +276,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -305,7 +306,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">01. RabbitMQ简介</h4>
+          <h4 class="title">01.相关概念点详解</h4>
         </a>
       </div>
     
@@ -415,7 +416,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -425,7 +426,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&title=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -435,7 +436,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. php-amqplib库实例 详细剖析各参数属性(全网独一哦)》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02.php-amqplib库实例, 详细剖析各参数属性》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

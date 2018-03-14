@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="Queue的Exclusive你使用消费者创建的排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了 (和持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他">
+    <meta name="description" content="Queue的Exclusive排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他消费者即">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04. Exclusive Queue (排他队列)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Queue的Exclusive你使用消费者创建的排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了 (和持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他">
+<meta property="og:description" content="Queue的Exclusive排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他消费者即">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-13T04:24:53.000Z">
+<meta property="og:updated_time" content="2018-03-14T01:17:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. Exclusive Queue (排他队列)">
-<meta name="twitter:description" content="Queue的Exclusive你使用消费者创建的排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了 (和持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他">
+<meta name="twitter:description" content="Queue的Exclusive排他队列需要注意:  由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关); 排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错; 排他队列通过消费者创建之后, 其他消费者即">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -180,9 +180,9 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Queue的Exclusive"><a href="#Queue的Exclusive" class="headerlink" title="Queue的Exclusive"></a>Queue的Exclusive</h2><p>你使用消费者创建的排他队列需要注意:</p>
+            <h2 id="Queue的Exclusive"><a href="#Queue的Exclusive" class="headerlink" title="Queue的Exclusive"></a>Queue的Exclusive</h2><p><code>排他队列</code>需要注意:</p>
 <ol>
-<li>由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了 (和持久化无关);</li>
+<li>由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关);</li>
 <li>排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意<strong>在其他生产者代码中不要再次声明与排他队列同名的队列了</strong>, 否则会报错;</li>
 <li>排他队列通过消费者创建之后, 其他消费者即使在代码中没有创建与排他队列同名的队列, 它也无法绑定该排他队列, 会报错;</li>
 </ol>
@@ -197,7 +197,7 @@
 <li>如果队列设置为排他, 则消费者必然只能有一个, 此时, 消费者的 exclusive 设置true/false貌似没什么关系, 但一般队列如果设置为exclusive,则该消费者也设置为exclusive;</li>
 <li>如果消费者中创建的队列设置为<code>非排他</code>队列, 而<code>消费者设置为exclusive</code>, 此时<ul>
 <li>别的生产者在发布消息时, 代码中依然可以包含创建同名队列 (因为队列是 <code>非排他</code> 的)</li>
-<li>此时, 只有该消费者可以消费队列中的消息, 其他队列如果也是消费该队列, 则启动会报错</li>
+<li>此时, 只有该消费者可以消费队列中的消息, 其他消费者如果也是消费该队列, 则启动会报错</li>
 </ul>
 </li>
 </ol>
