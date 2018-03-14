@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>11. basic_qos, prefetch_count | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&amp;#123;    $connection = new AMQPStreamConnection(&amp;apos;127.0.0.1&amp;apos;, 5672, &amp;apos;guest&amp;apos;, &amp;apos;guest&amp;apos;);    $chann">
+<meta name="keywords" content="RabbitMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="11. basic_qos, prefetch_count">
+<meta property="og:url" content="http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&amp;#123;    $connection = new AMQPStreamConnection(&amp;apos;127.0.0.1&amp;apos;, 5672, &amp;apos;guest&amp;apos;, &amp;apos;guest&amp;apos;);    $chann">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-13T14:33:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="11. basic_qos, prefetch_count">
+<meta name="twitter:description" content="正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&amp;#123;    $connection = new AMQPStreamConnection(&amp;apos;127.0.0.1&amp;apos;, 5672, &amp;apos;guest&amp;apos;, &amp;apos;guest&amp;apos;);    $chann">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">11. basic_qos, prefetch_count</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">11. basic_qos, prefetch_count</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-13T13:12:26.000Z" itemprop="datePublished" class="page-time">
+  2017-04-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#正常消息轮发的问题"><span class="post-toc-number">1.</span> <span class="post-toc-text">正常消息轮发的问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#生产者"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">生产者</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消费者1"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">消费者1</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消费者2"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">消费者2</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#结果"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">结果</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#basic-qos"><span class="post-toc-number">2.</span> <span class="post-toc-text">basic_qos</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#prefetch-count控制消息轮发"><span class="post-toc-number">3.</span> <span class="post-toc-text">prefetch_count控制消息轮发</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2017-04-15-rabbitmq-11"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">11. basic_qos, prefetch_count</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-13 21:12:26" datetime="2017-04-13T13:12:26.000Z"  itemprop="datePublished">2017-04-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="正常消息轮发的问题"><a href="#正常消息轮发的问题" class="headerlink" title="正常消息轮发的问题"></a>正常消息轮发的问题</h2><h3 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public function noPrefetchCount()</div><div class="line">&#123;</div><div class="line">    $connection = new AMQPStreamConnection(&apos;127.0.0.1&apos;, 5672, &apos;guest&apos;, &apos;guest&apos;);</div><div class="line">    $channel = $connection-&gt;channel();</div><div class="line">    // 声明</div><div class="line">    $exchange = &apos;prefetch_exchange&apos;;</div><div class="line">    $queueName = &apos;test_queue&apos;;</div><div class="line">    // 声明交换机</div><div class="line">    $channel-&gt;exchange_declare($exchange, &apos;direct&apos;, false, true, false);</div><div class="line">    // 声明队列</div><div class="line">    $channel-&gt;queue_declare($queueName, false, true, false, false);</div><div class="line">    $channel-&gt;queue_bind($queueName, $exchange);</div><div class="line">    for ($i=0; $i&lt;10; $i++) &#123;</div><div class="line">        $message = new AMQPMessage(&apos;hello world--&apos; . $i, [&apos;content_type&apos; =&gt; &apos;text/plain&apos;, &apos;delivery_mode&apos; =&gt; AMQPMessage::DELIVERY_MODE_PERSISTENT,]);</div><div class="line">        $channel-&gt;basic_publish($message, $exchange, null, true);</div><div class="line">    &#125;</div><div class="line">    $channel-&gt;close();</div><div class="line">    $connection-&gt;close();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="消费者1"><a href="#消费者1" class="headerlink" title="消费者1"></a>消费者1</h3><p>通过sleep(10)来模拟消费者1的复杂业务<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Console\Commands;</div><div class="line"></div><div class="line">use Illuminate\Console\Command;</div><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div><div class="line">use PhpAmqpLib\Wire\AMQPTable;</div><div class="line"></div><div class="line">class Consumer4 extends Command</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * The name and signature of the console command.</div><div class="line">     *</div><div class="line">     * @var string</div><div class="line">     */</div><div class="line">    protected $signature = &apos;Consumer4&apos;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * The console command description.</div><div class="line">     *</div><div class="line">     * @var string</div><div class="line">     */</div><div class="line">    protected $description = &apos;测试消费者&apos;;</div><div class="line"></div><div class="line">    public function __construct()</div><div class="line">    &#123;</div><div class="line">        parent::__construct();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Execute the console command.</div><div class="line">     *</div><div class="line">     * @return mixed</div><div class="line">     */</div><div class="line">    public function handle()</div><div class="line">    &#123;</div><div class="line">        $connection = new AMQPStreamConnection(&apos;127.0.0.1&apos;, 5672, &apos;guest&apos;, &apos;guest&apos;);</div><div class="line">        $channel = $connection-&gt;channel();</div><div class="line">        // 声明</div><div class="line">        $exchange = &apos;prefetch_exchange&apos;;</div><div class="line">        $queueName = &apos;test_queue&apos;;</div><div class="line">        // 声明交换机</div><div class="line">        $channel-&gt;exchange_declare($exchange, &apos;direct&apos;, false, true, false);</div><div class="line">        // 声明队列</div><div class="line">        $channel-&gt;queue_declare($queueName, false, true, false, false);</div><div class="line">        $channel-&gt;queue_bind($queueName, $exchange);</div><div class="line">        /**</div><div class="line">         * @param \PhpAmqpLib\Message\AMQPMessage $message</div><div class="line">         */</div><div class="line">        $backCall = function ($message) &#123;</div><div class="line">            echo &quot;\n--------\n&quot;;</div><div class="line">            echo $message-&gt;body;</div><div class="line">            //echo $message-&gt;delivery_info[&apos;delivery_tag&apos;];</div><div class="line">            echo &quot;\n--------\n&quot;;</div><div class="line">            sleep(10);</div><div class="line">            $message-&gt;delivery_info[&apos;channel&apos;]-&gt;basic_ack($message-&gt;delivery_info[&apos;delivery_tag&apos;]);</div><div class="line">        &#125;;</div><div class="line">        $channel-&gt;basic_consume($queueName, &apos;&apos;, false, false, false, false, $backCall);</div><div class="line"></div><div class="line">        while (count($channel-&gt;callbacks)) &#123;</div><div class="line">            $channel-&gt;wait();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="消费者2"><a href="#消费者2" class="headerlink" title="消费者2"></a>消费者2</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">namespace App\Console\Commands;</div><div class="line"></div><div class="line">use Illuminate\Console\Command;</div><div class="line">use PhpAmqpLib\Connection\AMQPStreamConnection;</div><div class="line">use PhpAmqpLib\Message\AMQPMessage;</div><div class="line">use PhpAmqpLib\Wire\AMQPTable;</div><div class="line"></div><div class="line">class Consumer5 extends Command</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * The name and signature of the console command.</div><div class="line">     *</div><div class="line">     * @var string</div><div class="line">     */</div><div class="line">    protected $signature = &apos;Consumer5&apos;;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * The console command description.</div><div class="line">     *</div><div class="line">     * @var string</div><div class="line">     */</div><div class="line">    protected $description = &apos;测试消费者&apos;;</div><div class="line"></div><div class="line">    public function __construct()</div><div class="line">    &#123;</div><div class="line">        parent::__construct();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Execute the console command.</div><div class="line">     *</div><div class="line">     * @return mixed</div><div class="line">     */</div><div class="line">    public function handle()</div><div class="line">    &#123;</div><div class="line">        $connection = new AMQPStreamConnection(&apos;127.0.0.1&apos;, 5672, &apos;guest&apos;, &apos;guest&apos;);</div><div class="line">        $channel = $connection-&gt;channel();</div><div class="line">        // 声明</div><div class="line">        $exchange = &apos;prefetch_exchange&apos;;</div><div class="line">        $queueName = &apos;test_queue&apos;;</div><div class="line">        // 声明交换机</div><div class="line">        $channel-&gt;exchange_declare($exchange, &apos;direct&apos;, false, true, false);</div><div class="line">        // 声明队列</div><div class="line">        $channel-&gt;queue_declare($queueName, false, true, false, false);</div><div class="line">        $channel-&gt;queue_bind($queueName, $exchange);</div><div class="line">        /**</div><div class="line">         * @param \PhpAmqpLib\Message\AMQPMessage $message</div><div class="line">         */</div><div class="line">        $backCall = function ($message) &#123;</div><div class="line">            echo &quot;\n--------\n&quot;;</div><div class="line">            echo $message-&gt;body;</div><div class="line">            //echo $message-&gt;delivery_info[&apos;delivery_tag&apos;];</div><div class="line">            echo &quot;\n--------\n&quot;;</div><div class="line">            $message-&gt;delivery_info[&apos;channel&apos;]-&gt;basic_ack($message-&gt;delivery_info[&apos;delivery_tag&apos;]);</div><div class="line">        &#125;;</div><div class="line">        $channel-&gt;basic_consume($queueName, &apos;&apos;, false, false, false, false, $backCall);</div><div class="line"></div><div class="line">        while (count($channel-&gt;callbacks)) &#123;</div><div class="line">            $channel-&gt;wait();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>启动两个消费者, 并且执行生产者;</p>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><ol>
+<li><p>消费者2 (Consumer5) 很快打印完 1，3，5，7，9后就歇着了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindembp:laravel renyimin$ php artisan Consumer5</div><div class="line"></div><div class="line">--------</div><div class="line">hello world--1</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">hello world--3</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">hello world--5</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">hello world--7</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">hello world--9</div><div class="line">--------</div></pre></td></tr></table></figure>
+</li>
+<li><p>而消费者1(Consumer4) 还在缓慢的打印 0,2,4,6,8</p>
+</li>
+</ol>
+<h2 id="basic-qos"><a href="#basic-qos" class="headerlink" title="basic_qos"></a>basic_qos</h2><ol>
+<li>rabbitmq对basic.qos信令的处理</li>
+</ol>
+<ul>
+<li>首先, basic.qos是针对channel进行设置的, 也就是说只有在channel建立之后才能发送basic.qos信令。</li>
+<li>在rabbitmq的实现中, 每个channel都对应会有一个rabbit_limiter进程, 当收到basic.qos信令后, 在rabbit_limiter进程中记录信令中prefetch_count的值, 同时记录的还有该channel未ack的消息个数;</li>
+</ul>
+<ol>
+<li>注: 其实basic.qos里还有另外两个参数可进行设置, prefetch_size和global, 但是RabbitMQ没有实现prefetch_size, 并在3.3.0版本中对global这个参数的含义进行了重新定义, 即glotal=true时表示在当前channel上所有的consumer都生效, 否则只对设置了之后新建的consumer生效;</li>
+</ol>
+<h2 id="prefetch-count控制消息轮发"><a href="#prefetch-count控制消息轮发" class="headerlink" title="prefetch_count控制消息轮发"></a>prefetch_count控制消息轮发</h2><p>只用在消费者创建完channel后, 简单加上 <code>$channel-&gt;basic_qos(&#39;&#39;, 1, true);</code> 即可(当然, 为了统一, 生产者最好也加上)</p>
+<p>这就表示: <code>消费者完成一个ack后, 才能给他继续发送, 如果消费者业务过于复杂, 就先发给其他闲着的消费者</code></p>
+<p>果然, 经过测试, Consumer4第一个<code>hello world--0</code>还没有执行完成的时候, Consumer5已经执行完了 1，2，3，4，5，6，7，8，9了</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&title=《11. basic_qos, prefetch_count》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&title=《11. basic_qos, prefetch_count》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. basic_qos, prefetch_count》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">09. RPC远程调用及注意事项</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/07/Redis/2017-06-07-redis-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. 一些规范点</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&title=《11. basic_qos, prefetch_count》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&title=《11. basic_qos, prefetch_count》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. basic_qos, prefetch_count》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3aQW7jMBAEwPz/07vXAIGE7hnS8KF0CmxZZDEASfXw5ye+/sVXe//vXz21+PuTnxsXHh4e3tGuP93zt8mn7r7f/96H9+dEg4WHh4d3jfc0o866mAxf0la7SODh4eF9J++9yWSjnN+f9wcPDw/vm3nv03r+hCSGyPuAh4eH93leEka8P2izLZ59ezhrwcPDw+vqTVEV6Xv+vlLfw8PDwzt6ICCZ6O8dTRj2Fg8PD+/aSac8Qp1N03mskBTP2rbw8PDwzvLyqb9dNvJByX9bH0TAw8PDu8Cblaz22+h2yJKN9YFMBQ8PD6/sTz7J5o3tF4/kyVE4goeHh3eU10YMsy1yuy3eHFPAw8PDu8fLH51M7u0QtEFDffQKDw8P7wKvndDzBSPfgs8KbPVRBjw8PLyP8GaHn85O9LMQBA8PD+8eb/boTcGsne43fcDDw8O7x2sn/Vmo2oLzvj32AQ8PD+8Cbzb5vi8DbWl/UwyrAxQ8PDy8Q7yk4c1RgM237T/gMZLAw8PDO8rbhwLJ0ORLRT70yRKFh4eHd5Y3K3ElEcAmsGgHKMpa8PDw8A7x2jLYqSl7ExzncQkeHh7ePV4bNCQb4k3AUb8B4OHh4X2cl0cJs0JUHuPmi1DeNzw8PLwbvDZWyMv5+RGrFpZ/joeHh3eDt9nC7re/SRiRD8ThHToeHh5e/LY+m9bPgveLEB4eHt5tXvt6PyuAJQHxLGiuVzA8PDy8xW4zvxJwC5sFvtFihoeHh3eBd+MAwf6A6ew47OrCw8PDK3mzA6N5FJsfwNosDFEYgYeHh3eUtw9MiyZnqcnZrAIPDw/vC3h5XDvbNM8CDjw8PLxv4M1qTPvFpt2y4+Hh4d3mnQoC2ohhFogUpS88PDy8C7z2jX5Wwm8n9BZ2LLDAw8PDe/v2P57jNcq823MkAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
