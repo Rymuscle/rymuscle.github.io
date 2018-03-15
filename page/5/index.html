@@ -617,7 +617,7 @@ RDB 默认是开启的, 关闭方式有:
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-Redis/2017-06-18-redis-12"
+            <article id="post-Redis/2017-06-17-redis-11"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
@@ -635,7 +635,7 @@ RDB 默认是开启的, 关闭方式有:
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-18-redis-12/">12. Redis -- 发布订阅</a>
+      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-17-redis-11/">11. Redis -- task queue</a>
     </h3>
   
 
@@ -645,21 +645,14 @@ RDB 默认是开启的, 关闭方式有:
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
-发布订阅其实 和 队列 非常相似:
+        前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制;
+FIFO 先进先出队列
+Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。
 
-这里的 频道, 就类似于任务队列中所讨论的 队列;
-而订阅者就类似于 任务队列中所讨论的 消费者;
-
-
-但他们还是有区别的: 
-
-对于队列来说, 即使消费者不在线, 消息也一直在队列中存放着, 等待消费者上线后进行处理;
-而对于 发布订阅 中的 订阅者来说, 如果消息发布到频道中时, 订阅者不在线(没有一直阻塞等待), 那么这条消息也不会为它保存着;
-...
+假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所...
     
 
-        <a href="/2017/06/17/Redis/2017-06-18-redis-12/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/17/Redis/2017-06-17-redis-11/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>

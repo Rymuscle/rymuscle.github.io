@@ -147,7 +147,7 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-Redis/2017-06-17-redis-11"
+            <article id="post-Redis/2017-06-18-redis-12"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-17-redis-11/">11. Redis -- task queue</a>
+      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-18-redis-12/">12. Redis -- 发布订阅</a>
     </h3>
   
 
@@ -175,14 +175,21 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制;
-FIFO 先进先出队列
-Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。
+        
+发布订阅其实 和 队列 非常相似:
 
-假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所...
+这里的 频道, 就类似于任务队列中所讨论的 队列;
+而订阅者就类似于 任务队列中所讨论的 消费者;
+
+
+但他们还是有区别的: 
+
+对于队列来说, 即使消费者不在线, 消息也一直在队列中存放着, 等待消费者上线后进行处理;
+而对于 发布订阅 中的 订阅者来说, 如果消息发布到频道中时, 订阅者不在线(没有一直阻塞等待), 那么这条消息也不会为它保存着;
+...
     
 
-        <a href="/2017/06/17/Redis/2017-06-17-redis-11/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/17/Redis/2017-06-18-redis-12/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -458,6 +465,56 @@ redis事务的ACID特性在redis中, 事务具有 原子...
         </li>
     
         <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-15-rabbitmq-10"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/">10. 事务机制 VS PublisherConfirm</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        背景之前已经了解过, 在使用RabbitMQ的时候, 我们可以通过 消息持久化 来解决因为服务器的异常奔溃导致的消息丢失;
+除此之外我们还会遇到一个问题, 那就是当消息的发布者在一次发布多条消息时, 将消息发送出去之后, 消息到底有没有正确到达服务器呢?
+
+如果不进行特殊配置的话, 默认情况下发布操作是不会返回任何信息给生产者的, 即, 默认情况下我们的生产者是不知道消息有没有正确到达服务器...
+    
+
+        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-rabbitmq/2017-04-13-rabbitmq-09"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -498,56 +555,6 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
     
 
         <a href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-15-rabbitmq-10"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/">10. 事务机制 VS PublisherConfirm</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        背景之前已经了解过, 在使用RabbitMQ的时候, 我们可以通过 消息持久化 来解决因为服务器的异常奔溃导致的消息丢失;
-除此之外我们还会遇到一个问题, 那就是当消息的发布者在一次发布多条消息时, 将消息发送出去之后, 消息到底有没有正确到达服务器呢?
-
-如果不进行特殊配置的话, 默认情况下发布操作是不会返回任何信息给生产者的, 即, 默认情况下我们的生产者是不知道消息有没有正确到达服务器...
-    
-
-        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
