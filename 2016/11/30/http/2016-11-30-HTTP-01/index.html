@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-15T03:13:40.000Z">
+<meta property="og:updated_time" content="2018-03-15T03:30:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. HTTP协议预览">
 <meta name="twitter:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
@@ -236,7 +236,12 @@
 <li>与 302, 303 不同, 它会将客户端的POST请求, 发送给location的目标页;<br><code>304 Not Modified</code>: 参考博文<a href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">缓存相关</a><br>~~未完待续</li>
 </ul>
 <p><code>400 Bad Request</code> : 告知客户端发送了一个错误的请求<br><code>403 Forbidden</code>: 服务器拒绝了请求<br><code>405 Method Not Allowed</code>: 比如你使用POST进行提交, 而提交的目标页进行了Location跳转到一个静态页面, 但是使用的是307响应, 此时POST请求会发送给这个静态页, 此时就会报405错误; 应该在响应中包含<code>Allow</code>首部;<br><code>404 Not Found</code> : 服务器无法找到所请求的URL;<br><code>406</code>: <a href="/2016/11/30/http/2016-11-30-HTTP-04/">各通用首部字段详解</a> 中<code>Accept-encoding</code></p>
-<p><code>500 Internal Server Error</code>: 服务端错误, 有可能是WEB应用存在错误</p>
+<p><code>500 Internal Server Error</code>: 服务端错误, 有可能是WEB应用存在错误<br><code>501 Not Implemented</code> : 服务器不具备完成请求的功能, 例如, 服务器无法识别请求方法时可能会返回此状态码<br><code>503 Service Unavaliable</code> : 用来说明服务器现在无法为请求提供服务, 但稍后可以; (可以回送:响应首部 <code>Retry-After</code> 表示多久恢复 )</p>
+<ul>
+<li>不同的客户端与服务器端应用对于 Retry-After 首部的支持依然不太一致。</li>
+<li>不过，一些爬虫程序，比如谷歌的爬虫程序Googlebot,会遵循Retry-After响应首部的规则,将其与503(Service Unavailable,当前服务不存在)响应一起发送有助于互联网引擎做出判断,在宕机结束之后继续对网站构建索引。</li>
+<li>参考:<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After</a><br><code>505 HTTP Version Not Supported</code> : 服务器收到的请求, 使用的是它无法支持的HTTP协议版本;</li>
+</ul>
 <p>~~未完待续</p>
 
         </div>
