@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-15T06:14:43.000Z">
+<meta property="og:updated_time" content="2018-03-15T06:55:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. HTTP协议预览">
 <meta name="twitter:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
@@ -232,10 +232,13 @@
 <h3 id="200-299"><a href="#200-299" class="headerlink" title="200 ~ 299"></a>200 ~ 299</h3><ol>
 <li><p>200 OK : 服务器已经成功处理请求</p>
 </li>
+<li><p>201 Created : 用于请求 <code>创建服务器对象</code>, 比如 <code>PUT操作</code> 成功创建资源后, 就应该返回 201码;<br> 响应的实体部分还应该包含各种引用了已创建的资源的URL;</p>
+</li>
 <li><p><a href="http://www.laruence.com/2011/01/20/1844.html" target="_blank" rel="external">204 No Content</a> : 响应报文中只包含若干首部和一个状态行, 但没有实体的主体部分; </p>
 <ul>
 <li>其实就是告诉浏览器, 服务端执行成功了, 但是没什么数据返回给你, 所以你不用刷新页面, 也不用导向新的页面; </li>
-<li>204适合多次对一个Item进行更新</li>
+<li>204适合多次对一个Item进行更新;</li>
+<li>阮大哥提到, 对DELETE也适用;</li>
 </ul>
 </li>
 <li><p>205 Reset Content : 告诉浏览器, 页面表单需要被重置;<br> 205的意思是服务端在接收了浏览器POST请求以后, 处理成功以后, 告诉浏览器, 执行成功了, 请清空用户填写的Form表单, 方便用户再次填写;</p>
@@ -274,13 +277,17 @@
 <h3 id="400-499"><a href="#400-499" class="headerlink" title="400 ~ 499"></a>400 ~ 499</h3><ol>
 <li><p>400 Bad Request : 告知客户端发送了一个错误的请求</p>
 </li>
-<li><p>403 Forbidden : 服务器拒绝了请求</p>
+<li><p>401 Unauthorized ：表示用户没有权限(令牌、用户名、密码错误);</p>
+</li>
+<li><p>403 Forbidden : 表示用户得到了授权(与401错误相对),但是访问是被禁止的;</p>
 </li>
 <li><p>405 Method Not Allowed : 比如你使用POST进行提交, 而提交的目标页进行了Location跳转到一个静态页面, 但是使用的是307响应, 此时POST请求会发送给这个静态页, 此时就会报405错误; 应该在响应中包含<code>Allow</code>首部;</p>
 </li>
 <li><p>404 Not Found : 服务器无法找到所请求的URL;</p>
 </li>
-<li><p>406 Not Acceptable : <a href="/2016/11/30/http/2016-11-30-HTTP-04/">各通用首部字段详解</a> 中<code>Accept-encoding</code></p>
+<li><p>406 Not Acceptable : <a href="/2016/11/30/http/2016-11-30-HTTP-04/">各通用首部字段详解</a> 中<code>Accept-encoding</code><br> 也可以说, 用户请求的格式不可得(比如用户请求JSON格式, 但是只有XML格式)</p>
+</li>
+<li><p>410 Gone : 用户请求的资源被永久删除，且不会再得到的;</p>
 </li>
 </ol>
 <h3 id="500-599"><a href="#500-599" class="headerlink" title="500 ~ 599"></a>500 ~ 599</h3><ol>
@@ -394,7 +401,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2016/11/30/http/2016-11-30-HTTP-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03. 各请求方法详解</h4>
+        <h4 class="title">03. HTTP各请求方法详解</h4>
       </a>
     </div>
   
