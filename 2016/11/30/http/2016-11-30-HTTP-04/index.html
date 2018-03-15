@@ -13,28 +13,27 @@
     
     
     
-    <title>04. General-Header-Fields(通用首部字段) | Lant&#39;s Blog</title>
+    <title>04. 各通用首部字段详解 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="Cache-Control 缓存指令 Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令 缓存响应指令   更多参考后面的博文缓存(200, 304)中的介绍  immutable属于缓存控制的一个扩展属性, http://www.jdon">
+    <meta name="description" content="Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  该指令是可选的; 指令可以有多个选项, 选项之间通过 , 分隔;  2.可以按请求和响应分为:  缓存请求指令(选项如下) 缓存响应指令(选项如下)  3.注意 no-cache 和 must-revalidate 的区别  no-cache: 告诉">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04. General-Header-Fields(通用首部字段)">
+<meta property="og:title" content="04. 各通用首部字段详解">
 <meta property="og:url" content="http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Cache-Control 缓存指令 Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令 缓存响应指令   更多参考后面的博文缓存(200, 304)中的介绍  immutable属于缓存控制的一个扩展属性, http://www.jdon">
+<meta property="og:description" content="Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  该指令是可选的; 指令可以有多个选项, 选项之间通过 , 分隔;  2.可以按请求和响应分为:  缓存请求指令(选项如下) 缓存响应指令(选项如下)  3.注意 no-cache 和 must-revalidate 的区别  no-cache: 告诉">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-request.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/cache-control-response.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/http/via-01.png">
-<meta property="og:updated_time" content="2018-03-12T03:36:43.000Z">
+<meta property="og:updated_time" content="2018-03-15T01:48:40.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04. General-Header-Fields(通用首部字段)">
-<meta name="twitter:description" content="Cache-Control 缓存指令 Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;  缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  可以按请求和响应分为:  缓存请求指令 缓存响应指令   更多参考后面的博文缓存(200, 304)中的介绍  immutable属于缓存控制的一个扩展属性, http://www.jdon">
+<meta name="twitter:title" content="04. 各通用首部字段详解">
+<meta name="twitter:description" content="Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;  该指令是可选的; 指令可以有多个选项, 选项之间通过 , 分隔;  2.可以按请求和响应分为:  缓存请求指令(选项如下) 缓存响应指令(选项如下)  3.注意 no-cache 和 must-revalidate 的区别  no-cache: 告诉">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/http/cache-control-request.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -116,7 +115,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04. General-Header-Fields(通用首部字段)</div>
+        <div class="flex-col header-title ellipsis">04. 各通用首部字段详解</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -138,7 +137,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">04. General-Header-Fields(通用首部字段)</h1>
+        <h1 class="title">04. 各通用首部字段详解</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-11-30T03:50:02.000Z" itemprop="datePublished" class="page-time">
@@ -163,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Cache-Control-缓存指令"><span class="post-toc-number">1.</span> <span class="post-toc-text">Cache-Control 缓存指令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Date"><span class="post-toc-number">2.</span> <span class="post-toc-text">Date</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Pragma"><span class="post-toc-number">3.</span> <span class="post-toc-text">Pragma</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">4.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Via"><span class="post-toc-number">5.</span> <span class="post-toc-text">Via</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Transfer-Encoding"><span class="post-toc-number">6.</span> <span class="post-toc-text">Transfer-Encoding</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-encoding"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">对比 请求首部字段Accept-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-实体首部字段Content-encoding"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">对比 实体首部字段Content-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-charset"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">对比 请求首部字段Accept-charset</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Trailer"><span class="post-toc-number">7.</span> <span class="post-toc-text">Trailer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Upgrade"><span class="post-toc-number">8.</span> <span class="post-toc-text">Upgrade</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Warning"><span class="post-toc-number">9.</span> <span class="post-toc-text">Warning</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">10.</span> <span class="post-toc-text">参考</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Cache-Control-缓存能力控制"><span class="post-toc-number">1.</span> <span class="post-toc-text">Cache-Control 缓存能力控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Pragma-兼容"><span class="post-toc-number">2.</span> <span class="post-toc-text">Pragma 兼容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Date-当前时间"><span class="post-toc-number">3.</span> <span class="post-toc-text">Date 当前时间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">4.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Via"><span class="post-toc-number">5.</span> <span class="post-toc-text">Via</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Transfer-Encoding"><span class="post-toc-number">6.</span> <span class="post-toc-text">Transfer-Encoding</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-encoding"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">对比 请求首部字段Accept-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-实体首部字段-Content-encoding"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">对比 实体首部字段 Content-encoding</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比-请求首部字段Accept-charset"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">对比 请求首部字段Accept-charset</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对比-请求首部字段Accept-Language"><span class="post-toc-number">7.</span> <span class="post-toc-text">对比 请求首部字段Accept-Language</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">7.1.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Trailer"><span class="post-toc-number">8.</span> <span class="post-toc-text">Trailer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Upgrade"><span class="post-toc-number">9.</span> <span class="post-toc-text">Upgrade</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Warning"><span class="post-toc-number">10.</span> <span class="post-toc-text">Warning</span></a></li></ol>
         </nav>
     </aside>
     
@@ -171,7 +170,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04. General-Header-Fields(通用首部字段)</h1>
+        <h1 class="post-card-title">04. 各通用首部字段详解</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-11-30 11:50:02" datetime="2016-11-30T03:50:02.000Z"  itemprop="datePublished">2016-11-30</time>
 
@@ -184,34 +183,32 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Cache-Control-缓存指令"><a href="#Cache-Control-缓存指令" class="headerlink" title="Cache-Control 缓存指令"></a>Cache-Control 缓存指令</h2><ol>
-<li><p><code>Cache-Control</code> 的指令是可选的, 也可以有多个, 多个指令之间通过 <code>,</code> 分隔;</p>
-</li>
-<li><p>缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;</p>
-</li>
-<li><p>可以按请求和响应分为:</p>
+            <h2 id="Cache-Control-缓存能力控制"><a href="#Cache-Control-缓存能力控制" class="headerlink" title="Cache-Control 缓存能力控制"></a>Cache-Control 缓存能力控制</h2><p>1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;</p>
 <ul>
-<li>缓存请求指令<br><img src="/img/http/cache-control-request.png" width="600/"></li>
-<li>缓存响应指令<br><img src="/img/http/cache-control-response.png" width="600/"></li>
+<li>该指令是可选的;</li>
+<li>指令可以有多个选项, 选项之间通过 <code>,</code> 分隔;</li>
 </ul>
+<p>2.可以按请求和响应分为:</p>
+<ul>
+<li>缓存请求指令(选项如下)<br><img src="/img/http/cache-control-request.png" width="500/"></li>
+<li>缓存响应指令(选项如下)<br><img src="/img/http/cache-control-response.png" width="500/"></li>
+</ul>
+<p>3.注意 <code>no-cache</code> 和 <code>must-revalidate</code> 的区别</p>
+<ul>
+<li>no-cache: 告诉浏览器、缓存服务器，不管本地副本是否过期，使用资源副本前，一定要到源服务器进行副本有效性校验;</li>
+<li>must-revalidate：告诉浏览器、缓存服务器，本地副本过期前，可以使用本地副本；本地副本一旦过期，必须去原始服务器进行有效性校验。(这应该是缓存系统的默认行为, 但must-revalidate指令使得这个要求是明确的<a href="https://stackoverflow.com/questions/2932890/http-cache-control-max-age-must-revalidate" target="_blank" rel="external">参考</a>;</li>
+<li><a href="https://segmentfault.com/a/1190000007317481" target="_blank" rel="external">可参考</a></li>
+</ul>
+<p>更多参考后面的博文<a href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">缓存(200, 304)</a>中的介绍</p>
+<h2 id="Pragma-兼容"><a href="#Pragma-兼容" class="headerlink" title="Pragma 兼容"></a>Pragma 兼容</h2><p>Pragma是HTTP1.1之前版本的历史遗留字段, 仅作为与HTTP1.0做向后兼容;<br>除了与只理解 <code>Pragma:no-cache</code> 的HTTP/1.0应用程序进行交互时使用; HTTP/1.1应用程序都应该使用Cache-Control:no-cache;</p>
+<h2 id="Date-当前时间"><a href="#Date-当前时间" class="headerlink" title="Date 当前时间"></a>Date 当前时间</h2><p>简单来说就是HTTP报文的创建日期, 它会参与到缓存的<code>过期时间</code>运算中;</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching" target="_blank" rel="external">公式</a>: <code>expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</code></li>
+<li><p>默认情况下, Date 的值为当前时间</p>
 </li>
-<li><p>更多参考后面的博文<a href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">缓存(200, 304)</a>中的介绍</p>
+<li><p>而响应首部字段中的 <code>Age</code> 头字段, 是告诉客户端, 源服务器创建的缓存在代理服务器上已经保存了多久, 字段的单位为秒; 代理创建响应时必须加上首部字段<code>Age</code>; </p>
 </li>
-<li><p><code>immutable</code><br>属于缓存控制的一个扩展属性, <a href="http://www.jdon.com/performance/cache-control-immutable.html" target="_blank" rel="external">http://www.jdon.com/performance/cache-control-immutable.html</a></p>
-<blockquote>
-<p>当一个支持immutable的客户端浏览器看到这个属性时, 它应该知道, 如果没有超过过期时间，那么服务器端该页面内容将不会改变, 这样浏览器就不应该再发送有条件的重新验证请求(比如通过If-None-Match 或 If-Modified-Since等条件再向服务器端发出更新检查);<br>也就是说, 通常过去我们使用304回复客户端该页面内容没有变化，但是如果用户按浏览器的刷新或F5键，浏览器会再次向服务器端发出该页面内容请求，服务器端如果确认该页面没有变化，那么发回304给客户端，不再发送该页面的实体内容，虽然这样节省了来回流量，但是如果大型网站的很多用户为了得到及时信息，经常会刷新浏览器，这就造成了大量刷新请求，向服务器端求证该页面是否改变，这会影响网站的带宽，也增加服务器端验证压力。<br><strong>而新的选项immutable可以杜绝这种现象</strong>。<br>immutable可以节省HTTP请求,缩短请求时间,这是因为服务器不必再处理304响应了。</p>
-</blockquote>
-</li>
-</ol>
-<h2 id="Date"><a href="#Date" class="headerlink" title="Date"></a>Date</h2><ol>
-<li>简单来说就是HTTP报文的创建日期, 它会参与到缓存控制的 过期时间运算中;</li>
-<li>公式: <code>expirationTime = responseTime(Date头) + freshnessLifetime(max-age/Exprie值) - currentAge(Age头)</code></li>
-<li>而响应首部字段中的 <code>Age</code> 头字段, 是告诉客户端, 源服务器创建的缓存在代理服务器上已经保存了多久, 字段的单位为秒;代理创建响应时必须加上首部字段Age; </li>
-</ol>
-<h2 id="Pragma"><a href="#Pragma" class="headerlink" title="Pragma"></a>Pragma</h2><ol>
-<li>Pragma是HTTP1.1之前版本的历史遗留字段, 仅作为与HTTP1.0做向后兼容;</li>
-<li>也属于和缓存相关的通用首部字段, 但只用在客户端发送的请求当中, 客户端会要求所有的中间服务器不返回缓存的资源(参考<code>Cache-Control:no-cache</code>), 最常用的是<code>Pragma:no-cache</code>;</li>
-</ol>
+</ul>
 <h2 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h2><ol>
 <li>该首部字段具备两个作用: <code>控制不再转发给代理的首部字段</code> 和 <code>管理持久连接</code>;</li>
 <li>更多参考<a href="/2017-04-21-HTTP-Connection-Keep-Alive/">HTTP - 并行连接, 持久连接</a></li>
@@ -223,8 +220,6 @@
 <p>Via首部是为了追踪传输路径, 所以也经常会和TRACE方法一起使用, 比如代理服务器受到由TRACE方法发送过来的请求(其中Max-Forward:0)时, 代理服务器就不能再转发该请求了,<br>这种情况下, 代理服务器会将自身的信息附加到Via首部后, 返回该请求的响应。</p>
 </blockquote>
 </li>
-<li><p>Via通用首部字段不仅用于报文的转发, 还可避免请求回环的发生, 所以必须在经过代理时附加该首部字段;<br> <img src="/img/http/via-01.png" width="300"></p>
-</li>
 <li><p>未完待续…</p>
 </li>
 </ol>
@@ -232,64 +227,52 @@
 <ol>
 <li>该通用首部字段规定了传输报文主体时采用的编码方式;</li>
 <li>HTTP/1.1的传输编码方式仅对分块传输编码有效, 即只能设置为 <code>Transfer-Encoding:chunked</code>;</li>
-<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="external">MDN参考</a>;</li>
+<li>参考 <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding" target="_blank" rel="external">MDN Doc</a>;</li>
 <li><code>Content-Encoding</code> 和 <code>Transfer-Encoding</code> 二者经常会结合来用, 其实就是针对 Transfer-Encoding 的分块再进行 Content-Encoding 压缩;</li>
 </ol>
-<h3 id="对比-请求首部字段Accept-encoding"><a href="#对比-请求首部字段Accept-encoding" class="headerlink" title="对比 请求首部字段Accept-encoding"></a>对比 <strong>请求首部字段Accept-encoding</strong></h3><p><strong>期望内容编码</strong></p>
+<h3 id="对比-请求首部字段Accept-encoding"><a href="#对比-请求首部字段Accept-encoding" class="headerlink" title="对比 请求首部字段Accept-encoding"></a>对比 请求首部字段Accept-encoding</h3><p><strong>内容编码</strong> (P369)</p>
 <ol>
-<li><p>请求首部字段<code>Accept-encoding</code>是将客户端用户代理(浏览器)所<strong>支持的内容编码方式</strong>(通常是某种压缩算法) 及 <strong>内容编码方式的优先级顺序</strong>, 通知给服务器;</p>
+<li><p>请求首部字段 <code>Accept-encoding</code> 是将客户端用户代理(浏览器)所<strong>支持的内容编码方式</strong>(通常是某种压缩算法) 及 <strong>内容编码方式的优先级顺序</strong>, 通知给服务器;</p>
 <ul>
-<li>通过内容协商, 服务端会选择一个客户端支持的方式, 使用并在 响应报文的实体首部字段 <code>Content-Encoding</code> 中通知客户端服务器选择了哪种内容编码方式;</li>
+<li>通过内容协商, 服务端会选择一个客户端支持的方式, 使用并在 响应报文的实体首部字段 <code>Content-Encoding</code> 中通知客户端, 服务器选择了哪种内容编码方式;</li>
 <li>另外, 可以一次性指定多种内容编码! </li>
 <li>也可以使用权重q值来表示相对优先级;</li>
 </ul>
 </li>
-<li><p>正常情况下, 主要采用以下4种编码方式:</p>
-<ul>
-<li>gzip</li>
-<li>compress</li>
-<li>deflate</li>
-<li>identity: 不执行压缩或不会变化的默认编码格式;</li>
-</ul>
+<li><p>正常情况下, 主要采用4种编码方式: <code>gzip</code>, <code>compress</code>, <code>deflate</code>, <code>identity</code>;</p>
 </li>
-<li><p>即使客户端和服务器都支持某些相同的压缩算法，但如果<code>Accept-encoding:identity</code>, 表示客户端告诉服务器对响应主体不要进行压缩。导致这种情况出现的两种常见的情形是：</p>
+<li><p>即使客户端和服务器都支持某些相同的压缩算法，但如果<code>Accept-encoding:identity</code>, 表示客户端告诉服务器对响应主体不要进行压缩, 出现的两种情况的常见情形是：</p>
 <ul>
 <li>要发送的数据已经经过压缩, 再次进行压缩不会导致被传输的数据量更小, 一些图像格式的文件会存在这种情况;</li>
 <li>服务器超载, 无法承受压缩需求导致的计算开销, 通常, 如果服务器使用超过80%的计算能力, 微软建议不要压缩;</li>
 </ul>
 </li>
-<li><p>只要identity(表示不需要进行任何编码)没有被明确禁止使用, 即, 没有通过 <code>identity;q=0</code>或是<code>*;q=0</code>指令明确设置 identity 的权重值，<strong>则服务器禁止返回表示客户端错误的 <code>406 Not Acceptable</code> 响应</strong>。</p>
+<li><p>只要identity(表示不需要进行任何编码)没有被明确禁止使用(没有明确通过 <code>identity;q=0</code> 或是 <code>*;q=0</code> 指令明确设置 identity 的权重值为0), 一旦禁止就表示 服务端必须进行编码;</p>
 <ul>
-<li>也就是只有你通过设置identity的权重为0, 服务器才可以返回表示客户端错误的<code>406 Not Acceptable</code></li>
+<li>没有禁止identity, 则服务器禁止返回表示客户端错误的 <code>406 Not Acceptable</code> 响应;</li>
+<li>禁止identity后, 服务器才可能因为实在没有合适的内容编码类型而, 返回表示客户端错误的<code>406 Not Acceptable</code></li>
 </ul>
 </li>
-<li><p><a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding" target="_blank" rel="external">MDN参考</a></p>
+<li><p>参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding" target="_blank" rel="external">MDN</a></p>
 </li>
 </ol>
-<h3 id="对比-实体首部字段Content-encoding"><a href="#对比-实体首部字段Content-encoding" class="headerlink" title="对比 实体首部字段Content-encoding"></a>对比 <strong>实体首部字段<code>Content-encoding</code></strong></h3><p><strong>内容编码</strong></p>
-<ol>
-<li>实体首部字段’Content-encoding’会告诉客户端, 服务器对实体的主体部分选用的内容编码方式, </li>
-<li>内容编码方式是指在不丢失实体信息的前提下所进行的压缩, 参考 <code>请求首部字段Accept-encoding</code> 所建议给服务器的编码方式:<ul>
-<li>gzip</li>
-<li>compress</li>
-<li>deflate</li>
-<li>identity</li>
-</ul>
-</li>
-</ol>
-<h3 id="对比-请求首部字段Accept-charset"><a href="#对比-请求首部字段Accept-charset" class="headerlink" title="对比 请求首部字段Accept-charset"></a>对比 <strong>请求首部字段<code>Accept-charset</code></strong></h3><ol>
-<li>请求首部字段’Accept-charset’会告诉服务器, 用户代理(浏览器)所支持的<code>字符集</code>和<code>字符集的相对优先顺序</code>。<ul>
+<h3 id="对比-实体首部字段-Content-encoding"><a href="#对比-实体首部字段-Content-encoding" class="headerlink" title="对比 实体首部字段 Content-encoding"></a>对比 实体首部字段 <code>Content-encoding</code></h3><p><strong>内容编码</strong><br>实体首部字段 <code>Content-encoding</code> 会告诉客户端, 服务器对实体的主体部分选用的内容编码方式</p>
+<h3 id="对比-请求首部字段Accept-charset"><a href="#对比-请求首部字段Accept-charset" class="headerlink" title="对比 请求首部字段Accept-charset"></a>对比 <strong>请求首部字段<code>Accept-charset</code></strong></h3><p>请求首部字段 <code>Accept-charset</code> 会告诉服务器, 用户代理(浏览器)所支持的<code>字符集</code>和<code>字符集的相对优先顺序</code>。(P388)</p>
+<ul>
 <li>可以一次性指定多种字符集;</li>
 <li>也可以使用权重q值来表示相对优先级;</li>
 </ul>
-</li>
-</ol>
+<h2 id="对比-请求首部字段Accept-Language"><a href="#对比-请求首部字段Accept-Language" class="headerlink" title="对比 请求首部字段Accept-Language"></a>对比 <strong>请求首部字段<code>Accept-Language</code></strong></h2><p>请求首部字段 <code>Accept-charset</code> 会告诉服务器, 用户代理(浏览器)所支持的<code>语言</code>和<code>语言的相对优先顺序</code>。</p>
+<ul>
+<li>可以一次性指定多种字符集;</li>
+<li>也可以使用权重q值来表示相对优先级;</li>
+</ul>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ol>
-<li>请求首部字段<code>Accept-encoding</code> 和 实体首部字段<code>Content-encoding</code>来决定压缩方式;</li>
+<li>请求首部字段<code>Accept-encoding</code> 和 实体首部字段<code>Content-encoding</code>来决定内容压缩方式;</li>
 <li>通用首部字段<code>Transfer-Encoding</code>用来决定响应实体是否分块;</li>
-<li>请求首部字段<code>Accept-charset</code>是客户端高速服务端自己能支持的编码方式;</li>
+<li>请求首部字段<code>Accept-charset</code>, <code>Accept-Language</code> 是客户端告诉服务端自己能支持的字符编码和语言及其中的优先顺序;</li>
 </ol>
-<h2 id="Trailer"><a href="#Trailer" class="headerlink" title="Trailer"></a>Trailer</h2><h2 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h2><h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>《HTTP权威指南》<br>《图解HTTP协议》<br><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="external">https://developer.mozilla.org/en-US/docs/Web/HTTP</a><br><a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">https://tools.ietf.org/html/rfc2616</a></p>
+<h2 id="Trailer"><a href="#Trailer" class="headerlink" title="Trailer"></a>Trailer</h2><h2 id="Upgrade"><a href="#Upgrade" class="headerlink" title="Upgrade"></a>Upgrade</h2><h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h2><p>~~未完待续</p>
 
         </div>
 
@@ -326,7 +309,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. 各通用首部字段详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -336,7 +319,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. 各通用首部字段详解》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -346,7 +329,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 各通用首部字段详解》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -374,9 +357,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/11/30/http/2016-11-30-HTTP-03/" id="post-prev" class="post-nav-link">
+        <a href="/2016/11/30/http/2016-11-30-HTTP-01/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">03. Request Method</h4>
+          <h4 class="title">01. HTTP协议预览</h4>
         </a>
       </div>
     
@@ -486,7 +469,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. 各通用首部字段详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -496,7 +479,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&title=《04. 各通用首部字段详解》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -506,7 +489,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. General-Header-Fields(通用首部字段)》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 各通用首部字段详解》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

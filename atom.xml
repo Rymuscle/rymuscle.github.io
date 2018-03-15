@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-03-13T12:47:06.000Z</updated>
+  <updated>2018-03-14T14:15:01.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>11. 内容协商与转码 (300)</title>
+    <link href="http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-11/"/>
+    <id>http://blog.renyimin.com/2017/12/06/http/2016-12-06-HTTP-11/</id>
+    <published>2017-12-06T10:50:27.000Z</published>
+    <updated>2018-03-14T14:15:01.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li><p>一个URL常常需要代表若干不同的资源</p><blockquote><p>例如那种需要以多种语言提供其内容的网站站点。<br> 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息;<br> 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。</p></blockquote></li><li><p>HTTP提供了 <code>内容协商</code> 方法，允许客户端和服务器作这样的决定。<br> 通过这些方法，单一的URL就可以代表不同的资源(比如，同一个网站页面的法语版和英语版)，这些不同的版本称为<code>变体</code>。</p></li><li><p>除了根据 <code>内容协商</code> 来决定URL代表的是那种版本的资源。另外, 对于有些特定的URL来说, 服务器还可以根据一些<strong>其他原则</strong>来决定发送什么内容给客户端最合适。在有些场合下, 服务器甚至可以自动生成定制的页面。比如，服务器可以为手持设备把HTML页面转换成WML页面，这类动态内容变换被称为<strong>转码</strong>。这些变换动作是HTTP客户端和服务器之间进行内容协商的结果。</p></li></ol><h2 id="内容协商技术"><a href="#内容协商技术" class="headerlink" title="内容协商技术"></a>内容协商技术</h2><ol><li><p>共有3种不同的方法可以决定服务器上哪个页面最适合客户端: <code>让客户端来选择</code>, <code>服务器自动判定</code>, 或 <code>让中间代理来选</code>。这3种技术分别称为<code>客户端驱动的协商</code>、<code>服务器驱动的协商</code> 以及 <code>透明协商</code></p></li><li><p>内容协商技术摘要如下:<br><img src="/img/http/内容协商.png" width="600"></p></li></ol><h3 id="客户端驱动-300"><a href="#客户端驱动-300" class="headerlink" title="客户端驱动 (300)"></a>客户端驱动 (300)</h3><p>1.对于服务器来说，收到客户端请求时只是发回响应，在其中列出可用的页面，让客户端决定要看哪个，这是最容易的事情。</p><ul><li>很显然，这是服务器最容易实现的方式，而且客户端很可能选择到最佳的版本(只要列表中有让客户端选择的足够信息)。</li><li>不利之处是<strong>每个页面都需要两次请求</strong>: <strong>第一次获取列表</strong>，<strong>第二次获取选择的副本</strong>。<br>这种技术速度很慢且过程枯燥乏味，让用户厌烦。</li></ul><p>2.从实现原理上来说，服务器实际上有两种方法为客户端提供选项:</p><ul><li>一是发送回一个HTML文档，里面有到该页面的各种版本的链接和每个版本的描述信息;</li><li>另一种方法是发送回HTTP/1.1响应时，使用 <code>300 Multiple Choices</code> 响应代码。客户端浏览器收到这种响应时，在前一种情况下(发回html文档的情况)，会显示一个带有链接的页面; 在后一种情况下，可能会弹出对话窗口，让用户做选择。不管怎么样，决定是由客户端的浏览器用户作出的</li></ul><p>3.除了增加时延并且对每个页面都要进行繁琐的多次请求之外, 这种方法<strong>还有一个缺点</strong>: 它需要多个URL, 公共页面要一个, 其他每种特殊页面也都要一个。</p><h3 id="服务器驱动"><a href="#服务器驱动" class="headerlink" title="服务器驱动"></a>服务器驱动</h3><p>1.之前已经知道了客户端驱动的协商存在的若干缺点。大部分缺点都涉及客户端和服务器之间通信量的增长, 这些通信量用来决定什么页面才是对请求的最佳响应。</p><p>2.而减少额外通信量的一种方法是<strong>让服务器来决定发送哪个页面回去</strong>，但为了做到这一点，<strong>客户端必须发送有关客户偏好的足够信息</strong>，以便服务器能够作出准确的决策。服务器通过 <code>客户端请求的首部集</code> 来获得这方面的信息(客户偏好)!! 有以下两种机制可供HTTP服务器评估发送什么响应给客户端比较合适：</p><ul><li>检査 客户端请求中的<code>内容协商首部集</code>: 服务器察看客户端发送的 <code>Accept内容协商首部集</code>, 设法用相应的响应首部与之匹配;</li><li>根据其他(非内容协商)首部进行变通, 例如，服务器可以根据客户端发送的 <code>User-Agent</code> 首部来发送响应</li></ul><h4 id="客户端内容协商首部集"><a href="#客户端内容协商首部集" class="headerlink" title="客户端内容协商首部集"></a>客户端内容协商首部集</h4><p>1.客户端可以用下面列出的HTTP首部集发送用户的偏好信息</p><blockquote><p>Accept : 告知服务器发送何种媒体类型<br>Accept-Language : 告知服务器发送何种语言<br>Accept-Charset : 告知服务器发送何种字符集<br>Accept-Encoding : 告知服务器采用何种编码</p></blockquote><p>2.<strong>实体首部集</strong> 和 <strong>内容协商首部集</strong></p><ul><li><strong>注意</strong>: 内容协商首部集与实体首部非常类似(比如 <code>Accept-Encoding</code> 和 <code>Content-Encoding</code>)。不过, 这两种首部的用途截然不同:</li><li><p><code>实体首部集</code>,像运输标签,它们描述了把报文从服务器传输给客户端的过程中必须的各种报文主体属性; 如下列出的实体首部集来匹配客户端的<code>Accept内容协商首部集</code></p>  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Accet首部            实体首部</div><div class="line">Accept    　　　　　　Content-Type</div><div class="line">Accept-Language     Content-Language</div><div class="line">Accept-Charset      Content-Type</div><div class="line">Accept-Encoding     Content-Encoding</div></pre></td></tr></table></figure><p>  （由于HTTP是无状态的协议，表示服务器不会在不同的请求之间追踪客户端的偏好，所以客户端必须在每个请求中都发送其偏好信息）</p></li><li><p>而<code>内容协商首部集</code>是由客户端发送给服务器用来告知其偏好信息的, 以便服务器可以从文档的不同版本中选择出最符合客户端偏好的那个来提供服务;</p></li></ul><h4 id="内容协商首部中的质量值"><a href="#内容协商首部中的质量值" class="headerlink" title="内容协商首部中的质量值"></a>内容协商首部中的质量值</h4><p>1.HTTP协议中定义了质量值，允许客户端为每种偏好类别列出多种选项，并为每种偏好选项关联一个优先次序。<br>    例如，客户端可以发送下列形式的<code>Accept-Language</code>首部：<code>Accept-Language: en; q=0.5, fr; q=0.0 , nl; q=1.0, tr; q=0.0</code><br>    其中q值的范围从0.0-1.0(0.0是优先级最低的，而1.0是优先级最高的)。<br>    上面列出的那个首部，说明该客户端最愿意接收荷兰语(缩写为nl)文档，但英语(缩写为en)文档也行; 无论如何，这个客户端都不愿意收到法语(缩写为fr)或土耳 其语(缩写为tr)的版本;</p><p>2.<strong>注意</strong>: 偏好的排列顺序并不重要，只有与偏好相关的<code>q值</code>才是重要的;</p><h4 id="客户端其它请求首部集"><a href="#客户端其它请求首部集" class="headerlink" title="客户端其它请求首部集"></a>客户端其它请求首部集</h4><p>1.服务器也可以根据客户端其他请求首部集来匹配响应, 比如 <code>User-Agent</code> 首部。例如, 服务器知道老版本的浏览器不支持JavaScript语言，这样就可以向其发送不含有JavaScript的页面版本。</p><p>2.由于缓存需要尽力提供所缓存文档中正确的”最佳”版本，HTTP协议定义了服务器在响应中发送的 <code>Vary</code> 首部。<br>    这个首部告知<strong>缓存</strong>, <strong>客户端</strong>, 和<strong>所有下游的代理</strong>, 服务器根据哪些首部来决定发送响应的最佳版本。</p><h3 id="透明协商-vary首部"><a href="#透明协商-vary首部" class="headerlink" title="透明协商(vary首部)"></a>透明协商(vary首部)</h3><p>1.了支持<strong>透明内容协商</strong>，服务器必须有能力告知代理，服务器需要检査哪些请求首部，以便对客户端的请求进行最佳匹配。但是HTTP/1.1规范中没有定义任何透明协商机制, 不过却定义了 <code>Vary</code> 首部。服务器在响应中发送了Vary首部，以告知中间节点需要使用哪些请求首部进行内容协商</p><p>2.代理缓存可以为通过单个URL访问的文档保存不同的副本, <strong>如果服务器把它们的决策过程传给代理,这些代理就能代表服务器与客户端进行协商</strong>。<br>（缓存同时也是进行内容转码的好地方，因为部署在缓存里的通用转码器能对任意服务器，而不仅仅是一台服务器传来的内容进行转码）</p><p>3.对内容进行缓存的时候是假设内容以后还可以重用。然而，为了确保对客户端请求回送的是正确的已缓存响应, 缓存必须应用服务器在回送响应时所用到的大部分决策逻辑;</p><p>4.之前我们已经了解了客户端发送的<code>Accept内容协商首部集</code>; 也了解到, 为了给每条请求选择最佳的响应, 服务器使用了哪些与这些首部集匹配的相应<code>实体首部集</code>。其实, 代理缓存也必须使用相同的首部集来决定回送哪个已缓存的响应。</p><p>5.<strong>下图展示了涉及缓存的正确及错误的操作序列</strong>。</p><ul><li>缓存把第一个请求转发给服务器，并存储其响应。</li><li>对于第二个请求，缓存根据URL査找到了匹配的文档。但是，这份文档是法语版的，而请求者想要的是西班牙语版的。如果缓存只是把文档的法语版本发给请求者的话，它就犯了错误;</li><li>像上面2中提到的, 代理缓存也必须要根据客户端发送来的<code>内容协商首部</code>来给客户端返回正确的响应<br>  <img src="/img/http/cache-beiyong-error.png" width="550"></li></ul><h4 id="Vary首部"><a href="#Vary首部" class="headerlink" title="Vary首部"></a>Vary首部</h4><p>1.下面是浏览器和服务器发送的一些典型的请求及响应首部:<br>    <img src="/img/http/vary-01.png" width="490"></p><p>2.然而, 如果服务器的决策不是依据<code>Accept</code>首部集，而是比如<code>User-Agent</code>首部的话，情况会如何？<br>例如, 服务器可能知道老版本的浏览器不支持JavaScript语言, 因此可能会回送不包含JavaScript的页面版本。<br>如果服务器是根据其他首部来决定发送哪个页面的话, <strong>和Accept首部集一样, 缓存也必须知道这些首部是什么, 这样才能在选择回送的页面时做出同样的逻辑判断</strong>。</p><p>3.HTTP的 <code>Vary</code> 响应首部中列出了所有客户端请求首部, 服务器可用这些首部来选择文档或产生定制的内容(在常规的内容协商首部集之外的内容)。例如, 若所提供的文档取决于<code>User-Agent</code>首部, <code>Vary首部</code>就必须包含<code>User-Agent</code>;</p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol><li>当新的请求到达时, 代理缓存会根据<code>内容协商首部集</code>来寻找最佳匹配。但在把文档提供给客户端之前, <strong>它还必须检査服务器有没有在已缓存响应中发送Vary首部</strong>。</li><li>如果有Vary首部, 那么新请求中那些首部的值必须与旧的已缓存的响应的请求首部相同。(也就是说,代理缓存也会保存旧的请求的请求首部和响应首部, 下面一句话更加肯定这一点)</li><li>因为服务器可能会根据客户端请求的首部来改变响应, 为了实现透明协商, 代理缓存就必须为每个已缓存变体保存<strong>客户端请求首部</strong>和<strong>相应的服务器响应首部</strong>)<br> <img src="/img/http/vary-02.png" width="650"></li><li>如果某服务器的Vary首部看起来像 <code>Vary: User-Agent, Cookie</code> 这样，大量不同的User-Agent和Cookie值将会产生非常多的变体, 而代理缓存必须为每个变体保存其相应的文档版本。当缓存执行査找时，首先会对内容协商首部集进行内容匹配，然后比较请求的变体与缓存的变体。如果无法匹配，缓存就从原始服务器获取文档</li></ol><h2 id="转码"><a href="#转码" class="headerlink" title="转码"></a>转码</h2><ol><li><p>我们已经讨论了一个机制, 该机制可以让客户端和服务器从某个URL的一系列文档中挑选出最适合客户端的文档。但是, 实现这些机制的前提是，存在一些满足客户端需求的文档—不管是完全满足还是在一定程度上满足;</p></li><li><p>然而, 如果服务器没有能满足客户端需求的文档会怎么样呢？服务器可以给出一个错误响应。但理论上，服务器可以把现存的文档转换成某种客户端可用的文档, 这种选项称为<strong>转码</strong>;</p></li><li><p>下面列出了一些假设的转码</p> <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">转换之前 　　　　　　　　　　　　转换之后</div><div class="line">HTML文档    　　　　　　　　　　WML文档</div><div class="line">高分辨率图像    　　　　　　　　低分辨率图像</div><div class="line">彩色图像    　　　　　　　　　　黑白图像</div><div class="line">有多个框架的复杂页面    　　　　没有很多框架或图像的简单文本页面</div><div class="line">有Java小应用程序的HTML页面    没有Java小应用程序的HTML页面</div><div class="line">有广告的页面    　　　　　　　　去除广告的页面</div></pre></td></tr></table></figure></li><li><p>有3种类别的转码: <strong>格式转换</strong>、<strong>信息综合</strong>以及<strong>内容注入</strong></p></li></ol><h3 id="格式转换"><a href="#格式转换" class="headerlink" title="格式转换"></a>格式转换</h3><ol><li><p>格式转换是指将数据从一种格式转换成另一种格式, 使之可以被客户端査看。通过HTML到WML的转换, 无线设备就可以访问通常供桌面客户端査看的文档了。通过慢速连接访问Web页面的客户端并不需要接收高分辨率图像, 如果通过格式转换降低图像分辨率和颜色来减小图像文件大小的话, 这类客户端就能更容易地査看图像比较丰富的页面了。</p></li><li><p>格式转换可以由如下<code>内容协商首部集</code>来驱动, 但也能由 <code>User-Agent</code> 首部来驱动。注意: <code>内容转换或转码</code> 与 <code>内容编码</code> 或 <code>传输编码</code> 是不同的, 后两者一般用于更高效或安全地传输内容, 而前两者则可使访问设备能够査看内容;</p><pre><code class="php">Accet首部            实体首部Accept    　　　　　　Content-TypeAccept-Language     Content-LanguageAccept-Charset      Content-TypeAccept-Encoding     Content-Encoding</code></pre></li></ol><h3 id="信息综合"><a href="#信息综合" class="headerlink" title="信息综合"></a>信息综合</h3><ol><li><p>从文档中提取关键的信息片段称为信息综合(information synthesis), 这是一种有用的转码操作。这种操作的例子包括根据小节标题生成文档的大纲，或者从页面中删除广告和商标</p></li><li><p>根据内容中的关键字对页面分类是更精细的技术, 有助于总结文档的精髓。这种技术常用于Web页面分类系统中，比如门户网站的Web页面目录</p></li></ol><h3 id="内容注入"><a href="#内容注入" class="headerlink" title="内容注入"></a>内容注入</h3><p>参见P423</p><h3 id="转码与静态预生成的对比"><a href="#转码与静态预生成的对比" class="headerlink" title="转码与静态预生成的对比"></a>转码与静态预生成的对比</h3><ol><li><p>转码的替代做法是在Web服务器上建立Web页面的不同副本, 例如一个是HTML, 一个是WML, 一个图像分辨率高，一个图像分辨率低；一个有多媒体内容，一个没有。</p></li><li><p>但是，这种方法不是很切合实际，原因很多：</p><ul><li>某个页面中的任何小改动都会牵扯很多页面，需要很多空间来存储各页面的不同版本，而且使页面编目和Web服务器编程(以提供正确的版本)变得更加困难。</li><li>有些转码操作，比如广告插入(尤其是定向广告插入)，就不能静态实现, 因为插入什么广告和请求页面的用户有关</li></ul></li><li><p>对单一的根页面进行即时转换，是比静态的预生成更容易的解决方案。<br> 但这样会在提供内容时增加时延。不过有时候其中一些计算可以由第三方进行，这样就减少了Web服务器上的计算负荷——比如可以由代理或缓存中的外部Agent完成转换</p></li><li><p>下图显示了在代理缓存中进行的转码<br> <img src="/img/http/zhuanma-01.png" width="430"></p></li></ol><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><http权威指南></http权威指南>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;一个URL常常需要代表若干不同的资源&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;例如那种需要以多种语言提供其内容的网站站点。
+      
+    
+    </summary>
+    
+      <category term="HTTP" scheme="http://blog.renyimin.com/categories/HTTP/"/>
+    
+    
+      <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
+    
+  </entry>
   
   <entry>
     <title>15.实战compose编排集成环境</title>
@@ -504,36 +532,6 @@
 &lt;li&gt;&lt;p&gt;&lt;code&gt;重复索引&lt;/code&gt; 是指在相同的列上按照相同的顺序创建的相同类型的索引; 应该避免这样的重复索引, 发现后也应该立即删除;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;p&gt;MySQL允许在相同的列上创建多个索引, 但是MySQL需要单独维护重复的索引, 
-      
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="索引" scheme="http://blog.renyimin.com/tags/%E7%B4%A2%E5%BC%95/"/>
-    
-      <category term="高性能索引策略" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>47. 使用索引扫描来做排序</title>
-    <link href="http://blog.renyimin.com/2017/09/25/mysql/2017-09-25-mysql-47/"/>
-    <id>http://blog.renyimin.com/2017/09/25/mysql/2017-09-25-mysql-47/</id>
-    <published>2017-09-25T10:25:11.000Z</published>
-    <updated>2018-03-08T05:38:13.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol><li><p>只有<strong>当索引的列顺序 和 ORDER BY 子句的顺序完全一致</strong>, 并且<strong>所有列的排序方向都一样时(要么都是正序, 要么都是倒序)</strong>, MySQL才能够使用索引来对结果做排序;</p></li><li><p>如果查询需要关联多张表, 则只有当 <strong>ORDER BY 子句引用的字段全部为第一个表时</strong>, 才能使用索引做排序;</p></li><li><p>ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQL都需要亲自去执行排序操作, 而<strong>无法利用索引排序</strong>;</p></li><li><p>有一种情况下, ORDER BY 子句可以不用满足最左前缀的要求, 那就是前导列为常量的时候;<br> 比如一张表的索引是 <code>key(a,b,c)</code> , 而 查询语句是 <code>... where a=100 order by b,c</code>, 即使 order by 不满足最左前缀的要求, 也可以<strong>使用索引做排序</strong>;</p></li><li><p>P177 列出了很多不可以使用索引做排序的查询;</p></li></ol><h2 id="当查询同时有-ORDER-BY-和-LIMIT-子句的时候"><a href="#当查询同时有-ORDER-BY-和-LIMIT-子句的时候" class="headerlink" title="当查询同时有 ORDER BY 和 LIMIT 子句的时候"></a>当查询同时有 ORDER BY 和 LIMIT 子句的时候</h2><ol><li><p>像<code>select &lt;col...&gt; from profiles where sex=&#39;m&#39; order by rating limit 10;</code>这种查询语句, 同时使用了<code>order by</code>和<code>limit</code>, 如果没有索引就会很慢;<br> 即使有索引, 如果用户界面有翻页, 翻页比较靠后时, 也会非常慢, 因为随着偏移量的增加, MySQL需要花费大量的时间来扫描需要丢弃的数据;</p></li><li><p>但是sex的选择性又很低, 如何优化呢?</p></li></ol><ul><li>对于选择性非常低的列, 如果要做排序的话, 可以增加一些特殊的索引来做排序, 例如, 可以创建 (sex, rating)索引</li><li>然后采用 <code>延迟关联</code> , 通过覆盖索引先查询返回需要的主键, 在根据这些主键关联原表获得需要的行;<br><code>select &lt;col...&gt; from profiles INNER JOIN (select &lt;primart key&gt; from profiles where x.sex=&#39;m&#39; order by rating limit 100000, 10) as x using(primary key)</code></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;只有&lt;strong&gt;当索引的列顺序 和 ORDER BY 子句的顺序完全一致&lt;/strong&gt;, 并且&lt;strong&gt;所有
       
     
     </summary>

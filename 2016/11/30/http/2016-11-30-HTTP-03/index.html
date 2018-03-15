@@ -13,27 +13,25 @@
     
     
     
-    <title>03. Request Method | Lant&#39;s Blog</title>
+    <title>03. 各请求方法详解 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  具体还要看不">
+    <meta name="description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="03. Request Method">
+<meta property="og:title" content="03. 各请求方法详解">
 <meta property="og:url" content="http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  具体还要看不">
+<meta property="og:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/http/postman-http-method.png">
-<meta property="og:updated_time" content="2018-03-09T10:28:12.000Z">
+<meta property="og:updated_time" content="2018-03-14T15:18:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="03. Request Method">
-<meta name="twitter:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  具体还要看不">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/http/postman-http-method.png">
+<meta name="twitter:title" content="03. 各请求方法详解">
+<meta name="twitter:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -114,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">03. Request Method</div>
+        <div class="flex-col header-title ellipsis">03. 各请求方法详解</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,7 +134,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">03. Request Method</h1>
+        <h1 class="title">03. 各请求方法详解</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-11-30T03:25:12.000Z" itemprop="datePublished" class="page-time">
@@ -169,7 +167,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">03. Request Method</h1>
+        <h1 class="post-card-title">03. 各请求方法详解</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-11-30 11:25:12" datetime="2016-11-30T03:25:12.000Z"  itemprop="datePublished">2016-11-30</time>
 
@@ -185,28 +183,21 @@
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
 <li><p>HTTP/1.1 中实现的method, <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">参考RFC2616</a>, 可以看到有: <code>OPTIONS</code>, <code>GET</code>, <code>HEAD</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p>
 </li>
-<li><p>RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&lt;图解http协议&gt;中也提到 <code>LINK</code>, <code>UNLINK</code>已经被http1.1废弃);</p>
+<li><p>RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;图解http协议&gt;中也提到 <code>LINK</code>, <code>UNLINK</code>已经被http1.1废弃);</p>
 </li>
-<li><p>具体还要看不同应用各自是如何去实现的, 有些应用会完整实现, 有些还会扩展, 有些可能会实现一部分</p>
-<ul>
-<li><p>参考symfony中的 <a href="https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/Request.php" target="_blank" rel="external">symfony/src/Symfony/Component/HttpFoundation/Request.php</a></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> METHOD_HEAD = <span class="string">'HEAD'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_GET = <span class="string">'GET'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_POST = <span class="string">'POST'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_PUT = <span class="string">'PUT'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_PATCH = <span class="string">'PATCH'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_DELETE = <span class="string">'DELETE'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_PURGE = <span class="string">'PURGE'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_OPTIONS = <span class="string">'OPTIONS'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_TRACE = <span class="string">'TRACE'</span>;</div><div class="line"><span class="keyword">const</span> METHOD_CONNECT = <span class="string">'CONNECT'</span>;</div></pre></td></tr></table></figure>
-</li>
-<li><p>而像postman这种工具, 实现的就比较多:<br><img src="/img/http/postman-http-method.png" width="400/"></p>
-</li>
-</ul>
+<li><p>不同应用各自的实现不同, 有些应用会完整实现, 有些还会扩展, 有些可能会实现一部分;</p>
 </li>
 </ol>
 <h2 id="PUT-对比POST"><a href="#PUT-对比POST" class="headerlink" title="PUT(对比POST)"></a>PUT(对比POST)</h2><ol>
 <li><p><code>PUT</code>: 对已有资源进行更新操作, 所以是 update 操作;</p>
 </li>
-<li><p>put和post的区别<br> 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a>) 的方法，POST则不是，<strong>这是一个很重要的区别</strong></p>
+<li><p>put和post的区别<br> 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a> 的方法，POST则不是，<strong>这是一个很重要的区别</strong></p>
 </li>
 <li><p>应该用PUT还是POST ？</p>
 </li>
 </ol>
 <ul>
-<li><strong>取决于这个REST服务的行为是否是idempotent(幂等)的</strong><br>假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用<code>POST</code>方法;<br>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用<code>PUT</code>方法;</li>
+<li><strong>取决于这个REST服务的行为是否是idempotent(幂等)的</strong><br>  假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用<code>POST</code>方法;<br>  但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用<code>PUT</code>方法;</li>
 <li>虽然POST和PUT差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦</li>
 </ul>
 <h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><ol>
@@ -214,21 +205,14 @@
 </li>
 <li><p>POST和PUT都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的;</p>
 </li>
-<li><p>再比如, 在我们的支付系统中, 一个api的功能是创建收款金额二维码, 它和金额相关:</p>
-<ul>
-<li>如果需求是 每个用户可以有多个二维码，如果连续调用则会创建新的二维码，这个时候就用<code>POST</code>;</li>
-<li>但如果需求是 用户的账户二维码只和用户关联，而且是一一对应的关系，此时这个api就应该用<code>PUT</code>，因为每次调用它，都将刷新用户账户二维码</li>
-</ul>
-</li>
 </ol>
 <h2 id="PATCH-对比PUT"><a href="#PATCH-对比PUT" class="headerlink" title="PATCH(对比PUT)"></a>PATCH(对比PUT)</h2><ol>
-<li>对已有资源的操作</li>
-</ol>
+<li><p>对已有资源的操作</p>
 <ul>
-<li>用于资源的部分内容进行更新<br>例如更新某一个字段, 具体比如说只更新用户信息的电话号码字段;   </li>
-<li>而<code>PUT</code>则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变。</li>
+<li>用于资源的<strong>部分内容</strong>进行更新 (例如更新某一个字段, 具体比如说只更新用户信息的电话号码字段);   </li>
+<li>而<code>PUT</code>则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变;</li>
 </ul>
-<ol>
+</li>
 <li><p>当资源不存在时: PATCH 可能会去创建一个新的资源, 这个意义上像是 saveOrUpdate 操作。</p>
 </li>
 <li><p>参考:</p>
@@ -240,14 +224,11 @@
 </ul>
 </li>
 </ol>
-<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回，而仅仅返回HTTP头信息。<br>有的人可能觉得这个方法没什么用，其实不是这样的, 比如: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>。</p>
+<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回，而仅仅返回HTTP头信息;<br>比如: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>。</p>
 <h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>比较简单, 直接获取资源;</p>
-<h2 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h2><p>这个方法很有趣, 但极少使用。它用于获取当前URL所支持的方法。若请求成功, 则它会在HTTP头中包含一个名为 <code>Allow</code> 的头, 值是服务器所支持的方法, 如 GET, POST。<br>另外, 之前跨域相关博文 <a href="/2016/09/18/2016-09-18-sameoriginpolicy-06/">CORS方案 not-so-simple request</a> 中的”预检”请求用的请求方法就是 <code>OPTIONS</code></p>
+<h2 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h2><p>这个方法使用比较少, 它用于获取当前URL所支持的方法;<br>若请求成功, 则它会在HTTP头中包含一个名为 <code>Allow</code> 的头, 值是服务器所支持的方法, 如 GET, POST;<br>之前跨域相关博文 <a href="/2016/09/18/2016-09-18-sameoriginpolicy-06/">CORS方案 not-so-simple request</a> 中的”预检”请求用的请求方法就是 <code>OPTIONS</code>;</p>
 <h2 id="CONNECT"><a href="#CONNECT" class="headerlink" title="CONNECT"></a>CONNECT</h2><p>要求用隧道协议连接代理, 如使用SSL</p>
-<h2 id="TRACE"><a href="#TRACE" class="headerlink" title="TRACE"></a>TRACE</h2><p>书中说比较少用</p>
-<blockquote>
-<p>TRACE_Method是HTTP（超文本传输）协议定义的一种协议调试方法，该方法会使服务器原样返回任意客户端请求的任何内容。<br>TRACE和TRACK是用来调试web服务器连接的HTTP方式。支持该方式的服务器存在跨站脚本漏洞，通常在描述各种浏览器缺陷的时候，把”Cross-Site-Tracing”简称为XST。攻击者可以利用此漏洞欺骗合法用户并得到他们的私人信息。（这个命令好怕怕，无知好吓人啊）<br>如何关闭Apache的TRACE请求<br>虚拟主机用户可以在.htaccess文件中添加如下代码过滤TRACE请求:<br>RewriteEngine on<br>RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)<br>RewriteRule .* - [F]<br>服务器用户在httpd.conf尾部添加如下指令后重启apache即可:<br>TraceEnable off </p>
-</blockquote>
+<h2 id="TRACE"><a href="#TRACE" class="headerlink" title="TRACE"></a>TRACE</h2><p>~~未完待续</p>
 <h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><p><a href="https://tools.ietf.org/html/rfc2616#section-9.7" target="_blank" rel="external">参考</a></p>
 <h2 id="PURGE"><a href="#PURGE" class="headerlink" title="PURGE"></a>PURGE</h2><p>非规范中定义的方法</p>
 
@@ -286,7 +267,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. Request Method》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. 各请求方法详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -296,7 +277,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. Request Method》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. 各请求方法详解》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -306,7 +287,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. Request Method》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 各请求方法详解》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -342,9 +323,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/11/30/http/2016-11-30-HTTP-04/" id="post-next" class="post-nav-link">
+      <a href="/2016/11/30/http/2016-11-30-HTTP-01/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">04. General-Header-Fields(通用首部字段)</h4>
+        <h4 class="title">01. HTTP协议预览</h4>
       </a>
     </div>
   
@@ -446,7 +427,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. Request Method》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. 各请求方法详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -456,7 +437,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. Request Method》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&title=《03. 各请求方法详解》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -466,7 +447,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. Request Method》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 各请求方法详解》 — Lant's Blog&url=http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

@@ -147,6 +147,57 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-04"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-11 19:28:16" datetime="2017-04-11T11:28:16.000Z"  itemprop="datePublished">2017-04-11</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/">04. Exclusive Queue (排他队列)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Queue的Exclusive排他队列需要注意:
+
+由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关);
+排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错;
+排他队列通过消费者创建之后, 其他消...
+    
+
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -390,13 +441,13 @@ HTTP...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Web缓存简介
-Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。
-使用缓存的优点:
+        Web缓存简介1.Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。
+2.使用缓存的优点
 
 减少了冗余的数据传输, 节省了你的网络费用
-
-有很多客户端访问一个流行的原始服务器页面时, 服务器会多次传输同一份文档, 每次传送给一个客户端。这样就会导致一些相同的字节在网络中一遍遍地...
+缓解了网络本身的瓶颈问题, 不需要更多的带宽就能够更快地加载页面
+降低了对原始服务器的要求, 服务器可以更快地响应, 避免过载的出现
+降低...
     
 
         <a href="/2016/11/30/http/2016-11-30-HTTP-05/" class="post-more waves-effect waves-button">
@@ -433,7 +484,7 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04/">04. General-Header-Fields(通用首部字段)</a>
+      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04/">04. 各通用首部字段详解</a>
     </h3>
   
 
@@ -443,23 +494,76 @@ Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Cache-Control 缓存指令
-Cache-Control 的指令是可选的, 也可以有多个, 多个指令之间通过 , 分隔;
+        Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
 
-缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
+该指令是可选的;
+指令可以有多个选项, 选项之间通过 , 分隔;
 
-可以按请求和响应分为:
+2.可以按请求和响应分为:
 
-缓存请求指令
-缓存响应指令
+缓存请求指令(选项如下)
+缓存响应指令(选项如下)
 
+3.注意 no-cache 和 must-revalidate 的区别
 
-更多参考后面的博文缓存(200, 304)中的介绍
-
-immutable属于缓存控制的一个扩展属性, http://www.j...
+no-cache:...
     
 
         <a href="/2016/11/30/http/2016-11-30-HTTP-04/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-http/2016-11-30-HTTP-01"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2016-11-30 11:25:12" datetime="2016-11-30T03:25:12.000Z"  itemprop="datePublished">2016-11-30</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-01/">01. HTTP协议预览</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言
+HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;
+
+协议版本
+
+HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法)
+HTTP/1.0 第一个得到广泛应用的HTTP版本;
+HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的...
+    
+
+        <a href="/2016/11/30/http/2016-11-30-HTTP-01/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -493,7 +597,7 @@ immutable属于缓存控制的一个扩展属性, http://www.j...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-03/">03. Request Method</a>
+      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-03/">03. 各请求方法详解</a>
     </h3>
   
 
@@ -506,9 +610,9 @@ immutable属于缓存控制的一个扩展属性, http://www.j...
         前言
 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
 
-RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中实现;(&lt;图解http协议&gt;中也提到 LINK, UNLINK已经被http1.1废弃);
+RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;图解http协议&gt;中也提到 LINK, UNLINK已经被http1.1废弃);
 
-具体还...
+不同应用各自的实现...
     
 
         <a href="/2016/11/30/http/2016-11-30-HTTP-03/" class="post-more waves-effect waves-button">
@@ -569,116 +673,6 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见, 在中
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-oauth/2016-10-22-OAuth-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-25 19:27:36" datetime="2016-10-25T11:27:36.000Z"  itemprop="datePublished">2016-10-25</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/25/oauth/2016-10-22-OAuth-03/">03. OAuth2.0的CSRF攻击</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        场景假设有如下几个角色:
-
-受害者 lant ;
-攻击者 rymuscle ;
-第三方客户端 liangren网 ;
-OAuth2服务提供平台 QQ ;
-
-攻击流程
-攻击者rymuscle 登录 liangren网 并且选择使用自己的 qq账号登录 ;
-
-liangren网 将 攻击者rymuscle 重定向到 qq的授权页, qq的授权页 向 攻击者rymuscle 显示 是否授权lian...
-    
-
-        <a href="/2016/10/25/oauth/2016-10-22-OAuth-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-oauth/2016-10-21-OAuth-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-21 15:27:36" datetime="2016-10-21T07:27:36.000Z"  itemprop="datePublished">2016-10-21</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/21/oauth/2016-10-21-OAuth-02/">02. 授权码模式</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言之前已经简单了解了授权码模式流程, 具体如何开发实现?
-开发流程可参考
-腾讯开放平台 使用Authorization_Code获取Access_Token 
-新浪Authorization_Code授权机制
-微信网页Authorization_Code授权机制
-
-
-    
-
-        <a href="/2016/10/21/oauth/2016-10-21-OAuth-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
 
     </div>
     
