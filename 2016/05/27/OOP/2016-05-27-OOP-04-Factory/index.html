@@ -13,26 +13,26 @@
     
     
     
-    <title>OOP - Simple Factory | Lant&#39;s Blog</title>
+    <title>04. Simple Factory 简单工厂模式 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指工厂方法模式, 它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位”大哥” —— 抽象工厂模式。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象">
+    <meta name="description" content="前言 假设公司开发的CRM系统可以显示饼状图的效果,原始设计方案如下  123456789101112131415161718192021222324class Client&amp;#123;    public $chartObject = null;    public function __construct($type)    &amp;#123;        switch ($chartType)">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOP - Simple Factory">
+<meta property="og:title" content="04. Simple Factory 简单工厂模式">
 <meta property="og:url" content="http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指工厂方法模式, 它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位”大哥” —— 抽象工厂模式。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象">
+<meta property="og:description" content="前言 假设公司开发的CRM系统可以显示饼状图的效果,原始设计方案如下  123456789101112131415161718192021222324class Client&amp;#123;    public $chartObject = null;    public function __construct($type)    &amp;#123;        switch ($chartType)">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-02.png">
-<meta property="og:updated_time" content="2018-02-28T09:48:40.000Z">
+<meta property="og:updated_time" content="2018-03-15T09:39:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOP - Simple Factory">
-<meta name="twitter:description" content="工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指工厂方法模式, 它也是使用频率最高的工厂模式。简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。此外，工厂方法模式还有一位”大哥” —— 抽象工厂模式。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象">
+<meta name="twitter:title" content="04. Simple Factory 简单工厂模式">
+<meta name="twitter:description" content="前言 假设公司开发的CRM系统可以显示饼状图的效果,原始设计方案如下  123456789101112131415161718192021222324class Client&amp;#123;    public $chartObject = null;    public function __construct($type)    &amp;#123;        switch ($chartType)">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-02.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -114,7 +114,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OOP - Simple Factory</div>
+        <div class="flex-col header-title ellipsis">04. Simple Factory 简单工厂模式</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,7 +136,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OOP - Simple Factory</h1>
+        <h1 class="title">04. Simple Factory 简单工厂模式</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-05-27T07:08:11.000Z" itemprop="datePublished" class="page-time">
@@ -169,7 +169,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OOP - Simple Factory</h1>
+        <h1 class="post-card-title">04. Simple Factory 简单工厂模式</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-05-27 15:08:11" datetime="2016-05-27T07:08:11.000Z"  itemprop="datePublished">2016-05-27</time>
 
@@ -182,28 +182,21 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>工厂模式是最常用的一类创建型设计模式, 通常所说的工厂模式是指<code>工厂方法模式</code>, 它也是使用频率最高的工厂模式。<br>简单工厂模式是工厂方法模式的”小弟”, 它不属于 GoF23种设计模式, 但在软件开发中应用也较为频繁, 通常将它作为学习其他工厂模式的入门。<br>此外，工厂方法模式还有一位”大哥” —— <strong>抽象工厂模式</strong>。这三种工厂模式各具特色, 难度也逐个加大, 在软件开发中它们都得到了广泛的应用, 成为面向对象软件中常用的创建对象的工具。</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p>假设公司开发的CRM系统可以显示饼状图的效果, 原始设计方案如下图: </p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>假设公司开发的CRM系统可以显示饼状图的效果,原始设计方案如下</p>
  <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line">    <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($type)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">switch</span> ($chartType) &#123;</div><div class="line">            <span class="keyword">case</span> <span class="string">'pie'</span> :</div><div class="line">                <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> PieChart();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> <span class="string">'bar'</span> :</div><div class="line">                <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> BarChart();</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">default</span>:</div><div class="line">                <span class="comment">//TODO</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;chartObject-&gt;display();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
-<li><p>客户端代码通过调用 ‘Client类’ 的构造函数来创建图表对象，根据参数 ‘type’ 可以得到不同类型的图表，然后再调用show()方法来显示相应的图表。</p>
+<li><p>客户端代码通过调用 Client类 的构造函数来创建图表对象, 根据参数 type 可以得到不同类型的图表，然后再调用show()方法来显示相应的图表。</p>
 </li>
 </ol>
-<h2 id="传统设计存在问题"><a href="#传统设计存在问题" class="headerlink" title="传统设计存在问题"></a>传统设计存在问题</h2><p><strong>不难看出，Client类是一个 “巨大的” 类, 在该类的设计中存在如下几个问题</strong>:</p>
+<h2 id="传统设计存在问题"><a href="#传统设计存在问题" class="headerlink" title="传统设计存在问题"></a>传统设计存在问题</h2><p>不难看出，Client类是一个巨大的类</p>
 <ul>
-<li><p>Client类中包含很多 “if…else…” / “switch…case…”代码块，整个类的代码相当冗长, 阅读难度、维护难度和测试难度也越大, 而且大量条件语句的存在还将影响系统的性能，程序在执行过程中需要做大量的条件判断;</p>
-</li>
-<li><p>Client类的职责过重, 它将各种图表对象的创建和使用集中在一个类中实现, <strong>违反了“单一职责原则”</strong>, 不利于类的重用和维护;</p>
-</li>
-<li><p>当需要增加新类型的图表时，必须修改Client类的源代码，<strong>违反了’开闭原则’</strong>;</p>
-</li>
-<li><p>客户端只能通过new关键字来直接创建图像对象, 图像类与客户端Client类耦合度较高 (比如一旦类的名字发生变更, 你也必须修改Client代码的源代码);</p>
-</li>
-<li><p>客户端在创建Chart对象之前可能还需要进行大量初始化设置, 例如设置柱状图的颜色、高度等, 如果在Client类的构造函数中没有提供一个默认设置, 那就只能由客户端来完成初始设置，这些代码在每次创建图像对象时都会出现, 导致代码的重复。</p>
-</li>
+<li>Client类中包含很多 “if…else…” / “switch…case…”代码块，整个类的代码相当冗长, 阅读难度、维护难度和测试难度也越大, 而且大量条件语句的存在还将影响系统的性能，程序在执行过程中需要做大量的条件判断;</li>
+<li>Client类的职责过重, 它将各种图表对象的创建和使用集中在一个类中实现, <strong>违反了单一职责原则</strong>, 不利于类的重用和维护;</li>
+<li>当需要增加新类型的图表时，必须修改Client类的源代码，<strong>违反了开闭原则</strong>;</li>
+<li>客户端只能通过new关键字来直接创建图像对象, 图像类与客户端Client类耦合度较高 (比如一旦类的名字或参数发生变更, 你也必须修改Client代码的源代码);</li>
+<li>客户端在创建Chart对象之前可能还需要进行大量初始化设置, 例如设置柱状图的颜色、高度等, 如果在Client类的构造函数中没有提供一个默认设置, 那就只能由客户端来完成初始设置，这些代码在每次创建图像对象时都会出现, 导致代码的重复。</li>
 </ul>
-<p>面对一个如此巨大、职责如此重，且与客户端代码耦合度非常高的类，我们应该怎么办？接下来介绍的 <code>简单工厂模式</code> 将在 一定程度上 解决上述问题。</p>
 <h2 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h2><ol>
 <li><p>为了将图像对象的创建和使用分离, 使用简单工厂模式对图表库进行重构, 重构后的结构如下图所示：<br> <img src="/img/oop/factory/simple-factory-02.png" width="525" height="315/"></p>
 <p> 在图中, Chart接口充当抽象产品类, 其子类PieChart和BarChart充当具体产品类, ChartFactory充当工厂类。</p>
@@ -224,11 +217,11 @@ $chartObject = ChartFactory::getChart($type);
 </li>
 </ol>
 <h2 id="简单工厂模式总结"><a href="#简单工厂模式总结" class="headerlink" title="简单工厂模式总结"></a>简单工厂模式总结</h2><ol>
-<li><p>简单工厂模式提供了专门的工厂类用于创建对象, <strong>将对象的创建和对象的使用分离开</strong>, 它作为一种最简单的工厂模式在软件开发中得到了较为广泛的应用;</p>
+<li><p>简单工厂模式提供了<strong>专门的工厂类</strong>用于创建对象, 将对象的创建和对象的使用分离开, 它作为一种最简单的工厂模式在软件开发中得到了较为广泛的应用;</p>
 </li>
 <li><p>主要优点</p>
 <ul>
-<li><p>工厂类包含必要的判断逻辑, 可以决定在什么时候创建哪一个产品类的实例, 客户端可以免除直接创建产品对象的职责, 而仅仅“消费”产品, 简单工厂模式实现了对象创建和使用的分离;</p>
+<li><p>工厂类包含必要的判断逻辑, 可以决定在什么时候创建哪一个产品类的实例, 客户端可以免除直接创建产品对象的职责, 而仅仅消费产品, 简单工厂模式实现了对象创建和使用的分离;</p>
 </li>
 <li><p>客户端无须知道所创建的具体产品类的类名，只需要知道创建具体产品类所需要对应的参数即可, 对于一些复杂的类名, 通过简单工厂模式可以在一定程度减少使用者的记忆量;</p>
 </li>
@@ -256,9 +249,6 @@ $chartObject = ChartFactory::getChart($type);
 </li>
 </ol>
 <p><strong>总之, 仍未完全做到 “开放-封闭原则”</strong></p>
-<p><a href="http://blog.csdn.net/lovelion/article/details/17517213）
-[参考](http://blog.51cto.com/haolloyin/category2.html）
-[参考](http://blog.csdn.net/lovelion/article/details/9300731" target="_blank" rel="external">参考</a></p>
 
         </div>
 
@@ -295,7 +285,7 @@ $chartObject = ChartFactory::getChart($type);
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《OOP - Simple Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《04. Simple Factory 简单工厂模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -305,7 +295,7 @@ $chartObject = ChartFactory::getChart($type);
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《OOP - Simple Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《04. Simple Factory 简单工厂模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -315,7 +305,7 @@ $chartObject = ChartFactory::getChart($type);
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Simple Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. Simple Factory 简单工厂模式》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -353,7 +343,7 @@ $chartObject = ChartFactory::getChart($type);
     <div class="waves-block waves-effect next">
       <a href="/2016/05/27/OOP/2016-05-27-OOP-05-Factory/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">OOP - Factory Method</h4>
+        <h4 class="title">05. Factory Method 工厂方法模式</h4>
       </a>
     </div>
   
@@ -455,7 +445,7 @@ $chartObject = ChartFactory::getChart($type);
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《OOP - Simple Factory》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《04. Simple Factory 简单工厂模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -465,7 +455,7 @@ $chartObject = ChartFactory::getChart($type);
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《OOP - Simple Factory》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&title=《04. Simple Factory 简单工厂模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -475,7 +465,7 @@ $chartObject = ChartFactory::getChart($type);
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - Simple Factory》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. Simple Factory 简单工厂模式》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-04-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
