@@ -13,26 +13,26 @@
     
     
     
-    <title>OOP - 为什么要引入工厂类? | Lant&#39;s Blog</title>
+    <title>03. 引入工厂类 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
+    <meta name="description" content="前言 工厂模式, 包括简单工厂模式、工厂方法模式 和 抽象工厂模式  通常, 在客户端代码中直接使用new关键字是最简单的一种创建对象的方式, 但是它的 灵活性较差  假设系统可以显示饼状图的效果, 原始设计方案如下图: 1234567891011121314151617181920212223242526272829303132&amp;lt;?php    class PieChart    &amp;#12">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OOP - 为什么要引入工厂类?">
+<meta property="og:title" content="03. 引入工厂类">
 <meta property="og:url" content="http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
+<meta property="og:description" content="前言 工厂模式, 包括简单工厂模式、工厂方法模式 和 抽象工厂模式  通常, 在客户端代码中直接使用new关键字是最简单的一种创建对象的方式, 但是它的 灵活性较差  假设系统可以显示饼状图的效果, 原始设计方案如下图: 1234567891011121314151617181920212223242526272829303132&amp;lt;?php    class PieChart    &amp;#12">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-01.png">
-<meta property="og:updated_time" content="2018-02-28T09:46:37.000Z">
+<meta property="og:updated_time" content="2018-03-15T09:33:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OOP - 为什么要引入工厂类?">
-<meta name="twitter:description" content="前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？ 对象的创建 通常有以下几种创建对象的方式：  使用new关键字直接创建对象; 通过反射机制创建对象; 通过clone()方法创建对象； 通过工厂类创建对象;   在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面通过一">
+<meta name="twitter:title" content="03. 引入工厂类">
+<meta name="twitter:description" content="前言 工厂模式, 包括简单工厂模式、工厂方法模式 和 抽象工厂模式  通常, 在客户端代码中直接使用new关键字是最简单的一种创建对象的方式, 但是它的 灵活性较差  假设系统可以显示饼状图的效果, 原始设计方案如下图: 1234567891011121314151617181920212223242526272829303132&amp;lt;?php    class PieChart    &amp;#12">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/oop/factory/simple-factory-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -114,7 +114,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">OOP - 为什么要引入工厂类?</div>
+        <div class="flex-col header-title ellipsis">03. 引入工厂类</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,7 +136,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">OOP - 为什么要引入工厂类?</h1>
+        <h1 class="title">03. 引入工厂类</h1>
         <h5 class="subtitle">
             
                 <time datetime="2016-05-27T06:33:19.000Z" itemprop="datePublished" class="page-time">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对象的创建"><span class="post-toc-number">2.</span> <span class="post-toc-text">对象的创建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出工厂类"><span class="post-toc-number">3.</span> <span class="post-toc-text">引出工厂类</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出工厂类"><span class="post-toc-number">2.</span> <span class="post-toc-text">引出工厂类</span></a></li></ol>
         </nav>
     </aside>
     
@@ -169,7 +169,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">OOP - 为什么要引入工厂类?</h1>
+        <h1 class="post-card-title">03. 引入工厂类</h1>
         <div class="post-meta">
             <time class="post-time" title="2016-05-27 14:33:19" datetime="2016-05-27T06:33:19.000Z"  itemprop="datePublished">2016-05-27</time>
 
@@ -182,45 +182,47 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>工厂模式(包括<code>简单工厂模式</code>、<code>工厂方法模式</code> 和 <code>抽象工厂模式</code> )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？</p>
-<h2 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h2><ol>
-<li><p>通常有以下几种创建对象的方式：</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>工厂模式, 包括<code>简单工厂模式</code>、<code>工厂方法模式</code> 和 <code>抽象工厂模式</code></p>
+</li>
+<li><p>通常, 在客户端代码中直接使用<code>new</code>关键字是最简单的一种创建对象的方式, 但是它的 <strong>灵活性较差</strong></p>
 <ul>
-<li>使用new关键字直接创建对象;</li>
-<li>通过反射机制创建对象;</li>
-<li>通过clone()方法创建对象；</li>
-<li>通过工厂类创建对象;</li>
+<li><p>假设系统可以显示饼状图的效果, 原始设计方案如下图:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">PieChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BarChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//Client</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> PieChart();</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject-&gt;display();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>上例在client类的构造函数中创建了PieChart类型的对象，并在show方法中调用了chartObject对象的display()方法, 这段代码看上去并没有什么问题;</p>
+</li>
 </ul>
 </li>
-<li><p>在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的<strong>灵活性较差</strong>，下面通过一个简单的示例来加以说明<br> 假设公司开发的CRM系统可以显示饼状图的效果, 原始设计方案如下图:</p>
- <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">PieChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'piechart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">BarChart</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">display</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'barchart'</span>, <span class="string">'&lt;br/&gt;'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//Client</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Client</span></span></div><div class="line"><span class="class">    </span>&#123;</div><div class="line">        <span class="keyword">public</span> $chartObject = <span class="keyword">null</span>;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject = <span class="keyword">new</span> PieChart();</div><div class="line">        &#125;</div><div class="line">    </div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line"><span class="function">        </span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;chartObject-&gt;display();</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<p> 在’client’类的构造函数中创建了’PieChart’类型的对象，并在’show’方法中调用了’chartObject’对象的’display()’方法, 这段代码看上去并没有什么问题;</p>
-</li>
-<li><p>下面我们来分析一下’Client’和’PieChart’之间的关系: ‘Client’类负责创建了一个’PieChart’类的对象, 并使用其方法’display()’来完成相应的业务处理;</p>
+<li><p>但事实上:</p>
 <ul>
-<li>也就是说’Client’即负责对象的创建, 又负责对象的使用, <strong>创建对象和使用对象的职责耦合在一起</strong>;</li>
-<li>同时, <strong>这样的设计会导致一个很严重的问题</strong>: 如果在 ‘Client’ 中希望能够使用另一个种类型的图像方案, 比如使用柱状图’BarChart’类的对象，那就必须修改’Client’类的源代码, <strong>违反了”开闭原则”</strong>。</li>
+<li>Client类即负责 <code>对象的创建</code>, 又负责 <code>对象的使用</code>, <strong>创建对象和使用对象的职责耦合在一起</strong>;</li>
+<li>同时, 这样的设计会导致一个很严重的问题, 这种强耦合必然违背了 开闭原则<br>如果在 Client 中希望能够使用另一个种类型的图像方案, 比如使用柱状图BarChart类，那就必须修改Client类的源代码, <strong>违反了”开闭原则”</strong>。</li>
 </ul>
 </li>
 </ol>
-<h2 id="引出工厂类"><a href="#引出工厂类" class="headerlink" title="引出工厂类"></a>引出工厂类</h2><p>最常用的一种解决方法是将 ‘chartObject’ 对象的创建职责从 ‘Client’ 类中移除, 在 ‘Client’ 类之外创建对象, 那么谁来负责创建 ‘chartObject’ 对象呢?<br>答案是：工厂类; 通过引入工厂类, 客户类就不会再涉及对象的创建(只是对对象进行使用), 而创建对象的工厂类自然也只是负责创建对象(也不会涉及对象的使用)。<br>引入工厂类 ChartFactory 之后的结构如下图所示:<br><img src="/img/oop/factory/simple-factory-01.png" width="495" height="370/"></p>
-<ol>
+<h2 id="引出工厂类"><a href="#引出工厂类" class="headerlink" title="引出工厂类"></a>引出工厂类</h2><ol>
+<li><p>最常用的一种解决方法是将 chartObject 对象的创建职责从 Client 类中移除, 通过引入工厂类, 在 Client 类之外创建对象:</p>
+<ul>
+<li>客户类就不会再涉及对象的创建, 只是对对象进行使用</li>
+<li>而创建对象的工厂类自然也只是负责创建对象, 也不会涉及对象的使用</li>
+</ul>
+</li>
+<li><p>引入工厂类 ChartFactory 之后的结构如下图所示:<br><img src="/img/oop/factory/simple-factory-01.png" width="495" height="370/"></p>
+</li>
 <li><p>工厂类的引入将降低维护工作量：</p>
 <ul>
-<li>如果图像类的构造函数发生变更, 或者需要添加或移除不同的图像类，你只要去维护 <code>ChartFactory</code> 的代码, 可能就不会影响到’Client’的代码;</li>
-<li>而且如果 <code>Chart</code> 抽象接口发生改变, 例如添加、移除方法或改变方法名, 只需要修改 <code>Client</code>, 不会给 <code>ChartFactory</code> 带来任何影响;</li>
-<li>在所有的工厂模式中, 我们都强调一点: 两个类A和B之间的关系应该仅仅是 <strong>A创建B</strong> 或是 <strong>A使用B</strong>, 而不能两种关系都有。<br>将对象的创建和使用分离, 也使得系统更加符合 ‘单一职责原则’, 有利于对功能的复用和系统的维护;</li>
+<li>如果需要添加或移除不同的图像类, 你只要去维护 <code>ChartFactory</code> 的代码, 就不会影响到Client的代码;</li>
+<li>而且如果 <code>Chart</code> 抽象接口发生改变, 例如添加、移除方法或改变方法名, 只需要修改Client代码, 不会给ChartFactory带来任何影响;</li>
 </ul>
 </li>
 <li><p>此外, 将对象的创建和使用分离还有一个好处:</p>
-<ul>
-<li>防止用来实例化一个类的代码在多个类中到处都是, 可以将有关创建的代码搬移到一个工厂类中。<br>因为有时候我们创建一个对象不只是简单调用其构造函数, 还需要设置一些参数, 可能还需要配置环境,<br>如果将这些代码散落在每一个创建对象的客户类中, 势必会出现代码重复、创建蔓延的问题, 而这些客户类其实无须承担对象的创建工作,<br>它们只需使用已创建好的对象就可以了。此时, 可以引入工厂类来封装对象的创建逻辑和客户代码的实例化/配置选项。</li>
-</ul>
 </li>
 </ol>
-<p><a href="http://blog.csdn.net/lovelion/article/details/17517213）
-[参考](http://blog.51cto.com/haolloyin/category2.html）
-[参考](http://blog.csdn.net/lovelion/article/details/7523392" target="_blank" rel="external">参考</a></p>
+<ul>
+<li>防止用来实例化一个类的代码在多个类中到处都是, 可以将有关创建的代码搬移到一个工厂类中;</li>
+<li>有时候创建一个对象不只是简单调用其构造函数, 还需要设置一些参数, 可能还需要配置环境, 此时, 可以引入工厂类来封装对象的创建逻辑和客户代码的实例化/配置选项。</li>
+</ul>
 
         </div>
 
@@ -257,7 +259,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《OOP - 为什么要引入工厂类?》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《03. 引入工厂类》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -267,7 +269,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《OOP - 为什么要引入工厂类?》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《03. 引入工厂类》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -277,7 +279,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - 为什么要引入工厂类?》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 引入工厂类》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -305,9 +307,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/05/27/OOP/2016-05-27-OOP-02-Singleton/" id="post-prev" class="post-nav-link">
+        <a href="/2016/05/27/OOP/2016-05-27-OOP-01-Singleton/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">OOP - Singleton-02</h4>
+          <h4 class="title">01. Singleton单例模式</h4>
         </a>
       </div>
     
@@ -417,7 +419,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《OOP - 为什么要引入工厂类?》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《03. 引入工厂类》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -427,7 +429,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《OOP - 为什么要引入工厂类?》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&title=《03. 引入工厂类》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -437,7 +439,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《OOP - 为什么要引入工厂类?》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 引入工厂类》 — Lant's Blog&url=http://blog.renyimin.com/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

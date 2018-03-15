@@ -260,7 +260,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/">OOP - 为什么要引入工厂类?</a>
+      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/">03. 引入工厂类</a>
     </h3>
   
 
@@ -270,71 +270,16 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言工厂模式(包括简单工厂模式、工厂方法模式 和 抽象工厂模式 )到底有什么用? 很多时候通过反射机制就可以很灵活地创建对象, 为毛还要工厂？
-对象的创建
-通常有以下几种创建对象的方式：
+        前言
+工厂模式, 包括简单工厂模式、工厂方法模式 和 抽象工厂模式
 
-使用new关键字直接创建对象;
-通过反射机制创建对象;
-通过clone()方法创建对象；
-通过工厂类创建对象;
+通常, 在客户端代码中直接使用new关键字是最简单的一种创建对象的方式, 但是它的 灵活性较差
 
-
-在客户端代码中直接使用new关键字是最简单的一种创建对象的方式，但是它的灵活性较差，下面...
+假设系统可以显示饼状图的效果, 原始设计方案如下图:
+1234567891011121314151617181920212223242526272829303132&lt;?php    class PieChart    &...
     
 
         <a href="/2016/05/27/OOP/2016-05-27-OOP-03-Why-Factory/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-OOP/2016-05-27-OOP-02-Singleton"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-05-27 11:41:13" datetime="2016-05-27T03:41:13.000Z"  itemprop="datePublished">2016-05-27</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-02-Singleton/">OOP - Singleton-02</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言之前已经对单例模式有了比较简单的认识接下来通过一些资料在系统了解一下单例模式;
-单例模式动机
-对于一个软件系统的某些类而言, 我们无须创建多个实例。
-
-举个大家都熟知的例子 —— Windows任务管理器, 当你在Windows的”任务栏”的右键弹出菜单上多次点击”启动任务管理器”。通常情况下，无论我们启动任务管理多少次，Windows系统始终只能弹出一个任务管理器窗口，也就是说在一个W...
-    
-
-        <a href="/2016/05/27/OOP/2016-05-27-OOP-02-Singleton/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -368,7 +313,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-01-Singleton/">02. Singleton-01</a>
+      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-01-Singleton/">01. Singleton单例模式</a>
     </h3>
   
 
@@ -417,7 +362,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-00-SOLID/">01. S.O.L.I.D</a>
+      <a class="post-title-link" href="/2016/05/27/OOP/2016-05-27-OOP-00-SOLID/">0. S.O.L.I.D</a>
     </h3>
   
 
@@ -665,12 +610,68 @@ LRU : memcache在设置新的key时, 或优先使用已经超时的key的chunk�
 
         </li>
     
+        <li class="post-list-item fade">
+            <article id="post-memcache/2016-03-10-memcache-20"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2016-03-10 18:51:28" datetime="2016-03-10T10:51:28.000Z"  itemprop="datePublished">2016-03-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/memcached/">memcached</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2016/03/10/memcache/2016-03-10-memcache-20/">20. 简介slab allocator内存分配机制</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+在memcached中, 为了缓解 内存碎片化 的问题, 使用了 slab allocator 机制来管理内存;
+slab allocator的原理比较简单
+
+按照预先规定的大小, 将分配的内存分割成特定长度的块(chunk)
+并把尺寸相同的块分成组 (slab)
+需要存内容时, memcache会根据内容的大小, 为其选择合理的slab
+
+
+从原理可以看出, slab allocator...
+    
+
+        <a href="/2016/03/10/memcache/2016-03-10-memcache-20/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/memcached/">memcached</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
     </ul>
 
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/10/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/12/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/10/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span>
     </div>
 </nav>
 
