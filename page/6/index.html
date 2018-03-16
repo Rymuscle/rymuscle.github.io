@@ -226,10 +226,10 @@ SETEX 实现锁介绍为了对数据进行排他性访问, 程序首...
         Redis事务与单线程
 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;
 
-和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题; 
+但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题; 
 
 mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案
-而redis的事务也是通过与WATCH(乐观锁)的结合才得...
+而redis的事务也是通过与WATC...
     
 
         <a href="/2017/06/11/Redis/2017-06-11-redis-07/" class="post-more waves-effect waves-button">

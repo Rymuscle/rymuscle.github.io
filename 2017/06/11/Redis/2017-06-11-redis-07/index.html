@@ -20,20 +20,20 @@
     
     
     <meta name="keywords" content="Redis">
-    <meta name="description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
+    <meta name="description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐">
 <meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="07. redis事务与WATCH乐观锁">
 <meta property="og:url" content="http://blog.renyimin.com/2017/06/11/Redis/2017-06-11-redis-07/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
+<meta property="og:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/redis/transaction_10.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/redis/watch_01.png">
-<meta property="og:updated_time" content="2018-03-08T14:37:55.000Z">
+<meta property="og:updated_time" content="2018-03-16T05:41:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="07. redis事务与WATCH乐观锁">
-<meta name="twitter:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐观锁)的结合才得以解决">
+<meta name="twitter:description" content="Redis事务与单线程 因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;  但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题;   mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案 而redis的事务也是通过与WATCH(乐">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/redis/transaction_10.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -186,7 +186,7 @@
             <h2 id="Redis事务与单线程"><a href="#Redis事务与单线程" class="headerlink" title="Redis事务与单线程"></a>Redis事务与单线程</h2><ol>
 <li><p>因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;</p>
 </li>
-<li><p>和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 <code>更新丢失</code> 问题; </p>
+<li><p>但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 <code>更新丢失</code> 问题; </p>
 <ul>
 <li>mysql是使用乐观锁, 悲观锁来解决的 参考<a href="/2017/09/16/mysql/2017-09-16-mysql-21/">MySQL高并发事务问题 及 解决方案</a></li>
 <li>而redis的事务也是通过与<code>WATCH</code>(<code>乐观锁</code>)的结合才得以解决这个问题</li>
