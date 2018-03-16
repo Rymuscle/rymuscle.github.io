@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Redis事务介绍 redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面;  redis事务从开始到结束通常会通过三个阶段:  事务开始  命令入队  事务执行    Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成;   redis事务的ACID特性在redis中, 事务具有 原子性(A">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-16T05:29:51.000Z">
+<meta property="og:updated_time" content="2018-03-16T05:37:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06. Redis 事务">
 <meta name="twitter:description" content="Redis事务介绍 redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面;  redis事务从开始到结束通常会通过三个阶段:  事务开始  命令入队  事务执行    Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成;   redis事务的ACID特性在redis中, 事务具有 原子性(A">
@@ -214,6 +214,8 @@
 </li>
 </ul>
 </li>
+<li><p>所以, 在事务中执行redis命令时, 最好确保所有命令都能执行成功;</p>
+</li>
 </ol>
 <h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>redis通过谨慎的错误检测和简单的设计来保证事务一致性。</p>
 <h3 id="隔离性"><a href="#隔离性" class="headerlink" title="隔离性"></a>隔离性</h3><ol>
@@ -224,8 +226,7 @@
 <li><p>Redis为单进程单线程模式, 采用队列模式将并发访问变为串行访问(Redis本身没有锁的概念, Redis对于多个客户端连接并不存在竞争)</p>
 </li>
 </ol>
-<h3 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h3><p>事务的耐久性指的是,当一个事务执行完毕时, 执行这个事务所得的结果已经被保持到永久存储介质里面;</p>
-<p>因为redis事务不过是简单的用队列包裹起来一组redis命令,redis并没有为事务提供任何额外的持久化功能, 所以redis事务的耐久性由redis使用的持久化模式(rdb/aof)来决定: </p>
+<h3 id="持久性"><a href="#持久性" class="headerlink" title="持久性"></a>持久性</h3><p>因为redis事务不过是简单的用队列包裹起来一组redis命令,redis并没有为事务提供任何额外的持久化功能, 所以redis事务的耐久性由redis使用的持久化模式(rdb/aof)来决定: </p>
 <p>关于持久化, 可以参考博文:<a href="/2017/06/15/Redis/2017-06-15-redis-11/">了解redis持久化</a></p>
 
         </div>
