@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="WebSocket客户端API如下WebSocket 构造函数 WebSocket对象作为一个构造函数, 用于新建 WebSocket 实例, 执行 var ws = new WebSocket(&amp;#39;ws://localhost:8080&amp;#39;); 之后, 客户端就会与服务器进行连接。  ws.readyState: readyState属性返回实例对象的当前状态,共有四种:  CONN">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-05T12:38:15.000Z">
+<meta property="og:updated_time" content="2018-03-16T09:46:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04.WebSocket - 客户端API">
 <meta name="twitter:description" content="WebSocket客户端API如下WebSocket 构造函数 WebSocket对象作为一个构造函数, 用于新建 WebSocket 实例, 执行 var ws = new WebSocket(&amp;#39;ws://localhost:8080&amp;#39;); 之后, 客户端就会与服务器进行连接。  ws.readyState: readyState属性返回实例对象的当前状态,共有四种:  CONN">
@@ -193,8 +193,6 @@
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>ws.onopen: 实例对象的<code>onopen</code>属性</p>
 <ul>
 <li><p>用于指定连接成功后的回调函数:</p>
@@ -205,55 +203,95 @@
 </ol>
 <pre><code>- 如果要指定多个回调函数，可以使用addEventListener方法。
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">ws.addEventListener(&apos;open&apos;, function (event) &#123;</div><div class="line">  ws.send(&apos;Hello Server!&apos;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">    ws.addEventListener(&apos;open&apos;, function (event) &#123;</div><div class="line">      ws.send(&apos;Hello Server!&apos;);</div><div class="line">    &#125;);</div><div class="line">    ```    </div><div class="line">4. ws.onclose</div><div class="line">    - 实例对象的onclose属性，用于指定连接关闭后的回调函数</div></pre></td></tr></table></figure>
+
+ws.onclose = function(event) {
+  var code = event.code;
+  var reason = event.reason;
+  var wasClean = event.wasClean;
+  // handle close event
+};
+
+ws.addEventListener(&quot;close&quot;, function(event) {
+  var code = event.code;
+  var reason = event.reason;
+  var wasClean = event.wasClean;
+  // handle close event
+});
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">5. ws.onmessage</div><div class="line">    - 实例对象的onmessage属性，用于指定收到服务器数据后的回调函数</div></pre></td></tr></table></figure>
+
+ws.onmessage = function(event) {
+  var data = event.data;
+  // 处理数据
+};
+
+ws.addEventListener(&quot;message&quot;, function(event) {
+  var data = event.data;
+  // 处理数据
+});
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 注意, 服务器数据可能是文本, 也可能是二进制数据(`blob`对象或`Arraybuffer`对象)</div></pre></td></tr></table></figure>
+
+ws.onmessage = function(event){
+  if(typeof event.data === String) {
+    console.log(&quot;Received data string&quot;);
+  }
+
+  if(event.data instanceof ArrayBuffer){
+    var buffer = event.data;
+    console.log(&quot;Received arraybuffer&quot;);
+  }
+}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 除了动态判断收到的数据类型, 也可以使用`binaryType`属性, 显式指定收到的二进制数据类型</div></pre></td></tr></table></figure>
+
+// 收到的是 blob 数据
+ws.binaryType = &quot;blob&quot;;
+ws.onmessage = function(e) {
+  console.log(e.data.size);
+};
+
+// 收到的是 ArrayBuffer 数据
+ws.binaryType = &quot;arraybuffer&quot;;
+ws.onmessage = function(e) {
+  console.log(e.data.byteLength);
+};
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">6. webSocket.send(): 实例对象的send()方法用于向服务器发送数据。</div><div class="line">    - 发送文本的 `ws.send(&apos;your message&apos;);`</div><div class="line"></div><div class="line">    - 发送 `Blob` 对象的例子</div></pre></td></tr></table></figure>
+
+var file = document
+  .querySelector(&apos;input[type=&quot;file&quot;]&apos;)
+  .files[0];
+ws.send(file);
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">- 发送 `ArrayBuffer` 对象的例子</div></pre></td></tr></table></figure>
+
+// Sending canvas ImageData as ArrayBuffer
+var img = canvas_context.getImageData(0, 0, 400, 320);
+var binary = new Uint8Array(img.data.length);
+for (var i = 0; i &lt; img.data.length; i++) {
+  binary[i] = img.data[i];
+}
+ws.send(binary.buffer);
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">7. webSocket.bufferedAmount</div><div class="line">    - 实例对象的 `bufferedAmount`属性, 表示还有多少字节的二进制数据没有发送出去, 它可以用来判断发送是否结束</div></pre></td></tr></table></figure>
+
+var data = new ArrayBuffer(10000000);
+ws.send(data);
+
+if (ws.bufferedAmount === 0) {
+  // 发送完毕
+} else {
+  // 发送还没结束
+}
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">8. webSocket.onerror</div><div class="line">    - 实例对象的onerror属性, 用于指定报错时的回调函数</div></pre></td></tr></table></figure>
+
+socket.onerror = function(event) {
+  // handle error event
+};
+
+socket.addEventListener(&quot;error&quot;, function(event) {
+  // handle error event
+});
+```
 </code></pre><ol>
-<li><p>ws.onclose</p>
-<ul>
-<li>实例对象的onclose属性，用于指定连接关闭后的回调函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">ws.onclose = function(event) &#123;</div><div class="line">  var code = event.code;</div><div class="line">  var reason = event.reason;</div><div class="line">  var wasClean = event.wasClean;</div><div class="line">  // handle close event</div><div class="line">&#125;;</div><div class="line"></div><div class="line">ws.addEventListener(&quot;close&quot;, function(event) &#123;</div><div class="line">  var code = event.code;</div><div class="line">  var reason = event.reason;</div><div class="line">  var wasClean = event.wasClean;</div><div class="line">  // handle close event</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>ws.onmessage</p>
-<ul>
-<li><p>实例对象的onmessage属性，用于指定收到服务器数据后的回调函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ws.onmessage = function(event) &#123;</div><div class="line">  var data = event.data;</div><div class="line">  // 处理数据</div><div class="line">&#125;;</div><div class="line"></div><div class="line">ws.addEventListener(&quot;message&quot;, function(event) &#123;</div><div class="line">  var data = event.data;</div><div class="line">  // 处理数据</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-</li>
-<li><p>注意, 服务器数据可能是文本, 也可能是二进制数据(<code>blob</code>对象或<code>Arraybuffer</code>对象)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">ws.onmessage = function(event)&#123;</div><div class="line">  if(typeof event.data === String) &#123;</div><div class="line">    console.log(&quot;Received data string&quot;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  if(event.data instanceof ArrayBuffer)&#123;</div><div class="line">    var buffer = event.data;</div><div class="line">    console.log(&quot;Received arraybuffer&quot;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>除了动态判断收到的数据类型, 也可以使用<code>binaryType</code>属性, 显式指定收到的二进制数据类型</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// 收到的是 blob 数据</div><div class="line">ws.binaryType = &quot;blob&quot;;</div><div class="line">ws.onmessage = function(e) &#123;</div><div class="line">  console.log(e.data.size);</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// 收到的是 ArrayBuffer 数据</div><div class="line">ws.binaryType = &quot;arraybuffer&quot;;</div><div class="line">ws.onmessage = function(e) &#123;</div><div class="line">  console.log(e.data.byteLength);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>webSocket.send(): 实例对象的send()方法用于向服务器发送数据。</p>
-<ul>
-<li><p>发送文本的 <code>ws.send(&#39;your message&#39;);</code></p>
-</li>
-<li><p>发送 <code>Blob</code> 对象的例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var file = document</div><div class="line">  .querySelector(&apos;input[type=&quot;file&quot;]&apos;)</div><div class="line">  .files[0];</div><div class="line">ws.send(file);</div></pre></td></tr></table></figure>
-</li>
-<li><p>发送 <code>ArrayBuffer</code> 对象的例子</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// Sending canvas ImageData as ArrayBuffer</div><div class="line">var img = canvas_context.getImageData(0, 0, 400, 320);</div><div class="line">var binary = new Uint8Array(img.data.length);</div><div class="line">for (var i = 0; i &lt; img.data.length; i++) &#123;</div><div class="line">  binary[i] = img.data[i];</div><div class="line">&#125;</div><div class="line">ws.send(binary.buffer);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>webSocket.bufferedAmount</p>
-<ul>
-<li>实例对象的 <code>bufferedAmount</code>属性, 表示还有多少字节的二进制数据没有发送出去, 它可以用来判断发送是否结束<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var data = new ArrayBuffer(10000000);</div><div class="line">ws.send(data);</div><div class="line"></div><div class="line">if (ws.bufferedAmount === 0) &#123;</div><div class="line">  // 发送完毕</div><div class="line">&#125; else &#123;</div><div class="line">  // 发送还没结束</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>webSocket.onerror</p>
-<ul>
-<li>实例对象的onerror属性, 用于指定报错时的回调函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">socket.onerror = function(event) &#123;</div><div class="line">  // handle error event</div><div class="line">&#125;;</div><div class="line"></div><div class="line">socket.addEventListener(&quot;error&quot;, function(event) &#123;</div><div class="line">  // handle error event</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>关闭连接: <code>ws.close()</code></p>
-</li>
+<li>关闭连接: <code>ws.close()</code></li>
 </ol>
-<p>摘自: <a href="http://www.ruanyifeng.com/blog/2017/05/websocket.html" target="_blank" rel="external">阮一峰</a></p>
 
         </div>
 
