@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Redis事务介绍 redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面;  redis事务从开始到结束通常会通过三个阶段:  事务开始  命令入队  事务执行    Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成;   redis事务的ACID特性在redis中, 事务具有 原子性(A">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-10T08:17:23.000Z">
+<meta property="og:updated_time" content="2018-03-16T05:29:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06. Redis 事务">
 <meta name="twitter:description" content="Redis事务介绍 redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面;  redis事务从开始到结束通常会通过三个阶段:  事务开始  命令入队  事务执行    Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成;   redis事务的ACID特性在redis中, 事务具有 原子性(A">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis事务介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis事务介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redis事务的ACID特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">redis事务的ACID特性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#原子性"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">原子性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">一致性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#隔离性"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">隔离性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#持久性"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">持久性</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Redis事务介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">Redis事务介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redis事务的ACID特性"><span class="post-toc-number">2.</span> <span class="post-toc-text">redis事务的ACID特性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#弱-原子性"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">(弱)原子性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一致性"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">一致性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#隔离性"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">隔离性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#持久性"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">持久性</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -193,8 +193,8 @@
 <li><p>Redis事务通常会使用 <code>MULTI</code>, <code>EXEC</code>, <code>WATCH</code>等命令来完成;</p>
 </li>
 </ol>
-<h2 id="redis事务的ACID特性"><a href="#redis事务的ACID特性" class="headerlink" title="redis事务的ACID特性"></a>redis事务的ACID特性</h2><p>在redis中, 事务具有 <code>原子性(Atomicity)</code> , <code>一致性(Consistency)</code> 和 <code>隔离性(Isolation)</code>;<br>并且当redis运行在某种特定的持久化模式下,事务也具有耐久性(Durability);</p>
-<h3 id="原子性"><a href="#原子性" class="headerlink" title="原子性"></a>原子性</h3><ol>
+<h2 id="redis事务的ACID特性"><a href="#redis事务的ACID特性" class="headerlink" title="redis事务的ACID特性"></a>redis事务的ACID特性</h2><p>在redis中, 事务具有 <code>原子性(Atomicity)</code> , <code>一致性(Consistency)</code> 和 <code>隔离性(Isolation)</code>;<br>并且当redis运行在某种特定的持久化模式下,事务也具有 <code>持久性(Durability)</code>;</p>
+<h3 id="弱-原子性"><a href="#弱-原子性" class="headerlink" title="(弱)原子性"></a>(弱)原子性</h3><ol>
 <li><p>对于redis的事务来说, <code>事务队列</code>中的命令也是要么就全部执行, 要么就一个都不执行, 因此redis的事务是具有原子性的; </p>
 </li>
 <li><p>不过需要注意的是: <strong>redis事务的原子性有两种情况需要区分</strong></p>
@@ -207,9 +207,8 @@
 </li>
 </ul>
 </li>
-</ol>
-<ol>
-<li>需要说明的是: 上述的第二种情况, 从表面上看, 不符合”原子性”, 因为你所执行的命令中有一条出错后, redis并没有进行回滚;<ul>
+<li><p>需要说明的是: 上述的第二种情况, 从表面上看, 不符合”原子性”, 因为你所执行的命令中有一条出错后, redis并没有进行回滚;</p>
+<ul>
 <li>其实是由于你的此种错误命令不属于语法错误, 对redis来说, 不会导致<code>执行出错</code>,所以你的这条错误命令是可以执行成功的, 不过成功后会返回错误提示, 所以redis并不会进行回滚;</li>
 <li>redis的作者在事务相关的文档中解释说:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">不支持事务回滚是因为这种复杂的功能和redis追求的简单高效的设计主旨不符合,</div><div class="line">并且他认为, redis事务的执行时错误通常都是编程错误造成的,</div><div class="line">这种错误通常只会出现在开发环境中, 而很少会在实际的生产环境中出现,</div><div class="line">所以他认为没有必要为redis开发事务回滚功能。</div></pre></td></tr></table></figure>
 </li>
