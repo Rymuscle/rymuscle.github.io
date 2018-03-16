@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制; FIFO 先进先出队列 Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。  假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所以这里">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-10T07:25:19.000Z">
+<meta property="og:updated_time" content="2018-03-16T06:08:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="11. Redis -- task queue">
 <meta name="twitter:description" content="前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制; FIFO 先进先出队列 Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。  假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所以这里">
@@ -203,7 +203,7 @@
 <h2 id="多种任务的队列"><a href="#多种任务的队列" class="headerlink" title="多种任务的队列"></a>多种任务的队列</h2><ol>
 <li><p>一般情况下, 我们为每种任务单独使用一个队列的; 但如果有一个队列处理多种任务的场景, 实现起来也很方便;</p>
 </li>
-<li><p>只用在消息中指明消息所需要调用的回调函数即可:</p>
+<li><p>只用在消息中指明消息所需要调用的回调函数即可;</p>
 </li>
 </ol>
 <h2 id="priority-优先级队列"><a href="#priority-优先级队列" class="headerlink" title="priority 优先级队列"></a>priority 优先级队列</h2><p>优先级队列其实在redis中可以依靠 <code>BRPOP</code>和<code>BLPOP</code>的特性;</p>
