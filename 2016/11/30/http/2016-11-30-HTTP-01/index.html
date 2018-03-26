@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
+    <meta name="description" content="简介 HTTP(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;  协议版本  HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持久的k">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01. HTTP协议预览">
 <meta property="og:url" content="http://blog.renyimin.com/2016/11/30/http/2016-11-30-HTTP-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
+<meta property="og:description" content="简介 HTTP(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;  协议版本  HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持久的k">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-26T08:02:05.000Z">
+<meta property="og:updated_time" content="2018-03-26T08:59:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. HTTP协议预览">
-<meta name="twitter:description" content="前言 HTTP(Hypertext Transfer Protocol, 超文本传输协议)是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;  协议版本  HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性,">
+<meta name="twitter:description" content="简介 HTTP(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;  协议版本  HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…) HTTP/1.0 第一个得到广泛应用的HTTP版本; HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持久的k">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#请求报文结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">请求报文结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文首部"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">报文首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#空行-CRLF"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">空行(CRLF)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文主体"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">报文主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#响应报文结构"><span class="post-toc-number">3.</span> <span class="post-toc-text">响应报文结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文首部-1"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">报文首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#空行-CRLF-1"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">空行(CRLF)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文主体-1"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">报文主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#请求方法"><span class="post-toc-number">4.</span> <span class="post-toc-text">请求方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#首部字段"><span class="post-toc-number">5.</span> <span class="post-toc-text">首部字段</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#请求首部字段"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">请求首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#响应首部字段"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">响应首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通用首部字段"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">通用首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体首部字段"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">实体首部字段</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#状态码详解"><span class="post-toc-number">6.</span> <span class="post-toc-text">状态码详解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#100-199"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">100 ~ 199</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#200-299"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">200 ~ 299</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#300-399"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">300 ~ 399</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#400-499"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">400 ~ 499</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#500-599"><span class="post-toc-number">6.5.</span> <span class="post-toc-text">500 ~ 599</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#请求报文结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">请求报文结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文首部"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">报文首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#空行-CRLF"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">空行(CRLF)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文主体"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">报文主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#响应报文结构"><span class="post-toc-number">3.</span> <span class="post-toc-text">响应报文结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文首部-1"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">报文首部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#空行-CRLF-1"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">空行(CRLF)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#报文主体-1"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">报文主体</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#请求方法"><span class="post-toc-number">4.</span> <span class="post-toc-text">请求方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#首部字段"><span class="post-toc-number">5.</span> <span class="post-toc-text">首部字段</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#请求首部字段"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">请求首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#响应首部字段"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">响应首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通用首部字段"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">通用首部字段</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实体首部字段"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">实体首部字段</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#状态码详解"><span class="post-toc-number">6.</span> <span class="post-toc-text">状态码详解</span></a></li></ol>
         </nav>
     </aside>
     
@@ -180,27 +180,29 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p><a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">HTTP(Hypertext Transfer Protocol, 超文本传输协议)</a>是在万维网上进行通信时所使用的协议; 可以说Web是建立在HTTP协议上通信的;</p>
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li><p><a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">HTTP</a>(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;</p>
 </li>
 <li><p>协议版本</p>
 <ul>
-<li>HTTP/0.9 有很多设计缺陷, 很快就被HTTP/1.0所取代了; (竟然支持GET方法)</li>
+<li>HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…)</li>
 <li>HTTP/1.0 第一个得到广泛应用的HTTP版本;</li>
-<li>HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;</li>
+<li>HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持久的keep-alivel连接)</li>
 <li><strong>HTTP/1.1</strong> 是当前使用的版本</li>
 <li>HTTP-NG(HTTP/2.0) 关注的是性能提升, 目前还未普及</li>
 </ul>
 </li>
-<li><p>用于HTTP协议交互的信息被称为HTTP报文; 请求端(客户端)的报文叫 <code>请求报文</code>, 响应端(服务器端)的叫 <code>响应报文</code>;</p>
+<li><p>用于HTTP协议交互的信息被称为<code>HTTP报文</code></p>
+<ul>
+<li>请求端(客户端)的报文叫 <code>请求报文</code>;</li>
+<li>响应端(服务器端)的叫 <code>响应报文</code>;</li>
+</ul>
 </li>
 </ol>
 <h2 id="请求报文结构"><a href="#请求报文结构" class="headerlink" title="请求报文结构"></a>请求报文结构</h2><h3 id="报文首部"><a href="#报文首部" class="headerlink" title="报文首部"></a>报文首部</h3><ol>
 <li><p><strong>请求行</strong> : 包含了 <code>请求方法</code>,  <code>请求URL</code>, <code>客户端请求报文使用的HTTP协议版本</code> (如: <code>GET / HTTP/1.1</code>)</p>
 </li>
 <li><p>首部块</p>
-</li>
-</ol>
 <ul>
 <li><p>请求首部字段</p>
 </li>
@@ -211,114 +213,24 @@
 <li><p>其他</p>
 </li>
 </ul>
+</li>
+</ol>
 <h3 id="空行-CRLF"><a href="#空行-CRLF" class="headerlink" title="空行(CRLF)"></a>空行(CRLF)</h3><h3 id="报文主体"><a href="#报文主体" class="headerlink" title="报文主体"></a>报文主体</h3><h2 id="响应报文结构"><a href="#响应报文结构" class="headerlink" title="响应报文结构"></a>响应报文结构</h2><h3 id="报文首部-1"><a href="#报文首部-1" class="headerlink" title="报文首部"></a>报文首部</h3><ol>
 <li><p><strong>状态行</strong> : 包含了 <code>服务端响应报文使用的HTTP协议版本</code>, <code>状态码</code>, <code>原因短语</code> (如: <code>HTTP/1.1 200 OK</code>)</p>
 </li>
 <li><p>首部块</p>
-</li>
-</ol>
 <ul>
 <li>响应首部字段</li>
 <li>通用首部字段</li>
 <li>实体首部字段</li>
 <li>其他 </li>
 </ul>
+</li>
+</ol>
 <h3 id="空行-CRLF-1"><a href="#空行-CRLF-1" class="headerlink" title="空行(CRLF)"></a>空行(CRLF)</h3><h3 id="报文主体-1"><a href="#报文主体-1" class="headerlink" title="报文主体"></a>报文主体</h3><h2 id="请求方法"><a href="#请求方法" class="headerlink" title="请求方法"></a><a href="/2016/11/30/http/2016-11-30-HTTP-03/">请求方法</a></h2><p>上面已经了解到, 在 “请求报文” -&gt; “报文首部” -&gt; “请求行” 中, 包含了 <code>请求方法</code>, 具体可参考 <a href="/2016/11/30/http/2016-11-30-HTTP-03/">各请求方法详解</a></p>
 <h2 id="首部字段"><a href="#首部字段" class="headerlink" title="首部字段"></a>首部字段</h2><p>从上面还可以看到, 报文中的首部块有如下几种<code>首部字段</code></p>
 <h3 id="请求首部字段"><a href="#请求首部字段" class="headerlink" title="请求首部字段"></a>请求首部字段</h3><h3 id="响应首部字段"><a href="#响应首部字段" class="headerlink" title="响应首部字段"></a>响应首部字段</h3><h3 id="通用首部字段"><a href="#通用首部字段" class="headerlink" title="通用首部字段"></a>通用首部字段</h3><p>Cache-Control 缓存能力控制<br>Pragma 兼容Cache-control<br>Date 当前时间<br>Transfer-Encoding 传输编码<br>Accept-encoding 内容编码  (请求首部字段) (可能会导致服务器返回 <code>406 Not Acceptable</code>)<br>Content-encoding 内容编码 (实体首部字段)<br>Accept-charset  请求首部字段<br>可参考博文：<a href="/2016/11/30/http/2016-11-30-HTTP-04/">各通用首部字段详解</a></p>
-<h3 id="实体首部字段"><a href="#实体首部字段" class="headerlink" title="实体首部字段"></a>实体首部字段</h3><h2 id="状态码详解"><a href="#状态码详解" class="headerlink" title="状态码详解"></a>状态码详解</h2><h3 id="100-199"><a href="#100-199" class="headerlink" title="100 ~ 199"></a>100 ~ 199</h3><ol>
-<li><code>101</code>: 参考博文<a href="2016/10/17/WebSocket/2017-10-28-websocket-02/">WebSocket简单示例分析</a><ul>
-<li>做协议升级, 还会响应: <code>Connection: Upgrade</code><br>~~未完待续</li>
-</ul>
-</li>
-</ol>
-<h3 id="200-299"><a href="#200-299" class="headerlink" title="200 ~ 299"></a>200 ~ 299</h3><ol>
-<li><p>200 OK : 服务器已经成功处理请求</p>
-</li>
-<li><p>201 Created : 用于请求 <code>创建服务器对象</code>, 比如 <code>PUT操作</code> 成功创建资源后, 就应该返回 201码;<br> 响应的实体部分还应该包含各种引用了已创建的资源的URL;</p>
-</li>
-<li><p><a href="http://www.laruence.com/2011/01/20/1844.html" target="_blank" rel="external">204 No Content</a> : 响应报文中只包含若干首部和一个状态行, 但没有实体的主体部分; </p>
-<ul>
-<li>其实就是告诉浏览器, 服务端执行成功了, 但是没什么数据返回给你, 所以你不用刷新页面, 也不用导向新的页面; </li>
-<li>204适合多次对一个Item进行更新;</li>
-<li>阮大哥提到, 对<code>DELETE</code>也适用;</li>
-</ul>
-</li>
-<li><p>205 Reset Content : 告诉浏览器, 页面表单需要被重置;<br> 205的意思是服务端在接收了浏览器POST请求以后, 处理成功以后, 告诉浏览器, 执行成功了, 请清空用户填写的Form表单, 方便用户再次填写;</p>
-</li>
-<li><p>206 Partial Content</p>
-<ul>
-<li>成功执行了一个部分或Range(范围)的请求; </li>
-<li>206响应中, 必须包含 <code>Content-Range</code>, <code>Date</code> 以及 <code>ETag</code>或<code>Content-Location</code>首部;</li>
-</ul>
-</li>
-</ol>
-<p>~~未完待续</p>
-<h3 id="300-399"><a href="#300-399" class="headerlink" title="300 ~ 399"></a>300 ~ 399</h3><ol>
-<li><p>300 Multiple Choices : 客户端驱动方式进行内容协商时, 服务器可能返回多个连接供客户端进行选择 (比如多语言网站可能会出现);</p>
-</li>
-<li><p>301 Moved Permanently : 在请求的URL已经被移除时使用, 响应的Location首部中应该包含资源现在所处的URL; (比较适合永久重定向)<br> 比如你从 www.test.com/location.php 中location跳转到 www.test.com/index.html 时, 响应的是301, 则即便稍后取消了location.php中的跳转, 浏览器还是会认为你之前的跳转是永久性的, 再次访问www.test.com/location.php仍然会进行跳转;</p>
-</li>
-<li><p>302 Found: 与301类似, 但是客户端应该使用Location首部给出的URL来进行<strong>临时</strong>定位资源, 将来的请求仍应该使用老的URL;</p>
-<ul>
-<li>比如你从 www.test.com/location.php 中location跳转到 www.test.com/index.html 时, 响应的是302, 则即便稍后取消了location.php中的跳转, 再次访问www.test.com/location.php则不会进行跳转, 而是访问到 location.php 修改后的代码;</li>
-<li>另外, 假设你之前是www.test.com/test.html通过<strong>post</strong>提交到www.test.com/location.php, location.php在进行跳转时, 会转成<strong>GET</strong>;</li>
-</ul>
-</li>
-<li><p>303 See Other : HTTP/1.1使用303来实现和302一样的<strong>临时</strong>重定向;</p>
-</li>
-<li><p>307 Temporary Redirect</p>
-<ul>
-<li>与301状态码类似, HTTP/1.1规范要求用307来取代302进行临时重定向; (302临时重定向留给HTTP/1.0)</li>
-<li>与 302, 303 不同, 它会将客户端的POST请求, 发送给location的目标页;</li>
-</ul>
-</li>
-<li><p>304 Not Modified : 参考博文<a href="/2016/11/30/http/2016-11-30-HTTP-05-cache/">缓存相关</a><br>~~未完待续</p>
-</li>
-</ol>
-<h3 id="400-499"><a href="#400-499" class="headerlink" title="400 ~ 499"></a>400 ~ 499</h3><ol>
-<li><p>400 Bad Request : 告知客户端发送了一个错误的请求</p>
-</li>
-<li><p>401 Unauthorized ：表示用户没有权限(令牌、用户名、密码错误);</p>
-</li>
-<li><p>403 Forbidden : 表示用户得到了授权(与401错误相对),但是访问是被禁止的;</p>
-</li>
-<li><p>405 Method Not Allowed : 比如你使用POST进行提交, 而提交的目标页进行了Location跳转到一个静态页面, 但是使用的是307响应, 此时POST请求会发送给这个静态页, 此时就会报405错误; 应该在响应中包含<code>Allow</code>首部;</p>
-</li>
-<li><p>404 Not Found : 服务器无法找到所请求的URL;</p>
-</li>
-<li><p>406 Not Acceptable : <a href="/2016/11/30/http/2016-11-30-HTTP-04/">各通用首部字段详解</a> 中<code>Accept-encoding</code><br> 也可以说, 用户请求的格式不可得(比如用户请求JSON格式, 但是只有XML格式)</p>
-</li>
-<li><p>410 Gone : 用户请求的资源被永久删除，且不会再得到的;</p>
-</li>
-<li><p>413 Payload Too Large: 413也是比较容易出现的一种状态码, 表示请求实体过大导致。用户上传的Content-Length大于nginx设定的最大值时。比如上传一张很大的图片，就会出现413错误码;</p>
-</li>
-<li><p>422 Unprocesable entity:  <code>[POST/PUT/PATCH]</code> 当创建一个对象时, 发生一个验证错误</p>
-</li>
-<li><p>429 Too Many Requests: 表示在一定的时间内用户发送了太多的请求, 即超出了”频次限制”, 在响应中，可以提供一个  Retry-After 首部来提示用户需要等待多长时间之后再发送新的请求。</p>
-</li>
-</ol>
-<h3 id="500-599"><a href="#500-599" class="headerlink" title="500 ~ 599"></a>500 ~ 599</h3><ol>
-<li><p>500 Internal Server Error : 服务端错误, 有可能是WEB应用存在错误</p>
-</li>
-<li><p>501 Not Implemented : 服务器不具备完成请求的功能, 例如, 服务器无法识别请求方法时可能会返回此状态码</p>
-</li>
-<li><p>503 Service Unavaliable : 用来说明服务器现在无法为请求提供服务, 但稍后可以; </p>
-<ul>
-<li>可以回送:响应首部 <code>Retry-After</code> 表示多久恢复;</li>
-<li>不同的客户端与服务器端应用对于 Retry-After 首部的支持依然不太一致;</li>
-<li>不过，一些爬虫程序，比如谷歌的爬虫程序Googlebot, 会遵循Retry-After响应首部的规则, 将其与503(Service Unavailable,当前服务不存在)响应一起发送有助于互联网引擎做出判断,在宕机结束之后继续对网站构建索引。</li>
-<li>参考:<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After</a></li>
-</ul>
-</li>
-<li><p>504 Gateway Time-out: 复现这个错误码比较简单, 让你的php程序模拟耗时请求, 如下代码</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">sleep(70);//模拟耗时，睡70秒</div><div class="line">echo &quot;睡醒了&quot;;</div></pre></td></tr></table></figure>
-<p> 就会返回</p>
-<pre><code>504 Gateway Time-out
-nginx/1.11.4
-</code></pre></li>
-<li>505 HTTP Version Not Supported: 服务器收到的请求, 使用的是它无法支持的HTTP协议版本;</li>
-</ol>
+<h3 id="实体首部字段"><a href="#实体首部字段" class="headerlink" title="实体首部字段"></a>实体首部字段</h3><h2 id="状态码详解"><a href="#状态码详解" class="headerlink" title="状态码详解"></a>状态码详解</h2><p>可参考博文：<a href="/2016/11/30/http/2016-11-30-HTTP-03/">HTTP状态码详解</a></p>
 <p>~~未完待续</p>
 
         </div>
@@ -404,17 +316,17 @@ nginx/1.11.4
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/11/30/http/2016-11-30-HTTP-03/" id="post-prev" class="post-nav-link">
+        <a href="/2016/11/30/http/2016-11-30-HTTP-02/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">03. HTTP各请求方法详解</h4>
+          <h4 class="title">02. HTTP各请求方法详解</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2016/11/30/http/2016-11-30-HTTP-04/" id="post-next" class="post-nav-link">
+      <a href="/2016/11/30/http/2016-11-30-HTTP-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">04. 各通用首部字段详解</h4>
+        <h4 class="title">03. HTTP状态码详解</h4>
       </a>
     </div>
   
