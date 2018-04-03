@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>21. Laravel中的&#34;服务容器&#34; | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Laravel">
+    <meta name="description" content="Laravel服务容器是一个用于管理类依赖和执行依赖注入的强大工具; 几乎所有的服务容器绑定都是在服务提供者中完成; 如果一个类没有基于任何接口那么就没有必要将其绑定到容器, 容器并不需要被告知如何构建对象, 因为它会使用PHP的反射服务自动解析出具体的对象;  正如上一篇Laravel中的”服务提供者”中聊过的, 使用服务提供者一个比较重要的原因就是因为在服务提供者中进行绑定时, 可以对 类与抽">
+<meta name="keywords" content="Laravel">
+<meta property="og:type" content="article">
+<meta property="og:title" content="21. Laravel中的&quot;服务容器&quot;">
+<meta property="og:url" content="http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Laravel服务容器是一个用于管理类依赖和执行依赖注入的强大工具; 几乎所有的服务容器绑定都是在服务提供者中完成; 如果一个类没有基于任何接口那么就没有必要将其绑定到容器, 容器并不需要被告知如何构建对象, 因为它会使用PHP的反射服务自动解析出具体的对象;  正如上一篇Laravel中的”服务提供者”中聊过的, 使用服务提供者一个比较重要的原因就是因为在服务提供者中进行绑定时, 可以对 类与抽">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-01T10:03:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="21. Laravel中的&quot;服务容器&quot;">
+<meta name="twitter:description" content="Laravel服务容器是一个用于管理类依赖和执行依赖注入的强大工具; 几乎所有的服务容器绑定都是在服务提供者中完成; 如果一个类没有基于任何接口那么就没有必要将其绑定到容器, 容器并不需要被告知如何构建对象, 因为它会使用PHP的反射服务自动解析出具体的对象;  正如上一篇Laravel中的”服务提供者”中聊过的, 使用服务提供者一个比较重要的原因就是因为在服务提供者中进行绑定时, 可以对 类与抽">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">21. Laravel中的&#34;服务容器&#34;</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">21. Laravel中的&#34;服务容器&#34;</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-31T12:10:39.000Z" itemprop="datePublished" class="page-time">
+  2018-03-31
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Laravel/">Laravel</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用法"><span class="post-toc-number">1.</span> <span class="post-toc-text">用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#绑定"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">绑定</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#绑定’接口’到’具体实现’"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">绑定’接口’到’具体实现’</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#多个类使用同一个接口"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">多个类使用同一个接口</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#上下文绑定"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">上下文绑定</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#设置标签"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">设置标签</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#从容器中解析对象"><span class="post-toc-number">1.6.</span> <span class="post-toc-text">从容器中解析对象</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Laravel/2018-03-31-Laravel-21"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">21. Laravel中的"服务容器"</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-31 20:10:39" datetime="2018-03-31T12:10:39.000Z"  itemprop="datePublished">2018-03-31</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Laravel/">Laravel</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Laravel服务容器是一个用于管理类依赖和执行依赖注入的强大工具;</p>
+<p>几乎所有的<code>服务容器绑定</code>都是在<code>服务提供者</code>中完成; 如果一个类没有基于任何接口那么就没有必要将其绑定到容器, 容器并不需要被告知如何构建对象, 因为它会使用PHP的反射服务自动解析出具体的对象;</p>
+<ul>
+<li>正如上一篇<a href="/2018/03/31/Laravel/2018-03-31-Laravel-20/">Laravel中的”服务提供者”</a>中聊过的, 使用<code>服务提供者</code>一个比较重要的原因就是因为在服务提供者中进行绑定时, 可以对 <code>类与抽象</code> 之间进行绑定, 这样, 在做依赖注入的时候, 就可以对抽象进行依赖, 而不是依赖具体的自定义服务类;</li>
+<li>而你的类如果没有基于任何接口, 自然也就没必要使用”服务提供者”了, Laravel容器并不需要被告知如何构建该对象，因为它会使用PHP的反射服务自动解析出具体的对象;</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><h3 id="绑定"><a href="#绑定" class="headerlink" title="绑定"></a>绑定</h3><ol>
+<li>在一个服务提供者中, 可以通过<code>$this-&gt;app</code>变量访问容器<ul>
+<li>然后, 可以使用<code>bind()</code>方法注册一个绑定, 该方法需要两个参数, 第一个参数是我们想要注册的类名或接口名称, 第二个参数是返回类的实例的闭包, 如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public function register()</div><div class="line">&#123;</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test&apos;, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- 也可以使用 `singleton()` 方法注册一个`单例绑定`, 它只需要解析一次的类或接口到容器，然后接下来对容器的调用将会返回同一个实例:
+在上一篇[Laravel中的&quot;服务提供者&quot;](/2018/03/31/Laravel/2018-03-31-Laravel-20/)中进行过测试, 使用`singleton()`方法的话, 在控制器中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">var_dump(app(&apos;test&apos;) === app(&apos;test&apos;)); // true</div></pre></td></tr></table></figure>
+
+但是如果使用的是`bind()`, 则是false
+</code></pre><h3 id="绑定’接口’到’具体实现’"><a href="#绑定’接口’到’具体实现’" class="headerlink" title="绑定’接口’到’具体实现’"></a>绑定’接口’到’具体实现’</h3><ol>
+<li>在绑定的时候需要注意, 只绑定<code>具体服务类</code>到服务容器中的话, 当在其他类中注入这个<code>具体服务类</code>的时候, 依赖的可是个具体, 不是抽象;</li>
+<li>为了可以在构造器或者任何其它, 进行注入依赖的地方可以做 <code>接口的类型</code> 的提示(而不是具体类型的提示), 还需要将<code>接口绑定到实现</code>, 如上一篇中的: <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public function register()</div><div class="line">&#123;</div><div class="line">    // 注意此处进行容器绑定的时候, 直接使用了$this-&gt;app即可获取服务器容器</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test&apos;, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">    // `接口`绑定到`实现`</div><div class="line">    $this-&gt;app-&gt;bind(TestContract::class, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="多个类使用同一个接口"><a href="#多个类使用同一个接口" class="headerlink" title="多个类使用同一个接口"></a>多个类使用同一个接口</h3><ol>
+<li><p>上面的绑定方式, 虽然在注入的地方可以使用<code>接口类型</code>的提示, 但由于绑定的是接口和某一个具体实现, 所以在注入的时候, 最终注入的还是绑定的那个具体实现</p>
+<ul>
+<li>如果在”服务提供者”中, 将接口绑定到多个具体实现上, 后面的覆盖前面的;</li>
+<li><p>即使不通过依赖, 而是指定具体类, 也无法保证注入的是哪个具体类, 还是会使用”服务提供者”中最后绑定到接口上的具体类,如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public function register()</div><div class="line">&#123;</div><div class="line">    // 注意此处进行容器绑定的时候, 直接使用了$this-&gt;app即可获取服务器容器</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test&apos;, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test1&apos;, function ($app) &#123;</div><div class="line">        return new Test1Service();</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    // 绑定接口到具体实现</div><div class="line">    $this-&gt;app-&gt;bind(TestContract::class, function ($app) &#123;</div><div class="line">        return new Test1Service();</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    // 绑定接口到具体实现</div><div class="line">    $this-&gt;app-&gt;bind(TestContract::class, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public function test()</div><div class="line">&#123;</div><div class="line">    // 即便此处指明调用Test1Service</div><div class="line">    $this-&gt;testManyBind(app(Test1Service::class));</div><div class="line">&#125;</div><div class="line"></div><div class="line">public function testManyBind(TestContract $testService)</div><div class="line">&#123;</div><div class="line">    // 这里最终调用的还是TestService, 但是如果在&quot;服务提供者中&quot;, 将接口绑定到具体的顺序调换, 则会调用Test1Service</div><div class="line">    $this-&gt;testService-&gt;callMe(&apos;PostControler&apos;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>所以, 如果接口有多个具体实现, 而且希望做到根据配置来决定应该给依赖注入哪个具体实现, 该怎么进行绑定呢?</p>
+<ul>
+<li>比如, 根据配置获取具体类(<code>app(&#39;test1&#39;)</code>), 然后传入<code>testManyBind</code>, 并且保证注入的就是test1? 该如何绑定</li>
+<li>再如, 如何在不同的方法自动注入不同的具体实现? 该如何绑定?</li>
+</ul>
+</li>
+</ol>
+<h3 id="上下文绑定"><a href="#上下文绑定" class="headerlink" title="上下文绑定"></a>上下文绑定</h3><ol>
+<li><p>有时侯我们可能有两个类使用同一个接口, 但我们希望在每个类中注入不同实现, 可以如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public function register()</div><div class="line">&#123;</div><div class="line">    // 注意此处进行容器绑定的时候, 直接使用了$this-&gt;app即可获取服务器容器</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test&apos;, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test1&apos;, function ($app) &#123;</div><div class="line">        return new Test1Service();</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    // 下面的用法, 表示: 当在PostsController类中注入的时候, 使用的就是Test1Service</div><div class="line">    // 即便 `接口绑定的TestService具体实现`在后面, 真正注入的也是Test1Service</div><div class="line">    $this-&gt;app-&gt;when(PostsController::class)</div><div class="line">        -&gt;needs(TestContract::class)</div><div class="line">        -&gt;give(function () &#123;</div><div class="line">            return new Test1Service();</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">    // 绑定接口到具体实现</div><div class="line">    $this-&gt;app-&gt;bind(TestContract::class, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>上面这样, 就可以做到:<br> 比方一个日志记录类, 具体类有: 记录日志到库, 记录日志到文件, 记录日志到memcache;<br> 你就可以在”服务提供者”中将所有的 具体类都绑定到接口, 并且指定将来哪个类去使用哪种记录方式;<br> 当然, 一般都是统一的, 除非有上面这种需求!</p>
+</li>
+</ol>
+<h3 id="设置标签"><a href="#设置标签" class="headerlink" title="设置标签"></a>设置标签</h3><ol>
+<li><p>少数情况下, 你可能需要使用到 <code>某类服务下的多种服务</code>, 即, 可能需要在一个类中使用到同一个接口的多个不同的具体实现;</p>
+<ul>
+<li>此时, 可以在<code>服务提供者</code>中通过<code>tag</code>方法给用到的具体实现都分配一个标签, 然后将多个不同实现通过<code>$app-&gt;tagged(&#39;aggregator&#39;,...)</code>聚合到一个<code>聚合服务中</code>;</li>
+<li>然后可以在某个类(比如controller, repository)中通过<code>app(&#39;aggregator&#39;)</code>来使用聚合的多个具体类; </li>
+<li>也可以直接在通过一个接口下创建一个聚合服务类, 然后将多个具体实现聚合给这个聚合服务类, 然后将聚合服务分配给你所需要的类;</li>
+</ul>
+</li>
+<li><p>例子:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public function register()</div><div class="line">&#123;</div><div class="line">    // TestContract接口下的TestService具体实现</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test&apos;, function ($app) &#123;</div><div class="line">        return new TestService();</div><div class="line">    &#125;);</div><div class="line">    // TestContract接口下的Test1Service具体实现</div><div class="line">    $this-&gt;app-&gt;singleton(&apos;test1&apos;, function ($app) &#123;</div><div class="line">        return new Test1Service();</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    // 把上面两个具体实现聚合起来, 打上标签&apos;t&apos;</div><div class="line">    $this-&gt;app-&gt;tag([&apos;test&apos;, &apos;test1&apos;], &apos;t&apos;);</div><div class="line">    // 然后把上面两个具体实现聚合到 新的具体实现`AggregatorService`上</div><div class="line">    // 使得被分配的类中可以使用app(&apos;aggregator&apos;)来调取聚合的多个服务</div><div class="line">    $this-&gt;app-&gt;bind(&apos;aggregator&apos;, function ($app) &#123;</div><div class="line">        return new AggregatorService($app-&gt;tagged(&apos;t&apos;));</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    // 最后将具体实现 AggregatorService 绑定到接口 TestContract 上, 并分配给 使用的类(控制器或者repository)</div><div class="line">    $this-&gt;app-&gt;bind(TestContract::class, function ($app) &#123;</div><div class="line">        return new AggregatorService($app-&gt;tagged(&apos;t&apos;));</div><div class="line">    &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p> 控制器中:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public function __construct(PostsRepository $postsRepository, TestContract $testService)</div><div class="line">&#123;</div><div class="line">    $this-&gt;postsRepository = $postsRepository;</div><div class="line">    $this-&gt;testService = $testService;</div><div class="line">    var_dump($this-&gt;testService-&gt;services);die; // 获取到同一个契约下的两个具体服务了</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="从容器中解析对象"><a href="#从容器中解析对象" class="headerlink" title="从容器中解析对象"></a>从容器中解析对象</h3><ol>
+<li><p>可以使用<code>注入</code>或者<code>app()方法</code>从容器中获取绑定好的对象;</p>
+<ul>
+<li>注意, <code>$this-&gt;app</code> 可以在<code>服务提供者</code>中直接使用, 要在控制器中, 需要使用 <code>app()</code>方法;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 这两种方法都行</div><div class="line">$this-&gt;app-&gt;make(&apos;FooBar&apos;);</div><div class="line">$this-&gt;app[&apos;FooBar&apos;];</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>容器事件: 服务容器在每一次解析对象时都会触发一个事件, 可以使用<code>resolving</code>方法监听该事件, 从而允许你在对象被传递给消费者之前为其设置额外属性</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$this-&gt;app-&gt;resolving(function ($object, $app) &#123;</div><div class="line">    // 容器解析所有类型对象时调用</div><div class="line">&#125;);</div><div class="line"></div><div class="line">$this-&gt;app-&gt;resolving(function (FooBar $fooBar, $app) &#123;</div><div class="line">    // 容器解析“FooBar”对象时调用</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><a href="http://laravelacademy.org/post/93.html" target="_blank" rel="external">参考</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Laravel/">Laravel</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&title=《21. Laravel中的"服务容器"》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&title=《21. Laravel中的"服务容器"》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《21. Laravel中的"服务容器"》 — Lant's Blog&url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/03/31/Laravel/2018-03-31-Laravel-20/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">20. Laravel中的&#34;服务提供者&#34;</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/01/Laravel/2018-04-01-Laravel-23/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">23. 门面（Facades）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&title=《21. Laravel中的"服务容器"》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&title=《21. Laravel中的"服务容器"》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《21. Laravel中的"服务容器"》 — Lant's Blog&url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/03/31/Laravel/2018-03-31-Laravel-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3awU5rMQwE0P7/T/MkVjyhlhk7oSxOV6gq9+ZkEUdjPx7x5+Pz8/Xvr998//77b579/tkTnj3zceODh4eHN1r6ZnGvwa83q11bvmY8PDy827ykGLTbkWxWu4n1xuHh4eG9lZdfeV8/MykMbaHCw8PD+5u8/ZU3DzveVvfw8PDwYl5+Rc7DiLZ4tBfxw1kLHh4eXsybNcDe+/f1/h4eHh7eqKueH7ttLNsWntlq8fDw8G7w2mg1HwKYbVNyWc8jXTw8PLx7vE0janbtTp45G0SowXh4eHgj3ka/iVCTQz/5fd3fw8PDw1vzbh/ryTeb4a1oW/Hw8PAO8TZxbbI1m0ZXvkFRgIuHh4d3iDf7582y8gC3LQY/vAUPDw/vKC8vCW1YsGmSHdsgPDw8vKO89iDOY4JZIpIHuxESDw8P7wKvPXbztlZyTW9D3uF24OHh4V3gte35fLn50Ops6AoPDw/vXbw2AsiX0m7ZrKgUWQseHh7eIV4eKORH9qx4bC7fq/kyPDw8vPg5swv05hLcFp42/P3vXXh4eHgXePujPwfv2135NuHh4eHd482a+m2zara4fXiBh4eHd4PXxhCzLchbWe2gQD3ugIeHh7fmnTqyZwWjXU87moCHh4d3gzcLI9qX5Uf8LODAw8PD+33ebIBpVjbagYBj0xB4eHh4R3kf5WcWQMzGrfKiFfX38PDw8K7xZpfmPKrYX7uLlBoPDw/vKG9WEmat/f24QL0ePDw8vAu8TTCxedysMOT4A7kLHh4e3kteXgyS17cxbr5NeWHAw8PD+x3eqRb+5jmbrh0eHh7eX+bl0epwHKosBj88Hw8PD++tvHZkKr+IJ2MBs+/x8PDw7vHyplcbrb5+y76c1JMReHh4eGvejQZYjsmv7HlkjIeHh3eN9w/raeQpzXJxkQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

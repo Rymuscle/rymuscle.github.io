@@ -13,25 +13,25 @@
     
     
     
-    <title>CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM | Lant&#39;s Blog</title>
+    <title>23. 门面（Facades） | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="PHP">
-    <meta name="description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
-<meta name="keywords" content="PHP">
+    <meta name="keywords" content="Laravel">
+    <meta name="description" content="创建自定义门面类 先创建好自己的自定义服务类; 在 App/Facades/ 下创建一个指向 自定义服务类 的门面类; 然后需要到配置文件config/app.php中的aliases数组中去注册门面类的别名;">
+<meta name="keywords" content="Laravel">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM">
-<meta property="og:url" content="http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/index.html">
+<meta property="og:title" content="23. 门面（Facades）">
+<meta property="og:url" content="http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
+<meta property="og:description" content="创建自定义门面类 先创建好自己的自定义服务类; 在 App/Facades/ 下创建一个指向 自定义服务类 的门面类; 然后需要到配置文件config/app.php中的aliases数组中去注册门面类的别名;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-17T13:03:48.000Z">
+<meta property="og:updated_time" content="2018-04-02T05:34:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM">
-<meta name="twitter:description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
+<meta name="twitter:title" content="23. 门面（Facades）">
+<meta name="twitter:description" content="创建自定义门面类 先创建好自己的自定义服务类; 在 App/Facades/ 下创建一个指向 自定义服务类 的门面类; 然后需要到配置文件config/app.php中的aliases数组中去注册门面类的别名;">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM</div>
+        <div class="flex-col header-title ellipsis">23. 门面（Facades）</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM</h1>
+        <h1 class="title">23. 门面（Facades）</h1>
         <h5 class="subtitle">
             
-                <time datetime="2016-06-28T08:40:32.000Z" itemprop="datePublished" class="page-time">
-  2016-06-28
+                <time datetime="2018-03-31T22:06:34.000Z" itemprop="datePublished" class="page-time">
+  2018-04-01
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Laravel/">Laravel</a></li></ul>
 
             
         </h5>
@@ -156,16 +156,23 @@
 
 <div class="container body-wrap">
     
-<article id="post-PHP/2017-04-11-fpm"
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建自定义门面类"><span class="post-toc-number">1.</span> <span class="post-toc-text">创建自定义门面类</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Laravel/2018-04-01-Laravel-23"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM</h1>
+        <h1 class="post-card-title">23. 门面（Facades）</h1>
         <div class="post-meta">
-            <time class="post-time" title="2016-06-28 16:40:32" datetime="2016-06-28T08:40:32.000Z"  itemprop="datePublished">2016-06-28</time>
+            <time class="post-time" title="2018-04-01 06:06:34" datetime="2018-03-31T22:06:34.000Z"  itemprop="datePublished">2018-04-01</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Laravel/">Laravel</a></li></ul>
 
 
 
@@ -173,21 +180,10 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;</p>
-<ul>
-<li>ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以<a href="http://www.thinkphp.cn/topic/42338.html" target="_blank" rel="external">参阅一下</a></li>
-<li>综合来看, <a href="http://yongxiong.leanote.com/post/%E4%BB%8ECGI%E5%88%B0FastCGI%E5%88%B0PHP-FPM" target="_blank" rel="external">这篇文章</a>比较权威</li>
-</ul>
-<ol>
-<li>CGI协议: 只是一个协议</li>
-<li>FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议)</li>
-<li>FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;</li>
-</ol>
-<ul>
-<li>php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;</li>
-</ul>
-<ol>
-<li>PHP-FPM: 不但实现了FastCGI协议, 而且自己具有进程管理功能!</li>
+            <h2 id="创建自定义门面类"><a href="#创建自定义门面类" class="headerlink" title="创建自定义门面类"></a>创建自定义门面类</h2><ol>
+<li>先创建好自己的自定义服务类;</li>
+<li>在 <code>App/Facades/</code> 下创建一个指向 <code>自定义服务类</code> 的门面类;</li>
+<li>然后需要到配置文件<code>config/app.php</code>中的<code>aliases</code>数组中去注册门面类的别名;</li>
 </ol>
 
         </div>
@@ -215,7 +211,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Laravel/">Laravel</a></li></ul>
 
 
             
@@ -225,7 +221,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&title=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&title=《23. 门面（Facades）》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -235,22 +231,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&title=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&title=《23. 门面（Facades）》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 门面（Facades）》 — Lant's Blog&url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -273,19 +269,12 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2016/05/28/OOP/2016-05-28-OOP-10-Laravel-Facade/" id="post-prev" class="post-nav-link">
+        <a href="/2018/03/31/Laravel/2018-03-31-Laravel-21/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">10. Laravel-Facade</h4>
+          <h4 class="title">21. Laravel中的&#34;服务容器&#34;</h4>
         </a>
       </div>
     
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2016/06/28/PHP/2016-06-28-closure/" id="post-next" class="post-nav-link">
-        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">closure 闭包</h4>
-      </a>
-    </div>
   
 </nav>
 
@@ -385,7 +374,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&title=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&title=《23. 门面（Facades）》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -395,22 +384,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&title=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&title=《23. 门面（Facades）》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM》 — Lant's Blog&url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 门面（Facades）》 — Lant's Blog&url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2016/06/28/PHP/2017-04-11-fpm/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/01/Laravel/2018-04-01-Laravel-23/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -421,7 +410,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNElEQVR42u3aQW7DMAwEwPz/0y7QaxFlV7KDWh6dCseNNT4wFMnXK17H78o/fXf/8WeNr5+8MDAwbss4huvvtpKHJdsaf3++NwwMjOcw5h4zvjJ+HcmVZG8YGBgY74JsHqDbF4GBgYFxbsBNAO2hFwMDA2PlEDtXFGvD9OVncQwMjBsy5rbynb8v7G9gYGDchHFMrbZ52X5bvR8MDIytGXlLMg++bRO0TROjsIuBgbEdo20GtE3KtuiWv9a392BgYGzHyP85SRDHpfzLhy0wMDA2ZSTHyO9sN08TJwtwGBgYN2S0Jfi5sYy5oY2CioGBsTUjiVcrAxbjY+p6xQwDA+MJjDaNa4+441QyT0Oj3w0MDIxNGUlgTUj5EfTcBmfx+4CBgXFzRt6YzK/PFeBWSoEYGBi7MvJCWA5ui3RtSe7tmAUGBsbWjPWGZXsAXkkKL+y7YmBg/EtG255sC2Hjrcwlmh/2jIGBsR2jfeQV419JUP6QUGJgYGzNmGs9zrUH2lW3MDEwMB7AmDu4rqd9+VMKNwYGxqaMHJMkfyultKVCGwYGxqaMNsC1m2iHMNqXjoGBsTfjKNdKqzJJGdshjKhqiIGBcXPGhcWvk6Yg2iQVAwNjV0YSZPNkMU/s2kPsh/1gYGA8gNE2DPIkMh+5aF8BBgYGRn4cXWktJINiERsDAwOjHKpoByzm7sHAwHgaIwmgbXFtrrUwWRfEwMDYmtE2BnJeMmYx11Q4eWgMAwPj/zJ+AIQ5aphyJ+hzAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACpElEQVR42u3aQW7CQAwFUO5/6XZbiRK+7TFNpZdVBE2Yl0Xsfs/jER9fL47rb3vH8z1/fvLYOPDw8PAOLb0HeF5Kcv5qPcknr9aAh4eHt8179TO9v7k+78Gq68HDw8O7D6/5M0Xq/HHj4eHh/Rfe5KHkxQAPDw/vDrxJuFCNDyZRyGLWgoeHhxfzJu3sX52vzPfw8PDwxlP1vEhUw9ZJG11YLR4eHt4CL19E+abBWCsPJnrrxMPDw9vg5QHBZMC/MTCLHhkeHh7eGq831L/GJ5/My8ybUoGHh4e3zMsByULzpVSHZIVr8fDw8BZ4yYs7aXnzIlF+uRe3dhUuxsPDw2vxJhueJkFtdQNWLwTBw8PD2+DlzXQep54KfHshSLRZAQ8PD2/Ay1ve3su6Nx47FYLg4eHhbfAmo688Jig0u61A+U0IgoeHh7fGS5rm6pg/iW7zdjy/Dx4eHt5nePmLOxl65XFD8rBG0S0eHh7eR3j5y7caWOTjtF6B+eVaPDw8vKO83igrb4jzBfUa6zfxBx4eHt4yr7es6hu4N9PvbWjAw8PD2+YlbW4SKExa4VP3L1czPDw8vCLv7Nao/DHlWxPw8PDw7sPLw9NqzNprlKuRRCEIxsPDw1vYz9mLFZJQ9exDLD8mPDw8vGVerwBUm928ZZ9s/8LDw8Pb5uXHqVb4VMseFQY8PDy8Bd6kOU4GadWhWt6CvylReHh4eEd5k5JQbZqTgjEZvP1yFR4eHt4Cr9rm5uAqe3J+4MDDw8Mr8nrFYLJdIH/19zZ74eHh4X2Gt7EhoNrgrlQ2PDw8vBvwqhsO8pgjuU95uwMeHh7eDXh5y1uNgKtjtqiQ4OHh4a3x8iAgR/YihnLccN2+4+Hh4S3wev/R54AqY32ah4eHh9fnfQOuyLGGNFIRvAAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
