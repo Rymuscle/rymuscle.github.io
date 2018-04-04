@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>yield 协程 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="PHP">
+    <meta name="description" content="迭代器迭代生成器简介 (迭代)生成器也是一个函数, 返回的是一个迭代器, 而这个迭代器实现了Iterator接口, 所以叫迭代生成器;  和普通函数不同, 由于(迭代)生成器返回的是一个迭代器, 所以(迭代)生成器函数中的返回值可以依次返回, 而不是只返回一个单独的值; 或者换句话说, (迭代)生成器使你能更方便的实现了迭代器接口;  引用网上常见的示例  1234567891011&amp;lt;?ph">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yield 协程">
+<meta property="og:url" content="http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="迭代器迭代生成器简介 (迭代)生成器也是一个函数, 返回的是一个迭代器, 而这个迭代器实现了Iterator接口, 所以叫迭代生成器;  和普通函数不同, 由于(迭代)生成器返回的是一个迭代器, 所以(迭代)生成器函数中的返回值可以依次返回, 而不是只返回一个单独的值; 或者换句话说, (迭代)生成器使你能更方便的实现了迭代器接口;  引用网上常见的示例  1234567891011&amp;lt;?ph">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/PHP/yield-send.png">
+<meta property="og:updated_time" content="2018-04-04T09:46:45.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="yield 协程">
+<meta name="twitter:description" content="迭代器迭代生成器简介 (迭代)生成器也是一个函数, 返回的是一个迭代器, 而这个迭代器实现了Iterator接口, 所以叫迭代生成器;  和普通函数不同, 由于(迭代)生成器返回的是一个迭代器, 所以(迭代)生成器函数中的返回值可以依次返回, 而不是只返回一个单独的值; 或者换句话说, (迭代)生成器使你能更方便的实现了迭代器接口;  引用网上常见的示例  1234567891011&amp;lt;?ph">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/PHP/yield-send.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">yield 协程</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">yield 协程</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-01-13T05:20:31.000Z" itemprop="datePublished" class="page-time">
+  2018-01-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#迭代器"><span class="post-toc-number">1.</span> <span class="post-toc-text">迭代器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#迭代生成器"><span class="post-toc-number">2.</span> <span class="post-toc-text">迭代生成器</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#生成器内部"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">生成器内部</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简单理解-协程-Coroutine"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">简单理解 协程(Coroutine)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#协程实现任务调度"><span class="post-toc-number">3.</span> <span class="post-toc-text">协程实现任务调度</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#任务和调度器之间的通信"><span class="post-toc-number">4.</span> <span class="post-toc-text">任务和调度器之间的通信</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-PHP/2018-01-13-yield"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">yield 协程</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-01-13 13:20:31" datetime="2018-01-13T05:20:31.000Z"  itemprop="datePublished">2018-01-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h2><h2 id="迭代生成器"><a href="#迭代生成器" class="headerlink" title="迭代生成器"></a>迭代生成器</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol>
+<li><p>(迭代)生成器也是一个函数, 返回的是一个<code>迭代器</code>, 而这个<code>迭代器</code>实现了<code>Iterator接口</code>, 所以叫<code>迭代生成器</code>;</p>
+</li>
+<li><p>和普通函数不同, 由于(迭代)生成器返回的是一个迭代器, 所以(迭代)生成器函数中的返回值可以依次返回, 而不是只返回一个单独的值; 或者换句话说, (迭代)生成器使你能更方便的实现了迭代器接口;</p>
+</li>
+<li><p>引用网上常见的示例</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function xrange($start, $end, $step = 1) &#123;</div><div class="line">    for ($i = $start; $i &lt;= $end; $i += $step) &#123;</div><div class="line">        yield $i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// var_dump(xrange(1, 1000000));   // object(Generator)[1]</div><div class="line">foreach (xrange(1, 1000000) as $num) &#123;</div><div class="line">    echo $num;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>上面这个 xrange() 函数提供了和PHP的内建函数range()一样的功能, 但是不同的是range()函数返回的是一个包含值从1到100万0的数组; <strong>而xrange()函数返回的是依次输出这些值的一个迭代器, 而不会真正以数组形式返回</strong>;</p>
+<ul>
+<li>这种方法的优点是显而易见的, 它可以让你在处理大数据集合的时候不用一次性的加载到内存中, 甚至你可以处理无限大的数据流;</li>
+<li>当然, 也可以不通过生成器来实现这个功能, 而是可以通过继承Iterator接口实现, 但通过使用生成器实现起来会更方便, 不用再去实现iterator接口中的5个方法了;</li>
+</ul>
+</li>
+</ol>
+<h3 id="生成器内部"><a href="#生成器内部" class="headerlink" title="生成器内部"></a>生成器内部</h3><ol>
+<li><p>要从<code>生成器</code>认识<code>协程</code>, 理解它内部是如何工作是非常重要的: 生成器是一种可中断的函数, 在它里面的<code>yield</code>构成了中断点;<br> 像上面的例子, 调用xrange(1,1000000)的时候, xrange()函数里代码其实并没有真正地运行, 它只是返回了一个迭代器;</p>
+</li>
+<li><p>调用迭代器的方法一次, 其中的代码运行一次, 例如:</p>
+<ul>
+<li>如果你调用生成器返回的迭代器的rewind方法 <code>$range-&gt;rewind()</code>, 那么xrange()里的代码就会运行到控制流第一次出现yield的地方, 而函数内传递给yield语句的返回值, 可以通过$range-&gt;current()获取;</li>
+<li>为了继续执行生成器中yield后的代码, 你就需要调用迭代器的 <code>$range-&gt;next()</code> 方法, 这将再次启动生成器, 直到下一次yield语句出现; 因此, 连续调用next()和current()方法, 你就能从生成器里获得所有的值,直到再没有yield语句出现;</li>
+<li>对xrange()来说, 这种情形出现在$i超过$end时, 在这种情况下, 控制流将到达函数的终点, 因此将不执行任何代码, 一旦这种情况发生, vaild()方法将返回假, 这时迭代结束;</li>
+<li><p>示例1</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">function gen() &#123;</div><div class="line">    var_dump(&apos;cat&apos;);</div><div class="line">    yield &apos;t&apos;;</div><div class="line">    var_dump(&apos;dog&apos;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">$gen-&gt;rewind();   // 指针会走到第一个yield处, 所以会经过 cat</div><div class="line">var_dump($gen-&gt;current());  // 获取第一个yield处的值</div><div class="line">var_dump(&apos;----------&apos;);</div><div class="line">$gen-&gt;next();  // 会往下走, 走到下一个yield处, 所以会经过 dog</div><div class="line">var_dump($gen-&gt;current());  // 获取下一个yield处的值 (但是后面已经没有yield了, 所以为null)</div><div class="line"></div><div class="line">// 结果:</div><div class="line">string(3) &quot;cat&quot;</div><div class="line">string(1) &quot;t&quot;</div><div class="line">string(10) &quot;----------&quot;</div><div class="line">string(3) &quot;dog&quot;</div><div class="line">NULL</div></pre></td></tr></table></figure>
+</li>
+<li><p>示例2</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">function gen() &#123;</div><div class="line">    var_dump(&apos;cat&apos;);</div><div class="line">    yield &apos;t&apos;;</div><div class="line">    var_dump(&apos;dog&apos;);</div><div class="line">    yield &apos;g&apos;;</div><div class="line">    var_dump(&apos;pig&apos;);</div><div class="line">    yield &apos;p&apos;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = gen();</div><div class="line">$gen-&gt;rewind();   // 指针会走到第一个yield处, 所以会经过 cat</div><div class="line">var_dump($gen-&gt;current());  // 获取第一个yield处的值</div><div class="line">var_dump(&apos;----------&apos;);</div><div class="line"></div><div class="line">$gen-&gt;next();  // 会往下走, 走到下一个yield处, 所以会经过 dog</div><div class="line">var_dump($gen-&gt;current());  // 获取下一个yield处的值 (但是后面已经没有yield了, 所以为null)</div><div class="line">var_dump(&apos;----------&apos;);</div><div class="line"></div><div class="line">$gen-&gt;next();  // 会往下走, 走到下一个yield处, 所以会经过 pig</div><div class="line">var_dump($gen-&gt;current());  // 获取下一个yield处的值 (p)</div><div class="line"></div><div class="line">var_dump(&apos;----------&apos;);</div><div class="line">$gen-&gt;next();  // 会往下走, 什么也没有</div><div class="line">var_dump($gen-&gt;current());  // 获取下一个yield处的值 (为null)</div><div class="line"></div><div class="line">// 结果</div><div class="line">string(3) &quot;cat&quot;</div><div class="line">string(1) &quot;t&quot;</div><div class="line">string(10) &quot;----------&quot;</div><div class="line">string(3) &quot;dog&quot;</div><div class="line">string(1) &quot;g&quot;</div><div class="line">string(10) &quot;----------&quot;</div><div class="line">string(3) &quot;pig&quot;</div><div class="line">string(1) &quot;p&quot;</div><div class="line">string(10) &quot;----------&quot;</div><div class="line">NULL</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>上面示例中使用(迭代)生成器时, <code>yield</code> 都只是简单地作为一个<code>语句</code>来使用, 这样只能实现 <strong>生成器到调用者的单向通信</strong>;</p>
+</li>
+</ol>
+<p>迭代器在进行循环(迭代)前, 需要先进行<code>rewind</code>;</p>
+<h3 id="简单理解-协程-Coroutine"><a href="#简单理解-协程-Coroutine" class="headerlink" title="简单理解 协程(Coroutine)"></a>简单理解 <code>协程(Coroutine)</code></h3><ol>
+<li><p>协程的支持是在迭代生成器的基础上, 增加了<strong>调用者可以回送数据给生成器</strong>的功能(调用者发送数据给被调用的生成器函数), <strong>这就把生成器到调用者的单向通信</strong>转变为<strong>两者之间的双向通信</strong>;</p>
+</li>
+<li><p>调用者传递数据给生成器, 是通过迭代器的<code>send()</code>方法实现的; 下面就是一个简单的协程示例, 用来演示这种通信如何运行的</p>
+<ul>
+<li><p>下面例子可以看到在生成器内部, <code>yield</code> 不再是简单的语句, 而是一个可以接收调用者参数并进行赋值的<code>表达式</code> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">function gen() &#123;</div><div class="line">    var_dump(&apos;cat&apos;);</div><div class="line">    $ret1 = (yield &apos;yield1&apos;);</div><div class="line">    var_dump($ret1 . &apos;dog&apos;);</div><div class="line">    $ret2 = (yield &apos;yield2&apos;);</div><div class="line">    var_dump($ret2 . &apos;pig&apos;);</div><div class="line">&#125;</div><div class="line">$gen = gen();</div><div class="line">$gen-&gt;rewind();     // 指针会走到第一个 yield 处, 所以会经过 cat</div><div class="line">// cat</div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;current());</div><div class="line">// yield1</div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;send(&apos;lala&apos;));   // 如果第一次send之前没有rewind将指针指向第一个yield, 则send会: 自动先进行一次rewind</div><div class="line">                                // 2. 由于指针还在第一个yield处, 此时send传递参数还是传到第一个yield处 (yield &apos;yield1&apos;)</div><div class="line">                                // 3. 执行next 到下一个yield (会经过 $ret.dog )</div><div class="line">                                // 4. 返回next之后的yield值(yield &apos;yield2&apos; )</div><div class="line">// laladog</div><div class="line">// yield2</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;current());      // 到了第二个yield处, 由于没有传递至, 所以可以通过current直接获取 yield &apos;yield2&apos; 传给调用者的 &apos;yield2&apos;</div><div class="line">// yield2</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;send(&apos;haha&apos;));   // 由于指针没变, 还在第二个yield处, 传递了 haha 给生成器</div><div class="line">                                // 然后执行了next 继续往下走, 会经过 var_dump($ret . &apos;pig&apos;);</div><div class="line">                                // 返回next之后的yield值 (已经进行了next, 而之后没有yield了, 所以会返回null)</div><div class="line">// hahapig</div><div class="line">// null</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;current());      // 由于上面已经走了next, 而下面啥都没有了......</div><div class="line">// null</div></pre></td></tr></table></figure>
+</li>
+<li><p>第一次send会默认执行rewind</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">function gen() &#123;</div><div class="line">    var_dump(&apos;cat&apos;);</div><div class="line">    $ret1 = (yield &apos;yield1&apos;);</div><div class="line">    var_dump($ret1 . &apos;dog&apos;);</div><div class="line">    $ret2 = (yield &apos;yield2&apos;);</div><div class="line">    var_dump($ret2 . &apos;pig&apos;);</div><div class="line">&#125;</div><div class="line">$gen = gen();</div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;send(&apos;lala&apos;));   // 如果第一次send之前没有rewind将指针指向第一个yield, 则send会: 自动先进行一次rewind (所以也会经过 cat )</div><div class="line">                                // 2. 由于指针还在第一个yield处, 此时send传递参数还是传到第一个yield处 (yield &apos;yield1&apos;)</div><div class="line">                                // 3. 执行next 到下一个yield (会经过 $ret.dog )</div><div class="line">                                // 4. 返回next之后的yield值(yield &apos;yield2&apos; )</div><div class="line">// cat</div><div class="line">// laladog</div><div class="line">// yield2</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;current());      // 到了第二个yield处, 由于没有传递至, 所以可以通过current直接获取 yield &apos;yield2&apos; 传给调用者的 &apos;yield2&apos;</div><div class="line">// yield2</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;send(&apos;haha&apos;));   // 由于指针没变, 还在第二个yield处, 传递了 haha 给生成器</div><div class="line">                                // 然后执行了next 继续往下走, 会经过 var_dump($ret . &apos;pig&apos;);</div><div class="line">                                // 返回next之后的yield值 (已经进行了next, 而之后没有yield了, 所以会返回null)</div><div class="line">// hahapig</div><div class="line">// null</div><div class="line"></div><div class="line">echo &apos;+++++++++++++++++++&apos;;</div><div class="line">var_dump($gen-&gt;current());      // 由于上面已经走了next, 而下面啥都没有了......</div><div class="line">// null</div><div class="line"></div><div class="line">//function foo() &#123;</div><div class="line">//    $string = yield;</div><div class="line">//    echo $string;</div><div class="line">//    for ($i = 1; $i &lt;= 3; $i++) &#123;</div><div class="line">//        yield $i;</div><div class="line">//    &#125;</div><div class="line">//&#125;</div><div class="line">//</div><div class="line">//$generator = foo();</div><div class="line">//$generator-&gt;send(&apos;Hello world!&apos;);</div><div class="line">//foreach ($generator as $value) echo &quot;$value\n&quot;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>更多小例子 (<a href="http://php.net/manual/zh/generator.send.php" target="_blank" rel="external">可参考PHP手册</a>)</p>
+<ul>
+<li><p>可以迭代三次</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function printer() &#123;</div><div class="line">    $i = 3;</div><div class="line">    while ($i&gt;0) &#123;</div><div class="line">        echo 33;</div><div class="line">        $string = yield;</div><div class="line">        echo $string;</div><div class="line">        $i--;</div><div class="line">        echo $i;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$printer = printer();</div><div class="line">$printer-&gt;send(&apos;Hello world!&apos;);</div><div class="line">echo &quot;&lt;br/&gt;++++++++++&lt;br/&gt;&quot;;</div><div class="line">$printer-&gt;send(&apos;haha&apos;);</div><div class="line">echo &quot;&lt;br/&gt;++++++++++&lt;br/&gt;&quot;;</div><div class="line">$printer-&gt;send(&apos;heihei&apos;);</div></pre></td></tr></table></figure>
+</li>
+<li><p>可以一直迭代</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function printer() &#123;</div><div class="line">    while (true) &#123;</div><div class="line">        echo 33;</div><div class="line">        $string = yield;</div><div class="line">        echo $string;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$printer = printer();</div><div class="line">$printer-&gt;send(&apos;Hello world!&apos;);</div><div class="line">echo &quot;&lt;br/&gt;++++++++++&lt;br/&gt;&quot;;</div><div class="line">$printer-&gt;send(&apos;haha&apos;);</div><div class="line">echo &quot;&lt;br/&gt;++++++++++&lt;br/&gt;&quot;;</div><div class="line">$printer-&gt;send(&apos;heihei&apos;);</div><div class="line">echo &quot;&lt;br/&gt;++++++++++&lt;br/&gt;&quot;;</div><div class="line">$printer-&gt;send(&apos;heihei2&apos;);</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>个人感觉重点在于理解调用者发出<code>send()</code>后, <code>send()</code>的执行包括<code>next()</code>及<code>返回</code> (以及, 如果是初次执行send的话, 会隐式执行<code>rewind</code>); </p>
+<ul>
+<li>也可以参考<a href="http://www.laruence.com/2015/05/28/3038.html" target="_blank" rel="external">鸟哥博客对send的说明</a><br><img src="/img/PHP/yield-send.png" width="400/"></li>
+</ul>
+</li>
+</ol>
+<h2 id="协程实现任务调度"><a href="#协程实现任务调度" class="headerlink" title="协程实现任务调度"></a>协程实现<code>任务调度</code></h2><ol>
+<li><p>上面的例子比较简单, 可能无法体系会到协程的优点, 接下来可以尝试利用<code>协程</code>去实现<code>多任务调度</code></p>
+<ul>
+<li>要解决的问题是当你想并发地运行多任务(或者”程序”)时, 我们都知道CPU在一个时刻只能运行一个任务(不考虑多核的情况), 因此处理器需要在不同的任务之间进行切换, 而且总是让每个任务<code>运行一小会儿</code>;</li>
+<li>多任务协作这个术语中的<code>协作</code>很好的说明了如何进行这种切换的: 它要求当前正在运行的任务<strong>自动</strong>把控制传回给调度器, 这样就可以运行其他任务了;<br>这与<code>抢占多任务</code>相反, 抢占多任务是这样的: 调度器可以中断运行了一段时间的任务, 不管它喜欢还是不喜欢;<br>协作多任务在Windows的早期版本(windows95)和Mac OS中有使用, 不过它们后来都切换到使用抢先多任务了, <strong>理由相当明确</strong>: 如果你依靠程序自动交出控制的话, <strong>那么一些恶意的程序将很容易占用整个CPU, 不与其他任务共享</strong>;</li>
+</ul>
+</li>
+<li><p>现在你应当明白协程和任务调度之间的关系: </p>
+<ul>
+<li>yield指令提供了任务中断自身的一种方法, 然后把控制交回给任务调度器;</li>
+<li><p>因此协程可以运行多个其他任务, 更进一步来说, <code>yield</code>可以用来在<code>任务</code>和<code>调度器</code>之间进行通信;</p>
+<p>手册中这个例子有空可以稍稍微品味一下: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">function nums() &#123;</div><div class="line">    for ($i = 0; $i &lt; 5; ++$i) &#123;</div><div class="line">        //get a value from the caller</div><div class="line">        $cmd = (yield $i);</div><div class="line"></div><div class="line">        if($cmd == &apos;stop&apos;) return;//exit the function</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$gen = nums();</div><div class="line">foreach($gen as $v)</div><div class="line">&#123;</div><div class="line">    if($v == 3)//we are satisfied</div><div class="line">        $gen-&gt;send(&apos;stop&apos;);</div><div class="line"></div><div class="line">    echo &quot;&#123;$v&#125;\n&quot;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>多任务调度的实现</p>
+<ul>
+<li><p>两个使用协程函数的任务:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">function task1() &#123;</div><div class="line">    for ($i = 1; $i &lt;= 10; ++$i) &#123;</div><div class="line">        echo &quot;This is task 1 iteration $i.\n&quot;;</div><div class="line">        yield;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function task2() &#123;</div><div class="line">    for ($i = 1; $i &lt;= 5; ++$i) &#123;</div><div class="line">        echo &quot;This is task 2 iteration $i.\n&quot;;</div><div class="line">        yield;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Task任务类包装 任务协程函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">/**</div><div class="line"> * 如代码, 一个任务就是用任务ID标记的一个协程(函数).</div><div class="line"> * 使用setSendValue()方法, 你可以指定哪些值将被发送到下次的恢复(在之后你会了解到我们需要这个),</div><div class="line"> * run()函数确实没有做什么, 除了调用send()方法的协同程序</div><div class="line"> * 要理解为什么添加了一个 beforeFirstYieldflag变量</div><div class="line"> */</div><div class="line">class Task &#123;</div><div class="line">    protected $taskId;</div><div class="line">    protected $coroutine;</div><div class="line">    protected $sendValue = null;</div><div class="line">    protected $beforeFirstYield = true;</div><div class="line"></div><div class="line">    public function __construct($taskId, Generator $coroutine) &#123;</div><div class="line">        $this-&gt;taskId = $taskId;</div><div class="line">        $this-&gt;coroutine = $coroutine;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function getTaskId() &#123;</div><div class="line">        return $this-&gt;taskId;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">//    public function setSendValue($sendValue) &#123;</div><div class="line">//        $this-&gt;sendValue = $sendValue;</div><div class="line">//    &#125;</div><div class="line"></div><div class="line">    public function run() &#123;</div><div class="line">        // 由于send的特性, 会导致先next, 所以下面在设置了一个初始标志beforeFirstYield, 初始时, 先获取了current</div><div class="line">        if ($this-&gt;beforeFirstYield) &#123;</div><div class="line">            $this-&gt;beforeFirstYield = false;</div><div class="line">            return $this-&gt;coroutine-&gt;current();</div><div class="line">        &#125; else &#123;</div><div class="line">            // 注意: 执行send之后会返回next之后的yield值</div><div class="line">            $retval = $this-&gt;coroutine-&gt;send(&apos;目前还没用到双向通信&apos;);</div><div class="line">            return $retval;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function isFinished() &#123;</div><div class="line">        return !$this-&gt;coroutine-&gt;valid();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>实现Scheduler调度器类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">class Scheduler &#123;</div><div class="line">    protected $maxTaskId = 0;</div><div class="line">    protected $taskMap = []; // taskId =&gt; task</div><div class="line">    protected $taskQueue;</div><div class="line"></div><div class="line">    public function __construct() &#123;</div><div class="line">        $this-&gt;taskQueue = new SplQueue();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function newTask(Generator $coroutine) &#123;</div><div class="line">        // 生成任务id</div><div class="line">        $tid = ++$this-&gt;maxTaskId;</div><div class="line">        // 将协程函数封包到Task类中 作为任务</div><div class="line">        $task = new Task($tid, $coroutine);</div><div class="line">        // 放入调度器的任务池中</div><div class="line">        $this-&gt;taskMap[$tid] = $task;</div><div class="line">        // 将任务放入调度器的队列中</div><div class="line">        $this-&gt;schedule($task);</div><div class="line">        return $tid;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function schedule(Task $task) &#123;</div><div class="line">        $this-&gt;taskQueue-&gt;enqueue($task);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function run() &#123;</div><div class="line">        while (!$this-&gt;taskQueue-&gt;isEmpty()) &#123;</div><div class="line">            // 从调度器队列中弹出任务, 准备执行</div><div class="line">            $task = $this-&gt;taskQueue-&gt;dequeue();</div><div class="line">            // 执行任务</div><div class="line">            $task-&gt;run();</div><div class="line"></div><div class="line">            // 如果任务执行完毕, 则从调度器的任务池中清除任务</div><div class="line">            if ($task-&gt;isFinished()) &#123;</div><div class="line">                unset($this-&gt;taskMap[$task-&gt;getTaskId()]);</div><div class="line">            &#125; else &#123;</div><div class="line">                // 否则, 再次将弹出的任务放入调度器的任务队列中</div><div class="line">                $this-&gt;schedule($task);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>测试 test.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">require_once &apos;Task.php&apos;;</div><div class="line">require_once &apos;Scheduler.php&apos;;</div><div class="line"></div><div class="line">function task1() &#123;</div><div class="line">    for ($i = 1; $i &lt;= 10; ++$i) &#123;</div><div class="line">        echo &quot;This is task 1 iteration $i.\n&quot;;</div><div class="line">        yield;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">function task2() &#123;</div><div class="line">    for ($i = 1; $i &lt;= 5; ++$i) &#123;</div><div class="line">        echo &quot;This is task 2 iteration $i.\n&quot;;</div><div class="line">        yield;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$scheduler = new Scheduler;</div><div class="line">$scheduler-&gt;newTask(task1());</div><div class="line">$scheduler-&gt;newTask(task2());</div><div class="line">$scheduler-&gt;run();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>当然, 上面是具有两个简单任务(没什么意义的任务)的调度器;</p>
+</li>
+</ol>
+<h2 id="任务和调度器之间的通信"><a href="#任务和调度器之间的通信" class="headerlink" title="任务和调度器之间的通信"></a>任务和调度器之间的通信</h2><ol>
+<li><p>上面可以看到, 调度器已经运行了, 那么我们来看下一个问题: <strong>任务和调度器之间的通信</strong>;</p>
+</li>
+<li><p>接下来将模拟 进程和操作系统进行会话时的方式 – <code>系统调用</code>, 来做任务和调度器之间的通信<br>我们需要<code>系统调用</code>的理由是操作系统与进程相比它处在不同的权限级别上, 因此为了执行特权级别的操作(如杀死另一个进程), 就不得不以某种方式把控制传回给内核, 这样内核就可以执行所说的操作了;<br> 再说一遍, 这种行为在内部是通过使用<code>中断指令</code>来实现的. 过去使用的是通用的int指令, 如今使用的是更特殊并且更快速的syscall/sysenter指令;</p>
+</li>
+<li><p>我们的任务调度系统将反映这种设计: 不是简单地把调度器传递给任务(这样就允许它做它想做的任何事), 我们将通过给yield表达式传递信息来与系统调用通信, 这儿yield即是中断, 也是传递信息给调度器(和从调度器传递出信息)的方法;</p>
+</li>
+<li><p>为了说明系统调用, 我们对可调用的系统调用做一个小小的封装:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"> </div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>~~未完待续</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&title=《yield 协程》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&title=《yield 协程》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《yield 协程》 — Lant's Blog&url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/21/docker/2017-10-21-15-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">15.实战compose编排集成环境</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/27/mysql/2018-03-27-mysql-101/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">101. 分区,分表,分库</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&title=《yield 协程》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&title=《yield 协程》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《yield 协程》 — Lant's Blog&url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/01/13/PHP/2018-01-13-yield/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3ay26DMBAF0Pz/T6fbVm3IvR4iFXNYRcIQHxYjz+PxiK/nt+v47u8rf2fy1OjCwMC4LCPZxPHmkqeON/p7Tf2BMDAwbsB4FcGO1xy/Jw++7f9iYGBgtIw8ZB+vx8DAwDiLMQmg/yjgYmBgXJCxFi6TQ+FZn+y0XBwDA+OCjEkQ/PTvj/Q3MDAwLsV4llfSgGxT1jbI/vEeDAyMrRlt0T85nLUbzUc63qzEwMDYlNGG1Lwo1obXdjjj0f4ZBgbGdozJQbAN1vkI2sunMDAwtma0SePkCJgH7sUGAAYGxtaMtdZj3p5sg3jeTMXAwLgPo/37+VBXO3hRpLIYGBjbMSaJaH43T4PbIPsjF8fAwNiUMU8+J5tLeG0TFAMDYz/GWQF3reWZtCLqaREMDIztGG3xa9KYXEuD69IeBgbGdoy2uH/umEX+sYqjIQYGxnaMtnmZhNF85Gst1EblNgwMjBsw1g6CeWhuB9GKUiAGBsamjLwQ1t6dFO/y9gMGBsZ9GHNMO4o6OW6+LLphYGDchtG+Yg05T30xMDDuxsgbA/O0Nl9fHCgxMDA2ZTzLqy3Z52NkSUEtmhPBwMDYjtGOarWk5HNMDqM1DAMD47KMSRMxD9/zIyAGBgZGHvgmT601MotUFgMDA2MpTT3eSvsJ3mTkGBgYGMGG5lvP15wQcDEwMC7FSJLPtaNeXnTLD4sYGBh3Y+SpY353MmzRJrQYGBhbM74ABep0ci0YbDEAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
