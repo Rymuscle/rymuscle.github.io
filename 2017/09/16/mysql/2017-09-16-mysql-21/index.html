@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
-<meta property="og:updated_time" content="2018-04-07T10:32:47.000Z">
+<meta property="og:updated_time" content="2018-04-07T10:39:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL高并发事务问题 及 解决方案">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
@@ -249,6 +249,7 @@
 <ul>
 <li>会在事务(假设事务A)中对写数据设置<code>x</code>锁, 其他事务(假设事务B)想对相同数据做修改, 要等到事务A数据修改完毕并提交(释放了<code>x</code>锁才行);</li>
 <li>由于最低隔离级别会出现脏读, 所以即使事务B在事务A提交之后, 对数据做了修改, rollback回滚到的也是事务A最后的提交数据, 所以不会覆盖;</li>
+<li>(而更高的<code>RC</code>,<code>RR</code>隔离级别使用了<code>MVCC</code>技术, 事务B回滚的话, 也是回滚到事务A最后的那次提交)</li>
 </ul>
 <ol>
 <li><p><strong>第二类丢失更新</strong>: A事务 覆盖 B事务 已经提交的数据，造成B事务所做操作丢失</p>
