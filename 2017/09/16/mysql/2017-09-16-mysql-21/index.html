@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
-<meta property="og:updated_time" content="2018-03-09T00:47:59.000Z">
+<meta property="og:updated_time" content="2018-04-07T10:32:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL高并发事务问题 及 解决方案">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性; 但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了;  高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所操作的">
@@ -243,8 +243,14 @@
 <h2 id="更新丢失"><a href="#更新丢失" class="headerlink" title="更新丢失"></a>更新丢失</h2><ol>
 <li><p>最后聊一下 <code>高并发事务</code> 的另一个问题: <code>丢失更新问题</code>, 该问题和之前几个问题需要区分开, 因为解决方案不是一类!</p>
 </li>
-<li><p>第一类丢失更新: A事务撤销时, 把已经提交的B事务的更新数据覆盖了<br><img src="/img/mysql/transaction/diushigengxin_01.png" width="608" height="243"><br>不过这种情况应该只在Mysql事务的最低隔离级别(READ UNCOMMITED)才会出现, <strong><code>RC</code> 及 <code>以上隔离级别</code> 已经保证了不会出现脏读, 也就不会出现该情况</strong>!</p>
+<li><p>第一类丢失更新: A事务撤销时, 把已经提交的B事务的更新数据覆盖了<br><img src="/img/mysql/transaction/diushigengxin_01.png" width="608" height="243"><br>不过这种情况在Mysql中不会出现, 因为即使是InnoDB事务的最低隔离级别(READ UNCOMMITED):</p>
 </li>
+</ol>
+<ul>
+<li>会在事务(假设事务A)中对写数据设置<code>x</code>锁, 其他事务(假设事务B)想对相同数据做修改, 要等到事务A数据修改完毕并提交(释放了<code>x</code>锁才行);</li>
+<li>由于最低隔离级别会出现脏读, 所以即使事务B在事务A提交之后, 对数据做了修改, rollback回滚到的也是事务A最后的提交数据, 所以不会覆盖;</li>
+</ul>
+<ol>
 <li><p><strong>第二类丢失更新</strong>: A事务 覆盖 B事务 已经提交的数据，造成B事务所做操作丢失</p>
 <ul>
 <li><p>下图可以看到, <strong>搞笑的是</strong>: 也正是因为RR隔离级别所保证的<code>可重复读</code>, 给此类问题的出现提供了基础条件;<br><img src="/img/mysql/transaction/diushigengxin_02.png" width="608" height="246"></p>
