@@ -147,14 +147,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-19-13-docker"
+            <article id="post-mysql/2017-09-25-mysql-50"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-19 14:27:53" datetime="2017-10-19T06:27:53.000Z"  itemprop="datePublished">2017-10-19</time>
+        <time class="post-time" title="2017-09-25 21:23:08" datetime="2017-09-25T13:23:08.000Z"  itemprop="datePublished">2017-09-25</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-13-docker/">13.Compose命令</a>
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-50/">50. EXPLAIN 分析</a>
     </h3>
   
 
@@ -175,22 +175,17 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Compose命令说明
-命令作用的对象: 对于Compose来说, 大部分命令所作用的对象既可以是项目本身, 也可以指定为项目中的服务或者容器。如果没有特别的说明, 命令针对的对象将是项目, 这意味着项目中所有的服务都会受到命令影响。
-
-命令格式: 
-
-docker-compose 命令的基本的使用格式是: docker-compose [-f=&lt;arg&gt;...] [option...
+        准备环境1234567891011121314151617181920212223242526272829303132333435363738CREATE TABLE `user_info` (  `id`   BIGINT(20)  NOT NULL AUTO_INCREMENT,  `name` VARCHAR(50) NOT NULL DEFAULT &apos;&apos;,  `a...
     
 
-        <a href="/2017/10/19/docker/2017-10-19-13-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-50/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -199,14 +194,14 @@ docker-compose 命令的基本的使用格式是: docker-compose [-f=&lt;arg&gt;
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-19-12-docker"
+            <article id="post-mysql/2017-09-25-mysql-49"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-19 11:07:53" datetime="2017-10-19T03:07:53.000Z"  itemprop="datePublished">2017-10-19</time>
+        <time class="post-time" title="2017-09-25 21:10:40" datetime="2017-09-25T13:10:40.000Z"  itemprop="datePublished">2017-09-25</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -217,7 +212,7 @@ docker-compose 命令的基本的使用格式是: docker-compose [-f=&lt;arg&gt;
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-12-docker/">12.Docker三剑客 之 Compose</a>
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-49/">49. 索引和锁</a>
     </h3>
   
 
@@ -227,22 +222,19 @@ docker-compose 命令的基本的使用格式是: docker-compose [-f=&lt;arg&gt;
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Compose简介
-Compose 项目是Docker官方的开源项目, 负责快速在集群中部署分布式应用。
-
-Compose定位是「定义和运行多个Docker容器的应用(Defining and running multi-container Docker applications)」。
-
-通过之前的学习，已经知道使用一个Dockerfile模板文件, 可以让用户很方便的定义一个单独的应用容器...
+        
+索引可以让查询锁定更少的行 
+因为InnoDB只有在访问行的时候才会对其加锁, 而索引能够减少InnoDB访问的行数, 从而减少锁的数量;但这只有当InnoDB在存储引擎层就能过滤掉所有不需要的行时才行, 如果索引(处在存储引擎层)无法过滤掉无效的行, 那么在InnoDB检索到数据并发送给服务器层以后, 服务器层才能应用where子句, 这时已经无法避免锁定行了;虽然InnoDB的行锁效率...
     
 
-        <a href="/2017/10/19/docker/2017-10-19-12-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-49/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -251,14 +243,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-19-11-docker"
+            <article id="post-mysql/2017-09-25-mysql-48"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-19 10:20:31" datetime="2017-10-19T02:20:31.000Z"  itemprop="datePublished">2017-10-19</time>
+        <time class="post-time" title="2017-09-25 18:27:40" datetime="2017-09-25T10:27:40.000Z"  itemprop="datePublished">2017-09-25</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -269,7 +261,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/19/docker/2017-10-19-11-docker/">11.高级网络配置</a>
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-48/">48. 冗余和重复索引</a>
     </h3>
   
 
@@ -279,20 +271,22 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Docker虚拟网络原理
-当Docker启动时, 会自动在主机上创建一个docker0虚拟网桥, 实际上是 Linux 的一个 bridge, 可以理解为一个软件交换机。它会在 挂载到它上面的哪些网口 之间转发信息。
+        
+重复索引 是指在相同的列上按照相同的顺序创建的相同类型的索引; 应该避免这样的重复索引, 发现后也应该立即删除;
 
-同时, Docker随机分配一个本地未占用的私有网段中的一个地址给docker0接口, 比如典型的172.17.42.1,掩码为255.255.0.0。此后启动的容器内的网口...
+MySQL允许在相同的列上创建多个索引, 但是MySQL需要单独维护重复的索引, 并且优化器在优化查询的时候也需要逐个地进行考虑, 这会影响性能;
+
+冗余索引 和 重复索引 不同, 如果创建了索引(A,B), 在创建索引(A)就是冗余索引, 因为这只是(A,B)索引的前缀索引...
     
 
-        <a href="/2017/10/19/docker/2017-10-19-11-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-48/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -301,14 +295,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-17-10-docker"
+            <article id="post-mysql/2017-09-25-mysql-47"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-17 18:15:23" datetime="2017-10-17T10:15:23.000Z"  itemprop="datePublished">2017-10-17</time>
+        <time class="post-time" title="2017-09-25 18:25:11" datetime="2017-09-25T10:25:11.000Z"  itemprop="datePublished">2017-09-25</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -319,7 +313,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/17/docker/2017-10-17-10-docker/">10.Docker中的网络功能</a>
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-47/">47. 使用索引扫描来做排序</a>
     </h3>
   
 
@@ -329,19 +323,22 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        外部访问容器端口映射
-容器中可以运行一些网络应用, 要让外部也可以访问这些应用, 可以通过 -P 或 -p 参数来指定端口映射。
-1$ docker run -d -p 8090:80 --name testVip --mount type=bind,source=/Users/renyimin/Desktop/testVip,target=/haha,readonly vipservice...
+        简介
+只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;
+
+如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;
+
+ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQ...
     
 
-        <a href="/2017/10/17/docker/2017-10-17-10-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-47/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -350,14 +347,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-17-09-docker"
+            <article id="post-mysql/2017-09-25-mysql-46"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-17 14:40:23" datetime="2017-10-17T06:40:23.000Z"  itemprop="datePublished">2017-10-17</time>
+        <time class="post-time" title="2017-09-25 17:30:26" datetime="2017-09-25T09:30:26.000Z"  itemprop="datePublished">2017-09-25</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -368,7 +365,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/17/docker/2017-10-17-09-docker/">09.Docker数据管理</a>
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-46/">46. 覆盖索引</a>
     </h3>
   
 
@@ -378,26 +375,24 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts)
-数据卷(Volumes)
-数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:
-数据卷 可以在容器之间共享和重用
-对 数据卷 的修改会立马生效
-对 数据卷 的更新，不会影响镜像
-数据卷 默认会一直存在，即使容器被删除
+        介绍
+通常, 大家都会根据查询的WHERE条件来创建合适的索引, 不过这只是索引优化的一个方面, 设计优秀的索引应该考虑到整个查询, 而不单单是where条件部分。
 
+覆盖索引
 
-注意: 数据卷 的使用, 类似于 ...
+索引确实是一种查找数据的高效方式, 但是MySQL也可以使用索引就能直接获取列的数据, 这样就不需要再去读取数据行;
+如果叶子节点中已经包含了要查询的数据, 那么就没有必要再回表查询了;
+即, 如果一个索引包含(或...
     
 
-        <a href="/2017/10/17/docker/2017-10-17-09-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-46/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -406,14 +401,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-17-08-docker"
+            <article id="post-mysql/2017-09-24-mysql-45"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-17 12:01:08" datetime="2017-10-17T04:01:08.000Z"  itemprop="datePublished">2017-10-17</time>
+        <time class="post-time" title="2017-09-24 20:10:31" datetime="2017-09-24T12:10:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -424,7 +419,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/17/docker/2017-10-17-08-docker/">08.容器--基本操作</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-45/">45. 聚簇索引</a>
     </h3>
   
 
@@ -434,20 +429,25 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        容器1.镜像(Image)和容器(Container)的关系, 就像是面向对象程序设计中的 类 和 实例 的关系一样, 镜像是静态的定义, 容器是镜像运行时的实体。容器可以被 创建、启动、停止、删除、暂停等。
-2.容器的实质是进程，但与直接在宿主执行的进程不同，容器进程运行于属于自己的独立的命名空间。
+        简介
+聚簇索引并不是一种单独的索引类型, 而是一种 数据存储方式; 
 
-因此容器可以拥有自己的 root 文件系统、自己的网络配置、自己的进程空间，甚至自己的用...
+因为是存储引擎负责实现索引, 所以不是所有的存储引擎都支持聚簇索引, 这里主要讨论的是 InnoDB引擎的聚簇索引;
+
+InnoDB的 聚簇索引 实际上在同一个结构中保存了 B-Tree索引 和 数据行
+
+当表有聚簇索引时, 它的数据行实际上存放在索引的叶子页中(叶子页包含了数据行的 全部列数据)
+因为无法同时把数据行存...
     
 
-        <a href="/2017/10/17/docker/2017-10-17-08-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-45/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -456,14 +456,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-17-07-docker"
+            <article id="post-mysql/2017-09-24-mysql-44"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-17 11:30:08" datetime="2017-10-17T03:30:08.000Z"  itemprop="datePublished">2017-10-17</time>
+        <time class="post-time" title="2017-09-24 17:25:31" datetime="2017-09-24T09:25:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -474,7 +474,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/17/docker/2017-10-17-07-docker/">07.Docker Registry 仓库</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-44/">44. 高性能索引策略 -- 多列索引</a>
     </h3>
   
 
@@ -484,22 +484,24 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        公开 Docker RegistryDocker Registry 公开服务是开放给用户使用、允许用户管理镜像的 Registry 服务
+        前言
+在多个列上建立独立的单列索引, 在大部分情况下并不能提高MySQL的查询性能; 
 
-一般这类公开服务允许用户免费上传、下载公开的镜像，并可能提供收费服务供用户管理私有镜像。
-最常使用的Registry公开服务是官方的 Docker Hub, 这也是默认的 Registry，并拥有大量的高质量的官方镜像。
+例如: film_actor 表在 film_id 和 actor_id 上各有一个单列索引, 但是对于下面这个查询WHERE条件, 这两个单列索引都不是好的选择
+select film_id, actor_id from actor where actor_id=1 OR film_id=1;
 
-由于某些原因，在国内访问这些服...
+
+对...
     
 
-        <a href="/2017/10/17/docker/2017-10-17-07-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-44/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -508,14 +510,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-14-06-docker"
+            <article id="post-mysql/2017-09-24-mysql-43"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-14 20:15:28" datetime="2017-10-14T12:15:28.000Z"  itemprop="datePublished">2017-10-14</time>
+        <time class="post-time" title="2017-09-24 17:20:31" datetime="2017-09-24T09:20:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -526,7 +528,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/14/docker/2017-10-14-06-docker/">06.其他方法定制 -- (镜像/容器 的 导入导出)</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-43/">43. 高性能索引策略 - 独立的列, 前缀索引</a>
     </h3>
   
 
@@ -536,19 +538,18 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        镜像 (save/load)1.docker save nginx:v1 &gt; alpine-latest.tar.gz：将指定镜像导出为 镜像存储文件;
-2.再使用 docker load -i alpine-latest.tar.gz 命令将 镜像存储文件 导入到本地镜像库;
-容器(export/import)1.docker export container_id &gt; my_...
+        前言前面已经对常见的索引类型及其对应的优缺点有了一定的了解, 接下来要考虑的就是如何 高效正确地选择并使用索引
+独立的列独立的列是指: 在查询条件中, 索引列 不能是表达式的一部分, 也不能是函数的参数; (如: select actor_id from actor where actor_id+1=5; 就无法使用索引, 应该始终将索引列单独放在比较符号的一侧, select actor_...
     
 
-        <a href="/2017/10/14/docker/2017-10-14-06-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-43/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
 
     </div>
     
@@ -557,14 +558,14 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-13-05-docker"
+            <article id="post-mysql/2017-09-24-mysql-42"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-13 10:25:07" datetime="2017-10-13T02:25:07.000Z"  itemprop="datePublished">2017-10-13</time>
+        <time class="post-time" title="2017-09-24 15:01:31" datetime="2017-09-24T07:01:31.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -575,7 +576,7 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/13/docker/2017-10-13-05-docker/">05.镜像 - Dockerfile常见指令详解</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-42/">42. 哈希索引</a>
     </h3>
   
 
@@ -585,23 +586,26 @@ Compose定位是「定义和运行多个Docker容器的应用(Defining and runni
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        FROM 指定基础镜像
-所谓定制镜像, 是以一个镜像为基础, 在其上进行定制。FROM 就用来指定基础镜像, 因此一个 Dockerfile 中 FROM 是必备的指令，并且必须是第一条指令。
-格式: FROM 镜像名[:标签]
+        简介
+哈希索引(hash index)基于哈希表实现, 只有精确匹配索引中所有列的查询才有效;
 
-MAINTAINER
-指定镜像的作者和联系方式信息(执行docker inspect image 输出中有相应的字段记录该信息)
-格式:MAINTAINER au...
+对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):
+
+哈希索引将所有的哈希码存储在索引中
+同时在哈希表中保存指向每个数据行的指针
+
+
+在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tr...
     
 
-        <a href="/2017/10/13/docker/2017-10-13-05-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-42/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
     </div>
     
@@ -610,14 +614,14 @@ MAINTAINER
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-docker/2017-10-12-04-docker"
+            <article id="post-mysql/2017-09-24-mysql-41"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-10-12 23:05:07" datetime="2017-10-12T15:05:07.000Z"  itemprop="datePublished">2017-10-12</time>
+        <time class="post-time" title="2017-09-24 14:50:19" datetime="2017-09-24T06:50:19.000Z"  itemprop="datePublished">2017-09-24</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -628,7 +632,7 @@ MAINTAINER
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/12/docker/2017-10-12-04-docker/">04.定制镜像 - Dockerfile脚本</a>
+      <a class="post-title-link" href="/2017/09/24/mysql/2017-09-24-mysql-41/">41. B-Tree索引</a>
     </h3>
   
 
@@ -638,20 +642,27 @@ MAINTAINER
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        使用Dockerfile定制镜像
-通过之前docker commit的学习了解到，镜像的定制实际上就是定制每一层所添加的配置、文件。如果我们可以把每一层修改、安装、构建、操作的命令都写入一个脚本，用这个脚本来构建、定制镜像，那么之前提及的无法重复的问题、镜像构建透明性的问题、体积的问题就都会解决。这个脚本就是 Dockerfile。
+        简介
+当人们谈论索引时, 如果没有特别指明索引类型, 多半说的就是 B-Tree 索引, 它使用 B-Tree 数据结构来存储数据;
 
-Dockerfile是一个文本文件，其内包含了一条条的指...
+MySQL的大多数存储引擎都支持这种索引 (Archive引擎不支持)
+
+存储引擎以不同的方式使用 B-Tree 索引, 性能也各有优劣:
+
+MyISAM使用 前缀压缩技术 使得索引更小
+InnoDB则按照原数据格式进行存储
+
+MyISAM的索引是通过 数据...
     
 
-        <a href="/2017/10/12/docker/2017-10-12-04-docker/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/24/mysql/2017-09-24-mysql-41/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li></ul>
 
     </div>
     
@@ -664,7 +675,7 @@ Dockerfile是一个文本文件，其内包含了一条条的指...
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
     </div>
 </nav>
 
