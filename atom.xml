@@ -256,10 +256,10 @@
   
   <entry>
     <title>Restful</title>
-    <link href="http://blog.renyimin.com/2018/03/16/http/2017-04-28-restful/"/>
-    <id>http://blog.renyimin.com/2018/03/16/http/2017-04-28-restful/</id>
+    <link href="http://blog.renyimin.com/2018/03/16/http/2018-03-06-restful/"/>
+    <id>http://blog.renyimin.com/2018/03/16/http/2018-03-06-restful/</id>
     <published>2018-03-16T11:36:23.000Z</published>
-    <updated>2018-05-09T06:27:37.000Z</updated>
+    <updated>2018-05-09T06:31:19.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>REST本身并没有创造新的技术, 组件或服务, 主要指的是一组<strong>架构约束条件和原则</strong>, 隐藏在RESTful背后的理念就是<strong>使用Web的现有特征和能力, 更好地使用现有Web标准中的一些准则和约束</strong>; 如果一个架构符合REST的约束条件和原则，我们就称它为RESTful架构。</p><p>虽然REST本身受Web技术的影响很深, 但是理论上REST架构风格并不是绑定在HTTP上, 只不过目前HTTP是唯一与REST相关的实例;</p><p>所以通常描述的REST也是通过HTTP实现的REST;</p><h2 id="URI的设计"><a href="#URI的设计" class="headerlink" title="URI的设计"></a>URI的设计</h2><ol><li><p>URI的设计应该遵循可寻址性原则, 具有<strong>自描述性</strong>, 需要在形式上给人以直觉上的关联; 比如:</p><ul><li><p>用<code>_</code>或<code>-</code>来让URI可读性更好<br>例如国内比较出名的开源中国社区, 它上面的新闻地址就采用这种风格, 如 <a href="http://www.oschina.net/news/38119/oschina-translate-reward-plan" target="_blank" rel="external">http://www.oschina.net/news/38119/oschina-translate-reward-plan</a></p></li><li><p>使用<code>/</code>来表示资源的层级关系<br>例如 <a href="https://github.com/rymuscle/chat/issues" target="_blank" rel="external">https://github.com/rymuscle/chat/issues</a> 就表示了一个多级的资源, 指的是rymuscle用户的chat项目的issues列表</p></li><li><p>使用<code>?</code>用来过滤资源 (如果记录数量很多，服务器不可能都将它们返回给用户, 比如分页等筛选条件)<br>很多人只是把<code>?</code>简单的当做是参数的传递, 很容易造成URI过于复杂、难以理解; 其实可以把<code>?</code>用于对资源的过滤;<br>例如 <code>https://github.com/rymuscle/chat/pulls</code> 用来表示git项目的所有推入请求;<br>而 <code>/pulls?state=closed</code> 用来表示git项目中已经关闭的推入请求, 这种URL通常对应的是一些特定条件的查询结果或算法运算结果;</p></li><li><p><code>,</code>或<code>;</code>可以用来表示同级资源的关系</p></li></ul></li><li><p>URI里带上版本号, 如 <code>https://api.example.com/v1/</code> (Github就是这样做的)<br> 另一种做法是, 将版本号放在HTTP头信息中, 但不如放入URL方便和直观;</p></li><li><p><strong>URI中只应该描述清楚资源的名称</strong>, 而不应该包括资源的操作(因为统一资源接口要求使用标准的HTTP方法对资源进行操作, 方法都是有语义的, 所以已经明确描述了这次的操作含义)</p><ul><li>URI不应该再使用动作来描述, 如下就是一些不符合统一接口要求的URI (它们都在URI中对操作进行了描述):<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">GET /getUser/1</div><div class="line">POST /createUser</div><div class="line">PUT /updateUser/1</div><div class="line">DELETE /deleteUser/1</div></pre></td></tr></table></figure></li></ul></li></ol><h2 id="HTTP动词"><a href="#HTTP动词" class="headerlink" title="HTTP动词"></a>HTTP动词</h2><p>接口应该使用标准的HTTP方法如GET，PUT和POST，并<strong>遵循这些方法的语义</strong>(通过明确的方法来描述操作), 可以参考博文 <a href="/2016/11/30/http/2016-11-30-HTTP-03/">HTTP各请求方法详解</a> 或者 <a href="http://www.runoob.com/w3cnote/restful-architecture.html" target="_blank" rel="external">Restful架构详解</a></p><h2 id="状态码"><a href="#状态码" class="headerlink" title="状态码"></a>状态码</h2><p>状态码应该使用HTTP标准状态码 可以参考博文 <a href="/2016/11/30/http/2016-11-30-HTTP-01/#状态码详解">HTTP协议预览</a></p><p>更多<a href="http://cizixs.com/2016/12/12/restful-api-design-guide" target="_blank" rel="external">参考</a></p>]]></content>
     
@@ -277,9 +277,9 @@
       <category term="HTTP" scheme="http://blog.renyimin.com/categories/Restful/HTTP/"/>
     
     
-      <category term="Restful" scheme="http://blog.renyimin.com/tags/Restful/"/>
-    
       <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
+    
+      <category term="Restful" scheme="http://blog.renyimin.com/tags/Restful/"/>
     
   </entry>
   
