@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="1xx 101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)~~未完待续  2xx Web API的设计与开发 P109  200 OK : 200码非常出名, 似乎没有对它进一步说明的必要; 201 Created : 当在服务器端创建数据成功时, 会返回201状态码;  用于请求 创建服务器对象, 比如 PUT操作 成功创建资源">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-09T06:25:57.000Z">
+<meta property="og:updated_time" content="2018-05-09T12:01:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. HTTP状态码详解">
 <meta name="twitter:description" content="1xx 101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)~~未完待续  2xx Web API的设计与开发 P109  200 OK : 200码非常出名, 似乎没有对它进一步说明的必要; 201 Created : 当在服务器端创建数据成功时, 会返回201状态码;  用于请求 创建服务器对象, 比如 PUT操作 成功创建资源">
@@ -300,27 +300,29 @@
 <li>例如某API存在一小时内只允许访问100次的访问限制, 这种情况下入股哦客户端视图进行第101次访问, 服务器便会返回该状态码;</li>
 <li>表示在一定的时间内用户发送了太多的请求, 即超出了”频次限制”, 在响应中，可以提供一个 <code>Retry-After</code> 首部来提示用户需要等待多长时间之后再发送新的请求;</li>
 </ul>
-<h2 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h2><ol>
-<li><p>500 Internal Server Error : 服务端错误, 有可能是WEB应用存在错误</p>
-</li>
-<li><p>501 Not Implemented : 服务器不具备完成请求的功能, 例如, 服务器无法识别请求方法时可能会返回此状态码</p>
-</li>
-<li><p>503 Service Unavaliable : 用来说明服务器现在无法为请求提供服务, 但稍后可以; </p>
+<h2 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h2><blockquote>
+<p>5字头状态码表示错误不发生在客户端, 而是由服务器自身问题引发的。</p>
+</blockquote>
+<p><strong>500 Internal Server Error</strong> : 是web应用程序开发里非常常见的错误, 当服务器代码里存在bug, 输出错误信息并停止运行等情况下, 就会返回该类型的错误;</p>
+<ul>
+<li>因此, 不仅限于API, 对于5字头状态码的错误, 都要认真监视错误日志, 使系统在出错时及时告知管理员, 以便在错误发生时做好应对措施, 防止再次发生。</li>
+</ul>
+<p><strong>501 Not Implemented</strong> : ???</p>
+<p><strong>502 Bad GateWay</strong> : ???</p>
+<p><strong>503 Service Unavaliable</strong> : 用来表示服务器当前处于<strong>暂</strong>不可用状态</p>
 <ul>
 <li>可以回送:响应首部 <code>Retry-After</code> 表示多久恢复;</li>
 <li>不同的客户端与服务器端应用对于 Retry-After 首部的支持依然不太一致;</li>
 <li>不过，一些爬虫程序，比如谷歌的爬虫程序Googlebot, 会遵循Retry-After响应首部的规则, 将其与503(Service Unavailable,当前服务不存在)响应一起发送有助于互联网引擎做出判断,在宕机结束之后继续对网站构建索引。</li>
 <li>参考:<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After</a></li>
 </ul>
-</li>
-<li><p>504 Gateway Time-out: 复现这个错误码比较简单, 让你的php程序模拟耗时请求, 如下代码</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">sleep(70);//模拟耗时，睡70秒</div><div class="line">echo &quot;睡醒了&quot;;</div></pre></td></tr></table></figure>
-<p> 就会返回</p>
-<pre><code>504 Gateway Time-out
+<p><strong>504 Gateway Time-out</strong>: 复现这个错误码比较简单, 让你的php程序模拟耗时请求, 如下代码<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">sleep(70);//模拟耗时，睡70秒</div><div class="line">echo &quot;睡醒了&quot;;</div></pre></td></tr></table></figure></p>
+<pre><code>就会返回
+```
+504 Gateway Time-out
 nginx/1.11.4
-</code></pre></li>
-<li>505 HTTP Version Not Supported: 服务器收到的请求, 使用的是它无法支持的HTTP协议版本;</li>
-</ol>
+``` 
+</code></pre><p><strong>505 HTTP Version Not Supported</strong>: 服务器收到的请求, 使用的是它无法支持的HTTP协议版本;</p>
 <p>参考:《HTTP权威指南》、《Web API的设计与开发》</p>
 
         </div>
