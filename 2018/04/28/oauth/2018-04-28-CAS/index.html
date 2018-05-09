@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OAuth2.0">
+    <meta name="description" content="Single Sign On单点登录(Single Sign On), 简称为SSO, 是目前比较流行的企业业务整合的解决方案之一;SSO的定义是在多个应用系统中, 用户只需要登录一次就可以访问所有相互信任的应用系统; CAS简介 CAS由Yale耶鲁大学研发的一款开源的,企业级,SSO单点登录解决方案; CAS Github 源码下载, 这里使用的是CAS5.1.9 CAS 文档CAS系统组件C">
+<meta name="keywords" content="OAuth2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01.">
+<meta property="og:url" content="http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Single Sign On单点登录(Single Sign On), 简称为SSO, 是目前比较流行的企业业务整合的解决方案之一;SSO的定义是在多个应用系统中, 用户只需要登录一次就可以访问所有相互信任的应用系统; CAS简介 CAS由Yale耶鲁大学研发的一款开源的,企业级,SSO单点登录解决方案; CAS Github 源码下载, 这里使用的是CAS5.1.9 CAS 文档CAS系统组件C">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-02T08:07:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01.">
+<meta name="twitter:description" content="Single Sign On单点登录(Single Sign On), 简称为SSO, 是目前比较流行的企业业务整合的解决方案之一;SSO的定义是在多个应用系统中, 用户只需要登录一次就可以访问所有相互信任的应用系统; CAS简介 CAS由Yale耶鲁大学研发的一款开源的,企业级,SSO单点登录解决方案; CAS Github 源码下载, 这里使用的是CAS5.1.9 CAS 文档CAS系统组件C">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01.</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">01.</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-28T13:10:12.000Z" itemprop="datePublished" class="page-time">
+  2018-04-28
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Single-Sign-On"><span class="post-toc-number">1.</span> <span class="post-toc-text">Single Sign On</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CAS简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">CAS简介</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CAS系统组件"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CAS系统组件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CAS-Server"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">CAS Server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CAS-Client"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">CAS Client</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CAS-Server搭建"><span class="post-toc-number">3.</span> <span class="post-toc-text">CAS Server搭建</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TGT-Ticket-Grangting-Ticket"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">TGT(Ticket Grangting Ticket)</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-oauth/2018-04-28-CAS"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01.</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-28 21:10:12" datetime="2018-04-28T13:10:12.000Z"  itemprop="datePublished">2018-04-28</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Single-Sign-On"><a href="#Single-Sign-On" class="headerlink" title="Single Sign On"></a>Single Sign On</h2><p>单点登录(Single Sign On), 简称为<code>SSO</code>, 是目前比较流行的企业业务整合的解决方案之一;<br>SSO的定义是在多个应用系统中, 用户只需要登录一次就可以访问所有相互信任的应用系统;</p>
+<h2 id="CAS简介"><a href="#CAS简介" class="headerlink" title="CAS简介"></a><a href="https://www.apereo.org/" target="_blank" rel="external">CAS</a>简介</h2><ol>
+<li><a href="https://www.apereo.org/projects/cas" target="_blank" rel="external">CAS</a>由Yale耶鲁大学研发的一款开源的,企业级,SSO单点登录解决方案;</li>
+<li><a href="https://github.com/apereo/cas" target="_blank" rel="external">CAS Github 源码下载</a>, 这里使用的是CAS5.1.9</li>
+<li><a href="https://apereo.github.io/cas/5.1.x/" target="_blank" rel="external">CAS 文档</a><h3 id="CAS系统组件"><a href="#CAS系统组件" class="headerlink" title="CAS系统组件"></a>CAS系统组件</h3>CAS系统架构由 <code>CAS Server</code> 和 <code>CAS Client</code> 两个物理组件构成, 它们通过各种协议进行通信;<h3 id="CAS-Server"><a href="#CAS-Server" class="headerlink" title="CAS Server"></a>CAS Server</h3></li>
+<li>CAS服务器是基于Spring框架构建的Java servlet, 其主要职责是验证用户, 并通过发布和验证票证来对 启用CAS的服务(通常称为CAS客户端)的访问权限 进行授权;<br>服务器在成功登录后, 会向用户授予 <code>票证(TGT)</code>时创建SSO会话;<br>根据用户的请求, 通过使用TGT作为标记的浏览器重定向向服务发出服务票据(ST);<br>ST随后通过反向信道通信在CAS服务器上进行验证。 CAS Protocol文档中详细描述了这些交互;</li>
+</ol>
+<h3 id="CAS-Client"><a href="#CAS-Client" class="headerlink" title="CAS Client"></a>CAS Client</h3><h2 id="CAS-Server搭建"><a href="#CAS-Server搭建" class="headerlink" title="CAS Server搭建"></a>CAS Server搭建</h2><ol>
+<li><code>CAS</code> 可以分为两部分 <code>CAS Server</code> 和 <code>CAS Client</code></li>
+</ol>
+<ul>
+<li><code>CAS Server</code> 用来负责用户的认证工作, 就像是把第一次登录用户的一个标识存在这里, 以便此用户在其他系统登录时验证其需不需要再次登录;</li>
+<li><code>CAS Client</code> 就是我们自己的应用, 需要接入<code>CAS Server</code>端; 当用户访问我们的应用时, 首先需要重定向到CAS Server端进行验证, 要是原来登陆过, 就免去登录, 重定向到下游系统, 否则进行用户名密码登陆操作;</li>
+</ul>
+<ol>
+<li>术语<br>Ticket Granting ticket (TGT): 可以认为是CAS Server根据用户账号和密码生成的一张票, 存在CAS Server端;<br>Ticket-granting cookie (TGC): 其实就是一个cookie, 存放用户身份信息, 由CAS Server发给CAS Client端;<br>Service ticket (ST): 由TGT生成的一次性票据, 用于验证, 只能用一次。相当于server发给client一张票, 然后client拿着这是个票再来找server验证, 看看是不是server签发的;<br>就像是我给了你一张我的照片, 然后你拿照片再来问我, 这个照片是不是你, 没错，就是这么无聊</li>
+</ol>
+<h3 id="TGT-Ticket-Grangting-Ticket"><a href="#TGT-Ticket-Grangting-Ticket" class="headerlink" title="TGT(Ticket Grangting Ticket)"></a>TGT(Ticket Grangting Ticket)</h3><ol>
+<li><code>TGT</code>是<code>CAS</code>为用户签发的登录票据, 拥有了TGT, 用户就可以证明自己在CAS成功登录过;<ul>
+<li>TGT封装了Cookie值以及此Cookie值对应的用户信息;</li>
+<li>用户在CAS认证成功后, CAS生成cookie, 写入浏览器, 同时生成一个TGT对象, 放入自己的缓存;</li>
+<li>TGT对象的ID就是cookie的值</li>
+<li>当HTTP再次请求到来时, 如果传过来的有CAS生成的cookie, 则CAS以此cookie值为key查询缓存中有无TGT, 如果有的话, 则说明用户之前登录过, 如果没有, 则用户需要重新登录;</li>
+</ul>
+</li>
+</ol>
+<p>ST（Service Ticket）<br>ST是CAS为用户签发的访问某一service的票据。用户访问service时，service发现用户没有ST，则要求用户去CAS获取ST。用户向CAS发出获取ST的请求，如果用户的请求中包含cookie，则CAS会以此cookie值为key查询缓存中有无TGT，如果存在TGT，则用此TGT签发一个ST，返回给用户。<br>用户凭借ST去访问service，service拿ST去CAS验证，验证通过后，允许用户访问资源。</p>
+<p>PGT（Proxy Granting Ticket）<br>Proxy Service的代理凭据。用户通过CAS成功登录某一Proxy Service后，CAS生成一个PGT对象，缓存在CAS本地，同时将PGT的值（一个UUID字符串）回传给Proxy Service，并保存在Proxy Service里。Proxy Service拿到PGT后，就可以为Target Service（back-end service）做代理，为其申请PT。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&title=《01.》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&title=《01.》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.》 — Lant's Blog&url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/04/21/OOP/PHP/2018-04-21-OOP-PHP-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03. 一些注意点</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&title=《01.》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&title=《01.》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.》 — Lant's Blog&url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/28/oauth/2018-04-28-CAS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3aQY7jMAwEwPn/pzPAnhYYxOmmPIu1VDoZhmOrdGAkkl9f8Xj9GT+v/77zbrRvTn41HBgYGI9lJJN497HkmXzS13c+LBAGBsYBjDwUXk/uOkDPGNdzw8DAwFjfGrZhFAMDA2M94CYbxFlQxsDAwLhm5CHyOtPVptVWQjMGBsY5jJXCwG9f/6P6BgYGxn/MeJWjDZf3lkLffgsDA2NrRnK8zO8nR9C2GJAfazEwMHZl5CF1PXS23y0axTAwMI5hzA6WbUgd/idcp/YwMDCOYbStFW1RoV2afLOIgYFxAiMpRtav/rV3Rt0iGBgYmzJmjQ55Am4lVffhGgMDY2tG/slZyixP1eVFhWKfi4GBsRGj7bNqA+XKIfnmugcGBsbDGetp+pUUWx5kMTAwzmTk6bC25SJvvGiDb1bbxMDA2IHRbtraYDpLz9VlAwwMjMMYs81cnm67qwmj2BRiYGA8nDFLzSdFgvUgnixH3eOGgYHxcMa9JYF8ojNS0RyGgYHxcMZsQitNY227WHQfAwPjAMZK2muls+O2sIuBgbE1Y3bIbA+uLaBt7MDAwNib8SpH/qu8qStZoA+LjoGBsTWjDXb5ITN5ftbMgYGBcSZjlji7qy6RB9wPx2MMDIwDGO202qm3BYA8EGNgYGC0Kbn2aDorc2JgYGCsJLZaZFLyjFJ1GBgYBzDaYsBsk5e/p54DBgbG1ozZAbJN/bflzHxZMTAwtmZ8A3X+LhvvyyWvAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

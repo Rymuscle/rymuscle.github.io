@@ -147,14 +147,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-12-06-HTTP-08"
+            <article id="post-rabbitmq/2017-04-15-rabbitmq-11"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-12-06 20:10:11" datetime="2016-12-06T12:10:11.000Z"  itemprop="datePublished">2016-12-06</time>
+        <time class="post-time" title="2017-04-13 21:12:26" datetime="2017-04-13T13:12:26.000Z"  itemprop="datePublished">2017-04-13</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/12/06/http/2016-12-06-HTTP-08/">08. 并行连接, 持久连接</a>
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/">11. basic_qos, prefetch_count</a>
     </h3>
   
 
@@ -175,24 +175,17 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        常被误解的Connection首部
-HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。
-
-HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;
-
-Connection首部可以承载3种不同类型的标签, 因此非常令人费解:
-
-HTTP...
+        正常消息轮发的问题生产者12345678910111213141516171819public function noPrefetchCount()&#123;    $connection = new AMQPStreamConnection(&apos;127.0.0.1&apos;, 5672, &apos;guest&apos;, &apos;guest&apos;);    $ch...
     
 
-        <a href="/2016/12/06/http/2016-12-06-HTTP-08/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-11/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -201,14 +194,14 @@ HTTP...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-12-06-HTTP-11"
+            <article id="post-rabbitmq/2017-04-15-rabbitmq-10"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-12-06 18:50:27" datetime="2016-12-06T10:50:27.000Z"  itemprop="datePublished">2016-12-06</time>
+        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -219,7 +212,7 @@ HTTP...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/12/06/http/2016-12-06-HTTP-11/">11. 内容协商与转码</a>
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/">10. 事务机制 VS PublisherConfirm</a>
     </h3>
   
 
@@ -229,23 +222,20 @@ HTTP...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-一个URL常常需要代表若干不同的资源
+        背景之前已经了解过, 在使用RabbitMQ的时候, 我们可以通过 消息持久化 来解决因为服务器的异常奔溃导致的消息丢失;
+除此之外我们还会遇到一个问题, 那就是当消息的发布者在一次发布多条消息时, 将消息发送出去之后, 消息到底有没有正确到达服务器呢?
 
-例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。
-
-
-HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，...
+如果不进行特殊配置的话, 默认情况下发布操作是不会返回任何信息给生产者的, 即, 默认情况下我们的生产者是不知道消息有没有正确到达服务器...
     
 
-        <a href="/2016/12/06/http/2016-12-06-HTTP-11/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -254,14 +244,14 @@ HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-05"
+            <article id="post-rabbitmq/2017-04-13-rabbitmq-09"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 21:27:36" datetime="2016-11-30T13:27:36.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -272,7 +262,7 @@ HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-05/">05. 缓存相关</a>
+      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/">09. RPC远程调用及注意事项</a>
     </h3>
   
 
@@ -282,137 +272,25 @@ HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Web缓存简介1.Web缓存是指可以自动保存常见文档副本的HTTP设备。当Web请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档。
-2.使用缓存的优点
+        RabbitMQ中实现RPC的机制
+客户端发送请求(消息)时, 在消息的属性(MessageProperties)中设置两个值: 
 
-减少了冗余的数据传输, 节省了你的网络费用
-缓解了网络本身的瓶颈问题, 不需要更多的带宽就能够更快地加载页面
-降低了对原始服务器的要求, 服务器可以更快地响应, 避免过载的出现
-降低...
-    
-
-        <a href="/2016/11/30/http/2016-11-30-HTTP-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-11-30 19:50:02" datetime="2016-11-30T11:50:02.000Z"  itemprop="datePublished">2016-11-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+replyTo: Queue名称, 用于告诉服务器处理完成后将通知我的消息发送到这个Queue中;
+correlationId: 此次请求的标识号, 服务器处理完成后需要将此属性返还, 客户端将根据这个id了解哪条请求被执行了; 
 
 
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-04/">04. 各通用首部字段详解</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
-
-该指令是可选的;
-指令可以有多个选项, 选项之间通过 , 分隔;
-
-2.可以按请求和响应分为(P377)
-
-缓存请求指令(选项如下)
-缓存响应指令(选项如下)
-
-3.注意 no-cache 和 must-revalidate 的区别
-
-no-c...
-    
-
-        <a href="/2016/11/30/http/2016-11-30-HTTP-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-11-30 14:30:12" datetime="2016-11-30T06:30:12.000Z"  itemprop="datePublished">2016-11-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-03/">03. HTTP状态码详解</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        100 ~ 199
-101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)~~未完待续
-
-200 ~ 299
-200 OK : 服务器已经成功处理请求
-
-201 Created : 用于请求 创建服务器对象, 比如 PUT操作 成功创建资源后, 就应该返回 201码; 响应的实体部分还应该包含各种引用了已创建的资源的URL;
-
+服务器端收到消息并处理
 ...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-03/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -421,14 +299,14 @@ no-c...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-02"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-06"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 11:29:12" datetime="2016-11-30T03:29:12.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-11 22:10:51" datetime="2017-04-11T14:10:51.000Z"  itemprop="datePublished">2017-04-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -439,7 +317,7 @@ no-c...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-02/">02. HTTP各请求方法详解</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/">06. Persistent (持久化)</a>
     </h3>
   
 
@@ -449,22 +327,26 @@ no-c...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        
+RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失
 
-RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;图解http协议&gt;中也提到 LINK, UNLINK已经被http1.1废弃);
+要做到消息持久化, 其实只用设置:
 
-不同应用各自的实现...
+
+
+exchange: durable属性为true
+queue: durable属性为true
+message对象: 12345678$msg = new AMQPM...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-02/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -473,14 +355,14 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2016-11-30-HTTP-01"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-05"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-30 11:25:12" datetime="2016-11-30T03:25:12.000Z"  itemprop="datePublished">2016-11-30</time>
+        <time class="post-time" title="2017-04-11 20:21:07" datetime="2017-04-11T12:21:07.000Z"  itemprop="datePublished">2017-04-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -491,7 +373,7 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/30/http/2016-11-30-HTTP-01/">01. HTTP协议预览</a>
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/">05. Priority(队列设定消息最大优先级, 消息优先级)</a>
     </h3>
   
 
@@ -501,24 +383,19 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        简介
-HTTP(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;
-
-协议版本
-
-HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…)
-HTTP/1.0 第一个得到广泛应用的HTTP版本;
-HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持...
+        前言在系统应用中会根据业务的优先级来决定哪些内容优先被解决, 在RabbitMQ 3.5+版本中支持了队列优先级 和 消息优先级。
+队列优先级
+您可以使用 x-max-priority 参数声明优先级队列, 这个参数应该是一个整数, 指出队列应该支持的最大优先级 在使用 php-amqplib 中, 即: 在 query_declare() 方法的 arguments参数 中加上 x-max...
     
 
-        <a href="/2016/11/30/http/2016-11-30-HTTP-01/" class="post-more waves-effect waves-button">
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
     </div>
     
@@ -527,11 +404,223 @@ HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-PHP/2016-11-25-bcrypt"
+            <article id="post-rabbitmq/2017-04-11-rabbitmq-04"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2016-11-25 21:25:03" datetime="2016-11-25T13:25:03.000Z"  itemprop="datePublished">2016-11-25</time>
+        <time class="post-time" title="2017-04-11 19:28:16" datetime="2017-04-11T11:28:16.000Z"  itemprop="datePublished">2017-04-11</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/">04. Exclusive Queue (排他队列)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Queue的Exclusive排他队列需要注意:
+
+由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关);
+排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错;
+排他队列通过消费者创建之后, 其他消...
+    
+
+        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-10 17:35:32" datetime="2017-04-10T09:35:32.000Z"  itemprop="datePublished">2017-04-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/">03. Exchange Type</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        RabbitMQ常用的Exchange Type有
+
+fanout
+direct
+topic
+headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)
+
+fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey);
+directdirect类型的Ex...
+    
+
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-02"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/">02.php-amqplib库实例, 详细剖析各参数属性</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;
+基础准备
+Mac安装rabbitmq比较简单, 自行搜索;
+
+Laravel中通过php-amqplib包来使用RabbitMQ;
+
+comp...
+    
+
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2017-04-10-rabbitmq-01"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-04-10 11:50:02" datetime="2017-04-10T03:50:02.000Z"  itemprop="datePublished">2017-04-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/">01.相关概念点详解</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;
+引用百度百科: 
+
+AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 
+
+应用场景
+...
+    
+
+        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-PHP/2017-03-20-Trait"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-03-20 19:36:23" datetime="2017-03-20T11:36:23.000Z"  itemprop="datePublished">2017-03-20</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
@@ -545,7 +634,7 @@ HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/11/25/PHP/2016-11-25-bcrypt/">密码保护</a>
+      <a class="post-title-link" href="/2017/03/20/PHP/2017-03-20-Trait/">Trait</a>
     </h3>
   
 
@@ -555,13 +644,13 @@ HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
-关于密码存储的最佳实践是计算密码的哈希值,而不是加密用户的密码; 加密和哈希不是一回事, 加密是双向算法, 加密的数据可以解密, 而哈希是单向算法, 哈希后的数据不能再还原成原始值, 而且相同的数据得到的哈希值始终相同;
+        简介
+php以前一直都是单继承的语言, 无法同时从两个基类中继承属性和方法; 为了解决这个问题, 自PHP5.4.0起, PHP实现了一种代码复用的方法, 称为trait; 它使开发人员能够自由地在不同层次结构内独立的类中复用 method, Trait 和 Class 组合的语义定义了一种减少复杂性的方式, 避免传统多继承 和 Mixin 类相关典型问题;
 
-在数据库中存储用户的密码, 要先计算密码的哈希值, 然后在数据库中存储密码的哈希值, 如果黑客攻入数据库, 只能看到无意义的密码哈希值, 需要花费大量的时间和资源才能破...
+用法: 通过在类中使用 use...
     
 
-        <a href="/2016/11/25/PHP/2016-11-25-bcrypt/" class="post-more waves-effect waves-button">
+        <a href="/2017/03/20/PHP/2017-03-20-Trait/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -569,116 +658,6 @@ HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP�
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-oauth/2016-10-22-OAuth-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-25 19:27:36" datetime="2016-10-25T11:27:36.000Z"  itemprop="datePublished">2016-10-25</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/25/oauth/2016-10-22-OAuth-03/">03. OAuth2.0的CSRF攻击</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        场景假设有如下几个角色:
-
-受害者 lant ;
-攻击者 rymuscle ;
-第三方客户端 liangren网 ;
-OAuth2服务提供平台 QQ ;
-
-攻击流程
-攻击者rymuscle 登录 liangren网 并且选择使用自己的 qq账号登录 ;
-
-liangren网 将 攻击者rymuscle 重定向到 qq的授权页, qq的授权页 向 攻击者rymuscle 显示 是否授权lian...
-    
-
-        <a href="/2016/10/25/oauth/2016-10-22-OAuth-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-oauth/2016-10-21-OAuth-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-21 15:27:36" datetime="2016-10-21T07:27:36.000Z"  itemprop="datePublished">2016-10-21</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/21/oauth/2016-10-21-OAuth-02/">02. 授权码模式</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言之前已经简单了解了授权码模式流程, 具体如何开发实现?
-开发流程可参考
-腾讯开放平台 使用Authorization_Code获取Access_Token 
-新浪Authorization_Code授权机制
-微信网页Authorization_Code授权机制
-
-
-    
-
-        <a href="/2016/10/21/oauth/2016-10-21-OAuth-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
 
     </div>
     

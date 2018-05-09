@@ -147,14 +147,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-15-rabbitmq-10"
+            <article id="post-oauth/2017-07-12-01"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
+        <time class="post-time" title="2017-07-12 20:10:12" datetime="2017-07-12T12:10:12.000Z"  itemprop="datePublished">2017-07-12</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
 
 
 
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/">10. 事务机制 VS PublisherConfirm</a>
+      <a class="post-title-link" href="/2017/07/12/oauth/2017-07-12-01/">01.</a>
     </h3>
   
 
@@ -175,20 +175,22 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        背景之前已经了解过, 在使用RabbitMQ的时候, 我们可以通过 消息持久化 来解决因为服务器的异常奔溃导致的消息丢失;
-除此之外我们还会遇到一个问题, 那就是当消息的发布者在一次发布多条消息时, 将消息发送出去之后, 消息到底有没有正确到达服务器呢?
+        
+为什么使用token? 而不使用账号密码?
 
-如果不进行特殊配置的话, 默认情况下发布操作是不会返回任何信息给生产者的, 即, 默认情况下我们的生产者是不知道消息有没有正确到达服务器...
+
+OAuth 的身份验证过程, 其实就是一个获取 access_token 的过程, 为什么要用token而不直接用账号密码来登录?
+经常使用 OAuth 身份认证的开发人员, 可能也会感觉到使用 token 都是出现在 让第三方网站访问用户数据提供服务 场景(比如第三方网站接入的微信, 微博登录, 可以提供用户在微信, 微博中的用户数据给第三...
     
 
-        <a href="/2017/04/13/rabbitmq/2017-04-15-rabbitmq-10/" class="post-more waves-effect waves-button">
+        <a href="/2017/07/12/oauth/2017-07-12-01/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
 
     </div>
     
@@ -197,14 +199,14 @@
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-13-rabbitmq-09"
+            <article id="post-Redis/2017-06-29-redis-31"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-13 18:20:39" datetime="2017-04-13T10:20:39.000Z"  itemprop="datePublished">2017-04-13</time>
+        <time class="post-time" title="2017-06-29 18:40:07" datetime="2017-06-29T10:40:07.000Z"  itemprop="datePublished">2017-06-29</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
 
@@ -215,7 +217,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/">09. RPC远程调用及注意事项</a>
+      <a class="post-title-link" href="/2017/06/29/Redis/2017-06-29-redis-31/">31. Lua脚本</a>
     </h3>
   
 
@@ -225,25 +227,243 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        RabbitMQ中实现RPC的机制
-客户端发送请求(消息)时, 在消息的属性(MessageProperties)中设置两个值: 
+        前言
+之前已经了解到, 在redis事物中, 为了检测事务即将操作的keys, 是否有多个clients同时改变而引起冲突, 这些keys将会在事务开始前使用 watch 被监控; 如果至少有一个被监控的key在执行exec命令前被修改, 则事务会被打断, 不执行任何动作, 从而保证原子性操作。
 
-replyTo: Queue名称, 用于告诉服务器处理完成后将通知我的消息发送到这个Queue中;
-correlationId: 此次请求的标识号, 服务器处理完成后需要将此属性返还, 客户端将根据这个id了解哪条请求被执行了; 
+之前的这种方案是在解决一种叫做 CAS(check-and-set) (检查后再设置) 的问题...
+    
+
+        <a href="/2017/06/29/Redis/2017-06-29-redis-31/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-24-redis-23"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-24 20:50:07" datetime="2017-06-24T12:50:07.000Z"  itemprop="datePublished">2017-06-24</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
-服务器端收到消息并处理
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/24/Redis/2017-06-24-redis-23/">23. redis 主从, 哨兵</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言
+和MySQL主从复制的原因一样, Redis虽然读取写入的速度都特别快, 但是也会产生读压力特别大的情况, 为了分担读压力, redis支持主从复制;
+
+Redis的主从结构可以采用 一主多从 或者 级联结构 , 下图为级联结构: 
+
+主从复制(Replication)实现读写分离, 提高服务器负载能力
+
+Redis的主从复制架构中, 一类是主数据库(master),  一类是从数据库...
+    
+
+        <a href="/2017/06/24/Redis/2017-06-24-redis-23/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-24-redis-21"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-24 13:40:54" datetime="2017-06-24T05:40:54.000Z"  itemprop="datePublished">2017-06-24</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/24/Redis/2017-06-24-redis-21/">21. 了解redis持久化</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Redis的两种持久化模式介绍
+RDB(Redis DB)简介
+RDB持久化功能可以将redis服务器包含的所有数据库数据以二进制文件(.rdb文件)的形式保存到硬盘;
+
+RDB 默认是开启的, 关闭方式有:
+
+注释掉配置文件中save策略行; 
+在所有save策略下添加save &quot;&quot;;
+
+
+创建RDB文件, 常见的三种方式
+
+给redis服务器发送SAVE命令;
+给re...
+    
+
+        <a href="/2017/06/24/Redis/2017-06-24-redis-21/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-17-redis-11"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-17 11:30:03" datetime="2017-06-17T03:30:03.000Z"  itemprop="datePublished">2017-06-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-17-redis-11/">11. Redis -- task queue</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制;
+FIFO 先进先出队列
+Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。
+
+假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所...
+    
+
+        <a href="/2017/06/17/Redis/2017-06-17-redis-11/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-18-redis-12"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-17 11:30:03" datetime="2017-06-17T03:30:03.000Z"  itemprop="datePublished">2017-06-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/17/Redis/2017-06-18-redis-12/">12. Redis -- 发布订阅</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+发布订阅其实 和 队列 非常相似:
+
+这里的 频道, 就类似于任务队列中所讨论的 队列;
+而订阅者就类似于 任务队列中所讨论的 消费者;
+
+
+但他们还是有区别的: 
+
+对于队列来说, 即使消费者不在线, 消息也一直在队列中存放着, 等待消费者上线后进行处理;
+而对于 发布订阅 中的 订阅者来说, 如果消息发布到频道中时, 订阅者不在线(没有一直阻塞等待), 那么这条消息也不会为它保存着;
 ...
     
 
-        <a href="/2017/04/13/rabbitmq/2017-04-13-rabbitmq-09/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/17/Redis/2017-06-18-redis-12/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 
     </div>
     
@@ -252,14 +472,14 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-11-rabbitmq-06"
+            <article id="post-Redis/2017-06-12-redis-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-11 22:10:51" datetime="2017-04-11T14:10:51.000Z"  itemprop="datePublished">2017-04-11</time>
+        <time class="post-time" title="2017-06-12 16:35:08" datetime="2017-06-12T08:35:08.000Z"  itemprop="datePublished">2017-06-12</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
 
@@ -270,7 +490,7 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/">06. Persistent (持久化)</a>
+      <a class="post-title-link" href="/2017/06/12/Redis/2017-06-12-redis-08/">08. redis锁 -- 不太安全?</a>
     </h3>
   
 
@@ -280,26 +500,18 @@ correlationId: 此次请求的标识号, 服务器处理完成后需要将此属
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
-RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失
-
-要做到消息持久化, 其实只用设置:
-
-
-
-exchange: durable属性为true
-queue: durable属性为true
-message对象: 12345678$msg = new AMQPM...
+        前言一般来说, 在对数据进行”加锁”时, 程序首先需要获取锁来得到对数据进行排他性访问的能力, 然后才能对数据执行一系列操作, 最后还要将锁释放给其他程序;之前已经了解过, Redis使用WATCH命令来代替对数据进行加锁, 因为WATCH只会在数据被其他客户端抢先修改了的情况下通知执行了这个命令的客户端, 所以这个命令被称为乐观锁;
+SETEX 实现锁介绍为了对数据进行排他性访问, 程序首...
     
 
-        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-06/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/12/Redis/2017-06-12-redis-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 
     </div>
     
@@ -308,14 +520,14 @@ message对象: 12345678$msg = new AMQPM...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-11-rabbitmq-05"
+            <article id="post-Redis/2017-06-11-redis-07"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-11 20:21:07" datetime="2017-04-11T12:21:07.000Z"  itemprop="datePublished">2017-04-11</time>
+        <time class="post-time" title="2017-06-11 21:14:46" datetime="2017-06-11T13:14:46.000Z"  itemprop="datePublished">2017-06-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
 
@@ -326,7 +538,7 @@ message对象: 12345678$msg = new AMQPM...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/">05. Priority(队列设定消息最大优先级, 消息优先级)</a>
+      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-07/">07. redis事务与WATCH乐观锁</a>
     </h3>
   
 
@@ -336,19 +548,23 @@ message对象: 12345678$msg = new AMQPM...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言在系统应用中会根据业务的优先级来决定哪些内容优先被解决, 在RabbitMQ 3.5+版本中支持了队列优先级 和 消息优先级。
-队列优先级
-您可以使用 x-max-priority 参数声明优先级队列, 这个参数应该是一个整数, 指出队列应该支持的最大优先级 在使用 php-amqplib 中, 即: 在 query_declare() 方法的 arguments参数 中加上 x-max...
+        Redis事务与单线程
+因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;
+
+但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题; 
+
+mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案
+而redis的事务也是通过与WATC...
     
 
-        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-05/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/11/Redis/2017-06-11-redis-07/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 
     </div>
     
@@ -357,14 +573,14 @@ message对象: 12345678$msg = new AMQPM...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-11-rabbitmq-04"
+            <article id="post-Redis/2017-06-11-redis-06"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-11 19:28:16" datetime="2017-04-11T11:28:16.000Z"  itemprop="datePublished">2017-04-11</time>
+        <time class="post-time" title="2017-06-11 19:10:03" datetime="2017-06-11T11:10:03.000Z"  itemprop="datePublished">2017-06-11</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
 
@@ -375,7 +591,7 @@ message对象: 12345678$msg = new AMQPM...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/">04. Exclusive Queue (排他队列)</a>
+      <a class="post-title-link" href="/2017/06/11/Redis/2017-06-11-redis-06/">06. Redis 事务</a>
     </h3>
   
 
@@ -385,21 +601,30 @@ message对象: 12345678$msg = new AMQPM...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Queue的Exclusive排他队列需要注意:
+        Redis事务介绍
+redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面;
 
-由于排他队列只在当前连接中有效, 所以应该放在消费者中创建, 否则, 如果在生产者中创建的话, 连接完成, 则队列也会被删除了(和queue的持久化无关);
-排他队列通过消费者创建之后, 其他生产者也可以给该排他队列发送消息, 但是注意在其他生产者代码中不要再次声明与排他队列同名的队列了, 否则会报错;
-排他队列通过消费者创建之后, 其他消...
+redis事务从开始到结束通常会通过三个阶段:
+
+事务开始 
+命令入队 
+事务执行 
+
+
+Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成;
+
+
+redis事务的ACID特性在redis中, 事务具有 原子...
     
 
-        <a href="/2017/04/11/rabbitmq/2017-04-11-rabbitmq-04/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/11/Redis/2017-06-11-redis-06/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 
     </div>
     
@@ -408,14 +633,14 @@ message对象: 12345678$msg = new AMQPM...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-10-rabbitmq-03"
+            <article id="post-Redis/2017-06-07-redis-03"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-04-10 17:35:32" datetime="2017-04-10T09:35:32.000Z"  itemprop="datePublished">2017-04-10</time>
+        <time class="post-time" title="2017-06-07 21:31:47" datetime="2017-06-07T13:31:47.000Z"  itemprop="datePublished">2017-06-07</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
 
 
 
@@ -426,7 +651,7 @@ message对象: 12345678$msg = new AMQPM...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/">03. Exchange Type</a>
+      <a class="post-title-link" href="/2017/06/07/Redis/2017-06-07-redis-03/">03. 一些规范点</a>
     </h3>
   
 
@@ -436,229 +661,22 @@ message对象: 12345678$msg = new AMQPM...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        RabbitMQ常用的Exchange Type有
+        
+将格式约定: 表名:字符串1:字符串2:·····
 
-fanout
-direct
-topic
-headers这四种(不过headers类型并不太实用,而且性能比较差,几乎再也用不到了)
+不要使用keys正则匹配操作, 包括但不限于各种形式的模糊匹配操作 因为Redis是单线程处理, 在线上KEY数量较多时, 操作效率极低(时间复杂度为O(N)), 该命令一旦执行会严重阻塞线上其它命令的正常请求, 而且在高QPS情况下会直接造成Redis服务崩溃
 
-fanoutfanout类型的Exchange路由规则非常简单, 它会把所有发送到该Exchange的消息路由到所有与它绑定的Queue中 (忽略routingkey);
-directdirect类型的Ex...
+可靠的消息队列服务Redis List经常被用于消息队列服务;假设消费者...
     
 
-        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-03/" class="post-more waves-effect waves-button">
+        <a href="/2017/06/07/Redis/2017-06-07-redis-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-10-rabbitmq-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-04-10 12:21:07" datetime="2017-04-10T04:21:07.000Z"  itemprop="datePublished">2017-04-10</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/">02.php-amqplib库实例, 详细剖析各参数属性</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        接下来尝试写一个完整的基础版本的 生产者--消费者 demo, 并详细介绍一下常见属性的作用 (可以说非常详尽了);在编写中, 你会发现php-amqplib 中实现的属性还是比较多的, 不过有些属性的实现 rabbitmq不一定支持, 具体可参考;
-基础准备
-Mac安装rabbitmq比较简单, 自行搜索;
-
-Laravel中通过php-amqplib包来使用RabbitMQ;
-
-comp...
-    
-
-        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-rabbitmq/2017-04-10-rabbitmq-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-04-10 11:50:02" datetime="2017-04-10T03:50:02.000Z"  itemprop="datePublished">2017-04-10</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/">01.相关概念点详解</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        背景RabbitMQ是一个由Erlang开发的AMQP的开源实现;
-引用百度百科: 
-
-AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 
-
-应用场景
-...
-    
-
-        <a href="/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2017-04-28-restful"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-03-20 19:36:23" datetime="2017-03-20T11:36:23.000Z"  itemprop="datePublished">2017-03-20</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/">Restful</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/HTTP/">HTTP</a></li></ul></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/03/20/http/2017-04-28-restful/">Restful</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介REST本身并没有创造新的技术, 组件或服务, 主要指的是一组架构约束条件和原则, 隐藏在RESTful背后的理念就是使用Web的现有特征和能力, 更好地使用现有Web标准中的一些准则和约束; 如果一个架构符合REST的约束条件和原则，我们就称它为RESTful架构。
-虽然REST本身受Web技术的影响很深, 但是理论上REST架构风格并不是绑定在HTTP上, 只不过目前HTTP是唯一与...
-    
-
-        <a href="/2017/03/20/http/2017-04-28-restful/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Restful/">Restful</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-PHP/2017-03-20-Trait"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-03-20 19:36:23" datetime="2017-03-20T11:36:23.000Z"  itemprop="datePublished">2017-03-20</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/03/20/PHP/2017-03-20-Trait/">Trait</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介
-php以前一直都是单继承的语言, 无法同时从两个基类中继承属性和方法; 为了解决这个问题, 自PHP5.4.0起, PHP实现了一种代码复用的方法, 称为trait; 它使开发人员能够自由地在不同层次结构内独立的类中复用 method, Trait 和 Class 组合的语义定义了一种减少复杂性的方式, 避免传统多继承 和 Mixin 类相关典型问题;
-
-用法: 通过在类中使用 use...
-    
-
-        <a href="/2017/03/20/PHP/2017-03-20-Trait/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
 
     </div>
     
