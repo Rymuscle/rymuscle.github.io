@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-05-09T12:39:45.000Z</updated>
+  <updated>2018-05-13T04:09:43.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>IO相关的一些概念</title>
+    <link href="http://blog.renyimin.com/2018/05/13/socket/2018-05-13-IO/"/>
+    <id>http://blog.renyimin.com/2018/05/13/socket/2018-05-13-IO/</id>
+    <published>2018-05-13T03:12:19.000Z</published>
+    <updated>2018-05-13T04:09:43.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="IO"><a href="#IO" class="headerlink" title="IO"></a>IO</h2><p>在开始socket编程前, 需要先对 <code>IO</code> 的概念有一定的认识: </p><ul><li>我们通常使用php的fopen打开文件关闭文件读读写写, 这叫<code>本地文件IO</code>; </li><li>而在socket编程中, 本质其实是<code>网络IO</code>;</li></ul><h2 id="同步异步阻塞非阻塞"><a href="#同步异步阻塞非阻塞" class="headerlink" title="同步异步阻塞非阻塞"></a>同步异步阻塞非阻塞</h2><p>之前反正一直搞不清楚同步和阻塞, 异步和非阻塞的概念, 总感觉同步就是阻塞, 异步就是非阻塞的, 总是搞得晕乎乎的, 于是就重新查了些资料进行了梳理, 如有不对欢迎大家指正;</p><h3 id="简单来说"><a href="#简单来说" class="headerlink" title="简单来说"></a>简单来说</h3><p>同步: 同步体现在, 在等待一件事情的处理结果时, 对方是否提供通知服务, 如果对方不提供通知服务, 则为 同步;</p><p>异步: 异步体现在, 在等待一件事情的处理结果时, 对方是否提供通知服务, 如果对方提供通知服务, 则为 异步;</p><p>阻塞: 阻塞体现在, 在等待一件事情的处理结果时, 你是否还去干点其他的事情, 如果不去, 则为 阻塞;</p><p>非阻塞: 非阻塞体现在, 在等待一件事情的处理结果时, 你是否还去干点其他的事情, 如果去了, 则为 非阻塞;</p><h3 id="结合例子来说"><a href="#结合例子来说" class="headerlink" title="结合例子来说"></a>结合例子来说</h3><p>此处找了一位朋友写的例子, 感觉很不错<br>同步阻塞: 你去 甜在心馒头 店买太极馒头, 阿梅说:”暂时没, 正在蒸呢, <strong>你自己看着点儿</strong>!”, 于是你就站在旁边只等馒头, 此时的你, 是阻塞的, 也是同步的;</p><ul><li>阻塞表现在你除了等馒头，别的什么都不做了;</li><li>同步表现在等馒头的过程中, 阿梅不提供通知服务, 你不得不自己主动检查 ＂馒头出炉＂ 的消息;</li></ul><p>同步非阻塞: 你去甜在心馒头店买太极馒头, 阿梅说:＂暂时没, 正在蒸呢, <strong>你自己看着点儿</strong>!＂, 于是你就站在旁边发发微信, 然后问一句:＂好了没？＂, 然后玩玩QQ游戏, 然后再问一句:＂好了没？＂, 此时的你, 是非阻塞的, 不过却还是同步的;</p><ul><li>非阻塞表现在你除了等馒头, 自己还在干别的事情;</li><li>同步表现在等馒头的过程中, 由于阿梅不提供通知服务, 你不得不自己主动检查 ＂馒头出炉＂ 的消息;</li></ul><p>异步阻塞: 你去甜在心馒头店买太极馒头, 阿梅说:＂暂时没, 正在蒸呢, 蒸好了<strong>我打电话告诉你</strong>!＂, 但你依然站在旁边只等馒头, 此时的你, 是阻塞的, 是异步的;</p><ul><li>阻塞表现在你除了等馒头, 也没去干点别的什么(比如玩玩手机啥的);</li><li>异步表现在等馒头的过程中, 阿梅提供电话通知＂馒头出炉＂的消息, 你只需要等阿梅的电话;</li></ul><p>异步非阻塞: 你去甜在心馒头店买太极馒头, 阿梅说:＂暂时没, 正在蒸呢, 蒸好了<strong>我打电话告诉你</strong>!＂, 于是你就走了, 去买了双新球鞋, 看了看武馆, 总之, 从此不再过问馒头的事情, 一心只等阿梅电话, 此时的你, 是非阻塞的, 是异步的</p><ul><li>非阻塞表现在你除了等馒头, 自己还去干点别的事情;</li><li>异步表现在等馒头的过程中, 阿梅提供电话通知＂馒头出炉＂的消息, 你只需要等阿梅的电话;</li></ul><p><a href="https://www.jianshu.com/p/5d00d25ef18a?utm_campaign=hugo&amp;utm_medium=reader_share&amp;utm_content=note&amp;utm_source=weixin-friends" target="_blank" rel="external">参考</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;IO&quot;&gt;&lt;a href=&quot;#IO&quot; class=&quot;headerlink&quot; title=&quot;IO&quot;&gt;&lt;/a&gt;IO&lt;/h2&gt;&lt;p&gt;在开始socket编程前, 需要先对 &lt;code&gt;IO&lt;/code&gt; 的概念有一定的认识: &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;我们通常使用php的
+      
+    
+    </summary>
+    
+      <category term="Socket" scheme="http://blog.renyimin.com/categories/Socket/"/>
+    
+    
+      <category term="Socket" scheme="http://blog.renyimin.com/tags/Socket/"/>
+    
+  </entry>
   
   <entry>
     <title>PHP-X</title>
@@ -512,35 +539,6 @@
     
     
       <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>70. 查询性能优化</title>
-    <link href="http://blog.renyimin.com/2017/09/27/mysql/2017-09-27-mysql-70/"/>
-    <id>http://blog.renyimin.com/2017/09/27/mysql/2017-09-27-mysql-70/</id>
-    <published>2017-09-27T12:50:37.000Z</published>
-    <updated>2018-03-08T06:03:46.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前已经了解了<code>索引优化</code>的相关内容, 它对于高性能是必不可少的, 但还不够, 还需要<code>合理设计查询</code>;</p><ul><li>如果查询写的很糟糕, 即使库表结构再合理, 索引再合适, 也无法实现高性能;</li><li>查询优化, 库表结构优化, 索引优化需要齐头并进, 一个不落;</li></ul><h2 id="慢查询基础"><a href="#慢查询基础" class="headerlink" title="慢查询基础"></a>慢查询基础</h2><h3 id="优化数据访问"><a href="#优化数据访问" class="headerlink" title="优化数据访问"></a>优化数据访问</h3><ul><li>确认应用程序是否在检索大量超过需要的数据, 你可能访问了太多的行, 也可能是太多的列;<br>比如: 总是返回全部的列; 只展示5条数据,你却查出100条;</li><li>确认<code>MySQL服务器层</code>是否在分析大量超过需要的数据行; (注意: 索引是在存储引擎层, 一旦服务器层分析的数据过多, 可能你的索引不太合适, 没有在存储引擎层过滤掉数据)<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>未完待续~~</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;之前已经了解了&lt;code&gt;索引优化&lt;/code&gt;的相关内容, 它对于高性能是必不可少的, 但还不够, 还需要&lt;code&gt;合理设计查询&lt;/co
-      
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="索引" scheme="http://blog.renyimin.com/tags/%E7%B4%A2%E5%BC%95/"/>
-    
-      <category term="查询性能优化" scheme="http://blog.renyimin.com/tags/%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
   </entry>
   
