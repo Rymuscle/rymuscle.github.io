@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-hit-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/http/revalidate-not-hit-01.png">
-<meta property="og:updated_time" content="2018-05-15T03:08:38.000Z">
+<meta property="og:updated_time" content="2018-05-15T04:12:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 缓存">
 <meta name="twitter:description" content="缓存关于缓存的概念本文就不详细展开说明了, 这里所说的web缓存其实就是: 为了降低服务器端的访问频率, 减少通信数量, 一些缓存设备, 如客户端或一些中继代理服务器将获取的数据保存下来, 当再次需要时, 就使用所保存的数据; (当请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档) 使用缓存的优点  减少了服务器端的通信数量, 可以提升用户">
@@ -254,7 +254,7 @@
 </li>
 </ol>
 <h3 id="验证模型"><a href="#验证模型" class="headerlink" title="验证模型"></a>验证模型</h3><ol>
-<li><p>文档过期后, 缓存设备并不是直接去服务器重新请求文档, 而是尽可能先去原始服务器查看其缓存文档有没有发生变化, 这种 <code>新鲜度检测</code> 被称为 <code>HTTP缓存再验证</code>;</p>
+<li><p>文档过期后, 缓存设备并不是直接去服务器重新请求文档, 而是尽可能先去原始服务器查看其缓存文档有没有发生变化, 这种 <code>新鲜度检测</code> 被称为 <code>HTTP缓存再验证</code>;<br> 当然, 在服务器没有返回”将缓存数据保存多久”的信息, 服务器就需要通过验证模型的两个响应首部字段(<code>Last-Modified</code> 和 <code>ETag</code>)来告知客户端更新相关的信息, 努力减少客户端不必要的访问;</p>
 </li>
 <li><p>所以说, 仅仅是已缓存文档过期了, 还不能说明该过期文档和原始服务器上的文档有实际的区别, 这只是意味着 <strong>到时间进行再验证了</strong> ; 因为客户端还可以设置一些缓存控制项来进行影响;</p>
 </li>
