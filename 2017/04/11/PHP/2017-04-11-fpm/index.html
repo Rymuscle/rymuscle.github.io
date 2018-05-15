@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="PHP">
-    <meta name="description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
+    <meta name="description" content="CGI协议: 只是一个协议  FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议);  FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序; php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;  PHP-FPM: 不但实现了FastCGI协议,">
 <meta name="keywords" content="PHP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/11/PHP/2017-04-11-fpm/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
+<meta property="og:description" content="CGI协议: 只是一个协议  FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议);  FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序; php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;  PHP-FPM: 不但实现了FastCGI协议,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-09T12:15:57.000Z">
+<meta property="og:updated_time" content="2018-05-15T09:48:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CGI协议, CGI程序, FastCGI协议, FastCGI程序, PHP-FPM">
-<meta name="twitter:description" content="网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;  ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以参阅一下 综合来看, 这篇文章比较权威   CGI协议: 只是一个协议 FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议) FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;   php-cgi程序: 在php">
+<meta name="twitter:description" content="CGI协议: 只是一个协议  FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议);  FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序; php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;  PHP-FPM: 不但实现了FastCGI协议,">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -173,21 +173,23 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>网上很多相关这些概念的文章, 但不是不权威, 就是自相矛盾, 总之就是越看越糊涂;</p>
+            <ol>
+<li><p>CGI协议: 只是一个协议</p>
+</li>
+<li><p>FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议);</p>
+</li>
+<li><p>FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;<br> php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;</p>
+</li>
+<li><p>PHP-FPM: 不但实现了FastCGI协议, 而且自己具有进程管理功能;</p>
+</li>
+<li><p>Nginx与PHP的交互依赖于CGI接口, 因为两者都实现了CGI接口, 所以Nginx可以把收到的请求交给PHP, 并从PHP获得相应的结果回传给客户端;</p>
 <ul>
-<li>ThinkPHP官方讨论区的一篇文章争议就比较大, 有时间可以<a href="http://www.thinkphp.cn/topic/42338.html" target="_blank" rel="external">参阅一下</a></li>
-<li>综合来看, <a href="http://yongxiong.leanote.com/post/%E4%BB%8ECGI%E5%88%B0FastCGI%E5%88%B0PHP-FPM" target="_blank" rel="external">这篇文章</a>比较权威</li>
+<li>最基本的CGI实现是每次请求都新建一个PHP进程, 处理完成后关闭进程, 这种方式会消耗很多的资源在进程的启动和关闭上, 所以效率并不高;</li>
+<li>进而出现了FastCGI这种实现方式, 也就是启动一个进程后让它处理多个请求再关闭, 这种方式就是解决每次请求都打开和关闭进程的消耗的, 但FastCGI有个缺点, 就是因为一个进程只能同时处理一个请求, 如果同时收到多个请求, 它们只能排队等待FastCGI进程的处理;</li>
+<li>解决FastCGI只能同时处理一个请求的方式很简单, 就是开启多个FastCGI进程, 不过开启多个FastCGI进程的话就存在对这些进程的管理问题, 比如究竟要开多少个进程, 怎么根据需要分配请求到这些进程上等等;</li>
+<li>而PHP-FPM就是这样一个管理FastCGI进程的管理程序, Nginx先将请求传递给PHP-FPM，再由PHP-FPM选择合适的FastCGI处理进程进行处理; 在PHP-FPM将请求传递给FastCGI处理进程的时候, 就涉及到进程复用了, 原则上, PHP-FPM会选择空闲的FastCGI进程去处理请求, 在处理之前, PHP-FPM会发送进程复用信号给FastCGI进程, 用来让FastCGI进程准备好接受请求并处理; 但是, FastCGI进程并不总是能够处理请求, 也就是不一定能够响应进程复用信号(比如说出现假死的情况), 所以这个参数就表示了PHP-FPM留给FastCGI进程多久时间去响应进程复用信号, 如果超时了, PHP-FPM会选择其他的方式(例如使用其他的FastCGI进程)去处理请求;<br>参考<a href="https://segmentfault.com/q/1010000007053797" target="_blank" rel="external">segmentfault问答</a></li>
 </ul>
-<ol>
-<li>CGI协议: 只是一个协议</li>
-<li>FastCGI协议: 也只是一个协议(不过是CGI协议升级后的协议)</li>
-<li>FastCGI程序: 实现了FastCGI协议的程序为FastCGI程序;</li>
-</ol>
-<ul>
-<li>php-cgi程序: 在php中的sapi/cgi/php-cgi就实现了FastCGI协议, 虽然它的名字取名为php-cgi, 但其实是支持FacsCGI协议的;</li>
-</ul>
-<ol>
-<li>PHP-FPM: 不但实现了FastCGI协议, 而且自己具有进程管理功能!</li>
+</li>
 </ol>
 
         </div>
