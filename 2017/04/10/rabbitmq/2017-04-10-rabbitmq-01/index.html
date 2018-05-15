@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现; 引用百度百科:   AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   高级Rabbit">
+    <meta name="description" content="背景RabbitMQ是一个由Erlang开发的 AMQP 的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的 应用层 标准 高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景 应用解耦假设系">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01.相关概念点详解">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/10/rabbitmq/2017-04-10-rabbitmq-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现; 引用百度百科:   AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   高级Rabbit">
+<meta property="og:description" content="背景RabbitMQ是一个由Erlang开发的 AMQP 的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的 应用层 标准 高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景 应用解耦假设系">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq.png">
-<meta property="og:updated_time" content="2018-05-13T05:56:45.000Z">
+<meta property="og:updated_time" content="2018-05-15T09:38:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01.相关概念点详解">
-<meta name="twitter:description" content="背景RabbitMQ是一个由Erlang开发的AMQP的开源实现; 引用百度百科:   AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的应用层标准高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   高级Rabbit">
+<meta name="twitter:description" content="背景RabbitMQ是一个由Erlang开发的 AMQP 的开源实现;  AMQP 即Advanced Message Queuing Protocol, 一个提供统一消息服务的 应用层 标准 高级消息队列协议, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。   应用场景 应用解耦假设系">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高级"><span class="post-toc-number">2.</span> <span class="post-toc-text">高级</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#应用场景"><span class="post-toc-number">3.</span> <span class="post-toc-text">应用场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本概念"><span class="post-toc-number">4.</span> <span class="post-toc-text">基本概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RabbitMQ-Server"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">RabbitMQ Server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#vhost"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">vhost</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#connection"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">connection</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#channel"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">channel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#publisher-producer"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">publisher/producer</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#exchange-交换器"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">exchange(交换器)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#queue-队列"><span class="post-toc-number">4.7.</span> <span class="post-toc-text">queue(队列)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#consumer-消费者-订阅者"><span class="post-toc-number">4.8.</span> <span class="post-toc-text">consumer(消费者, 订阅者)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#prefetch-count"><span class="post-toc-number">4.9.</span> <span class="post-toc-text">prefetch_count</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ack消息确认"><span class="post-toc-number">4.10.</span> <span class="post-toc-text">ack消息确认</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RoutingKey-BindingKey"><span class="post-toc-number">4.11.</span> <span class="post-toc-text">RoutingKey, BindingKey</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#应用场景"><span class="post-toc-number">2.</span> <span class="post-toc-text">应用场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基本概念"><span class="post-toc-number">3.</span> <span class="post-toc-text">基本概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RabbitMQ-Server"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">RabbitMQ Server</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#vhost"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">vhost</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#connection"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">connection</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#channel"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">channel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#publisher-producer"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">publisher/producer</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#exchange-交换器"><span class="post-toc-number">3.6.</span> <span class="post-toc-text">exchange(交换器)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#queue-队列"><span class="post-toc-number">3.7.</span> <span class="post-toc-text">queue(队列)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#consumer-消费者-订阅者"><span class="post-toc-number">3.8.</span> <span class="post-toc-text">consumer(消费者, 订阅者)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#prefetch-count"><span class="post-toc-number">3.9.</span> <span class="post-toc-text">prefetch_count</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ack消息确认"><span class="post-toc-number">3.10.</span> <span class="post-toc-text">ack消息确认</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RoutingKey-BindingKey"><span class="post-toc-number">3.11.</span> <span class="post-toc-text">RoutingKey, BindingKey</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -182,22 +182,18 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><a href="http://www.rabbitmq.com" target="_blank" rel="external"><code>RabbitMQ</code></a>是一个由Erlang开发的<code>AMQP</code>的开源实现;</p>
-<p>引用百度百科: </p>
+            <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p><a href="http://www.rabbitmq.com" target="_blank" rel="external"><code>RabbitMQ</code></a>是一个由Erlang开发的 <code>AMQP</code> 的开源实现;</p>
 <blockquote>
-<p><code>AMQP</code> 即Advanced Message Queuing Protocol, 一个提供统一消息服务的<code>应用层</code>标准<code>高级消息队列协议</code>, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 </p>
+<p><code>AMQP</code> 即Advanced Message Queuing Protocol, 一个提供统一消息服务的 <code>应用层</code> 标准 <code>高级消息队列协议</code>, 是应用层协议的一个开放标准, 为面向消息的中间件设计。 基于此协议的客户端与消息中间件可传递消息，并不受客户端/中间件不同产品，不同的开发语言等条件的限制。 </p>
 </blockquote>
-<h2 id="高级"><a href="#高级" class="headerlink" title="高级"></a>高级</h2><p>RabbitMQ集群<br>使用各种工具进行监控<br>编写RabbitMQ插件</p>
 <h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ol>
 <li><p>应用解耦<br>假设系统A完成一步操作, 需要调用系统B,C完成一部分后续操作, 此时, 系统A对用户的响应就依赖于系统B,C完成后续操作的时间;<br>而如果后续操作只是做一些及时性要求不是特别高的操作, 就没必要让用户等待这段操作的时间;<br>此时就需要对系统间的调用进行<strong>异步解耦</strong></p>
 </li>
 <li><p>系统调用中断<br>如果系统B,C出现中断, 系统A中的操作已经完成(无法回滚), 那么整个流程就会不完整;<br>此时就需要系统A的后续流程能够被保留重试;</p>
 </li>
-<li><p>流量削峰<br>另外, 消息队列还可以用来缓解流量高峰, 对于高并发涌入的大量操作, 系统无法立即做出响应时, 可以将其丢入队列中, 以暂时缓解系统压力, 系统后续在进行逐一处理;</p>
+<li><p>流量削峰<br>另外, 消息队列还可以用来缓解流量高峰, 对于高并发涌入的大量操作, 系统无法立即做出响应时, 可以将其丢入队列中, 以暂时缓解系统压力, 系统后续在进行逐一处理;<br>……</p>
 </li>
 </ol>
-<p>…</p>
-<p>AMDQ协议就可以解决以上的问题, 而RabbitMQ实现了AMQP</p>
 <h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>先看一张整体架构图<br><img src="/img/rabbitmq/rabbitmq.png" width="400/"></p>
 <h3 id="RabbitMQ-Server"><a href="#RabbitMQ-Server" class="headerlink" title="RabbitMQ Server"></a>RabbitMQ Server</h3><p>也叫broker server, 他的角色就是维护一条从<code>Producer</code>到<code>Consumer</code>的路线, 保证数据能够按照指定的方式进行传输;<br>虽然这个保证也不是100%的保证, 但是对于普通的应用来说这已经足够了;(当然对于商业系统来说，可以再做一层数据一致性的guard, 就可以彻底保证系统的一致性了)</p>
 <h3 id="vhost"><a href="#vhost" class="headerlink" title="vhost"></a>vhost</h3><p>每个 <code>virtual host</code> 本质上都是一个<code>RabbitMQ Server</code>, 拥有它自己的 <code>exchagne</code>, <code>queue</code>, 和 <code>bindings rule</code>, <code>consumer</code> 等等;</p>
