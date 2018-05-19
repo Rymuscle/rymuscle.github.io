@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Linux">
-    <meta name="description" content="简介AWK 是一门解释型的编程语言, 在处理文本文件时, 它又是非常强大的文本分析工具, 其名称得自于它的三位创始人 Alfred Aho 、Peter Weinberger 和 Brian Kernighan 姓氏的首个字母;在Linux系统日常工作中, 掌握awk将会使你的工作变的非常高效且高端;  下面是几个AWK的变体:  AWK - 原先来源于 AT &amp;amp; T 实验室的的AWK N">
+    <meta name="description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux文本处理 - awk">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/15/linux/2018-05-15-awk/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="简介AWK 是一门解释型的编程语言, 在处理文本文件时, 它又是非常强大的文本分析工具, 其名称得自于它的三位创始人 Alfred Aho 、Peter Weinberger 和 Brian Kernighan 姓氏的首个字母;在Linux系统日常工作中, 掌握awk将会使你的工作变的非常高效且高端;  下面是几个AWK的变体:  AWK - 原先来源于 AT &amp;amp; T 实验室的的AWK N">
+<meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-17T12:03:40.000Z">
+<meta property="og:updated_time" content="2018-05-18T10:26:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - awk">
-<meta name="twitter:description" content="简介AWK 是一门解释型的编程语言, 在处理文本文件时, 它又是非常强大的文本分析工具, 其名称得自于它的三位创始人 Alfred Aho 、Peter Weinberger 和 Brian Kernighan 姓氏的首个字母;在Linux系统日常工作中, 掌握awk将会使你的工作变的非常高效且高端;  下面是几个AWK的变体:  AWK - 原先来源于 AT &amp;amp; T 实验室的的AWK N">
+<meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk-基础语法结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">awk 基础语法结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk的命令行选项"><span class="post-toc-number">3.</span> <span class="post-toc-text">awk的命令行选项</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk程序结构"><span class="post-toc-number">4.</span> <span class="post-toc-text">awk程序结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BEGIN-语句块"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">BEGIN 语句块</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#练习"><span class="post-toc-number">5.</span> <span class="post-toc-text">练习</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#针对多文件"><span class="post-toc-number">6.</span> <span class="post-toc-text">针对多文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sed"><span class="post-toc-number">7.</span> <span class="post-toc-text">sed</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#grep"><span class="post-toc-number">8.</span> <span class="post-toc-text">grep</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#语法结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">语法结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内置的一些变量"><span class="post-toc-number">3.</span> <span class="post-toc-text">内置的一些变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk的命令行选项"><span class="post-toc-number">4.</span> <span class="post-toc-text">awk的命令行选项</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#awk程序结构"><span class="post-toc-number">5.</span> <span class="post-toc-text">awk程序结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BEGIN-语句块"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">BEGIN 语句块</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#练习"><span class="post-toc-number">6.</span> <span class="post-toc-text">练习</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#针对多文件"><span class="post-toc-number">7.</span> <span class="post-toc-text">针对多文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sed"><span class="post-toc-number">8.</span> <span class="post-toc-text">sed</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#grep"><span class="post-toc-number">9.</span> <span class="post-toc-text">grep</span></a></li></ol>
         </nav>
     </aside>
     
@@ -180,37 +180,46 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>AWK 是一门解释型的编程语言, 在处理文本文件时, 它又是非常强大的文本分析工具, 其名称得自于它的三位创始人 Alfred Aho 、Peter Weinberger 和 Brian Kernighan 姓氏的首个字母;<br>在Linux系统日常工作中, 掌握awk将会使你的工作变的非常高效且高端; </p>
-<p>下面是几个AWK的变体:</p>
-<ul>
-<li>AWK - 原先来源于 AT &amp; T 实验室的的AWK</li>
-<li>NAWK - AT &amp; T 实验室的AWK的升级版</li>
-<li>GAWK - 这就是GNU AWK。所有的GNU/Linux发布版都自带GAWK，它与AWK和NAWK完全兼容</li>
-</ul>
-<p>常见用途(使用AWK可以做很多任务, 下面简单列出几个常用的场景)</p>
-<ul>
-<li>文本处理 (本人通常是使用awk做一些日志分析的工作)</li>
-<li>输出格式化的文本报表</li>
-<li>执行字符串操作</li>
-<li>执行算数运算</li>
-</ul>
-<h2 id="awk-基础语法结构"><a href="#awk-基础语法结构" class="headerlink" title="awk 基础语法结构"></a>awk 基础语法结构</h2><ol>
-<li><p>可以在命令行直接执行awk命令: <code>awk [选项参数] &#39;awk程序内容&#39; 目标文件s</code></p>
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li><p>Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持<code>if-else</code>控制语句, <code>for/while</code>循环语句等功能; 同时, <strong>它是一个强大的文本分析工具</strong>;<br> 在工作中, 你通常可以使用awk对一些文本, 比如日志文件进行一些很方便的分析工作;</p>
 </li>
-<li><p>也可以使用脚本文件来提供awk程序(将过长的awk程序放在脚本文件中): <code>awk [选项参数] -f 命令脚本文件 目标文件s</code></p>
+<li><p>之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;</p>
 </li>
+<li><p>awk 命令的执行过程</p>
+<ul>
+<li>awk是逐行处理的, 就是说, 当awk处理一个文本时, 会一行一行进行处理, 处理完当前行, 再处理下一行, awk默认以 “换行符” 为标记来识别每一行, 跟我们人类一样, 每次遇到”回车换行”, 就认为是当前行的结束, 新的一行的开始;</li>
+<li>awk会按照用户指定的分割符去分割当前行为多个字段(每个字段分别被标识为 <code>$1</code> 一直到 <code>$NF</code>, <code>$NF</code>为awk中的变量, 表示当前行被分隔出的最大字段数), 如果没有指定分割符, 默认使用空格作为分隔符, 另外, 默认会将空格符和制表符都视为空格, 而且多个连续的空格都视为一个;</li>
+</ul>
+</li>
+</ol>
+<h2 id="语法结构"><a href="#语法结构" class="headerlink" title="语法结构"></a>语法结构</h2><ol>
+<li><p>基本语法结构为: <code>awk [options] &#39;program&#39; file1 , file2 ...</code>, 其中, <code>&#39;program&#39;</code> 又可以细分为 <code>pattern</code> 和 <code>action</code>; 也就是说, awk的语法为 <code>awk [options] &#39;pattern {action}&#39; file1 , file2 ...</code></p>
+</li>
+<li><p><code>action</code> 指的就是动作, awk 擅长文本格式化并将格式化后的文本<strong>输出</strong>, 所以它比较常用的 action 是 <code>print</code> 和 <code>printf</code>;</p>
+</li>
+<li><p><code>option</code> 选项, 可以不用任何选项, 常用选项为</p>
+<ul>
+<li><code>-F fs or --field-separator fs</code> : 指定输入文件分隔符(), fs可以是一个字符串或是一个正则表达式;</li>
+<li><code>-v</code> 变量赋值选项: 该选项将一个值赋予一个变量, 它会在程序开始之前进行赋值, 下面的例子描述了该选项的使用<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ awk -v name=Rymuscle &apos;BEGIN&#123;printf &quot;Name = %s\n&quot;, name&#125;&apos;</div><div class="line">Name = Jerry</div><div class="line">$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>多文件处理比较少见, 遇到了再说~~</p>
+</li>
+</ol>
+<h2 id="内置的一些变量"><a href="#内置的一些变量" class="headerlink" title="内置的一些变量"></a>内置的一些变量</h2><ol>
+<li></li>
+<li></li>
+<li></li>
 </ol>
 <h2 id="awk的命令行选项"><a href="#awk的命令行选项" class="headerlink" title="awk的命令行选项"></a>awk的命令行选项</h2><p>目前只列出本人目前比较常用的, 稍后会进行补充</p>
 <ol>
 <li><p><code>awk --version</code> : 输出awk版本信息</p>
 </li>
-<li><p><code>-v</code> 变量赋值选项: 该选项将一个值赋予一个变量, 它会在程序开始之前进行赋值, 下面的例子描述了该选项的使用</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ awk -v name=Rymuscle &apos;BEGIN&#123;printf &quot;Name = %s\n&quot;, name&#125;&apos;</div><div class="line">Name = Jerry</div><div class="line">$</div></pre></td></tr></table></figure>
-</li>
-<li><p><code>-f scriptfile 或者 --file scriptfile</code> : 从脚本文件中读取awk命令;</p>
-</li>
-<li><p><code>-F fs or --field-separator fs</code> : 指定输入文件分隔符(), fs是一个字符串或者是一个正则表达式;</p>
-</li>
+<li></li>
+<li><code>-f scriptfile 或者 --file scriptfile</code> : 从脚本文件中读取awk命令;</li>
+</ol>
+<ol>
 <li><p>默认将空格符和制表符都视为空格, 而且多个连续的空格都视为一个(如果强制指定文件分隔符为多个空格, 效果其实和一个空格一样)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ cat awk.log</div><div class="line">renyimin   200 1200W 		男</div><div class="line"></div><div class="line">renfumin 500 200W  男</div><div class="line">renjuanfang          1000 900W 女</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;&#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line">renyimin 200 1200W</div><div class="line"></div><div class="line">renfumin 500 200W</div><div class="line">renjuanfang 1000 900W</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
 </li>
