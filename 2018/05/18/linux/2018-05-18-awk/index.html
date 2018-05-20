@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-20T03:23:30.000Z">
+<meta property="og:updated_time" content="2018-05-20T03:43:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - awk">
 <meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger,">
@@ -258,9 +258,21 @@
 </li>
 </ol>
 <h2 id="END-语句块"><a href="#END-语句块" class="headerlink" title="END 语句块"></a>END 语句块</h2><p>END 则用于处理匹配过的最后一个文件的最后一行之后的位置;</p>
-<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p>下面根据nginx的access.log日志来做一些练习</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p>下面根据nginx的access.log日志来做一些练习 (这个日志还是挺大量的)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wc c2b_bid.2018-04-23-access.log</div><div class="line">   65608  1501442 29580860 c2b_bid.2018-04-23-access.log</div></pre></td></tr></table></figure></p>
 <ol>
-<li></li>
+<li><p>统计独立ip的访问量 - 共有多少独立IP访问过本站点</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">-bash-4.2$ awk &apos;&#123;print $1&#125;&apos; c2b_bid.2018-04-23-access.log | sort -n | uniq | wc -l</div><div class="line">240</div></pre></td></tr></table></figure>
+<p> 表示共有240个不同ip访问过站点</p>
+</li>
+<li><p>统计独立ip的访问情况 - 每个独立ip的访问次数</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">bash-4.2$ awk &apos;&#123;print $1&#125;&apos; c2b_bid.2018-04-23-access.log | sort -n | uniq -c</div><div class="line">    190 remote_addr=[100.116.226.0]</div><div class="line">    195 remote_addr=[100.116.226.1]</div><div class="line">    176 remote_addr=[100.116.226.10]</div><div class="line">    176 remote_addr=[100.116.226.100]</div><div class="line">    .....</div><div class="line">    就不全部列出了</div></pre></td></tr></table></figure>
+</li>
+<li><p>统计访问最频繁的前10个ip</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">-bash-4.2$ awk &apos;&#123;print $1&#125;&apos; c2b_bid.2018-04-23-access.log | sort -n | uniq -c | sort -rn | head -10</div><div class="line">    407 remote_addr=[100.116.251.123]</div><div class="line">    399 remote_addr=[100.116.251.65]</div><div class="line">    394 remote_addr=[100.116.251.56]</div><div class="line">    390 remote_addr=[100.116.251.97]</div><div class="line">    388 remote_addr=[100.116.251.11]</div><div class="line">    387 remote_addr=[100.116.251.110]</div><div class="line">    384 remote_addr=[100.116.251.98]</div><div class="line">    383 remote_addr=[100.116.251.83]</div><div class="line">    382 remote_addr=[100.116.251.8]</div><div class="line">    381 remote_addr=[100.116.251.40]</div><div class="line">-bash-4.2$</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看访问380次以上的ip</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">-bash-4.2$ awk &apos;&#123;print $1&#125;&apos; c2b_bid.2018-04-23-access.log | sort -n | uniq -c | awk &apos;$1 &gt; 380 &#123;print&#125;&apos; | sort -rn</div><div class="line">    407 remote_addr=[100.116.251.123]</div><div class="line">    399 remote_addr=[100.116.251.65]</div><div class="line">    394 remote_addr=[100.116.251.56]</div><div class="line">    390 remote_addr=[100.116.251.97]</div><div class="line">    388 remote_addr=[100.116.251.11]</div><div class="line">    387 remote_addr=[100.116.251.110]</div><div class="line">    384 remote_addr=[100.116.251.98]</div><div class="line">    383 remote_addr=[100.116.251.83]</div><div class="line">    382 remote_addr=[100.116.251.8]</div><div class="line">    381 remote_addr=[100.116.251.40]</div><div class="line">    381 remote_addr=[100.116.251.38]</div><div class="line">    381 remote_addr=[100.116.251.118]</div><div class="line">-bash-4.2$</div></pre></td></tr></table></figure>
+</li>
 </ol>
 
         </div>
