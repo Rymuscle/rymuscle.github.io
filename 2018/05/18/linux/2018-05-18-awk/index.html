@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-23T12:06:43.000Z">
+<meta property="og:updated_time" content="2018-05-23T12:18:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - awk">
 <meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
@@ -257,12 +257,17 @@
 <li><p><code>NR</code>: 它会存储当前已经读取了多少行的计数. 我们可以使用 <code>$NR</code> 给结果的每一行加上行号</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:linux renyimin$ awk &apos;&#123;print NR,$0&#125;&apos; awk.log</div><div class="line">1 renyimin   &quot;200&quot; 1200W 		男</div><div class="line">2</div><div class="line">3 renfumin 500 &quot;200W&quot;  男</div><div class="line">4 renjuanfang          1000 900W &quot;女&quot;</div><div class="line">5</div><div class="line">renyimindeMacBook-Pro:linux renyimin$</div></pre></td></tr></table></figure>
 </li>
+<li><p><code>FS</code>: 除了使用 <code>-F</code>参数指定字段分隔符, 也可以通过 -v 设定 <code>FS</code> 内置变量来指定字段分隔符 (或者在<code>BEGIN</code>中指定<code>FS</code>变量)</p>
+</li>
+<li><p><code>OFS</code> : 上面介绍了如何设定输入分隔符, 其实还有输出分隔符, 可以使用 <code>-v OFS=&#39;分隔符&#39;</code>(或者在<code>BEGIN</code>中指定<code>OFS</code>变量), 来定义输出分隔符 (注意,在输出时, 各字段间的<code>逗号</code>就代表了输出分隔符, 没有逗号则各字段会紧连着)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log | awk -F&quot;[][]&quot; -v OFS=&apos;---&apos; &apos;&#123;print $2,$3&#125;&apos;</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log | awk -F&quot;[][]&quot; &apos;BEGIN&#123;OFS=&quot;---&quot;&#125; &#123;print $2,$3&#125;&apos;</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
+</li>
 <li><p>其余的, 用到了再补充~~</p>
 </li>
 </ol>
 <h2 id="BEGIN-语句块"><a href="#BEGIN-语句块" class="headerlink" title="BEGIN 语句块"></a>BEGIN 语句块</h2><ol>
-<li>BEGIN语句块的语法: 在awk的program中 <code>BEGIN {awk-commands}</code>: BEGIN语句块在程序开始的使用执行, 它只执行一次, 在这里可以初始化变量。</li>
-<li>BEGIN是AWK的关键字, 因此它必须为大写, 注意, 这个语句块是可选的;</li>
+<li><code>BEGIN</code> 语句块的语法: 在awk的program中 <code>BEGIN {awk-commands}</code>: BEGIN语句块在程序开始的使用执行, 它只执行一次, 在这里可以初始化变量或者打印一个开头什么的…</li>
+<li><code>BEGIN</code> 是AWK的关键字, 因此它必须为大写, 注意, 这个语句块是可选的;</li>
 <li>测试:<ul>
 <li>可以使用 <code>print &quot;&quot;</code> 在输出之前先打印一个空行<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:linux renyimin$ awk &apos;BEGIN &#123;print &quot;&quot;&#125; &#123;print NR,$0&#125;&apos; awk.log</div><div class="line"></div><div class="line">1 renyimin   &quot;200&quot; 1200W 		男</div><div class="line">2</div><div class="line">3 renfumin 500 &quot;200W&quot;  男</div><div class="line">4 renjuanfang          1000 900W &quot;女&quot;</div><div class="line">5</div></pre></td></tr></table></figure>
 </li>
