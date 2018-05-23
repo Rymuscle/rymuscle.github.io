@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="sort Linux sort命令用于将文本文件内容以行为单位进行排序;  语法: sort [-bcdfimMnr][-o&amp;lt;输出文件&amp;gt;][-t&amp;lt;分隔字符&amp;gt;][+&amp;lt;起始栏位&amp;gt;-&amp;lt;结束栏位&amp;gt;][--help][--verison][文件] sort 命令既可以从特定的文件，也可以从 stdin 中获取输入;  选项  123456789101112-b">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-19T05:00:42.000Z">
+<meta property="og:updated_time" content="2018-05-23T05:27:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - sort, uniq, wc">
 <meta name="twitter:description" content="sort Linux sort命令用于将文本文件内容以行为单位进行排序;  语法: sort [-bcdfimMnr][-o&amp;lt;输出文件&amp;gt;][-t&amp;lt;分隔字符&amp;gt;][+&amp;lt;起始栏位&amp;gt;-&amp;lt;结束栏位&amp;gt;][--help][--verison][文件] sort 命令既可以从特定的文件，也可以从 stdin 中获取输入;  选项  123456789101112-b">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sort"><span class="post-toc-number">1.</span> <span class="post-toc-text">sort</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#uniq"><span class="post-toc-number">2.</span> <span class="post-toc-text">uniq</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#wc"><span class="post-toc-number">3.</span> <span class="post-toc-text">wc</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sort"><span class="post-toc-number">1.</span> <span class="post-toc-text">sort</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#uniq"><span class="post-toc-number">2.</span> <span class="post-toc-text">uniq</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#wc"><span class="post-toc-number">3.</span> <span class="post-toc-text">wc</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nl"><span class="post-toc-number">4.</span> <span class="post-toc-text">nl</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其他案例"><span class="post-toc-number">5.</span> <span class="post-toc-text">其他案例</span></a></li></ol>
         </nav>
     </aside>
     
@@ -246,6 +246,14 @@
 </li>
 </ul>
 </li>
+</ol>
+<h2 id="nl"><a href="#nl" class="headerlink" title="nl"></a>nl</h2><p>nl命令在linux系统中用来计算文件中行号, nl 可以将输出的文件内容自动的加上行号, 其默认的结果与 <code>cat -n</code> 有点不太一样, nl 可以将行号做比较多的显示设计, 包括位数与是否自动补齐 0 等等的功能<br>1．命令格式 : <code>nl [选项]... [文件]...</code><br>2．命令参数：<br>    -b  ：指定行号指定的方式，主要有两种：<br>    -b a ：表示不论是否为空行，也同样列出行号(类似 cat -n)；<br>    -b t ：如果有空行，空的那一行不要列出行号(默认值)；<br>    -n  ：列出行号表示的方法，主要有三种：<br>    -n ln ：行号在萤幕的最左方显示；<br>    -n rn ：行号在自己栏位的最右方显示，且不加 0 ；<br>    -n rz ：行号在自己栏位的最右方显示，且加 0 ；<br>    -w  ：行号栏位的占用的位数。<br>    -p 在逻辑定界符处不重新开始计算。</p>
+<ol>
+<li>试用 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">$ nl -ba Test.class.php</div><div class="line"> 1	&lt;?php</div><div class="line"> 2	interface Huma</div><div class="line"> 3	&#123;</div><div class="line"> 4	     public static function say();</div><div class="line"> 5	&#125;</div><div class="line"> 6</div><div class="line"> 7	class Male implements Huma</div><div class="line"> 8	&#123;</div><div class="line"> 9	    private static function say()</div><div class="line">10	    &#123;</div><div class="line">11	        echo &quot;I am a Male&quot;;</div><div class="line">12	    &#125;</div><div class="line">13	&#125;</div><div class="line">14</div><div class="line">15	class Female implements Huma</div><div class="line">16	&#123;</div><div class="line">17	    public static function say()</div><div class="line">18	    &#123;</div><div class="line">19	        echo &quot;I am a Female&quot;;</div><div class="line">20	    &#125;</div><div class="line">21	&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="其他案例"><a href="#其他案例" class="headerlink" title="其他案例"></a>其他案例</h2><ol>
+<li>在多个文件中匹配某个字符串(比如 ‘&lt;?php’), 并列出文件名: <code>grep &#39;&lt;?php&#39; *.php</code></li>
 </ol>
 <p>重点还是多练习….</p>
 
