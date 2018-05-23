@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Linux">
-    <meta name="description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger,">
+    <meta name="description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux文本处理 - awk">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/18/linux/2018-05-18-awk/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger,">
+<meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-20T03:43:53.000Z">
+<meta property="og:updated_time" content="2018-05-23T12:06:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - awk">
-<meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger,">
+<meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -181,7 +181,7 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
-<li><p>Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持<code>if-else</code>控制语句, <code>for/while</code>循环语句, 内置函数等功能; 同时, <strong>它是一个强大的文本分析工具</strong>;<br> 在工作中, 你通常可以使用awk对一些文本, 比如对日志文件进行一些很方便的分析工作;</p>
+<li><p>Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持<code>if-else</code>控制语句, <code>for/while</code>循环语句, 内置函数等功能; 同时, <strong>它是一个强大的文本分析工具</strong>; </p>
 </li>
 <li><p>之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;</p>
 </li>
@@ -192,6 +192,8 @@
 <li>同时, awk会按照用户指定的分割符去分割当前行为多个字段(每个字段分别被标识为 <code>$1</code> 一直到 <code>$NF</code>, <code>$NF</code>为awk中的变量, 表示当前行被分隔出的最大字段数), 如果没有指定分割符, 默认使用空格作为分隔符, 另外, 默认会将空格符和制表符都视为空格, 而且多个连续的空格都视为一个;</li>
 </ul>
 </li>
+<li><p>作为一个PHP开发人员, 在工作中, 不一定要求会写比较复杂的awk语句, 但可能经常会接触到开发, 沙盒, 预发, 线上等各种环境, 此时可以使用awk对一些日志文本做一些分析很方便的分析工作;</p>
+</li>
 </ol>
 <h2 id="语法结构"><a href="#语法结构" class="headerlink" title="语法结构"></a>语法结构</h2><ol>
 <li><p>基本语法结构为: <code>awk [options] &#39;program&#39; file1 , file2 ...</code>, 其中, <code>&#39;program&#39;</code> 又可以细分为 <code>pattern</code>模式 和 <code>action</code>动作; 也就是说, awk的完整语法其实为 <code>awk [options] &#39;pattern {action}&#39; file1 , file2 ...</code></p>
@@ -201,13 +203,19 @@
 <li><p><strong>注意模式匹配字符串时, 需要使用双引号</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ cat awk.log</div><div class="line">renyimin   200 1200W 		男</div><div class="line"></div><div class="line">renfumin 500 200W  男</div><div class="line">renjuanfang          1000 900W 女</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&quot;renyimin&quot; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line">renyimin 200 1200W</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&apos;renyimin&apos; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==renyimin &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
 </li>
-<li><p>模式可以有多个</p>
+<li><p>模式可以组合(可以使用括号和逻辑操作符与 <code>&amp;&amp;</code> ， 或 <code>||</code> ， 以及非 <code>!</code> 对模式进行组合)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&quot;renyimin&quot; &amp;&amp; $2&gt;20 &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line">renyimin 200 1200W</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&quot;renyimin&quot; &amp;&amp; $2&gt;200 &#123;print $1,$2,$3&#125;&apos; awk.log</div></pre></td></tr></table></figure>
 </li>
-<li><p>模式可以使用<code>运算符</code>, 也可以使用<code>正则表达式</code></p>
+<li><p>模式可以使用<code>运算符</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:linux renyimin$ cat test1.log</div><div class="line">Beth	4.00	0</div><div class="line">Dan	3.75	0</div><div class="line">kathy	4.00	10</div><div class="line">Mark	5.00	20</div><div class="line">Mary	5.50	22</div><div class="line">Susie	4.25	18</div><div class="line">renyimindeMacBook-Pro:linux renyimin$ awk &apos;$2*$3&gt;50 &#123;print $0&#125;&apos; test1.log</div><div class="line">Mark	5.00	20</div><div class="line">Mary	5.50	22</div><div class="line">Susie	4.25	18</div><div class="line">renyimindeMacBook-Pro:linux renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>也可以使用<code>正则表达式</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:linux renyimin$ awk &apos;/Susie/ &#123;print $0&#125;&apos; test1.log</div><div class="line">Susie	4.25	18</div><div class="line">renyimindeMacBook-Pro:linux renyimin$</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
+</ol>
+<ol>
 <li><p><code>action</code> 指的就是动作, awk 擅长文本格式化并将格式化后的文本<strong>输出</strong>, 所以它比较常用的 action 是 <code>print</code> 和 <code>printf</code>;</p>
 </li>
 <li><p>‘模式+动作’ 语句中的 模式 或 动作都可以省略, 但不是两者同时省略;</p>
@@ -222,7 +230,11 @@
 </li>
 <li><p><code>option</code> 选项, 可以不用任何选项, 常用选项为</p>
 <ul>
-<li><code>-F fs or --field-separator fs</code> : 指定输入文件分隔符(), fs可以是一个字符串或是一个正则表达式 (当然, 也可以使用内置变量, 结合参数 -v,  <code>-v FS=&#39;分隔符&#39;</code> 来指定分隔符)<br><code>-F</code> 还可以使用正则表达式来定制按照某些字符串来做分隔,字符需要放在<code>&#39;[]&#39;中</code>, 比如对nginx的access日志使用<code>[</code>或者<code>]</code>来分隔<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ tail -5 c2b_oms.2018-03-30-access.log</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:16:43:17 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[200] byte=[884] elapsed=[2.189] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[7.55]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:11:45 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.136] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:13:25 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[200] byte=[695] elapsed=[0.115] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[9.50]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:14:41 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.133] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:14:58 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.139] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">$ tail -5 c2b_oms.2018-03-30-access.log | awk -F &quot;[][]&quot; &apos;&#123;print $8&#125;&apos;</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
+<li><p><code>-F fs or --field-separator fs</code> : 指定输入文件分隔符(), fs可以是一个字符串或是一个正则表达式 (当然, 也可以使用内置变量, 结合参数 -v,  <code>-v FS=&#39;分隔符&#39;</code> 来指定分隔符)<br><code>-F</code> 还可以使用正则表达式来定制按照某些字符串来做分隔, 字符需要放在 <code>&#39;[]&#39;中</code>, 比如对nginx的access日志使用<code>[</code>或者<code>]</code>来分隔</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">$ tail -5 c2b_oms.2018-03-30-access.log</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:16:43:17 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[200] byte=[884] elapsed=[2.189] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[7.55]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:11:45 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.136] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:13:25 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[200] byte=[695] elapsed=[0.115] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[9.50]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:14:41 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.133] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:17:14:58 +0800] request=[GET /api/v1/car_dealer/list HTTP/1.1] status=[500] byte=[22005] elapsed=[0.139] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[-]</div><div class="line">$ tail -5 c2b_oms.2018-03-30-access.log | awk -F &apos;[][]&apos; &apos;&#123;print $8&#125;&apos;</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">GET /api/v1/car_dealer/list HTTP/1.1</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
+<p>或者还可以使用 <code>tail -10 c2b_oms.2018-03-30-access.log | awk -F&#39;[\\[\\]]&#39; &#39;{print $2}&#39;</code></p>
+</li>
+<li>可以按照任意一段字符串进行分隔<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:11:26:09 +0800] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone=18625036504 HTTP/1.1] status=[200] byte=[276] elapsed=[0.005] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[0.61]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:11:28:23 +0800] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone=renyimin HTTP/1.1] status=[200] byte=[786] elapsed=[1.312] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[8.27]</div><div class="line">remote_addr=[172.16.254.2] http_x_forward=[-] time=[30/Mar/2018:11:29:39 +0800] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone1=renyimin HTTP/1.1] status=[200] byte=[786] elapsed=[0.269] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[8.27]</div><div class="line">[work@VM_0_206_centos nginx_log]$ tail -10 c2b_oms.2018-03-30-access.log | awk -F&apos;+0800&apos; &apos;&#123;print $2&#125;&apos;</div><div class="line">] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone=18625036504 HTTP/1.1] status=[200] byte=[276] elapsed=[0.005] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[0.61]</div><div class="line">] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone=renyimin HTTP/1.1] status=[200] byte=[786] elapsed=[1.312] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[8.27]</div><div class="line">] request=[GET /api/v1/car_dealer/list?car_dealer_name_or_phone1=renyimin HTTP/1.1] status=[200] byte=[786] elapsed=[0.269] refer=[-] body=[-] ua=[PostmanRuntime/6.1.6] cookie=[-] gzip=[8.27]</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
