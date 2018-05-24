@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-23T12:18:24.000Z">
+<meta property="og:updated_time" content="2018-05-24T02:01:42.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux文本处理 - awk">
 <meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;   之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令">
@@ -250,7 +250,7 @@
 </code></pre><ol>
 <li>多文件处理, 用到了再补充~~</li>
 </ol>
-<h2 id="内置的一些变量"><a href="#内置的一些变量" class="headerlink" title="内置的一些变量"></a>内置的一些变量</h2><p>下面值列出本人常用的一些awk内置变量</p>
+<h2 id="内置的一些变量"><a href="#内置的一些变量" class="headerlink" title="内置的一些变量"></a>内置的一些变量</h2><p>下面值列出本人常用的一些awk内置变量<br>变量可以在<code>BEGIN</code>语句块中声明, 也可以在<code>program</code>中声明, 也可以使用参数 <code>-v</code> 声明</p>
 <ol>
 <li><p><code>NF</code>: <strong>行的字段数量</strong>, 你可以在awk命令的program中使用action, 在action中比较常用的是print所需的字段, 此时你可能总是需要通过 $1, $2 这样来指定索要打印的不同字段, 但任何表达式都可以使用在<code>$</code>之后来表达一个字段的序号; 表达式会被求值并用于表示字段序号, 同时, Awk会对当前输入的行有多少个字段进行计数, 并且将当前行的字段数量存储在一个内建的称作 <code>NF</code> 的变量中;<br> 因此, 程序 <code>{ print NF, $1, $NF }</code> 会依次打印出每一行的字段数量, 第一个字段的值, 最后一个字段的值;</p>
 </li>
@@ -261,6 +261,9 @@
 </li>
 <li><p><code>OFS</code> : 上面介绍了如何设定输入分隔符, 其实还有输出分隔符, 可以使用 <code>-v OFS=&#39;分隔符&#39;</code>(或者在<code>BEGIN</code>中指定<code>OFS</code>变量), 来定义输出分隔符 (注意,在输出时, 各字段间的<code>逗号</code>就代表了输出分隔符, 没有逗号则各字段会紧连着)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log | awk -F&quot;[][]&quot; -v OFS=&apos;---&apos; &apos;&#123;print $2,$3&#125;&apos;</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log | awk -F&quot;[][]&quot; &apos;BEGIN&#123;OFS=&quot;---&quot;&#125; &#123;print $2,$3&#125;&apos;</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
+</li>
+<li><p>另外声明变量也可以直接在 <code>program</code> 中进行</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[work@VM_0_206_centos nginx_log]$ tail -3 c2b_oms.2018-03-30-access.log | awk &apos;FS=&quot;[][]&quot;,OFS=&quot;---&quot; &#123;print $2,$3&#125;&apos;</div><div class="line">http_x_forward=[-]---time=[30/Mar/2018:11:26:09</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">172.16.254.2--- http_x_forward=</div><div class="line">[work@VM_0_206_centos nginx_log]$</div></pre></td></tr></table></figure>
 </li>
 <li><p>其余的, 用到了再补充~~</p>
 </li>
