@@ -147,6 +147,58 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-Redis/2017-06-07-redis-03"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-06-07 21:31:47" datetime="2017-06-07T13:31:47.000Z"  itemprop="datePublished">2017-06-07</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/06/07/Redis/2017-06-07-redis-03/">03. 一些规范点</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+将格式约定: 表名:字符串1:字符串2:·····
+
+不要使用keys正则匹配操作, 包括但不限于各种形式的模糊匹配操作 因为Redis是单线程处理, 在线上KEY数量较多时, 操作效率极低(时间复杂度为O(N)), 该命令一旦执行会严重阻塞线上其它命令的正常请求, 而且在高QPS情况下会直接造成Redis服务崩溃
+
+可靠的消息队列服务Redis List经常被用于消息队列服务;假设消费者...
+    
+
+        <a href="/2017/06/07/Redis/2017-06-07-redis-03/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-PHP/2017-04-26-Xhgui"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -587,63 +639,6 @@ php以前一直都是单继承的语言, 无法同时从两个基类中继承属
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-oauth/2016-10-22-OAuth-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2016-10-25 19:27:36" datetime="2016-10-25T11:27:36.000Z"  itemprop="datePublished">2016-10-25</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OAuth2-0/">OAuth2.0</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2016/10/25/oauth/2016-10-22-OAuth-03/">03. OAuth2.0的CSRF攻击</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        场景假设有如下几个角色:
-
-受害者 lant ;
-攻击者 rymuscle ;
-第三方客户端 liangren网 ;
-OAuth2服务提供平台 QQ ;
-
-攻击流程
-攻击者rymuscle 登录 liangren网 并且选择使用自己的 qq账号登录 ;
-
-liangren网 将 攻击者rymuscle 重定向到 qq的授权页, qq的授权页 向 攻击者rymuscle 显示 是否授权lian...
-    
-
-        <a href="/2016/10/25/oauth/2016-10-22-OAuth-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OAuth2-0/">OAuth2.0</a></li></ul>
 
     </div>
     

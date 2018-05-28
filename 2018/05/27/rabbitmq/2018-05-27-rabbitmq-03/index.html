@@ -13,27 +13,29 @@
     
     
     
-    <title>03. 浅析RabbitMQ通信过程 | Lant&#39;s Blog</title>
+    <title>03. 服务器管理 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="前言之前已经下载安装, 并顺利启动了RabbitMQ服务, 并且顺提访问 http://127.0.0.1:15672 打开了RabbitMQ的web后台管理界面; 接下来, 将会简单了解一下RabbitMQ的消息通信过程;… 浅析RabbitMQ通信过程下面是自己绘制的一张比较简单的整体通信模式架构图接下来需要简单认识一下上图中的各个概念点 Broker Server (Rabbit Serve">
+    <meta name="description" content="前言到目前为止我们已经 下载安装并成功启动了Rabbitmq服务, 接下来, 可以简单了解一些与服务器管理相关的知识点; Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装目录下的 ‘sbin/‘ 目录下, 运行 rabbitmq-server -detached 来启动后来运行;如果启动中遇到了任何错误, 可以检查RabbitMQ的日志文件; 如果不知道">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="03. 浅析RabbitMQ通信过程">
+<meta property="og:title" content="03. 服务器管理">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言之前已经下载安装, 并顺利启动了RabbitMQ服务, 并且顺提访问 http://127.0.0.1:15672 打开了RabbitMQ的web后台管理界面; 接下来, 将会简单了解一下RabbitMQ的消息通信过程;… 浅析RabbitMQ通信过程下面是自己绘制的一张比较简单的整体通信模式架构图接下来需要简单认识一下上图中的各个概念点 Broker Server (Rabbit Serve">
+<meta property="og:description" content="前言到目前为止我们已经 下载安装并成功启动了Rabbitmq服务, 接下来, 可以简单了解一些与服务器管理相关的知识点; Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装目录下的 ‘sbin/‘ 目录下, 运行 rabbitmq-server -detached 来启动后来运行;如果启动中遇到了任何错误, 可以检查RabbitMQ的日志文件; 如果不知道">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-new.png">
-<meta property="og:updated_time" content="2018-05-27T10:50:47.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-file-path.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-file-path-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-env-01.png">
+<meta property="og:updated_time" content="2018-05-28T09:07:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="03. 浅析RabbitMQ通信过程">
-<meta name="twitter:description" content="前言之前已经下载安装, 并顺利启动了RabbitMQ服务, 并且顺提访问 http://127.0.0.1:15672 打开了RabbitMQ的web后台管理界面; 接下来, 将会简单了解一下RabbitMQ的消息通信过程;… 浅析RabbitMQ通信过程下面是自己绘制的一张比较简单的整体通信模式架构图接下来需要简单认识一下上图中的各个概念点 Broker Server (Rabbit Serve">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-new.png">
+<meta name="twitter:title" content="03. 服务器管理">
+<meta name="twitter:description" content="前言到目前为止我们已经 下载安装并成功启动了Rabbitmq服务, 接下来, 可以简单了解一些与服务器管理相关的知识点; Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装目录下的 ‘sbin/‘ 目录下, 运行 rabbitmq-server -detached 来启动后来运行;如果启动中遇到了任何错误, 可以检查RabbitMQ的日志文件; 如果不知道">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-file-path.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -114,7 +116,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">03. 浅析RabbitMQ通信过程</div>
+        <div class="flex-col header-title ellipsis">03. 服务器管理</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,7 +138,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">03. 浅析RabbitMQ通信过程</h1>
+        <h1 class="title">03. 服务器管理</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-05-27T10:20:09.000Z" itemprop="datePublished" class="page-time">
@@ -161,7 +163,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#浅析RabbitMQ通信过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">浅析RabbitMQ通信过程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Broker-Server-Rabbit-Server"><span class="post-toc-number">3.</span> <span class="post-toc-text">Broker Server (Rabbit Server)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Exchange"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Exchange</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Queue"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">Queue</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BindingKey"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">BindingKey</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RoutingKey"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">RoutingKey</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Producer"><span class="post-toc-number">4.</span> <span class="post-toc-text">Producer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer"><span class="post-toc-number">5.</span> <span class="post-toc-text">Consumer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">6.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Channel"><span class="post-toc-number">7.</span> <span class="post-toc-text">Channel</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#vhost"><span class="post-toc-number">8.</span> <span class="post-toc-text">vhost</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Erlang-和-Erlang-Cookie"><span class="post-toc-number">2.</span> <span class="post-toc-text">Erlang 和 Erlang Cookie</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#命令行的基本使用"><span class="post-toc-number">3.</span> <span class="post-toc-text">命令行的基本使用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置相关"><span class="post-toc-number">4.</span> <span class="post-toc-text">配置相关</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#rabbitmq-env-conf"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">rabbitmq-env.conf</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#rabbitmq-conf"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">rabbitmq.conf</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RabbitMQ权限控制"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">RabbitMQ权限控制</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#解读Rabbit日志文件"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">解读Rabbit日志文件</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -169,7 +171,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">03. 浅析RabbitMQ通信过程</h1>
+        <h1 class="post-card-title">03. 服务器管理</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-05-27 18:20:09" datetime="2018-05-27T10:20:09.000Z"  itemprop="datePublished">2018-05-27</time>
 
@@ -182,53 +184,30 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前已经下载安装, 并顺利启动了RabbitMQ服务, 并且顺提访问 <code>http://127.0.0.1:15672</code> 打开了RabbitMQ的web后台管理界面; 接下来, 将会简单了解一下RabbitMQ的消息通信过程;<br>…</p>
-<h2 id="浅析RabbitMQ通信过程"><a href="#浅析RabbitMQ通信过程" class="headerlink" title="浅析RabbitMQ通信过程"></a>浅析RabbitMQ通信过程</h2><p>下面是自己绘制的一张比较简单的整体通信模式架构图<br><img src="/img/rabbitmq/rabbitmq-new.png"><br>接下来需要简单认识一下上图中的各个概念点</p>
-<h2 id="Broker-Server-Rabbit-Server"><a href="#Broker-Server-Rabbit-Server" class="headerlink" title="Broker Server (Rabbit Server)"></a>Broker Server (Rabbit Server)</h2><p>RabbitMQ是作为一个消息投递的<strong>中间代理服务器</strong>存在的(broker有 中间人, 代理人的意思);<br>应用程序从RabbitMQ获取的数据并不是Rabbit产生的, 可以认为它在应用程序之间扮演着<strong>路由器</strong>的角色;</p>
-<h3 id="Exchange"><a href="#Exchange" class="headerlink" title="Exchange"></a>Exchange</h3><p>Rabbit Server的内部构件, 也叫 <strong>交换机</strong>, 值得注意的是: 消息永远不可能被直接发送到Rabbit Server的Queue中, 它总是会经过Rabbit Server的 <strong>exchange交换机</strong>;</p>
-<p>为什么Rabbit Server不是将生产者投递的消息直接发送到队列, 而必须要经过内部的exchange组件? 毕竟对于生产者来说, 只是希望消息能够到队列而已, Rabbit Server中为啥还多了一步?</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>到目前为止我们已经 下载安装并成功启动了Rabbitmq服务, 接下来, 可以简单了解一些与服务器管理相关的知识点;</p>
+<h2 id="Erlang-和-Erlang-Cookie"><a href="#Erlang-和-Erlang-Cookie" class="headerlink" title="Erlang 和 Erlang Cookie"></a>Erlang 和 Erlang Cookie</h2><h2 id="命令行的基本使用"><a href="#命令行的基本使用" class="headerlink" title="命令行的基本使用"></a>命令行的基本使用</h2><p>RabbitMQ的启动可以在安装目录下的 ‘sbin/‘ 目录下, 运行 <code>rabbitmq-server -detached</code> 来启动后来运行;<br>如果启动中遇到了任何错误, 可以检查RabbitMQ的日志文件; 如果<strong>不知道日志文件的位置</strong>, 可以查看:<br><img src="/img/rabbitmq/rabbitmq-file-path.png" width="400"><br><img src="/img/rabbitmq/rabbitmq-file-path-02.png" width="400"></p>
+<p>2.</p>
+<h2 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a><a href="http://www.rabbitmq.com/configure.html" target="_blank" rel="external">配置相关</a></h2><p>一般情况下, RabbitMQ的默认配置就足够了, 通过在Web管理平台可以看到, 默认是没有配置文件的; 如果希望特殊设置的话, 有几个位置可以进行配置;<br>注意, 文件默认是没有的, 如果需要必须自己创建, 至于创建配置文件的位置在哪里, 可以通过日志文件来查看:</p>
+<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">enyimindembp:rabbitmq renyimin$ pwd</div><div class="line">/usr/local/var/log/rabbitmq</div><div class="line">renyimindembp:rabbitmq renyimin$ ls</div><div class="line">log				rabbit@localhost-sasl.log	rabbit@localhost.log		rabbit@localhost_upgrade.log</div><div class="line">enyimindembp:rabbitmq renyimin$ head -20 rabbit\@localhost.log</div><div class="line"></div><div class="line">=INFO REPORT==== 11-Dec-2017::15:37:02 ===</div><div class="line">Starting RabbitMQ 3.6.14 on Erlang 20.1.7</div><div class="line">Copyright (C) 2007-2017 Pivotal Software, Inc.</div><div class="line">Licensed under the MPL.  See http://www.rabbitmq.com/</div><div class="line"></div><div class="line">=INFO REPORT==== 11-Dec-2017::15:37:02 ===</div><div class="line">node           : rabbit@localhost</div><div class="line">home dir       : /Users/renyimin</div><div class="line">config file(s) : /usr/local/etc/rabbitmq/rabbitmq.config (not found)</div><div class="line">cookie hash    : qNSOVbC4c3Bg7punCVVdaQ==</div><div class="line">log            : /usr/local/var/log/rabbitmq/rabbit@localhost.log</div><div class="line">sasl log       : /usr/local/var/log/rabbitmq/rabbit@localhost-sasl.log</div><div class="line">database dir   : /usr/local/var/lib/rabbitmq/mnesia/rabbit@localhost</div></pre></td></tr></table></figure>
+</code></pre><h3 id="rabbitmq-env-conf"><a href="#rabbitmq-env-conf" class="headerlink" title="rabbitmq-env.conf"></a>rabbitmq-env.conf</h3><p>环境变量的配置文件 rabbitmq-env.conf : 可以用来配置rabbitmq的一些基本配置文件的路径;</p>
+<p>这些文件的位置是特定于分发的, 默认情况下, 它们可能不会创建, 但希望位于每个平台的以下位置：</p>
 <ul>
-<li>如果没有exchange内部组件, 对于生产者投递来的消息, broker其实貌似也可以根据消息内容中的某个属性来判断消息该投递给哪个队列, 或者也可以指定投递给全部队列, 或者根据正则来投递给某些队列; 但这样的话, 相当于生产者和队列直接面对面做了强绑定;</li>
-<li>而如果有exchange的话, 对于绑定和解析绑定, 直接交由exchange来进行即可, 这样在内部也做到了解耦和单一职责的划分, 这样就可以将一些业务逻辑独立出来(比方你是要群发, 还是指定队列发送, 或者匹配队列发送, 这些绑定和解析工作都由exchange在生产者和队列中间进行处理, 生产者和队列不需要直接面对面);</li>
+<li>通用UNIX <code>$ RABBITMQ_HOME/etc/rabbitmq /</code></li>
+<li>Debian <code>/etc/rabbitmq/</code></li>
+<li>RPM <code>/etc/rabbitmq/</code></li>
+<li>Mac OSX(Homebrew) <code>$ {install_prefix}/etc/rabbitmq/</code>，Homebrew前缀通常是<code>/usr/local</code></li>
+<li>Windows <code>％APPDATA％\RabbitMQ\</code></li>
 </ul>
-<p>在RabbitMQ中, exchange组件有四种类型 ：</p>
-<ul>
-<li><p><code>direct</code> :<br>使用这种类型, 会将生产者发送消息时设置的 <code>routingkey</code> 与 queue和exchange绑定时的 <code>bindingkey</code> 进行<strong>精确匹配</strong>, 如果 <code>routingkey</code> 和 <code>bindingkey</code> 完全一样, 那么Message就会被传递到当前exchange的对应queue中;<br>如果使用了direct类型Exchange, 绑定队列和exchange时, 可以不必指定 <code>routingkey</code> 的名字, 在此类型下创建的queue有一个默认的 <code>routingkey</code>, 这个 <code>routingkey</code> 一般和 <code>queue</code> 同名;<br><strong>注意</strong>: 虽然不可以创建两个相同名字的队列, 但是多个不同名的队列与exchange进行绑定时, <code>bindingkey</code> 可以相同; 所以可能会有多个队列的<code>bindingkey</code>都 与 同一条消息发布时的<code>routingkey</code>可以匹配, 从而导致同一条消息被exchange路由到多个队列中!</p>
-</li>
-<li><p><code>fanout</code>:<br>使用这种类型, 会将生产者发送消息时设置的 <code>routingkey</code> 与 queue和exchange绑定时的 <code>bindingkey</code> 进行<strong>模式匹配</strong>(正则匹配)<br>比如 生产者发送消息时设置的<code>routing key</code>为 <code>ab*</code>, 则可以与 <code>bindingkey</code> 为 <code>ab</code> 开头的所有的queue匹配;</p>
-</li>
-<li><p><code>topic</code> ：<br>使用这种类型, 会忽略<code>routingkey</code>的存在, 直接将消息广播到所有与当前exchange绑定的queue中; </p>
-</li>
-<li><p><code>headers</code> : 不太实用, 而且性能比较差, 几乎再也用不到了</p>
-</li>
-</ul>
-<h3 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h3><p>生产者投递给broker server的消息, 最终会被存储到队列中, 等待消费者处理;<br>队列在声明后, 需要与exchange进行绑定;<br>注意: 如果你不能承担消息丢入”黑洞”而丢失的话, 你的应用无论是生产者还是消费者, 都应该尝试去创建队列;</p>
-<h3 id="BindingKey"><a href="#BindingKey" class="headerlink" title="BindingKey"></a>BindingKey</h3><p>队列在声明后, 需要与exchange进行绑定, 绑定的时候可以显示地区指定一个 <code>routingkey</code>, 这里我们叫 <code>bindingkey</code>;<br>注意: 有些队列在声明后, 在与exchange绑定时, 没有显示地去设置 <code>bindingkey</code>, 此时 <code>bindingkey</code> 默认为队列名字;</p>
-<h3 id="RoutingKey"><a href="#RoutingKey" class="headerlink" title="RoutingKey"></a>RoutingKey</h3><p>生产者在消息发布时, 需要指明消息的 <code>routingkey</code>, exchange则会依据此<code>routingkey</code>去匹配 与 自身绑定的那些队列在绑定时 所显示设置的<code>bindingkey</code>(或者队列名), 从而决定消息将会被路由到与自身绑定的哪些队列中;<br>当然, 如果exchange设置的type是<code>topic</code>类型, 则会忽略 <code>routingkey</code> 和 <code>bindingkey</code> 的存在;</p>
-<h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h2><p>图中左侧的客户端程序’A,B’, 其实就是生产者: 连接到 Rabbit Server , 并将消息投递到 Rabbit Server;<br>producer永远不可能直接将消息丢到<code>队列</code>中;</p>
-<h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h2><p>图中右侧的客户端程序’1,2,3’, 其实就是消费者: 连接到 Rabbit Server , 并从 Rabbit Server 中接收消息;<br>发送消息时需要指定 <code>routingkey</code>, <strong>如果没有指定routingkey或者指定的routingkey匹配不到对应的bindingkey, 消息会被 Rabbit 服务丢弃掉, 掉入”黑洞”</strong>;</p>
-<h2 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h2><p>Connection其实就是一个TCP的连接, <code>Producer</code> 和 <code>Consumer</code> 都是通过TCP连接到RabbitMQ Server的, 任何与Rabbit Server内部交互的应用程序都需要通过TCP连接到RabbitMQ Server, 后面会看到, 程序的起始就是建立这个TCP连接;<br>Connection是RabbitMQ的socket链接, 它封装了socket协议相关部分逻辑</p>
-<h2 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h2><p>Channel 是我们与RabbitMQ打交道的最重要的一个接口, 我们大部分的业务操作是在channel这个接口中完成的 (包括 <code>定义exchange</code>, <code>定义queue</code>, <code>绑定exchange与queue</code>、<code>发布消息</code> 等);</p>
-<p>Channel 是虚拟连接, 它建立在上述的TCP连接 <code>connection</code> 中, 数据流动都是在channel中进行的, 程序起始第一步就是建立TCP连接 <code>Connection</code>, 第二步就是建立信道 <code>Channel</code>;</p>
-<p>为什么使用Channel, 而不是直接使用TCP连接？<br>对于OS来说, 建立和关闭TCP连接是有代价的, 频繁的建立关闭TCP连接对于系统的性能有很大的影响, 而且TCP的连接数也有限制, 这也限制了系统处理高并发的能力;<br>但是，在TCP连接中建立channel是没有上述代价的, 对于 <code>producer</code> 或者 <code>consumer</code> 来说, 可以并发的使用多个channel进行 ‘publish’或者’receive’;</p>
-<h2 id="vhost"><a href="#vhost" class="headerlink" title="vhost"></a>vhost</h2><p>最后, 还有一个在图中并未体现出来的概念 <code>vhost</code></p>
-<p>每一个RabbitMQ服务器都能创建虚拟消息服务器, 我们称之为虚拟主机(<code>vhost</code>), 每一个 <code>vhost</code> 本质上都是一个 mini 版的 RabbitMQ Server, 拥有自己的 <code>exchagne</code>, <code>queue</code>, 和 <code>bindings rule</code>, <code>consumer</code> 等等, 更重要的是, 它还拥有自己的 <code>权限机制</code>, 这使得你能够安全地使用一个RabbitMQ服务器来服务众多应用程序, 而不用担心A应用可能会删除B应用正在使用的队列;</p>
-<p>vhost之于Rabbit就像虚拟机之于物理服务器一样: 通过在各个实例间提供逻辑上隔离, 允许你为不同应用程序安全保密地运行数据, 这很有用, 它既能将同一Rabbit的众多客户端区分开来, 又可以避免队列和交换器的命名冲突; 否则, 你可能不得不去运行多个Rabbit, 并承担随之而来的管理问题, 相反, 你可以只运行一个Rabbit, 然后按需启动或者关闭vhost;<br>当你有多个不同的应用要使用RabbitMQ时, 你可以为每个应用定义一个vhost来将应用从逻辑上隔离开;</p>
-<p>vhost是AMQP概念的基础, 你必须在连接时进行指定, 由于RabbitMQ包含了开箱即用的默认vhost: <code>/</code> , 因此时候用起来非常简单, 如果你不需要多个vhost的话, 就使用默认的即可;<br>通过使用默认的guest用户名和密码guest, 就可以访问默认的 vhost, 为了安全起见, 你应该更改它;</p>
-<p>AMQP 并没有指定权限控制是在vhost级别还是在服务器端级别实现, 这留给了消息服务器的开发者去决定, 而<strong>在RabbitMQ中, 权限控制是以<code>vhost</code>为单位的</strong>, 当你在Rabbit里创建一个用户时, 用户通常会被指派给至少一个vhost, 并且只能访问被指派的vhost内的队列, 交换机和绑定;<br>当你在设计消息通信架构时, 记住vhost之间是绝对隔离的, 你无法将 vhost ‘a’ 中的交换机绑定到 vhost ‘b’ 中的队列去;</p>
-<p>另外需要注意: 当你在RabbitMQ集群上创建vhost时, 整个集群上都会创建该vhost;</p>
-<p>如何创建vhost? vhost和权限控制非常独特, 它们是AMQP中唯一无法通过AMQP协议创建的基元(不同于队列, 交换机和绑定), 对于RabbitMQ来说, 你需要通过 RabbitMQ 安装路径下 <code>./sbin/</code> 目录中的 <code>rabbitmqctl</code> 工具来创建</p>
-<ul>
-<li><p>如果想知道特定rabbitmq服务器上运行着哪些vhost时, 可以执行</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl list_vhosts</div><div class="line">Listing vhosts</div><div class="line">/</div></pre></td></tr></table></figure>
-</li>
-<li><p>创建一个vhost</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl add_vhost test</div><div class="line">Creating vhost &quot;test&quot;</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除一个vhost</p>
-  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl delete_vhost test</div><div class="line">Deleting vhost &quot;test&quot;</div></pre></td></tr></table></figure>
-</li>
-</ul>
+<p>现在修改 rabbitmq-env.conf 中指定的 rabbitmq.conf 位置为 ‘/usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq.conf’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">renyimindembp:rabbitmq renyimin$ pwd</div><div class="line">/usr/local/etc/rabbitmq</div><div class="line">renyimindembp:rabbitmq renyimin$ cat rabbitmq-env.conf</div><div class="line">CONFIG_FILE=/usr/local/etc/rabbitmq/rabbitmq</div><div class="line">NODE_IP_ADDRESS=127.0.0.1</div><div class="line">NODENAME=rabbit@localhost</div><div class="line">renyimindembp:rabbitmq renyimin$ vim rabbitmq-env.conf</div><div class="line">....</div><div class="line">renyimindembp:rabbitmq renyimin$ cat rabbitmq-env.conf</div><div class="line">#CONFIG_FILE=/usr/local/etc/rabbitmq/rabbitmq</div><div class="line">CONFIG_FILE=/usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq</div><div class="line">NODE_IP_ADDRESS=127.0.0.1</div><div class="line">NODENAME=rabbit@localhost</div><div class="line">renyimindembp:rabbitmq renyimin$</div></pre></td></tr></table></figure></p>
+<p>改完重启之后, 在Web管理界面会发现也有了配置文件的路径:<br><img src="/img/rabbitmq/rabbitmq-env-01.png" width="400"></p>
+<h3 id="rabbitmq-conf"><a href="#rabbitmq-conf" class="headerlink" title="rabbitmq.conf"></a>rabbitmq.conf</h3><p>如果 rabbitmq.conf 不存在, 可以手动创建;<br>如果更改位置, 请设置 <code>RABBITMQ_CONFIG_FILE</code> 环境变量, <strong>RabbitMQ会自动将.conf扩展名附加到此变量的值</strong>;</p>
+<p>配置对于<code>rabbitmq.config</code>文件, rabbit官网提供了默认的<code>rabbitmq.conf.example</code>, 可以从<a href="https://github.com/rabbitmq/rabbitmq-server/blob/master/docs/rabbitmq.conf.example" target="_blank" rel="external">此处</a>获取;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+<p>主要参考官方文档：<a href="http://www.rabbitmq.com/configure.html" target="_blank" rel="external">http://www.rabbitmq.com/configure.html</a></p>
+<h3 id="RabbitMQ权限控制"><a href="#RabbitMQ权限控制" class="headerlink" title="RabbitMQ权限控制"></a>RabbitMQ权限控制</h3><h3 id="解读Rabbit日志文件"><a href="#解读Rabbit日志文件" class="headerlink" title="解读Rabbit日志文件"></a>解读Rabbit日志文件</h3><p>### </p>
+<ol>
+<li>在成功启动了RabbitMQ服务之后, </li>
+<li>命令行查看<code>虚拟机</code>, <code>队列</code>, <code>交换器</code>和<code>绑定状态</code>;</li>
+</ol>
 <p>通常情况下, 你是在服务器上直接运行 <code>rabbitmqctl</code> 来管理自己的rabbitmq节点, 不过你也可以通过 <code>-n rabbit@[server_name]</code>选项来管理远程rabbitmq节点, <code>@</code>符号将节点标识符(rabbit@[server_name])分成两部分: </p>
 <ul>
 <li>左边的是Erlang应用程序名称, 在这里永远都是 <code>rabbit</code>;</li>
@@ -271,7 +250,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 服务器管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -281,7 +260,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 服务器管理》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -291,7 +270,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 服务器管理》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -329,7 +308,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-04/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">04. 服务器管理</h4>
+        <h4 class="title">04. 浅析RabbitMQ通信过程</h4>
       </a>
     </div>
   
@@ -431,7 +410,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 服务器管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -441,7 +420,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&title=《03. 服务器管理》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -451,7 +430,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 浅析RabbitMQ通信过程》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 服务器管理》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
