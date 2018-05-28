@@ -13,25 +13,25 @@
     
     
     
-    <title>secret | Lant&#39;s Blog</title>
+    <title>06. 持久化策略 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="secret">
-    <meta name="description" content="想象力就是一切, 它是声明将发生之事的预览 – 爱因斯坦 (1879-1955) 要达成你生命中想要的一切, 其捷径就是 – 当下就”是”快乐的, 并且”感觉”快乐! 这是把金钱和其他你想要的事物带进你生命中最快的方式。 我现在终于了解, 富足正在那儿等着我。我的任务不是去想出金钱要”如何”到来, 而是去要求, 去相信我已经在接收财富, 以及当下就去感觉幸福快乐, 至于其细节, 就交给宇宙去处理吧">
-<meta name="keywords" content="secret">
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="持久化方案RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;    要做到消息持久化, 必须保证如下三点设置正确:  exchange交换器: durable属性为true; queue队列: durable属性为true; 除了上述两点之外, 还需要在投递消息时候">
+<meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="secret">
-<meta property="og:url" content="http://blog.renyimin.com/2018/05/28/2018-05-28-secret/index.html">
+<meta property="og:title" content="06. 持久化策略">
+<meta property="og:url" content="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="想象力就是一切, 它是声明将发生之事的预览 – 爱因斯坦 (1879-1955) 要达成你生命中想要的一切, 其捷径就是 – 当下就”是”快乐的, 并且”感觉”快乐! 这是把金钱和其他你想要的事物带进你生命中最快的方式。 我现在终于了解, 富足正在那儿等着我。我的任务不是去想出金钱要”如何”到来, 而是去要求, 去相信我已经在接收财富, 以及当下就去感觉幸福快乐, 至于其细节, 就交给宇宙去处理吧">
+<meta property="og:description" content="持久化方案RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;    要做到消息持久化, 必须保证如下三点设置正确:  exchange交换器: durable属性为true; queue队列: durable属性为true; 除了上述两点之外, 还需要在投递消息时候">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-28T05:30:40.000Z">
+<meta property="og:updated_time" content="2018-05-28T11:54:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="secret">
-<meta name="twitter:description" content="想象力就是一切, 它是声明将发生之事的预览 – 爱因斯坦 (1879-1955) 要达成你生命中想要的一切, 其捷径就是 – 当下就”是”快乐的, 并且”感觉”快乐! 这是把金钱和其他你想要的事物带进你生命中最快的方式。 我现在终于了解, 富足正在那儿等着我。我的任务不是去想出金钱要”如何”到来, 而是去要求, 去相信我已经在接收财富, 以及当下就去感觉幸福快乐, 至于其细节, 就交给宇宙去处理吧">
+<meta name="twitter:title" content="06. 持久化策略">
+<meta name="twitter:description" content="持久化方案RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;    要做到消息持久化, 必须保证如下三点设置正确:  exchange交换器: durable属性为true; queue队列: durable属性为true; 除了上述两点之外, 还需要在投递消息时候">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">secret</div>
+        <div class="flex-col header-title ellipsis">06. 持久化策略</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -134,15 +134,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">secret</h1>
+        <h1 class="title">06. 持久化策略</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-05-28T05:02:56.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2018-05-28T09:12:11.000Z" itemprop="datePublished" class="page-time">
   2018-05-28
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/secret/">secret</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
             
         </h5>
@@ -156,16 +156,23 @@
 
 <div class="container body-wrap">
     
-<article id="post-2018-05-28-secret"
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久化方案"><span class="post-toc-number">1.</span> <span class="post-toc-text">持久化方案</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久化原理"><span class="post-toc-number">2.</span> <span class="post-toc-text">持久化原理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久化的问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">持久化的问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#具体代码"><span class="post-toc-number">4.</span> <span class="post-toc-text">具体代码</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2018-05-28-rabbitmq-06"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">secret</h1>
+        <h1 class="post-card-title">06. 持久化策略</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-05-28 13:02:56" datetime="2018-05-28T05:02:56.000Z"  itemprop="datePublished">2018-05-28</time>
+            <time class="post-time" title="2018-05-28 17:12:11" datetime="2018-05-28T09:12:11.000Z"  itemprop="datePublished">2018-05-28</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/secret/">secret</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -173,10 +180,19 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>想象力就是一切, 它是声明将发生之事的预览 – 爱因斯坦 (1879-1955)</p>
-<p>要达成你生命中想要的一切, 其捷径就是 – 当下就”是”快乐的, 并且”感觉”快乐! 这是把金钱和其他你想要的事物带进你生命中最快的方式。</p>
-<p>我现在终于了解, 富足正在那儿等着我。我的任务不是去想出金钱要”如何”到来, 而是去要求, 去相信我已经在接收财富, 以及当下就去感觉幸福快乐, 至于其细节, 就交给宇宙去处理吧!  </p>
-<p>💰来的<strong>容易</strong>而且<strong>频繁</strong>!</p>
+            <h2 id="持久化方案"><a href="#持久化方案" class="headerlink" title="持久化方案"></a>持久化方案</h2><p>RabbitMQ 默认情况下, <code>Exchange</code>, <code>队列</code>, <code>消息</code> 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 <code>Exchange</code>, <code>队列</code>, 以及 <code>队列中的消息</code> 都会丢失;   </p>
+<p>要做到消息持久化, 必须保证如下三点设置正确:</p>
+<ul>
+<li>exchange交换器: durable属性为true;</li>
+<li>queue队列: durable属性为true;</li>
+<li>除了上述两点之外, 还需要在投递消息时候, 设置message的 <code>delivery_mode</code> 模式为<code>2</code>来标识消息为持久化消息;<br>要知道, 一个包含持久化消息的非持久化队列, 在Rabbit Server重启之后, 该队列将会不复存在, 消息就会变成孤儿;</li>
+</ul>
+<h2 id="持久化原理"><a href="#持久化原理" class="headerlink" title="持久化原理"></a>持久化原理</h2><p>RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送响应; 还需要注意的是, 如果之后这条消息被路由到一个非持久化队列, 则消息又会从上面的日志文件中删除, 并且无法从服务器重启中恢复;<br>一旦你从持久化队列中消费了一条持久性消息(并且进行了确认), RabbitMQ会在持久化日志中把这条消息标记为等待垃圾收集;</p>
+<h2 id="持久化的问题"><a href="#持久化的问题" class="headerlink" title="持久化的问题"></a>持久化的问题</h2><ul>
+<li>持久化由于会写磁盘, 所以会极大降低RabbitMQ每秒处理的消息总数, 降低吞吐量;</li>
+<li>持久化在Rabbit内建集群环境下工作的并不好, 后面在学习集群时, 会给出相应的解决方案;</li>
+</ul>
+<h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p>下面通过使用 Laravel + php-amqplib 扩展, 通过创建一个投递消息的生产者, 展示了如何创建一条持久化消息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
 
         </div>
 
@@ -203,7 +219,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/secret/">secret</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
             
@@ -213,7 +229,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&title=《secret》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&title=《06. 持久化策略》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -223,22 +239,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&title=《secret》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&title=《06. 持久化策略》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《secret》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 持久化策略》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -261,17 +277,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-04/" id="post-prev" class="post-nav-link">
+        <a href="/2018/05/28/2018-05-28-secret/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">04. 浅析RabbitMQ通信过程</h4>
+          <h4 class="title">secret</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" id="post-next" class="post-nav-link">
+      <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">06. 持久化策略</h4>
+        <h4 class="title">05. 一条消息的一声</h4>
       </a>
     </div>
   
@@ -373,7 +389,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&title=《secret》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&title=《06. 持久化策略》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -383,22 +399,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&title=《secret》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&title=《06. 持久化策略》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《secret》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 持久化策略》 — Lant's Blog&url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/28/2018-05-28-secret/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -409,7 +425,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACNElEQVR42u3aS5KDMAxF0ex/0/Q0VWnDfRIMkK9HKX72YaAgyZ8PHsfXWB3/Pvt7Ze05Nw8ZMmS8lnGcjt9lkWkOMFaw1dkLqgwZMjZgrJbCl36+CHI9n1eGDBkyzh93HjRri+g/QYYMGTJqS68lpTJkyJDRSWJJCtoP4o/n4jJkyHghoxMEn/79SH9DhgwZr2Ic4SD3dpoNtSFDhozZjNqUtXDJXw3ZnPHP9TJkyBjKILeRKW9IL0vPkSFDxj6MWvhLGem2sKDlIEOGjC0ZvBCfJqUkuMdFNxkyZIxmkAT1iY+/fuq7LLfJkCFjKCOdoFae43Gy9fpkyJAxjpEGUNRnwKlp5+yy3CZDhoxxjHRK3h4g4bK/OeNTe3MyZMgYxKgFXFJcSzdzoO9AGTJkDGWQT0MeCvlS0nT64skyZMgYzUirVbyFUGtVphs4ZMiQsQ+jswGiFoJrZ4OmggwZMgYxOmlkJ/rVym3L1ypDhozRDF7YuqFwT5aCgzja3SZDhozRjHRTBU9iSYpbTKFlyJCxDaO/wYI3LHmhDTVZZciQMZrBQ1unuNZpSBTvkiFDxgjGEY5aq5InyeR4vB9EhgwZL2fcVdznITXd8pXeK0OGjKkMnjTGxXoc1nkgvsjFZciQMZpBGo289ZiGaf4PUOzEypAhYzNGLeHks/APx1bAlSFDxmhGmu52gnXQSJAhQ8YGjH6TspOUkiM3l9tkyJDxKgZPHUlI7bQtO5+SMmTIGMr4A6yi9RtV85z1AAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqUlEQVR42u3aQW7DMAwEwPz/0+21QGtnKZKpD+OTkSaxRgEkdqnXK76+fl33r1/99eq6f+LPV14bFx4eHl576PeMPji5Tz4bTRYeHh7eGu9qRU0W5WSJz995v8HkY8bDw8N7Mq860GQLORsPHh4e3jN5yYByWDX4wMPDw3sOLwkjkq/OJ6X/1+GsBQ8PD6/Wb4pK5Ofcr/T38PDw8Npd9U82+KtNuGi0eHh4eAu8fED9IwJnS/9Z1IuHh4e3x0uW9U4T6+yV/BjBm+fi4eHhLfDy5tPZ9pAv92eRbjm6xcPDw2vzqk2mapl79p7qGKL/FfDw8PCGeNXSeSrAre5d1bHh4eHh7fE6R6zOFvpO0FA+eoWHh4e3wKsu04XA9OjAVj6t+ZTh4eHhzfLyo075wj270LeKcjw8PLw1XnWhT6Ymn4L86cl2dZlS4+Hh4Q3xphbofHA5OI8eot8QDw8Pb5SXH7c6a/l3otvOhOLh4eFt8PJAIb8/izA6xwiiGBcPDw9vjddBJqVzslXkhwzebEh4eHh4H+Hlr3SK8jyQzUfyxz0eHh7eAq965YVvUlh3ji9Um2d4eHh4G7z8oFU1gEhK5Or34OHh4f0Xr1oE5+FF3uI6iySiicbDw8Nb4J0de+oMvVrX5wfCLn8APDw8vGVe+cONUOMsjChPHB4eHt4yL1nuzyalCh6LOfDw8PDWeMk//Plj8kHfT8FYPo2Hh4c3xPsqXvkDqgVxNdqIAhQ8PDy8Bd5ZnDoVGUzdD1x4eHh4Rd7e0JM4I/9U9dvw8PDwtnnVaDUpYasF7vBuhoeHh/cYXl4o52nqWRtsZWPAw8PDW6s5z8rfahssP55VOHSFh4eHN8SrDjdv+Xe+OY9uB7IWPDw8vKGuerX59JkJGo4w8PDw8FLeN4AkK/AHfLTrAAAAAElFTkSuQmCC" alt="微信分享二维码">
 </div>
 
 

@@ -29,7 +29,7 @@
 <meta property="og:description" content="下面绘制了一张比较简单的Rabbit消息通信架构图 接下来需要简单认识一下上图中的各个概念点     Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思);应用程序从RabbitMQ获取的数据并不是Rabbit产生的, 可以认为它在应用程序之间扮演着路由器的角色; ExchangeRabbit">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-new.png">
-<meta property="og:updated_time" content="2018-05-28T09:08:21.000Z">
+<meta property="og:updated_time" content="2018-05-28T09:10:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. 浅析RabbitMQ通信过程">
 <meta name="twitter:description" content="下面绘制了一张比较简单的Rabbit消息通信架构图 接下来需要简单认识一下上图中的各个概念点     Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思);应用程序从RabbitMQ获取的数据并不是Rabbit产生的, 可以认为它在应用程序之间扮演着路由器的角色; ExchangeRabbit">
@@ -212,7 +212,7 @@
 <p>Channel 是虚拟连接, 它建立在上述的TCP连接 <code>connection</code> 中, 数据流动都是在channel中进行的, 程序起始第一步就是建立TCP连接 <code>Connection</code>, 第二步就是建立信道 <code>Channel</code>;</p>
 <p>为什么使用Channel, 而不是直接使用TCP连接？<br>对于OS来说, 建立和关闭TCP连接是有代价的, 频繁的建立关闭TCP连接对于系统的性能有很大的影响, 而且TCP的连接数也有限制, 这也限制了系统处理高并发的能力;<br>但是，在TCP连接中建立channel是没有上述代价的, 对于 <code>producer</code> 或者 <code>consumer</code> 来说, 可以并发的使用多个channel进行 ‘publish’或者’receive’;</p>
 <h2 id="vhost"><a href="#vhost" class="headerlink" title="vhost"></a>vhost</h2><p>最后, 还有一个在图中并未体现出来的概念 <code>vhost</code></p>
-<p>每一个RabbitMQ服务器都能创建虚拟消息服务器, 我们称之为虚拟主机(<code>vhost</code>), 每一个 <code>vhost</code> 本质上都是一个 mini 版的 RabbitMQ Server, 拥有自己的 <code>exchagne</code>, <code>queue</code>, 和 <code>bindings rule</code>, <code>consumer</code> 等等, 更重要的是, 它还拥有自己的 <code>权限机制</code>, 这使得你能够安全地使用一个RabbitMQ服务器来服务众多应用程序, 而不用担心A应用可能会删除B应用正在使用的队列;</p>
+<p>每一个RabbitMQ服务器都能创建虚拟消息服务器, 我们称之为虚拟主机(<code>vhost</code>), 每一个 <code>vhost</code> 本质上都是一个 mini 版的 RabbitMQ Server, 拥有自己的 <code>exchagne</code>, <code>queue</code>, 和 <code>bindings rule</code> 等等, 更重要的是, 它还拥有自己的 <code>权限机制</code>, 这使得你能够安全地使用一个RabbitMQ服务器来服务众多应用程序, 而不用担心A应用可能会删除B应用正在使用的队列;</p>
 <p>vhost之于Rabbit就像虚拟机之于物理服务器一样: 通过在各个实例间提供逻辑上隔离, 允许你为不同应用程序安全保密地运行数据, 这很有用, 它既能将同一Rabbit的众多客户端区分开来, 又可以避免队列和交换器的命名冲突; 否则, 你可能不得不去运行多个Rabbit, 并承担随之而来的管理问题, 相反, 你可以只运行一个Rabbit, 然后按需启动或者关闭vhost;<br>当你有多个不同的应用要使用RabbitMQ时, 你可以为每个应用定义一个vhost来将应用从逻辑上隔离开;</p>
 <p>vhost是AMQP概念的基础, 你必须在连接时进行指定, 由于RabbitMQ包含了开箱即用的默认vhost: <code>/</code> , 因此时候用起来非常简单, 如果你不需要多个vhost的话, 就使用默认的即可;<br>通过使用默认的guest用户名和密码guest, 就可以访问默认的 vhost, 为了安全起见, 你应该更改它;</p>
 <p>AMQP 并没有指定权限控制是在vhost级别还是在服务器端级别实现, 这留给了消息服务器的开发者去决定, 而<strong>在RabbitMQ中, 权限控制是以<code>vhost</code>为单位的</strong>, 当你在Rabbit里创建一个用户时, 用户通常会被指派给至少一个vhost, 并且只能访问被指派的vhost内的队列, 交换机和绑定;<br>当你在设计消息通信架构时, 记住vhost之间是绝对隔离的, 你无法将 vhost ‘a’ 中的交换机绑定到 vhost ‘b’ 中的队列去;</p>
