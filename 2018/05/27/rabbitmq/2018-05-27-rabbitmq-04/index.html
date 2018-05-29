@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言因为RabbitMQ专注于应用程序之间的消息通信, 所以在开始尝试使用Rabbit进行消息通信前, 清楚地理解通信模式的概念是非常重要的; 下面是一张比较简单的Rabbit消息通信架构图 Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思); 应用程序从RabbitMQ获取的数据并不是Rab">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-new.png">
-<meta property="og:updated_time" content="2018-05-29T06:39:32.000Z">
+<meta property="og:updated_time" content="2018-05-29T07:56:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. 浅析RabbitMQ通信模式">
 <meta name="twitter:description" content="前言因为RabbitMQ专注于应用程序之间的消息通信, 所以在开始尝试使用Rabbit进行消息通信前, 清楚地理解通信模式的概念是非常重要的; 下面是一张比较简单的Rabbit消息通信架构图 Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思); 应用程序从RabbitMQ获取的数据并不是Rab">
@@ -161,7 +161,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Broker-Server-Rabbit-Server"><span class="post-toc-number">2.</span> <span class="post-toc-text">Broker Server (Rabbit Server)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">3.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Channel"><span class="post-toc-number">4.</span> <span class="post-toc-text">Channel</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Exchange"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Exchange</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Queue"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">Queue</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BindingKey"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">BindingKey</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RoutingKey"><span class="post-toc-number">5.</span> <span class="post-toc-text">RoutingKey</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Producer"><span class="post-toc-number">6.</span> <span class="post-toc-text">Producer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer"><span class="post-toc-number">7.</span> <span class="post-toc-text">Consumer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#vhost"><span class="post-toc-number">8.</span> <span class="post-toc-text">vhost</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">9.</span> <span class="post-toc-text">小结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Broker-Server-Rabbit-Server"><span class="post-toc-number">2.</span> <span class="post-toc-text">Broker Server (Rabbit Server)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Connection"><span class="post-toc-number">3.</span> <span class="post-toc-text">Connection</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Channel"><span class="post-toc-number">4.</span> <span class="post-toc-text">Channel</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Exchange"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Exchange</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BindingKey"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">BindingKey</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RoutingKey"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">RoutingKey</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Queue"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">Queue</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Producer"><span class="post-toc-number">5.</span> <span class="post-toc-text">Producer</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer"><span class="post-toc-number">6.</span> <span class="post-toc-text">Consumer</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#vhost"><span class="post-toc-number">7.</span> <span class="post-toc-text">vhost</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -207,16 +207,21 @@
 <li><p><code>headers</code> : 不太实用, 而且性能比较差, 几乎再也用不到了</p>
 </li>
 </ul>
+<h3 id="BindingKey"><a href="#BindingKey" class="headerlink" title="BindingKey"></a>BindingKey</h3><p>队列在声明后, 需要与exchange进行绑定, 绑定的时候可以显示地区指定一个 <code>routingkey</code>, 这里我们叫 <code>bindingkey</code>;<br>注意: 队列在与exchange绑定时, 如果没有显示地去设置 <code>bindingkey</code>, 此时 <code>bindingkey</code> 默认为队列名字;</p>
+<h3 id="RoutingKey"><a href="#RoutingKey" class="headerlink" title="RoutingKey"></a>RoutingKey</h3><p>生产者在消息发布时, 需要指明消息的 <code>routingkey</code>, exchange则会依据此<code>routingkey</code>去匹配 与 自身绑定的那些队列在绑定时 所显示或非显示设置的 <code>bindingkey</code>, 从而决定消息将会被路由到与自身绑定的哪些队列中;<br>当然, 如果exchange设置的type是<code>topic</code>类型, 则会忽略 <code>routingkey</code> 和 <code>bindingkey</code> 的存在;</p>
 <h3 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h3><p>生产者投递给broker server的消息, 最终会被内部组件exchange路由到匹配的队列中, 等待consumers处理;</p>
 <p>队列在声明后, 需要与exchange进行绑定 (绑定时会使用一个叫 routingkey 的东西, 这里我一般会叫他 bindingkey); </p>
 <p>注意: 如果你不能承担消息丢入”黑洞”而丢失的话, 你的应用无论是生产者还是消费者, 都应该尝试去创建队列;</p>
 <p>队列有很多参数属性可以设置, 后面在代码中经会一一展示如何使用它的这些属性;</p>
-<h3 id="BindingKey"><a href="#BindingKey" class="headerlink" title="BindingKey"></a>BindingKey</h3><p>队列在声明后, 需要与exchange进行绑定, 绑定的时候可以显示地区指定一个 <code>routingkey</code>, 这里我们叫 <code>bindingkey</code>;<br>注意: 队列在与exchange绑定时, 如果没有显示地去设置 <code>bindingkey</code>, 此时 <code>bindingkey</code> 默认为队列名字;</p>
-<h2 id="RoutingKey"><a href="#RoutingKey" class="headerlink" title="RoutingKey"></a>RoutingKey</h2><p>生产者在消息发布时, 需要指明消息的 <code>routingkey</code>, exchange则会依据此<code>routingkey</code>去匹配 与 自身绑定的那些队列在绑定时 所显示或非显示设置的 <code>bindingkey</code>, 从而决定消息将会被路由到与自身绑定的哪些队列中;<br>当然, 如果exchange设置的type是<code>topic</code>类型, 则会忽略 <code>routingkey</code> 和 <code>bindingkey</code> 的存在;</p>
 <h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h2><p>图中左侧的客户端程序’A,B’, 其实就是生产者: 连接到 Rabbit Server , 并将消息投递到 Rabbit Server, 然后由exchange交换机决定该如何转发消息到队列中;<br>Producer永远不可能直接将消息丢到queue中;<br>Producer可以通过bindingkey与exchange进行绑定;</p>
 <h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h2><p>图中右侧的客户端程序’1,2,3’, 其实就是消费者: 连接到 Rabbit Server , 并从 Rabbit Server 中接收消息;</p>
 <p>发送消息时需要指定 routingkey, 如果没有指定routingkey或者指定的routingkey匹配不到对应的bindingkey, 消息会被 Rabbit 服务丢弃掉, 掉入”黑洞”;</p>
 <p>另外, consumer在处理完消息之后, </p>
+<h3 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a>Consumer Prefetch</h3><p>官方文档<a href="http://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">消费预取</a>一节可以看到, 在RabbitMQ中, 对prefetch_count的定义与AMQP0-9-1貌似不太一样;</p>
+<p>prefetch允许为每个consumer指定最大的<code>unacked messages</code>数目, 简单来说就是用来指定一个consumer一次可以从Rabbit中获取多少条message并缓存在client中(RabbitMQ提供的各种语言的client library), 一旦缓冲区满了, Rabbit将会停止投递新的message到该consumer中直到它发出ack;</p>
+<p>假设prefetch值设为10, 共有两个consumer, 意味着每个consumer每次会从queue中预抓取10条消息到本地缓存着等待消费, 同时该channel的unacked数变为20, 而Rabbit投递的顺序是，先为consumer1投递满10个message，再往consumer2投递10个message。如果这时有新message需要投递，先判断channel的unacked数是否等于20，如果是则不会将消息投递到consumer中，message继续呆在queue中。<br>之后其中consumer对一条消息进行ack，unacked此时等于19，Rabbit就判断哪个consumer的unacked少于10，就投递到哪个consumer中。</p>
+<p>总的来说，consumer负责不断处理消息，不断ack，然后只要unacked数少于prefetch * consumer数目，broker就不断将消息投递过去</p>
+<p>正常情况下, 如果有多个消费者订阅了同一个Queue, Queue中的消息会被平摊给多个消费者;<br>但是, 如果每个消息的处理时间不同, 就有可能会导致某些消费者一直在忙, 而另外一些消费者很快就处理完手头工作并处于空闲的情况;<br>此时, 可以通过设置 <code>prefetchCount</code> 来限制queue每次发送给每个消费者的消息数, 比如我们设置<code>prefetchCount=1</code>, 则queue每次给每个消费者发送一条消息, 消费者处理完这条消息后Queue会再给该消费者发送一条消息;</p>
 <h2 id="vhost"><a href="#vhost" class="headerlink" title="vhost"></a>vhost</h2><p>最后, 还有一个在图中并未体现出来的概念 <code>vhost</code></p>
 <p>每一个RabbitMQ服务器都能创建虚拟消息服务器, 我们称之为虚拟主机(<code>vhost</code>), 每一个 <code>vhost</code> 本质上都是一个 mini 版的 RabbitMQ Server, 拥有自己的 <code>exchagne</code>, <code>queue</code>, 和 <code>bindings rule</code> 等等, 更重要的是, 它还拥有自己的 <code>权限机制</code>, 这使得你能够安全地使用一个RabbitMQ服务器来服务众多应用程序, 而不用担心A应用可能会删除B应用正在使用的队列;</p>
 <p>vhost之于Rabbit就像虚拟机之于物理服务器一样: 通过在各个实例间提供逻辑上隔离, 允许你为不同应用程序安全保密地运行数据, 这很有用, 它既能将同一Rabbit的众多客户端区分开来, 又可以避免队列和交换器的命名冲突; 否则, 你可能不得不去运行多个Rabbit, 并承担随之而来的管理问题, 相反, 你可以只运行一个Rabbit, 然后按需启动或者关闭vhost;<br>当你有多个不同的应用要使用RabbitMQ时, 你可以为每个应用定义一个vhost来将应用从逻辑上隔离开;</p>
@@ -328,9 +333,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/28/2018-05-28-secret/" id="post-next" class="post-nav-link">
+      <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">secret</h4>
+        <h4 class="title">06. 持久化策略</h4>
       </a>
     </div>
   

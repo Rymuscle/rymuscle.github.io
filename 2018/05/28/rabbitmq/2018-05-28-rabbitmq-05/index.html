@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来需要尝试编码来了解一条消息的一生;12 通过上述的简单例子, 你可能发现像 交换机, 队列, 消息 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;  队列, 交换机的验证属性  通过本篇, 将会认识exchange, queue,">
+    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序先尝试创建一个生产者, 其基本步骤可以分为如下几步   创建与Rabbit Server的TCP连接    创建信道    通过信道–创建exchange    通过信道–创建queue    通过信道–对exchange">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="05. 一条消息的一生">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来需要尝试编码来了解一条消息的一生;12 通过上述的简单例子, 你可能发现像 交换机, 队列, 消息 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;  队列, 交换机的验证属性  通过本篇, 将会认识exchange, queue,">
+<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序先尝试创建一个生产者, 其基本步骤可以分为如下几步   创建与Rabbit Server的TCP连接    创建信道    通过信道–创建exchange    通过信道–创建queue    通过信道–对exchange">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-29T02:20:34.000Z">
+<meta property="og:updated_time" content="2018-05-29T10:09:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 一条消息的一生">
-<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来需要尝试编码来了解一条消息的一生;12 通过上述的简单例子, 你可能发现像 交换机, 队列, 消息 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;  队列, 交换机的验证属性  通过本篇, 将会认识exchange, queue,">
+<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序先尝试创建一个生产者, 其基本步骤可以分为如下几步   创建与Rabbit Server的TCP连接    创建信道    通过信道–创建exchange    通过信道–创建queue    通过信道–对exchange">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -156,6 +156,13 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者应用程序"><span class="post-toc-number">1.</span> <span class="post-toc-text">生产者应用程序</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-rabbitmq/2018-05-28-rabbitmq-05"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -173,7 +180,38 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来需要尝试编码来了解一条消息的一生;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>
+            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生;</p>
+<h2 id="生产者应用程序"><a href="#生产者应用程序" class="headerlink" title="生产者应用程序"></a>生产者应用程序</h2><p>先尝试创建一个生产者, 其基本步骤可以分为如下几步</p>
+<ul>
+<li><ol>
+<li>创建与Rabbit Server的TCP连接</li>
+</ol>
+</li>
+<li><ol>
+<li>创建信道</li>
+</ol>
+</li>
+<li><ol>
+<li>通过信道–创建exchange</li>
+</ol>
+</li>
+<li><ol>
+<li>通过信道–创建queue</li>
+</ol>
+</li>
+<li><ol>
+<li>通过信道–对exchange与queue进行绑定</li>
+</ol>
+</li>
+<li><ol>
+<li>创建消息</li>
+</ol>
+</li>
+<li><ol>
+<li>通过信道–发布消息<br>代码可参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/RabbitBaseController.php" target="_blank" rel="external">Github</a>中的 ‘firstProducer’ 方法;</li>
+</ol>
+</li>
+</ul>
 <p>通过上述的简单例子, 你可能发现像 <code>交换机</code>, <code>队列</code>, <code>消息</code> 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;</p>
 <ol>
 <li><p>队列, 交换机的验证属性</p>
