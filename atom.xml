@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-05-29T10:18:48.000Z</updated>
+  <updated>2018-05-29T12:39:05.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/"/>
     <id>http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/</id>
     <published>2018-05-28T09:16:23.000Z</published>
-    <updated>2018-05-29T10:18:48.000Z</updated>
+    <updated>2018-05-29T12:39:05.000Z</updated>
     
-    <content type="html"><![CDATA[<p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生;</p><h2 id="生产者应用程序"><a href="#生产者应用程序" class="headerlink" title="生产者应用程序"></a>生产者应用程序</h2><p>先尝试创建一个生产者, 其基本步骤可以分为如下几步</p><ul><li><ol><li>创建与Rabbit Server的TCP连接</li></ol></li><li><ol><li>创建信道</li></ol></li><li><ol><li>通过信道–创建exchange</li></ol></li><li><ol><li>通过信道–创建queue</li></ol></li><li><ol><li>通过信道–对exchange与queue进行绑定</li></ol></li><li><ol><li>创建消息</li></ol></li><li><ol><li>通过信道–发布消息<br>代码可参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/RabbitBaseController.php" target="_blank" rel="external">Github</a>中的 ‘firstProducer’ 方法;</li></ol></li></ul><h2 id="消费者应用程序"><a href="#消费者应用程序" class="headerlink" title="消费者应用程序"></a>消费者应用程序</h2><ul><li><ol><li>创建与Rabbit Server的TCP连接</li></ol></li><li><ol><li>创建信道</li></ol></li><li><ol><li>通过信道–创建exchange</li></ol></li><li><ol><li>通过信道–创建queue</li></ol></li><li><ol><li>通过信道–对exchange与queue进行绑定</li></ol></li><li><ol><li>创建消息</li></ol></li><li><ol><li>通过信道–发布消息</li></ol></li></ul><p>通过上述的简单例子, 你可能发现像 <code>交换机</code>, <code>队列</code>, <code>消息</code> 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;</p><ol><li><p>队列, 交换机的验证属性</p></li><li><p>通过本篇, 将会认识exchange, queue, msg的 `` 属性;</p></li></ol>]]></content>
+    <content type="html"><![CDATA[<p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生;</p><h2 id="生产者应用程序"><a href="#生产者应用程序" class="headerlink" title="生产者应用程序"></a>生产者应用程序</h2><p>先尝试创建一个生产者, 其基本步骤可以分为如下几步</p><ul><li><ol><li>创建与Rabbit Server的TCP连接</li></ol></li><li><ol><li>创建信道</li></ol></li><li><ol><li>通过信道–创建exchange</li></ol></li><li><ol><li>通过信道–创建queue</li></ol></li><li><ol><li>通过信道–对exchange与queue进行绑定</li></ol></li><li><ol><li>创建消息</li></ol></li><li><ol><li>通过信道–发布消息</li></ol></li></ul><p>在这个生产者的小实例中, 同时对 交换器, 队列, 消息的 一些基础属性进行了注释讲解, 代码可参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/RabbitBaseController.php" target="_blank" rel="external">Github</a>中的 ‘firstProducer’ 方法;</p><h2 id="消费者应用程序"><a href="#消费者应用程序" class="headerlink" title="消费者应用程序"></a>消费者应用程序</h2><ul><li><ol><li>创建与Rabbit Server的TCP连接</li></ol></li><li><ol><li>创建信道</li></ol></li><li><ol><li>通过信道–创建exchange</li></ol></li><li><ol><li>通过信道–创建queue</li></ol></li><li><ol><li>通过信道–对exchange与queue进行绑定</li></ol></li><li><ol><li>创建消息</li></ol></li><li><ol><li>通过信道–发布消息</li></ol></li></ul><p>通过上述的简单例子, 你可能发现像 <code>交换机</code>, <code>队列</code>, <code>消息</code> 都有很多的属性可供配置, 此处先简单介绍两个, 其余属性伴随着后续知识都会一一进行了解;</p><ol><li><p>队列, 交换机的验证属性</p></li><li><p>通过本篇, 将会认识exchange, queue, msg的 `` 属性;</p></li></ol>]]></content>
     
     <summary type="html">
     
