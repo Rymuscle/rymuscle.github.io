@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言因为RabbitMQ专注于应用程序之间的消息通信, 所以在开始尝试使用Rabbit进行消息通信前, 清楚地理解通信模式的概念是非常重要的; 下面是一张比较简单的Rabbit消息通信架构图 Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思); 应用程序从RabbitMQ获取的数据并不是Rab">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/rabbitmq-new.png">
-<meta property="og:updated_time" content="2018-05-30T02:30:07.000Z">
+<meta property="og:updated_time" content="2018-05-31T06:18:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. 浅析RabbitMQ通信模式">
 <meta name="twitter:description" content="前言因为RabbitMQ专注于应用程序之间的消息通信, 所以在开始尝试使用Rabbit进行消息通信前, 清楚地理解通信模式的概念是非常重要的; 下面是一张比较简单的Rabbit消息通信架构图 Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思); 应用程序从RabbitMQ获取的数据并不是Rab">
@@ -215,7 +215,7 @@
 <p>队列有很多参数属性可以设置, 后面在代码中经会一一展示如何使用它的这些属性;</p>
 <h2 id="Producer"><a href="#Producer" class="headerlink" title="Producer"></a>Producer</h2><p>图中左侧的客户端程序’A,B’, 其实就是生产者: 连接到 Rabbit Server , 并将消息投递到 Rabbit Server, 然后由exchange交换机决定该如何转发消息到队列中;<br>Producer永远不可能直接将消息丢到queue中;<br>Producer可以通过bindingkey与exchange进行绑定;</p>
 <h2 id="Consumer"><a href="#Consumer" class="headerlink" title="Consumer"></a>Consumer</h2><p>图中右侧的客户端程序’1,2,3’, 其实就是消费者: 连接到 Rabbit Server , 并从 Rabbit Server 中接收消息;</p>
-<p>发送消息时需要指定 routingkey, 如果没有指定routingkey或者指定的routingkey匹配不到对应的bindingkey, 消息会被 Rabbit 服务丢弃掉, 掉入”黑洞”;</p>
+<p>发送消息时需要指定 routingkey, 如果没有指定routingkey 或者 指定的routingkey匹配不到对应的bindingkey, 消息会被 Rabbit 服务丢弃掉, 掉入”黑洞”;</p>
 <p>另外, consumer在处理完消息之后, </p>
 <h3 id="通道预取设置-QoS"><a href="#通道预取设置-QoS" class="headerlink" title="通道预取设置 QoS"></a>通道预取设置 QoS</h3><p><a href="https://www.jianshu.com/p/c0bfe198739e" target="_blank" rel="external">https://www.jianshu.com/p/c0bfe198739e</a></p>
 <h3 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a>Consumer Prefetch</h3><p><a href="https://www.jianshu.com/p/4d043d3045ca" target="_blank" rel="external">https://www.jianshu.com/p/4d043d3045ca</a></p>

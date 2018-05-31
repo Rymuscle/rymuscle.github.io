@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-31T06:06:09.000Z">
+<meta property="og:updated_time" content="2018-05-31T07:10:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 一条消息的一生">
 <meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
@@ -159,7 +159,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者应用程序"><span class="post-toc-number">1.</span> <span class="post-toc-text">生产者应用程序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消费者应用程序"><span class="post-toc-number">2.</span> <span class="post-toc-text">消费者应用程序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参数讲解"><span class="post-toc-number">3.</span> <span class="post-toc-text">参数讲解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#声明交换器"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">声明交换器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#声明队列"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">声明队列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建消息"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">创建消息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#消息发布"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">消息发布</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#生产者应用程序"><span class="post-toc-number">1.</span> <span class="post-toc-text">生产者应用程序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消费者应用程序"><span class="post-toc-number">2.</span> <span class="post-toc-text">消费者应用程序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参数讲解"><span class="post-toc-number">3.</span> <span class="post-toc-text">参数讲解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#声明交换器"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">声明交换器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#声明队列"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">声明队列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建消息"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">创建消息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#发布消息"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">发布消息</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">4.</span> <span class="post-toc-text">注意</span></a></li></ol>
         </nav>
     </aside>
     
@@ -249,7 +249,24 @@
 <li>delivery_mode : 消息持久化的条件之一, 值为2时表示持久化</li>
 <li>content_type : 比如: ‘text/plain’</li>
 </ul>
-<h3 id="消息发布"><a href="#消息发布" class="headerlink" title="消息发布"></a>消息发布</h3><p>暂时接触到的属性都比较熟悉, 稍后会接触一些特殊作用的属性</p>
+<h3 id="发布消息"><a href="#发布消息" class="headerlink" title="发布消息"></a>发布消息</h3><p>暂时接触到的属性都比较熟悉, 稍后会接触一些特殊作用的属性</p>
+<ol>
+<li><p><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.publish.mandatory" target="_blank" rel="external">mandatory</a> </p>
+<ul>
+<li>当mandatory标志位设置为true时, 如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue, 那么会调用 basic.return 方法将消息返回给生产者(Basic.Return + Content-Header + Content-Body);</li>
+<li>当mandatory设置为false时, 出现上述情形broker会直接将消息扔掉;</li>
+</ul>
+</li>
+<li><p>php-amqplib并未实现的<strong><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.publish.immediate" target="_blank" rel="external">immediate</a></strong></p>
+<ul>
+<li>当immediate标志位设置为true时, 如果exchange在将消息路由到queue(s)时发现对于的queue上没有消费者, 那么这条消息不会放入队列中, 当与消息routeKey关联的所有queue(一个或者多个)都没有消费者时, 该消息会通过 basic.return 方法返还给生产者;</li>
+<li><strong>但是可惜的是</strong>, 这只是AMQP的规定, 客户端不一定会严格实现, 如 <code>php-amqplib</code> 包就没有实现, 如果设置了immediate为true, 运行会报错: <code>PhpAmqpLib \ Exception \ AMQPProtocolConnectionException (540) NOT_IMPLEMENTED - immediate=true</code></li>
+</ul>
+</li>
+<li><p>概括来说, mandatory标志告诉服务器至少将该消息route到一个队列中, 否则将消息返还给生产者; immediate标志告诉服务器如果该消息关联的queue上有消费者, 则马上将消息投递给它, 如果所有queue都没有消费者, 直接把消息返还给生产者, 不用将消息入队列等待消费者了;</p>
+</li>
+</ol>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><p><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html" target="_blank" rel="external">AMQP协议</a>规定了不同客户端(比如php-amqplib)需要实现的内容, 但是这些客户端不一定会完全并严格地实现;</p>
 
         </div>
 
