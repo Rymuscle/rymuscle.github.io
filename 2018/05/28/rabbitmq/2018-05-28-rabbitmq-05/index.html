@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信道--对exchange与que">
+    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="05. 一条消息的一生">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信道--对exchange与que">
+<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-31T06:02:27.000Z">
+<meta property="og:updated_time" content="2018-05-31T06:06:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 一条消息的一生">
-<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信道--对exchange与que">
+<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -180,7 +180,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生;</p>
+            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;</p>
 <h2 id="生产者应用程序"><a href="#生产者应用程序" class="headerlink" title="生产者应用程序"></a>生产者应用程序</h2><ol>
 <li><p>先尝试创建一个生产者, 其基本步骤可以分为如下几步</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">创建与Rabbit Server的TCP连接</div><div class="line">创建信道</div><div class="line">通过信道--创建exchange</div><div class="line">通过信道--创建queue</div><div class="line">通过信道--对exchange与queue进行绑定</div><div class="line">创建消息</div><div class="line">通过信道--发布消息</div><div class="line">关闭信道</div><div class="line">关闭连接</div></pre></td></tr></table></figure>
