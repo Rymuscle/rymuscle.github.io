@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-05-31T06:02:27.000Z</updated>
+  <updated>2018-05-31T06:04:49.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>06. 持久化策略</title>
+    <link href="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/"/>
+    <id>http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/</id>
+    <published>2018-05-28T09:32:11.000Z</published>
+    <updated>2018-05-31T06:04:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="持久化方案"><a href="#持久化方案" class="headerlink" title="持久化方案"></a>持久化方案</h2><p>RabbitMQ 默认情况下, <code>Exchange</code>, <code>队列</code>, <code>消息</code> 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 <code>Exchange</code>, <code>队列</code>, 以及 <code>队列中的消息</code> 都会丢失;   </p><p>要做到消息持久化, 必须保证如下三点设置正确:</p><ul><li>exchange交换器: durable属性为true;</li><li>queue队列: durable属性为true;</li><li>除了上述两点之外, 还需要在投递消息时候, 设置message的 <code>delivery_mode</code> 模式为<code>2</code>来标识消息为持久化消息;<br>要知道, 一个包含持久化消息的非持久化队列, 在Rabbit Server重启之后, 该队列将会不复存在, 消息就会变成孤儿;</li></ul><h2 id="持久化原理"><a href="#持久化原理" class="headerlink" title="持久化原理"></a>持久化原理</h2><p>RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送响应; 还需要注意的是, 如果之后这条消息被路由到一个非持久化队列, 则消息又会从上面的日志文件中删除, 并且无法从服务器重启中恢复;<br>一旦你从持久化队列中消费了一条持久性消息(并且进行了确认), RabbitMQ会在持久化日志中把这条消息标记为等待垃圾收集;</p><h2 id="持久化的问题"><a href="#持久化的问题" class="headerlink" title="持久化的问题"></a>持久化的问题</h2><ul><li>持久化由于会写磁盘, 所以会极大降低RabbitMQ每秒处理的消息总数, 降低吞吐量;</li><li>持久化在Rabbit内建集群环境下工作的并不好, 后面在学习集群时, 会给出相应的解决方案;</li></ul><h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p>下面通过使用 Laravel + php-amqplib 扩展, 通过创建一个投递消息的生产者, 展示了如何创建一条持久化消息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;持久化方案&quot;&gt;&lt;a href=&quot;#持久化方案&quot; class=&quot;headerlink&quot; title=&quot;持久化方案&quot;&gt;&lt;/a&gt;持久化方案&lt;/h2&gt;&lt;p&gt;RabbitMQ 默认情况下, &lt;code&gt;Exchange&lt;/code&gt;, &lt;code&gt;队列&lt;/code&gt;, &lt;c
+      
+    
+    </summary>
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
+    
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
   
   <entry>
     <title>05. 一条消息的一生</title>
@@ -31,31 +56,6 @@
       
         &lt;p&gt;到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来了解一条消息的一生;&lt;/p&gt;
 &lt;h2 id=&quot;生产者应用程序&quot;&gt;&lt;a href=&quot;#生产者应用程序&quot; class=&quot;headerli
-      
-    
-    </summary>
-    
-      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
-    
-    
-      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>06. 持久化策略</title>
-    <link href="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/"/>
-    <id>http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/</id>
-    <published>2018-05-28T09:12:11.000Z</published>
-    <updated>2018-05-28T11:54:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="持久化方案"><a href="#持久化方案" class="headerlink" title="持久化方案"></a>持久化方案</h2><p>RabbitMQ 默认情况下, <code>Exchange</code>, <code>队列</code>, <code>消息</code> 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 <code>Exchange</code>, <code>队列</code>, 以及 <code>队列中的消息</code> 都会丢失;   </p><p>要做到消息持久化, 必须保证如下三点设置正确:</p><ul><li>exchange交换器: durable属性为true;</li><li>queue队列: durable属性为true;</li><li>除了上述两点之外, 还需要在投递消息时候, 设置message的 <code>delivery_mode</code> 模式为<code>2</code>来标识消息为持久化消息;<br>要知道, 一个包含持久化消息的非持久化队列, 在Rabbit Server重启之后, 该队列将会不复存在, 消息就会变成孤儿;</li></ul><h2 id="持久化原理"><a href="#持久化原理" class="headerlink" title="持久化原理"></a>持久化原理</h2><p>RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送响应; 还需要注意的是, 如果之后这条消息被路由到一个非持久化队列, 则消息又会从上面的日志文件中删除, 并且无法从服务器重启中恢复;<br>一旦你从持久化队列中消费了一条持久性消息(并且进行了确认), RabbitMQ会在持久化日志中把这条消息标记为等待垃圾收集;</p><h2 id="持久化的问题"><a href="#持久化的问题" class="headerlink" title="持久化的问题"></a>持久化的问题</h2><ul><li>持久化由于会写磁盘, 所以会极大降低RabbitMQ每秒处理的消息总数, 降低吞吐量;</li><li>持久化在Rabbit内建集群环境下工作的并不好, 后面在学习集群时, 会给出相应的解决方案;</li></ul><h2 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h2><p>下面通过使用 Laravel + php-amqplib 扩展, 通过创建一个投递消息的生产者, 展示了如何创建一条持久化消息:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;持久化方案&quot;&gt;&lt;a href=&quot;#持久化方案&quot; class=&quot;headerlink&quot; title=&quot;持久化方案&quot;&gt;&lt;/a&gt;持久化方案&lt;/h2&gt;&lt;p&gt;RabbitMQ 默认情况下, &lt;code&gt;Exchange&lt;/code&gt;, &lt;code&gt;队列&lt;/code&gt;, &lt;c
       
     
     </summary>
