@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-31T11:46:27.000Z">
+<meta property="og:updated_time" content="2018-06-01T09:36:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 一条消息的一生">
 <meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
@@ -253,7 +253,7 @@
 <ol>
 <li><p><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.publish.mandatory" target="_blank" rel="external">mandatory</a> </p>
 <ul>
-<li>当mandatory标志位设置为true时, 如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue, 那么rabbit server会自动去调用 <code>basic.return</code> 方法将消息返回给生产者(Basic.Return + Content-Header + Content-Body);<br>生产者可以使用channel的<code>set_return_listener()</code>绑定一个回调函数来进行监听; 但是注意, 此时生产者貌似需要为阻塞状态在命令行启动;</li>
+<li>当mandatory标志位设置为true时, 如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue, 那么rabbit server会自动去调用 <code>basic.return</code> 方法将消息返回给生产者(Basic.Return + Content-Header + Content-Body);<br>生产者可以使用channel的<code>set_return_listener()</code>绑定一个回调函数来进行监听, 但是注意, 此时生产者貌似需要为阻塞状态在命令行启动, 所以, 我是不会这么写一个生产者的…</li>
 <li>当mandatory设置为false时, 出现上述情形broker会直接将消息扔掉;</li>
 <li>代码可以参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/testProducter.php" target="_blank" rel="external">github</a>, <a href="">文档Demo</a></li>
 </ul>
