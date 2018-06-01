@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
+    <meta name="description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;本系列文章代码Demo使用 Laravel5.5 + php-amqplib来做演示; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Serve">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="05. 一条消息的一生">
 <meta property="og:url" content="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
+<meta property="og:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;本系列文章代码Demo使用 Laravel5.5 + php-amqplib来做演示; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Serve">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-01T09:36:25.000Z">
+<meta property="og:updated_time" content="2018-06-01T09:43:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 一条消息的一生">
-<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Server的TCP连接创建信道通过信道--创建exchange通过信道--创建queue通过信">
+<meta name="twitter:description" content="到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;本系列文章代码Demo使用 Laravel5.5 + php-amqplib来做演示; 生产者应用程序 先尝试创建一个生产者, 其基本步骤可以分为如下几步  123456789创建与Rabbit Serve">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -180,19 +180,19 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;</p>
+            <p>到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;<br>本系列文章代码Demo使用 <code>Laravel5.5</code> + <a href="http://www.rabbitmq.com/devtools.html#php-dev" target="_blank" rel="external">php-amqplib</a>来做演示;</p>
 <h2 id="生产者应用程序"><a href="#生产者应用程序" class="headerlink" title="生产者应用程序"></a>生产者应用程序</h2><ol>
 <li><p>先尝试创建一个生产者, 其基本步骤可以分为如下几步</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">创建与Rabbit Server的TCP连接</div><div class="line">创建信道</div><div class="line">通过信道--创建exchange</div><div class="line">通过信道--创建queue</div><div class="line">通过信道--对exchange与queue进行绑定</div><div class="line">创建消息</div><div class="line">通过信道--发布消息</div><div class="line">关闭信道</div><div class="line">关闭连接</div></pre></td></tr></table></figure>
 </li>
-<li><p>代码可参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/RabbitBaseController.php" target="_blank" rel="external">Github</a>中的 <code>firstProducer()</code> 方法</p>
+<li><p>代码已上传至<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/RabbitBaseController.php" target="_blank" rel="external">Github</a>中的 <code>firstProducer()</code> 方法</p>
 </li>
 </ol>
 <h2 id="消费者应用程序"><a href="#消费者应用程序" class="headerlink" title="消费者应用程序"></a>消费者应用程序</h2><ol>
 <li><p>再尝试创建一个生产者, 其基本步骤可以分为如下几步</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">创建与Rabbit Server的TCP连接</div><div class="line">创建信道</div><div class="line">通过信道--创建exchange</div><div class="line">通过信道--创建queue</div><div class="line">通过信道--对exchange与queue进行绑定</div><div class="line">创建消息回调函数</div><div class="line">消费消息</div></pre></td></tr></table></figure>
 </li>
-<li><p>代码可参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/firstConsumer.php" target="_blank" rel="external">Github</a></p>
+<li><p>代码已上传<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/firstConsumer.php" target="_blank" rel="external">Github</a></p>
 </li>
 </ol>
 <h2 id="参数讲解"><a href="#参数讲解" class="headerlink" title="参数讲解"></a><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html" target="_blank" rel="external">参数讲解</a></h2><p>在上面的生产者的小实例中, 对 声明交换器、声明队列、绑定交换机与队列、声明消息、消息发布 的一些基础参数属性进行了注释讲解;</p>
@@ -255,7 +255,7 @@
 <ul>
 <li>当mandatory标志位设置为true时, 如果exchange根据自身类型和消息routeKey无法找到一个符合条件的queue, 那么rabbit server会自动去调用 <code>basic.return</code> 方法将消息返回给生产者(Basic.Return + Content-Header + Content-Body);<br>生产者可以使用channel的<code>set_return_listener()</code>绑定一个回调函数来进行监听, 但是注意, 此时生产者貌似需要为阻塞状态在命令行启动, 所以, 我是不会这么写一个生产者的…</li>
 <li>当mandatory设置为false时, 出现上述情形broker会直接将消息扔掉;</li>
-<li>代码可以参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/testProducter.php" target="_blank" rel="external">github</a>, <a href="">文档Demo</a></li>
+<li>代码已上传<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/testProducter.php" target="_blank" rel="external">github</a>, php-amqplib文档<a href="https://github.com/php-amqplib/php-amqplib/blob/b7b677d046a9735e0ad940d649feaf38d58c866c/demo/basic_return.php" target="_blank" rel="external">Demo</a></li>
 </ul>
 </li>
 <li><p>php-amqplib并未实现的<strong><a href="http://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.publish.immediate" target="_blank" rel="external">immediate</a></strong></p>
