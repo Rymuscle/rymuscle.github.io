@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
-<meta property="og:updated_time" content="2018-06-19T10:08:39.000Z">
+<meta property="og:updated_time" content="2018-06-19T10:10:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20. 消费者预取 Consumer Prefetch">
 <meta name="twitter:description" content="Consumer Prefetch1.官方文档: https://www.rabbitmq.com/consumer-prefetch.html 2.译文:限制 unack 消息数量的更自然有效的方法;AMQP 0-9-1 指定了 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;  不幸的是, channel 并不是理想的">
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简要分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">简要分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试1"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试1</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简要分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">简要分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试1"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试1</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试2"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试2</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展</span></a></li></ol>
         </nav>
     </aside>
     
@@ -239,7 +239,7 @@
 <li><p>所以: 为了避免这种浪费资源的情况, 你可能就需要根据上一篇讲解的 prefetch_count 来针对不同消费者进行设置; (当然, 一般如果, 消费者都在同一台机器的话, 而且处理同一个业务, 消费能力不会差异太大, 但仍需要根据网络和处理能力给消费者设置合理的prefetch_count)</p>
 </li>
 </ol>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<h2 id="测试2"><a href="#测试2" class="headerlink" title="测试2"></a>测试2</h2><ol>
 <li><p>根据上面的描述, 有如下疑问 </p>
 <ul>
 <li>在默认模式下, 这难道意味着, 生产者发布的消息会尽可能全部推送给消费者进程, 队列中会尽可能将消息全部推出? 全部缓存在消费者本地? 那当消费者断开时, 消息是如何恢复到队列中的? 或者不会恢复到队列中?<br>为了答疑, 下面进行测试 </li>
