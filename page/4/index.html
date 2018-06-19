@@ -147,14 +147,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-05"
+            <article id="post-mysql/2017-09-16-mysql-22"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-11-30 21:27:36" datetime="2017-11-30T13:27:36.000Z"  itemprop="datePublished">2017-11-30</time>
+        <time class="post-time" title="2017-09-16 14:10:07" datetime="2017-09-16T06:10:07.000Z"  itemprop="datePublished">2017-09-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-05/">05. 缓存</a>
+      <a class="post-title-link" href="/2017/09/16/mysql/2017-09-16-mysql-22/">22. 幻读的延伸 - 快照读 (snapshot read) 与 当前读 (current read)</a>
     </h3>
   
 
@@ -175,20 +175,20 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        缓存关于缓存的概念本文就不详细展开说明了, 这里所说的web缓存其实就是: 为了降低服务器端的访问频率, 减少通信数量, 一些缓存设备, 如客户端或一些中继代理服务器将获取的数据保存下来, 当再次需要时, 就使用所保存的数据; (当请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档)
-使用缓存的优点
-
-减少了服务器端的通信数量, 可以提...
+        前言RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题
+演示
+打开 客户端1 查看隔离级别及初始数据
+ 12345678910111213141516171819mysql&gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+--------...
     
 
-        <a href="/2017/11/30/http/2017-11-30-HTTP-05/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/16/mysql/2017-09-16-mysql-22/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     
@@ -197,14 +197,14 @@
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-04"
+            <article id="post-mysql/2017-09-16-mysql-21"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-11-30 19:50:02" datetime="2017-11-30T11:50:02.000Z"  itemprop="datePublished">2017-11-30</time>
+        <time class="post-time" title="2017-09-16 13:40:53" datetime="2017-09-16T05:40:53.000Z"  itemprop="datePublished">2017-09-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -215,7 +215,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-04/">04. 各通用首部字段详解</a>
+      <a class="post-title-link" href="/2017/09/16/mysql/2017-09-16-mysql-21/">21. MySQL高并发事务问题 及 解决方案</a>
     </h3>
   
 
@@ -225,29 +225,20 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
-
-该指令是可选的;
-指令可以有多个选项, 选项之间通过 , 分隔;
-
-2.可以按请求和响应分为(P377)
-
-缓存请求指令(选项如下)
-缓存响应指令(选项如下)
-
-3.注意 no-cache 和 must-revalidate 的区别
-
-no-c...
+        前言上一篇MySQL事务简介简单介绍了MySQL事务的相关概念及特性;
+但在实际场景中, 可能经常会面对一些高并发应用, 此时, 简单了解事务概念和特性就不足以应对问题了; 
+高并发的事务问题在并发量比较大的时候, 很容易出现 多个事务同时进行 的情况。
+假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境过分乐观, 从而并没有对自己所...
     
 
-        <a href="/2017/11/30/http/2017-11-30-HTTP-04/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/16/mysql/2017-09-16-mysql-21/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     
@@ -256,14 +247,14 @@ no-c...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-03"
+            <article id="post-mysql/2017-09-16-mysql-20"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-11-30 14:30:12" datetime="2017-11-30T06:30:12.000Z"  itemprop="datePublished">2017-11-30</time>
+        <time class="post-time" title="2017-09-16 11:01:07" datetime="2017-09-16T03:01:07.000Z"  itemprop="datePublished">2017-09-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -274,7 +265,7 @@ no-c...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-03/">03. HTTP状态码详解</a>
+      <a class="post-title-link" href="/2017/09/16/mysql/2017-09-16-mysql-20/">20. MySQL事务简介</a>
     </h3>
   
 
@@ -284,26 +275,20 @@ no-c...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        1xx
-101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)~~未完待续
+        事务的概念
+事务：可以理解为一个 独立的 工作单元, 在这个 独立的 工作单元中, 可以有 一组 操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。
 
-2xx
-Web API的设计与开发 P109
-
-200 OK : 200码非常出名, 似乎没有对它进一步说明的必要;
-201 Created : 当在服务器端创建数据成功时, 会返回201状态码;
-
-也就是使用 POST 请求方法的场景 (如:用户登录...
+仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账1...
     
 
-        <a href="/2017/11/30/http/2017-11-30-HTTP-03/" class="post-more waves-effect waves-button">
+        <a href="/2017/09/16/mysql/2017-09-16-mysql-20/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     
@@ -312,14 +297,14 @@ Web API的设计与开发 P109
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-02"
+            <article id="post-mysql/2017-08-23-mysql-12"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-11-30 11:29:12" datetime="2017-11-30T03:29:12.000Z"  itemprop="datePublished">2017-11-30</time>
+        <time class="post-time" title="2017-08-23 18:51:28" datetime="2017-08-23T10:51:28.000Z"  itemprop="datePublished">2017-08-23</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -330,7 +315,7 @@ Web API的设计与开发 P109
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-02/">02. HTTP各请求方法详解</a>
+      <a class="post-title-link" href="/2017/08/23/mysql/2017-08-23-mysql-12/">12. MySQL备份与恢复</a>
     </h3>
   
 
@@ -340,22 +325,19 @@ Web API的设计与开发 P109
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+        ## 
+## 
 
-RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;图解http协议&gt;中也提到 LINK, UNLINK已经被http1.1废弃);
-
-不同应用各自的实现...
     
 
-        <a href="/2017/11/30/http/2017-11-30-HTTP-02/" class="post-more waves-effect waves-button">
+        <a href="/2017/08/23/mysql/2017-08-23-mysql-12/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
     </div>
     
@@ -364,14 +346,14 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-01"
+            <article id="post-mysql/2017-08-18-mysql-05"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-11-30 11:25:12" datetime="2017-11-30T03:25:12.000Z"  itemprop="datePublished">2017-11-30</time>
+        <time class="post-time" title="2017-08-18 18:51:28" datetime="2017-08-18T10:51:28.000Z"  itemprop="datePublished">2017-08-18</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -382,7 +364,7 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-01/">01. HTTP协议预览</a>
+      <a class="post-title-link" href="/2017/08/18/mysql/2017-08-18-mysql-05/">05. 复制</a>
     </h3>
   
 
@@ -392,278 +374,20 @@ RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        简介
-HTTP(Hypertext Transfer Protocol 超文本传输协议), 是在万维网上进行通信时所使用的协议;
+        概述
+MySQL内建的复制功能是构建基于MySQL的大规模、高性能应用的基础, 这类应用使用所谓的水平扩展的架构。 可以通过为服务器配置一个或多个备库的方式来进行数据同步, 复制功能不仅有利于构建高性能的应用, 同时也是高可用、可扩展性、灾难恢复、备份以及数据仓库等工作的基础。
 
-协议版本
-
-HTTP/0.9 有很多设计缺, 很快就被HTTP/1.0所取代了;(…只支持GET方法…)
-HTTP/1.0 第一个得到广泛应用的HTTP版本;
-HTTP/1.O+ 在HTTP/1.0上扩展了很多非官方的特性, 是非正式的HTTP扩展版本;(支持持...
+复制解决的基本问题是让一台服务器的数据与其他服务器的数据保持同步。一台主库的数据可以同步到多台备库上, 备库本身...
     
 
-        <a href="/2017/11/30/http/2017-11-30-HTTP-01/" class="post-more waves-effect waves-button">
+        <a href="/2017/08/18/mysql/2017-08-18-mysql-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-29-websocket-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-10-29 22:09:10" datetime="2017-10-29T14:09:10.000Z"  itemprop="datePublished">2017-10-29</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/29/WebSocket/2017-10-29-websocket-05/">05.WebSocket - 实战</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        ThinkPHP + WorkerMan + WebSocket 实现节本聊天室功能git仓库地址~~未完待续
-
-    
-
-        <a href="/2017/10/29/WebSocket/2017-10-29-websocket-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-10-28 20:50:52" datetime="2017-10-28T12:50:52.000Z"  itemprop="datePublished">2017-10-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/28/WebSocket/2017-10-28-websocket-04/">04.WebSocket - 客户端API</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        WebSocket客户端API如下WebSocket 构造函数
-WebSocket对象作为一个构造函数, 用于新建 WebSocket 实例, 执行 var ws = new WebSocket(&#39;ws://localhost:8080&#39;); 之后, 客户端就会与服务器进行连接。
-
-ws.readyState: readyState属性返回实例对象的当前状态,共有四种:
-
-C...
-    
-
-        <a href="/2017/10/28/WebSocket/2017-10-28-websocket-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-10-28 17:30:42" datetime="2017-10-28T09:30:42.000Z"  itemprop="datePublished">2017-10-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/28/WebSocket/2017-10-28-websocket-03/">03.跨站点WebSocket劫持漏洞</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        跨站点WebSocket劫持漏洞原理是劫持而非简单的伪造
-
-为了创建全双工通信, 客户端需要基于HTTP进行握手切换到WebSocket协议, 正是这个升级协议的握手过程存在着潜在的问题。
-示例:
-
-客户端伪造 与服务端同顶级域名 的跨子域cookie
-12345678910111213&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;...
-    
-
-        <a href="/2017/10/28/WebSocket/2017-10-28-websocket-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-10-28 13:57:08" datetime="2017-10-28T05:57:08.000Z"  itemprop="datePublished">2017-10-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/28/WebSocket/2017-10-28-websocket-02/">02.WebSocket简单示例分析</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        客户端简单示例1.下面通过 客户端与websocket.org网站的Echo测试服务建立连接 来进行学习
-1234567891011121314151617181920212223242526&lt;!DOCTYPE html&gt;&lt;html lang=&quot;en&quot;&gt;&lt;head&gt;    &lt;meta charset=&quot;UTF-8&quo...
-    
-
-        <a href="/2017/10/28/WebSocket/2017-10-28-websocket-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-WebSocket/2017-10-28-websocket-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-10-28 10:40:16" datetime="2017-10-28T02:40:16.000Z"  itemprop="datePublished">2017-10-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/WebSocket/">WebSocket</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/10/28/WebSocket/2017-10-28-websocket-01/">01.引出WebSocket</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言
-传统模式的 Web 系统使用http协议在服务器和客户端之间进行通信, 是以客户端发出请求,服务器端响应的方式进行工作的, 服务器是无法主动的推送数据给客户端的, 这也是为了安全起见;
-
-既然已经有了HTTP协议，为什么还需要另一个协议? 
-
-答案很简单, 因为HTTP协议有一个缺陷: 通信只能由客户端发起。
-由于HTTP协议做不到服务器主动向客户端推送信息, 这种单向请求的特点就注定...
-    
-
-        <a href="/2017/10/28/WebSocket/2017-10-28-websocket-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/WebSocket/">WebSocket</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
     </div>
     
@@ -676,7 +400,7 @@ C...
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">下一页</a>
+    <a class="extend prev" rel="prev" href="/page/3/">上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
     </div>
 </nav>
 

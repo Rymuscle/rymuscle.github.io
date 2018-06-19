@@ -147,11 +147,11 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-28-rabbitmq-06"
+            <article id="post-rabbitmq/2018-06-15-rabbitmq-21"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-28 17:32:11" datetime="2018-05-28T09:32:11.000Z"  itemprop="datePublished">2018-05-28</time>
+        <time class="post-time" title="2018-06-15 10:04:26" datetime="2018-06-15T02:04:26.000Z"  itemprop="datePublished">2018-06-15</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -165,7 +165,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/">06. 持久化策略</a>
+      <a class="post-title-link" href="/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/">21. Consumer Priorities 消费者优先级</a>
     </h3>
   
 
@@ -175,15 +175,17 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        持久化方案RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;   
-要做到消息持久化, 必须保证如下三点设置正确:
+        Consumer Priorities简介
+消费者优先级允许你确保高优先级的消费者在活跃时接收消息, 并且消息只有在高优先级消费者阻塞时才会转向低优先级的消费者.
 
-exchange交换器: durable属性为true;
-queue队列: durable属性为true;
-除了上述两点之外, 还需要在投递消...
+通常, 连接到队列的活跃消费者, 是以循环方式接收来自它的消息; 当使用 “消费者优先级” 时, 如果存在多个活跃的消费者具有相同的高优先级, 消息也会被循环传送给它们;
+
+
+定义活跃消费者
+活跃的消费者是可以无需等待就能收到消...
     
 
-        <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -199,11 +201,11 @@ queue队列: durable属性为true;
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-28-rabbitmq-05"
+            <article id="post-rabbitmq/2018-06-12-rabbitmq-19"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-28 17:16:23" datetime="2018-05-28T09:16:23.000Z"  itemprop="datePublished">2018-05-28</time>
+        <time class="post-time" title="2018-06-12 11:26:55" datetime="2018-06-12T03:26:55.000Z"  itemprop="datePublished">2018-06-12</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -217,7 +219,7 @@ queue队列: durable属性为true;
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/">05. 一条消息的一生</a>
+      <a class="post-title-link" href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</a>
     </h3>
   
 
@@ -227,13 +229,15 @@ queue队列: durable属性为true;
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        到现在, 已经成功安装运行了Rabbit, 并且简单了解了RabbitMQ的消息通信机制及Rabbit内部的一些组件; 接下来就需要通过编码来学习如何使用RabbitMQ简单发布并消费一条消息;本系列文章代码Demo使用 Laravel5.5 + php-amqplib来做演示;
-生产者应用程序
-先尝试创建一个生产者, 其基本步骤可以分为如下几步
- 123456789创建与Rabbit Se...
+        RabbitMQ关于吞吐量,延迟和带宽的一些理论
+官方文档: https://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/ 
+
+译文: 网上虽然有很多版本的译文, 在此处还是重新做了翻译
+
+你在Rabbit中有一个队列, 然后有一些客户端从这个队列中进行消费;如果你...
     
 
-        <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-05/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -249,14 +253,14 @@ queue队列: durable属性为true;
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-27-rabbitmq-04"
+            <article id="post-mysql/2018-03-28-mysql-103"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-27 18:30:26" datetime="2018-05-27T10:30:26.000Z"  itemprop="datePublished">2018-05-27</time>
+        <time class="post-time" title="2018-03-28 10:41:26" datetime="2018-03-28T02:41:26.000Z"  itemprop="datePublished">2018-03-28</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -267,7 +271,7 @@ queue队列: durable属性为true;
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-04/">04. 浅析RabbitMQ通信模式</a>
+      <a class="post-title-link" href="/2018/03/28/mysql/2018-03-28-mysql-103/">103. 分区管理</a>
     </h3>
   
 
@@ -277,19 +281,23 @@ queue队列: durable属性为true;
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言因为RabbitMQ专注于应用程序之间的消息通信, 所以在开始尝试使用Rabbit进行消息通信前, 清楚地理解通信模式的概念是非常重要的;
-下面是一张比较简单的Rabbit消息通信架构图
-Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理服务器存在的(broker有 中间人, 代理人的意思); 应用程序从RabbitMQ获取的数据并不是...
+        分区管理MySQL5.1 提供了许多修改分区表的方式, 添加、删除、重新定义、合并或拆分已经存在的分区是可能的, 所有这些操作都可以通过使用ALTER TABLE命令的分区扩展来实现; 当然, 也有获得分区表和分区信息的方式;
+drop删除分区及数据
+mysql&gt; alter table user drop partition p4;
+
+注意: 
+
+只能对每个分区进行删除, 不能针对每...
     
 
-        <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-04/" class="post-more waves-effect waves-button">
+        <a href="/2018/03/28/mysql/2018-03-28-mysql-103/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
     </div>
     
@@ -298,14 +306,14 @@ Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-27-rabbitmq-03"
+            <article id="post-mysql/2018-03-27-mysql-102"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-27 18:20:09" datetime="2018-05-27T10:20:09.000Z"  itemprop="datePublished">2018-05-27</time>
+        <time class="post-time" title="2018-03-27 15:46:51" datetime="2018-03-27T07:46:51.000Z"  itemprop="datePublished">2018-03-27</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -316,7 +324,7 @@ Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/">03. 服务器管理</a>
+      <a class="post-title-link" href="/2018/03/27/mysql/2018-03-27-mysql-102/">102. 分区键, 主键, 唯一索引关系</a>
     </h3>
   
 
@@ -326,18 +334,22 @@ Broker Server (Rabbit Server)RabbitMQ是作为一个消息投递的中间代理�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言到目前为止我们已经 下载安装并成功启动了Rabbitmq服务, 接下来, 可以简单了解一些与服务器管理相关的知识点;
-Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装目录下的 ‘sbin/‘ 目录下, 运行 rabbitmq-server -detached 来启动后来运行;如果启动中遇到了任何错误, 可以检查RabbitMQ的日志文件; 如果...
+        
+若表有 primary key 或 unique key, 在对表进行分区时, 需要注意: 分区键 必须包含在primary key或unique key列内, 这是为了确保主键的效率, 否则同一主键区的数据一个在Ａ分区, 一个在Ｂ分区, 显然会比较麻烦; 可以说: 在分区表上, 用于分区表达式里的每一个字段都必须是唯一性索引的一部分;
+
+如何理解上面的概念?
+
+如果表中既有主键, 也有唯...
     
 
-        <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-03/" class="post-more waves-effect waves-button">
+        <a href="/2018/03/27/mysql/2018-03-27-mysql-102/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
     </div>
     
@@ -346,14 +358,14 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-27-rabbitmq-02"
+            <article id="post-mysql/2018-03-27-mysql-101"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-27 12:20:21" datetime="2018-05-27T04:20:21.000Z"  itemprop="datePublished">2018-05-27</time>
+        <time class="post-time" title="2018-03-27 11:37:12" datetime="2018-03-27T03:37:12.000Z"  itemprop="datePublished">2018-03-27</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -364,7 +376,7 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-02/">02. Win,MacOS,Linux下载安装RabbitMQ</a>
+      <a class="post-title-link" href="/2018/03/27/mysql/2018-03-27-mysql-101/">101. 分区,分表,分库</a>
     </h3>
   
 
@@ -374,21 +386,27 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Windows
-下载windows版RabbitMQ: 到官网下载windows installer即可;
+        前言
+MySQL是从5.1开始支持分区功能的, 在MySQL中, 数据是以文件的形势存在磁盘上的, 默认放在 ‘/mysql/data/‘ 下(可以通过my.cnf中的datadir来指定)
 
-直接傻瓜式双击安装 (可能会提示: Erlang could be detected. You must install Erlang before install RabbitMQ...., 点击是, 会跳转到 Erlang 的下载地址)
-然后下载并安装对应版本的 Erlang (...
+MyISAM引擎中, 一张表主要对应着三个文件: 
+
+.frm(与表相关的元数据信息都存放在frm文件, 包括表结构的定义信息等)
+.myd(存放表数据)
+.myi(存表索引)
+
+
+InnoDB引擎中...
     
 
-        <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-02/" class="post-more waves-effect waves-button">
+        <a href="/2018/03/27/mysql/2018-03-27-mysql-101/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
     </div>
     
@@ -397,14 +415,14 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-27-rabbitmq-01"
+            <article id="post-http/2018-03-06-restful"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-27 10:35:21" datetime="2018-05-27T02:35:21.000Z"  itemprop="datePublished">2018-05-27</time>
+        <time class="post-time" title="2018-03-16 19:36:23" datetime="2018-03-16T11:36:23.000Z"  itemprop="datePublished">2018-03-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/">Restful</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Restful/HTTP/">HTTP</a></li></ul></li></ul>
 
 
 
@@ -415,7 +433,7 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-01/">01. 认识RabbitMQ消息队列软件</a>
+      <a class="post-title-link" href="/2018/03/16/http/2018-03-06-restful/">Restful</a>
     </h3>
   
 
@@ -425,20 +443,18 @@ Erlang 和 Erlang Cookie命令行的基本使用RabbitMQ的启动可以在安装
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        简介
-RabbitMQ是一个由 Erlang 开发的 AMQP 的开源消息队列软件, 遵循 Mozilla Public License开源协议; (rabbit : 兔子, 行动迅速, 繁殖疯狂)
-
-AMQP 即 Advanced Message Queuing Protocol(高级消息队列协议), 一个提供统一消息服务的 应用层 标准 高级消息队列协议, 是应用层协议的一个开放标准, ...
+        简介REST本身并没有创造新的技术, 组件或服务, 主要指的是一组架构约束条件和原则, 隐藏在RESTful背后的理念就是使用Web的现有特征和能力, 更好地使用现有Web标准中的一些准则和约束; 如果一个架构符合REST的约束条件和原则，我们就称它为RESTful架构。
+虽然REST本身受Web技术的影响很深, 但是理论上REST架构风格并不是绑定在HTTP上, 只不过目前HTTP是唯一与...
     
 
-        <a href="/2018/05/27/rabbitmq/2018-05-27-rabbitmq-01/" class="post-more waves-effect waves-button">
+        <a href="/2018/03/16/http/2018-03-06-restful/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Restful/">Restful</a></li></ul>
 
     </div>
     
@@ -447,14 +463,14 @@ AMQP 即 Advanced Message Queuing Protocol(高级消息队列协议), 一个提�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-linux/2018-05-18-awk"
+            <article id="post-http/2017-12-06-HTTP-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-18 10:03:51" datetime="2018-05-18T02:03:51.000Z"  itemprop="datePublished">2018-05-18</time>
+        <time class="post-time" title="2017-12-06 20:10:11" datetime="2017-12-06T12:10:11.000Z"  itemprop="datePublished">2017-12-06</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
 
 
 
@@ -465,7 +481,7 @@ AMQP 即 Advanced Message Queuing Protocol(高级消息队列协议), 一个提�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/18/linux/2018-05-18-awk/">Linux文本处理 - awk</a>
+      <a class="post-title-link" href="/2017/12/06/http/2017-12-06-HTTP-08/">08. 并行连接, 持久连接</a>
     </h3>
   
 
@@ -475,22 +491,24 @@ AMQP 即 Advanced Message Queuing Protocol(高级消息队列协议), 一个提�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        简介
-Awk是一种便于使用且表达能力强的程序设计语言, 没错, 它是一门编程语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具; 
+        常被误解的Connection首部
+HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。
 
-之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;
+HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;
 
-awk...
+Connection首部可以承载3种不同类型的标签, 因此非常令人费解:
+
+HTTP...
     
 
-        <a href="/2018/05/18/linux/2018-05-18-awk/" class="post-more waves-effect waves-button">
+        <a href="/2017/12/06/http/2017-12-06-HTTP-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
 
     </div>
     
@@ -499,14 +517,14 @@ awk...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-linux/2018-05-17-regular"
+            <article id="post-http/2017-12-06-HTTP-11"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-17 14:22:31" datetime="2018-05-17T06:22:31.000Z"  itemprop="datePublished">2018-05-17</time>
+        <time class="post-time" title="2017-12-06 18:50:27" datetime="2017-12-06T10:50:27.000Z"  itemprop="datePublished">2017-12-06</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
 
 
 
@@ -517,7 +535,7 @@ awk...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/17/linux/2018-05-17-regular/">正则表达式</a>
+      <a class="post-title-link" href="/2017/12/06/http/2017-12-06-HTTP-11/">11. 内容协商与转码</a>
     </h3>
   
 
@@ -527,17 +545,23 @@ awk...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
+        前言
+一个URL常常需要代表若干不同的资源
+
+例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。
+
+
+HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，...
     
 
-        <a href="/2018/05/17/linux/2018-05-17-regular/" class="post-more waves-effect waves-button">
+        <a href="/2017/12/06/http/2017-12-06-HTTP-11/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
 
     </div>
     
@@ -546,14 +570,14 @@ awk...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-linux/2018-05-17"
+            <article id="post-http/2017-11-30-HTTP-05"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-17 14:17:57" datetime="2018-05-17T06:17:57.000Z"  itemprop="datePublished">2018-05-17</time>
+        <time class="post-time" title="2017-11-30 21:27:36" datetime="2017-11-30T13:27:36.000Z"  itemprop="datePublished">2017-11-30</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
 
 
 
@@ -564,7 +588,7 @@ awk...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/17/linux/2018-05-17/">Linux编辑器</a>
+      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-05/">05. 缓存</a>
     </h3>
   
 
@@ -574,20 +598,20 @@ awk...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        vim跳转光标跳转到某行光标跳转到行首光标跳转到行尾
-复制粘贴复制当前行复制从当前行开始多少行复制指定某几行
-搜索替换分屏垂直水平分屏切换焦点
+        缓存关于缓存的概念本文就不详细展开说明了, 这里所说的web缓存其实就是: 为了降低服务器端的访问频率, 减少通信数量, 一些缓存设备, 如客户端或一些中继代理服务器将获取的数据保存下来, 当再次需要时, 就使用所保存的数据; (当请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档)
+使用缓存的优点
 
+减少了服务器端的通信数量, 可以提...
     
 
-        <a href="/2018/05/17/linux/2018-05-17/" class="post-more waves-effect waves-button">
+        <a href="/2017/11/30/http/2017-11-30-HTTP-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
 
     </div>
     
@@ -596,14 +620,14 @@ awk...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-linux/2018-05-16-other-command"
+            <article id="post-http/2017-11-30-HTTP-04"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-05-16 15:28:21" datetime="2018-05-16T07:28:21.000Z"  itemprop="datePublished">2018-05-16</time>
+        <time class="post-time" title="2017-11-30 19:50:02" datetime="2017-11-30T11:50:02.000Z"  itemprop="datePublished">2017-11-30</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
 
 
 
@@ -614,7 +638,7 @@ awk...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/16/linux/2018-05-16-other-command/">Linux文本处理 - sort, uniq, wc</a>
+      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-04/">04. 各通用首部字段详解</a>
     </h3>
   
 
@@ -624,22 +648,29 @@ awk...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        sort
-Linux sort命令用于将文本文件内容以行为单位进行排序; 
-语法: sort [-bcdfimMnr][-o&lt;输出文件&gt;][-t&lt;分隔字符&gt;][+&lt;起始栏位&gt;-&lt;结束栏位&gt;][--help][--verison][文件] sort 命令既可以从特定的文件，也可以从 stdin 中获取输入;
+        Cache-Control 缓存能力控制1.Cache-Control 缓存指令是单向的, 即请求中存在一个指令并不意味着响应中将存在同一个指令;
 
-选项
- 12345678910111...
+该指令是可选的;
+指令可以有多个选项, 选项之间通过 , 分隔;
+
+2.可以按请求和响应分为(P377)
+
+缓存请求指令(选项如下)
+缓存响应指令(选项如下)
+
+3.注意 no-cache 和 must-revalidate 的区别
+
+no-c...
     
 
-        <a href="/2018/05/16/linux/2018-05-16-other-command/" class="post-more waves-effect waves-button">
+        <a href="/2017/11/30/http/2017-11-30-HTTP-04/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
 
     </div>
     
@@ -652,7 +683,7 @@ Linux sort命令用于将文本文件内容以行为单位进行排序;
     
 <nav id="page-nav">
     <div class="inner">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
     </div>
 </nav>
 
