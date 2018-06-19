@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
-<meta property="og:updated_time" content="2018-06-19T10:03:00.000Z">
+<meta property="og:updated_time" content="2018-06-19T10:08:39.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20. 消费者预取 Consumer Prefetch">
 <meta name="twitter:description" content="Consumer Prefetch1.官方文档: https://www.rabbitmq.com/consumer-prefetch.html 2.译文:限制 unack 消息数量的更自然有效的方法;AMQP 0-9-1 指定了 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;  不幸的是, channel 并不是理想的">
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简要分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">简要分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试1"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试1</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#手动设置channel的Qos"><span class="post-toc-number">7.</span> <span class="post-toc-text">手动设置channel的Qos</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#prefetch-count控制消息轮发"><span class="post-toc-number">8.</span> <span class="post-toc-text">prefetch_count控制消息轮发</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简要分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">简要分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试1"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试1</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展</span></a></li></ol>
         </nav>
     </aside>
     
@@ -297,19 +297,6 @@
 </ul>
 </li>
 </ol>
-<h2 id="手动设置channel的Qos"><a href="#手动设置channel的Qos" class="headerlink" title="手动设置channel的Qos"></a>手动设置channel的Qos</h2><p>手动设置<br>测试:</p>
-<ul>
-<li>启动消费者 testQosCustomer1</li>
-<li>启动消费者 testQosCustomer2</li>
-<li>请求一次生产者 testQosProducer</li>
-</ul>
-<p>代码参考[]</p>
-<p>结果:</p>
-<p>需要通过设置Qos的prefetch count来控制consumer的流量。同时设置得当也会提高consumer的吞吐量。</p>
-<p>basic_qos, prefetch_count</p>
-<h2 id="prefetch-count控制消息轮发"><a href="#prefetch-count控制消息轮发" class="headerlink" title="prefetch_count控制消息轮发"></a>prefetch_count控制消息轮发</h2><p>只用在消费者创建完channel后, 简单加上 <code>$channel-&gt;basic_qos(&#39;&#39;, 1, true);</code> 即可(当然, 为了统一, 生产者最好也加上)</p>
-<p>这就表示: <code>消费者完成一个ack后, 才能给他继续发送, 如果消费者业务过于复杂, 就先发给其他闲着的消费者</code></p>
-<p>果然, 经过测试, Consumer4第一个<code>hello world--0</code>还没有执行完成的时候, Consumer5已经执行完了 1，2，3，4，5，6，7，8，9了</p>
 
         </div>
 
