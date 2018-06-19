@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>20. 消费者预取 Consumer Prefetch | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="Consumer Prefetch 官方文档: https://www.rabbitmq.com/consumer-prefetch.html  译文:  限制 unack 消息数量的更自然有效的方法; AMQP 0-9-1 指定 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;不幸的是, channel 并不是理想的范围">
+<meta name="keywords" content="RabbitMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="20. 消费者预取 Consumer Prefetch">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Consumer Prefetch 官方文档: https://www.rabbitmq.com/consumer-prefetch.html  译文:  限制 unack 消息数量的更自然有效的方法; AMQP 0-9-1 指定 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;不幸的是, channel 并不是理想的范围">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
+<meta property="og:updated_time" content="2018-06-19T06:40:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="20. 消费者预取 Consumer Prefetch">
+<meta name="twitter:description" content="Consumer Prefetch 官方文档: https://www.rabbitmq.com/consumer-prefetch.html  译文:  限制 unack 消息数量的更自然有效的方法; AMQP 0-9-1 指定 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;不幸的是, channel 并不是理想的范围">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">20. 消费者预取 Consumer Prefetch</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">20. 消费者预取 Consumer Prefetch</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-13T11:23:36.000Z" itemprop="datePublished" class="page-time">
+  2018-06-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Prefetch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Prefetch-1"><span class="post-toc-number">2.</span> <span class="post-toc-text">Consumer Prefetch</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#设置prefetch-count-1"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">设置prefetch_count=1</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#手动设置channel的Qos"><span class="post-toc-number">3.</span> <span class="post-toc-text">手动设置channel的Qos</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#prefetch-count控制消息轮发"><span class="post-toc-number">4.</span> <span class="post-toc-text">prefetch_count控制消息轮发</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2018-06-13-rabbitmq-20"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">20. 消费者预取 Consumer Prefetch</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-13 19:23:36" datetime="2018-06-13T11:23:36.000Z"  itemprop="datePublished">2018-06-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a>Consumer Prefetch</h2><ol>
+<li><p>官方文档: <a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">https://www.rabbitmq.com/consumer-prefetch.html</a></p>
+</li>
+<li><p>译文:</p>
+<ul>
+<li>限制 unack 消息数量的更自然有效的方法;</li>
+<li><p>AMQP 0-9-1 指定 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;<br>不幸的是, channel 并不是理想的范围 - 因为单个channel可能从多个队列进行消费, channel和queue需要为每个发送的消息相互协调, 以确保它们不会超出限制, 这在单台机器上会慢, 而在整个集群中使用时会非常慢;</p>
+</li>
+<li><p>此外, 对于许多用途, 指定<strong>适用于每个消费者的预取计数</strong>更会简单一些;</p>
+</li>
+<li><p>因此, RabbitMQ在basic.qos方法中重新定义了全局标志的含义:<br>global | Meaning of prefetch_count in AMQP 0-9-1 | Meaning of prefetch_count in RabbitMQ </p>
+</li>
+<li>| :-: | -:<br>false | shared across all consumers on the channel(在channel中的所有消费者中分享)| applied separately to each new consumer on the channel(在频道上分别应用于每个新消费者)<br>true | shared across all consumers on the connection(在连接上的所有消费者中共享) | shared across all consumers on the channel(在渠道中的所有消费者中分享)</li>
+</ul>
+</li>
+</ol>
+<p>在使用RabbitMQ时, 如果完全不配置QoS, RabbitMQ会将队列中的所有消息轮发到与队列绑定的consumers端; 而consumer会在本地缓存所有的message, 这样的话, 如果某个消费者的业务逻辑处理比较复杂, 那么将会在较长时间之后才会操作完成并ack;<br>如果RabbitMQ并不考虑Consumer端的感受, 而采用默认的轮发方式, 消费慢的Consumer将会在本地堆积很多消息, 从而导致内存不足或者对其他进程造成影响;</p>
+<p>?? 难道意味着 默认模式下, 生产者发布的消息会立刻全部推送给消费进程, 不管消费者是否能够消费完? 队列中会立马为空? 全部缓存在消费者本地?</p>
+<p>只有在 手动ack的时候会生效 (prefetch_count在no_ask=false的情况下生效，即在自动应答的情况下这两个值是不生效的)</p>
+<p>测试:</p>
+<ul>
+<li>创建消费者1 ‘testQosCustomer1’ (简单打印消息内容)  <strong>启动消费者</strong></li>
+<li>创建消费者1 ‘testQosCustomer2’ (sleep 5秒, 模拟复杂业务需求) <strong>启动消费者</strong></li>
+<li>创建一个生产者 ‘testQosProducer’, 一次向队列 ‘qosTestQueue’ 中推送10条消息 <strong>请求一次生产者</strong></li>
+<li>注意需要先启动消费者, 再请求生产者; (如果先请求了生产者, 可能在启动第一个消费者之后, 其会迅速消费完10条消息, 这样就无法模拟效果了)</li>
+</ul>
+<p>代码参考[]</p>
+<p>貌似Rabbit Server会尽快把所有消息都推送出去, queue中的 ready 会立刻被推送干净, 但是消费者的unacked会发现增多;<br>你会发现, ready一旦置空, 你甚至删除了队列, 消费者还在继续消费, 这貌似就是消费者在本地缓存区已经存放了消息; </p>
+<p>消息大量积压貌似会导致消费者假死:<br>我发现，RabbitMQ服务器会在短时间内发送大量的消息给Consumer，然后，如果你没有来得及Ack的话，那么服务端会积压大量的UnAcked消息，而Consumer如果来不急处理也会处于假死（也可能引起程序崩溃）。</p>
+<p>你在Rabbit有一个队列，然后一些消费者从这个队列中消费。如果你根本没有设置QoS（basic.qos），那么Rabbit会把所有的队列消息都按照网络和客户端允许的速度推送给客户端。消费者将会飞速增加它们的内存占用，因为它们将所有消息都缓存在自己的RAM中。如果您询问Rabbit，队列可能会显示为空，但会有大量在客户端中，正准备由客户端应用程序处理的消息未被确认。如果您添加新的消费者，则队列中不会有消息发送给新的消费者。即使有其他消费者可用于更快地处理这样的消息，它们也只是在现有的客户端缓存，并且可能在那里很长一段时间。这是相当次优的。</p>
+<p>结果:</p>
+<ul>
+<li><p>testQosCustomer1 : 迅速打印出结果, 然后就处于闲置状态了</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan testQosConsumer1</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!1</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!3</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!5</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!7</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!9</div><div class="line">--------</div></pre></td></tr></table></figure>
+</li>
+<li><p>testQosCustomer2 : 还在缓慢打印</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan testQosConsumer2</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!2</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!4</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!6</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!8</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!10</div><div class="line">--------</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>??<strong>上面的场景就是由于某些消费者自身处理能力有限, 从rabbitmq获取一定数量的消息后, 希望rabbitmq不再将队列中的消息推送过来, 当对消息处理完后(即对消息进行了ack, 并且有能力处理更多的消息)再接收来自队列的消息。在这种场景下, 我们可以通过设置basic.qos信令中的prefetch_count来达到这种效果</strong></p>
+<h2 id="Consumer-Prefetch-1"><a href="#Consumer-Prefetch-1" class="headerlink" title="Consumer Prefetch"></a><a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">Consumer Prefetch</a></h2><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="external">Channel Prefetch Setting (QoS)</a></p>
+<ol>
+<li><p>rabbitmq对basic.qos信令的处理</p>
+<ul>
+<li>首先, basic.qos 是针对channel进行设置的, 也就是说只有在channel建立之后才能发送basic.qos信令; RabbitMQ只支持通道级的预取计数, 而不是connection级的 或者 基于大小的预取;<br><a href="http://www.bubuko.com/infodetail-1955647.html" target="_blank" rel="external">预取</a></li>
+<li>在rabbitmq的实现中, 每个channel都对应会有一个rabbit_limiter进程, 当收到basic.qos信令后, 在rabbit_limiter进程中记录信令中prefetch_count的值, 同时记录的还有该channel未ack的消息个数;</li>
+</ul>
+</li>
+<li><p>在<code>php-amqplib</code>中, 可以使用信道的 <code>basic_qos()</code> 来进行控制, <code>basic_qos()</code> 有三个参数:</p>
+<ul>
+<li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端RabbitMQ系统没有实现该参数的功能)可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a><br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
+<li>prefetch_count : 预取消息数量</li>
+<li>global, 但是RabbitMQ没有实现prefetch_size, 并在3.3.0版本中对global这个参数的含义进行了重新定义, 即glotal=true时表示在当前channel上所有的consumer都生效, 否则只对设置了之后新建的consumer生效;</li>
+</ul>
+</li>
+<li></li>
+</ol>
+<p>我去, 如果不设置Prefetch_count的话, 到底消息是在队列中, 还是在消费者的缓存中?</p>
+<h3 id="设置prefetch-count-1"><a href="#设置prefetch-count-1" class="headerlink" title="设置prefetch_count=1"></a>设置prefetch_count=1</h3><ol>
+<li><p>这样可以设置让消费者消费完成并ack之后, RabbitServer 才可以继续给该消费者发送消息, 否则就不继续给消费者推送消息;</p>
+</li>
+<li></li>
+</ol>
+<h2 id="手动设置channel的Qos"><a href="#手动设置channel的Qos" class="headerlink" title="手动设置channel的Qos"></a>手动设置channel的Qos</h2><p>手动设置<br>测试:</p>
+<ul>
+<li>启动消费者 testQosCustomer1</li>
+<li>启动消费者 testQosCustomer2</li>
+<li>请求一次生产者 testQosProducer</li>
+</ul>
+<p>代码参考[]</p>
+<p>结果:</p>
+<p>需要通过设置Qos的prefetch count来控制consumer的流量。同时设置得当也会提高consumer的吞吐量。</p>
+<p>basic_qos, prefetch_count</p>
+<h2 id="prefetch-count控制消息轮发"><a href="#prefetch-count控制消息轮发" class="headerlink" title="prefetch_count控制消息轮发"></a>prefetch_count控制消息轮发</h2><p>只用在消费者创建完channel后, 简单加上 <code>$channel-&gt;basic_qos(&#39;&#39;, 1, true);</code> 即可(当然, 为了统一, 生产者最好也加上)</p>
+<p>这就表示: <code>消费者完成一个ack后, 才能给他继续发送, 如果消费者业务过于复杂, 就先发给其他闲着的消费者</code></p>
+<p>果然, 经过测试, Consumer4第一个<code>hello world--0</code>还没有执行完成的时候, Consumer5已经执行完了 1，2，3，4，5，6，7，8，9了</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&title=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&title=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">21. Consumer Priorities 消费者优先级</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&title=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&title=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《20. 消费者预取 Consumer Prefetch》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACt0lEQVR42u3aS24jMQwFwL7/pZ1tgMDux49sB6heBY4nrdJC1DzyuuLn8evJv5k/yRuTtzcfPDw8vMHSn7044T1bSu/nv+969p2bzcLDw8M7xsuXm/CS7cvflRcJPDw8vG/mVY/y5HDPtw8PDw/vf/F6RSK/oL++1uPh4eF9Dy8JI3oZaXIt7v12OWvBw8PDq/Wbrvyg/4afj/T38PDw8MZd9YUD91h/P1otHh4e3gFeNVxIrtrJ2EF+9PeiXjw8PLx38pLjuBr+5o20m4W2BhHw8PDwzvGqTamkJFQv0NVIN3ojHh4e3gFe4XoajwVUNy4pLXkBw8PDwzvNywHV63WvMPS24Or9Yzw8PLwiLz+Uq5FuNeqdXLVv+nt4eHh4q7ykcVUtGHmwWw1885VE/z/Aw8PDG/OqowDJX6jGvvn3m2EuHh4e3piXN+AngcXkuM+HDMpDA3h4eHgtXpWRt8TyAYV86CrfuJuZMjw8PLwBb2uh1evyVjNsobOHh4eH1+LlS+xdbfO2Vm+M4Olq8fDw8N7Oy9tLvcIweW+ylXh4eHgneNXrcj5eUA2Fk4VOxrzw8PDwtniTA3ey3ORKPXlXlLXg4eHhtXjVEOGKn2rAUW254eHh4X2KVy0D5UO5dU3PxwhuyhseHh7eAd5WeagOTk0KTH41x8PDwzvHWx51ihedhxGjjcPDw8N7Oy9vem1FCb3L/U3Fw8PDwzvASz55/XkvMujFxHkUgoeHh7fLexSf6nac2KxCGcPDw8M7wNuNU7fmZ0fztpPagoeHhxfzJsUgb5vlf6FXGKKsBQ8PD2+V12t6VdtUo9RkN6vAw8PD+xAvD4Wr5Wcr4MDDw8P7Bt6j9fTaYNX3LhQGPDw8vJhXDWSTz3sRQ741y1kLHh4e3lJXvVo8eozJhX4hwsDDw8NL1/YDNm4W24mvw1YAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

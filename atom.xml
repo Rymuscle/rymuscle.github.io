@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-06-19T02:13:17.000Z</updated>
+  <updated>2018-06-19T06:12:22.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -20,16 +20,42 @@
     <title>21. Consumer Priorities 消费者优先级</title>
     <link href="http://blog.renyimin.com/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/"/>
     <id>http://blog.renyimin.com/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/</id>
-    <published>2018-06-15T02:04:26.000Z</published>
-    <updated>2018-06-19T02:13:17.000Z</updated>
+    <published>2018-06-15T05:04:26.000Z</published>
+    <updated>2018-06-19T06:12:22.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Consumer-Priorities"><a href="#Consumer-Priorities" class="headerlink" title="Consumer Priorities"></a><a href="https://www.rabbitmq.com/consumer-priority.html" target="_blank" rel="external">Consumer Priorities</a></h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol><li><p>消费者优先级允许你确保高优先级的消费者在活跃时接收消息, 并且消息只有在高优先级消费者阻塞时才会转向低优先级的消费者.</p></li><li><p>通常, 连接到队列的活跃消费者, 是以循环方式接收来自它的消息; 当使用 “消费者优先级” 时, 如果存在多个活跃的消费者具有相同的高优先级, 消息也会被循环传送给它们;</p></li></ol><h3 id="定义活跃消费者"><a href="#定义活跃消费者" class="headerlink" title="定义活跃消费者"></a>定义活跃消费者</h3><ol><li><p>活跃的消费者是可以无需等待就能收到消息的消费者. 假如一个消费者无法接收消息, 它就会变成阻塞状态: 因为它的 channel 在发布 basic.qos 之后已达到 unack消息的最大数量, 或者仅仅是因为网络拥塞;</p></li><li><p>当消费者的 “优先级” 被使用时, 你可以期望你的最高优先级的消费者接收所有的消息, 直到它们被阻塞, 然后较低优先级的消费者才将开始接收一些消息;</p></li><li><p>理解RabbitMQ仍然会优先传递消息是很重要的: 如果有一个活跃着的低优先级消费者已经准备好了, Rabbitmq是不会等待高优先级的阻塞消费者变成非阻塞的(它会将消息发送给已经准备好的低优先级的活跃消费者);</p></li></ol><h3 id="使用消费者-优先级别"><a href="#使用消费者-优先级别" class="headerlink" title="使用消费者 优先级别"></a>使用消费者 优先级别</h3><ol><li><p>将 <code>basic.consume()</code> 方法中的 <code>$arguments</code> 参数的 <code>x-priority</code> 属性设置为整数值, 未指定值的消费者优先级为0, 更大的数字表示更高的优先级, 并且可以使用正数和负数;</p></li><li><p>注意事项: </p><ul><li><p>多个消费者共同绑定同一个队列时, 可以给消费者设置优先级, 这样, 优先级高的消费者会优先拿到消息并进行处理, <strong>除非优先级高的都处于阻塞状态(unack达到Qos设置的上限值)</strong>, 否则优先级低的消费者不会拿到消息;<br>通过运行下面示例(没有设置Qos时)可以发现, 同时启动两个消费者, 然后刷新生产者, 会发现在高优先级的消费者在默认不设置Qos时, 即不阻塞的情况下, 低优先级消费者一条消息也不会收到(没有消费结果);</p></li><li><p>接下来可以模拟高优先级的Consumer阻塞, 会发现, 高优先级的Consumer在拿到第一条消息之后, 优先级低的Consumer会立刻开始进行处理<br>注意, 模拟消费者阻塞时, 不能只通过比如 <code>sleep(50)</code> 这种方式, 因为这样只是消费者的处理速度变慢, 但是<strong>消费者的预取量还是默认的(即不受限制)</strong>, 所以消息还是会被发送给优先级高的消费者, 这样造成的结果就是 优先级高的消费者一直在缓慢地消费, 而优先级低的消费者一直在闲置;<br>所以还需要给优先级高的消费者设定 <code>Qos=1</code> 来进行测试(设定为1是为了测试方便, 也可以设置其他值, 不过这样的话, 就会有qos所设置的数量的消息被优先推送给高优先级的consumer, 直到达到qos量之后才会阻塞), 这样才能使得优先级高的消费者在没有急时ack的情况下被阻塞, 从而让优先级低的Consumer进行消费<br>实例运行(刷新生产者10次尝试一下)可以发现, 高优先级的消费者在拿到第一条消息后, 后面的消息都给了 低优先级的消费者, 但随着高优先级的消费者进行ack而恢复活跃状态, 又会优先拿到消息</p></li></ul></li><li><p>示例可查看: </p><ul><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TestPriorityConsumerController.php" target="_blank" rel="external">生产者 TestPriorityConsumerController.php </a>    </li><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/tree/master/app/Console/Commands" target="_blank" rel="external">消费者 priorityConsumer1.php, priorityConsumer2.php</a></li></ul></li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="Consumer-Priorities"><a href="#Consumer-Priorities" class="headerlink" title="Consumer Priorities"></a><a href="https://www.rabbitmq.com/consumer-priority.html" target="_blank" rel="external">Consumer Priorities</a></h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol><li><p>消费者优先级允许你确保高优先级的消费者在活跃时接收消息, 并且消息只有在高优先级消费者阻塞时才会转向低优先级的消费者;</p></li><li><p>通常, 连接到队列的活跃消费者, 是以循环方式接收来自它的消息; 当使用 “消费者优先级” 时, 如果存在多个活跃的消费者具有相同的高优先级, 消息也会被循环传送给它们;</p></li></ol><h3 id="定义活跃消费者"><a href="#定义活跃消费者" class="headerlink" title="定义活跃消费者"></a>定义活跃消费者</h3><ol><li><p>活跃的消费者是可以无需等待就能收到消息的消费者. 假如一个消费者无法接收消息, 它就会变成阻塞状态: 因为它的 channel 在发布 basic.qos 之后已达到 unack消息的最大数量, 或者仅仅是因为网络拥塞;</p></li><li><p>当消费者的 “优先级” 被使用时, 你可以期望你的最高优先级的消费者接收所有的消息, 直到它们被阻塞, 然后较低优先级的消费者才将开始接收一些消息;</p></li><li><p>理解RabbitMQ仍然会优先传递消息是很重要的: 如果有一个活跃着的低优先级消费者已经准备好了, Rabbitmq是不会等待高优先级的阻塞消费者变成非阻塞的(它会将消息发送给已经准备好的低优先级的活跃消费者);</p></li></ol><h3 id="使用消费者-优先级别"><a href="#使用消费者-优先级别" class="headerlink" title="使用消费者 优先级别"></a>使用消费者 优先级别</h3><ol><li><p>将 <code>basic.consume()</code> 方法中的 <code>$arguments</code> 参数的 <code>x-priority</code> 属性设置为整数值, 未指定值的消费者优先级为0, 更大的数字表示更高的优先级, 并且可以使用正数和负数;</p></li><li><p>注意事项: </p><ul><li><p>多个消费者共同绑定同一个队列时, 可以给消费者设置优先级, 这样, 优先级高的消费者会优先拿到消息并进行处理, <strong>除非优先级高的都处于阻塞状态(unack达到Qos设置的上限值)</strong>, 否则优先级低的消费者不会拿到消息;<br>通过运行下面示例(没有设置Qos时)可以发现, 同时启动两个消费者, 然后刷新生产者, 会发现在高优先级的消费者在默认不设置Qos时, 即不阻塞的情况下, 低优先级消费者一条消息也不会收到(没有消费结果);</p></li><li><p>接下来可以模拟高优先级的Consumer阻塞, 会发现, 高优先级的Consumer在拿到第一条消息之后, 优先级低的Consumer会立刻开始进行处理<br>注意, 模拟消费者阻塞时, 不能只通过比如 <code>sleep(50)</code> 这种方式, 因为这样只是消费者的处理速度变慢, 但是<strong>消费者的预取量还是默认的(即不受限制)</strong>, 所以消息还是会被发送给优先级高的消费者, 这样造成的结果就是 优先级高的消费者一直在缓慢地消费, 而优先级低的消费者一直在闲置;<br>所以还需要给优先级高的消费者设定 <code>Qos=1</code> 来进行测试(设定为1是为了测试方便, 也可以设置其他值, 不过这样的话, 就会有qos所设置的数量的消息被优先推送给高优先级的consumer, 直到达到qos量之后才会阻塞), 这样才能使得优先级高的消费者在没有急时ack的情况下被阻塞, 从而让优先级低的Consumer进行消费<br>实例运行(刷新生产者10次尝试一下)可以发现, 高优先级的消费者在拿到第一条消息后, 后面的消息都给了 低优先级的消费者, 但随着高优先级的消费者进行ack而恢复活跃状态, 又会优先拿到消息</p></li></ul></li><li><p>示例可查看: </p><ul><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TestPriorityConsumerController.php" target="_blank" rel="external">生产者 TestPriorityConsumerController.php </a>    </li><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/tree/master/app/Console/Commands" target="_blank" rel="external">消费者 priorityConsumer1.php, priorityConsumer2.php</a></li></ul></li></ol>]]></content>
     
     <summary type="html">
     
       
       
         &lt;h2 id=&quot;Consumer-Priorities&quot;&gt;&lt;a href=&quot;#Consumer-Priorities&quot; class=&quot;headerlink&quot; title=&quot;Consumer Priorities&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://www.rabbitmq
+      
+    
+    </summary>
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
+    
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>20. 消费者预取 Consumer Prefetch</title>
+    <link href="http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/"/>
+    <id>http://blog.renyimin.com/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/</id>
+    <published>2018-06-13T11:23:36.000Z</published>
+    <updated>2018-06-19T06:40:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a>Consumer Prefetch</h2><ol><li><p>官方文档: <a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">https://www.rabbitmq.com/consumer-prefetch.html</a></p></li><li><p>译文:</p><ul><li>限制 unack 消息数量的更自然有效的方法;</li><li><p>AMQP 0-9-1 指定 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;<br>不幸的是, channel 并不是理想的范围 - 因为单个channel可能从多个队列进行消费, channel和queue需要为每个发送的消息相互协调, 以确保它们不会超出限制, 这在单台机器上会慢, 而在整个集群中使用时会非常慢;</p></li><li><p>此外, 对于许多用途, 指定<strong>适用于每个消费者的预取计数</strong>更会简单一些;</p></li><li><p>因此, RabbitMQ在basic.qos方法中重新定义了全局标志的含义:<br>global | Meaning of prefetch_count in AMQP 0-9-1 | Meaning of prefetch_count in RabbitMQ </p></li><li>| :-: | -:<br>false | shared across all consumers on the channel(在channel中的所有消费者中分享)| applied separately to each new consumer on the channel(在频道上分别应用于每个新消费者)<br>true | shared across all consumers on the connection(在连接上的所有消费者中共享) | shared across all consumers on the channel(在渠道中的所有消费者中分享)</li></ul></li></ol><p>在使用RabbitMQ时, 如果完全不配置QoS, RabbitMQ会将队列中的所有消息轮发到与队列绑定的consumers端; 而consumer会在本地缓存所有的message, 这样的话, 如果某个消费者的业务逻辑处理比较复杂, 那么将会在较长时间之后才会操作完成并ack;<br>如果RabbitMQ并不考虑Consumer端的感受, 而采用默认的轮发方式, 消费慢的Consumer将会在本地堆积很多消息, 从而导致内存不足或者对其他进程造成影响;</p><p>?? 难道意味着 默认模式下, 生产者发布的消息会立刻全部推送给消费进程, 不管消费者是否能够消费完? 队列中会立马为空? 全部缓存在消费者本地?</p><p>只有在 手动ack的时候会生效 (prefetch_count在no_ask=false的情况下生效，即在自动应答的情况下这两个值是不生效的)</p><p>测试:</p><ul><li>创建消费者1 ‘testQosCustomer1’ (简单打印消息内容)  <strong>启动消费者</strong></li><li>创建消费者1 ‘testQosCustomer2’ (sleep 5秒, 模拟复杂业务需求) <strong>启动消费者</strong></li><li>创建一个生产者 ‘testQosProducer’, 一次向队列 ‘qosTestQueue’ 中推送10条消息 <strong>请求一次生产者</strong></li><li>注意需要先启动消费者, 再请求生产者; (如果先请求了生产者, 可能在启动第一个消费者之后, 其会迅速消费完10条消息, 这样就无法模拟效果了)</li></ul><p>代码参考[]</p><p>貌似Rabbit Server会尽快把所有消息都推送出去, queue中的 ready 会立刻被推送干净, 但是消费者的unacked会发现增多;<br>你会发现, ready一旦置空, 你甚至删除了队列, 消费者还在继续消费, 这貌似就是消费者在本地缓存区已经存放了消息; </p><p>消息大量积压貌似会导致消费者假死:<br>我发现，RabbitMQ服务器会在短时间内发送大量的消息给Consumer，然后，如果你没有来得及Ack的话，那么服务端会积压大量的UnAcked消息，而Consumer如果来不急处理也会处于假死（也可能引起程序崩溃）。</p><p>你在Rabbit有一个队列，然后一些消费者从这个队列中消费。如果你根本没有设置QoS（basic.qos），那么Rabbit会把所有的队列消息都按照网络和客户端允许的速度推送给客户端。消费者将会飞速增加它们的内存占用，因为它们将所有消息都缓存在自己的RAM中。如果您询问Rabbit，队列可能会显示为空，但会有大量在客户端中，正准备由客户端应用程序处理的消息未被确认。如果您添加新的消费者，则队列中不会有消息发送给新的消费者。即使有其他消费者可用于更快地处理这样的消息，它们也只是在现有的客户端缓存，并且可能在那里很长一段时间。这是相当次优的。</p><p>结果:</p><ul><li><p>testQosCustomer1 : 迅速打印出结果, 然后就处于闲置状态了</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan testQosConsumer1</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!1</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!3</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!5</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!7</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!9</div><div class="line">--------</div></pre></td></tr></table></figure></li><li><p>testQosCustomer2 : 还在缓慢打印</p>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan testQosConsumer2</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!2</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!4</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!6</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!8</div><div class="line">--------</div><div class="line"></div><div class="line">--------</div><div class="line">Hello World!10</div><div class="line">--------</div></pre></td></tr></table></figure></li></ul><p>??<strong>上面的场景就是由于某些消费者自身处理能力有限, 从rabbitmq获取一定数量的消息后, 希望rabbitmq不再将队列中的消息推送过来, 当对消息处理完后(即对消息进行了ack, 并且有能力处理更多的消息)再接收来自队列的消息。在这种场景下, 我们可以通过设置basic.qos信令中的prefetch_count来达到这种效果</strong></p><h2 id="Consumer-Prefetch-1"><a href="#Consumer-Prefetch-1" class="headerlink" title="Consumer Prefetch"></a><a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">Consumer Prefetch</a></h2><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="external">Channel Prefetch Setting (QoS)</a></p><ol><li><p>rabbitmq对basic.qos信令的处理</p><ul><li>首先, basic.qos 是针对channel进行设置的, 也就是说只有在channel建立之后才能发送basic.qos信令; RabbitMQ只支持通道级的预取计数, 而不是connection级的 或者 基于大小的预取;<br><a href="http://www.bubuko.com/infodetail-1955647.html" target="_blank" rel="external">预取</a></li><li>在rabbitmq的实现中, 每个channel都对应会有一个rabbit_limiter进程, 当收到basic.qos信令后, 在rabbit_limiter进程中记录信令中prefetch_count的值, 同时记录的还有该channel未ack的消息个数;</li></ul></li><li><p>在<code>php-amqplib</code>中, 可以使用信道的 <code>basic_qos()</code> 来进行控制, <code>basic_qos()</code> 有三个参数:</p><ul><li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端RabbitMQ系统没有实现该参数的功能)可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a><br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li><li>prefetch_count : 预取消息数量</li><li>global, 但是RabbitMQ没有实现prefetch_size, 并在3.3.0版本中对global这个参数的含义进行了重新定义, 即glotal=true时表示在当前channel上所有的consumer都生效, 否则只对设置了之后新建的consumer生效;</li></ul></li><li></li></ol><p>我去, 如果不设置Prefetch_count的话, 到底消息是在队列中, 还是在消费者的缓存中?</p><h3 id="设置prefetch-count-1"><a href="#设置prefetch-count-1" class="headerlink" title="设置prefetch_count=1"></a>设置prefetch_count=1</h3><ol><li><p>这样可以设置让消费者消费完成并ack之后, RabbitServer 才可以继续给该消费者发送消息, 否则就不继续给消费者推送消息;</p></li><li></li></ol><h2 id="手动设置channel的Qos"><a href="#手动设置channel的Qos" class="headerlink" title="手动设置channel的Qos"></a>手动设置channel的Qos</h2><p>手动设置<br>测试:</p><ul><li>启动消费者 testQosCustomer1</li><li>启动消费者 testQosCustomer2</li><li>请求一次生产者 testQosProducer</li></ul><p>代码参考[]</p><p>结果:</p><p>需要通过设置Qos的prefetch count来控制consumer的流量。同时设置得当也会提高consumer的吞吐量。</p><p>basic_qos, prefetch_count</p><h2 id="prefetch-count控制消息轮发"><a href="#prefetch-count控制消息轮发" class="headerlink" title="prefetch_count控制消息轮发"></a>prefetch_count控制消息轮发</h2><p>只用在消费者创建完channel后, 简单加上 <code>$channel-&gt;basic_qos(&#39;&#39;, 1, true);</code> 即可(当然, 为了统一, 生产者最好也加上)</p><p>这就表示: <code>消费者完成一个ack后, 才能给他继续发送, 如果消费者业务过于复杂, 就先发给其他闲着的消费者</code></p><p>果然, 经过测试, Consumer4第一个<code>hello world--0</code>还没有执行完成的时候, Consumer5已经执行完了 1，2，3，4，5，6，7，8，9了</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Consumer-Prefetch&quot;&gt;&lt;a href=&quot;#Consumer-Prefetch&quot; class=&quot;headerlink&quot; title=&quot;Consumer Prefetch&quot;&gt;&lt;/a&gt;Consumer Prefetch&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;官
       
     
     </summary>
@@ -89,9 +115,9 @@
       <category term="HTTP" scheme="http://blog.renyimin.com/categories/Restful/HTTP/"/>
     
     
-      <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
-    
       <category term="Restful" scheme="http://blog.renyimin.com/tags/Restful/"/>
+    
+      <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
     
   </entry>
   
@@ -546,34 +572,6 @@
       <category term="索引" scheme="http://blog.renyimin.com/tags/%E7%B4%A2%E5%BC%95/"/>
     
       <category term="高性能索引策略" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>42. 哈希索引</title>
-    <link href="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/"/>
-    <id>http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-42/</id>
-    <published>2017-09-24T07:01:31.000Z</published>
-    <updated>2018-03-07T10:04:36.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol><li><p>哈希索引(hash index)基于哈希表实现, <strong>只有精确匹配索引中所有列的查询才有效</strong>;</p></li><li><p>对于每一行数据, 存储引擎都会对所有的索引列计算一个哈希码(hash code):</p><ul><li>哈希索引将所有的哈希码存储在索引中</li><li><strong>同时在哈希表中保存指向每个数据行的指针</strong></li></ul></li><li><p>在MySQL中, 只有Memory引擎显示支持哈希索引, 这也是Memory引擎表的默认索引类型, Memory引擎也支持B-Tree索引。</p><ul><li>Memory引擎支持 <code>非唯一哈希索引</code>, 也就是同样的索引, 不同的数据可能产生相同的哈希码, 如果出现这种情况, 索引会以<strong>链表</strong>的方式存放多个行指针到同一个哈希条目中</li><li>查找时, 会1. 先在索引中按照哈希码来找到指向数据行的指针, 2. 然后比较数据行的值是否是你查找的行</li></ul></li></ol><h2 id="哈希索引的限制"><a href="#哈希索引的限制" class="headerlink" title="哈希索引的限制"></a>哈希索引的限制</h2><p>因为索引自身只要存储对应的哈希值和行指针, 所以索引的结构十分紧凑, 这也让哈希索引的查找速度非常快, 然而哈希索引也有它的限制:</p><ul><li><p>哈希索引只包含哈希值和行指针, 而不存储字段值, 所以不能使用索引中的值来避免读取行, 不过, 访问内存中的行的速度很快;</p></li><li><p>哈希索引数据并不是按照索引值顺序排序的, 所以无法用于排序;</p></li><li><p>不支持 <code>部分索引列匹配查找</code> , 因为哈希索引始终是使用索引列的全部内容来计算哈希值的;</p></li><li><p>不支持范围查询 (只支持如 <code>=</code>, <code>&lt;&gt;</code>, <code>in</code> 等一些 等值比较)</p></li><li><p>哈希索引数据非常快, 除非有很多哈希冲突 (因为memory引擎支持非唯一索引, 也就是同样的索引, 不同的数据可能产生相同的哈希码)<br><strong>当出现哈希冲突时</strong>, 存储引擎必须遍历 冲突的哈希值 所对应的 <code>链表</code> 中所有的行指针, 逐行到表中进行比较, 直到找到所有符合条件的行;</p></li></ul><h2 id="哈希冲突"><a href="#哈希冲突" class="headerlink" title="哈希冲突"></a>哈希冲突</h2><p>如果哈希冲突很多的话, 一些索引维护操作的代价也为很高, <strong>如果表中删除一行数据, 存储引擎需要遍历对应哈希值的链表中的每一行, 找到并删除对应行的指针, 冲突越多代价越大</strong>;</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;哈希索引(hash index)基于哈希表实现, &lt;strong&gt;只有精确匹配索引中所有列的查询才有效&lt;/strong&gt;;
-      
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="索引" scheme="http://blog.renyimin.com/tags/%E7%B4%A2%E5%BC%95/"/>
     
   </entry>
   
