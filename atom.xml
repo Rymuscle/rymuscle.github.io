@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://blog.renyimin.com/"/>
-  <updated>2018-06-19T06:12:22.000Z</updated>
+  <updated>2018-06-20T07:23:58.000Z</updated>
   <id>http://blog.renyimin.com/</id>
   
   <author>
@@ -17,13 +17,39 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费</title>
+    <link href="http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/"/>
+    <id>http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/</id>
+    <published>2018-06-19T11:21:32.000Z</published>
+    <updated>2018-06-20T07:23:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Priority-Queues"><a href="#Priority-Queues" class="headerlink" title="Priority Queues"></a>Priority Queues</h2><ol><li><p>官网文档: <a href="https://www.rabbitmq.com/priority.html" target="_blank" rel="external">https://www.rabbitmq.com/priority.html</a></p></li><li><p>译文</p><ul><li><p>从版本3.5.0开始, RabbitMQ在核心中实现<strong>优先级队列</strong><br>任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 <code>策略</code>)<br>支持有限的优先级数量: 255, 建议1至10之间的值;</p></li><li><p>使用客户端提供的可选参数 $arguments<br>要声明优先级队列, 请使用 <code>x-max-priority</code> 可选队列参数, 该参数应该是1到255之间的正整数, 表示队列应该支持的最大优先级;</p></li><li><p>AMQP 0-9-1规范对于优先级的工作方式有些模糊, 它认为所有的队列中必须至少有两个是支持优先级的, 并且可以支持多达10个, 它没有定义 “没有优先级属性的消息该如何被处理”;</p></li><li><p>与AMQP 0-9-1规格相比, 默认情况下, RabbitMQ队列不支持优先级, 在创建优先级队列时, 您可以根据需要指定任意数量的优先级, 注意:<br>队列的每个优先级会有一些 内存 和 磁盘 方面的成本, 还会有额外的CPU成本, 特别是在消费时, 所以你可能不希望创建大量的优先级 (或者翻译为 不希望创建巨大数字的优先级);</p></li><li><p>消息优先级字段被定义为无符号字节, 所以实际上优先级应该在0到255之间;</p></li><li><p>没有优先级属性的消息被视为优先级为0, 优先级高于队列最大值的消息被视为以最高优先级发布;</p></li><li><p>资源使用注意事项<br><strong>如果需要优先级队列, 我们建议在1到10之间使用, 目前使用更多优先级将消耗更多资源(Erlang进程)</strong>;</p></li><li><p>与消费者互动<br>理解消费者在处理优先级队列时的工作方式非常重要, 默认情况下, 消费者可能会在ack之前, 已经被发送了大量的消息;<br>因此, 如果一个饥饿的消费者连接一个空的队列, 值得注意的是, 因为消息可能不会在队列中等待任何时间, 在这种情况下, 优先队列将不会有任何机会优先考虑它们;<br>在大多数情况下, 您会希望在消费者手动确认模式下使用 <code>basic.qos</code>, 以限制可以随时发送的消息数量, 从而允许优先化消息;</p></li><li><p>其他功能的影响</p></li><li><p>为什么 策略 定义是不可能的<br>为队列定义可选参数最方便的方法是通过策略, 策略是配置队列长度限制, TTL等的推荐方式;<br>但是, 策略不能用于配置优先级, 因为策略是动态的, 并且可以在声明队列后进行更改, 优先级队列在队列声明之后永远不会改变它们支持的优先级的数量, 因此策略不是一个安全的选项;</p></li></ul></li></ol><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><ol><li><p>当queue只有一个consumer时, 如果producer先发送msg到queue, 然后再启动consumer, 此时和consumer的Qos是否设置或者设置大小无关, msg会按照优先级由高到低依次输出 (不会按照producer的发送顺序输出)<br> 貌似是因为 msg 有足够的时间在Rabbit Server中按照优先级做好排序;</p></li><li><p>当queue只有一个consumer时, 如果先启动consumer, 然后producer再发送msg到queue</p><ul><li><p>如果没有设置Qos, 即便consumer处理每条消息的速度很慢, 但是由于运行producer之后, 由于消息会在第一时间被尽可能全量发送到consumer, 所以queue中貌似没什么时间对msg按照优先级进行排序, 所以consumer拿到的msg只是按照发送顺序排列的消息;</p></li><li><p>如果设置了Qos的prefetch_count=1, 先启动consumer:<br>理论上, 第一个msg是按照发送顺序, 但是之后的9个msg都会按照优先级顺序;<br>但实际测试发现, 有时候msg还会全部按照优先级顺序来, 这是个比较疑惑的问题, 后来通过观察WebUI管理界面可以发现, 在启动消费者之后, 并不一定队列可以立马识别到该consumer, 如果你此时运行了producer, 那么相当于先运行了producer, 然后再启动了消费者, 所以msg将会全部按照优先级循序被消费;<br>并且即使你prefetch_count=1的同时设置了 sleep(5), 还是会出现上面的问题(也是由于虽然你先执行了consumer, 但其实producer先被执行的原因)! </p></li><li><p>如果设置了Qos, 但是设置的prefetch_count&gt;1(比如为2)<br>理论上也是前两个msg按照发送顺序, 而后面8个按照优先级顺序;<br>实际测试发现, 如果出现上面的意外, 也会导致10条消息全部按照优先级顺序被消费;</p></li></ul></li><li><p>小结</p><ul><li>先运行生产者生产消息, 然后再启动消费者, 消息都会按照优先级在queue中做好排序, 然后逐一发送给消费者; (这正是消费能力不足的情况,类似于consumer消费过慢并产生很多unack, 导致queue中的msg有实现按照优先级排序)</li><li>先启动消费者, 然后运行生产者生产消息, 消息会根据消费者设置的Qos, 优先会有prefetch_count数量的消费者被直接发送到consumer, 这些msg会按照发送先后顺序被消费, 之后的剩余消费者则会按照优先级顺序被消费; </li></ul></li></ol><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol><li><p>针对上面的分析进行测试</p><ul><li>在生产者中准备好10条优先级为0-10的消息, 然后乱序发送, 代码参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/MsgPriorityController.php" target="_blank" rel="external">此处</a></li><li><p>消费者使用三种Qos做测试 1. 默认Qos, 不做限制 2. Qos设置为1, 3. Qos设置为2, 代码参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/msgPriorityConsumer.php" target="_blank" rel="external">此处</a></p></li><li><p>先运行生产者, 然后启动消费者, 会发现乱序的消息会按照优先级高低依次输出</p></li><li>而如果先启动消费者, 之后再运行生产者, 你会发现, 由于会有prefetch_count的msg被发送给消费者, 所以这部分消息会按照发送先后顺序被消费, 而其余消息会按照优先级高低依次输出;<br>如果没有设置Qos, 或者Qos设置的数量大于消息条数, 那么msg都会按照发送的先后顺序被消费, 不会按照优先级顺序被消费;</li></ul></li><li><p>如果消息设置了选项 <code>priority</code>, 而队列没有设置 <code>x-max-priority</code>, 效果会怎样?</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan msgPriorityConsumer</div><div class="line"></div><div class="line">In AMQPChannel.php line 188:</div><div class="line">                                                                                                                                                                     </div><div class="line">PRECONDITION_FAILED - inequivalent arg &apos;x-max-priority&apos; for queue &apos;msgPrioityQueue&apos; in vhost &apos;/&apos;: received none but current is the value &apos;10&apos; of type &apos;signedint&apos;  </div><div class="line">                                                                                                                                                                     </div><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$</div></pre></td></tr></table></figure></li><li><p>队列设置了优先级选项 <code>x-max-priority</code>, 如果消息不设置优先级选项 <code>priority</code>, 效果会怎样?<br> 无论设置适当的Qos先启动消费者, 还是先运行生产者生产消息, msg都是按照发送顺序被消费的!</p></li><li><p>如果有多个消费者, 消息被发送给不同的消费者, 这样还会按照优先级顺序进行么?<br> 多个消费者是无法保证Msg被消费的顺序的;</p></li><li><p>集群模式下, 顺序如何保证?<br> ~~ 待续</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Priority-Queues&quot;&gt;&lt;a href=&quot;#Priority-Queues&quot; class=&quot;headerlink&quot; title=&quot;Priority Queues&quot;&gt;&lt;/a&gt;Priority Queues&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;官网文档: &lt;a 
+      
+    
+    </summary>
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
+    
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
+  
+  <entry>
     <title>21. Consumer Priorities 消费者优先级</title>
     <link href="http://blog.renyimin.com/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/"/>
     <id>http://blog.renyimin.com/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/</id>
     <published>2018-06-15T05:04:26.000Z</published>
-    <updated>2018-06-19T06:12:22.000Z</updated>
+    <updated>2018-06-20T04:47:52.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Consumer-Priorities"><a href="#Consumer-Priorities" class="headerlink" title="Consumer Priorities"></a><a href="https://www.rabbitmq.com/consumer-priority.html" target="_blank" rel="external">Consumer Priorities</a></h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol><li><p>消费者优先级允许你确保高优先级的消费者在活跃时接收消息, 并且消息只有在高优先级消费者阻塞时才会转向低优先级的消费者;</p></li><li><p>通常, 连接到队列的活跃消费者, 是以循环方式接收来自它的消息; 当使用 “消费者优先级” 时, 如果存在多个活跃的消费者具有相同的高优先级, 消息也会被循环传送给它们;</p></li></ol><h3 id="定义活跃消费者"><a href="#定义活跃消费者" class="headerlink" title="定义活跃消费者"></a>定义活跃消费者</h3><ol><li><p>活跃的消费者是可以无需等待就能收到消息的消费者. 假如一个消费者无法接收消息, 它就会变成阻塞状态: 因为它的 channel 在发布 basic.qos 之后已达到 unack消息的最大数量, 或者仅仅是因为网络拥塞;</p></li><li><p>当消费者的 “优先级” 被使用时, 你可以期望你的最高优先级的消费者接收所有的消息, 直到它们被阻塞, 然后较低优先级的消费者才将开始接收一些消息;</p></li><li><p>理解RabbitMQ仍然会优先传递消息是很重要的: 如果有一个活跃着的低优先级消费者已经准备好了, Rabbitmq是不会等待高优先级的阻塞消费者变成非阻塞的(它会将消息发送给已经准备好的低优先级的活跃消费者);</p></li></ol><h3 id="使用消费者-优先级别"><a href="#使用消费者-优先级别" class="headerlink" title="使用消费者 优先级别"></a>使用消费者 优先级别</h3><ol><li><p>将 <code>basic.consume()</code> 方法中的 <code>$arguments</code> 参数的 <code>x-priority</code> 属性设置为整数值, 未指定值的消费者优先级为0, 更大的数字表示更高的优先级, 并且可以使用正数和负数;</p></li><li><p>注意事项: </p><ul><li><p>多个消费者共同绑定同一个队列时, 可以给消费者设置优先级, 这样, 优先级高的消费者会优先拿到消息并进行处理, <strong>除非优先级高的都处于阻塞状态(unack达到Qos设置的上限值)</strong>, 否则优先级低的消费者不会拿到消息;<br>通过运行下面示例(没有设置Qos时)可以发现, 同时启动两个消费者, 然后刷新生产者, 会发现在高优先级的消费者在默认不设置Qos时, 即不阻塞的情况下, 低优先级消费者一条消息也不会收到(没有消费结果);</p></li><li><p>接下来可以模拟高优先级的Consumer阻塞, 会发现, 高优先级的Consumer在拿到第一条消息之后, 优先级低的Consumer会立刻开始进行处理<br>注意, 模拟消费者阻塞时, 不能只通过比如 <code>sleep(50)</code> 这种方式, 因为这样只是消费者的处理速度变慢, 但是<strong>消费者的预取量还是默认的(即不受限制)</strong>, 所以消息还是会被发送给优先级高的消费者, 这样造成的结果就是 优先级高的消费者一直在缓慢地消费, 而优先级低的消费者一直在闲置;<br>所以还需要给优先级高的消费者设定 <code>Qos=1</code> 来进行测试(设定为1是为了测试方便, 也可以设置其他值, 不过这样的话, 就会有qos所设置的数量的消息被优先推送给高优先级的consumer, 直到达到qos量之后才会阻塞), 这样才能使得优先级高的消费者在没有急时ack的情况下被阻塞, 从而让优先级低的Consumer进行消费<br>实例运行(刷新生产者10次尝试一下)可以发现, 高优先级的消费者在拿到第一条消息后, 后面的消息都给了 低优先级的消费者, 但随着高优先级的消费者进行ack而恢复活跃状态, 又会优先拿到消息</p></li></ul></li><li><p>示例可查看: </p><ul><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TestPriorityConsumerController.php" target="_blank" rel="external">生产者 TestPriorityConsumerController.php </a>    </li><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/tree/master/app/Console/Commands" target="_blank" rel="external">消费者 priorityConsumer1.php, priorityConsumer2.php</a></li></ul></li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="Consumer-Priorities"><a href="#Consumer-Priorities" class="headerlink" title="Consumer Priorities"></a><a href="https://www.rabbitmq.com/consumer-priority.html" target="_blank" rel="external">Consumer Priorities</a></h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol><li><p>消费者优先级允许你确保高优先级的消费者在活跃时接收消息, 并且消息只有在高优先级消费者阻塞时才会转向低优先级的消费者;</p></li><li><p>通常, 连接到队列的活跃消费者, 是以循环方式接收来自它的消息; 当使用 “消费者优先级” 时, 如果存在多个活跃的消费者具有相同的高优先级, 消息也会被循环传送给它们;</p></li></ol><h3 id="定义活跃消费者"><a href="#定义活跃消费者" class="headerlink" title="定义活跃消费者"></a>定义活跃消费者</h3><ol><li><p>活跃的消费者是可以无需等待就能收到消息的消费者. 假如一个消费者无法接收消息, 它就会变成阻塞状态: 因为它的 channel 在发布 basic.qos 之后已达到 unack消息的最大数量, 或者仅仅是因为网络拥塞;</p></li><li><p>当消费者的 “优先级” 被使用时, 你可以期望你的最高优先级的消费者接收所有的消息, <strong>直到它们被阻塞</strong>, 然后较低优先级的消费者才将开始接收一些消息;</p></li><li><p>理解RabbitMQ仍然会优先传递消息是很重要的: 如果有一个活跃着的低优先级消费者已经准备好了, Rabbitmq是不会等待高优先级的阻塞消费者变成非阻塞的(它会将消息发送给已经准备好的低优先级的活跃消费者);</p></li></ol><h3 id="使用消费者-优先级别"><a href="#使用消费者-优先级别" class="headerlink" title="使用消费者 优先级别"></a>使用消费者 优先级别</h3><ol><li><p>将 <code>basic.consume()</code> 方法中的 <code>$arguments</code> 参数的 <code>x-priority</code> 属性设置为整数值, 未指定值的消费者优先级为0, 更大的数字表示更高的优先级, 并且可以使用正数和负数;</p></li><li><p>注意事项: </p><ul><li><p>多个消费者共同绑定同一个队列时, 可以给消费者设置优先级, 这样, 优先级高的消费者会优先拿到消息并进行处理, <strong>除非优先级高的都处于阻塞状态(unack达到Qos设置的上限值)</strong>, 否则优先级低的消费者不会拿到消息;<br>通过运行下面示例(没有设置Qos时)可以发现, 同时启动两个消费者, 然后刷新生产者, 会发现在高优先级的消费者在默认不设置Qos时, 即不阻塞的情况下, 低优先级消费者一条消息也不会收到(没有消费结果);</p></li><li><p>接下来可以模拟高优先级的Consumer阻塞, 会发现, 高优先级的Consumer在拿到第一条消息之后, 优先级低的Consumer会立刻开始进行处理<br>注意, 模拟消费者阻塞时, 不能只通过比如 <code>sleep(50)</code> 这种方式, 因为这样只是消费者的处理速度变慢, 但是<strong>消费者的预取量还是默认的(即不受限制)</strong>, 所以消息还是会被发送给优先级高的消费者, 这样造成的结果就是 优先级高的消费者一直在缓慢地消费, 而优先级低的消费者一直在闲置;<br>所以还需要给优先级高的消费者设定 <code>Qos=1</code> 来进行测试(设定为1是为了测试方便, 也可以设置其他值, 不过这样的话, 就会有qos所设置的数量的消息被优先推送给高优先级的consumer, 直到达到qos量之后才会阻塞), 这样才能使得优先级高的消费者在没有急时ack的情况下被阻塞, 从而让优先级低的Consumer进行消费<br>实例运行(刷新生产者10次尝试一下)可以发现, 高优先级的消费者在拿到第一条消息后, 后面的消息都给了 低优先级的消费者, 但随着高优先级的消费者进行ack而恢复活跃状态, 又会优先拿到消息</p></li></ul></li><li><p>示例可查看: </p><ul><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TestPriorityConsumerController.php" target="_blank" rel="external">生产者 TestPriorityConsumerController.php </a>    </li><li><a href="https://github.com/rymuscle/Laravel-RabbitMQ/tree/master/app/Console/Commands" target="_blank" rel="external">消费者 priorityConsumer1.php, priorityConsumer2.php</a></li></ul></li></ol><h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p><a href="https://www.rabbitmq.com/blog/2013/12/16/using-consumer-priorities-with-rabbitmq/" target="_blank" rel="external">https://www.rabbitmq.com/blog/2013/12/16/using-consumer-priorities-with-rabbitmq/</a></p>]]></content>
     
     <summary type="html">
     
@@ -114,9 +140,9 @@
       <category term="HTTP" scheme="http://blog.renyimin.com/categories/Restful/HTTP/"/>
     
     
-      <category term="Restful" scheme="http://blog.renyimin.com/tags/Restful/"/>
-    
       <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
+    
+      <category term="Restful" scheme="http://blog.renyimin.com/tags/Restful/"/>
     
   </entry>
   
@@ -530,35 +556,6 @@
         &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
 &lt;li&gt;&lt;p&gt;在多个列上建立独立的&lt;code&gt;单列索引&lt;/code&gt;, 在大部分情况下并不能提高MySQL的查询性能; &lt;/p&gt;
 &lt;ul
-      
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="索引" scheme="http://blog.renyimin.com/tags/%E7%B4%A2%E5%BC%95/"/>
-    
-      <category term="高性能索引策略" scheme="http://blog.renyimin.com/tags/%E9%AB%98%E6%80%A7%E8%83%BD%E7%B4%A2%E5%BC%95%E7%AD%96%E7%95%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>43. 高性能索引策略 - 独立的列, 前缀索引</title>
-    <link href="http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-43/"/>
-    <id>http://blog.renyimin.com/2017/09/24/mysql/2017-09-24-mysql-43/</id>
-    <published>2017-09-24T09:20:31.000Z</published>
-    <updated>2018-03-08T05:22:03.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前面已经对常见的索引类型及其对应的优缺点有了一定的了解, 接下来要考虑的就是如何 <code>高效正确地选择并使用索引</code></p><h2 id="独立的列"><a href="#独立的列" class="headerlink" title="独立的列"></a>独立的列</h2><p>独立的列是指: 在查询条件中, <code>索引列</code> 不能是表达式的一部分, 也不能是函数的参数; (如: <code>select actor_id from actor where actor_id+1=5;</code> 就无法使用索引, 应该始终将索引列单独放在比较符号的一侧, <code>select actor_id from actor where actor_id=4;</code>);</p><h2 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h2><ol><li><p>因为B-Tree索引中存储了<code>实际的列值</code>, 所以如果你需要索引的列的内容很长, 就会导致 <code>索引变得大且慢</code>;<br> 对于<code>BLOB</code>, <code>TEXT</code> 或者很长的 <code>VARCHAR</code> 类型的列, 必须使用前缀索引, 因为MySQL不允许索引这些列的完整长度;</p></li><li><p>正常情况下, 不论是创建 <code>单列索引</code> 还是 <code>多列索引</code>, 创建的索引都是以 <code>某个列完整的值</code> 来创建索引, 而 <code>前缀索引</code>则是以 <code>列开始的部分字符</code> 来创建索引, 从而大大节约索引空间, 提高索引效率, 但是这样会降低索引的选择性;</p></li></ol><h2 id="索引选择性"><a href="#索引选择性" class="headerlink" title="索引选择性"></a>索引选择性</h2><ol><li><p><code>索引选择性</code>: 是指不重复的索引值(基数) 和 数据表的记录总数的比值(当然, 唯一索引的所有索引值都不同, 选择性是1, 这是最好的索引选择性, 性能也是最好的); </p></li><li><p>假设一张订单表, 按照 <code>city</code>(城市全名) 来分 和 按照 <code>city</code>(第一个字)来分组 , 那肯定前一种情况分出来的组比较多, 也就是不重复的索引值多;   </p><ul><li><p>如果按照 <code>city</code> 字段的前3个字符来分组的话, 效果如下<br><img src="/img/mysql/index/index_xuanzexing_02.png" width="500"></p></li><li><p>如果按照 <code>city</code> 字段的前7个字符来分组的话, 可以想到, 自然可能会是 <code>分组会更多, 每组的数据会更少</code><br><img src="/img/mysql/index/index_xuanzexing_03.png" width="500"></p></li></ul></li><li><p>分的组越多, 也就是如果以此长度的前缀创建索引的话, 不重复的索引值也就越多, 那么选择性就越高;<br> 选择性越高, 则查询效率越高, 因为MySQL在查找时能够通过索引就过滤掉更多的行, 否则一个索引还是对应了很多的数据行, 那效率还是很低;</p></li><li><p>而我们要做的其实就是让我们的 <code>前缀选择性</code> 接近 <code>完整列的选择性</code></p><ul><li>简单点说, 让 <code>city(n)</code> 接近 <code>city</code> 的选择性;</li><li>计算完整列的选择性<br><img src="/img/mysql/index/index_xuanzexing_04.png" width="500"></li><li>下面给出了同一个查询中计算不同前缀长度的选择性<br><img src="/img/mysql/index/index_xuanzexing_05.png" width="500"></li></ul></li><li><p>前缀索引是一种能使索引更小, 更快的有效办法, 但也有其缺点: </p><ul><li>MySQL无法使用前缀索引做 <code>ORDER BY</code> 和 <code>GROUP BY</code></li><li>有无法使用前缀索引做覆盖扫描</li></ul></li><li>创建前缀索引: <code>alter table city add key(city(7))</code>, 表示以 city 字段的前7个字符 来创建索引;</li></ol><p>参考p189:</p><ul><li>根据传统经验, 不应该在选择性低的裂伤创建索引, 但是如果很过查询都用到该列, 比如一个表中的 <code>gender</code> 列, 考虑到使用的频率, 还是建议在创建不同组合的索引时, 将 (sex) 作为前缀!</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;前面已经对常见的索引类型及其对应的优缺点有了一定的了解, 接下来要考虑的就是如何 &lt;code&gt;高效正确地选择并使用索引&lt;/code&gt;&lt;/p&gt;
       
     
     </summary>
