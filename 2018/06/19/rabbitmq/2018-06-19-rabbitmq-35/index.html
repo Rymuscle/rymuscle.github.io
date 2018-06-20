@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-20T07:28:28.000Z">
+<meta property="og:updated_time" content="2018-06-20T07:35:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="35. Priority Queues - 消息按 发送顺序&#x2F;优先级高低 依次消费">
 <meta name="twitter:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
@@ -217,7 +217,10 @@
 <li><p>小结</p>
 <ul>
 <li>先运行生产者生产消息, 然后再启动消费者, 消息都会按照优先级在queue中做好排序, 然后逐一发送给消费者; (这正是消费能力不足的情况,类似于consumer消费过慢并产生很多unack, 导致queue中的msg有实现按照优先级排序)</li>
-<li>先启动消费者, 然后运行生产者生产消息, 消息会根据消费者设置的Qos, 优先会有prefetch_count数量的消费者被直接发送到consumer, 这些msg会按照发送先后顺序被消费, 之后的剩余消费者则会按照优先级顺序被消费; </li>
+<li><p>先启动消费者, 然后运行生产者生产消息, 消息会根据消费者设置的Qos, 优先会有prefetch_count数量的消费者被直接发送到consumer, 这些msg会按照发送先后顺序被消费, 之后的剩余消费者则会按照优先级顺序被消费; </p>
+</li>
+<li><p>所以消息优先级貌似对应用场景比较苛刻, 感觉如果需要消息有顺序, 貌似按照发送顺序就比较理想! </p>
+</li>
 </ul>
 </li>
 </ol>
@@ -239,7 +242,7 @@
 </li>
 <li><p>如果有多个消费者, 消息被发送给不同的消费者, 这样还会按照优先级顺序进行么?<br> 多个消费者是无法保证Msg被消费的顺序的;</p>
 </li>
-<li><p>集群模式下, 顺序如何保证?<br> ~~ 待续</p>
+<li><p>集群模式下, 发送顺序和优先级顺序如何保证?<br> ~~ 待续</p>
 </li>
 </ol>
 
