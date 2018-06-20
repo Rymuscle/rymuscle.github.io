@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-20T07:23:58.000Z">
+<meta property="og:updated_time" content="2018-06-20T07:28:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="35. Priority Queues - 消息按 发送顺序&#x2F;优先级高低 依次消费">
 <meta name="twitter:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
@@ -208,7 +208,7 @@
 <ul>
 <li><p>如果没有设置Qos, 即便consumer处理每条消息的速度很慢, 但是由于运行producer之后, 由于消息会在第一时间被尽可能全量发送到consumer, 所以queue中貌似没什么时间对msg按照优先级进行排序, 所以consumer拿到的msg只是按照发送顺序排列的消息;</p>
 </li>
-<li><p>如果设置了Qos的prefetch_count=1, 先启动consumer:<br>理论上, 第一个msg是按照发送顺序, 但是之后的9个msg都会按照优先级顺序;<br>但实际测试发现, 有时候msg还会全部按照优先级顺序来, 这是个比较疑惑的问题, 后来通过观察WebUI管理界面可以发现, 在启动消费者之后, 并不一定队列可以立马识别到该consumer, 如果你此时运行了producer, 那么相当于先运行了producer, 然后再启动了消费者, 所以msg将会全部按照优先级循序被消费;<br>并且即使你prefetch_count=1的同时设置了 sleep(5), 还是会出现上面的问题(也是由于虽然你先执行了consumer, 但其实producer先被执行的原因)! </p>
+<li><p>如果设置了Qos的prefetch_count=1, 先启动consumer:<br>理论上, 第一个msg是按照发送顺序, 但是之后的9个msg都会按照优先级顺序;<br>但实际测试发现, 有时候msg还会全部按照优先级顺序来, 这是个比较疑惑的问题, 后来通过观察WebUI管理界面可以发现, 在启动消费者之后, 并不一定队列可以立马识别到该consumer (因为队列的 Consumers 这列显示还是0), 如果你此时运行了producer, 那么相当于先运行了producer, 然后再启动了消费者, 所以msg将会全部按照优先级循序被消费; 所以要为了确保消费者被先启动, 最好确保队列的Consumers这列显示为1, 表示消费者已经连接上来了;<br>并且即使你prefetch_count=1的同时设置了 sleep(5), 还是会出现上面的问题(也是由于虽然你先执行了consumer, 但其实producer先被执行的原因)! </p>
 </li>
 <li><p>如果设置了Qos, 但是设置的prefetch_count&gt;1(比如为2)<br>理论上也是前两个msg按照发送顺序, 而后面8个按照优先级顺序;<br>实际测试发现, 如果出现上面的意外, 也会导致10条消息全部按照优先级顺序被消费;</p>
 </li>
