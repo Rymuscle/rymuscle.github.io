@@ -13,7 +13,7 @@
     
     
     
-    <title>35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费 | Lant&#39;s Blog</title>
+    <title>35. Priority Queues - queue(x-max-priority) + message(priority) | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,14 +23,14 @@
     <meta name="description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="35. Priority Queues - 消息按 发送顺序&#x2F;优先级高低 依次消费">
+<meta property="og:title" content="35. Priority Queues - queue(x-max-priority) + message(priority)">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-20T07:35:53.000Z">
+<meta property="og:updated_time" content="2018-06-21T01:53:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="35. Priority Queues - 消息按 发送顺序&#x2F;优先级高低 依次消费">
+<meta name="twitter:title" content="35. Priority Queues - queue(x-max-priority) + message(priority)">
 <meta name="twitter:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;  使用客户">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费</div>
+        <div class="flex-col header-title ellipsis">35. Priority Queues - queue(x-max-priority) + message(priority)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费</h1>
+        <h1 class="title">35. Priority Queues - queue(x-max-priority) + message(priority)</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-19T11:21:32.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费</h1>
+        <h1 class="post-card-title">35. Priority Queues - queue(x-max-priority) + message(priority)</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-19 19:21:32" datetime="2018-06-19T11:21:32.000Z"  itemprop="datePublished">2018-06-19</time>
 
@@ -200,13 +200,21 @@
 </li>
 </ul>
 </li>
+<li><p>Rabbit中的消息可以按 发送顺序, 优先级高低 被依次消费</p>
+<ul>
+<li>默认不设置 队列,消息优先级 的情况下, 如果只有一个消费者, 消息会按照其发送顺序被一次消费</li>
+<li>如果设置了 队列,消息优先级, 如果只有一个消费者, 消息会按照 发送顺序, 发送顺序+优先级顺序, 全部按照优先级顺序 三种顺序依次被消费;<br>下面会有案例展示;</li>
+</ul>
+</li>
+<li><p>要想使用 消息优先级, 需要使用 队列的 $arguments的 <code>x-max-priority</code> 选项 和 消息的 $arguments的 <code>priority</code> 选项;</p>
+</li>
 </ol>
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><ol>
-<li><p>当queue只有一个consumer时, 如果producer先发送msg到queue, 然后再启动consumer, 此时和consumer的Qos是否设置或者设置大小无关, msg会按照优先级由高到低依次输出 (不会按照producer的发送顺序输出)<br> 貌似是因为 msg 有足够的时间在Rabbit Server中按照优先级做好排序;</p>
+<li><p>当queue只有一个consumer时, 如果producer先发送msg到queue, 然后再启动consumer, 此时和consumer的Qos是否设置或者设置大小无关, msg会按照优先级由高到低依次输出 (不会按照producer的发送顺序输出)<br> 貌似是因为 msg 有足够的时间(先运行producer的时间+消费者启动后连接到server的时间)在Rabbit Server中按照优先级做好排序;</p>
 </li>
 <li><p>当queue只有一个consumer时, 如果先启动consumer, 然后producer再发送msg到queue</p>
 <ul>
-<li><p>如果没有设置Qos, 即便consumer处理每条消息的速度很慢, 但是由于运行producer之后, 由于消息会在第一时间被尽可能全量发送到consumer, 所以queue中貌似没什么时间对msg按照优先级进行排序, 所以consumer拿到的msg只是按照发送顺序排列的消息;</p>
+<li><p>如果没有设置Qos, 即便consumer处理每条消息的速度很慢, 但是由于运行producer之后, 消息会在第一时间被尽可能全量发送到consumer, 所以queue中貌似没什么时间对msg按照优先级进行排序, 所以consumer拿到的msg只是按照发送顺序排列的消息;</p>
 </li>
 <li><p>如果设置了Qos的prefetch_count=1, 先启动consumer:<br>理论上, 第一个msg是按照发送顺序, 但是之后的9个msg都会按照优先级顺序;<br>但实际测试发现, 有时候msg还会全部按照优先级顺序来, 这是个比较疑惑的问题, 后来通过观察WebUI管理界面可以发现, 在启动消费者之后, 并不一定队列可以立马识别到该consumer (因为队列的 Consumers 这列显示还是0), 如果你此时运行了producer, 那么相当于先运行了producer, 然后再启动了消费者, 所以msg将会全部按照优先级循序被消费; 所以要为了确保消费者被先启动, 最好确保队列的Consumers这列显示为1, 表示消费者已经连接上来了;<br>并且即使你prefetch_count=1的同时设置了 sleep(5), 还是会出现上面的问题(也是由于虽然你先执行了consumer, 但其实producer先被执行的原因)! </p>
 </li>
@@ -281,7 +289,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -291,7 +299,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -301,7 +309,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -434,7 +442,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -444,7 +452,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&title=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -454,7 +462,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《35. Priority Queues - 消息按 发送顺序/优先级高低 依次消费》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《35. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
