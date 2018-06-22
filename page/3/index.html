@@ -140,6 +140,164 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-25-mysql-48"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-25 18:27:40" datetime="2017-09-25T10:27:40.000Z"  itemprop="datePublished">2017-09-25</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-48/">48. 冗余和重复索引</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+重复索引 是指在相同的列上按照相同的顺序创建的相同类型的索引; 应该避免这样的重复索引, 发现后也应该立即删除;
+
+MySQL允许在相同的列上创建多个索引, 但是MySQL需要单独维护重复的索引, 并且优化器在优化查询的时候也需要逐个地进行考虑, 这会影响性能;
+
+冗余索引 和 重复索引 不同, 如果创建了索引(A,B), 在创建索引(A)就是冗余索引, 因为这只是(A,B)索引的前缀索引...
+    
+
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-48/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-25-mysql-47"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-25 18:25:11" datetime="2017-09-25T10:25:11.000Z"  itemprop="datePublished">2017-09-25</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-47/">47. 使用索引扫描来做排序</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        简介
+只有当索引的列顺序 和 ORDER BY 子句的顺序完全一致, 并且所有列的排序方向都一样时(要么都是正序, 要么都是倒序), MySQL才能够使用索引来对结果做排序;
+
+如果查询需要关联多张表, 则只有当 ORDER BY 子句引用的字段全部为第一个表时, 才能使用索引做排序;
+
+ORDER BY 子句 和 查找型查询的限制是一样的, 需要满足索引的最左前缀的要求, 否则, MySQ...
+    
+
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-47/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-mysql/2017-09-25-mysql-46"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2017-09-25 17:30:26" datetime="2017-09-25T09:30:26.000Z"  itemprop="datePublished">2017-09-25</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2017/09/25/mysql/2017-09-25-mysql-46/">46. 覆盖索引</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        介绍
+通常, 大家都会根据查询的WHERE条件来创建合适的索引, 不过这只是索引优化的一个方面, 设计优秀的索引应该考虑到整个查询, 而不单单是where条件部分。
+
+覆盖索引
+
+索引确实是一种查找数据的高效方式, 但是MySQL也可以使用索引就能直接获取列的数据, 这样就不需要再去读取数据行;
+如果叶子节点中已经包含了要查询的数据, 那么就没有必要再回表查询了;
+即, 如果一个索引包含(或...
+    
+
+        <a href="/2017/09/25/mysql/2017-09-25-mysql-46/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/索引/">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/高性能索引策略/">高性能索引策略</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-mysql/2017-09-24-mysql-45"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -504,163 +662,6 @@ MyISAM的索引是通过 数据...
     
 
         <a href="/2017/09/17/mysql/2017-09-17-mysql-27/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-17-mysql-26"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-17 18:10:21" datetime="2017-09-17T10:10:21.000Z"  itemprop="datePublished">2017-09-17</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/17/mysql/2017-09-17-mysql-26/">26. MVCC 多版本并发控制</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介Multiversion Concurrency Control
-
-阿里数据库内核’2017/12’月报中对MVCC的解释是:
-多版本控制: 指的是一种 提高并发 的技术。最早的数据库系统, 只有读读之间可以并发，读写，写读，写写都要阻塞。引入多版本之后，只有写写之间相互阻塞，其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。
-
-
-&lt;高性能MySQL&gt;中对MVCC...
-    
-
-        <a href="/2017/09/17/mysql/2017-09-17-mysql-26/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MVCC/">MVCC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-17-mysql-25"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-17 14:50:52" datetime="2017-09-17T06:50:52.000Z"  itemprop="datePublished">2017-09-17</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/17/mysql/2017-09-17-mysql-25/">25. READ COMMITTED</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言
-READ COMMITTED 隔离级别可以解决高并发场景下, 事务 脏读 的问题; 也就是可以让事务只能读其他事务已完成(提交/回滚)的落地数据;
-
-如果让你用 锁 来设计该隔离级别 ? 假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 尚未落地的脏数据 呢?
-
-当事务B在对数据做写操作的时候, ...
-    
-
-        <a href="/2017/09/17/mysql/2017-09-17-mysql-25/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-mysql/2017-09-17-mysql-24"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-09-17 14:40:04" datetime="2017-09-17T06:40:04.000Z"  itemprop="datePublished">2017-09-17</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/17/mysql/2017-09-17-mysql-24/">24. READ UNCOMMITTED 未提交读</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介
-READ UNCOMMITTED 隔离级别会造成 脏读(Dirty Read) 现象的出现:也就是说, 事务 可以读取 其他事务 未提交的数据(事务A中对数据所做的修改, 即使还没有被提交, 对其他事务也都是可见的); 
-
-这个级别会导致很多问题, 而且从性能上来说, READ COMMITTED 并不会比其他的级别好太多, 却缺乏其他级别的很多好处, 在实际应用中一般很少使用。
-
-虽...
-    
-
-        <a href="/2017/09/17/mysql/2017-09-17-mysql-24/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>

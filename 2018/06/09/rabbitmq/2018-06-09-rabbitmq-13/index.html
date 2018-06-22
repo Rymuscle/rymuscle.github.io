@@ -29,7 +29,7 @@
 <meta property="og:description" content="理论 官方文档: https://www.rabbitmq.com/maxlength.html  译文:  一个队列的最大长度可以通过设置 消息的数量 或者 消息的字节数(所有消息体长度的总和, 忽略消息属性 和 任何杂项开销), 或者两者都设置, 来限制;  对于任何给定的队列, 其最大长度(包括以上说的两种类型), 可以使用队列的$arguments参数, 或者在服务器端使用policies">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/queue-length-limit-01.png">
-<meta property="og:updated_time" content="2018-06-21T05:13:34.000Z">
+<meta property="og:updated_time" content="2018-06-21T07:36:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="13. Queue Length Limit (队列长度限制) - x-max-length, x-max-length-bytes, x-overflow">
 <meta name="twitter:description" content="理论 官方文档: https://www.rabbitmq.com/maxlength.html  译文:  一个队列的最大长度可以通过设置 消息的数量 或者 消息的字节数(所有消息体长度的总和, 忽略消息属性 和 任何杂项开销), 或者两者都设置, 来限制;  对于任何给定的队列, 其最大长度(包括以上说的两种类型), 可以使用队列的$arguments参数, 或者在服务器端使用policies">
@@ -210,14 +210,15 @@ rabbitmqctl (Windows) : rabbitmqctl.bat set_policy my-pol &quot;^two-messages$&q
 还可以使用管理插件定义策略, 有关更多详细信息，请参阅[策略文档](https://www.rabbitmq.com/parameters.html#policies)
 
 - 使用 $arguments 定义最大队列长度
-通过提供带有非负整数值的 `x-max-length`($ageuments中的选项) 队列声明参数, 可以设置最大消息数; 非负整数值的`x-max-length-bytes` 则可以设置字节的最大长度;
+通过提供带有非负整数值的 `x-max-length`($ageuments中的选项) 队列声明参数, 可以设置最大消息数; 非负整数值的 `x-max-length-bytes` 则可以设置字节的最大长度;
 如果两个参数都设置了, 那么两者都适用, 无论哪个限制首先被实施;
 
 通过为队列声明参数$arguments的 `x-overflow` 选项提供一个字符串值, 可以设置溢出行为, 可能的值有 `drop-head`(默认) 或 `reject-publish`;
 </code></pre><h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
-<li><p>2.</p>
+<li><p>默认溢出行为下, 当队列中消息放满时, 消息什么时候丢弃, 什么时候被死信? </p>
 </li>
-<li></li>
+<li><p>测试代码参考<a href=""></a>;</p>
+</li>
 </ol>
 
         </div>

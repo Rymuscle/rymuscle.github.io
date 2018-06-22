@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
-<meta property="og:updated_time" content="2018-06-19T10:10:41.000Z">
+<meta property="og:updated_time" content="2018-06-21T07:33:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20. 消费者预取 Consumer Prefetch">
 <meta name="twitter:description" content="Consumer Prefetch1.官方文档: https://www.rabbitmq.com/consumer-prefetch.html 2.译文:限制 unack 消息数量的更自然有效的方法;AMQP 0-9-1 指定了 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;  不幸的是, channel 并不是理想的">
@@ -291,7 +291,7 @@
 </li>
 <li><p>在<code>php-amqplib</code>中, 可以使用信道的 <code>basic_qos()</code> 来进行控制, <code>basic_qos()</code> 有三个参数:</p>
 <ul>
-<li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端RabbitMQ系统没有实现该参数的功能)可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a><br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
+<li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端<strong>RabbitMQ系统没有实现该参数的功能</strong>, 还可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a>)<br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
 <li>prefetch_count : 预取消息数量</li>
 <li>global, 但是RabbitMQ没有实现prefetch_size, 并在3.3.0版本中对global这个参数的含义进行了重新定义, 即glotal=true时表示在当前channel上所有的consumer都生效, 否则只对设置了之后新建的consumer生效;</li>
 </ul>
@@ -381,9 +381,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/12/rabbitmq/2018-06-07-rabbitmq-11/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</h4>
+          <h4 class="title">11. Dead Letter Exchanges 私信交换机</h4>
         </a>
       </div>
     

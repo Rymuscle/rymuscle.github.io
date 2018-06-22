@@ -13,25 +13,25 @@
     
     
     
-    <title>12. 惰性队列 | Lant&#39;s Blog</title>
+    <title>08. 消费者应答 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="https://www.rabbitmq.com/lazy-queues.html">
+    <meta name="description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="12. 惰性队列">
-<meta property="og:url" content="http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/index.html">
+<meta property="og:title" content="08. 消费者应答">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="https://www.rabbitmq.com/lazy-queues.html">
+<meta property="og:description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-21T02:04:01.000Z">
+<meta property="og:updated_time" content="2018-06-21T11:55:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="12. 惰性队列">
-<meta name="twitter:description" content="https://www.rabbitmq.com/lazy-queues.html">
+<meta name="twitter:title" content="08. 消费者应答">
+<meta name="twitter:description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">12. 惰性队列</div>
+        <div class="flex-col header-title ellipsis">08. 消费者应答</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,11 +127,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">12. 惰性队列</h1>
+        <h1 class="title">08. 消费者应答</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-06-09T02:14:30.000Z" itemprop="datePublished" class="page-time">
-  2018-06-09
+                <time datetime="2018-06-05T09:45:51.000Z" itemprop="datePublished" class="page-time">
+  2018-06-05
 </time>
 
 
@@ -149,13 +149,20 @@
 
 <div class="container body-wrap">
     
-<article id="post-rabbitmq/2018-06-09-rabbitmq-12"
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Acknowledgements-and-Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Acknowledgements and Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Negative-Acknowledgements"><span class="post-toc-number">2.</span> <span class="post-toc-text">Negative Acknowledgements</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2018-06-05-rabbitmq-08"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">12. 惰性队列</h1>
+        <h1 class="post-card-title">08. 消费者应答</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-06-09 10:14:30" datetime="2018-06-09T02:14:30.000Z"  itemprop="datePublished">2018-06-09</time>
+            <time class="post-time" title="2018-06-05 17:45:51" datetime="2018-06-05T09:45:51.000Z"  itemprop="datePublished">2018-06-05</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -166,7 +173,28 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p><a href="https://www.rabbitmq.com/lazy-queues.html" target="_blank" rel="external">https://www.rabbitmq.com/lazy-queues.html</a></p>
+            <p>basic_ack<br>basic_nack<br>basic_cancle<br>basic_reject<br>basic_reject<br>basic_reject<br>basic_reject</p>
+<p>……<br>confirm_select<br>confirm_select_ok</p>
+<p>……<br>set_return_listener<br>set_ack_handler<br>set_nack_handler<br>……<br>wait_for_pending_acks</p>
+<h2 id="Consumer-Acknowledgements-and-Publisher-Confirms"><a href="#Consumer-Acknowledgements-and-Publisher-Confirms" class="headerlink" title="Consumer Acknowledgements and Publisher Confirms"></a>Consumer Acknowledgements and Publisher Confirms</h2><ol>
+<li>官网文档: <a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">https://www.rabbitmq.com/confirms.html</a></li>
+<li>译文<ul>
+<li>消费者确认 和 发布者确认</li>
+</ul>
+</li>
+</ol>
+<h2 id="Negative-Acknowledgements"><a href="#Negative-Acknowledgements" class="headerlink" title="Negative Acknowledgements"></a>Negative Acknowledgements</h2><p>1.官网文档: <a href="https://www.rabbitmq.com/nack.html" target="_blank" rel="external">https://www.rabbitmq.com/nack.html</a> </p>
+<ol>
+<li>译文<ul>
+<li>否定性的确认<br>AMQP0-9-1中的Consumers可以选择 手动确认。</li>
+</ul>
+</li>
+</ol>
+<p>AMQP 0-9-1规范定义了basic.reject方法，该方法允许客户拒绝单个传递的消息，指示代理丢弃或重新发送消息。 不幸的是，basic.reject不支持散列中否定确认消息。</p>
+<p>为了解决这个问题，RabbitMQ支持basic.nack方法，该方法提供了basic.reject的所有功能，同时也允许批量处理消息。</p>
+<p>要批量拒绝邮件，客户端将basic.nack方法的多个标志设置为true。 然后，代理将拒绝所有未确认的，传递的消息，直至包含basic.nack方法的delivery_tag字段中指定的消息。 在这方面，basic.nack补充了basic.ack的批量确认语义。</p>
+<p>这个例子拒绝了一条消息，要求经纪人重新申请：</p>
+<p><a href="https://www.rabbitmq.com/nack.html" target="_blank" rel="external">https://www.rabbitmq.com/nack.html</a><br><a href="https://www.rabbitmq.com/consumer-cancel.html" target="_blank" rel="external">https://www.rabbitmq.com/consumer-cancel.html</a></p>
 
         </div>
 
@@ -203,7 +231,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -213,22 +241,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 消费者应答》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -251,17 +279,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" id="post-prev" class="post-nav-link">
+        <a href="/2018/03/16/http/2018-03-06-restful/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">07. 两个确认机制</h4>
+          <h4 class="title">Restful</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-13/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">13. Queue Length Limit (队列长度限制) - x-max-length, x-max-length-bytes, x-overflow</h4>
+        <h4 class="title">07. 两个确认机制</h4>
       </a>
     </div>
   
@@ -363,7 +391,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -373,22 +401,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 消费者应答》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -399,7 +427,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvklEQVR42u3aS27DMAwFwNz/0i3QVYHCznui5HQxWhWJPxoVEBmKr1c8vn7G77//fnJ/79U1fz/Pr9w28PDw8JamfjVy0v29c9LVfK7ei4eHh3ea1waD+9cnE7qfaE59Y8HDw8P7KG9tg54EjDaJx8PDw/ufvLXyxP2mv1YQwcPDw/ssL9nc24kmoaVNuA/WWvDw8PBi3mRT/tTfx8/38PDw8JZO1dc23OTwLDkMmw88PDy8E7y2zLrWCNW2I0xmEv1iwMPDwxvw7hsCJj/vk2CQtCNMFhQPDw/vHC85xGoPwPKGg3xp8jIuHh4e3jleXhS4f+je5oC1o7K6PwIPDw9vEy9PsvMwsHcR2/QaDw8Pby8vLxa0023Z+bdFAQUPDw/vEV5yBJVPMS8fJM/Ji8t4eHh4z/B2vb4tPSRPa/8NeHh4eOd4k4m2x1T5vXlwitoO8PDw8Lby7gPDpHyQFynypqt8saK4h4eHh7fEW9tw83JqW8iYLMTlrPDw8PAe4a2VJ9Y28QkvegIeHh7eg7xku8/Lr3moyNP6aCHw8PDwDvByRtti1U46OXJrlxUPDw9vLy+fejKt/Nskpc4X7vJePDw8vGO8+1S1PcpKQkv77eLS4OHh4R3mzVPevEiRp8htQh91RuDh4eENePOiaj7FtaJDO8O6So2Hh4dX8or6bpl2J/i10FIsHB4eHt4jvHk5NT/mb8sN7QLh4eHhneAVeXdZnsiT7Lx4MRp4eHh4m3hf5VgLG6MNvUzQ33RG4OHh4Y157R67a5duP1kr5uLh4eGd4yXBoA0eyXLsPVR70zqAh4eHd4C39voc37YU5BHszTV4eHh4H+W1xdm1Y61t3WR4eHh4/4Y3OTxrixp5CLm8Hg8PD+8Yb54Kt0nzWhNDnWTj4eHhHeC1B2BtypuHn7VU/jUfeHh4eCnvG9RIXpP3NG1VAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACq0lEQVR42u3aQW7DMAwEQP//0+m1h1pZkpKTAqNTkdaWxgUsZcnrisfr11j/zd1V65HMuJ59NPDw8PAGS7+beD3Z3UKTq6p3y9eMh4eHd5q3ftEnk60fWXXpvU0CDw8P7zt5vSXm90mO7Hh4eHj/kZfHEFXYelPBw8PD+x5eEkYkwe4kmKj+dnPWgoeHh1erNzWPs5/6+Uh9Dw8PD29cVa8W+CdLqRbhotXi4eHhHeDlS6lGA9XjcrWQVmgOw8PDw9vK2/X1vteqlQSyCfj2nnh4eHgHeL2NoQdIHmU10o3+AXh4eHgHeL0y1eTzvTMWWrjw8PDwxrwkROi1DvRC23zriiJjPDw8vGO8/NbVY/GkYau6Gbyp7+Hh4eFt5Z075s6PyNWtIgpw8fDw8Aa8HDbfAHrxbt6YFYW5eHh4eGPe/BA8OWpXS3H57Hh4eHjP8PLD9NUaVfCGLQoPDw/vGC/BvOJR7VyYFMM29EHg4eHhbeJVlzV/oU/aCN6k1Hh4eHgHeHkQkB+pJw+u2tp1e088PDy8Y7xqqalXjsoDiOoDKoQReHh4eGNePln+yaTdqteg8GYleHh4eAd41RCh91qvHqOrR3k8PDy853m7QoekaWAeSSQtYnh4eHjP8KpbQq+B4IpHsl2tP8fDw8M7wSu/WJe8/Krewb384PDw8PAe5+1tF8jBvWaCP67Fw8PDO8brHZ2r7VDzTWWUT+Ph4eGNea/iqD6OBNaLNtZFuD96yvDw8PA28eZxarXwf+LnDQMPDw+vyOs1jOZRbB4fTDaGchiBh4eHN+bl0Wr1dd8rjG3e0/Dw8PA+ypvHtfn2Mw848PDw8L6Bl0ycAPKDcvUx4eHh4T3D6wUB1fCiF2RMmrHw8PDwTvCq3+j3RrS9QtrmCAMPDw8v5f0AKEpK3xYByr8AAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

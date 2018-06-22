@@ -173,9 +173,7 @@
 
 译文
 
-从版本3.5.0开始, RabbitMQ在核心中实现优先级队列任何队列都可以使用客户端提供的可选参数变成优先的 (但与其他功能不同, 此处可以使用可选参数$arguments, 但是不支持使用 策略)支持有限的优先级数量: 255, 建议1至10之间的值;
-
-使...
+从3.5.0版本开始, RabbitMQ已经在核心中实现了 优先级队列任何队列都可以使用客户端提供的可选参数 $arguments 变成优先的 (但与其他功能不同, 此处可以使用可选参数 $arguments, 但是不支持使用 策略)该实现支持有限的优先级数量:...
     
 
         <a href="/2018/06/19/rabbitmq/2018-06-19-rabbitmq-35/" class="post-more waves-effect waves-button">
@@ -282,6 +280,60 @@
     
 
         <a href="/2018/06/13/rabbitmq/2018-06-13-rabbitmq-20/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-07-rabbitmq-11"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-12 14:36:51" datetime="2018-06-12T06:36:51.000Z"  itemprop="datePublished">2018-06-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/12/rabbitmq/2018-06-07-rabbitmq-11/">11. Dead Letter Exchanges 私信交换机</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        关于死信
+官网文档: https://www.rabbitmq.com/dlx.html
+
+译文 (死信貌似是个动词)
+
+来自队列的消息可能被 “死信”, 即, 在如下任何事件发生的情况下, 消息被重新发布到另一个Exchange:该消息被拒绝(basic.reject 或 basic.nack ), 其中 requeue = false消息的TTL过期要么队列长度限制已超出
+
+死信Exch...
+    
+
+        <a href="/2018/06/12/rabbitmq/2018-06-07-rabbitmq-11/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -451,6 +503,106 @@
         </li>
     
         <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-03-rabbitmq-07"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-05 17:45:51" datetime="2018-06-05T09:45:51.000Z"  itemprop="datePublished">2018-06-05</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/">07. 两个确认机制</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject
+……confirm_selectconfirm_select_ok
+……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks
+Consume...
+    
+
+        <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-05-rabbitmq-08"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-05 17:45:51" datetime="2018-06-05T09:45:51.000Z"  itemprop="datePublished">2018-06-05</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 消费者应答</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject
+……confirm_selectconfirm_select_ok
+……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks
+Consume...
+    
+
+        <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-http/2018-03-06-restful"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -491,163 +643,6 @@
     <div class="post-footer">
         
 	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Restful/">Restful</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2017-12-06-HTTP-08"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-06 20:10:11" datetime="2017-12-06T12:10:11.000Z"  itemprop="datePublished">2017-12-06</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/06/http/2017-12-06-HTTP-08/">08. 并行连接, 持久连接</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        常被误解的Connection首部
-HTTP允许在客户端和最终的源端服务器之间存在一串HTTP中间实体(代理, 高速缓存等)。可以从客户端开始, 逐跳地将HTTP报文经过这些中间设备, 转发到源端服务器上去(或者进行反向传递)。
-
-HTTP的 Connection 首部字段中有一个由,分隔的连接标签列表;
-
-Connection首部可以承载3种不同类型的标签, 因此非常令人费解:
-
-HTTP...
-    
-
-        <a href="/2017/12/06/http/2017-12-06-HTTP-08/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2017-12-06-HTTP-11"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-12-06 18:50:27" datetime="2017-12-06T10:50:27.000Z"  itemprop="datePublished">2017-12-06</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/12/06/http/2017-12-06-HTTP-11/">11. 内容协商与转码</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言
-一个URL常常需要代表若干不同的资源
-
-例如那种需要以多种语言提供其内容的网站站点。 如果某个站点有 ‘说法语的’ 和 ‘说英语的’ 两种用户, 它可能想用这两种语言提供网站站点信息; 理想情况下，服务器应当向英语用户发送英文版，向法语用户发送法文版; 而用户只要访问网站主页就可以得到相应语言的内容。
-
-
-HTTP提供了 内容协商 方法，允许客户端和服务器作这样的决定。 通过这些方法，...
-    
-
-        <a href="/2017/12/06/http/2017-12-06-HTTP-11/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-http/2017-11-30-HTTP-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-11-30 21:27:36" datetime="2017-11-30T13:27:36.000Z"  itemprop="datePublished">2017-11-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/11/30/http/2017-11-30-HTTP-05/">05. 缓存</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        缓存关于缓存的概念本文就不详细展开说明了, 这里所说的web缓存其实就是: 为了降低服务器端的访问频率, 减少通信数量, 一些缓存设备, 如客户端或一些中继代理服务器将获取的数据保存下来, 当再次需要时, 就使用所保存的数据; (当请求抵达缓存设备时, 如果缓存设备本地有”已缓存的”副本, 就可以从本地设备而不是原始服务器中提取这个文档)
-使用缓存的优点
-
-减少了服务器端的通信数量, 可以提...
-    
-
-        <a href="/2017/11/30/http/2017-11-30-HTTP-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
 
     </div>
     
