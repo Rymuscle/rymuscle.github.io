@@ -509,7 +509,7 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-05 17:45:51" datetime="2018-06-05T09:45:51.000Z"  itemprop="datePublished">2018-06-05</time>
+        <time class="post-time" title="2018-06-05 19:20:56" datetime="2018-06-05T11:20:56.000Z"  itemprop="datePublished">2018-06-05</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -523,7 +523,7 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 消费者应答</a>
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 两个确认机制 -- Publisher Confirms</a>
     </h3>
   
 
@@ -533,10 +533,12 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject
-……confirm_selectconfirm_select_ok
-……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks
-Consume...
+        Publisher Confirms
+官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms
+
+译文
+
+当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后...
     
 
         <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
@@ -573,7 +575,7 @@ Consume...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/">07. 两个确认机制</a>
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/">07. 消费者确认机制(Consumer Acknowledgements)</a>
     </h3>
   
 
@@ -583,10 +585,11 @@ Consume...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject
-……confirm_selectconfirm_select_ok
-……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks
-Consume...
+        Consumer Acknowledgements
+在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;
+
+从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认;
+从 broker 到 pu...
     
 
         <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" class="post-more waves-effect waves-button">

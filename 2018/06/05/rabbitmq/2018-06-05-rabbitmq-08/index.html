@@ -13,25 +13,25 @@
     
     
     
-    <title>08. 消费者应答 | Lant&#39;s Blog</title>
+    <title>08. 两个确认机制 -- Publisher Confirms | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
+    <meta name="description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="08. 消费者应答">
+<meta property="og:title" content="08. 两个确认机制 -- Publisher Confirms">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
+<meta property="og:description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-21T11:55:20.000Z">
+<meta property="og:updated_time" content="2018-06-23T09:51:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="08. 消费者应答">
-<meta name="twitter:description" content="basic_ackbasic_nackbasic_canclebasic_rejectbasic_rejectbasic_rejectbasic_reject ……confirm_selectconfirm_select_ok ……set_return_listenerset_ack_handlerset_nack_handler……wait_for_pending_acks Consumer A">
+<meta name="twitter:title" content="08. 两个确认机制 -- Publisher Confirms">
+<meta name="twitter:description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">08. 消费者应答</div>
+        <div class="flex-col header-title ellipsis">08. 两个确认机制 -- Publisher Confirms</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,10 +127,10 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">08. 消费者应答</h1>
+        <h1 class="title">08. 两个确认机制 -- Publisher Confirms</h1>
         <h5 class="subtitle">
             
-                <time datetime="2018-06-05T09:45:51.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2018-06-05T11:20:56.000Z" itemprop="datePublished" class="page-time">
   2018-06-05
 </time>
 
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Acknowledgements-and-Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Acknowledgements and Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Negative-Acknowledgements"><span class="post-toc-number">2.</span> <span class="post-toc-text">Negative Acknowledgements</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#预习"><span class="post-toc-number">2.</span> <span class="post-toc-text">预习</span></a></li></ol>
         </nav>
     </aside>
     
@@ -160,9 +160,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">08. 消费者应答</h1>
+        <h1 class="post-card-title">08. 两个确认机制 -- Publisher Confirms</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-06-05 17:45:51" datetime="2018-06-05T09:45:51.000Z"  itemprop="datePublished">2018-06-05</time>
+            <time class="post-time" title="2018-06-05 19:20:56" datetime="2018-06-05T11:20:56.000Z"  itemprop="datePublished">2018-06-05</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
@@ -173,28 +173,48 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>basic_ack<br>basic_nack<br>basic_cancle<br>basic_reject<br>basic_reject<br>basic_reject<br>basic_reject</p>
+            <h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a>Publisher Confirms</h2><ol>
+<li><p>官网文档: <a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">https://www.rabbitmq.com/confirms.html#publisher-confirms</a></p>
+</li>
+<li><p>译文</p>
+<ul>
+<li><p>当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;<br>使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用<strong>事务</strong> - 使通道事务化, 然后为 每个消息或消息集 发布和提交; 不过, 这样的话, 事务会将吞吐量降低250倍;<br>为了解决这个问题, 引入了<strong>确认机制</strong>, 它模仿协议中已经存在的<strong>消费者确认机制</strong>;</p>
+</li>
+<li><p>要启用<code>确认</code>，客户端会发送<code>confirm.select</code>方法, 根据是否设置不等待, 代理可以用 <code>confirm.select-ok</code> 进行响应;<br>一旦在通道上使用 <code>confirm.select</code> 方法, 就说它处于<strong>确认模式</strong>, <strong>事务通道不能进入确认模式</strong>, 一旦通道处于确认模式, 就不能进行事务处理; 也就是说 <strong>事务 和 Publisher Confirm 不能同时使用</strong>;<br>一旦通道处于确认模式, 代理和客户端都会对消息进行计数(在第一次confirm.select时从1开始计数), 然后, broker通过在相同channel上发送 <code>basic.ack</code> 来处理它们, 从而确认消息; <code>delivery-tag</code> 字段包含确认消息的序列号。Broker也可以在 <code>basic.ack</code> 中设置 <code>multiple</code> 字段, 以表示到当前序列号为止的所有消息都已被处理;</p>
+</li>
+<li><p>publishes的Negative应答<br>在特殊情况下, broker无法成功处理消息, Broker将发送一个 <code>basic.nack</code> 而不是 <code>basic.ack</code>;<br>在这种情况下, <code>basic.nack</code> 的字段与 <code>basic.ack</code> 中的相应字段具有相同的含义, 并且应忽略 <code>requeue</code> 字段, 通过 <code>nack</code> 一条或多条消息, broker表示无法处理消息并拒绝对他们负责; 此时, 客户可以选择重新发布消息。</p>
+</li>
+<li><p>发布的消息什么时候被broker确认?<br>??对于不可路由的消息, 一旦交换验证消息不会路由到任何队列, broker将发出确认。如果该消息是强制发布的, <code>basic.return</code> 会在 <code>basic.ack</code> 之前发送给客户端, 对于否定确认<code>basic.nack</code>也是如此;<br>对于可路由消息, 当消息被所有队列接受时发送 <code>basic.ack</code> ; 对于路由到持久队列的持久消息, 这意味着持久化到磁盘; 对于镜像队列, 这意味着所有镜像都接受了该消息;</p>
+</li>
+<li><p>持久化消息的延迟应答 ?? 如何异步?<br>将消息保存到磁盘后, 将发送 被路由到持久队列的持久消息的 <code>basic.ack</code>, RabbitMQ消息存储在间隔(几百毫秒)后将消息持久保存到磁盘,<br>以最大限度地减少fsync（2）调用的次数，或者当一个队列处于空闲状态时。这意味着在恒定负载下，basic.ack的延迟可能会达到几百毫秒。为了提高吞吐量，强烈建议应用程序异步处理确认（作为流）或发布批量消息并等待未完成的确认。客户端库的确切API不尽相同。<br>为了提高吞吐量, 强烈建议应用程序异步处理确认(作为流)或发布批量消息并等待未完成的确认, 客户端库的确切API不尽相同;</p>
+</li>
+<li><p>Publisher Confirms 的顺序考虑<br>在大多数情况下, RabbitMQ将按发布顺序向publisher确认消息(这适用于在单个频道上发布的消息); 但是, 发布者确认是异步发出的, 并且可以确认一条消息或一组消息;<br>由于消息确认可以以不同的顺序到达, 所以, 应用程序应尽可能不取决于确认的顺序;</p>
+</li>
+<li><p>Publisher Confirms 并 保证投放<br>如果broker在消息写入磁盘之前崩溃, 代理将丢失持久性消息, 在某些情况下, 这会导致broker以令人惊讶的方式行事:<br>例如, 考虑这种情况:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">客户端发布持久消息给持久队列</div><div class="line">客户端从队列中的消费消息(注意消息是持久的并且队列持久), 但还没有确认</div><div class="line">Broker死亡并重新启动</div><div class="line">并且客户端重新连接并开始消费消息.</div></pre></td></tr></table></figure>
+<p><strong>此时, 客户可以合理地认为该消息将再次发送, 情况并非如此: 重新启动导致代理丢失消息, 为了保证持久性, 客户应该使用确认机制, 如果发布者的channel处于确认模式, 则发布者不会收到丢失消息的确认(因为消息尚未写入磁盘)</strong>;</p>
+</li>
+<li><p>限制<br>最大 Delivery Tag, 递送标签是一个64位长的值，因此其最大值为9223372036854775807.由于递送标签的范围是按每个通道划分的，因此发布商或消费者在实践中不太可能运行该值</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="预习"><a href="#预习" class="headerlink" title="预习"></a>预习</h2><p>本篇还涉及到了 Qos预取相关的内容:</p>
+<ol>
+<li><p>针对Qos的提前预习(译文)</p>
+<ul>
+<li><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="external">信道预取设置(QoS)</a><br>由于消息是异步发送(推送)给客户端的, 因此在任何给定时刻通常都有不止一条消息在信道上运行; 此外, 客户的手动确认本质上也是异步的, 所以有一个 未确认的交付标签的滑动窗口, 开发人员通常会倾向于限制此窗口的大小, <strong>以避免消费者端无限制的缓冲区问题</strong>。<br>这是通过使用 <code>basic.qos</code> 方法设置 <code>预取计数</code> 值完成的, 该值定义了<strong>channel上允许的最大未确认递送数量</strong>, 一旦数字达到配置的计数, RabbitMQ将停止在通道上传送更多消息, 除非至少有一个未确认的消息被确认;<br>例如, 假设在通道 “Ch” 上有未确认的交付标签5,6,7和8, 并且通道 “Ch” 的预取计数(后面会学到是<code>prefetch_count</code>)设置为4, 则RabbitMQ将不会在 “Ch” 上推送更多交付, 除非至少有一个未完成的交付被确认(当确认帧在 <code>delivery_tag=8</code> 的频道上到达时, <strong>RabbitMQ将会注意到并再发送一条消息</strong>)</p>
+</li>
+<li><p>QoS预取设置对使用 <code>basic.get</code>(<code>pull API</code>) 获取的消息没有影响, 即使在手动确认模式下也是如此;</p>
+</li>
+</ul>
+</li>
+<li><p><strong>消费者确认模式, 预取和吞吐量(译文)</strong><br> 确认模式 和 QoS预取值 对消费者吞吐量有显着影响, 一般来说, <strong>增加预取值将提高向消费者传递消息的速度, 当然, 自动确认模式可以产生最佳的传送速率</strong><br> 但是, 在上面两种情况下, 尚未完成交付处理的消息(unacked)数量也会增加, 从而增加消费者RAM消耗;<br> <strong>自动确认模式或带无限预取的手动确认模式应谨慎使用</strong>, 消费者在没有确认的情况下消耗大量消息将导致其所连接的节点上的内存消耗增长;<br> 预取值1是最保守的, 但这将显着降低吞吐量, 特别是在消费者连接延迟较高的环境中, 对于许多应用来说, 更高的价值是合适和最佳的;<br> 100到300范围内的Qos(<code>prefetch_count</code>)预取值通常提供最佳的吞吐量, 并且不会面临压垮consumer的重大风险, 而更高的值往往会遇到效率递减的规律; </p>
+</li>
+</ol>
+<p>basic_ack<br>basic_nack<br>basic_cancle<br>basic_reject</p>
 <p>……<br>confirm_select<br>confirm_select_ok</p>
 <p>……<br>set_return_listener<br>set_ack_handler<br>set_nack_handler<br>……<br>wait_for_pending_acks</p>
-<h2 id="Consumer-Acknowledgements-and-Publisher-Confirms"><a href="#Consumer-Acknowledgements-and-Publisher-Confirms" class="headerlink" title="Consumer Acknowledgements and Publisher Confirms"></a>Consumer Acknowledgements and Publisher Confirms</h2><ol>
-<li>官网文档: <a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">https://www.rabbitmq.com/confirms.html</a></li>
-<li>译文<ul>
-<li>消费者确认 和 发布者确认</li>
-</ul>
-</li>
-</ol>
-<h2 id="Negative-Acknowledgements"><a href="#Negative-Acknowledgements" class="headerlink" title="Negative Acknowledgements"></a>Negative Acknowledgements</h2><p>1.官网文档: <a href="https://www.rabbitmq.com/nack.html" target="_blank" rel="external">https://www.rabbitmq.com/nack.html</a> </p>
-<ol>
-<li>译文<ul>
-<li>否定性的确认<br>AMQP0-9-1中的Consumers可以选择 手动确认。</li>
-</ul>
-</li>
-</ol>
-<p>AMQP 0-9-1规范定义了basic.reject方法，该方法允许客户拒绝单个传递的消息，指示代理丢弃或重新发送消息。 不幸的是，basic.reject不支持散列中否定确认消息。</p>
-<p>为了解决这个问题，RabbitMQ支持basic.nack方法，该方法提供了basic.reject的所有功能，同时也允许批量处理消息。</p>
-<p>要批量拒绝邮件，客户端将basic.nack方法的多个标志设置为true。 然后，代理将拒绝所有未确认的，传递的消息，直至包含basic.nack方法的delivery_tag字段中指定的消息。 在这方面，basic.nack补充了basic.ack的批量确认语义。</p>
-<p>这个例子拒绝了一条消息，要求经纪人重新申请：</p>
-<p><a href="https://www.rabbitmq.com/nack.html" target="_blank" rel="external">https://www.rabbitmq.com/nack.html</a><br><a href="https://www.rabbitmq.com/consumer-cancel.html" target="_blank" rel="external">https://www.rabbitmq.com/consumer-cancel.html</a></p>
 
         </div>
 
@@ -231,7 +251,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -241,7 +261,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -251,7 +271,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 消费者应答》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -281,7 +301,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">07. 两个确认机制</h4>
+          <h4 class="title">07. 消费者确认机制(Consumer Acknowledgements)</h4>
         </a>
       </div>
     
@@ -391,7 +411,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -401,7 +421,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 消费者应答》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -411,7 +431,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 消费者应答》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
