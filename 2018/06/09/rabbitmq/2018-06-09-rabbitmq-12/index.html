@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Lazy Queues 从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;  Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:  消费者脱机/已经崩溃/因维护而停机">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-30T06:38:35.000Z">
+<meta property="og:updated_time" content="2018-06-30T06:47:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="12. Lazy Queues 惰性队列">
 <meta name="twitter:description" content="Lazy Queues 从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;  Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:  消费者脱机/已经崩溃/因维护而停机">
@@ -195,7 +195,7 @@
 <li><p>队列具备两种模式: <strong>default</strong> 和 <strong>lazy</strong></p>
 <ul>
 <li>默认的为default模式, 在3.6.0之前的版本无需做任何变更</li>
-<li>lazy模式即为惰性队列的模式, 可以通过调用 channel.queueDeclare 方法的时候在参数中设置</li>
+<li>lazy模式即为惰性队列的模式, 可以通过调用 channel.queueDeclare 方法的时候在参数中设置 <code>x-queue-mode</code> 为 <code>lazy</code> 或者 <code>default</code> 来指明队列为惰性或者正常</li>
 <li>也可以通过Policy的方式设置, 如果一个队列同时使用这两种方式设置的话, 那么队列参数优先于策略值</li>
 <li>只能通过删除队列, 重新创建队列并使用不同的参数重新声明它, 来更改队列模式</li>
 </ul>
@@ -203,6 +203,8 @@
 <li><p>当你想要优先保持节点内存使用率较低, 而较高的磁盘I/O和磁盘利用率可以接收时，所以惰性队列就比较合适;</p>
 </li>
 <li><p>貌似通过使用 <code>惰性队列+持久化队列</code>, 磁盘I/O无法避免的情况下, 还可以保证内存降低!</p>
+</li>
+<li><p><a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/LazyQueueController.php" target="_blank" rel="external">代码参考</a></p>
 </li>
 <li><p>未完待续~~</p>
 </li>
