@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>22. Priority Queues - queue(x-max-priority) + message(priority) | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从3.5.0版本开始, RabbitMQ已经在核心中实现了 优先级队列任何队列都可以使用客户端提供的可选参数 $arguments 变成优先的 (但与其他功能不同, 此处可以使用可选参数 $arguments, 但是不支持使用 策略)该实现支持有限的优先级数量: 25">
+<meta name="keywords" content="RabbitMQ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22. Priority Queues - queue(x-max-priority) + message(priority)">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从3.5.0版本开始, RabbitMQ已经在核心中实现了 优先级队列任何队列都可以使用客户端提供的可选参数 $arguments 变成优先的 (但与其他功能不同, 此处可以使用可选参数 $arguments, 但是不支持使用 策略)该实现支持有限的优先级数量: 25">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-06-30T05:52:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="22. Priority Queues - queue(x-max-priority) + message(priority)">
+<meta name="twitter:description" content="Priority Queues 官网文档: https://www.rabbitmq.com/priority.html  译文  从3.5.0版本开始, RabbitMQ已经在核心中实现了 优先级队列任何队列都可以使用客户端提供的可选参数 $arguments 变成优先的 (但与其他功能不同, 此处可以使用可选参数 $arguments, 但是不支持使用 策略)该实现支持有限的优先级数量: 25">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">22. Priority Queues - queue(x-max-priority) + message(priority)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">22. Priority Queues - queue(x-max-priority) + message(priority)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-19T11:21:32.000Z" itemprop="datePublished" class="page-time">
+  2018-06-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Priority-Queues"><span class="post-toc-number">1.</span> <span class="post-toc-text">Priority Queues</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分析"><span class="post-toc-number">2.</span> <span class="post-toc-text">分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-rabbitmq/2018-06-19-rabbitmq-22"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">22. Priority Queues - queue(x-max-priority) + message(priority)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-19 19:21:32" datetime="2018-06-19T11:21:32.000Z"  itemprop="datePublished">2018-06-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Priority-Queues"><a href="#Priority-Queues" class="headerlink" title="Priority Queues"></a>Priority Queues</h2><ol>
+<li><p>官网文档: <a href="https://www.rabbitmq.com/priority.html" target="_blank" rel="external">https://www.rabbitmq.com/priority.html</a></p>
+</li>
+<li><p>译文</p>
+<ul>
+<li><p>从3.5.0版本开始, RabbitMQ已经在核心中实现了 <strong>优先级队列</strong><br>任何队列都可以使用客户端提供的可选参数 <code>$arguments</code> 变成优先的 (但与其他功能不同, 此处可以使用可选参数 <code>$arguments</code>, 但是不支持使用 <code>策略</code>)<br>该实现支持有限的优先级数量: 255, 建议1至10之间的值;</p>
+</li>
+<li><p>使用客户端提供的可选参数 <code>$arguments</code><br>要声明优先级队列, 请使用queue的可选参数 <code>$arguments</code> 的 <code>x-max-priority</code> 选项, 该参数应该是1到255之间的正整数, 表示队列应该支持的最大优先级;</p>
+</li>
+<li><p>AMQP 0-9-1规范对于优先级的工作方式有些模糊, 它认为所有的队列中必须至少有两个是支持优先级的, 并且可以支持多达10个, 它没有定义 “没有优先级属性的消息该如何被处理”;</p>
+</li>
+<li><p>与AMQP 0-9-1规格相比, 默认情况下, RabbitMQ队列不支持优先级, 在创建优先级队列时, 您可以根据需要指定任意数量的优先级别, 不过需要注意:<br>队列的每个优先级会有一些 内存 和 磁盘 方面的成本, 还会有额外的CPU成本, 特别是在消费时, 所以你可能不希望创建大量的优先级别;</p>
+</li>
+<li><p>消息的 <code>priority</code> 字段被定义为无符号字节, 所以实际上优先级应该在0到255之间;<br>没有 <code>priority</code> 属性的消息被视为优先级为0, 优先级高于队列最大值的消息被视为以最高优先级发布;</p>
+</li>
+<li><p>资源使用注意事项<br><strong>如果需要优先级队列, 建议使用1到10之间的级别, 目前使用更多优先级将消耗更多资源(Erlang进程)</strong>;</p>
+</li>
+<li><p>与消费者互动<br>理解消费者在处理优先级队列时的工作方式非常重要, 默认情况下, 消费者在做任何应答之前, 可能已经被发送了大量的消息;<br>因此, 如果一个饥饿的消费者连接一个消息稍后才会被发布到的空队列, 这样, <strong>消息可能不会在队列中等待任何时间, 在这种情况下, 优先队列将不会有机会对它们做优先级</strong>;<br>在大多数情况下, 你会希望在消费者手动确认模式下使用 <code>basic.qos</code>, 以限制可以随时发送的消息数量, 从而允许优先化消息;</p>
+</li>
+<li><p>其他功能的互动<br>通常, 优先级队列具有标准RabbitMQ队列的所有功能: 它们支持持久性, 分页, 镜像等; 有几点需要注意的互动:<br>应该过期的消息仍然只会从队列的头部过期, 这些消息将永远不会传递, 但它们将显示在队列统计信息中;<br>设置了 <code>max-length</code> 的Queues, 通常情况下, 将从队列头部丢弃消息以强制执行限制, 这意味着<strong>可能会丢弃更高优先级的消息, 为低优先级的消息让路</strong>, 这可能不是你所期望的;</p>
+</li>
+<li><p>为什么 策略 定义是不可能的<br>为队列定义可选参数最方便的方法是通过策略, 策略是配置队列长度限制, TTL等的推荐方式;<br>但是, 策略不能用于配置优先级, 因为策略是动态的, 并且可以在声明队列后进行更改, 优先级队列在队列声明之后永远不会改变它们支持的优先级的数量, 因此策略不是一个安全的选项;</p>
+</li>
+</ul>
+</li>
+<li><p>Rabbit中的消息可以按 <strong>发送顺序</strong>, <strong>优先级高低</strong> 被依次消费</p>
+<ul>
+<li>默认不设置 队列,消息 优先级 的情况下, 如果只有一个消费者, 消息会按照其发送顺序被依次消费</li>
+<li>如果设置了 队列,消息 优先级, 如果只有一个消费者, 消息会按照 <code>全部按照发送顺序</code>, <code>发送顺序+优先级顺序</code>, <code>全部按照优先级顺序</code> 3种顺序依次被消费;<br>下面会有案例展示;</li>
+</ul>
+</li>
+<li><p>要想使用优先级, 需要使用 队列的 $arguments的 <code>x-max-priority</code> 选项 和 消息的 $arguments的 <code>priority</code> 选项;</p>
+</li>
+</ol>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>当有多个consumer时, 是无法保证消息按发送顺序或者优先级顺序被消费的, 因为每个consumer视自身能力, 都有自己的消费速度, 而且也不一定稳定;</p>
+<ol>
+<li><p>当queue只有一个consumer时, 如果producer先发送msg到queue, 然后再启动consumer, 此时和consumer的Qos是否设置或者设置大小无关, msg会按照优先级由高到低依次输出 (不会按照producer的发送顺序输出)<br> 像之前译文中 <code>与消费者互动</code> 中提到的, 这是因为 msg 有足够的时间(消费者启动后连接到server的时间), 在Rabbit Server中按照优先级做好排序;</p>
+</li>
+<li><p>当queue只有一个consumer时, 如果先启动consumer, 然后producer再发送msg到queue</p>
+<ul>
+<li><p>如果没有设置Qos, 即便consumer处理每条消息的速度很慢, 但是由于运行producer之后, 消息会在第一时间被尽可能全量发送到consumer, 所以queue中貌似没什么时间对msg按照优先级进行排序, 所以consumer拿到的msg只是按照发送顺序排列的消息;<br>先启动consumer的情况下, 消费者是处于饥饿状态;</p>
+</li>
+<li><p>如果设置了Qos的prefetch_count=1, 先启动consumer:<br>理论上, 第一个msg是按照发送顺序, 但是之后的9个msg都会按照优先级顺序;<br>但实际测试发现, 有时候msg还会全部按照优先级顺序来, 这是个比较疑惑的问题, 后来通过观察WebUI管理界面可以发现, 在启动消费者之后, 并不一定队列可以立马识别到该consumer (因为队列的 Consumers 这列显示还是0), 如果你此时运行了producer, 那么相当于先运行了producer, 然后再启动了消费者, 所以msg将会全部按照优先级循序被消费; 所以要为了确保消费者被先启动, 最好确保队列的Consumers这列显示为1, 表示消费者已经连接上来了;<br>并且即使你prefetch_count=1的同时设置了 sleep(5), 还是会出现上面的问题(也是由于虽然你先执行了consumer, 但其实producer先被执行的原因)! </p>
+</li>
+<li><p>如果设置了Qos, 但是设置的prefetch_count&gt;1(比如为2)<br>理论上也是前两个msg按照发送顺序, 而后面8个按照优先级顺序;<br>实际测试发现, 如果出现上面的意外, 也会导致10条消息全部按照优先级顺序被消费;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>先运行生产者生产消息, 然后再启动消费者, 消息会有时间按照优先级在queue中做好排序, 然后发送给消费者; (这种条件类似消费能力不足的情况, 类似于consumer消费过慢并产生很多unack, 导致queue中的msg有时间按照优先级排序)</p>
+</li>
+<li><p>先启动消费者, 然后运行生产者生产消息, 消息会根据消费者设置的Qos, 优先会有prefetch_count数量的消费者被直接发送到consumer, 这些msg会按照发送先后顺序被消费, 之后的剩余消费者则会按照优先级顺序被消费; </p>
+</li>
+<li><p>总之, 消息想要按照设置的优先级别来被消费, 在将消息发出去之前, Server必须有足够的时间对Queue中的消息按照优先级高低做好排序;    </p>
+</li>
+<li><p>所以消息优先级貌似对应用场景比较苛刻(消费者貌似要唯一, 而且需要消费者阻塞产生unacked之后, server中的消息貌似才有时间排序), 所以这个优先级感觉挺鸡肋, 如果需要消息有顺序, 还不如就 保证消费者唯一, 然后按照发送顺序消费即可! </p>
+</li>
+</ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li><p>针对上面的分析进行测试</p>
+<ul>
+<li>在生产者中准备好10条优先级为0-10的消息, 然后乱序发送, 代码参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/MsgPriorityController.php" target="_blank" rel="external">此处</a></li>
+<li><p>消费者使用三种Qos做测试 1. 默认Qos, 不做限制 2. Qos设置为1, 3. Qos设置为2, 代码参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/msgPriorityConsumer.php" target="_blank" rel="external">此处</a></p>
+</li>
+<li><p>先运行生产者, 然后启动消费者, 会发现乱序的消息会按照优先级高低依次输出</p>
+</li>
+<li>而如果先启动消费者, 之后再运行生产者, 你会发现, 由于会有prefetch_count的msg被发送给消费者, 所以这部分消息会按照发送先后顺序被消费, 而其余消息会按照优先级高低依次输出;<br>如果没有设置Qos, 或者Qos设置的数量大于消息条数, 那么msg都会按照发送的先后顺序被消费, 不会按照优先级顺序被消费;</li>
+</ul>
+</li>
+<li><p>如果消息设置了选项 <code>priority</code>, 而队列没有设置 <code>x-max-priority</code>, 效果会怎样?</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$ php artisan msgPriorityConsumer</div><div class="line"></div><div class="line">In AMQPChannel.php line 188:</div><div class="line">                                                                                                                                                                     </div><div class="line">PRECONDITION_FAILED - inequivalent arg &apos;x-max-priority&apos; for queue &apos;msgPrioityQueue&apos; in vhost &apos;/&apos;: received none but current is the value &apos;10&apos; of type &apos;signedint&apos;  </div><div class="line">                                                                                                                                                                     </div><div class="line">renyimindeMacBook-Pro:Rabbit renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>队列设置了优先级选项 <code>x-max-priority</code>, 如果消息不设置优先级选项 <code>priority</code>, 效果会怎样?<br> 无论设置适当的Qos先启动消费者, 还是先运行生产者生产消息, msg都是按照发送顺序被消费的!</p>
+</li>
+<li><p>如果有多个消费者, 消息被发送给不同的消费者, 这样还会按照优先级顺序进行么?<br> 多个消费者是无法保证Msg被消费的顺序的;</p>
+</li>
+<li><p>集群模式下, 发送顺序和优先级顺序如何保证?<br> ~~ 待续</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&title=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&title=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/15/rabbitmq/2018-06-15-rabbitmq-21/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">21. Consumer Priorities 消费者优先级</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&title=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&title=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. Priority Queues - queue(x-max-priority) + message(priority)》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/19/rabbitmq/2018-06-19-rabbitmq-22/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtklEQVR42u3aQU7EMAwFUO5/aZDYjtr+7yTQxesKMW3qN0hxsP31FV/fv9fnz5/3fH76HVzJald3brjw8PDwRqHfv/h+6c87E2RLunrLw8p4eHh4x3izoPMXJ9SrO9vkhIeHh/ce3n0QOSxPFbNjPR4eHt57eCupoq0Y4OHh4b2flxQj8tfPqqz5gftIrQUPDw+v6zcNG2D/9fMf9ffw8PDwyq56vkHPtvg2wdTR4uHh4R3gJW2nPD20sBkvGTJ4WA4PDw9vK289lHwUIE8DSXq4XBMPDw/vAC95LP998crlBJN/KXh4eHh7ebOGfZ4SZiu0rTI8PDy89/DazX2lM5W/t2iM4eHh4W3ltUuvFxdmb2mHG/Dw8PBO82bH5baIsNI8G8aGh4eHd4CXNLraMaz7Z/PiQhtJdLDGw8PD28Rri7ltmXVlu5+VIer/HvDw8PBiXkKaDQ3kKyeJJE8t9V8MDw8Pb8SbJYZ2W28PyhsKvnh4eHgHeG1h9ERwbXqo78TDw8PbytsVysoA1soow8OzeHh4eAd4bfl1ZfSqrS7nAwoP6+Ph4eFt5eUPrJd3Z8lmaawBDw8P7wAvL8jmgwLtpt+WZetEhYeHh3eAt3KMzssH7VhAW0/Aw8PD+xveyihVO3TVIlc+jXIXHh4e3gJv79DVepEiP3Y/lDPw8PDwDvBmzapZiEmJoR0CK0YH8PDw8Dbx8luTYkGSAPKJhuRLeShb4OHh4R3mzcoKs2N0PqCQJ6SHxICHh4e3idduuPlIwcr87Lm0gYeHh7eLd2L73vUVtInhsoyLh4eHd4B3Iog2rFkCwMPDw3szLy9h5Gfa/NA8bLbh4eHhvYCXDwe0Jd0kqrbIi4eHh3eOlze98obTymhCPo7wcEzHw8PDO8BrG2B5uLsSQ5sklvp7eHh4eHef/gAeGbtgz5XjcAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
