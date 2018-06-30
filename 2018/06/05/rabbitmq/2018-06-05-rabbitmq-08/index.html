@@ -13,25 +13,27 @@
     
     
     
-    <title>08. 两个确认机制 -- Publisher Confirms | Lant&#39;s Blog</title>
+    <title>08. Publisher Confirms 消息确认机制 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
+    <meta name="description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="08. 两个确认机制 -- Publisher Confirms">
+<meta property="og:title" content="08. Publisher Confirms 消息确认机制">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
+<meta property="og:description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-23T09:51:17.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/wireshark-Confirm.Select-ok.png">
+<meta property="og:updated_time" content="2018-06-30T05:37:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="08. 两个确认机制 -- Publisher Confirms">
-<meta name="twitter:description" content="Publisher Confirms 官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms  译文  当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后为 每">
+<meta name="twitter:title" content="08. Publisher Confirms 消息确认机制">
+<meta name="twitter:description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/wireshark-Confirm.Select-ok.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">08. 两个确认机制 -- Publisher Confirms</div>
+        <div class="flex-col header-title ellipsis">08. Publisher Confirms 消息确认机制</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +129,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">08. 两个确认机制 -- Publisher Confirms</h1>
+        <h1 class="title">08. Publisher Confirms 消息确认机制</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-05T11:20:56.000Z" itemprop="datePublished" class="page-time">
@@ -152,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#预习"><span class="post-toc-number">2.</span> <span class="post-toc-text">预习</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试代码"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试代码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#预习"><span class="post-toc-number">3.</span> <span class="post-toc-text">预习</span></a></li></ol>
         </nav>
     </aside>
     
@@ -160,7 +162,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">08. 两个确认机制 -- Publisher Confirms</h1>
+        <h1 class="post-card-title">08. Publisher Confirms 消息确认机制</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-05 19:20:56" datetime="2018-06-05T11:20:56.000Z"  itemprop="datePublished">2018-06-05</time>
 
@@ -173,32 +175,36 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a>Publisher Confirms</h2><ol>
-<li><p>官网文档: <a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">https://www.rabbitmq.com/confirms.html#publisher-confirms</a></p>
-</li>
-<li><p>译文</p>
+            <h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">Publisher Confirms</a></h2><ol>
+<li><p>当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;</p>
 <ul>
-<li><p>当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;<br>使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用<strong>事务</strong> - 使通道事务化, 然后为 每个消息或消息集 发布和提交; 不过, 这样的话, 事务会将吞吐量降低250倍;<br>为了解决这个问题, 引入了<strong>确认机制</strong>, 它模仿协议中已经存在的<strong>消费者确认机制</strong>;</p>
+<li>使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用<strong>事务</strong> – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交; </li>
+<li><strong>不过, 由于事务非常重量级, 会将吞吐量降低250倍;</strong></li>
+<li>为了解决这个问题, 引入了 <strong>Publisher Confirms</strong>, 它模仿协议中已经存在的 <strong>消费者确认机制</strong>;</li>
+</ul>
 </li>
-<li><p>要启用<code>确认</code>，客户端会发送<code>confirm.select</code>方法, 根据是否设置不等待, 代理可以用 <code>confirm.select-ok</code> 进行响应;<br>一旦在通道上使用 <code>confirm.select</code> 方法, 就说它处于<strong>确认模式</strong>, <strong>事务通道不能进入确认模式</strong>, 一旦通道处于确认模式, 就不能进行事务处理; 也就是说 <strong>事务 和 Publisher Confirm 不能同时使用</strong>;<br>一旦通道处于确认模式, 代理和客户端都会对消息进行计数(在第一次confirm.select时从1开始计数), 然后, broker通过在相同channel上发送 <code>basic.ack</code> 来处理它们, 从而确认消息; <code>delivery-tag</code> 字段包含确认消息的序列号。Broker也可以在 <code>basic.ack</code> 中设置 <code>multiple</code> 字段, 以表示到当前序列号为止的所有消息都已被处理;</p>
+<li><p>要启用这个确认机制，客户端可以通过使用channel的 <code>confirm.select</code> 方法</p>
+<ul>
+<li>如果设置了 <code>confirm.select</code> 方法的 <code>no-wait</code>, 代理会用 <code>confirm.select-ok</code> 进行响应, 不过这点你貌似也只能通过抓包来观察:<br><img src="/img/rabbitmq/wireshark-Confirm.Select-ok.png"></li>
+<li>这里说的 <code>confirm.select</code> 和 php-amqplib包中的 <code>confirm_select_ok()</code> 方法可不是一个意思, 而且php-amqplib也没对confirm_select_ok做实现</li>
+</ul>
 </li>
-<li><p>publishes的Negative应答<br>在特殊情况下, broker无法成功处理消息, Broker将发送一个 <code>basic.nack</code> 而不是 <code>basic.ack</code>;<br>在这种情况下, <code>basic.nack</code> 的字段与 <code>basic.ack</code> 中的相应字段具有相同的含义, 并且应忽略 <code>requeue</code> 字段, 通过 <code>nack</code> 一条或多条消息, broker表示无法处理消息并拒绝对他们负责; 此时, 客户可以选择重新发布消息。</p>
+<li><p>上面也提到了, 该确认机制是模仿已经存在的 消费者确认机制, 所以, Broker也会使用类似 <strong>ack</strong>, <strong>nack</strong> 来响应Publisher: </p>
+<ul>
+<li>可以通过为 <code>set_ack_handler</code> , <code>set_nack_handler</code> 设置回调, 来监测消息是否成功到达服务器, 成功则会触发 <code>set_ack_handler</code>, 失败则会触发 <code>set_nack_handler</code></li>
+<li><strong>只有在负责队列的Erlang进程中发生内部错误时才会回应nack</strong>, 所以这个在测试中也一直没有使用set_nack_handler捕获到错误, 但是对于nack的消息, 可以设置进行重发;</li>
+<li>注意: <strong>这两监听函数是监听 publisher confirm 应答的, 可不是监听 consumer ack 应答的</strong>;</li>
+</ul>
 </li>
-<li><p>发布的消息什么时候被broker确认?<br>??对于不可路由的消息, 一旦交换验证消息不会路由到任何队列, broker将发出确认。如果该消息是强制发布的, <code>basic.return</code> 会在 <code>basic.ack</code> 之前发送给客户端, 对于否定确认<code>basic.nack</code>也是如此;<br>对于可路由消息, 当消息被所有队列接受时发送 <code>basic.ack</code> ; 对于路由到持久队列的持久消息, 这意味着持久化到磁盘; 对于镜像队列, 这意味着所有镜像都接受了该消息;</p>
+<li><p>一旦在channel上使用 <code>confirm.select</code> 方法, 就说它处于<strong>确认模式</strong>, <strong>事务通道不能进入确认模式</strong>, 一旦通道处于确认模式, 就不能进行事务处理; 也就是说 <strong>事务 和 Publisher Confirm 不能同时使用</strong>;<br> 一旦通道处于确认模式, 代理和客户端都会对消息进行计数(在第一次confirm.select时从1开始计数), 然后, broker通过在相同channel上发送 <code>basic.ack</code> 来处理它们, 从而确认消息;<br> <code>delivery-tag</code> 字段包含确认消息的序列号;<br> 最大 Delivery Tag, 递送标签是一个64位长的值，因此其最大值为9223372036854775807.由于递送标签的范围是按每个通道划分的，因此发布商或消费者在实践中不太可能运行该值</p>
 </li>
-<li><p>持久化消息的延迟应答 ?? 如何异步?<br>将消息保存到磁盘后, 将发送 被路由到持久队列的持久消息的 <code>basic.ack</code>, RabbitMQ消息存储在间隔(几百毫秒)后将消息持久保存到磁盘,<br>以最大限度地减少fsync（2）调用的次数，或者当一个队列处于空闲状态时。这意味着在恒定负载下，basic.ack的延迟可能会达到几百毫秒。为了提高吞吐量，强烈建议应用程序异步处理确认（作为流）或发布批量消息并等待未完成的确认。客户端库的确切API不尽相同。<br>为了提高吞吐量, 强烈建议应用程序异步处理确认(作为流)或发布批量消息并等待未完成的确认, 客户端库的确切API不尽相同;</p>
-</li>
-<li><p>Publisher Confirms 的顺序考虑<br>在大多数情况下, RabbitMQ将按发布顺序向publisher确认消息(这适用于在单个频道上发布的消息); 但是, 发布者确认是异步发出的, 并且可以确认一条消息或一组消息;<br>由于消息确认可以以不同的顺序到达, 所以, 应用程序应尽可能不取决于确认的顺序;</p>
-</li>
-<li><p>Publisher Confirms 并 保证投放<br>如果broker在消息写入磁盘之前崩溃, 代理将丢失持久性消息, 在某些情况下, 这会导致broker以令人惊讶的方式行事:<br>例如, 考虑这种情况:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">客户端发布持久消息给持久队列</div><div class="line">客户端从队列中的消费消息(注意消息是持久的并且队列持久), 但还没有确认</div><div class="line">Broker死亡并重新启动</div><div class="line">并且客户端重新连接并开始消费消息.</div></pre></td></tr></table></figure>
-<p><strong>此时, 客户可以合理地认为该消息将再次发送, 情况并非如此: 重新启动导致代理丢失消息, 为了保证持久性, 客户应该使用确认机制, 如果发布者的channel处于确认模式, 则发布者不会收到丢失消息的确认(因为消息尚未写入磁盘)</strong>;</p>
-</li>
-<li><p>限制<br>最大 Delivery Tag, 递送标签是一个64位长的值，因此其最大值为9223372036854775807.由于递送标签的范围是按每个通道划分的，因此发布商或消费者在实践中不太可能运行该值</p>
-</li>
+<li><p>Publisher Confirms 的顺序考虑</p>
+<ul>
+<li>在大多数情况下, RabbitMQ将按发布顺序向publisher确认消息(这适用于在单个频道上发布的消息); 但是, 发布者确认是异步发出的, 并且可以确认一条消息或一组消息;<br>由于消息确认可以以不同的顺序到达, 所以, 应用程序应尽可能不取决于确认的顺序;</li>
 </ul>
 </li>
 </ol>
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>publisher confirm 不需要消费者参与, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PublisherConfirmController.php" target="_blank" rel="external">代码参考</a></p>
 <h2 id="预习"><a href="#预习" class="headerlink" title="预习"></a>预习</h2><p>本篇还涉及到了 Qos预取相关的内容:</p>
 <ol>
 <li><p>针对Qos的提前预习(译文)</p>
@@ -251,7 +257,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -261,7 +267,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -271,7 +277,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -301,7 +307,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">07. 消费者确认机制(Consumer Acknowledgements)</h4>
+          <h4 class="title">07. Consumer Acknowledgements 消费者确认机制</h4>
         </a>
       </div>
     
@@ -411,7 +417,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -421,7 +427,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&title=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -431,7 +437,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 两个确认机制 -- Publisher Confirms》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. Publisher Confirms 消息确认机制》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

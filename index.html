@@ -523,7 +523,7 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 两个确认机制 -- Publisher Confirms</a>
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. Publisher Confirms 消息确认机制</a>
     </h3>
   
 
@@ -534,11 +534,10 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
 
     
         Publisher Confirms
-官网文档: https://www.rabbitmq.com/confirms.html#publisher-confirms
+当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;
 
-译文
-
-当你向Broker(这里当然就是Rabbit Server)发布消息时, 客户端不能认为该消息已到达服务器并且已成功处理;使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 - 使通道事务化, 然后...
+使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交; 
+不过, 由于事务非常重量级, 会将吞吐量降低25...
     
 
         <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
@@ -575,7 +574,7 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/">07. 消费者确认机制(Consumer Acknowledgements)</a>
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/">07. Consumer Acknowledgements 消费者确认机制</a>
     </h3>
   
 
