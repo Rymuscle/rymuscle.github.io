@@ -20,21 +20,21 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="Consumer Acknowledgements 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publi">
+    <meta name="description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="07. Consumer Acknowledgements 消费者确认机制">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Consumer Acknowledgements 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publi">
+<meta property="og:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/negative-ack.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/negative-ack.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/unknown-delivery-tag.png">
-<meta property="og:updated_time" content="2018-06-30T04:58:44.000Z">
+<meta property="og:updated_time" content="2018-06-30T05:46:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="07. Consumer Acknowledgements 消费者确认机制">
-<meta name="twitter:description" content="Consumer Acknowledgements 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publi">
+<meta name="twitter:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/negative-ack.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -156,7 +156,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Acknowledgements"><span class="post-toc-number">1.</span> <span class="post-toc-text">Consumer Acknowledgements</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#发后即忘模式"><span class="post-toc-number">2.</span> <span class="post-toc-text">发后即忘模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Negative-Ack"><span class="post-toc-number">3.</span> <span class="post-toc-text">Negative Ack</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Negative-Ack-和-requeue"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">Negative Ack 和 requeue</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一次确认多次交付"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">一次确认多次交付</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端错误-双重ack-和-未知Tags"><span class="post-toc-number">4.</span> <span class="post-toc-text">客户端错误: 双重ack 和 未知Tags</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">5.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-Negative-Ack"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展 - Negative Ack</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-consumer-cancle"><span class="post-toc-number">7.</span> <span class="post-toc-text">扩展 - consumer-cancle</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Consumer-Acknowledgements"><span class="post-toc-number">2.</span> <span class="post-toc-text">Consumer Acknowledgements</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#发后即忘模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">发后即忘模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Negative-Ack"><span class="post-toc-number">4.</span> <span class="post-toc-text">Negative Ack</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Negative-Ack-和-requeue"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Negative Ack 和 requeue</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Nack-和-Reject"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">Nack 和 Reject</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#一次确认多次交付"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">一次确认多次交付</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#客户端错误-双重ack-和-未知Tags"><span class="post-toc-number">5.</span> <span class="post-toc-text">客户端错误: 双重ack 和 未知Tags</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-Negative-Ack"><span class="post-toc-number">6.</span> <span class="post-toc-text">扩展 - Negative Ack</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#扩展-consumer-cancle"><span class="post-toc-number">7.</span> <span class="post-toc-text">扩展 - consumer-cancle</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">8.</span> <span class="post-toc-text">测试</span></a></li></ol>
         </nav>
     </aside>
     
@@ -177,18 +177,23 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Consumer-Acknowledgements"><a href="#Consumer-Acknowledgements" class="headerlink" title="Consumer Acknowledgements"></a><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">Consumer Acknowledgements</a></h2><ol>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
 <li><p>在RabbitMQ中, 为了 <strong>保证消息能安全发布到Broker</strong>, <strong>保证消息被消费者成功处理</strong>, 因此, publishers 和 conmusers 需要有用于 <code>delivery(交付)确认</code> 和 <code>处理确认</code> 的机制;</p>
 <ul>
 <li>从 consumers 到 RabbitMQ 的递送处理确认被称为 <code>AMQP 0-9-1中的确认</code>;</li>
-<li><p>从 broker 到 publishers 的确认是一个扩展协议, 被称为 <code>publisher confirms</code>;</p>
-</li>
-<li><p>这两个功能都基于相同的想法, 并受TCP的启发; 它们对于 <strong>从publishers到RabbitMQ节点</strong> 以及 <strong>从RabbitMQ节点到consumers</strong> 的可靠传送都是至关重要的;</p>
-</li>
+<li>从 broker 到 publishers 的确认是一个扩展协议, 被称为 <code>publisher confirms</code>;</li>
 </ul>
 </li>
-<li><p>Delivery Identifiers: Delivery Tags(交付标签)<br> 当消费者(订阅)被注册时, 消息将被RabbitMQ使用 <code>basic.deliver</code> 方法递送(推送), 该方法带有一个 <code>delivery tag</code>, 它唯一标识 channel 上的一个delivery(投递); 由于投放标签的范围是按每个channel划分的, 因此交付必须在同一channel上被确认;<br> 确认交付的客户端库方法将交付标签作为参数, 如下</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$channel-&gt;basic_ack(8, false);  // 有2个参数可用 delivery_tag, multiple</div><div class="line">$channel-&gt;basic_nack(8, false, true);   // 有4个参数可用 delivery_tag, multiple, requeue</div><div class="line">$channel-&gt;basic_reject(8, false);   // 有3个参数可用 delivery_tag, requeue</div></pre></td></tr></table></figure>
+<li><p>这两个功能都<strong>基于相同的想法</strong>, 并受TCP的启发; 它们对于 <strong>从publishers到RabbitMQ节点</strong> 以及 <strong>从RabbitMQ节点到consumers</strong> 的可靠传送都是至关重要的;</p>
+</li>
+</ol>
+<h2 id="Consumer-Acknowledgements"><a href="#Consumer-Acknowledgements" class="headerlink" title="Consumer Acknowledgements"></a><a href="https://www.rabbitmq.com/confirms.html" target="_blank" rel="external">Consumer Acknowledgements</a></h2><ol>
+<li><p>Delivery Identifiers: Delivery Tags(交付标签)</p>
+<ul>
+<li>当消费者(订阅)被注册时, 消息将被RabbitMQ使用 <code>basic.deliver</code> 方法递送(推送), 该方法带有一个 <code>delivery tag</code>, 它唯一标识 channel 上的一个delivery(投递); 由于投放标签的范围是按每个channel划分的, 因此交付必须在同一channel上被确认;</li>
+<li>确认交付的客户端库方法将交付标签作为参数, 如下, 可以在consumer中使用如下几种消息应答<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$channel-&gt;basic_ack(8, false);  // 有2个参数可用 delivery_tag, multiple</div><div class="line">$channel-&gt;basic_nack(8, false, true);   // 有4个参数可用 delivery_tag, multiple, requeue</div><div class="line">$channel-&gt;basic_reject(8, false);   // 有3个参数可用 delivery_tag, requeue</div></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 <li><p>消费者确认模式和数据安全注意事项</p>
 <ul>
@@ -224,21 +229,23 @@
 <li><p>有时候, Consumers 并不能立即处理投递来的消息, 但其他实例可能能够处理, 在这种情况下, 你可能就需要重新安排并让其他消费者接收并处理它, <code>basic.reject()</code> 和 <code>basic.nack()</code> 是两种用于这种场景的方法;</p>
 <ul>
 <li>这些方法通常用于 negatively ack (应答)一个投递, 这个投递可以被broker丢弃或重新入队列(默认是被丢弃的), 此行为由 <code>requeue</code> 字段控制(如 <code>$channel-&gt;basic_nack(8, false, true);</code>);</li>
-<li>当该字段设置为true时, 代理将使用指定的 delivery tag 重新进行交付<br>如果可能, 当消息被 <code>requeue</code>(重排)时, <strong>它将被放置在其队列中的原始位置</strong>, 如果不是(由于多个消费者共享队列时来自其他消费者的并发递送和确认), 则该消息将被重新排队到更接近队列头的位置;<br>已重排的消息可能会立即准备好重新发送, 具体取决于它们在队列中的位置, 以及具有活跃consumer的channel使用的预取值, 这意味着, 如果所有消费者都因为暂时状况 requeue 时, 它们将创建一个 requeue/redelivery(重新发货/重新递送)的<strong>循环</strong>, 就网络带宽和CPU资源而言, 这样的循环可能是昂贵的;</li>
+<li>当该字段设置为true时, 代理将使用指定的 delivery tag 重新进行交付</li>
 </ul>
 </li>
+<li><p>如果可能, 当消息被 <code>requeue</code>(重排)时, <strong>它将被放置在其队列中的原始位置</strong>, 如果不是(由于多个消费者共享队列时来自其他消费者的并发递送和确认), 则该消息将被重新排队到更接近队列头的位置;<br> 已重排的消息可能会立即准备好重新发送, 具体取决于它们在队列中的位置, 以及具有活跃consumer的channel使用的预取值, 这意味着, 如果所有消费者都因为暂时状况 requeue 时, 它们将创建一个 requeue/redelivery(重新发货/重新递送)的<strong>循环</strong>, 就网络带宽和CPU资源而言, 这样的循环可能是昂贵的;</p>
+</li>
+</ol>
+<h3 id="Nack-和-Reject"><a href="#Nack-和-Reject" class="headerlink" title="Nack 和 Reject"></a>Nack 和 Reject</h3><ol>
 <li><p><strong>消费者实现可以跟踪重新传送的次数并拒绝消息(丢弃它们)或延迟计划重新计划;</strong></p>
 <ul>
 <li>可以使用 <code>basic.nack()</code> 方法可以一次性 拒绝 或 requeue 多个消息, 这是区别于 <code>basic.reject()</code>的;</li>
 <li><code>basic.nack()</code> 接受一个额外的参数 <code>multiple</code>, 这两个方法的所有参数对比之前也已经介绍过了, 如下:<br><img src="/img/rabbitmq/negative-ack.png" width="500/"></li>
 </ul>
 </li>
-<li><p>一般在 consumer 进行应答时, 会这样使用 : <code>$message-&gt;delivery_info[&#39;channel&#39;]-&gt;basic_nack($message-&gt;delivery_info[&#39;delivery_tag&#39;]);</code></p>
-</li>
 <li><p><strong>消费者失败或失去连接时: 自动requeue</strong></p>
 <ul>
 <li>使用手动确认时, 任何未收到应答的投递将在发送递送的通道(或连接)关闭时自动requeue (**这包括客户端的TCP连接丢失, 消费者应用程序(进程)失败…)</li>
-<li>由于这种行为, 消费者必须做好准备来处理重新来的投递，否则就得考虑到<strong>幂等性</strong>;<br>Redeliveries 将有一个特殊的布尔属性 <code>redeliver</code>, 由RabbitMQ设置为true, 首次投递时, 它是被设置为false; </li>
+<li>由于这种行为, 消费者必须做好准备来处理重新来的投递，否则就得考虑到<strong>幂等性</strong>;</li>
 <li><strong>请注意, 因为有requeue机制, 所以消费者可以收到先前传送给其他消费者的消息</strong>。  </li>
 </ul>
 </li>
@@ -255,10 +262,6 @@
 <li><p>Broker报出 “unknown delivery tag” 的另一种情况是, 无论是positive 还是negative 的应答, 在与收到投递的channel不同的channel上尝试确认;  (不过这个一般我们都是使用当前channel应答当前channel)</p>
 </li>
 </ol>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
-<li>消费者参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/consumerConfirm.php" target="_blank" rel="external">此处</a></li>
-<li>生产者参考<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/ConsumerConfirmController.php" target="_blank" rel="external">此处</a></li>
-</ol>
 <h2 id="扩展-Negative-Ack"><a href="#扩展-Negative-Ack" class="headerlink" title="扩展 - Negative Ack"></a>扩展 - <a href="https://www.rabbitmq.com/nack.html" target="_blank" rel="external">Negative Ack</a></h2><ol>
 <li><p>AMQP 0-9-1 中的消费者可以选择使用 手动确认机制;</p>
 </li>
@@ -272,7 +275,10 @@
 </li>
 <li><p>其他事件(如queue被删除)或集群场景中队列所在的节点失败, 将导致消费被取消, 但不会通知客户端通道, 这通常是无益的;</p>
 </li>
-<li></li>
+</ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li>消费者代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/consumerConfirm.php" target="_blank" rel="external">参考</a></li>
+<li>生产者代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/ConsumerConfirmController.php" target="_blank" rel="external">参考</a>    </li>
 </ol>
 
         </div>

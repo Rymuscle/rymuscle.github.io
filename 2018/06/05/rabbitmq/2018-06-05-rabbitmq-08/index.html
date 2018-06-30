@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
+    <meta name="description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="08. Publisher Confirms 发布者确认机制">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
+<meta property="og:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/wireshark-Confirm.Select-ok.png">
-<meta property="og:updated_time" content="2018-06-30T05:39:03.000Z">
+<meta property="og:updated_time" content="2018-06-30T05:47:03.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="08. Publisher Confirms 发布者确认机制">
-<meta name="twitter:description" content="Publisher Confirms 当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;  使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交;  不过, 由于事务非常重量级, 会将吞吐量降低250倍;">
+<meta name="twitter:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/wireshark-Confirm.Select-ok.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Publisher-Confirms"><span class="post-toc-number">1.</span> <span class="post-toc-text">Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试代码"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试代码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#预习"><span class="post-toc-number">3.</span> <span class="post-toc-text">预习</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Publisher-Confirms"><span class="post-toc-number">2.</span> <span class="post-toc-text">Publisher Confirms</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试代码"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试代码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#预习"><span class="post-toc-number">4.</span> <span class="post-toc-text">预习</span></a></li></ol>
         </nav>
     </aside>
     
@@ -175,7 +175,19 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">Publisher Confirms</a></h2><ol>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>在RabbitMQ中, 为了 <strong>保证消息能安全发布到Broker</strong>, <strong>保证消息被消费者成功处理</strong>, 因此, publishers 和 conmusers 需要有用于 <code>delivery(交付)确认</code> 和 <code>处理确认</code> 的机制;</p>
+<ul>
+<li>从 consumers 到 RabbitMQ 的递送处理确认被称为 <code>AMQP 0-9-1中的确认</code>;</li>
+<li>从 broker 到 publishers 的确认是一个扩展协议, 被称为 <code>publisher confirms</code>;</li>
+</ul>
+</li>
+<li><p>这两个功能都<strong>基于相同的想法</strong>, 并受TCP的启发; 它们对于 <strong>从publishers到RabbitMQ节点</strong> 以及 <strong>从RabbitMQ节点到consumers</strong> 的可靠传送都是至关重要的;</p>
+</li>
+<li><p>之前已经介绍了 consumers ack, 下面介绍 publisher confirm</p>
+</li>
+</ol>
+<h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">Publisher Confirms</a></h2><ol>
 <li><p>当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;</p>
 <ul>
 <li>使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用<strong>事务</strong> – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交; </li>

@@ -533,11 +533,11 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Publisher Confirms
-当你向Broker(Rabbit Server)发布消息时, 由于网络常出现的不确定因素, 客户端(Publisher)需要有机制来确认该消息已到达服务器;
+        前言
+在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;
 
-使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用事务 – 使channel事务化, 然后为 每个消息 或 消息集 发布和提交; 
-不过, 由于事务非常重量级, 会将吞吐量降低25...
+从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认;
+从 broker 到 publishers 的确认是一个扩展协议, 被称...
     
 
         <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
@@ -584,11 +584,11 @@ https://www.rabbitmq.com/confirms.html#channel-qos-prefetch
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Consumer Acknowledgements
+        前言
 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;
 
 从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认;
-从 broker 到 pu...
+从 broker 到 publishers 的确认是一个扩展协议, 被称...
     
 
         <a href="/2018/06/05/rabbitmq/2018-06-03-rabbitmq-07/" class="post-more waves-effect waves-button">
