@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/wireshark-Confirm.Select-ok.png">
-<meta property="og:updated_time" content="2018-06-30T05:47:03.000Z">
+<meta property="og:updated_time" content="2018-06-30T05:50:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="08. Publisher Confirms 发布者确认机制">
 <meta name="twitter:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
@@ -215,6 +215,11 @@
 <li>在大多数情况下, RabbitMQ将按发布顺序向publisher确认消息(这适用于在单个频道上发布的消息); 但是, 发布者确认是异步发出的, 并且可以确认一条消息或一组消息;<br>由于消息确认可以以不同的顺序到达, 所以, 应用程序应尽可能不取决于确认的顺序;</li>
 </ul>
 </li>
+<li><p>未完~~~</p>
+<ul>
+<li><a href="https://yq.aliyun.com/articles/42206" target="_blank" rel="external">https://yq.aliyun.com/articles/42206</a></li>
+</ul>
+</li>
 </ol>
 <h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>publisher confirm 不需要消费者参与, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PublisherConfirmController.php" target="_blank" rel="external">代码参考</a></p>
 <h2 id="预习"><a href="#预习" class="headerlink" title="预习"></a>预习</h2><p>本篇还涉及到了 Qos预取相关的内容:</p>
@@ -230,9 +235,6 @@
 <li><p><strong>消费者确认模式, 预取和吞吐量(译文)</strong><br> 确认模式 和 QoS预取值 对消费者吞吐量有显着影响, 一般来说, <strong>增加预取值将提高向消费者传递消息的速度, 当然, 自动确认模式可以产生最佳的传送速率</strong><br> 但是, 在上面两种情况下, 尚未完成交付处理的消息(unacked)数量也会增加, 从而增加消费者RAM消耗;<br> <strong>自动确认模式或带无限预取的手动确认模式应谨慎使用</strong>, 消费者在没有确认的情况下消耗大量消息将导致其所连接的节点上的内存消耗增长;<br> 预取值1是最保守的, 但这将显着降低吞吐量, 特别是在消费者连接延迟较高的环境中, 对于许多应用来说, 更高的价值是合适和最佳的;<br> 100到300范围内的Qos(<code>prefetch_count</code>)预取值通常提供最佳的吞吐量, 并且不会面临压垮consumer的重大风险, 而更高的值往往会遇到效率递减的规律; </p>
 </li>
 </ol>
-<p>basic_ack<br>basic_nack<br>basic_cancle<br>basic_reject</p>
-<p>……<br>confirm_select<br>confirm_select_ok</p>
-<p>……<br>set_return_listener<br>set_ack_handler<br>set_nack_handler<br>……<br>wait_for_pending_acks</p>
 
         </div>
 
