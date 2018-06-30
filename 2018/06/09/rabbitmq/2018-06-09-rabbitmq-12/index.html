@@ -13,25 +13,25 @@
     
     
     
-    <title>12. 惰性队列 | Lant&#39;s Blog</title>
+    <title>12. Lazy Queues 惰性队列 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="https://www.rabbitmq.com/lazy-queues.html">
+    <meta name="description" content="Lazy Queues 从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;  Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:  消费者脱机/已经崩溃/因维护而停机">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="12. 惰性队列">
+<meta property="og:title" content="12. Lazy Queues 惰性队列">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="https://www.rabbitmq.com/lazy-queues.html">
+<meta property="og:description" content="Lazy Queues 从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;  Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:  消费者脱机/已经崩溃/因维护而停机">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-21T02:04:01.000Z">
+<meta property="og:updated_time" content="2018-06-30T06:38:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="12. 惰性队列">
-<meta name="twitter:description" content="https://www.rabbitmq.com/lazy-queues.html">
+<meta name="twitter:title" content="12. Lazy Queues 惰性队列">
+<meta name="twitter:description" content="Lazy Queues 从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;  Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:  消费者脱机/已经崩溃/因维护而停机">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">12. 惰性队列</div>
+        <div class="flex-col header-title ellipsis">12. Lazy Queues 惰性队列</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">12. 惰性队列</h1>
+        <h1 class="title">12. Lazy Queues 惰性队列</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-09T02:14:30.000Z" itemprop="datePublished" class="page-time">
@@ -149,11 +149,18 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Lazy-Queues"><span class="post-toc-number">1.</span> <span class="post-toc-text">Lazy Queues</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-rabbitmq/2018-06-09-rabbitmq-12"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">12. 惰性队列</h1>
+        <h1 class="post-card-title">12. Lazy Queues 惰性队列</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-09 10:14:30" datetime="2018-06-09T02:14:30.000Z"  itemprop="datePublished">2018-06-09</time>
 
@@ -166,7 +173,40 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p><a href="https://www.rabbitmq.com/lazy-queues.html" target="_blank" rel="external">https://www.rabbitmq.com/lazy-queues.html</a></p>
+            <h2 id="Lazy-Queues"><a href="#Lazy-Queues" class="headerlink" title="Lazy Queues"></a><a href="https://www.rabbitmq.com/lazy-queues.html" target="_blank" rel="external">Lazy Queues</a></h2><ol>
+<li><p>从RabbitMQ 3.6.0开始m, Broker有了 <code>Lazy Queues</code> 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 <code>Lazy Queues</code>;</p>
+</li>
+<li><p>Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:</p>
+<ul>
+<li>消费者脱机/已经崩溃/因维护而停机</li>
+<li>突然有消息进入高峰, 生产者超过消费者</li>
+<li>消费者比平时慢</li>
+</ul>
+</li>
+<li><p>默认情况下, 消息被发布到RabbitMQ时, 队列将其保存在内存缓存中, <strong>这能够尽可能快地向消费者传递消息</strong>; </p>
+<ul>
+<li>请注意, 持久性消息可以在进入RabbitMQ时写入磁盘, 并同时保存在RAM中;</li>
+<li><p>每当代理认为需要释放内存时, 缓存中的消息将被分页到磁盘; 将一批消息分页到磁盘会花费时间并阻塞队列进程, 从而无法在分页时收到新消息, 尽管最近版本的RabbitMQ改进了分页算法, 但对于队列中有数百万条消息可能需要分页的用例, 情况仍然不理想;<br>而懒惰队列会尝试将消息尽可能早地移动到磁盘上, 这意味着在正常操作的大多数情况下, RAM中的消息数量明显减少, 这是以增加磁盘I / O为代价的;</p>
+</li>
+<li><p>如果消息是持久化的, 那么这样的I/O操作不可避免, <strong>惰性队列和持久化消息可谓是最佳拍档</strong>;<br>注意如果惰性队列中存储的是非持久化的消息, 内存的使用率会一直很稳定, 但是重启之后消息一样会丢失;</p>
+</li>
+</ul>
+</li>
+<li><p>队列具备两种模式: <strong>default</strong> 和 <strong>lazy</strong></p>
+<ul>
+<li>默认的为default模式, 在3.6.0之前的版本无需做任何变更</li>
+<li>lazy模式即为惰性队列的模式, 可以通过调用 channel.queueDeclare 方法的时候在参数中设置</li>
+<li>也可以通过Policy的方式设置, 如果一个队列同时使用这两种方式设置的话, 那么队列参数优先于策略值</li>
+<li>只能通过删除队列, 重新创建队列并使用不同的参数重新声明它, 来更改队列模式</li>
+</ul>
+</li>
+<li><p>当你想要优先保持节点内存使用率较低, 而较高的磁盘I/O和磁盘利用率可以接收时，所以惰性队列就比较合适;</p>
+</li>
+<li><p>貌似通过使用 <code>惰性队列+持久化队列</code>, 磁盘I/O无法避免的情况下, 还可以保证内存降低!</p>
+</li>
+<li><p>未完待续~~</p>
+</li>
+</ol>
 
         </div>
 
@@ -203,7 +243,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. Lazy Queues 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -213,7 +253,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. Lazy Queues 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -223,7 +263,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. Lazy Queues 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -363,7 +403,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. Lazy Queues 惰性队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -373,7 +413,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&title=《12. Lazy Queues 惰性队列》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -383,7 +423,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《12. Lazy Queues 惰性队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

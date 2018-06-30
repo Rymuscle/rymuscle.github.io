@@ -471,7 +471,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/">12. 惰性队列</a>
+      <a class="post-title-link" href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/">12. Lazy Queues 惰性队列</a>
     </h3>
   
 
@@ -481,8 +481,12 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        https://www.rabbitmq.com/lazy-queues.html
+        Lazy Queues
+从RabbitMQ 3.6.0开始m, Broker有了 Lazy Queues 的概念 – queues尽可能早地将其内容移动到磁盘的队列, 并且只在消费者请求时将其加载到RAM中, 因此命名为 Lazy Queues;
 
+Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条消息), 出于各种原因, 队列可能变得很长:
+
+消费者脱机/已经崩溃/因维护...
     
 
         <a href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-12/" class="post-more waves-effect waves-button">
