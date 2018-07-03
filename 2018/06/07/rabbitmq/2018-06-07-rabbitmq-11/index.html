@@ -13,25 +13,25 @@
     
     
     
-    <title>11. Dead Letter Exchanges 死信交换机 | Lant&#39;s Blog</title>
+    <title>11. Dead Letter Exchanges (DLX) 死信交换机 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="关于死信 官网文档: https://www.rabbitmq.com/dlx.html  译文 (死信貌似是个动词)  来自队列的消息可能被 “死信”, 即, 在如下任何事件发生的情况下, 消息被重新发布到另一个Exchange:该消息被拒绝(basic.reject 或 basic.nack ), 其中 requeue = false消息的TTL过期要么队列长度限制已超出  死信Exchang">
+    <meta name="description" content="关于死信 死信: 来自队列的消息可能会变成 “dead-lettered”死信, 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中  消息被拒绝(basic.reject 或 basic.nack) 并且 requeue=false(即没有进行重排); 消息TTL过期 队列达到最大长度(队列满了, 无法再添加数据到mq中)   死信交换机(也叫死信邮箱):    在定义业务队列">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="11. Dead Letter Exchanges 死信交换机">
+<meta property="og:title" content="11. Dead Letter Exchanges (DLX) 死信交换机">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="关于死信 官网文档: https://www.rabbitmq.com/dlx.html  译文 (死信貌似是个动词)  来自队列的消息可能被 “死信”, 即, 在如下任何事件发生的情况下, 消息被重新发布到另一个Exchange:该消息被拒绝(basic.reject 或 basic.nack ), 其中 requeue = false消息的TTL过期要么队列长度限制已超出  死信Exchang">
+<meta property="og:description" content="关于死信 死信: 来自队列的消息可能会变成 “dead-lettered”死信, 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中  消息被拒绝(basic.reject 或 basic.nack) 并且 requeue=false(即没有进行重排); 消息TTL过期 队列达到最大长度(队列满了, 无法再添加数据到mq中)   死信交换机(也叫死信邮箱):    在定义业务队列">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-01T09:41:02.000Z">
+<meta property="og:updated_time" content="2018-07-03T11:30:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="11. Dead Letter Exchanges 死信交换机">
-<meta name="twitter:description" content="关于死信 官网文档: https://www.rabbitmq.com/dlx.html  译文 (死信貌似是个动词)  来自队列的消息可能被 “死信”, 即, 在如下任何事件发生的情况下, 消息被重新发布到另一个Exchange:该消息被拒绝(basic.reject 或 basic.nack ), 其中 requeue = false消息的TTL过期要么队列长度限制已超出  死信Exchang">
+<meta name="twitter:title" content="11. Dead Letter Exchanges (DLX) 死信交换机">
+<meta name="twitter:description" content="关于死信 死信: 来自队列的消息可能会变成 “dead-lettered”死信, 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中  消息被拒绝(basic.reject 或 basic.nack) 并且 requeue=false(即没有进行重排); 消息TTL过期 队列达到最大长度(队列满了, 无法再添加数据到mq中)   死信交换机(也叫死信邮箱):    在定义业务队列">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">11. Dead Letter Exchanges 死信交换机</div>
+        <div class="flex-col header-title ellipsis">11. Dead Letter Exchanges (DLX) 死信交换机</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">11. Dead Letter Exchanges 死信交换机</h1>
+        <h1 class="title">11. Dead Letter Exchanges (DLX) 死信交换机</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-07T06:36:51.000Z" itemprop="datePublished" class="page-time">
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关于死信"><span class="post-toc-number">1.</span> <span class="post-toc-text">关于死信</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">问题</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#关于死信"><span class="post-toc-number">1.</span> <span class="post-toc-text">关于死信</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Dead-Lettered-Messages"><span class="post-toc-number">2.</span> <span class="post-toc-text">Dead-Lettered Messages</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#疑问"><span class="post-toc-number">4.</span> <span class="post-toc-text">疑问</span></a></li></ol>
         </nav>
     </aside>
     
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">11. Dead Letter Exchanges 死信交换机</h1>
+        <h1 class="post-card-title">11. Dead Letter Exchanges (DLX) 死信交换机</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-07 14:36:51" datetime="2018-06-07T06:36:51.000Z"  itemprop="datePublished">2018-06-07</time>
 
@@ -173,40 +173,56 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="关于死信"><a href="#关于死信" class="headerlink" title="关于死信"></a>关于死信</h2><ol>
-<li><p>官网文档: <a href="https://www.rabbitmq.com/dlx.html" target="_blank" rel="external">https://www.rabbitmq.com/dlx.html</a></p>
-</li>
-<li><p>译文 (死信貌似是个动词)</p>
+            <h2 id="关于死信"><a href="#关于死信" class="headerlink" title="关于死信"></a><a href="https://www.rabbitmq.com/dlx.html" target="_blank" rel="external">关于死信</a></h2><ol>
+<li><p>死信: 来自队列的消息可能会变成 “dead-lettered”死信, 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中</p>
 <ul>
-<li><p>来自队列的消息可能被 “死信”, 即, 在如下任何事件发生的情况下, 消息被重新发布到另一个Exchange:<br>该消息被拒绝(<code>basic.reject</code> 或 <code>basic.nack</code> ), 其中 <code>requeue = false</code><br>消息的TTL过期<br>要么队列长度限制已超出</p>
+<li>消息被拒绝(<code>basic.reject</code> 或 <code>basic.nack</code>) 并且 <code>requeue=false(即没有进行重排)</code>;</li>
+<li>消息TTL过期</li>
+<li>队列达到最大长度(队列满了, 无法再添加数据到mq中)</li>
+</ul>
 </li>
-<li><p>死信Exchange(DLX)其实也是标准的Exchange, 它们可以是任何常见的type, 并且可以像通常那样进行声明;</p>
+<li><p>死信交换机(也叫死信邮箱):  </p>
+<ul>
+<li><p>在定义业务队列的时候, 你需要考虑指定一个死信交换机, 死信交换机可以和任何一个普通的队列进行绑定, 然后在业务队列出现死信的时候就会将数据发送到死信队列;</p>
 </li>
-<li><p>对于任何给定的队列, 客户端可以使用 <strong>队列的$arguments</strong> 或 在服务器中使用<strong>策略</strong> 来定义DLX; 在 策略 和 $arguments 都指定的情况下, $arguments 将覆盖 策略!</p>
+<li><p>死信Exchange(DLX)其实也是<strong>正常的</strong>Exchange, 它们可以是任何常见的type, 并且可以像通常那样进行声明;</p>
 </li>
-<li><p>使用 队列的 $arguments 配置 DLX<br>要为队列设置死信交换, 需要设置队列 <code>$arguments</code> 参数的 <code>x-dead-letter-exchange</code> 选项为交换机的名称:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$channel-&gt;exchange_declare(&apos;testDlxExchange&apos;, &apos;direct&apos;, false, true, false, false, false);</div><div class="line">$arguments = new AMQPTable([</div><div class="line">    // 指定死信交换机</div><div class="line">    &apos;x-dead-letter-exchange&apos; =&gt; &apos;testDlxExchange&apos;,</div><div class="line">    // 指定死信路由键</div><div class="line">    &apos;x-dead-letter-routing-key&apos; =&gt; &apos;testDlxRoutingKey&apos;</div><div class="line">]);</div><div class="line">$channel-&gt;queue_declare(&apos;testDlxQueue&apos;, false, true, false, false, false, $arguments);</div></pre></td></tr></table></figure>
-<p>上面的代码声明了一个名为 <code>testDlxExchange</code> 的Exchange, 并将这个新Exchange设置为新创建的队列的 <strong>死信Exchange</strong>;<br><strong>请注意</strong>: 在声明queue时不必声明exchange, 但是在消息需要被死信时它应该存在, 如果它不存在, 那么这些消息将被无声地丢弃;<br>想上面那样, 你也可以指定一个routingkey, 以便在死信消息时使用, 如果没有设置, 则会使用消息自己的routingkey</p>
+<li><p>对于任何给定的队列, 客户端可以使用队列的 <code>$arguments</code> 或 在服务器中使用 <code>策略</code> 来定义DLX;(在 策略 和 $arguments 都指定的情况下, $arguments 将覆盖 策略)</p>
 </li>
-<li><p>当一个死信exchange被指定时, 除了声明队列上的通常配置权限之外, 用户还需要对该队列具有读权限, 并对死信exchange有写入权限, 权限在队列声明时被验证</p>
-</li>
-<li><p>使用<code>策略</code>配置DLX可参考<a href="https://www.rabbitmq.com/dlx.html" target="_blank" rel="external">官网文档</a></p>
-</li>
-<li><p>路由死信消息<br>死信的消息被路由到他们的死信exchange: 可以使用它们所在的队列所指定的routingkey 或者 如果队列没有设置routingkey, 则使用最初发布的routingkey; ??<br>例如:<br>假如你使用 <code>routingkey=foo</code> 将消息发布到交换机, 然后该消息被 dead-lettered, 它将被发布到routingkey为 <code>foo</code> 的 死信exchange;<br>而如果消息最初着陆的队列已声明了 <code>x-dead-letter-routing-key=bar</code>, 则该消息将被发布到它的(routingkey为 “bar”)死信exchange;<br>???<br>请注: 如果没有为该队列设置特定的routingkey, 则其上的消息将用其原始routingkey被dead-lettered, 这包括由CC和BCC标题添加的路由键(有关这两个标题的详细信息，请参阅发件人选择的发行版)<br>死信消息重新发布，发布者确认已在内部启用，因此消息最终着陆的“死信队列”（DLX路由目标）必须在消息从原始队列中删除之前确认消息。换句话说，“发布”（邮件过期的队列）队列不会在死信队列确认接收邮件之前删除邮件（请参阅确认以了解有关所做保证的详细信息）。请注意，如果代理程序不正常关闭，则可能会在原始队列和死文字目标队列上复制相同的消息。<br>有可能形成消息死书的循环。例如，当一个队列在没有指定死信路由密钥的情况下将消息发送到默认交换机时，会发生这种情况。如果在整个周期内没有拒绝，这些周期中的消息（即达到相同队列两次的消息）将被丢弃。</p>
-</li>
-<li><p>Dead-Lettered Messages<br>死信被re-publish后, 会在消息的header中增加一个叫做<code>x-death</code>的数组内容, 包含了以下字段内容:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">queue 消息被重新路由前所在的queue的名称</div><div class="line">reason 消息成为死信的原因，有如下几种: 消息被拒绝并且requeue=false, message的TTL过期, 超过了queue允许的最大消息长度</div><div class="line">time 消息成为死信的日期时间</div><div class="line">exchange 消息被重新路由到exchange的名称</div><div class="line">routing-keys 消息被发布时的 routing-keys</div><div class="line">original-expiration 消息的原始expiration属性</div></pre></td></tr></table></figure>
+<li><p>要设置死信交换, 需要通过队列来设置, 队列 <code>$arguments</code> 参数的 <code>x-dead-letter-exchange</code> 选项为交换机的名称, <code>testDlxRoutingKey</code> 则为死信路由键:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$channel-&gt;exchange_declare(&apos;testDlxExchange&apos;, &apos;direct&apos;, false, true, false, false, false);</div><div class="line">$arguments = new AMQPTable([</div><div class="line">  // 指定死信交换机</div><div class="line">  &apos;x-dead-letter-exchange&apos; =&gt; &apos;testDlxExchange&apos;,</div><div class="line">  // 指定死信路由键</div><div class="line">  &apos;x-dead-letter-routing-key&apos; =&gt; &apos;testDlxRoutingKey&apos;</div><div class="line">]);</div><div class="line">$channel-&gt;queue_declare(&apos;testDlxQueue&apos;, false, true, false, false, false, $arguments);</div></pre></td></tr></table></figure>
+<p>使用<code>策略</code>配置DLX可参考<a href="https://www.rabbitmq.com/dlx.html" target="_blank" rel="external">官网文档</a></p>
 </li>
 </ul>
 </li>
+<li><p>像上面那样, 你也可以指定一个死信routingkey, 以便在死信消息时使用; 如果没有设置, 则会使用消息自己的routingkey:</p>
+<ul>
+<li>假如你使用 <code>routingkey=foo</code> 将消息发布到交换机, 然后该消息被dead-lettered, 它将被发布到routingkey为 <code>foo</code> 的 死信exchange;</li>
+<li>而如果消息最初着陆的队列已声明了 <code>x-dead-letter-routing-key=bar</code>, 则该消息将被发布到它的(routingkey为 “bar”)死信exchange;</li>
+</ul>
+</li>
+<li><p>死信队列 : 死信队列实际上就是一个普通的队列, 只是这个队列跟死信交换机进行了绑定, 用来存放死信而已;</p>
+</li>
+<li><p>当一个死信exchange被指定时, 除了声明队列上的通常配置权限之外, 用户还需要对该队列具有读权限, 并对死信exchange有写入权限, 权限在队列声明时被验证</p>
+</li>
+</ol>
+<h2 id="Dead-Lettered-Messages"><a href="#Dead-Lettered-Messages" class="headerlink" title="Dead-Lettered Messages"></a>Dead-Lettered Messages</h2><ol>
+<li><p>死信被re-publish后, 会在消息的header中增加一个叫做 <code>x-death</code> 的数组内容, 包含了以下字段内容:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">queue 消息被重新路由前所在的queue的名称</div><div class="line">reason 消息成为死信的原因，有如下几种: 消息被拒绝并且requeue=false, message的TTL过期, 超过了queue允许的最大消息长度</div><div class="line">time 消息成为死信的日期时间</div><div class="line">exchange 消息被重新路由到exchange的名称</div><div class="line">routing-keys 消息被发布时的 routing-keys</div><div class="line">original-expiration 消息的原始expiration属性</div></pre></td></tr></table></figure>
+</li>
+<li></li>
 </ol>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
-<li><a href="https://www.cnblogs.com/wei-feng/p/6599419.html" target="_blank" rel="external">常见问题</a></li>
-<li>如果queue既设置了 <code>x-dead-letter-exchange</code>, 也设置了 <code>routingKey</code>, 那么消息会如何路由?<br> <a href="https://www.cnblogs.com/williamwsj/p/8108970.html" target="_blank" rel="external">https://www.cnblogs.com/williamwsj/p/8108970.html</a> 可以设置消息的存活时间;</li>
+<li><p>一个路由可以绑定一个DLX, 那是否可以有多个DLX? 还是说所有的死信只能扔到一个DLX下的死信queue中?</p>
+</li>
+<li><p>如果queue既设置了 <code>x-dead-letter-exchange</code>, 也设置了 <code>routingKey</code>, 那么消息会如何路由?</p>
+</li>
 </ol>
-<p>## </p>
-<p><a href="https://my.oschina.net/u/3015099/blog/781970" target="_blank" rel="external">https://my.oschina.net/u/3015099/blog/781970</a></p>
-<p><a href="https://blog.csdn.net/qq_29778131/article/details/52536965" target="_blank" rel="external">https://blog.csdn.net/qq_29778131/article/details/52536965</a></p>
+<ol>
+<li><a href="https://www.cnblogs.com/wei-feng/p/6599419.html" target="_blank" rel="external">常见问题</a></li>
+</ol>
+<p>##<br><a href="https://www.cnblogs.com/williamwsj/p/8108970.html" target="_blank" rel="external">https://www.cnblogs.com/williamwsj/p/8108970.html</a> 可以设置消息的存活时间;<br><a href="https://my.oschina.net/u/3015099/blog/781970" target="_blank" rel="external">https://my.oschina.net/u/3015099/blog/781970</a><br><a href="https://blog.csdn.net/qq_29778131/article/details/52536965" target="_blank" rel="external">https://blog.csdn.net/qq_29778131/article/details/52536965</a></p>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><p>死信消息重新发布，发布者确认已在内部启用，因此消息最终着陆的“死信队列”（DLX路由目标）必须在消息从原始队列中删除之前确认消息。<br>换句话说，“发布”（邮件过期的队列）队列不会在死信队列确认接收邮件之前删除邮件（请参阅确认以了解有关所做保证的详细信息）。<br>请注意，如果代理程序不正常关闭，则可能会在原始队列和死文字目标队列上复制相同的消息。<br>有可能形成消息死书的循环。<br>例如，当一个队列在没有指定死信路由密钥的情况下将消息发送到默认交换机时，会发生这种情况。如果在整个周期内没有拒绝，这些周期中的消息（即达到相同队列两次的消息）将被丢弃。</p>
 
         </div>
 
@@ -243,7 +259,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -253,7 +269,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -263,7 +279,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -403,7 +419,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -413,7 +429,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&title=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -423,7 +439,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. Dead Letter Exchanges 死信交换机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《11. Dead Letter Exchanges (DLX) 死信交换机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
