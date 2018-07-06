@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/negative-ack.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/negative-ack.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/unknown-delivery-tag.png">
-<meta property="og:updated_time" content="2018-06-30T05:46:16.000Z">
+<meta property="og:updated_time" content="2018-07-04T06:02:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="07. Consumer Acknowledgements 消费者确认机制">
 <meta name="twitter:description" content="前言 在RabbitMQ中, 为了 保证消息能安全发布到Broker, 保证消息被消费者成功处理, 因此, publishers 和 conmusers 需要有用于 delivery(交付)确认 和 处理确认 的机制;  从 consumers 到 RabbitMQ 的递送处理确认被称为 AMQP 0-9-1中的确认; 从 broker 到 publishers 的确认是一个扩展协议, 被称为 p">
@@ -232,7 +232,11 @@
 <li>当该字段设置为true时, 代理将使用指定的 delivery tag 重新进行交付</li>
 </ul>
 </li>
-<li><p>如果可能, 当消息被 <code>requeue</code>(重排)时, <strong>它将被放置在其队列中的原始位置</strong>, 如果不是(由于多个消费者共享队列时来自其他消费者的并发递送和确认), 则该消息将被重新排队到更接近队列头的位置;<br> 已重排的消息可能会立即准备好重新发送, 具体取决于它们在队列中的位置, 以及具有活跃consumer的channel使用的预取值, 这意味着, 如果所有消费者都因为暂时状况 requeue 时, 它们将创建一个 requeue/redelivery(重新发货/重新递送)的<strong>循环</strong>, 就网络带宽和CPU资源而言, 这样的循环可能是昂贵的;</p>
+<li><p>如果可能, 当消息被 <code>requeue</code>(重排)时, <strong>它将被放置在其队列中的原始位置</strong>, 如果不是(由于多个消费者共享队列时来自其他消费者的并发递送和确认), 则该消息将被重新排队到更接近队列头的位置;</p>
+<ul>
+<li>已重排的消息可能会立即准备好重新发送, 具体取决于它们在队列中的位置, 以及具有活跃consumer的channel使用的预取值, 这意味着, 如果所有消费者都因为暂时状况 requeue 时, 它们将创建一个 requeue/redelivery(重新发货/重新递送)的<strong>循环</strong>, 就网络带宽和CPU资源而言, 这样的循环可能是昂贵的;</li>
+<li>对于这种情况, 有建议说是在出现无法正确消费的消息时不要采用requeue的方式来确保消息可靠性, 而是重新投递到新的队列中,比如设定的死信队列中, 以此可以避免前面所说的死循环而又可以确保相应的消息不丢失, 对于死信队列中的消息可以用另外的方式来消费分析, 以便找出问题的根本;</li>
+</ul>
 </li>
 </ol>
 <h3 id="Nack-和-Reject"><a href="#Nack-和-Reject" class="headerlink" title="Nack 和 Reject"></a>Nack 和 Reject</h3><ol>
@@ -244,8 +248,8 @@
 </li>
 <li><p><strong>消费者失败或失去连接时: 自动requeue</strong></p>
 <ul>
-<li>使用手动确认时, 任何未收到应答的投递将在发送递送的通道(或连接)关闭时自动requeue (**这包括客户端的TCP连接丢失, 消费者应用程序(进程)失败…)</li>
-<li>由于这种行为, 消费者必须做好准备来处理重新来的投递，否则就得考虑到<strong>幂等性</strong>;</li>
+<li>使用手动确认时, 任何未收到应答的投递将在发送递送的通道(或连接)关闭时自动requeue</li>
+<li>由于这种行为, 消费者可能已经执行了, 但是确认消息在发送途中由于网络问题, publisher没收到应答, 这就会导致消息被requeue(重发), 这样消费者必须做好准备来处理重新来的投递，这就得考虑到<strong>幂等性</strong>;</li>
 <li><strong>请注意, 因为有requeue机制, 所以消费者可以收到先前传送给其他消费者的消息</strong>。  </li>
 </ul>
 </li>

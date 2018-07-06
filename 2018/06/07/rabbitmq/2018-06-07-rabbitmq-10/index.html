@@ -13,7 +13,7 @@
     
     
     
-    <title>10. TTL 和 延迟队列 | Lant&#39;s Blog</title>
+    <title>10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,14 +23,14 @@
     <meta name="description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="10. TTL 和 延迟队列">
+<meta property="og:title" content="10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-03T03:09:23.000Z">
+<meta property="og:updated_time" content="2018-07-06T05:10:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="10. TTL 和 延迟队列">
+<meta name="twitter:title" content="10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列">
 <meta name="twitter:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">10. TTL 和 延迟队列</div>
+        <div class="flex-col header-title ellipsis">10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">10. TTL 和 延迟队列</h1>
+        <h1 class="title">10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-07T06:28:56.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">10. TTL 和 延迟队列</h1>
+        <h1 class="post-card-title">10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-07 14:28:56" datetime="2018-06-07T06:28:56.000Z"  itemprop="datePublished">2018-06-07</time>
 
@@ -227,7 +227,11 @@
 </ul>
 </li>
 </ol>
-<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li>Publisher代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/DlxController.php" target="_blank" rel="external">参考</a><br> 内容为业务队列绑定一个死信队列(死信队列可以先不存在, 即 你可以不用先运行Consumer来创建dlx)</li>
+<li>Consuemr代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/dlxConsumer.php" target="_blank" rel="external">参考</a><br> 内容为死信队列与死信交换机的绑定</li>
+</ol>
+<h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><ol>
 <li><p>首先, 应该清楚的是, <code>延迟队列</code>存储的对象对应的肯定是<code>延时消息</code>, 所谓 <code>延时消息</code> 是指当消息被发送以后, 并不想让消费者立即拿到消息, 而是等待指定时间后, 消费者才拿到这个消息进行消费; 比如:</p>
 <ul>
 <li>在订单系统中, 一个用户下单之后通常有30分钟的时间进行支付, 如果30分钟之内没有支付成功, 那么这个订单将进行一场处理, 这是就可以使用延时队列将订单信息发送到延时队列;</li>
@@ -274,7 +278,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL 和 延迟队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -284,7 +288,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL 和 延迟队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -294,7 +298,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. TTL 和 延迟队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -434,7 +438,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL 和 延迟队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -444,7 +448,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL 和 延迟队列》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&title=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -454,7 +458,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. TTL 和 延迟队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

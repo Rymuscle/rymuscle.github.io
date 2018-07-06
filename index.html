@@ -480,16 +480,13 @@ Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条�
 
     
         关于死信
-死信: 来自队列的消息可能会变成 “dead-lettered”死信, 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中
+死信: 
 
-消息被拒绝(basic.reject 或 basic.nack) 并且 requeue=false(即没有进行重排);
-消息TTL过期
-队列达到最大长度(队列满了, 无法再添加数据到mq中)
+来自队列的消息可能会变成 “dead-lettered”(死信), 即, 当出现以下情况的时候, 会被重新发布到另一个Exchange中:123消息被拒绝(`basic.reject` 或 `basic.nack`) 并且 `requeue=false(即没有进行重排)`;消息TTL过期队列达到最大长度(队列满了, 无法再添加数据到mq中)
 
 
-死信交换机(也叫死信邮箱):  
 
-在定义业...
+死信交换机(也叫死信邮...
     
 
         <a href="/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/" class="post-more waves-effect waves-button">
@@ -526,7 +523,7 @@ Lazy Queues的主要目标之一是能够支持非常长的队列(数百万条�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/">10. TTL 和 延迟队列</a>
+      <a class="post-title-link" href="/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/">10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列</a>
     </h3>
   
 
