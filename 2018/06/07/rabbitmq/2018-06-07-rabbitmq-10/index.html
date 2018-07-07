@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
+    <meta name="description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间):  如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间   如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;  如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
 <meta property="og:title" content="10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/07/rabbitmq/2018-06-07-rabbitmq-10/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
+<meta property="og:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间):  如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间   如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;  如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-06T05:10:26.000Z">
+<meta property="og:updated_time" content="2018-07-07T02:13:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列">
-<meta name="twitter:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间): 如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间; 如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同; 如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;    队列TTL设置">
+<meta name="twitter:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间):  如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间   如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;  如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Time-To-Live-Extensions"><span class="post-toc-number">1.</span> <span class="post-toc-text">Time-To-Live Extensions</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#队列TTL设置"><span class="post-toc-number">2.</span> <span class="post-toc-text">队列TTL设置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#消息TTL设置"><span class="post-toc-number">3.</span> <span class="post-toc-text">消息TTL设置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通过队列-设置消息TTL"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">通过队列 设置消息TTL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通过消息-设置TTL"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">通过消息 设置TTL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">对比</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#延迟队列"><span class="post-toc-number">5.</span> <span class="post-toc-text">延迟队列</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试-1"><span class="post-toc-number">6.</span> <span class="post-toc-text">测试</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Time-To-Live-Extensions"><span class="post-toc-number">1.</span> <span class="post-toc-text">Time-To-Live Extensions</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Queue-TTL"><span class="post-toc-number">2.</span> <span class="post-toc-text">Queue TTL</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Message-TTL"><span class="post-toc-number">3.</span> <span class="post-toc-text">Message TTL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通过队列-设置消息TTL"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">通过队列 设置消息TTL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#通过消息-设置TTL"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">通过消息 设置TTL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#对比"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">对比</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#延迟队列"><span class="post-toc-number">5.</span> <span class="post-toc-text">延迟队列</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#TTL-DLX"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">TTL+DLX</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#插件方式"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">插件方式</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -174,25 +174,36 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="Time-To-Live-Extensions"><a href="#Time-To-Live-Extensions" class="headerlink" title="Time-To-Live Extensions"></a><a href="https://www.rabbitmq.com/ttl.html" target="_blank" rel="external">Time-To-Live Extensions</a></h2><ol>
-<li>RabbitMQ允许你为 <code>Messages</code> 和 <code>Queues</code> 设置 <code>TTL</code>(生存时间):<ul>
-<li>如果通过 队列的可选参数 设置TTL, 则队列中所有消息都有相同的过期时间;</li>
-<li>如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;</li>
-<li>如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;</li>
+<li><p>RabbitMQ允许你为 <code>Messages</code> 和 <code>Queues</code> 设置 <code>TTL</code>(生存时间):</p>
+<ul>
+<li><p>如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间 </p>
+</li>
+<li><p>如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;</p>
+</li>
+<li><p>如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;</p>
+</li>
 </ul>
 </li>
 </ol>
-<h2 id="队列TTL设置"><a href="#队列TTL设置" class="headerlink" title="队列TTL设置"></a>队列TTL设置</h2><ol>
+<h2 id="Queue-TTL"><a href="#Queue-TTL" class="headerlink" title="Queue TTL"></a>Queue TTL</h2><ol>
 <li><p>通过在队列声明时, 设置 <code>$arguments</code> 参数的 <code>x-expires</code> 选项 或 通过设置 <code>expires</code> 策略, 可以为给定队列设置过期时间</p>
 <ul>
 <li>这可以控制队列在被自动删除之前有多长时间可以不被使用<br>不被使用的意思是: 队列没有consumer, 队列尚未重新声明, 并且至少在有效期内未调用 <code>basic.get</code>, 待测试??<br>例如, 这可以用于RPC的回复队列, 其中可以创建许多可能永远不会被耗尽的队列??</li>
 </ul>
 </li>
-<li><p><code>x-expires</code> 以毫秒为单位, 与消息ttl不同, 它不能为0; 1000表示1秒内未使用的队列将会被删除;</p>
+<li><p><code>x-expires</code> 以毫秒为单位, 与消息ttl不同, 它不能为0 (1000表示1秒内未使用的队列将会被删除)</p>
 </li>
-<li><p>此功能可以与自动删除队列属性一起使用 ??</p>
+<li><p>此功能可以与自动删除队列属性一起使用</p>
+<ul>
+<li><p><code>queue.declare</code> 命令中的 <code>x-expires</code> 参数控制 queue 被自动删除前可以处于未使用状态的时间;<br>未使用的意思是 queue 上没有任何 consumer, queue 没有被重新声明, 并且在过期时间段内未调用过 basic.get 命令;<br>通俗的说就是: 一个被设置为自动删除的队列, 在没有消费者对其进行消费的情况下, 它可以存活的时间;<br>该方式可用于, 例如, RPC-style 的回复 queue, 其中许多 queue 会被创建出来, 但是却从未被使用 ?? 这句话还未领会 </p>
+<p>服务器会确保在过期时间到达后 queue 被删除, 但是不保证删除的动作有多么的及时。在服务器重启后，持久化的 queue 的超时时间将重新计算。 </p>
+</li>
+</ul>
+</li>
+<li><p>队列过期后, 消息不会进入死信 </p>
 </li>
 </ol>
-<h2 id="消息TTL设置"><a href="#消息TTL设置" class="headerlink" title="消息TTL设置"></a>消息TTL设置</h2><h3 id="通过队列-设置消息TTL"><a href="#通过队列-设置消息TTL" class="headerlink" title="通过队列 设置消息TTL"></a>通过队列 设置消息TTL</h3><ol>
+<h2 id="Message-TTL"><a href="#Message-TTL" class="headerlink" title="Message TTL"></a>Message TTL</h2><h3 id="通过队列-设置消息TTL"><a href="#通过队列-设置消息TTL" class="headerlink" title="通过队列 设置消息TTL"></a>通过队列 设置消息TTL</h3><ol>
 <li><p>消息TTL可以通过设置 队列的 <code>$arguments</code> 参数的 <code>x-message-ttl</code> 选项来设置队列中消息的TTL;</p>
 </li>
 <li><p>已经在队列中超过配置的TTL的消息被认为是dead(死亡的)</p>
@@ -226,22 +237,28 @@
 <li>因此, 如果使用了第二种方式, 建议让消费者在线以确保消息更快地被丢弃;</li>
 </ul>
 </li>
+<li><p>测试中会有体现</p>
+</li>
 </ol>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
 <li>Publisher代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/DlxController.php" target="_blank" rel="external">参考</a><br> 内容为业务队列绑定一个死信队列(死信队列可以先不存在, 即 你可以不用先运行Consumer来创建dlx)</li>
 <li>Consuemr代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/dlxConsumer.php" target="_blank" rel="external">参考</a><br> 内容为死信队列与死信交换机的绑定</li>
 </ol>
-<h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><ol>
+<h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><h3 id="TTL-DLX"><a href="#TTL-DLX" class="headerlink" title="TTL+DLX"></a>TTL+DLX</h3><ol>
 <li><p>首先, 应该清楚的是, <code>延迟队列</code>存储的对象对应的肯定是<code>延时消息</code>, 所谓 <code>延时消息</code> 是指当消息被发送以后, 并不想让消费者立即拿到消息, 而是等待指定时间后, 消费者才拿到这个消息进行消费; 比如:</p>
 <ul>
 <li>在订单系统中, 一个用户下单之后通常有30分钟的时间进行支付, 如果30分钟之内没有支付成功, 那么这个订单将进行一场处理, 这是就可以使用延时队列将订单信息发送到延时队列;</li>
 <li>用户希望通过手机远程遥控家里的智能设备在指定的时间进行工作, 这时候就可以将用户指令发送到延时队列, 当指令设定的时间到了再将指令推送到只能设备;</li>
 </ul>
 </li>
-<li><p>RabbitMQ延迟队列的实现: TTL+DLX<br><a href="https://blog.csdn.net/u014308482/article/details/53036770" target="_blank" rel="external">https://blog.csdn.net/u014308482/article/details/53036770</a><br>死信延时的问题: <a href="https://blog.csdn.net/qq315737546/article/details/66475743" target="_blank" rel="external">https://blog.csdn.net/qq315737546/article/details/66475743</a></p>
-<h2 id="测试-1"><a href="#测试-1" class="headerlink" title="测试"></a>测试</h2></li>
+<li><p>RabbitMQ延迟队列的实现: TTL+DLX</p>
+<ul>
+<li><a href="https://blog.csdn.net/u014308482/article/details/53036770" target="_blank" rel="external">https://blog.csdn.net/u014308482/article/details/53036770</a></li>
+<li>死信延时的问题: <a href="https://blog.csdn.net/qq315737546/article/details/66475743" target="_blank" rel="external">https://blog.csdn.net/qq315737546/article/details/66475743</a></li>
+</ul>
+</li>
 </ol>
-<p>参考: <a href="https://www.cnblogs.com/haoxinyue/p/6613706.html" target="_blank" rel="external">https://www.cnblogs.com/haoxinyue/p/6613706.html</a></p>
+<h3 id="插件方式"><a href="#插件方式" class="headerlink" title="插件方式"></a>插件方式</h3><p>参考: <a href="https://www.cnblogs.com/haoxinyue/p/6613706.html" target="_blank" rel="external">https://www.cnblogs.com/haoxinyue/p/6613706.html</a></p>
 
         </div>
 
