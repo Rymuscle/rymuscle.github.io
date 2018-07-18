@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test04.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-test05.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/qos-prefetch-size-error.png">
-<meta property="og:updated_time" content="2018-07-18T07:36:25.000Z">
+<meta property="og:updated_time" content="2018-07-18T09:30:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20. 消费者预取 Consumer Prefetch">
 <meta name="twitter:description" content="Consumer Prefetch 作为限制 unack 消息数量的更自然有效的方法; AMQP 0-9-1 指定了 basic.qos 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量;   但是值得注意的是: channel 并不是理想的设定范围, 因为单个channel可能从多个队列进行消费, channel和queue需要为每个发送的消">
@@ -192,11 +192,17 @@
 </li>
 </ol>
 <h2 id="简要分析"><a href="#简要分析" class="headerlink" title="简要分析"></a>简要分析</h2><ol>
-<li><p>在使用RabbitMQ时, 如果完全不配置QoS, RabbitMQ是不会考虑到Consumers端是否ack的情况, 而是采用默认方式, 将队列中的所有消息按照网络和客户端允许的速度尽快<strong>轮发</strong>到与队列绑定的consumers端; 而consumers会在本地缓存所有投递过来的messages, 这样的话, 就可能会导致</p>
+<li><p>在使用RabbitMQ时, 如果完全不配置QoS, RabbitMQ是不会考虑到Consumers端是否ack的情况, 而是采用默认方式, 将队列中的所有消息按照网络和客户端允许的速度<strong>尽快轮发</strong>到与队列绑定的consumers端; 而consumers会在本地缓存所有投递过来的messages, 这样的话, 就可能会导致</p>
 <ul>
 <li>如果某个消费者的业务逻辑处理比较复杂(将会在较长时间之后才会操作完成并进行ack), 这也就导致消费慢的Consumer将会在本地堆积很多消息, 从而导致内存不足或者对其他进程造成影响 (<strong>消费者可能被撑到假死</strong>);</li>
 <li>而其他消费能力强的Consumers, 可能已经很快地消费完成处于闲置状态, <strong>从而造成资源浪费</strong>; </li>
 <li>同时, 新启的消费者也无法分担已经被之前消费者缓存到其本地的消息, 所以此时即便启动更多消费者, 也<strong>无力缓解大量的unack消息积压, 让你产生疑惑</strong>;</li>
+</ul>
+</li>
+<li><p><strong>而当你设置了Qos之后, RabbitMQ虽然也是将队列中的消息尽快轮发到Consumers中, 但是因为消费者具有的 prefetch_count 消息预取值上限, 所以RabbitMQ在轮发消息的时候, 如果发现消费者的 unack 消息达到了 prefetch_count 的值, 即使rabbitmq中有很多ready的就绪消息, 也不会给该Consumer继续投递消息了(只有消费者的 unack消息小于prefetch_count的值时, 才会继续通过轮发方式给该consumer投递ready消息), 如果此时有新的消费者加入, 它也将会拿到未投递出去的ready消息!</strong></p>
+<ul>
+<li>可以通过启动 prefetchCountConsumer1，prefetchCountConsumer2 两个消费者(prefetch_count 均为10), 然后使用下面测试中的生产者发送100条消息, 前期观察会发现队列中消息的最大 unacked 为20, 并且你会发现队列中处于ready状态的消息会每次2个的递减, 这就预示着, 每次这两个消费者只要unacked的消息书小于prefetch_count(10), Rabbitmq才会给这两个consumer各自发送一条msg;</li>
+<li>之后如果启动了 prefetchCountConsumer3(prefetch_count为20), 此时会发现队列中消息的最大 unacked 会为40, prefetchCountConsumer3的加入会使得队列中处于ready状态的消息直接骤减20个, 最后rabbitmq中的ready消息已经为0, 每个消费者还在继续消费各自未unacked的消息, 最终消费完成后, 整个队列中的 unacked 消息为0;</li>
 </ul>
 </li>
 <li><p>Qos的设置只有在<strong>开启手动ack</strong>后才会生效 (即, prefetch_count 在 no_ask=false 的情况下生效)</p>
@@ -277,7 +283,7 @@
 <li>在rabbitmq的实现中, 每个channel都对应会有一个rabbit_limiter进程, 当收到basic.qos信令后, 在rabbit_limiter进程中记录信令中prefetch_count的值, 同时记录的还有该channel未ack的消息个数;</li>
 </ul>
 </li>
-<li><p>在<code>php-amqplib</code>中, 可以使用信道的 <code>basic_qos()</code> 来进行控制, <code>basic_qos()</code> 有三个参数:</p>
+<li><p>在<code>php-amqplib</code>中, 可以使用 channel 的 <code>basic_qos()</code> 方法来进行控制, <code>basic_qos()</code> 有三个参数:</p>
 <ul>
 <li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端<strong>RabbitMQ系统没有实现该参数的功能</strong>, 还可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a>)<br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
 <li>prefetch_count : 预取消息数量</li>
