@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间):  如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间   如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;  如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-07T02:13:19.000Z">
+<meta property="og:updated_time" content="2018-07-19T02:06:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="10. TTL (x-expires,x-message-ttl, expiration)和 延迟队列">
 <meta name="twitter:description" content="Time-To-Live Extensions RabbitMQ允许你为 Messages 和 Queues 设置 TTL(生存时间):  如果通过 队列的可选参数 设置队列/消息的TTL, 则队列中所有消息都有相同的过期时间   如果通过 消息的属性 为每条消息单独设置TTL, 则每条消息的TTL都可以不同;  如果上述两种方法同时使用, 则消息的过期时间以两者之间TTL较小的那个数值为准;">
@@ -242,7 +242,7 @@
 </ol>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
 <li>Publisher代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/DlxController.php" target="_blank" rel="external">参考</a><br> 内容为业务队列绑定一个死信队列(死信队列可以先不存在, 即 你可以不用先运行Consumer来创建dlx)</li>
-<li>Consuemr代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/dlxConsumer.php" target="_blank" rel="external">参考</a><br> 内容为死信队列与死信交换机的绑定</li>
+<li>Consuemr代码<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/dlxConsumer.php" target="_blank" rel="external">参考</a><br> 内容为死信队列与死信交换器的绑定</li>
 </ol>
 <h2 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h2><h3 id="TTL-DLX"><a href="#TTL-DLX" class="headerlink" title="TTL+DLX"></a>TTL+DLX</h3><ol>
 <li><p>首先, 应该清楚的是, <code>延迟队列</code>存储的对象对应的肯定是<code>延时消息</code>, 所谓 <code>延时消息</code> 是指当消息被发送以后, 并不想让消费者立即拿到消息, 而是等待指定时间后, 消费者才拿到这个消息进行消费; 比如:</p>
@@ -353,7 +353,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2018/06/07/rabbitmq/2018-06-07-rabbitmq-11/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">11. Dead Letter Exchanges (DLX) 死信交换机</h4>
+        <h4 class="title">11. Dead Letter Exchanges (DLX) 死信交换器</h4>
       </a>
     </div>
   
