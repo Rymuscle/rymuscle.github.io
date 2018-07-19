@@ -13,7 +13,7 @@
     
     
     
-    <title>32. RabbitMQ集群 -- 单机 | Lant&#39;s Blog</title>
+    <title>32. RabbitMQ集群 -- 单机部署伪集群 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,14 +23,14 @@
     <meta name="description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="32. RabbitMQ集群 -- 单机">
+<meta property="og:title" content="32. RabbitMQ集群 -- 单机部署伪集群">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-19T07:33:03.000Z">
+<meta property="og:updated_time" content="2018-07-19T08:29:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="32. RabbitMQ集群 -- 单机">
+<meta name="twitter:title" content="32. RabbitMQ集群 -- 单机部署伪集群">
 <meta name="twitter:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">32. RabbitMQ集群 -- 单机</div>
+        <div class="flex-col header-title ellipsis">32. RabbitMQ集群 -- 单机部署伪集群</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">32. RabbitMQ集群 -- 单机</h1>
+        <h1 class="title">32. RabbitMQ集群 -- 单机部署伪集群</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-26T07:28:16.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">32. RabbitMQ集群 -- 单机</h1>
+        <h1 class="post-card-title">32. RabbitMQ集群 -- 单机部署伪集群</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-26 15:28:16" datetime="2018-06-26T07:28:16.000Z"  itemprop="datePublished">2018-06-26</time>
 
@@ -347,7 +347,7 @@ Removing node rabbit_2@localhost from the cluster
 renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_3@localhost
 Removing node rabbit_3@localhost from the cluster
 renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">## [RabbitMQ集群节点类型](http://www.rabbitmq.com/clustering.html#change-type)</div><div class="line">1. 可以在将节点加入集群时, 设定节点的类型 ([参考](http://www.rabbitmq.com/clustering.html#creating-ram))</div><div class="line">    比如 `rabbitmqctl -n rabbit_3@localhost join_cluster --ram rabbit@localhost`</div><div class="line">    </div><div class="line">2. 之前已经通过 `rabbitmqctl cluster_status` 查看了集群的状态, 里面比较重要的是 `nodes` 部分</div><div class="line">    - 下面告诉你有三个节点加入了集群, 并且三个节点都是 disc 磁盘节点!</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">## [RabbitMQ集群节点类型](http://www.rabbitmq.com/clustering.html#change-type)设置与修改</div><div class="line">1. 可以在将节点加入集群时, 设定节点的类型 ([参考](http://www.rabbitmq.com/clustering.html#creating-ram))</div><div class="line">    比如 `rabbitmqctl -n rabbit_3@localhost join_cluster --ram rabbit@localhost`</div><div class="line">    </div><div class="line">2. 之前已经通过 `rabbitmqctl cluster_status` 查看了集群的状态, 里面比较重要的是 `nodes` 部分</div><div class="line">    - 下面告诉你有三个节点加入了集群, 并且三个节点都是 disc 磁盘节点!</div></pre></td></tr></table></figure>
 
 [{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
      {running_nodes,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]},
@@ -484,7 +484,7 @@ renyimindeMacBook-Pro:~ renyimin$
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -494,7 +494,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -504,7 +504,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -644,7 +644,7 @@ renyimindeMacBook-Pro:~ renyimin$
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -654,7 +654,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -664,7 +664,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. RabbitMQ集群 -- 单机》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. RabbitMQ集群 -- 单机部署伪集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
