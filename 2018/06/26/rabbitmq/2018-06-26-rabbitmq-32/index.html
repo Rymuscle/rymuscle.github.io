@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/cluster-error01.png">
-<meta property="og:updated_time" content="2018-07-20T06:14:23.000Z">
+<meta property="og:updated_time" content="2018-07-20T06:21:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="32. 单机部署集群 -- 普通集群">
 <meta name="twitter:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
@@ -234,7 +234,15 @@
 <li>或者仅存储到RAM内存中</li>
 </ul>
 </li>
-<li><p>注意: 一个集群至少要有一个磁盘节点;</p>
+<li><p>注意, RabbitMQ要求在集群中至少要有一个磁盘节点, 所有其他节点可以是内存节点。当节点加入或者离开集群时, 它们必须要将变更至少通知到一个磁盘节点; 如果只有一个磁盘节点, 而不凑巧的是它有刚好崩溃, 那么集群虽然可以继续路由消息, 但是不能做一下操作:</p>
+<ul>
+<li>创建队列</li>
+<li>创建交换器</li>
+<li>创建绑定</li>
+<li>添加用户</li>
+<li>更改权限</li>
+<li>添加或删除集群节点</li>
+</ul>
 </li>
 </ol>
 <h2 id="本机配置集群"><a href="#本机配置集群" class="headerlink" title="本机配置集群"></a>本机配置集群</h2><ol>
