@@ -144,4 +144,30 @@
     
   </entry>
   
+  <entry>
+    <title>02. HTTP请求方法</title>
+    <link href="http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/"/>
+    <id>http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/</id>
+    <published>2017-11-30T03:29:12.000Z</published>
+    <updated>2018-07-20T13:20:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li><p>HTTP/1.1 中实现的method, <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">参考RFC2616</a>, 可以看到有: <code>OPTIONS</code>, <code>HEAD</code>, <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p></li><li><p>RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图解http协议》中也提到 <code>LINK</code>, <code>UNLINK</code> 已经被http1.1废弃);</p></li><li><p>不同应用各自的实现不同, 有些应用会完整实现, 有些还会扩展, 有些可能只会实现一部分;</p></li></ol><h2 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h2><ol><li><p><code>PUT</code>: 替换资源;</p></li><li><p><code>PUT</code> 和 <code>POST</code>的区别: 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a> 的方法, POST则不是, <strong>这是一个很重要的区别</strong></p></li><li><p>应该用 <code>PUT</code> 还是 <code>POST</code>?</p><ul><li><p>取决于这个REST服务的行为是否是idempotent(幂等)的<br>假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用 <code>POST</code> 方法;<br>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用 <code>PUT</code> 方法;</p></li><li><p>虽然 <code>POST</code> 和 <code>PUT</code> 差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦;</p></li></ul></li></ol><h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><ol><li><p><code>POST</code>: 上面已经提过了, <strong>POST是非幂等的</strong>;</p></li><li><p><code>POST</code> 和 <code>PUT</code> 都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的;</p></li></ol><h2 id="PATCH"><a href="#PATCH" class="headerlink" title="PATCH"></a>PATCH</h2><p><strong>PATCH不是HTTP标准方法的，服务端需要考虑客户端是否能够支持的问题</strong>;</p><ol><li><p>对已有资源的操作: 用于对资源的 <strong>部分内容</strong> 进行更新 (例如更新某一个字段, 具体比如说只更新用户信息的电话号码字段);   </p></li><li><p>而 <code>PUT</code> 则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变;</p></li></ol><h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><ol><li>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回, 而仅仅返回HTTP头信息;<br> 比如: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>;</li></ol><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>比较简单, 直接获取资源;</p><h2 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h2><p>这个方法使用比较少, 它用于获取当前URL所支持的方法;<br>若请求成功, 则它会在HTTP头中包含一个名为 <code>Allow</code> 的头, 值是服务器所支持的方法, 如 GET, POST;<br>之前跨域相关博文 <a href="/2016/09/18/2016-09-18-sameoriginpolicy-06/">CORS方案 not-so-simple request</a> 中的”预检”请求用的请求方法就是 <code>OPTIONS</code>;</p><h2 id="CONNECT"><a href="#CONNECT" class="headerlink" title="CONNECT"></a>CONNECT</h2><p>要求用隧道协议连接代理, 如使用SSL</p><h2 id="TRACE"><a href="#TRACE" class="headerlink" title="TRACE"></a>TRACE</h2><p>~~未完待续</p><h2 id="DELETE"><a href="#DELETE" class="headerlink" title="DELETE"></a>DELETE</h2><p><a href="https://tools.ietf.org/html/rfc2616#section-9.7" target="_blank" rel="external">参考</a></p><h2 id="PURGE"><a href="#PURGE" class="headerlink" title="PURGE"></a>PURGE</h2><p>非规范中定义的方法</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;HTTP/1.1 中实现的method, &lt;a href=&quot;https://tools.ietf.org/html/rfc
+      
+    
+    </summary>
+    
+      <category term="HTTP" scheme="http://blog.renyimin.com/categories/HTTP/"/>
+    
+    
+      <category term="HTTP" scheme="http://blog.renyimin.com/tags/HTTP/"/>
+    
+  </entry>
+  
 </feed>

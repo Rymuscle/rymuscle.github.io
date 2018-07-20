@@ -13,25 +13,25 @@
     
     
     
-    <title>02. HTTP各请求方法详解 | Lant&#39;s Blog</title>
+    <title>02. HTTP请求方法 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
+    <meta name="description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, HEAD, GET, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图解http协议》中也提到 LINK, UNLINK 已经被http1.1废弃);  不同应用各自的实现不同,">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02. HTTP各请求方法详解">
-<meta property="og:url" content="http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/index.html">
+<meta property="og:title" content="02. HTTP请求方法">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
+<meta property="og:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, HEAD, GET, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图解http协议》中也提到 LINK, UNLINK 已经被http1.1废弃);  不同应用各自的实现不同,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-09T06:27:03.000Z">
+<meta property="og:updated_time" content="2018-07-20T13:20:39.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02. HTTP各请求方法详解">
-<meta name="twitter:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&amp;lt;图解http协议&amp;gt;中也提到 LINK, UNLINK已经被http1.1废弃);  不同应用各自的实现不同,">
+<meta name="twitter:title" content="02. HTTP请求方法">
+<meta name="twitter:description" content="前言 HTTP/1.1 中实现的method, 参考RFC2616, 可以看到有: OPTIONS, HEAD, GET, POST, PUT, DELETE, TRACE, CONNECT  RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图解http协议》中也提到 LINK, UNLINK 已经被http1.1废弃);  不同应用各自的实现不同,">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02. HTTP各请求方法详解</div>
+        <div class="flex-col header-title ellipsis">02. HTTP请求方法</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">02. HTTP各请求方法详解</h1>
+        <h1 class="title">02. HTTP请求方法</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-11-30T03:29:12.000Z" itemprop="datePublished" class="page-time">
@@ -152,15 +152,15 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PUT-对比POST"><span class="post-toc-number">2.</span> <span class="post-toc-text">PUT(对比POST)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#POST"><span class="post-toc-number">3.</span> <span class="post-toc-text">POST</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PATCH-对比PUT"><span class="post-toc-number">4.</span> <span class="post-toc-text">PATCH(对比PUT)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HEAD"><span class="post-toc-number">5.</span> <span class="post-toc-text">HEAD</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GET"><span class="post-toc-number">6.</span> <span class="post-toc-text">GET</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OPTIONS"><span class="post-toc-number">7.</span> <span class="post-toc-text">OPTIONS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CONNECT"><span class="post-toc-number">8.</span> <span class="post-toc-text">CONNECT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TRACE"><span class="post-toc-number">9.</span> <span class="post-toc-text">TRACE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DELETE"><span class="post-toc-number">10.</span> <span class="post-toc-text">DELETE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PURGE"><span class="post-toc-number">11.</span> <span class="post-toc-text">PURGE</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PUT"><span class="post-toc-number">2.</span> <span class="post-toc-text">PUT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#POST"><span class="post-toc-number">3.</span> <span class="post-toc-text">POST</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PATCH"><span class="post-toc-number">4.</span> <span class="post-toc-text">PATCH</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HEAD"><span class="post-toc-number">5.</span> <span class="post-toc-text">HEAD</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GET"><span class="post-toc-number">6.</span> <span class="post-toc-text">GET</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#OPTIONS"><span class="post-toc-number">7.</span> <span class="post-toc-text">OPTIONS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CONNECT"><span class="post-toc-number">8.</span> <span class="post-toc-text">CONNECT</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TRACE"><span class="post-toc-number">9.</span> <span class="post-toc-text">TRACE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DELETE"><span class="post-toc-number">10.</span> <span class="post-toc-text">DELETE</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PURGE"><span class="post-toc-number">11.</span> <span class="post-toc-text">PURGE</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-http/2017-11-30-HTTP-02"
+<article id="post-HTTP/2017-11-30-HTTP-02"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02. HTTP各请求方法详解</h1>
+        <h1 class="post-card-title">02. HTTP请求方法</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-11-30 11:29:12" datetime="2017-11-30T03:29:12.000Z"  itemprop="datePublished">2017-11-30</time>
 
@@ -174,51 +174,43 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p>HTTP/1.1 中实现的method, <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">参考RFC2616</a>, 可以看到有: <code>OPTIONS</code>, <code>GET</code>, <code>HEAD</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p>
+<li><p>HTTP/1.1 中实现的method, <a href="https://tools.ietf.org/html/rfc2616" target="_blank" rel="external">参考RFC2616</a>, 可以看到有: <code>OPTIONS</code>, <code>HEAD</code>, <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>, <code>TRACE</code>, <code>CONNECT</code></p>
 </li>
-<li><p>RFC2616中提到: PATCH，LINK，UNLINK方法被定义，但并不常见;(&lt;图解http协议&gt;中也提到 <code>LINK</code>, <code>UNLINK</code>已经被http1.1废弃);</p>
+<li><p>RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图解http协议》中也提到 <code>LINK</code>, <code>UNLINK</code> 已经被http1.1废弃);</p>
 </li>
-<li><p>不同应用各自的实现不同, 有些应用会完整实现, 有些还会扩展, 有些可能会实现一部分;</p>
-</li>
-</ol>
-<h2 id="PUT-对比POST"><a href="#PUT-对比POST" class="headerlink" title="PUT(对比POST)"></a>PUT(对比POST)</h2><ol>
-<li><p><code>PUT</code>: 对已有资源进行更新操作, 所以是 update 操作;</p>
-</li>
-<li><p>put和post的区别<br> 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a> 的方法，POST则不是，<strong>这是一个很重要的区别</strong></p>
-</li>
-<li><p>应该用PUT还是POST ？</p>
+<li><p>不同应用各自的实现不同, 有些应用会完整实现, 有些还会扩展, 有些可能只会实现一部分;</p>
 </li>
 </ol>
+<h2 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h2><ol>
+<li><p><code>PUT</code>: 替换资源;</p>
+</li>
+<li><p><code>PUT</code> 和 <code>POST</code>的区别: 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="external"><code>idempotent(幂等性)</code></a> 的方法, POST则不是, <strong>这是一个很重要的区别</strong></p>
+</li>
+<li><p>应该用 <code>PUT</code> 还是 <code>POST</code>?</p>
 <ul>
-<li><strong>取决于这个REST服务的行为是否是idempotent(幂等)的</strong><br>  假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用<code>POST</code>方法;<br>  但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用<code>PUT</code>方法;</li>
-<li>虽然POST和PUT差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦</li>
+<li><p>取决于这个REST服务的行为是否是idempotent(幂等)的<br>假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用 <code>POST</code> 方法;<br>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用 <code>PUT</code> 方法;</p>
+</li>
+<li><p>虽然 <code>POST</code> 和 <code>PUT</code> 差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦;</p>
+</li>
 </ul>
+</li>
+</ol>
 <h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><ol>
 <li><p><code>POST</code>: 上面已经提过了, <strong>POST是非幂等的</strong>;</p>
 </li>
-<li><p>POST和PUT都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的;</p>
+<li><p><code>POST</code> 和 <code>PUT</code> 都可以上传文件或者创建新信息, 但主要看你的REST服务行为是否是幂等的;</p>
 </li>
 </ol>
-<h2 id="PATCH-对比PUT"><a href="#PATCH-对比PUT" class="headerlink" title="PATCH(对比PUT)"></a>PATCH(对比PUT)</h2><p><strong>PATCH不是HTTP标准方法的，服务端需要考虑客户端是否能够支持的问题</strong></p>
+<h2 id="PATCH"><a href="#PATCH" class="headerlink" title="PATCH"></a>PATCH</h2><p><strong>PATCH不是HTTP标准方法的，服务端需要考虑客户端是否能够支持的问题</strong>;</p>
 <ol>
-<li><p>对已有资源的操作</p>
-<ul>
-<li>用于资源的<strong>部分内容</strong>进行更新 (例如更新某一个字段, 具体比如说只更新用户信息的电话号码字段);   </li>
-<li>而<code>PUT</code>则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变;</li>
-</ul>
+<li><p>对已有资源的操作: 用于对资源的 <strong>部分内容</strong> 进行更新 (例如更新某一个字段, 具体比如说只更新用户信息的电话号码字段);   </p>
 </li>
-<li><p>当资源不存在时: PATCH 可能会去创建一个新的资源, 这个意义上像是 saveOrUpdate 操作。</p>
-</li>
-<li><p>参考:</p>
-<ul>
-<li><a href="https://segmentfault.com/q/1010000005685904/" target="_blank" rel="external">https://segmentfault.com/q/1010000005685904/</a></li>
-<li><a href="https://unmi.cc/restful-http-patch-method/" target="_blank" rel="external">https://unmi.cc/restful-http-patch-method/</a></li>
-<li><a href="http://restcookbook.com/HTTP%20Methods/patch/" target="_blank" rel="external">http://restcookbook.com/HTTP%20Methods/patch/</a></li>
-<li><a href="https://tools.ietf.org/html/rfc5789" target="_blank" rel="external">https://tools.ietf.org/html/rfc5789</a></li>
-</ul>
+<li><p>而 <code>PUT</code> 则用于更新某个资源较完整的内容, 比如说用户要重填完整表单更新所有信息, 后台处理更新时可能只是保留内部记录ID不变;</p>
 </li>
 </ol>
-<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回，而仅仅返回HTTP头信息;<br>比如: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>。</p>
+<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><ol>
+<li>HEAD和 <code>GET</code> 本质是一样的, 区别在于如果使用HEAD, 响应体将不会被返回, 而仅仅返回HTTP头信息;<br> 比如: 欲判断某个资源是否存在, 我们通常使用GET, <strong>但这里用HEAD则意义更加明确</strong>;</li>
+</ol>
 <h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>比较简单, 直接获取资源;</p>
 <h2 id="OPTIONS"><a href="#OPTIONS" class="headerlink" title="OPTIONS"></a>OPTIONS</h2><p>这个方法使用比较少, 它用于获取当前URL所支持的方法;<br>若请求成功, 则它会在HTTP头中包含一个名为 <code>Allow</code> 的头, 值是服务器所支持的方法, 如 GET, POST;<br>之前跨域相关博文 <a href="/2016/09/18/2016-09-18-sameoriginpolicy-06/">CORS方案 not-so-simple request</a> 中的”预检”请求用的请求方法就是 <code>OPTIONS</code>;</p>
 <h2 id="CONNECT"><a href="#CONNECT" class="headerlink" title="CONNECT"></a>CONNECT</h2><p>要求用隧道协议连接代理, 如使用SSL</p>
@@ -261,7 +253,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&title=《02. HTTP各请求方法详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&title=《02. HTTP请求方法》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -271,22 +263,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&title=《02. HTTP各请求方法详解》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&title=《02. HTTP请求方法》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. HTTP各请求方法详解》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. HTTP请求方法》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -306,20 +298,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
-      <div class="waves-block waves-effect prev">
-        <a href="/2017/11/30/http/2017-11-30-HTTP-01/" id="post-prev" class="post-nav-link">
-          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">01. HTTP协议预览</h4>
-        </a>
-      </div>
-    
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-03/" id="post-next" class="post-nav-link">
+      <a href="/2018/05/28/RabbitMQ/2018-05-28-rabbitmq-06/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03. HTTP状态码详解</h4>
+        <h4 class="title">06. 持久化策略</h4>
       </a>
     </div>
   
@@ -421,7 +406,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&title=《02. HTTP各请求方法详解》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&title=《02. HTTP请求方法》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -431,22 +416,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&title=《02. HTTP各请求方法详解》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&title=《02. HTTP请求方法》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. HTTP各请求方法详解》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. HTTP请求方法》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-02/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/HTTP/2017-11-30-HTTP-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -457,7 +442,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJElEQVR42u3aO7LDIAwF0Ox/035tXhF8JTlF4FB5Mv7oUCgI8XrF43ob+Z35/dWvNAcGBsbPMq7l+PSBPNzkqfX1OjYMDIxzGMnn169eg6uZM48NAwMD49M9SbgJNZkUDAwMjF7CTTDJkm79CwYGBka1iO0t9fIpq6ZmDAyMcxiTwvLb11/pb2BgYPwU4yqOdaMxXyBWmwc3UWFgYGzNyBNcXoj27ukd0cDAwDiHkZeXvUB7DYObcCdVMgYGxhaMeehJjZm0B/KGBAYGxgmMpKFYTdnVdPmVBgAGBsYWjMKBhuJxit7veYrHwMDAqG6K9Y6LTbb5MDAwTmBUi9XqobFqas6n4N81BgbG1oxeYZkkzcnRjeriEgMDY2/G+hWTgra6lZYXqx9Pi2BgYGzKmGzWV8ezzQkMDIzTGPkCLmlV5oVrbxEZ/XtgYGBsxMiD6+3GP1X63qRmDAyMrRl5WfhUcL1FZ9TUxMDA2JqRfyyvhieHLfLGwKs3ZxgYGD/IKC/Cxim19/WbqcTAwDiSkf+eb7fNJ6XQj8XAwNiO0VuiVUcPFqVmDAyMTRm9AxPVdmav3G3W3xgYGNsx5olyDUtCqb4tL30xMDB2YkySbH5sorcELEwBBgbGAYykiK1u6E+SePkpDAwMjNb1JB0nUTV3DTEwMI5hPLWtn+CjFgUGBsYBjKSIzQ+e9paAvQUiBgbGCYz8sbyg7bUtq6FjYGAcwPgDAYGTYXavazAAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACO0lEQVR42u3aO7LCMAwFUPa/6fdaCuJcSVDYOakyTIh9KIT1eb3i6295vT+T3L9/cvX+1y8uDAyMbRnVLSYL9xjr52+oGBgYD2BcRbDkmfVGqwE0XxcDAwNjcuxLgmwSvjEwMDCqjPzIuD7YrVfHwMDAmCSxySYmQXy97tdycQwMjA0Zk8Ty1/c/6W9gYGBsxfgrXsl3ewlqHmQ/vA0DA+NoxnyQYtKkrA5h3BxAMTAwjmYkxa9qcT9aLA7NyYEVAwPjCYw8IPZGvnrtgepaGBgY5zFGsbnV8vxWcC9vEQMDY3NGL4mtlvLzd1bLcBgYGGczqoMOeWtz3qSMzrN5/wEDA2NbxrxhOW9MVgP6h3sMDIyjGdUDXBIu89S0V7aLQjYGBsZBjHy0a36AywPu+scqDIRhYGAcwZiHy2a/NNjoaIADAwPjIEZ+XOuV8qvn02TkotlzwMDA2JYxqa7nBbW82VA9pF5Ot2FgYBzEqC7QGzWbNBuiHwIDA+NoRq+I1gPPj4PNKRIMDIwjGHmHs9odrY5x5Mn2ZdENAwPjaEZ1E3n6ug7ZScWsEHAxMDAOZfTCbhI68+1WxzswMDCew+gVvHrpbjWw5s1RDAyMsxm9MFcdnsgHOJIW6SRYY2Bg7MvopZ15YyBJd6tJbHMgDAMDY3PGtxqZ1bGM6j/A5bcwMDAwxqX8b51hbzJyDAwMjGKhP+f1nsHAwHgaYzIekYfOSenthoSBgXE0I08dJ1ushtfkjwEDA+MBjH9DnNYsldCtPAAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
