@@ -29,7 +29,7 @@
 <meta property="og:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/cluster-error01.png">
-<meta property="og:updated_time" content="2018-07-20T06:21:13.000Z">
+<meta property="og:updated_time" content="2018-07-20T07:37:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="32. 单机部署集群 -- 普通集群">
 <meta name="twitter:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内建集群简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">内建集群简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群的类型"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群的类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#普通模式"><span class="post-toc-number">4.</span> <span class="post-toc-text">普通模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解内部元数据"><span class="post-toc-number">5.</span> <span class="post-toc-text">了解内部元数据</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存or磁盘节点"><span class="post-toc-number">6.</span> <span class="post-toc-text">内存or磁盘节点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#非集群单一节点"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">非集群单一节点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#集群节点类型"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">集群节点类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本机配置集群"><span class="post-toc-number">7.</span> <span class="post-toc-text">本机配置集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RabbitMQ集群的搭建"><span class="post-toc-number">8.</span> <span class="post-toc-text">RabbitMQ集群的搭建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群节点类型设置与修改"><span class="post-toc-number">9.</span> <span class="post-toc-text">集群节点类型设置与修改</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">10.</span> <span class="post-toc-text">测试</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内建集群简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">内建集群简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群的类型"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群的类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#普通模式"><span class="post-toc-number">4.</span> <span class="post-toc-text">普通模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解内部元数据"><span class="post-toc-number">5.</span> <span class="post-toc-text">了解内部元数据</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存or磁盘节点"><span class="post-toc-number">6.</span> <span class="post-toc-text">内存or磁盘节点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本机配置集群"><span class="post-toc-number">7.</span> <span class="post-toc-text">本机配置集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RabbitMQ集群的搭建"><span class="post-toc-number">8.</span> <span class="post-toc-text">RabbitMQ集群的搭建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群节点类型设置与修改"><span class="post-toc-number">9.</span> <span class="post-toc-text">集群节点类型设置与修改</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">10.</span> <span class="post-toc-text">测试</span></a></li></ol>
         </nav>
     </aside>
     
@@ -221,17 +221,19 @@
 <li>绑定元数据: 一张简单的表格展示了如何将消息路由到队列;</li>
 <li>vhost元数据: 为vhost内的队列、交换器和绑定提供命名空间和安全属性;</li>
 </ul>
-<h2 id="内存or磁盘节点"><a href="#内存or磁盘节点" class="headerlink" title="内存or磁盘节点"></a>内存or磁盘节点</h2><p>每个Rabbitmq节点, 不管是单一节点系统或者是庞大集群的一部分, 要么是内存节点(RAM node), 要么是磁盘节点(disk node):</p>
+<h2 id="内存or磁盘节点"><a href="#内存or磁盘节点" class="headerlink" title="内存or磁盘节点"></a>内存or磁盘节点</h2><ol>
+<li><p>每个Rabbitmq节点, 不管是单一节点系统或者是庞大集群的一部分, 要么是内存节点(RAM node), 要么是磁盘节点(disk node):</p>
 <ul>
 <li>内存节点将所有的队列、交换器、绑定、用户、权限和vhost的元数据定义都仅存储在内存中;</li>
 <li>而磁盘节点则将元数据存储在磁盘中;</li>
 </ul>
-<h3 id="非集群单一节点"><a href="#非集群单一节点" class="headerlink" title="非集群单一节点"></a>非集群单一节点</h3><p>在单一节点的非集群环境中, RabbitMQ默认会将元数据都存放在<strong>内存中</strong>; 但是, 会将标记为可持久化的队列和交换器(以及它们的绑定)存储到硬盘上, 存储到硬盘上可以确保队列和交换器在重启Rabbitmq节点后重新被创建;</p>
-<h3 id="集群节点类型"><a href="#集群节点类型" class="headerlink" title="集群节点类型"></a>集群节点类型</h3><ol>
-<li><p>而当你引入Rabbitmq集群后, RabbitMQ需要追踪的元数据类型包括: 集群节点位置, 以及节点与已记录的其他类型的元数据的关系, 在这里, 集群对元数据的存储提供了选择:</p>
+</li>
+<li><p>非集群单一节点: 在单一节点的非集群环境中, RabbitMQ默认会将元数据都存放在<strong>内存中</strong>; 但是, 会将标记为可持久化的队列和交换器(以及它们的绑定)存储到硬盘上, 存储到硬盘上可以确保队列和交换器在重启Rabbitmq节点后重新被创建;</p>
+</li>
+<li><p>集群节点类型 </p>
 <ul>
-<li>将元数据存储到磁盘上 (集群中创建节点时的默认设置)</li>
-<li>或者仅存储到RAM内存中</li>
+<li>当你引入Rabbitmq集群后, RabbitMQ需要追踪的元数据类型包括: 集群节点位置, 以及节点与已记录的其他类型的元数据的关系;</li>
+<li>集群对元数据的存储提供了选择:<br>将元数据存储到磁盘上 (集群中创建节点时的默认设置) 或者 存储到RAM内存中</li>
 </ul>
 </li>
 <li><p>注意, RabbitMQ要求在集群中至少要有一个磁盘节点, 所有其他节点可以是内存节点。当节点加入或者离开集群时, 它们必须要将变更至少通知到一个磁盘节点; 如果只有一个磁盘节点, 而不凑巧的是它有刚好崩溃, 那么集群虽然可以继续路由消息, 但是不能做一下操作:</p>
