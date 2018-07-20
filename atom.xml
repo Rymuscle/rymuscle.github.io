@@ -66,4 +66,57 @@
     
   </entry>
   
+  <entry>
+    <title>08. 事务 VS Publisher Confirms(发布者确认机制)</title>
+    <link href="http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/"/>
+    <id>http://blog.renyimin.com/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/</id>
+    <published>2018-06-05T11:20:56.000Z</published>
+    <updated>2018-07-20T06:00:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="问题的出现"><a href="#问题的出现" class="headerlink" title="问题的出现"></a>问题的出现</h2><ol><li><p>和消息持久化相关的一个概念是 AMQP 的事务(transaction)机制;</p></li><li><p>到目前为止, 我们讨论的是将 <code>消息</code>, <code>队列</code> 和 <code>交换器</code> 设置为持久化; 这一切都工作的很好, 并且RabbitMQ也负责保证消息的安全, 但是由于 <strong>发布消息的操作并不会反回任何信息给生产者</strong>, 所以你也无法得知是否消息已经到达了服务器并且服务器是否已经将消息持久化到了硬盘;</p><ul><li>服务器可能会在把消息写入到硬盘前就宕机了, 或者消息压根就还没有发送到服务器, 服务器就宕机了, 消息会因此而丢失, 而你却不知道; </li><li>另外, 你可能是发送多条消息, 如果部分发送成功, 部分失败呢? 这你也无法得知;</li></ul></li></ol><h2 id="事务机制"><a href="#事务机制" class="headerlink" title="事务机制"></a>事务机制</h2><ol><li><p>为了确保消息能够被安全发布到Broker, 如果使用标准的AMQP 0-9-1, 保证消息不会丢失的唯一方法是使用 <strong>事务机制</strong> (将channel事务化)</p></li><li><p>php-amqplib 中与事务机制有关的方法有三个, 分别是Channel里面的 <code>txSelect()</code>, <code>txCommit()</code> 以及 <code>txRollback()</code>;</p><ul><li>txSelect(): 用于将当前Channel设置成是transaction模式</li><li>txCommit(): 用于提交事务</li><li>txRollback(): 用于回滚事务</li></ul></li><li><p>但是值得注意的是事务存在的问题: </p><ul><li>AMQP 0-9-1 中的事务几乎吸干了RabbitMQ的性能, 会导致事务吞吐量严重下降;</li><li>事务会使得生产者应用程序变成同步的, 而你使用消息通信就是为了避免同步;</li></ul></li><li><p>鉴于上面的问题, 你可能不会在生产中使用事务机制, 此处只做了个简单的事务测试, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TxController.php" target="_blank" rel="external">测试代码</a></p></li></ol><h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">Publisher Confirms</a></h2><ol><li><p>既然事务存在的问题让你拒绝使用它, 但是<code>确保消息被成功投递到服务器</code>这个问题仍需要解决; 为了避免事务机制在解决问题时导致的新问题, RabbitMQ团队拿出了更好的方案来保证消息的投递: <strong>发送方确认模式</strong></p></li><li><p>它模仿协议中已经存在的 <strong>消费者确认机制</strong></p></li><li><p>要启用这个确认机制，客户端可以通过使用 channel 的 <code>confirm.select</code> 方法</p><ul><li><p>如果设置了 <code>confirm.select</code> 方法的 <code>no-wait</code>, 代理会用 <code>confirm.select-ok</code> 进行响应, 不过这点你貌似也只能通过抓包来观察:<br><img src="/img/rabbitmq/wireshark-Confirm.Select-ok.png"></p></li><li><p>这里说的 <code>confirm.select-ok</code> 是代理对发布者的响应信息 (和 php-amqplib包中的 <code>confirm_select_ok()</code> 方法可不是一个意思, 而且php-amqplib也没对confirm_select_ok做实现)</p></li></ul></li><li><p>上面也提到了, 该确认机制是模仿已经存在的 消费者确认机制, 所以, Broker也会使用类似 <strong>ack</strong>, <strong>nack</strong> 来响应Publisher: </p><ul><li><p>可以通过为 <code>set_ack_handler</code> , <code>set_nack_handler</code> 设置回调, 来监测消息是否成功到达服务器, 成功则会触发 <code>set_ack_handler</code>, 失败则会触发 <code>set_nack_handler</code></p></li><li><p><strong>只有在负责队列的Erlang进程中发生内部错误时才会回应nack</strong>, 所以这个在测试中也一直没有使用 set_nack_handler 捕获到错误 (是对于nack的消息, 可以设置进行重发);</p></li><li><p>注意: <strong>这两监听函数是监听服务器对 publisher 的应答的, 可不是监听 consumer 对服务器的应答的</strong>;</p></li></ul></li><li><p>一旦在channel上使用 <code>confirm.select</code> 方法, 就说 channel 处于 <strong>确认模式</strong>, 一旦通道处于确认模式, 就不能进行事务处理; 也就是说 <strong>事务 和 Publisher Confirm 不能同时使用</strong>;  </p><ul><li>一旦通道处于确认模式, 代理和客户端都会对消息进行计数(在第一次confirm.select时从1开始计数), 然后, broker通过在相同channel上发送 <code>basic.ack</code> 来处理它们, 从而确认消息; </li><li><code>delivery-tag</code> 字段包含确认消息的序列号;<br>最大 Delivery Tag, 递送标签是一个64位长的值，因此其最大值为9223372036854775807.由于递送标签的范围是按每个通道划分的，因此发布商或消费者在实践中不太可能运行该值</li></ul></li><li><p>Publisher Confirms 的顺序考虑</p><ul><li>在大多数情况下, RabbitMQ将按发布顺序向publisher确认消息(这适用于在单个频道上发布的消息); 但是, 发布者确认是异步发出的, 并且可以确认一条消息或一组消息;<br>由于消息确认可以以不同的顺序到达, 所以, 应用程序应尽可能不取决于确认的顺序;</li></ul></li></ol><h2 id="发布者确认存在的问题"><a href="#发布者确认存在的问题" class="headerlink" title="发布者确认存在的问题"></a>发布者确认存在的问题</h2><ol><li><a href="https://yq.aliyun.com/articles/42206" target="_blank" rel="external">mandatory 属性问题</a></li></ol><h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>publisher confirm 不需要消费者参与, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PublisherConfirmController.php" target="_blank" rel="external">代码参考</a></p><h2 id="Qos预习"><a href="#Qos预习" class="headerlink" title="Qos预习"></a>Qos预习</h2><ol><li><p>针对Qos的提前预习(译文)</p><ul><li><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="external">信道预取设置(QoS)</a><br>由于消息是异步发送(推送)给客户端的, 因此在任何给定时刻通常都有不止一条消息在信道上运行; 此外, 客户的手动确认本质上也是异步的, 所以有一个 未确认的交付标签的滑动窗口, 开发人员通常会倾向于限制此窗口的大小, <strong>以避免消费者端无限制的缓冲区问题</strong>。<br>这是通过使用 <code>basic.qos</code> 方法设置 <code>预取计数</code> 值完成的, 该值定义了<strong>channel上允许的最大未确认递送数量</strong>, 一旦数字达到配置的计数, RabbitMQ将停止在通道上传送更多消息, 除非至少有一个未确认的消息被确认;<br>例如, 假设在通道 “Ch” 上有未确认的交付标签5,6,7和8, 并且通道 “Ch” 的预取计数(后面会学到是<code>prefetch_count</code>)设置为4, 则RabbitMQ将不会在 “Ch” 上推送更多交付, 除非至少有一个未完成的交付被确认(当确认帧在 <code>delivery_tag=8</code> 的频道上到达时, <strong>RabbitMQ将会注意到并再发送一条消息</strong>)</p></li><li><p>QoS预取设置对使用 <code>basic.get</code>(<code>pull API</code>) 获取的消息没有影响, 即使在手动确认模式下也是如此;</p></li></ul></li><li><p><strong>消费者确认模式, 预取和吞吐量(译文)</strong><br> 确认模式 和 QoS预取值 对消费者吞吐量有显着影响, 一般来说, <strong>增加预取值将提高向消费者传递消息的速度, 当然, 自动确认模式可以产生最佳的传送速率</strong><br> 但是, 在上面两种情况下, 尚未完成交付处理的消息(unacked)数量也会增加, 从而增加消费者RAM消耗;<br> <strong>自动确认模式或带无限预取的手动确认模式应谨慎使用</strong>, 消费者在没有确认的情况下消耗大量消息将导致其所连接的节点上的内存消耗增长;<br> 预取值1是最保守的, 但这将显着降低吞吐量, 特别是在消费者连接延迟较高的环境中, 对于许多应用来说, 更高的价值是合适和最佳的;<br> 100到300范围内的Qos(<code>prefetch_count</code>)预取值通常提供最佳的吞吐量, 并且不会面临压垮consumer的重大风险, 而更高的值往往会遇到效率递减的规律; </p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;问题的出现&quot;&gt;&lt;a href=&quot;#问题的出现&quot; class=&quot;headerlink&quot; title=&quot;问题的出现&quot;&gt;&lt;/a&gt;问题的出现&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;和消息持久化相关的一个概念是 AMQP 的事务(transaction)机制;&lt;/p&gt;
+&lt;/li&gt;
+      
+    
+    </summary>
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
+    
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>06. 持久化策略</title>
+    <link href="http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/"/>
+    <id>http://blog.renyimin.com/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/</id>
+    <published>2018-05-28T09:32:11.000Z</published>
+    <updated>2018-07-20T05:53:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="持久化原理"><a href="#持久化原理" class="headerlink" title="持久化原理"></a>持久化原理</h2><ol><li><p>RabbitMQ 默认情况下, <code>Exchange</code>, <code>队列</code>, <code>消息</code> 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 <code>Exchange</code>, <code>队列</code>, 以及 <code>队列中的消息</code> 都会丢失;</p></li><li><p>RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送响应; </p><ul><li>还需要注意的是, 如果之后这条消息被路由到一个非持久化队列, 则消息又会从上面的日志文件中删除, 并且无法从服务器重启中恢复;</li><li>一旦你从持久化队列中消费了一条持久性消息(并且进行了确认), RabbitMQ会在持久化日志中把这条消息标记为等待垃圾收集;</li></ul></li></ol><h2 id="持久化方案"><a href="#持久化方案" class="headerlink" title="持久化方案"></a>持久化方案</h2><ol><li><p>要做到消息持久化, 必须保证如下三点设置正确:</p><ul><li>exchange交换器: durable属性为true;</li><li>queue队列: durable属性为true;</li><li>除了上述两点之外, 还需要在投递消息时候, 设置message的 <code>delivery_mode</code> 模式为<code>2</code>来标识消息为持久化消息;</li></ul></li><li><p>另外: 一个包含持久化消息的非持久化队列, 在Rabbit Server重启之后, 该队列将会不复存在, 消息就会变成孤儿;</p></li><li><p><a href="">具体代码</a></p></li></ol><h2 id="持久化的问题"><a href="#持久化的问题" class="headerlink" title="持久化的问题"></a>持久化的问题</h2><ol><li><p>持久化由于会写磁盘, 所以会极大降低RabbitMQ每秒处理的消息总数, 降低吞吐量;</p></li><li><p>持久化在Rabbit内建集群环境下工作的并不好, 虽然RabbitMQ集群允许你和集群中的任何节点的任一队列进行通信, 但是如果队列所在的节点崩溃后, 如果队列是持久化的, 那么直到这个节点恢复之前, 这个队列都不会在整个集群中被创建出来;<br> 后面在学习集群时, 会给出相应的解决方案;</p></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;持久化原理&quot;&gt;&lt;a href=&quot;#持久化原理&quot; class=&quot;headerlink&quot; title=&quot;持久化原理&quot;&gt;&lt;/a&gt;持久化原理&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;RabbitMQ 默认情况下, &lt;code&gt;Exchange&lt;/code&gt;, &lt;code&gt;队列&lt;/
+      
+    
+    </summary>
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/categories/RabbitMQ/"/>
+    
+    
+      <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
+  
 </feed>

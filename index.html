@@ -238,6 +238,108 @@ RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间�
 
         </li>
     
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-05-rabbitmq-08"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-05 19:20:56" datetime="2018-06-05T11:20:56.000Z"  itemprop="datePublished">2018-06-05</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 事务 VS Publisher Confirms(发布者确认机制)</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        问题的出现
+和消息持久化相关的一个概念是 AMQP 的事务(transaction)机制;
+
+到目前为止, 我们讨论的是将 消息, 队列 和 交换器 设置为持久化; 这一切都工作的很好, 并且RabbitMQ也负责保证消息的安全, 但是由于 发布消息的操作并不会反回任何信息给生产者, 所以你也无法得知是否消息已经到达了服务器并且服务器是否已经将消息持久化到了硬盘;
+
+服务器可能会在把消息写入...
+    
+
+        <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-05-28-rabbitmq-06"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-05-28 17:32:11" datetime="2018-05-28T09:32:11.000Z"  itemprop="datePublished">2018-05-28</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/">06. 持久化策略</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        持久化原理
+RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;
+
+RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送...
+    
+
+        <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
     </ul>
 
     
