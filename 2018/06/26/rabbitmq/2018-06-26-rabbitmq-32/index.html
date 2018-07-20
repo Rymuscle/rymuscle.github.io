@@ -13,7 +13,7 @@
     
     
     
-    <title>32. 单机部署集群 | Lant&#39;s Blog</title>
+    <title>32. 单机部署集群 -- 普通集群 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,15 +23,17 @@
     <meta name="description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="32. 单机部署集群">
+<meta property="og:title" content="32. 单机部署集群 -- 普通集群">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-20T02:03:20.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/rabbitmq/cluster-error01.png">
+<meta property="og:updated_time" content="2018-07-20T06:14:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="32. 单机部署集群">
+<meta name="twitter:title" content="32. 单机部署集群 -- 普通集群">
 <meta name="twitter:description" content="前言当你需要在生产环境中部署RabbitMQ时, 需要注意的是, 单实例在生产环境虽然部署起来很容易, 但是当你的rabbitmq服务器遇到内存崩溃或者断电的情况时, 这款高性能的产品就要成为你的耻辱了, 将会为你造成极大的问题!因此你需要将你的RabbitMQ变成高可用的才行; 内建集群简介 RabbitMQ最优秀的功能之一就是其内建集群, 这款消息队列中间件产品本身是基于Erlang编写, E">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/rabbitmq/cluster-error01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">32. 单机部署集群</div>
+        <div class="flex-col header-title ellipsis">32. 单机部署集群 -- 普通集群</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +129,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">32. 单机部署集群</h1>
+        <h1 class="title">32. 单机部署集群 -- 普通集群</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-26T07:28:16.000Z" itemprop="datePublished" class="page-time">
@@ -152,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内建集群简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">内建集群简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解内部元数据"><span class="post-toc-number">3.</span> <span class="post-toc-text">了解内部元数据</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存or磁盘节点"><span class="post-toc-number">4.</span> <span class="post-toc-text">内存or磁盘节点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#非集群单一节点"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">非集群单一节点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#集群节点"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">集群节点</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群的类型"><span class="post-toc-number">5.</span> <span class="post-toc-text">集群的类型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#普通模式"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">普通模式</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本机配置集群"><span class="post-toc-number">6.</span> <span class="post-toc-text">本机配置集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RabbitMQ集群的搭建"><span class="post-toc-number">7.</span> <span class="post-toc-text">RabbitMQ集群的搭建</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内建集群简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">内建集群简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群的类型"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群的类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#普通模式"><span class="post-toc-number">4.</span> <span class="post-toc-text">普通模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#了解内部元数据"><span class="post-toc-number">5.</span> <span class="post-toc-text">了解内部元数据</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存or磁盘节点"><span class="post-toc-number">6.</span> <span class="post-toc-text">内存or磁盘节点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#非集群单一节点"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">非集群单一节点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#集群节点类型"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">集群节点类型</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#本机配置集群"><span class="post-toc-number">7.</span> <span class="post-toc-text">本机配置集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RabbitMQ集群的搭建"><span class="post-toc-number">8.</span> <span class="post-toc-text">RabbitMQ集群的搭建</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群节点类型设置与修改"><span class="post-toc-number">9.</span> <span class="post-toc-text">集群节点类型设置与修改</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">10.</span> <span class="post-toc-text">测试</span></a></li></ol>
         </nav>
     </aside>
     
@@ -160,7 +162,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">32. 单机部署集群</h1>
+        <h1 class="post-card-title">32. 单机部署集群 -- 普通集群</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-26 15:28:16" datetime="2018-06-26T07:28:16.000Z"  itemprop="datePublished">2018-06-26</time>
 
@@ -184,27 +186,8 @@
 </ul>
 </li>
 </ol>
-<h2 id="了解内部元数据"><a href="#了解内部元数据" class="headerlink" title="了解内部元数据"></a>了解内部元数据</h2><p>RabbitMQ内部会始终同步四种类型的内部元数据:</p>
-<ul>
-<li>队列元数据: 队列名称和它的属性 (是否可持久化, 是否自动删除);</li>
-<li>交换器元数据: 交换器名称、类型和属性 (可持久化等);</li>
-<li>绑定元数据: 一张简单的表格展示了如何将消息路由到队列;</li>
-<li>vhost元数据: 为vhost内的队列、交换器和绑定提供命名空间和安全属性;</li>
-</ul>
-<h2 id="内存or磁盘节点"><a href="#内存or磁盘节点" class="headerlink" title="内存or磁盘节点"></a>内存or磁盘节点</h2><p>每个Rabbitmq节点, 不管是单一节点系统或者是庞大集群的一部分, 要么是内存节点(RAM node), 要么是磁盘节点(disk node):</p>
-<ul>
-<li>内存节点将所有的队列、交换器、绑定、用户、权限和vhost的元数据定义都仅存储在内存中;</li>
-<li>而磁盘节点则将元数据存储在磁盘中;</li>
-</ul>
-<h3 id="非集群单一节点"><a href="#非集群单一节点" class="headerlink" title="非集群单一节点"></a>非集群单一节点</h3><p>在单一节点的非集群环境中, RabbitMQ默认会将元数据都存放在<strong>内存中</strong>;<br>但是, 会将标记为可持久化的队列和交换器(以及它们的绑定)存储到硬盘上, 存储到硬盘上可以确保队列和交换器在重启Rabbitmq节点后重新被创建;</p>
-<p>单节点类型只允许磁盘类型的节点?</p>
-<h3 id="集群节点"><a href="#集群节点" class="headerlink" title="集群节点"></a>集群节点</h3><p>而当你引入Rabbitmq集群后, RabbitMQ需要追踪的元数据类型包括: 集群节点位置, 以及节点与已记录的其他类型的元数据的关系, 在这里, 集群对元数据的存储提供了选择:</p>
-<ul>
-<li>将元数据存储到磁盘上 (集群中创建节点时的默认设置)</li>
-<li>或者仅存储到RAM内存中</li>
-</ul>
-<h2 id="集群的类型"><a href="#集群的类型" class="headerlink" title="集群的类型"></a>集群的类型</h2><p>Rabbit集群模式大概分为三种: <strong>普通模式</strong>、<strong>镜像模式</strong></p>
-<h3 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h3><ol>
+<h2 id="集群的类型"><a href="#集群的类型" class="headerlink" title="集群的类型"></a>集群的类型</h2><p>Rabbit集群模式大概分为两种: <strong>普通模式</strong>、<strong>镜像模式</strong>; 本篇主要介绍普通模式</p>
+<h2 id="普通模式"><a href="#普通模式" class="headerlink" title="普通模式"></a>普通模式</h2><ol>
 <li><p>普通模式(也就是默认的集群模式), 对于该集群模式, 当你将多个节点组合成集群后, 需要注意的是: <strong>不是每一个节点都有所有队列的完全拷贝</strong></p>
 <ul>
 <li><p>在非集群的单一节点中, 所有关于队列的信息(元数据、状态、内容)都完全存储在该节点上;</p>
@@ -227,11 +210,32 @@
 <li><p>但是有人可能会想: 是否可以让消费者重新连接到集群上, 这样不就可以重新创建队列了? 但需要注意的是: </p>
 <ul>
 <li>因为一般如果我们的队列设置的是持久化的, 而在该队列的主节点挂掉之后, 重新连接到队列时, 一般也不会修改队列的持久化属性; </li>
-<li>这就需要注意一个问题, 仅当你之前创建的队列为非持久化时, 你才可以重新创建该队列为持久化, 因为这是为了保证你之前的持久化队列节点在重新被恢复启动后, 其中的消息还会被恢复, 而如果你创建一个新的持久化队列, 如果覆盖之前的持久化队列, 那消息不就丢了!!<br>所以如果之前是持久化队列, 而且还是以持久化的方式创建该队列, 集群就会报<code>404 NOT FOUND</code>错误 </li>
-<li>待尝试~~</li>
+<li>这就需要注意一个问题, 仅当你之前创建的队列为非持久化时, 你才可以重新创建该队列为持久化, 因为这是为了保证你之前的持久化队列节点在重新被恢复启动后, 其中的消息还会被恢复, 而如果你创建一个新的持久化队列, 如果覆盖之前的持久化队列, 那消息不就丢了!!<br>所以如果之前是持久化队列, 而且还是以持久化的方式创建该队列, 集群就会报错误, 后面会进行测试! </li>
 </ul>
 </li>
-<li></li>
+</ol>
+<h2 id="了解内部元数据"><a href="#了解内部元数据" class="headerlink" title="了解内部元数据"></a>了解内部元数据</h2><p>RabbitMQ内部会始终同步四种类型的内部元数据:</p>
+<ul>
+<li>队列元数据: 队列名称和它的属性 (是否可持久化, 是否自动删除);</li>
+<li>交换器元数据: 交换器名称、类型和属性 (可持久化等);</li>
+<li>绑定元数据: 一张简单的表格展示了如何将消息路由到队列;</li>
+<li>vhost元数据: 为vhost内的队列、交换器和绑定提供命名空间和安全属性;</li>
+</ul>
+<h2 id="内存or磁盘节点"><a href="#内存or磁盘节点" class="headerlink" title="内存or磁盘节点"></a>内存or磁盘节点</h2><p>每个Rabbitmq节点, 不管是单一节点系统或者是庞大集群的一部分, 要么是内存节点(RAM node), 要么是磁盘节点(disk node):</p>
+<ul>
+<li>内存节点将所有的队列、交换器、绑定、用户、权限和vhost的元数据定义都仅存储在内存中;</li>
+<li>而磁盘节点则将元数据存储在磁盘中;</li>
+</ul>
+<h3 id="非集群单一节点"><a href="#非集群单一节点" class="headerlink" title="非集群单一节点"></a>非集群单一节点</h3><p>在单一节点的非集群环境中, RabbitMQ默认会将元数据都存放在<strong>内存中</strong>; 但是, 会将标记为可持久化的队列和交换器(以及它们的绑定)存储到硬盘上, 存储到硬盘上可以确保队列和交换器在重启Rabbitmq节点后重新被创建;</p>
+<h3 id="集群节点类型"><a href="#集群节点类型" class="headerlink" title="集群节点类型"></a>集群节点类型</h3><ol>
+<li><p>而当你引入Rabbitmq集群后, RabbitMQ需要追踪的元数据类型包括: 集群节点位置, 以及节点与已记录的其他类型的元数据的关系, 在这里, 集群对元数据的存储提供了选择:</p>
+<ul>
+<li>将元数据存储到磁盘上 (集群中创建节点时的默认设置)</li>
+<li>或者仅存储到RAM内存中</li>
+</ul>
+</li>
+<li><p>注意: 一个集群至少要有一个磁盘节点;</p>
+</li>
 </ol>
 <h2 id="本机配置集群"><a href="#本机配置集群" class="headerlink" title="本机配置集群"></a>本机配置集群</h2><ol>
 <li><p>在开始配置集群前, 首先要确保现存的Rabbitmq没有运行, 因此需要关闭节点 (本机为mac, 关闭操作如下)</p>
@@ -264,8 +268,6 @@
 </li>
 </ul>
 </li>
-</ol>
-<ol>
 <li><p>现在启动了三个节点 rabbit, rabbit_1, rabbit_2, 并且每个节点都会有系统的主机名在@后; 但是每个节点仍然是独立节点, 拥有自己的元数据, 并且不知道其他节点的存在;</p>
 <ul>
 <li>集群中的第一个节点rabbit,将初始元数据带入集群, 并且无需被告知加入;</li>
@@ -274,181 +276,93 @@
 </li>
 <li><p>要将rabbit_1和rabbit_2节点加入rabbit, 要停止该Erlang节点上运行的rabbitmq应用程序, 并重设它们的元数据, 这样它们才可以被加入rabbit节点并且获取rabbit节点的元数据; 可以使用 <code>rabbitmqctl</code> 来完成这些工作</p>
 <ul>
-<li>停止rabbit_1节点上的应用程序<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost stop_app</div><div class="line">Stopping rabbit application on node rabbit_1@renyimindeMacBook-Pro ...</div></pre></td></tr></table></figure>
+<li><p>停止rabbit_1节点上的应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost stop_app</div><div class="line">Stopping rabbit application on node rabbit_1@renyimindeMacBook-Pro ...</div></pre></td></tr></table></figure>
+</li>
+<li><p>重设rabbit_1节点的元数据和状态为清空状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost reset</div><div class="line">Resetting node rabbit_1@renyimindeMacBook-Pro ...</div></pre></td></tr></table></figure>
+</li>
+<li><p>这样你就准备好了一个 停止运行的并且清空了的 rabbit 应用, 现在可以准备好将其加入到集群中的第一个节点rabbit中:<br>注意书上的 <code>cluster</code> 命令好像已经不用了, 换成了 <code>join_cluster</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost join_cluster rabbit@localhost</div><div class="line">Clustering node rabbit_1@localhost with rabbit@localhost</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>最后, 可以重启第二个节点的应用程序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost start_app</div><div class="line">Starting node rabbit_1@localhost ...</div><div class="line"> completed with 1 plugins.</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>节点rabbit_2加入集群的步骤同上, 具体操作如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost start_app</div><div class="line">Starting node rabbit_1@localhost ...</div><div class="line"> completed with 1 plugins.</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost stop_app</div><div class="line">Stopping rabbit application on node rabbit_2@localhost ...</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost reset</div><div class="line">Resetting node rabbit_2@localhost ...</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost join_cluster rabbit@localhost</div><div class="line">Clustering node rabbit_2@localhost with rabbit@localhost</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost start_app</div><div class="line">Starting node rabbit_2@localhost ...</div><div class="line"> completed with 1 plugins.</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>查看集群状态, 可以在任意一个节点通过 <code>rabbitmqctl cluster_status</code> 进行查看</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl cluster_status</div><div class="line">Cluster status of node rabbit@localhost ...</div><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;]&#125;,</div><div class="line"> &#123;running_nodes,[rabbit_2@localhost,rabbit_1@localhost,rabbit@localhost]&#125;,</div><div class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;&#125;,</div><div class="line"> &#123;partitions,[]&#125;,</div><div class="line"> &#123;alarms,[&#123;rabbit_2@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_1@localhost,[]&#125;,</div><div class="line">          &#123;rabbit@localhost,[]&#125;]&#125;]</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost cluster_status</div><div class="line">Cluster status of node rabbit_1@localhost ...</div><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;]&#125;,</div><div class="line"> &#123;running_nodes,[rabbit_2@localhost,rabbit@localhost,rabbit_1@localhost]&#125;,</div><div class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;&#125;,</div><div class="line"> &#123;partitions,[]&#125;,</div><div class="line"> &#123;alarms,[&#123;rabbit_2@localhost,[]&#125;,</div><div class="line">          &#123;rabbit@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_1@localhost,[]&#125;]&#125;]</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost cluster_status</div><div class="line">Cluster status of node rabbit_2@localhost ...</div><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;]&#125;,</div><div class="line"> &#123;running_nodes,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;,</div><div class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;&#125;,</div><div class="line"> &#123;partitions,[]&#125;,</div><div class="line"> &#123;alarms,[&#123;rabbit@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_1@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_2@localhost,[]&#125;]&#125;]</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+<li><p>注意: </p>
+<ul>
+<li>上面使用比较多的 <code>rabbitmqctl</code> 命令的关键参数是 <code>-n</code>, 这会告诉rabbitmqctl命令, 你想在指定节点而非默认节点<code>rabbit@</code>上执行命令;</li>
+<li>记住, Erlang节点间通过Erlang cookie的方式来允许互相通信。因为rabbitmqctl使用Erlang OPT通信机制来和Rabbit节点通信, 运行rabbitmqctl的机器和所要连接的Rabbit节点必须使用相同的Erlang cookie, 否则你会得到一个错误;<br>当然, 上面的集群是在本机做伪集群, Erlang cookie 自然也都是一致的!</li>
+</ul>
+</li>
+<li><p>将节点从集群中删除 <code>forget_cluster_node</code></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_1@localhost</div><div class="line">Removing node rabbit_1@localhost from the cluster</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_2@localhost</div><div class="line">Removing node rabbit_2@localhost from the cluster</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_3@localhost</div><div class="line">Removing node rabbit_3@localhost from the cluster</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="集群节点类型设置与修改"><a href="#集群节点类型设置与修改" class="headerlink" title="集群节点类型设置与修改"></a><a href="http://www.rabbitmq.com/clustering.html#change-type" target="_blank" rel="external">集群节点类型</a>设置与修改</h2><ol>
+<li><p>可以在将节点加入集群时, 设定节点的类型 (<a href="http://www.rabbitmq.com/clustering.html#creating-ram" target="_blank" rel="external">参考</a>)<br> 比如 <code>rabbitmqctl -n rabbit_3@localhost join_cluster --ram rabbit@localhost</code></p>
+</li>
+<li><p>之前已经通过 <code>rabbitmqctl cluster_status</code> 查看了集群的状态, 里面比较重要的是 <code>nodes</code> 部分</p>
+<ul>
+<li><p>下面告诉你有三个节点加入了集群, 并且三个节点都是 disc 磁盘节点!</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;]&#125;,</div><div class="line">     &#123;running_nodes,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;,</div><div class="line">     &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;&#125;,</div><div class="line">     &#123;partitions,[]&#125;,</div><div class="line">     &#123;alarms,[&#123;rabbit@localhost,[]&#125;,</div><div class="line">              &#123;rabbit_1@localhost,[]&#125;,</div><div class="line">              &#123;rabbit_2@localhost,[]&#125;]&#125;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>running_nodes 部分告诉你集群中的哪些节点正在运行; </p>
+</li>
+</ul>
+</li>
+<li><p>现在你可以连接到这三个running_nodes中的任何一个, 并且开始创建队列, 发布消息或者执行任何其他AMQP任务; </p>
+</li>
+<li><p>你也可以对节点类型进行修改, 如下将rabbit_2节点类型修改为内存节点 (注意: 修改节点类型, 需要先停止节点应用)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost stop_app</div><div class="line">Stopping rabbit application on node rabbit_2@localhost ...</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost change_cluster_node_type ram</div><div class="line">Turning rabbit_2@localhost into a ram node</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost start_app</div><div class="line">Starting node rabbit_2@localhost ...</div><div class="line"> completed with 1 plugins.</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost cluster_status</div><div class="line">Cluster status of node rabbit_1@localhost ...</div><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost]&#125;,</div><div class="line">         &#123;ram,[rabbit_2@localhost]&#125;]&#125;,</div><div class="line"> &#123;running_nodes,[rabbit_2@localhost,rabbit@localhost,rabbit_1@localhost]&#125;,</div><div class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;&#125;,</div><div class="line"> &#123;partitions,[]&#125;,</div><div class="line"> &#123;alarms,[&#123;rabbit_2@localhost,[]&#125;,</div><div class="line">          &#123;rabbit@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_1@localhost,[]&#125;]&#125;]</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li>运行<a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/LocalClusterController.php" target="_blank" rel="external">生产者代码</a>, 在集群中的rabbit节点中创建持久化队列<ul>
+<li>初始集群状态<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl cluster_status</div><div class="line">Cluster status of node rabbit@localhost ...</div><div class="line">[&#123;nodes,[&#123;disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]&#125;]&#125;,</div><div class="line"> &#123;running_nodes,[rabbit_2@localhost,rabbit_1@localhost,rabbit@localhost]&#125;,</div><div class="line"> &#123;cluster_name,&lt;&lt;&quot;rabbit@renyimindemacbook-pro.rrcoa.com&quot;&gt;&gt;&#125;,</div><div class="line"> &#123;partitions,[]&#125;,</div><div class="line"> &#123;alarms,[&#123;rabbit_2@localhost,[]&#125;,</div><div class="line">          &#123;rabbit_1@localhost,[]&#125;,</div><div class="line">          &#123;rabbit@localhost,[]&#125;]&#125;]</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ol>
-<pre><code>- 重设rabbit_1节点的元数据和状态为清空状态
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost reset</div><div class="line">Resetting node rabbit_1@renyimindeMacBook-Pro ...</div><div class="line">``` </div><div class="line"></div><div class="line">- 这样你就准备好了一个 停止运行的并且清空了的 rabbit 应用, 现在可以准备好将其加入到集群中的第一个节点rabbit中:</div><div class="line">注意书上的 `cluster` 命令好像已经不用了, 换成了 `join_cluster`</div></pre></td></tr></table></figure>
+<pre><code>- 运行生产者, 查看创建的队列(已经有一条msg放入队列中)
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">prefetchCountQueue	0</div><div class="line">localClusterQueue	1</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">prefetchCountQueue	0</div><div class="line">localClusterQueue	1</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">prefetchCountQueue	0</div><div class="line">localClusterQueue	1</div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">prefetchCountQueue	0</div><div class="line">localClusterQueue	1</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</code></pre><ol>
+<li><p>kill掉该持久化队列localClusterQueue所在的主节点rabbit</p>
+<ul>
+<li><p>查看节点进程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ ps aux | grep rabbitmq</div><div class="line">root              2656   0.4  0.3  4150148  58156   ??  S    三01下午   5:09.15 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [&#123;nodelay,true&#125;] -rabbit tcp_listeners [&#123;&quot;127.0.0.1&quot;,5672&#125;] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit@localhost&quot; -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672 -noshell -noinput</div><div class="line">renyimin         28537   0.0  0.0  2423384    232 s007  R+    3:12下午   0:00.00 grep rabbitmq</div><div class="line">root             72516   0.0  0.5  4143168  79400   ??  S     1:03下午   0:16.71 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit_2@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [&#123;nodelay,true&#125;] -rabbit tcp_listeners [&#123;&quot;127.0.0.1&quot;,5674&#125;] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit_2@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit_2@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_2@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_2@localhost&quot; -kernel inet_dist_listen_min 25674 -kernel inet_dist_listen_max 25674 -noshell -noinput</div><div class="line">root             71841   0.0  0.5  4138448  77104   ??  S     1:01下午   0:15.15 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit_1@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [&#123;nodelay,true&#125;] -rabbit tcp_listeners [&#123;&quot;127.0.0.1&quot;,5673&#125;] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit_1@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit_1@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_1@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_1@localhost&quot; -kernel inet_dist_listen_min 25673 -kernel inet_dist_listen_max 25673 -noshell -noinput</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>sudo kill 2656</code></p>
+</li>
+</ul>
+</li>
+<li><p>将生产者改连 rabbit_1 节点, 重新运行生产者</p>
+<ul>
+<li>报错:<br><img src="/img/rabbitmq/cluster-error01.png"></li>
+<li>挂掉的主节点中<strong>已存在该持久化队列</strong>, 如果在主节点挂掉后, 你能直接连接其他节点创建该队列的话, 此时创建的是个新队列, 要知道, 宕机的主节点中的持久化队列还在等待恢复呢, 它内部可能让然有很多msg需要恢复并被处理;<br>所以Rabbit集群的这个问题是有原因的!!</li>
+</ul>
+</li>
+<li><p>可以重新启动该节点 <code>sudo RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit@localhost rabbitmq-server -detached</code></p>
+<ul>
+<li>会发现之前的持久化队列会被恢复<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">localClusterQueue	1</div><div class="line">prefetchCountQueue	0</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">localClusterQueue	1</div><div class="line">prefetchCountQueue	0</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">localClusterQueue	1</div><div class="line">prefetchCountQueue	0</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>此时即使生产者连接着 rabbit_1 也可以创建该同名持久化队列了</p>
+<ul>
+<li>重新运行刚才连接到 rabbit_1 的生产者, 不会报错了, 而是正确往队列发布了一条消息<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues</div><div class="line">Timeout: 60.0 seconds ...</div><div class="line">Listing queues for vhost / ...</div><div class="line">localClusterQueue	2</div><div class="line">prefetchCountQueue	0</div><div class="line">renyimindeMacBook-Pro:~ renyimin$</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
 
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost join_cluster rabbit@localhost
-Clustering node rabbit_1@localhost with rabbit@localhost
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- 最后, 可以重启第二个节点的应用程序</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost start_app
-Starting node rabbit_1@localhost ...
- completed with 1 plugins.
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- 节点rabbit_2加入集群的步骤同上, 具体操作如下:</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost start_app
-Starting node rabbit_1@localhost ...
- completed with 1 plugins.
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost stop_app
-Stopping rabbit application on node rabbit_2@localhost ...
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost reset
-Resetting node rabbit_2@localhost ...
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost join_cluster rabbit@localhost
-Clustering node rabbit_2@localhost with rabbit@localhost
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost start_app
-Starting node rabbit_2@localhost ...
- completed with 1 plugins.
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">4. 查看集群状态, 可以在任意一个节点通过 `rabbitmqctl cluster_status` 进行查看</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl cluster_status
-Cluster status of node rabbit@localhost ...
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
- {running_nodes,[rabbit_2@localhost,rabbit_1@localhost,rabbit@localhost]},
- {cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;},
- {partitions,[]},
- {alarms,[{rabbit_2@localhost,[]},
-          {rabbit_1@localhost,[]},
-          {rabbit@localhost,[]}]}]
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost cluster_status
-Cluster status of node rabbit_1@localhost ...
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
- {running_nodes,[rabbit_2@localhost,rabbit@localhost,rabbit_1@localhost]},
- {cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;},
- {partitions,[]},
- {alarms,[{rabbit_2@localhost,[]},
-          {rabbit@localhost,[]},
-          {rabbit_1@localhost,[]}]}]
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost cluster_status
-Cluster status of node rabbit_2@localhost ...
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
- {running_nodes,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]},
- {cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;},
- {partitions,[]},
- {alarms,[{rabbit@localhost,[]},
-          {rabbit_1@localhost,[]},
-          {rabbit_2@localhost,[]}]}]
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">5. 注意: </div><div class="line">    - 上面使用比较多的 `rabbitmqctl` 命令的关键参数是 `-n`, 这会告诉rabbitmqctl命令, 你想在指定节点而非默认节点`rabbit@`上执行命令;</div><div class="line">    - 记住, Erlang节点间通过Erlang cookie的方式来允许互相通信。因为rabbitmqctl使用Erlang OPT通信机制来和Rabbit节点通信, 运行rabbitmqctl的机器和所要连接的Rabbit节点必须使用相同的Erlang cookie, 否则你会得到一个错误; </div><div class="line">    当然, 上面的集群是在本机做伪集群, Erlang cookie 自然也都是一致的!</div><div class="line"></div><div class="line">6. 将节点从集群中删除 `forget_cluster_node`</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_1@localhost
-Removing node rabbit_1@localhost from the cluster
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_2@localhost
-Removing node rabbit_2@localhost from the cluster
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl forget_cluster_node rabbit_3@localhost
-Removing node rabbit_3@localhost from the cluster
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">    </div><div class="line">## [RabbitMQ集群节点类型](http://www.rabbitmq.com/clustering.html#change-type)设置与修改</div><div class="line">1. 可以在将节点加入集群时, 设定节点的类型 ([参考](http://www.rabbitmq.com/clustering.html#creating-ram))</div><div class="line">    比如 `rabbitmqctl -n rabbit_3@localhost join_cluster --ram rabbit@localhost`</div><div class="line">    </div><div class="line">2. 之前已经通过 `rabbitmqctl cluster_status` 查看了集群的状态, 里面比较重要的是 `nodes` 部分</div><div class="line">    - 下面告诉你有三个节点加入了集群, 并且三个节点都是 disc 磁盘节点!</div></pre></td></tr></table></figure>
-
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
-     {running_nodes,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]},
-     {cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;},
-     {partitions,[]},
-     {alarms,[{rabbit@localhost,[]},
-              {rabbit_1@localhost,[]},
-              {rabbit_2@localhost,[]}]}]
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">    - running_nodes 部分告诉你集群中的哪些节点正在运行; </div><div class="line">     </div><div class="line">3. 现在你可以连接到这三个running_nodes中的任何一个, 并且开始创建队列, 发布消息或者执行任何其他AMQP任务; </div><div class="line"></div><div class="line">4. 你也可以对节点类型进行修改, 如下将rabbit_2节点类型修改为内存节点 (注意: 修改节点类型, 需要先停止节点应用)</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost stop_app
-Stopping rabbit application on node rabbit_2@localhost ...
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost change_cluster_node_type ram
-Turning rabbit_2@localhost into a ram node
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost start_app
-Starting node rabbit_2@localhost ...
- completed with 1 plugins.
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost cluster_status
-Cluster status of node rabbit_1@localhost ...
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost]},
-         {ram,[rabbit_2@localhost]}]},
- {running_nodes,[rabbit_2@localhost,rabbit@localhost,rabbit_1@localhost]},
- {cluster_name,&lt;&lt;&quot;rabbit@renyimindeMacBook-Pro&quot;&gt;&gt;},
- {partitions,[]},
- {alarms,[{rabbit_2@localhost,[]},
-          {rabbit@localhost,[]},
-          {rabbit_1@localhost,[]}]}]
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">## 测试</div><div class="line">1. 运行[生产者代码](https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/LocalClusterController.php), 在集群中的rabbit节点中创建持久化队列</div><div class="line">    - 初始集群状态</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl cluster_status
-Cluster status of node rabbit@localhost ...
-[{nodes,[{disc,[rabbit@localhost,rabbit_1@localhost,rabbit_2@localhost]}]},
- {running_nodes,[rabbit_2@localhost,rabbit_1@localhost,rabbit@localhost]},
- {cluster_name,&lt;&lt;&quot;rabbit@renyimindemacbook-pro.rrcoa.com&quot;&gt;&gt;},
- {partitions,[]},
- {alarms,[{rabbit_2@localhost,[]},
-          {rabbit_1@localhost,[]},
-          {rabbit@localhost,[]}]}]
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- 运行生产者, 查看创建的队列(已经有一条msg放入队列中)</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-prefetchCountQueue    0
-localClusterQueue    1
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-prefetchCountQueue    0
-localClusterQueue    1
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-prefetchCountQueue    0
-localClusterQueue    1
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-prefetchCountQueue    0
-localClusterQueue    1
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">2. kill掉该持久化队列localClusterQueue所在的主节点rabbit</div><div class="line">    - 查看节点进程</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ ps aux | grep rabbitmq
-root              2656   0.4  0.3  4150148  58156   ??  S    三01下午   5:09.15 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{&quot;127.0.0.1&quot;,5672}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit@localhost&quot; -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672 -noshell -noinput
-renyimin         28537   0.0  0.0  2423384    232 s007  R+    3:12下午   0:00.00 grep rabbitmq
-root             72516   0.0  0.5  4143168  79400   ??  S     1:03下午   0:16.71 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit_2@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{&quot;127.0.0.1&quot;,5674}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit_2@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit_2@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_2@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_2@localhost&quot; -kernel inet_dist_listen_min 25674 -kernel inet_dist_listen_max 25674 -noshell -noinput
-root             71841   0.0  0.5  4138448  77104   ??  S     1:01下午   0:15.15 /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang/erts-9.3.3.1/bin/beam.smp -W w -A 64 -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -P 1048576 -t 5000000 -stbt db -zdbbl 1280000 -K true -- -root /usr/local/Cellar/erlang@20/20.3.8.2/lib/erlang -progname erl -- -home /Users/renyimin -- -pa /usr/local/Cellar/rabbitmq/3.7.7/ebin -noshell -noinput -s rabbit boot -sname rabbit_1@localhost -boot /usr/local/opt/erlang@20/lib/erlang/bin/start_clean -conf /usr/local/Cellar/rabbitmq/3.7.5/etc/rabbitmq/rabbitmq -conf_dir /usr/local/var/lib/rabbitmq/config -conf_script_dir /usr/local/sbin -conf_schema_dir /usr/local/var/lib/rabbitmq/schema -kernel inet_default_connect_options [{nodelay,true}] -rabbit tcp_listeners [{&quot;127.0.0.1&quot;,5673}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit lager_log_root &quot;/usr/local/var/log/rabbitmq&quot; -rabbit lager_default_file &quot;/usr/local/var/log/rabbitmq/rabbit_1@localhost.log&quot; -rabbit lager_upgrade_file &quot;/usr/local/var/log/rabbitmq/rabbit_1@localhost_upgrade.log&quot; -rabbit enabled_plugins_file &quot;/usr/local/etc/rabbitmq/enabled_plugins&quot; -rabbit plugins_dir &quot;/usr/local/Cellar/rabbitmq/3.7.7/plugins&quot; -rabbit plugins_expand_dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_1@localhost-plugins-expand&quot; -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir &quot;/usr/local/var/lib/rabbitmq/mnesia/rabbit_1@localhost&quot; -kernel inet_dist_listen_min 25673 -kernel inet_dist_listen_max 25673 -noshell -noinput
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">    - `sudo kill 2656`</div><div class="line">    </div><div class="line">3. 将生产者改连 rabbit_1 节点, 重新运行生产者</div><div class="line">    - 报错: </div><div class="line">    &lt;img src=&quot;/img/rabbitmq/cluster-error01.png&quot;/&gt;</div><div class="line">    - 挂掉的主节点中已存在该持久化队列, 如果在主节点挂掉后, 你能直接连接其他节点创建该队列的话, 此时创建的是个新队列, 要知道, 宕机的主节点中的持久化队列还在等待恢复呢, 它内部可能让然有很多msg需要恢复并被处理;</div><div class="line">    所以Rabbit集群的这个问题是有原因的!!</div><div class="line"></div><div class="line">4. 可以重新启动该节点 `sudo RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit@localhost rabbitmq-server -detached`</div><div class="line">    - 会发现之前的持久化队列会被恢复</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-localClusterQueue    1
-prefetchCountQueue    0
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_1@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-localClusterQueue    1
-prefetchCountQueue    0
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-localClusterQueue    1
-prefetchCountQueue    0
-renyimindeMacBook-Pro:~ renyimin$
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">5. 此时即使生产者连接着 rabbit_1 也可以创建该同名持久化队列了</div><div class="line">    - 重新运行刚才连接到 rabbit_1 的生产者, 不会报错了, 而是正确往队列发布了一条消息</div></pre></td></tr></table></figure>
-
-renyimindeMacBook-Pro:~ renyimin$ rabbitmqctl -n rabbit_2@localhost list_queues
-Timeout: 60.0 seconds ...
-Listing queues for vhost / ...
-localClusterQueue    2
-prefetchCountQueue    0
-renyimindeMacBook-Pro:~ renyimin$
-```
-</code></pre>
         </div>
 
         <blockquote class="post-copyright">
@@ -484,7 +398,7 @@ renyimindeMacBook-Pro:~ renyimin$
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -494,7 +408,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -504,7 +418,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. 单机部署集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -637,7 +551,7 @@ renyimindeMacBook-Pro:~ renyimin$
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -647,7 +561,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&title=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -657,7 +571,7 @@ renyimindeMacBook-Pro:~ renyimin$
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. 单机部署集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. 单机部署集群 -- 普通集群》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
