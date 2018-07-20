@@ -13,25 +13,25 @@
     
     
     
-    <title>19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论 | Lant&#39;s Blog</title>
+    <title>19. 消费者预取 Consumer Prefetch | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 译文: 网上虽然有很多版本的译文, 在此处还是重新做了翻译  你在Rabbit中有一个队列, 然后有一些客户端从这个队列中进行消费;如果你根本没有设置QoS(basic.qos), 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中;同">
+    <meta name="description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, 队列可能会显示为空, 但是">
 <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论">
+<meta property="og:title" content="19. 消费者预取 Consumer Prefetch">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 译文: 网上虽然有很多版本的译文, 在此处还是重新做了翻译  你在Rabbit中有一个队列, 然后有一些客户端从这个队列中进行消费;如果你根本没有设置QoS(basic.qos), 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中;同">
+<meta property="og:description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, 队列可能会显示为空, 但是">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-30T05:51:29.000Z">
+<meta property="og:updated_time" content="2018-07-20T10:52:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论">
-<meta name="twitter:description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 译文: 网上虽然有很多版本的译文, 在此处还是重新做了翻译  你在Rabbit中有一个队列, 然后有一些客户端从这个队列中进行消费;如果你根本没有设置QoS(basic.qos), 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中;同">
+<meta name="twitter:title" content="19. 消费者预取 Consumer Prefetch">
+<meta name="twitter:description" content="RabbitMQ关于吞吐量,延迟和带宽的一些理论 假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, 队列可能会显示为空, 但是">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</div>
+        <div class="flex-col header-title ellipsis">19. 消费者预取 Consumer Prefetch</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</h1>
+        <h1 class="title">19. 消费者预取 Consumer Prefetch</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-12T03:26:55.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论</h1>
+        <h1 class="post-card-title">19. 消费者预取 Consumer Prefetch</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-12 11:26:55" datetime="2018-06-12T03:26:55.000Z"  itemprop="datePublished">2018-06-12</time>
 
@@ -174,19 +174,15 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="RabbitMQ关于吞吐量-延迟和带宽的一些理论"><a href="#RabbitMQ关于吞吐量-延迟和带宽的一些理论" class="headerlink" title="RabbitMQ关于吞吐量,延迟和带宽的一些理论"></a><a href="https://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/" target="_blank" rel="external">RabbitMQ关于吞吐量,延迟和带宽的一些理论</a></h2><ol>
-<li><p>译文: 网上虽然有很多版本的译文, 在此处还是重新做了翻译</p>
+<li><p>假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, <strong>队列可能会显示为空</strong>, 但是会有大量的 unacked 消息; 并且此时如果你添加新的消费者, 由于消息已经在现有的客户端中缓存, 队列中并没有 ready状态的 消息, 所以即使增加更多新的消费者, 也无法缓解队列中 unacked 消息数量, 这是相当次优的!</p>
+</li>
+<li><p>所以，默认的QoS预取给客户端(consumer)设置了无限的缓冲区, 这可能导致不良的行为和性能; 那么, 应该将QoS预取缓冲区大小设置为多少呢?<br> 目标是让消费者保持工作饱和状态, <strong>但要尽量减少客户端的缓冲区大小, 以便让更多的消息保留在Rabbit的队列中, 这样就可以供新消费者来消费</strong>;</p>
+</li>
+<li><p>比方说, Rabbit从这个队列中拿出一条消息, 把它投递给消费者, 需要50ms, 而Consumer处理消息需要4ms; 一旦消费者处理了消息, 它就会发送一个ack给Rabbit, 这将再次花费50ms发送给Rabbit并被Rabbit进行处理; 所以我们总共有104ms的往返时间。</p>
 <ul>
-<li><p>你在Rabbit中有一个队列, 然后有一些客户端从这个队列中进行消费;<br>如果你根本没有设置QoS(basic.qos), 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中;<br>同时, 值得注意的是: 此时如果你询问Rabbit, <strong>队列可能会显示为空</strong>, 但是会有大量的未确认消息在客户端中, 准备被客户端应用程序处理;<br>并且此时如果你添加新的消费者, 由于没有消息留在队列中, 所以队列也无法将消息发送给新的消费者的;<br>尽管有其他消费者可用于更快地处理消息, 但由于消息已经在现有的客户端中缓存, 并且可能在那里很长一段时间, 所以这是相当次优的!</p>
+<li><p>如果我们消息设置了QoS预取值为1, 那么直到这个往返行程完成之前, Rabbit是不会发送下一个消息给客户端的;<br>因此, <strong>每次往返的104ms中, 客户端只有4ms, 或者说只有3.8％的时间忙碌, 而我们希望百分之百的时间都在忙碌中</strong>;</p>
 </li>
-<li><p>所以，默认的QoS预取给客户端(consumer)设置了无限的缓冲区, 这可能导致不良的行为和性能; 那么, 应该将QoS预取缓冲区大小设置为多少呢?<br>目标是让消费者保持工作饱和状态, <strong>但要尽量减少客户端的缓冲区大小, 以便让更多的消息保留在Rabbit的队列中, 这样就可以供新消费者来消费</strong>;</p>
-</li>
-<li><p>比方说, Rabbit从这个队列中拿出一条消息, 把它放到网络上，然后到达消费者, 需要50ms; 客户端处理消息需要4ms;<br>一旦消费者处理了消息, 它就会发送一个ack给Rabbit, 这将再次花费50ms发送给Rabbit并被Rabbit进行处理; 所以我们总共有104ms的往返时间。<br>如果我们消息设置了QoS预取值为1, 那么直到这个往返行程完成之前, Rabbit是不会发送下一个消息给客户端的;<br>因此, <strong>每次往返的104ms中, 客户端只有4ms,或者说只有3.8％的时间忙碌, 而我们希望百分之百的时间都在忙碌中</strong>;</p>
-</li>
-<li><p>如果我们在每个消息的客户端上执行 <code>总的往返时间/处理时间</code>, 会得到 <code>104/4 = 26</code><br>如果我们设置消息的QoS预取值为26, 那就解决了我们的问题: 假设客户端具有26个消息缓冲, 等待处理<br>(这是一个明智的假设:<br>一旦你设置了basic.qos, 然后从一个队列中进行消费, Rabbit将会尽可能多的将消息发送到你订阅该队列的客户端中, 直到QoS的限制;</p>
-</li>
-<li><p>如果你认为消息不是很大, 带宽也很高, 那么Rabbit很可能更快地发送消息到你的客户端, 因此, 从完整的客户端缓冲区的角度来做所有的数学运算是合理的(也更简单的)</p>
-</li>
-<li><p>如果每条消息需要4ms的处理来处理, 那么总共需要 <code>26×4 = 104ms</code> 来处理整个缓冲区(中的消息);<br>第一个4ms是第一个消息的客户端处理消息的时间, 处理完成后, 客户端然后发出一个确认(这一点需要50ms才能到达代理), 然后继续处理缓冲区中的下一条消息, 代理向客户端发出一条新消息, 这需要50ms的时间, 所以到了104ms时间, 客户端已经完成缓冲区的处理, 代理的下一条消息已经到达, 并准备好等待客户端来处理它;<br>因此, 客户端始终处于忙碌状态: 具有较大的QoS预取值也不会使其更快了, 但是我们最大限度地减少了缓冲区的大小, 并且减少了客户端消息的延迟; 事实上, <strong>客户端能够在下一条消息到达之前完全排空缓冲区, 因此缓冲区实际上保持为空</strong>;</p>
+<li><p>如果我们在每个消息的客户端上执行 <code>总的往返时间/处理时间</code>, 会得到 <code>104/4 = 26</code><br>如果我们设置消息的QoS预取值为26, 那就解决了我们的问题: 如果每条消息需要4ms的处理来处理, 那么总共需要 <code>26×4 = 104ms</code> 来处理整个缓冲区(中的消息);<br>第一个4ms是第一个消息的客户端处理消息的时间, 处理完成后, 客户端然后发出一个确认(这需要50ms才能到达代理), 然后继续处理缓冲区中的下一条消息, 代理向客户端发出一条新消息, 这需要50ms的时间, 所以到了104ms时间, 客户端已经完成缓冲区的处理, 代理的下一轮26条消息已经到达, 并准备好等待客户端来处理它;<br>因此, 客户端始终处于忙碌状态: 具有较大的QoS预取值也不会使其更快了, 但是我们最大限度地减少了缓冲区的大小, 并且减少了客户端消息的延迟;<br><strong>客户端能够在下一条消息到达之前完全排空缓冲区, 因此缓冲区实际上保持为空</strong>;</p>
 </li>
 <li><p>如果处理时间和网络行为保持不变, 此解决方案绝对没问题<br>但考虑一下如果网络突然间速度减半会发生什么情况(rymuscle:显然, <strong>网络传输时间就加长了</strong>): 此时你的预取缓冲区(也就是你设置的prefetch预取值)就不够大了, 现在客户端会就会闲置, 等待新消息到达, 因为客户端能够处理消息的速度比Rabbit能够提供新消息的速度要快;</p>
 </li>
@@ -242,7 +238,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -252,7 +248,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -262,7 +258,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -290,9 +286,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-13/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">13. Queue Length Limit (队列长度限制) - x-max-length, x-max-length-bytes, x-overflow</h4>
+          <h4 class="title">08. 事务 VS Publisher Confirms(发布者确认机制)</h4>
         </a>
       </div>
     
@@ -402,7 +398,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -412,7 +408,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&title=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -422,7 +418,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《19. 消费者预取 Consumer Prefetch - RabbitMQ关于 吞吐量, 延迟 和 带宽 的一些理论》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《19. 消费者预取 Consumer Prefetch》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
