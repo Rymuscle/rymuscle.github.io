@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="事务的概念 事务：可以理解为一个 独立的 工作单元, 在这个 独立的 工作单元中, 可以有 一组 操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。  仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-21T02:56:36.000Z">
+<meta property="og:updated_time" content="2018-07-21T03:02:08.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="20. MySQL 事务">
 <meta name="twitter:description" content="事务的概念 事务：可以理解为一个 独立的 工作单元, 在这个 独立的 工作单元中, 可以有 一组 操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。  仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元">
@@ -183,7 +183,7 @@
 </li>
 </ol>
 <h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>一个运行良好的事务处理系统必须具备下面这些标准特性(高并发场景离不开事务的这几个标准特性) </p>
-<h3 id="Atomicity-原子性"><a href="#Atomicity-原子性" class="headerlink" title="Atomicity 原子性"></a>Atomicity 原子性</h3><p>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部提交成功, 要么全部失败回滚。<br>对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p>
+<h3 id="Atomicity-原子性"><a href="#Atomicity-原子性" class="headerlink" title="Atomicity 原子性"></a>Atomicity 原子性</h3><p>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部成功提交, 要么有操作失败导致所有操作全部回滚。<br>对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p>
 <h3 id="Consistency-一致性"><a href="#Consistency-一致性" class="headerlink" title="Consistency 一致性"></a>Consistency 一致性</h3><p>你大概可以这样来理解: 虽然数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性总是能够保证 <strong>数据库总是从一个数据一致性的状态 转换到 另一个数据一致性的状态</strong>; </p>
 <p>比如之前转账的例子:<br>转账前的数据一致性状态是: ‘Iron Man’(余额500), ‘Wolverine’(余额15)<br>转账成功后的数据一致性状态是: ‘Iron Man’(余额400), ‘Wolverine’(余额115)<br>转账如果失败的话, 数据的一致性的状态应该回滚到转账前的状态: ‘Iron Man’(余额500), ‘Wolverine’(余额15)</p>
 <h3 id="Isolation-隔离性"><a href="#Isolation-隔离性" class="headerlink" title="Isolation 隔离性"></a><strong>Isolation 隔离性</strong></h3><ol>
