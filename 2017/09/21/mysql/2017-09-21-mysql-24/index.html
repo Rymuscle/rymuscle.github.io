@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/zuse.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lock_result.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/transaction_state_01.png">
-<meta property="og:updated_time" content="2018-07-23T06:40:21.000Z">
+<meta property="og:updated_time" content="2018-07-23T08:00:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="24. 隔离级别 - READ UNCOMMITTED 未提交读">
 <meta name="twitter:description" content="简介 READ UNCOMMITTED 隔离级别会引起 脏读(Dirty Read) 现象的出现: 也就是说, 在该隔离级别下, 当前事务 可以读取 其他事务 未提交的, 具备持久性的数据(事务A中对数据所做的修改, 在还未最终被提交时, 对其他事务也都是可见的);   这个级别会导致很多问题, 而且从性能上来说, READ COMMITTED 并不会比其他的级别好太多, 却缺乏其他级别的很多好处">
@@ -160,7 +160,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分析该隔离级别如何加锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">分析该隔离级别如何加锁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分析该隔离级别如何加锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">分析该隔离级别如何加锁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">5.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结-1"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -244,7 +244,10 @@
 <p> 大概是说: 在 READ UNCOMMITTED 级别运行的事务不会发出<code>共享锁</code>: 也就是事务A在读取数据时, 什么锁都不加; 这样的话, 事务B就可以对同样的数据进行修改(同时会加上<code>排他锁</code>);<br> 而事务A要读取事务B未提交的修改, 也不会被事务B所加的排他锁阻止, 因为排他锁会阻止其他事务再对其锁定的数据加读写锁, <strong>但是可笑的是, 事务在该隔离级别下去读数据的话根本什么锁都不加, 这就让排他锁无法排它了</strong>;</p>
 </li>
 </ol>
-<p><strong>所以可以得出</strong>: <code>READ UNCOMMITTED</code> 隔离级别下, 读不会加任何锁; 而写会加排他锁, 并到事务结束之后释放。( 读写不阻塞, 写写阻塞 (但会读到脏数据) )</p>
+<h2 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><strong>所以可以得出</strong>: <code>READ UNCOMMITTED</code> 隔离级别下, 读不会加任何锁; 而写会加排他锁, 并到事务结束之后释放。( 读写不阻塞, 写写阻塞 (但会读到脏数据) )</li>
+<li><a href="/2017/09/22/mysql/2017-09-22-mysql-26/">参考</a>, 会知道, <code>SERIALIZABLE</code> 隔离级别才会<strong>对所有读取的行都加锁</strong>;</li>
+</ol>
 
         </div>
 
@@ -337,9 +340,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/22/mysql/2017-09-22-mysql-25/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. HTTP请求方法</h4>
+        <h4 class="title">25. 隔离级别 - READ COMMITTED</h4>
       </a>
     </div>
   

@@ -13,25 +13,22 @@
     
     
     
-    <title>23. 隔离级别 与 锁 | Lant&#39;s Blog</title>
+    <title>33 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
-<meta name="keywords" content="MySQL,事务">
+    <meta name="keywords" content="RabbitMQ">
+    <meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="23. 隔离级别 与 锁">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/index.html">
+<meta property="og:title" content="33">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-23T07:59:35.000Z">
+<meta property="og:updated_time" content="2018-07-23T07:11:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="23. 隔离级别 与 锁">
-<meta name="twitter:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
+<meta name="twitter:title" content="33">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +102,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">23. 隔离级别 与 锁</div>
+        <div class="flex-col header-title ellipsis">33</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,15 +124,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">23. 隔离级别 与 锁</h1>
+        <h1 class="title">33</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-21T06:20:52.000Z" itemprop="datePublished" class="page-time">
-  2017-09-21
+                <time datetime="2018-06-29T13:28:16.000Z" itemprop="datePublished" class="page-time">
+  2018-06-29
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
             
         </h5>
@@ -149,23 +146,16 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">2.</span> <span class="post-toc-text">READ UNCOMMITTED 未提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-提交读"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ UNCOMMITTED 提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-多版本并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">MVCC 多版本并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.</span> <span class="post-toc-text">REPEATABLE READ 可重复读</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-mysql/2017-09-21-mysql-23"
+<article id="post-rabbitmq/2018-06-29-rabbitmq-33"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">23. 隔离级别 与 锁</h1>
+        <h1 class="post-card-title">33</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-21 14:20:52" datetime="2017-09-21T06:20:52.000Z"  itemprop="datePublished">2017-09-21</time>
+            <time class="post-time" title="2018-06-29 21:28:16" datetime="2018-06-29T13:28:16.000Z"  itemprop="datePublished">2018-06-29</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
 
@@ -173,18 +163,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
-<li><p>之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的<strong>4种隔离级别</strong> 结合 <strong>MVCC机制</strong> 来进行解决;</p>
-</li>
-<li><p>而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;</p>
-</li>
-</ol>
-<h2 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED 未提交读"></a><a href="/2017/09/21/mysql/2017-09-21-mysql-24/">READ UNCOMMITTED 未提交读</a></h2><h2 id="READ-UNCOMMITTED-提交读"><a href="#READ-UNCOMMITTED-提交读" class="headerlink" title="READ UNCOMMITTED 提交读"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-25/">READ UNCOMMITTED 提交读</a></h2><h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-26/">MVCC 多版本并发控制</a></h2><h2 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ 可重复读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-27/">REPEATABLE READ 可重复读</a></h2><p>参考资料:<br>-《高性能MySQL》</p>
-<ul>
-<li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
-<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
-</ul>
-
+            
         </div>
 
         <blockquote class="post-copyright">
@@ -210,7 +189,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
 
 
             
@@ -220,7 +199,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&title=《23. 隔离级别 与 锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -230,22 +209,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&title=《23. 隔离级别 与 锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 隔离级别 与 锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -268,19 +247,12 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/19/mysql/2017-09-19-mysql-22/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">22. 幻读, 快照读(snapshot read), 当前读 (current read)</h4>
+          <h4 class="title">32. 单机部署集群 -- 普通集群</h4>
         </a>
       </div>
     
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/09/21/mysql/2017-09-21-mysql-24/" id="post-next" class="post-nav-link">
-        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">24. 隔离级别 - READ UNCOMMITTED 未提交读</h4>
-      </a>
-    </div>
   
 </nav>
 
@@ -380,7 +352,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&title=《23. 隔离级别 与 锁》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -390,22 +362,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&title=《23. 隔离级别 与 锁》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 隔离级别 与 锁》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -416,7 +388,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKklEQVR42u3aS27DMAwFwN7/0u42gFPlkVIKWBqtAjuQPVkw/OjnJ17Xy3q9cv88vnvf5379fnfZwsDAeCzjGq7qa42v9J41/j4GBsY5jL8iWM6oBtlx5MzfDQMDAyN/9TyVTPI6DAwMjB5jXHyOk7nkif8UcDEwMB7LSArLXgDtpZtfrMUxMDAeyJgpLL/9+SvzDQwMjEcxruLqhde1w4A3O2BgYGzNmB9hVsvOPPVMhgoYGBjnMGbC6ExilwTo6g4YGBi7Mlala70ac9kBDgwMjK0Z1eFldeSZDzIX9wsxMDA2YvRKxPlQmwfZQrsNAwNja8aqNtk3BpaFRBADA2NTRu9QRXXrtSPMDz8BBgbGRow8gPaGi9Uitteew8DAOIHRnHAWd6j+AyRIDAyMExgzbf2kHO01+vNwj4GBcQKjUN0OQ+dMmE5+iHK/EAMDY2tGtRBNSt/8MFnvB8XAwDiNMfPSvcQxH45+qMUxMDA2ZeQNsjwgzl/Pw/GbPTEwMDZl5AlZ9W6eDs4MSjEwME5j5A216jHWfGzZLHExMDC2ZswcccgbbTmvN5bAwMDYlXEVVy9A54OH5ogUAwNja0a+VrXeqlfyZBQDA2NvRh5kCwcg4rBeDcQfanEMDIytGclRierhjLx8XVCLY2BgYBQL2mS3/InRGBUDAwOj1RTrNezy72BgYJzGyIvYasI3UyQXRqoYGBhbM/LSsRoiZ8YMa5+IgYHxWMYvPxwd86x176MAAAAASUVORK5CYII=" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrUlEQVR42u3awY4aMRAEUP7/pzfXRAqjqm6bEOnNCe0yg5+RbFPdr1d8/Txev7+nvTe56/n5By48PDy8a0PPee+Gnrw/vzeaLDw8PLxrvHcr6rv35LyE/TyedhPCw8PD+zbecIGOpyBh4+Hh4f1fvGS4+aQk6QEeHh7ed/LaiHYT5s6m5nrWgoeHh9eddaMq0ve8vlLfw8PDw1tX1WcL7qm72s3gL3fh4eHhXeDlC25e0Mr/0pbZ2nHi4eHh3eBt2pvy/yZtAdH3EHziH8/Ew8PDu8DbtzTtm6jaELk+7uPh4eFd47UNVQm1bcPKG7OSv+Dh4eHd4yVDyQe3CW3braUYAx4eHt4hXtsslUexeTibs+vWKzw8PLwLvDaS2Ax6dkSeBRzDxAUPDw8v5u1/8Lebyiy8aMMRPDw8vM/w2kBh1qS1eWadOeDh4eFd5iXL8WxqWvCmwett0xUeHh7emjdre2qj2E10O6tq1WdwPDw8vJI3+/i81SAva83aCN6OHw8PD+8CL2kC2JTKZqHwrKhWfId4eHh4a96mKNXGFm0gm7cXREdtPDw8vDVvFiXMGqf2T86nJurMwsPDwzvE22P2BbP22I2Hh4f3Sd6pMHc2WZtIIolC8PDw8D7P2wDywDdv1WqP5nh4eHi3ebMSfntXPqGbreLAQPHw8PDiX+uzRqthIT8uj7WHfjw8PLzP8J6Hkj+0jQySzx0GuHh4eHgXeD/l1bYIJLBZ4Bt9DXh4eHgXeKfi1H3havP6wIWHh4dX8mZtAfkC3R7HZxtDEUbg4eHhHeK10WobN+Rr+OvshYeHh/cFvOcC1SxNnZXBrmwMeHh4eP+INzua500DRZMWHh4e3jXerOh1I2LIp+Zw1oKHh4d3qKqebBLtBLXtVvnmcSCwwMPDw3vi/QJVL9B13dkf0AAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
