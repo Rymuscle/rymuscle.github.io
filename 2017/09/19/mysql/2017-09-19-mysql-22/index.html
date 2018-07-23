@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题 演示 打开 客户端1 查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+-------------">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-21T07:16:45.000Z">
+<meta property="og:updated_time" content="2018-07-21T09:10:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="22. 幻读, 快照读(snapshot read), 当前读 (current read)">
 <meta name="twitter:description" content="RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题 演示 打开 客户端1 查看隔离级别及初始数据  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+-------------">
@@ -223,7 +223,7 @@
 <li><p>当前读, 读取最新版本的记录, 没有快照, 在InnoDB中, 当前读取根本不会创建任何快照。当前读的操作如下, 可以看到 insert, update, delete都是快照读, 所以这几个操作会察觉到其他事务对数据做的更改, 而select察觉不到:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">select ... lock in share mode</div><div class="line">select ... for update</div><div class="line">insert</div><div class="line">update</div><div class="line">delete</div></pre></td></tr></table></figure>
 </li>
-<li><p>使用 <code>隔离性</code> 的最高隔离级别 <code>SERIALIZABLE</code> 也可以解决<code>幻读</code>, 但该隔离级别在实际中很少使用!</p>
+<li><p>使用 <code>隔离性</code> 的最高隔离级别 <code>SERIALIZABLE</code> 也可以解决 <code>幻读</code>, 但该隔离级别在实际中很少使用!</p>
 </li>
 </ol>
 
@@ -318,9 +318,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/21/mysql/2017-09-21-mysql-23/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. HTTP请求方法</h4>
+        <h4 class="title">23. 隔离级别 与 锁</h4>
       </a>
     </div>
   
