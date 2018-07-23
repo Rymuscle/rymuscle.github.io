@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>27. 认识 undo Log 和 redo Log | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="27. 认识 undo Log 和 redo Log">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-07-23T11:27:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="27. 认识 undo Log 和 redo Log">
+<meta name="twitter:description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">27. 认识 undo Log 和 redo Log</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">27. 认识 undo Log 和 redo Log</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-27T14:16:31.000Z" itemprop="datePublished" class="page-time">
+  2017-09-27
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#undo-log"><span class="post-toc-number">1.</span> <span class="post-toc-text">undo log</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redo-log"><span class="post-toc-number">2.</span> <span class="post-toc-text">redo log</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-09-23-mysql-27"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">27. 认识 undo Log 和 redo Log</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-27 22:16:31" datetime="2017-09-27T14:16:31.000Z"  itemprop="datePublished">2017-09-27</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文摘自<a href="http://mysql.taobao.org/monthly/2015/04/01/" target="_blank" rel="external">阿里数据库内核月报 － 2015 / 04</a>, 如想了解更多, 可以点击链接进行参考;</p>
+<h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><ol>
+<li><p>Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;</p>
+</li>
+<li><p>Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使用独立的 Undo 表空间;</p>
+</li>
+<li><p>Undo记录中存储的是老版本数据, 当一个旧的事务需要读取数据时, 为了能读取到老版本的数据, 需要顺着 undo链 找到满足其可见性的记录; 当版本链很长时, <strong>通常可以认为这是个比较耗时的操作</strong>(例如bug#69812)</p>
+</li>
+<li><p>大多数对数据的变更操作包括 INSERT/DELETE/UPDATE, 其中INSERT操作在事务提交前只对当前事务可见, 因此产生的Undo日志可以在事务提交后直接删除(谁会对刚插入的数据有可见性需求呢), 而对于 UPDATE/DELETE 则需要维护多版本信息; 在InnoDB里, UPDATE和DELETE操作产生的Undo日志被归成一类, 即 update_undo。</p>
+</li>
+</ol>
+<p>更多细节可参考<a href="http://mysql.taobao.org/monthly/2015/04/01/" target="_blank" rel="external">数据库内核月报 － 2015 / 04</a></p>
+<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><ol>
+<li><p>InnoDB 有两块非常重要的日志, 一个是 <code>undo log</code>, 另外一个是 <code>redo log</code>; 前者用来保证事务的原子性以及InnoDB的MVCC, 后者用来保证事务的持久性;<br> Redo日志记录某数据块被修改后的值, 可以用来恢复未写入data file的已成功事务更新的数据;</p>
+</li>
+<li><p>和大多数关系型数据库一样, InnoDB记录了对数据文件的物理更改, 并保证总是<strong>日志先行</strong>, 也就是所谓的WAL, 即在持久化数据文件前, 保证之前的redo日志已经写到磁盘;</p>
+</li>
+<li><p>LSN(log sequence number)用于记录日志序号, 它是一个不断递增的 unsigned long long 类型整数;</p>
+<ul>
+<li>在 InnoDB 的日志系统中, LSN 无处不在, 它既用于表示修改脏页时的日志序号, 也用于记录checkpoint, 通过LSN, 可以具体的定位到其在redo log文件中的位置;</li>
+<li>为了管理脏页, 在 Buffer Pool 的每个instance上都维持了一个flush list, flush list 上的 page 按照修改这些 page 的LSN号进行排序;<br>因此定期做redo checkpoint点时, 选择的 LSN 总是所有 bp instance 的 flush list 上最老的那个page(拥有最小的LSN);</li>
+</ul>
+</li>
+<li><p>由于采用WAL的策略, 每次事务提交时需要持久化 redo log 才能保证事务不丢; 而延迟刷脏页则起到了合并多次修改的效果, 避免频繁写数据文件造成的性能问题;</p>
+</li>
+</ol>
+<p>更多细节可参考<a href="http://mysql.taobao.org/monthly/2015/05/01/" target="_blank" rel="external">阿里数据库内核月报</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/09/22/mysql/2017-09-22-mysql-26/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">26. MVCC 多版本并发控制</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02. HTTP请求方法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLUlEQVR42u3aMW4DMQwFUd//0k6bFJbnkzJiUbNVYGQlvS0IUuTjgZ/nr+fV768esvJ6l22PDBkyjmWQQ6x/WW9cW5mfTYYMGfcwSCgk2/TD6Kt13pxZhgwZMpZJYW01HuhlyJAho88gRyQ7/nPAlSFDxtczeOBLy9d+Grq5FpchQ8aBjE5h+em/P9LfkCFDxlGMZ/ik1228NE1L3D9rypAhYzSDBzhelK6TP86Ohz9kyJAxmkHGKdLLr/WBeLMzLlllyJAxjsFfCFK08N0NAxwyZMgYzUhHIviV3N4VNtwOypAh41gGD508geukjySkBj1YGTJkjGCQy7L+eER/XKNYysqQIWMQIyXVlu4UsbwVKkOGjHkMciyyZT8FrIV4GTJk3MPgAxO1a7s04PKhDZSlypAh43BGrUmZDoFxahrEZciQcTODNwNqLYS9AxkyZMi4gZFede09HP8Eb0KzDBkyhjLSYrXz/7WyllzeyZAhYzaDjDXwcNxJNNOwK0OGjNsYJIyS5WrDGdsaqDJkyLiG0dmYl7LkY8UNCRkyZFzA4JdinQYAv0rbPGYhQ4aMYxm72gBpyCbJX/BpZMiQMZpRC3Y8aSPXZLwwThucMmTImMTojFPUwjdhFMfCZMiQMZrBRyXSYrWfPqLLOxkyZMgIEzhe6PIdUUUuQ4YMGY2L/r28bQFXhgwZRzFIEZuOU6SlbC1BlCFDxg0M/hppPdYOwcNuq6kpQ4aM8xg/VDki4KakpBAAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
