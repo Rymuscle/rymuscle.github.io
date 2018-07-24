@@ -31,9 +31,10 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/unReRead.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
-<meta property="og:updated_time" content="2018-07-21T05:32:22.000Z">
+<meta property="og:updated_time" content="2018-07-24T04:35:10.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
@@ -243,7 +244,25 @@
 <h3 id="第一类丢失更新"><a href="#第一类丢失更新" class="headerlink" title="第一类丢失更新"></a>第一类丢失更新</h3><ol>
 <li><p>A事务撤销时, 把已经提交的B事务的更新数据覆盖了<br> <img src="/img/mysql/transaction/diushigengxin_01.png"></p>
 </li>
-<li><p>需要注意的是: 这种情况在Mysql中不会出现, 因为即使是InnoDB事务的最低隔离级别(<code>READ UNCOMMITED</code>), 由于会对写数据设置 <code>x</code> 锁;<br> 这样, 事务A想对数据做读取/修改, 也都只能要等到事务B的数据修改完毕并提交( 释放了<code>x</code>锁才行 );<br> 这样之后, 即便回滚, 也回滚到的是事务B已经最终提交的那次改变; </p>
+<li><p>需要注意的是: 这种情况在Mysql中不会出现;</p>
+</li>
+<li><p>对于InnoDB事务的最低隔离级别 <code>READ UNCOMMITED</code>, 由于事务A对事务B中的每一步操作结果都是可见的, 更别说是事务B提交之后了, 所以, 事务A在T5阶段的修改其实已经是基于对其可见的(事务B最终提交的)数据了, 因此回滚的话, 也会回滚到事务B最终提交的数据; 测试:<br> <img src="/img/mysql/transaction/diushigengxin_01_01.png"></p>
+</li>
+<li><p>而对于 <code>READ UNCOMMITED</code> 之上的隔离级别:</p>
+<ul>
+<li><code>READ COMMITTED</code> 为提交读, 也就是在事务B提交之后, 事务A在T5阶段是可以select(快照读)到事务B最终提交的数据的, 更别说update(当前读)到了, 所以事务A最终的Rollback其实也是基于事务B提交后的数据的, 所以事务A的回滚最终会回滚到事务B提交的修改数据, 而不是事务A一早读取的数据;</li>
+<li><code>REPEATABLE READ</code> 可重复读, 事务A在T5阶段虽然select不到事务B最终提交的数据(快照读), 但是可以update(当前读)到事务B最终提交的数据的<br>因为 update 为当前读, 而select为快照读! 关于快照读和当前读, 可以参考后面的文章<a href="/2017/09/19/mysql/2017-09-19-mysql-22/">幻读, 快照读(snapshot read), 当前读 (current read)</a></li>
+</ul>
+</li>
+<li><p>对于上面的方法, 可以自行测试 (下面测试的是READ COMMITTED隔离级别下的第一类丢失更新, 可以自行测试 REPEATABLE READ 隔离级别)</p>
+<ul>
+<li><p>事务A</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">// 在事务B执行完后查看, 该隔离级别已经可以看到数据了</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age+1 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+</li>
+<li><p>事务B</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = 100 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 </ol>
 <h3 id="第二类丢失更新"><a href="#第二类丢失更新" class="headerlink" title="第二类丢失更新"></a>第二类丢失更新</h3><ol>
@@ -268,6 +287,7 @@
 <li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
 <li><a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank" rel="external">MySQL官方文档</a></li>
 <li>《高性能MySQL》</li>
+<li><a href="https://www.jianshu.com/p/d75fcdeb07a3" target="_blank" rel="external">https://www.jianshu.com/p/d75fcdeb07a3</a></li>
 </ul>
 
         </div>

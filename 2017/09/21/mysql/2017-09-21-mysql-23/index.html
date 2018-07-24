@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
+    <meta name="description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
 <meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="23. 隔离级别 与 锁">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/21/mysql/2017-09-21-mysql-23/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
+<meta property="og:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-23T07:59:35.000Z">
+<meta property="og:updated_time" content="2018-07-24T04:02:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="23. 隔离级别 与 锁">
-<meta name="twitter:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ UNCOMMITTED 提交读M">
+<meta name="twitter:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">2.</span> <span class="post-toc-text">READ UNCOMMITTED 未提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-提交读"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ UNCOMMITTED 提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-多版本并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">MVCC 多版本并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.</span> <span class="post-toc-text">REPEATABLE READ 可重复读</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">2.</span> <span class="post-toc-text">READ UNCOMMITTED 未提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ COMMITTED 提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-多版本并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">MVCC 多版本并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.</span> <span class="post-toc-text">REPEATABLE READ 可重复读</span></a></li></ol>
         </nav>
     </aside>
     
@@ -179,7 +179,7 @@
 <li><p>而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;</p>
 </li>
 </ol>
-<h2 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED 未提交读"></a><a href="/2017/09/21/mysql/2017-09-21-mysql-24/">READ UNCOMMITTED 未提交读</a></h2><h2 id="READ-UNCOMMITTED-提交读"><a href="#READ-UNCOMMITTED-提交读" class="headerlink" title="READ UNCOMMITTED 提交读"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-25/">READ UNCOMMITTED 提交读</a></h2><h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-26/">MVCC 多版本并发控制</a></h2><h2 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ 可重复读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-27/">REPEATABLE READ 可重复读</a></h2><p>参考资料:<br>-《高性能MySQL》</p>
+<h2 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED 未提交读"></a><a href="/2017/09/21/mysql/2017-09-21-mysql-24/">READ UNCOMMITTED 未提交读</a></h2><h2 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED 提交读"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-25/">READ COMMITTED 提交读</a></h2><h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-26/">MVCC 多版本并发控制</a></h2><h2 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ 可重复读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-27/">REPEATABLE READ 可重复读</a></h2><p>参考资料:<br>-《高性能MySQL》</p>
 <ul>
 <li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="external">MySQL官方文档</a></li>
 <li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>

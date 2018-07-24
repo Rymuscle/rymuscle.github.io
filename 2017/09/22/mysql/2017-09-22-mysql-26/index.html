@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_03.png">
-<meta property="og:updated_time" content="2018-07-23T12:00:26.000Z">
+<meta property="og:updated_time" content="2018-07-23T12:04:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="26. MVCC 多版本并发控制">
 <meta name="twitter:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
@@ -247,11 +247,11 @@
 </ol>
 </li>
 <li><ol>
-<li><code>trx_id_current &lt;= trx_id_current &lt;= low_limit_id</code>, 表示: 该行记录所在事务在本次新事务创建的时候处于活动状态，从up_limit_id到low_limit_id进行遍历，如果trx_id_current等于他们之中的某个事务id的话，那么不可见, 调到步骤4,否则表示可见。</li>
+<li><code>trx_id_current &lt;= trx_id_current &lt;= low_limit_id</code>, 表示, 该行记录所在事务在本次新事务创建的时候处于活动状态, 从up_limit_id到low_limit_id进行遍历，如果trx_id_current等于他们之中的某个事务id的话，那么不可见, 调到步骤4,否则表示可见。</li>
 </ol>
 </li>
 <li><ol>
-<li>从该行记录的 DB_ROLL_PTR 指针所指向的回滚段中取出最新的undo-log的版本号, 将它赋值该 <code>trx_id_current</code>，然后跳到步骤1重新开始判断;</li>
+<li>从该行记录的 DB_ROLL_PTR 指针所指向的回滚段中取出最新的undo-log的版本号, 将它赋值该 <code>trx_id_current</code>, 然后跳到步骤1重新开始判断;</li>
 </ol>
 </li>
 <li><ol>
