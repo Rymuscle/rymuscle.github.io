@@ -31,10 +31,13 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/unReRead.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_01_01.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/diushigengxin_02.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/serialize.png">
-<meta property="og:updated_time" content="2018-07-24T04:35:10.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_r_u.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_r_c.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_r_r.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_02_new.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
+<meta property="og:updated_time" content="2018-07-24T07:34:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
@@ -159,7 +162,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高并发事务问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">高并发事务问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">幻读</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新丢失"><span class="post-toc-number">3.</span> <span class="post-toc-text">更新丢失</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一类丢失更新"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">第一类丢失更新</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二类丢失更新"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">第二类丢失更新</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注意"><span class="post-toc-number">4.</span> <span class="post-toc-text">注意</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#高并发事务问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">高并发事务问题</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#脏读"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">脏读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#不可重复读"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">不可重复读</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#幻读"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">幻读</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新丢失"><span class="post-toc-number">3.</span> <span class="post-toc-text">更新丢失</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第一类丢失更新"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">第一类丢失更新</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#第二类丢失更新"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">第二类丢失更新</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -245,40 +248,45 @@
 <li><p>A事务撤销时, 把已经提交的B事务的更新数据覆盖了<br> <img src="/img/mysql/transaction/diushigengxin_01.png"></p>
 </li>
 <li><p>需要注意的是: 这种情况在Mysql中不会出现;</p>
-</li>
-<li><p>对于InnoDB事务的最低隔离级别 <code>READ UNCOMMITED</code>, 由于事务A对事务B中的每一步操作结果都是可见的, 更别说是事务B提交之后了, 所以, 事务A在T5阶段的修改其实已经是基于对其可见的(事务B最终提交的)数据了, 因此回滚的话, 也会回滚到事务B最终提交的数据; 测试:<br> <img src="/img/mysql/transaction/diushigengxin_01_01.png"></p>
-</li>
-<li><p>而对于 <code>READ UNCOMMITED</code> 之上的隔离级别:</p>
 <ul>
-<li><code>READ COMMITTED</code> 为提交读, 也就是在事务B提交之后, 事务A在T5阶段是可以select(快照读)到事务B最终提交的数据的, 更别说update(当前读)到了, 所以事务A最终的Rollback其实也是基于事务B提交后的数据的, 所以事务A的回滚最终会回滚到事务B提交的修改数据, 而不是事务A一早读取的数据;</li>
-<li><code>REPEATABLE READ</code> 可重复读, 事务A在T5阶段虽然select不到事务B最终提交的数据(快照读), 但是可以update(当前读)到事务B最终提交的数据的<br>因为 update 为当前读, 而select为快照读! 关于快照读和当前读, 可以参考后面的文章<a href="/2017/09/19/mysql/2017-09-19-mysql-22/">幻读, 快照读(snapshot read), 当前读 (current read)</a></li>
-</ul>
+<li><p>对于InnoDB事务的最低隔离级别 <code>READ UNCOMMITED</code>, 由于事务A对事务B中的每一步操作结果都是可见的, 更别说是事务B提交之后了, 所以, 事务A在T3阶段的修改其实已经是基于对其可见的(事务B最终提交的)数据了, 因此回滚的话, 也会回滚到事务B最终提交的数据; 测试:<br><img src="/img/mysql/transaction/lose_update_01_r_u.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age - 15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
 </li>
-<li><p>对于上面的方法, 可以自行测试 (下面测试的是READ COMMITTED隔离级别下的第一类丢失更新, 可以自行测试 REPEATABLE READ 隔离级别)</p>
-<ul>
-<li><p>事务A</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">// 在事务B执行完后查看, 该隔离级别已经可以看到数据了</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age+1 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+<li><p>对于 <code>READ COMMITTED</code> 为提交读, 也就是在事务B提交之后, 事务A在T3阶段是可以select(快照读)到事务B最终提交的数据的, 更别说update(当前读)到了, 所以事务A最终的Rollback其实也是基于事务B提交后的数据的, 所以事务A的回滚最终会回滚到事务B提交的修改数据, 而不是事务A一早读取的数据;<br><img src="/img/mysql/transaction/lose_update_01_r_c.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age - 15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
 </li>
-<li><p>事务B</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = 100 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<li><p>对于 <code>REPEATABLE READ</code> 可重复读, 事务A在T3阶段虽然select不到事务B最终提交的数据(快照读), 但是可以update(当前读)到事务B最终提交的数据的<br><img src="/img/mysql/transaction/lose_update_01_r_r.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age+10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<p>因为 <code>update</code> 为当前读(不会遵守可重复读的要求), 而select为快照读! 关于快照读和当前读, 可以参考后面的文章<a href="/2017/09/19/mysql/2017-09-19-mysql-22/">幻读, 快照读(snapshot read), 当前读 (current read)</a></p>
+</li>
+<li><p><code>SERIALIZABLE</code> 读写都加锁, 会出现死锁<br><img src="/img/mysql/transaction/lose_update_01_s.png"><br>为了不出现死锁: 也不会出现第一类丢失更新的问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age -15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ol>
 <h3 id="第二类丢失更新"><a href="#第二类丢失更新" class="headerlink" title="第二类丢失更新"></a>第二类丢失更新</h3><ol>
-<li><p>A事务 覆盖 B事务 已经提交的数据，造成B事务所做操作丢失<br> <img src="/img/mysql/transaction/diushigengxin_02.png"></p>
+<li><p>A事务 覆盖 B事务 已经提交的数据，造成B事务所做操作丢失<br> <img src="/img/mysql/transaction/lose_update_02_new.png"></p>
 </li>
-<li><p>这种丢失更新, 是比较常见的, 是无法依靠前三种隔离级别来解决的, 而且可以看到事务A不是要将数据更新为最终的一个确认值, 而是依据读取到的值进行计算后写入的, 这样必然会导致事务B的更新丢失</p>
+<li><p>这种丢失更新, 一般是先在事务外查询出的数据, 觉得符合要求, 然后在事务A中依据查询出的结果做完运算后, 然后对数据进行的修改, 这样必然会导致事务B的更新丢失; </p>
+<ul>
+<li>而如果在事务中不是依据事务外查询出的结果进行运算后再更新, 而是直接使用 类似库存递减的操作, 如 <code>update goods set number=number-1 where id=1;</code>, 虽然不会造成丢失更新, 但是会造成超卖现象!</li>
+<li>另外, 如果将读写都放入事务中, 很容易造成死锁的出现 (因为serialize将事务串行化了, 读写都会互相阻塞(经过测试), 不会造成第二类丢失更新问题, 但是仍然会造成<strong>超卖</strong>!;)<br><img src="/img/mysql/transaction/lose_update_01_s.png"></li>
+</ul>
 </li>
-<li><p>解决方案: 可以使用如 <code>乐观锁</code>(在修改时, where判断数据是否为你读取时的数据; 或者提供数据版本字段来控制), <code>悲观锁</code> 来解决;</p>
+<li><p>解决方案:</p>
+<ul>
+<li><code>乐观锁</code>(在修改时, where判断数据是否为你读取时的数据; 或者提供数据版本字段来控制)</li>
+<li><code>悲观锁</code></li>
+</ul>
 </li>
-</ol>
-<h2 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h2><ol>
-<li><p><strong>注意: 最高隔离级别 <code>Serializable</code> 在实际应用场景中并不被采用 (并且, 它也无法解决更新丢失的问题)</strong></p>
+<li><p><strong>注意: 最高隔离级别 <code>Serializable</code> 在实际应用场景中并不被采用</strong></p>
 </li>
-<li><p>因为虽然serialize将事务串行化了, 但貌似只是将同时到达的多个不同事务中的语句按照锁进行了串行化, 虽然读写都会互相阻塞(经过测试), 但是这只是代表事务之间需要等待, 但最终都会执行, 所以还会造成<strong>超卖</strong>!;</p>
-</li>
-<li><p>所以即使是最高隔离级别, 也还是会出现 第二类更新丢失 的高并发事务问题:<br> <img src="/img/mysql/transaction/serialize.png"><br> 可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></p>
+<li><p>另外, 可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></p>
 </li>
 </ol>
 <p>参考资料:</p>
