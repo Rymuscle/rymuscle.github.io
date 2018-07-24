@@ -31,7 +31,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/mvcc/yanshi_03.png">
-<meta property="og:updated_time" content="2018-07-24T09:43:55.000Z">
+<meta property="og:updated_time" content="2018-07-24T12:18:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="26. MVCC 多版本并发控制">
 <meta name="twitter:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
@@ -156,7 +156,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Multiversion-Concurrency-Control简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">Multiversion Concurrency Control简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#read-view"><span class="post-toc-number">2.</span> <span class="post-toc-text">read view</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC何时创建-read-view"><span class="post-toc-number">3.</span> <span class="post-toc-text">MVCC何时创建 read view</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#可见性比较算法"><span class="post-toc-number">4.</span> <span class="post-toc-text">可见性比较算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#案例分析"><span class="post-toc-number">5.</span> <span class="post-toc-text">案例分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#当前读和快照读"><span class="post-toc-number">6.</span> <span class="post-toc-text">当前读和快照读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结-InnoDB所谓的MVCC"><span class="post-toc-number">7.</span> <span class="post-toc-text">小结 InnoDB所谓的MVCC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-高并发特点"><span class="post-toc-number">8.</span> <span class="post-toc-text">MVCC 高并发特点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">9.</span> <span class="post-toc-text">参考</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Multiversion-Concurrency-Control简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">Multiversion Concurrency Control简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#read-view"><span class="post-toc-number">2.</span> <span class="post-toc-text">read view</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC何时创建read-view"><span class="post-toc-number">3.</span> <span class="post-toc-text">MVCC何时创建read view</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#可见性比较算法"><span class="post-toc-number">4.</span> <span class="post-toc-text">可见性比较算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#案例分析"><span class="post-toc-number">5.</span> <span class="post-toc-text">案例分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#当前读和快照读"><span class="post-toc-number">6.</span> <span class="post-toc-text">当前读和快照读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结-InnoDB所谓的MVCC"><span class="post-toc-number">7.</span> <span class="post-toc-text">小结 InnoDB所谓的MVCC</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-高并发特点"><span class="post-toc-number">8.</span> <span class="post-toc-text">MVCC 高并发特点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">9.</span> <span class="post-toc-text">参考</span></a></li></ol>
         </nav>
     </aside>
     
@@ -195,10 +195,10 @@
 <li><p>~~</p>
 </li>
 </ol>
-<h2 id="MVCC何时创建-read-view"><a href="#MVCC何时创建-read-view" class="headerlink" title="MVCC何时创建 read view"></a>MVCC何时创建 read view</h2><ol>
-<li><p>对于read view快照的生成时机, 也非常关键, 也正是因为生成时机的不同, 造成了 <code>RC</code>, <code>RR</code>两种隔离级别的不同可见性;</p>
+<h2 id="MVCC何时创建read-view"><a href="#MVCC何时创建read-view" class="headerlink" title="MVCC何时创建read view"></a>MVCC何时创建read view</h2><ol>
+<li><p>对于 read view 快照的生成时机, 也非常关键, 也正是因为生成时机的不同, 造成了 <code>RC</code>, <code>RR</code>两种隔离级别的不同可见性;</p>
 </li>
-<li><p>在innodb(默认repeatable read级别), 事务在b egin/start transaction 之后的第一条select读操作后, 会创建一个快照(read view), 将当前系统中活跃的其他事务记录起来; 而在innodb(read committed级别), 事务中每条select语句都会创建一个快照(read view); 可以参考:</p>
+<li><p>在innodb(默认repeatable read级别), 事务在 begin/start transaction 之后的第一条select读操作后, 会创建一个快照(read view), 将当前系统中活跃的其他事务记录起来; 而在innodb(read committed级别), 事务中每条select语句都会创建一个快照(read view); 可以参考:</p>
 <ul>
 <li><a href="http://www.sohu.com/a/194511597_610509" target="_blank" rel="external">http://www.sohu.com/a/194511597_610509</a>)</li>
 <li><a href="https://dev.mysql.com/doc/refman/5.7/en/glossary.html#glos_consistent_read" target="_blank" rel="external">一致性读</a><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">With REPEATABLE READ isolation level, the snapshot is based on the time when the first read operation is performed.</div><div class="line">使用REPEATABLE READ隔离级别，快照是基于执行第一个读操作的时间。</div><div class="line">With READ COMMITTED isolation level, the snapshot is reset to the time of each consistent read operation.</div><div class="line">使用READ COMMITTED隔离级别，快照被重置为每个一致的读取操作的时间。</div></pre></td></tr></table></figure>
