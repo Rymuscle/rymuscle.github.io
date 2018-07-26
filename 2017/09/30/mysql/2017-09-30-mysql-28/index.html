@@ -13,25 +13,25 @@
     
     
     
-    <title>26. MVCC 多版本并发控制 | Lant&#39;s Blog</title>
+    <title>28. 认识MySQL的 Binary Log | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
-<meta name="keywords" content="MySQL,事务">
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="Binary Loghttp://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="26. MVCC 多版本并发控制">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/index.html">
+<meta property="og:title" content="28. 认识MySQL的 Binary Log">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
+<meta property="og:description" content="Binary Loghttp://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-25T06:23:37.000Z">
+<meta property="og:updated_time" content="2018-07-25T06:38:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="26. MVCC 多版本并发控制">
-<meta name="twitter:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
+<meta name="twitter:title" content="28. 认识MySQL的 Binary Log">
+<meta name="twitter:description" content="Binary Loghttp://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">26. MVCC 多版本并发控制</div>
+        <div class="flex-col header-title ellipsis">28. 认识MySQL的 Binary Log</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,11 +127,11 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">26. MVCC 多版本并发控制</h1>
+        <h1 class="title">28. 认识MySQL的 Binary Log</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-22T13:10:21.000Z" itemprop="datePublished" class="page-time">
-  2017-09-22
+                <time datetime="2017-09-30T14:16:31.000Z" itemprop="datePublished" class="page-time">
+  2017-09-30
 </time>
 
 
@@ -152,17 +152,17 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Multiversion-Concurrency-Control简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">Multiversion Concurrency Control简介</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binary-Log"><span class="post-toc-number">1.</span> <span class="post-toc-text">Binary Log</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-mysql/2017-09-22-mysql-26"
+<article id="post-mysql/2017-09-30-mysql-28"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">26. MVCC 多版本并发控制</h1>
+        <h1 class="post-card-title">28. 认识MySQL的 Binary Log</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-22 21:10:21" datetime="2017-09-22T13:10:21.000Z"  itemprop="datePublished">2017-09-22</time>
+            <time class="post-time" title="2017-09-30 22:16:31" datetime="2017-09-30T14:16:31.000Z"  itemprop="datePublished">2017-09-30</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -173,19 +173,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Multiversion-Concurrency-Control简介"><a href="#Multiversion-Concurrency-Control简介" class="headerlink" title="Multiversion Concurrency Control简介"></a>Multiversion Concurrency Control简介</h2><ol>
-<li><p><a href="http://mysql.taobao.org/monthly/2017/12/01/" target="_blank" rel="external">阿里数据库内核’2017/12’月报</a>中对 MVCC 的解释是:</p>
-<blockquote>
-<p><strong>多版本控制</strong>: 指的是一种 <strong>提高并发</strong> 的技术。<br> 最早的数据库系统, <strong>只有 <code>读读</code> 之间可以并发，<code>读写</code>，<code>写读</code>，<code>写写</code> 都要阻塞</strong>。<br> 引入多版本之后，<strong>只有 <code>写写</code> 之间相互阻塞</strong>, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。</p>
-</blockquote>
-</li>
-<li><p>&lt;高性能MySQL&gt;中对 MVCC 的部分介绍</p>
-<blockquote>
-<p>MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁。<br> <strong>基于提升并发性能的考虑</strong>, 它们一般都同时实现了多版本并发控制(MVCC)。<br> 不仅是MySQL, 包括Oracle, PostgreSQL 等其他数据库系统也都实现了MVCC, 但各自的实现机制不尽相同, 因为MVCC没有一个统一的实现标准。<br> 可以认为MVCC是行级锁的一个变种, 但是它在很多情况下避免了加锁操作, 因此开销更低。虽然实现机制有所不同, 但大都实现了非阻塞的读操作，写操作也只锁定必要的行。<br> <strong>MVCC只在 <code>READ COMMITTED</code> 和 <code>REPEATABLE READ</code> 两个隔离级别下工作。其他两个隔离级别和 MVCC 不兼容, 因为 <code>READ UNCOMMITTED</code> 总是读取最新的数据行, 而不是符合当前事务版本的数据行。而 <code>SERIALIZABLE</code> 则会对所有读取的行都加锁</strong></p>
-</blockquote>
-</li>
-</ol>
-<p>~~未整理完待续</p>
+            <h2 id="Binary-Log"><a href="#Binary-Log" class="headerlink" title="Binary Log"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a></h2><p><a href="http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/" target="_blank" rel="external">http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/</a></p>
 
         </div>
 
@@ -212,7 +200,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
 
             
@@ -222,7 +210,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&title=《26. MVCC 多版本并发控制》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -232,22 +220,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&title=《26. MVCC 多版本并发控制》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MVCC 多版本并发控制》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 认识MySQL的 Binary Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -270,17 +258,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/22/mysql/2017-09-22-mysql-25/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/27/mysql/2017-09-23-mysql-27/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">25. 隔离级别 - READ COMMITTED</h4>
+          <h4 class="title">27. 认识MySQL的 undo Log 和 redo Log</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/09/27/mysql/2017-09-23-mysql-27/" id="post-next" class="post-nav-link">
+      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">27. 认识MySQL的 undo Log 和 redo Log</h4>
+        <h4 class="title">02. HTTP请求方法</h4>
       </a>
     </div>
   
@@ -382,7 +370,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&title=《26. MVCC 多版本并发控制》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -392,22 +380,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&title=《26. MVCC 多版本并发控制》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MVCC 多版本并发控制》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 认识MySQL的 Binary Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-26/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -418,7 +406,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3awW6EMAxFUf7/p+m6mk64zwapOJdVhYaQw8K1Yx8Hvs6P69v9b79cr/y52vHEJUOGjNcyyCY62+Urr2EXb5QhQ8YGDBIKOb4TRtfv/XpfhgwZMvByfDX+CWTIkCGjw0gTQbKaDBkyZHSK2PXRGw/Ha9jjtbgMGTJeyOgUlk///Uh/Q4YMGa9inOHFg29amqYl7q81ZciQMZrBAxwvStdlJ2fz/ciQIWMHRm3kolas8pK11v6UIUPGPAYPeZ0QeW+6+cd+ZMiQMZqRHsqnYxa1hI83O+MoLkOGjBcy0hStlo/x9LGWhsqQIWM2Iw2XnYO5u9LKoxazZciQMZrBW4y147xaCxP9D5EhQ8YIBtlQJ2XkKSBJ/i5ODWXIkDGacdfSnUQzfWPQEpAhQ8bLGbzRyMF8SCL9BOjQTYYMGeMYvByNp8xwKtkfyJAhQ8ZsRu1YjY+IkWd5wXwRmmXIkDGU0RnkIskiKVPJJwhqcRkyZIxjpJj0sCwd+eJjGTJkyNiZ0SlT05DaXwFluDJkyBjEqBWladORpJvFhoQMGTI2YHSSP94AuLfNIEOGjB0YZ3ilgTJ9Ni5cZciQsQHjrpidhml+p3ZgJ0OGjHkMPk5RK1nT0pcXsTJkyNiNwccp0lYlHzhrtSJkyJAhI2SQhI8nhSTQy5AhQ8a97ck+78GAK0OGjH/MIEVsuom0lK0liDJkyNiBwR/j5Wu6Cf7JWk1NGTJkvI/xA7vvGQb8xonXAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMklEQVR42u3aS26EMBAFwNz/0kTKKlICvGczC+zyKhpmwMWi0x9/fcXr+Flnnxy/1tnVs2/+/fzv1ccWBgbGaxnH5ZrZ1tjWz357Q8XAwNiAcR1kr7+TP/ga3D4XAwMDow2aCS/P6zAwMDDmA25yNS9HkzQUAwMDIylin9pWnix+pBbHwMB4IeOpgPiJvz8438DAwHgJ4xhaebHaBtaxXWFgYKzNmEn7ku3ODCbbhh0GBsaqjLxZ3wbZNt1MAvTpHTAwMJZm5BdmhgRtAB0cDGBgYGzDyI9ZtC2zJLzmr2CwR4iBgfFaRvLIpHwd69gnZXDRbsPAwFiakZSseVmbB+68SL65GwYGxmaMse22xe38szAwMHZgtIGyPUiRH7bIE8p/fouBgbEBox1eziR2Y8POm1eDgYGxNCNv8Y+Rku22h8mKYxYYGBjLMdqDWe2QYGbwOTiDxcDAWIIxVqDmhzPaInbsiRgYGDsw2oNi7dGxPAWsG20YGBgbMNo2WXK7+c9njm5gYGCsyniqodaG1LzNF/1jwMDA2IaRb70dJ+QBPQnuN/8xMDAwlmO0IfWphLIOqfmvMDAwFmIc5RorO9uxQfsKMDAw1ma0hzDaMnhstUcxMDAwdmA8MDiMG/1JOtg25jAwMPZhzLTS8kRwJkzfvAIMDAyMOEWbKUfbchcDAwOjHUCOMa7vXwRoDAyMDRgzzfq8cE1e09hoEwMDY23GzGAgGRiMtd4+gsTAwHgf4xsocrJQA6J9SgAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 

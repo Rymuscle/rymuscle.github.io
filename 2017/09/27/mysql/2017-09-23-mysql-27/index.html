@@ -13,24 +13,24 @@
     
     
     
-    <title>27. 认识 undo Log 和 redo Log | Lant&#39;s Blog</title>
+    <title>27. 认识MySQL的 undo Log 和 redo Log | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL,事务">
+    <meta name="keywords" content="MySQL">
     <meta name="description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
-<meta name="keywords" content="MySQL,事务">
+<meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="27. 认识 undo Log 和 redo Log">
+<meta property="og:title" content="27. 认识MySQL的 undo Log 和 redo Log">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-24T09:43:55.000Z">
+<meta property="og:updated_time" content="2018-07-25T06:29:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="27. 认识 undo Log 和 redo Log">
+<meta name="twitter:title" content="27. 认识MySQL的 undo Log 和 redo Log">
 <meta name="twitter:description" content="本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考; undo log Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;  Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">27. 认识 undo Log 和 redo Log</div>
+        <div class="flex-col header-title ellipsis">27. 认识MySQL的 undo Log 和 redo Log</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">27. 认识 undo Log 和 redo Log</h1>
+        <h1 class="title">27. 认识MySQL的 undo Log 和 redo Log</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-09-27T14:16:31.000Z" itemprop="datePublished" class="page-time">
@@ -160,7 +160,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">27. 认识 undo Log 和 redo Log</h1>
+        <h1 class="post-card-title">27. 认识MySQL的 undo Log 和 redo Log</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-09-27 22:16:31" datetime="2017-09-27T14:16:31.000Z"  itemprop="datePublished">2017-09-27</time>
 
@@ -226,7 +226,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
 
 
             
@@ -236,7 +236,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -246,7 +246,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -256,7 +256,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -292,9 +292,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/30/mysql/2017-09-30-mysql-28/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. HTTP请求方法</h4>
+        <h4 class="title">28. 认识MySQL的 Binary Log</h4>
       </a>
     </div>
   
@@ -396,7 +396,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -406,7 +406,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&title=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -416,7 +416,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《27. 认识MySQL的 undo Log 和 redo Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

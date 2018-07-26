@@ -215,11 +215,36 @@
   </entry>
   
   <entry>
-    <title>27. 认识 undo Log 和 redo Log</title>
+    <title>28. 认识MySQL的 Binary Log</title>
+    <link href="http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/"/>
+    <id>http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/</id>
+    <published>2017-09-30T14:16:31.000Z</published>
+    <updated>2018-07-25T06:38:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Binary-Log"><a href="#Binary-Log" class="headerlink" title="Binary Log"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a></h2><p><a href="http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/" target="_blank" rel="external">http://guweigang.com/blog/2013/11/18/mysql-binlog-in-realtime/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;Binary-Log&quot;&gt;&lt;a href=&quot;#Binary-Log&quot; class=&quot;headerlink&quot; title=&quot;Binary Log&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.5/en/binary-
+      
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>27. 认识MySQL的 undo Log 和 redo Log</title>
     <link href="http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/"/>
     <id>http://blog.renyimin.com/2017/09/27/mysql/2017-09-23-mysql-27/</id>
     <published>2017-09-27T14:16:31.000Z</published>
-    <updated>2018-07-24T09:43:55.000Z</updated>
+    <updated>2018-07-25T06:29:48.000Z</updated>
     
     <content type="html"><![CDATA[<p>本文摘自<a href="http://mysql.taobao.org/monthly/2015/04/01/" target="_blank" rel="external">阿里数据库内核月报 － 2015 / 04</a>, 如想了解更多, 可以点击链接进行参考;</p><h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><ol><li><p>Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;</p></li><li><p>Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使用独立的 Undo 表空间;</p></li><li><p>Undo记录中存储的是老版本数据, 当一个旧的事务需要读取数据时, 为了能读取到老版本的数据, 需要顺着 undo链 找到满足其可见性的记录; 当版本链很长时, <strong>通常可以认为这是个比较耗时的操作</strong>(例如bug#69812)</p></li><li><p>大多数对数据的变更操作包括 INSERT/DELETE/UPDATE, 其中INSERT操作在事务提交前只对当前事务可见, 因此产生的Undo日志可以在事务提交后直接删除(谁会对刚插入的数据有可见性需求呢), 而对于 UPDATE/DELETE 则需要维护多版本信息; 在InnoDB里, UPDATE和DELETE操作产生的Undo日志被归成一类, 即 update_undo。</p></li></ol><p>更多细节可参考<a href="http://mysql.taobao.org/monthly/2015/04/01/" target="_blank" rel="external">数据库内核月报 － 2015 / 04</a></p><h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><ol><li><p>InnoDB 有两块非常重要的日志, 一个是 <code>undo log</code>, 另外一个是 <code>redo log</code>; 前者用来保证事务的原子性以及InnoDB的MVCC, 后者用来保证事务的持久性;<br> Redo日志记录某数据块被修改后的值, 可以用来恢复未写入data file的已成功事务更新的数据;</p></li><li><p>和大多数关系型数据库一样, InnoDB记录了对数据文件的物理更改, 并保证总是<strong>日志先行</strong>, 也就是所谓的WAL, 即在持久化数据文件前, 保证之前的redo日志已经写到磁盘;</p></li><li><p>LSN(log sequence number)用于记录日志序号, 它是一个不断递增的 unsigned long long 类型整数;</p><ul><li>在 InnoDB 的日志系统中, LSN 无处不在, 它既用于表示修改脏页时的日志序号, 也用于记录checkpoint, 通过LSN, 可以具体的定位到其在redo log文件中的位置;</li><li>为了管理脏页, 在 Buffer Pool 的每个instance上都维持了一个flush list, flush list 上的 page 按照修改这些 page 的LSN号进行排序;<br>因此定期做redo checkpoint点时, 选择的 LSN 总是所有 bp instance 的 flush list 上最老的那个page(拥有最小的LSN);</li></ul></li><li><p>由于采用WAL的策略, 每次事务提交时需要持久化 redo log 才能保证事务不丢; 而延迟刷脏页则起到了合并多次修改的效果, 避免频繁写数据文件造成的性能问题;</p></li></ol><p>更多细节可参考<a href="http://mysql.taobao.org/monthly/2015/05/01/" target="_blank" rel="external">阿里数据库内核月报</a></p>]]></content>
     
@@ -236,8 +261,6 @@
     
     
       <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
     
   </entry>
   
@@ -412,9 +435,9 @@
     <link href="http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-20/"/>
     <id>http://blog.renyimin.com/2017/09/16/mysql/2017-09-16-mysql-20/</id>
     <published>2017-09-16T03:06:07.000Z</published>
-    <updated>2018-07-24T09:43:29.000Z</updated>
+    <updated>2018-07-26T01:45:46.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="事务的概念"><a href="#事务的概念" class="headerlink" title="事务的概念"></a>事务的概念</h2><ol><li><p>事务：可以理解为一个 <strong>独立的</strong> 工作单元, 在这个 <strong>独立的</strong> 工作单元中, 可以有 <strong>一组</strong> 操作; 放在这个独立工作单元中的一组操作, <strong>要么全部执行成功, 要么全部执行失败</strong>。</p></li><li><p>仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么本次转账操作至少需要三个步骤</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure></li><li><p><strong>注意</strong>: 上面的三个步操作，其实就需要打包在一个事务中, 这样就可以保证一组操作可以作为一个 <code>独立的工作单元</code> 来执行。并且在 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则<strong>事务整体就应该是失败的, 那就必须回滚所有已经执行了的步骤</strong>。<br> 假设第二步操作成功, 但是第三步操作失败, 那么整个事务就应该是失败的, 就必须将第二步的操作回滚。(其实这里也体现了事务最基本的一个特性: <strong>保证数据的一致性</strong>)</p></li></ol><h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>一个运行良好的事务处理系统必须具备下面这些标准特性(高并发场景离不开事务的这几个标准特性) </p><h3 id="Atomicity-原子性"><a href="#Atomicity-原子性" class="headerlink" title="Atomicity 原子性"></a>Atomicity 原子性</h3><p>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部成功提交, 要么有操作失败导致所有操作全部回滚。<br>对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p><h3 id="Consistency-一致性"><a href="#Consistency-一致性" class="headerlink" title="Consistency 一致性"></a>Consistency 一致性</h3><p>你大概可以这样来理解: 虽然数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性总是能够保证 <strong>数据库总是从一个数据一致性的状态 转换到 另一个数据一致性的状态</strong>; </p><p>比如之前转账的例子:<br>转账前的数据一致性状态是: ‘Iron Man’(余额500), ‘Wolverine’(余额15)<br>转账成功后的数据一致性状态是: ‘Iron Man’(余额400), ‘Wolverine’(余额115)<br>转账如果失败的话, 数据的一致性的状态应该回滚到转账前的状态: ‘Iron Man’(余额500), ‘Wolverine’(余额15)</p><h3 id="Isolation-隔离性"><a href="#Isolation-隔离性" class="headerlink" title="Isolation 隔离性"></a><strong>Isolation 隔离性</strong></h3><ol><li><p><strong>通常来说</strong>, 一个事务所做的修改在最终提交以前, 对其他事务是不可见的;<br>比如在之前的转账例子中, 在执行完成最后一步(第三步), 事务还没来得及最终提交之前, 此时有另一个程序去读取A账户的余额, <strong>那么这个程序读到的应该是没有被减100的余额才对</strong></p></li><li><p>上面为什么说 <code>通常来说</code>, 难道还有其他情况 ?<br>后面会详细讨论事务<code>隔离性</code> 的四个 <code>隔离级别</code>, 到时候就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (但确实也还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code>, 对其他事务的可见就造成了 <code>脏读问题</code> 的出现)</p></li><li><p>事务有四种隔离级别(从低到高)</p><ul><li><code>READ UNCOMMITTED</code>    (未提交读)</li><li><code>READ COMMITTED</code>      (提交读)</li><li><code>REPEATABLE READ</code>     (可重复读)</li><li><code>SERIALIZABLE</code>        (可串行化) <strong>注意: 它仍然无法解决<code>更新丢失</code>的问题</strong>(可以<a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">参考</a>)</li></ul></li></ol><h3 id="Durability-持久性"><a href="#Durability-持久性" class="headerlink" title="Durability 持久性"></a>Durability 持久性</h3><p>一旦事务被最终提交后, 在这个独立单元中的所有操作所做的修改将会 <code>永久</code> 保存到数据库中; (所谓<code>永久</code>可以理解为被事务修改的数据是真正存放到了表中, 而不是存放在了诸如临时表之类的地方);</p>]]></content>
+    <content type="html"><![CDATA[<h2 id="事务的概念"><a href="#事务的概念" class="headerlink" title="事务的概念"></a>事务的概念</h2><ol><li><p>事务：可以理解为一个 <strong>独立的</strong> 工作单元, 在这个 <strong>独立的</strong> 工作单元中, 可以有 <strong>一组</strong> 操作; 放在这个独立工作单元中的一组操作, <strong>要么全部执行成功, 要么全部执行失败</strong>。</p></li><li><p>仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账100元, 那么本次转账操作至少需要三个步骤</p> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">检查`Iron Man`余额`&gt;=100`元</div><div class="line">从`Iron Man`余额中`-100`元</div><div class="line">给`Wolverine`余额`+100`元</div></pre></td></tr></table></figure></li><li><p><strong>注意</strong>: 上面的三个步操作，其实就需要打包在一个事务中, 这样就可以保证一组操作可以作为一个 <code>独立的工作单元</code> 来执行。并且在 <code>独立工作单元</code>(即事务) 中的这三个操作, 只要有任何一个操作失败, 则<strong>事务整体就应该是失败的, 那就必须回滚所有已经执行了的步骤</strong>。<br> 假设第二步操作成功, 但是第三步操作失败, 那么整个事务就应该是失败的, 就必须将第二步的操作回滚。(其实这里也体现了事务最基本的一个特性: <strong>保证数据的一致性</strong>)</p></li></ol><h2 id="事务的ACID特性"><a href="#事务的ACID特性" class="headerlink" title="事务的ACID特性"></a>事务的ACID特性</h2><p>一个运行良好的事务处理系统必须具备下面这些标准特性(高并发场景离不开事务的这几个标准特性) </p><h3 id="Atomicity-原子性"><a href="#Atomicity-原子性" class="headerlink" title="Atomicity 原子性"></a>Atomicity 原子性</h3><p>一个事务必须被视为<code>一个不可分割的最小工作单元</code>, 整个事务中的所有操作要么全部成功提交, 要么有操作失败导致所有操作全部回滚。<br>对于一个事务来说, 不能只成功执行其中的一部分操作, 这就是事务的原子性。</p><h3 id="Consistency-一致性"><a href="#Consistency-一致性" class="headerlink" title="Consistency 一致性"></a>Consistency 一致性</h3><p>你大概可以这样来理解: 虽然数据表中的数据可能一直在变化, 但是事务的<code>一致性</code>特性总是能够保证 <strong>数据库总是从一个数据一致性的状态 转换到 另一个数据一致性的状态</strong>; </p><p>比如之前转账的例子:<br>转账前的数据一致性状态是: ‘Iron Man’(余额500), ‘Wolverine’(余额15)<br>转账成功后的数据一致性状态是: ‘Iron Man’(余额400), ‘Wolverine’(余额115)<br>转账如果失败的话, 数据的一致性的状态应该回滚到转账前的状态: ‘Iron Man’(余额500), ‘Wolverine’(余额15)</p><h3 id="Isolation-隔离性"><a href="#Isolation-隔离性" class="headerlink" title="Isolation 隔离性"></a><strong>Isolation 隔离性</strong></h3><ol><li><p><strong>通常来说</strong>, 一个事务所做的修改在最终提交以前, 对其他事务是不可见的;<br>比如在之前的转账例子中, 在执行完成最后一步(第三步), 事务还没来得及最终提交之前, 此时有另一个程序去读取A账户的余额, <strong>那么这个程序读到的应该是没有被减100的余额才对</strong></p></li><li><p>上面为什么说 <code>通常来说</code>, 难道还有其他情况 ?<br>后面会详细讨论事务<code>隔离性</code> 的四个 <code>隔离级别</code>, 到时候就知道这里为什么说<code>通常来说</code>对其他事务是不可见的; (但确实也还有特例, 比如最低隔离级别 <code>READ UNCOMMITTED</code>, 对其他事务的可见就造成了 <code>脏读问题</code> 的出现)</p></li><li><p>事务有四种隔离级别(从低到高)</p><ul><li><code>READ UNCOMMITTED</code>    (未提交读)</li><li><code>READ COMMITTED</code>      (提交读)</li><li><code>REPEATABLE READ</code>     (可重复读)</li><li><code>SERIALIZABLE</code>        (可串行化) <strong>注意: 该隔离级别才会读写都加锁</strong></li></ul></li></ol><h3 id="Durability-持久性"><a href="#Durability-持久性" class="headerlink" title="Durability 持久性"></a>Durability 持久性</h3><p>一旦事务被最终提交后, 在这个独立单元中的所有操作所做的修改将会 <code>永久</code> 保存到数据库中; (所谓<code>永久</code>可以理解为被事务修改的数据是真正存放到了表中, 而不是存放在了诸如临时表之类的地方);</p>]]></content>
     
     <summary type="html">
     
