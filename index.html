@@ -620,11 +620,12 @@ RFC2616中提到: PATCH, LINK, UNLINK方法被定义, 但并不常见; (《图�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        本文摘自阿里数据库内核月报 － 2015 / 04, 如想了解更多, 可以点击链接进行参考;
-undo log
+        undo log
 Undo日志记录某数据被修改前的值, 可以用来在事务失败时进行rollback;
 
-Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也...
+Undo log 是 InnoDB MVCC 事务特性的重要组成部分, 当我们对记录做了变更操作时就会产生undo记录, Undo记录默认被记录到系统表空间(ibdata)中, 但从5.6开始, 也可以使用独立的 Undo 表空间;
+
+Undo记录中存储的是老版本数据, 当一个旧的事务需要读...
     
 
         <a href="/2017/09/27/mysql/2017-09-23-mysql-27/" class="post-more waves-effect waves-button">

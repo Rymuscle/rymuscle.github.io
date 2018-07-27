@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_02_new.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
-<meta property="og:updated_time" content="2018-07-24T07:34:18.000Z">
+<meta property="og:updated_time" content="2018-07-27T02:17:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
@@ -186,9 +186,9 @@
             <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上一篇<a href="/2017/09/16/mysql/2017-09-16-mysql-20/">MySQL事务简介</a>中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题; </p>
 <h2 id="高并发事务问题"><a href="#高并发事务问题" class="headerlink" title="高并发事务问题"></a>高并发事务问题</h2><p>在并发量比较大的时候, 很容易出现 <strong>多个事务并行</strong> 的情况;<br>假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 <strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以 <strong>最终导致了一些问题的出现</strong>;</p>
 <h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ol>
-<li><p>Mysql中, 如果 事务A 读取了另一个并行 事务B <strong>未最终提交的写数据</strong>, 那事务A的这次读取操作就叫 <strong>脏读</strong></p>
+<li><p>如果 事务A 读取了另一个并行 事务B <strong>未最终提交的写数据</strong>, 那事务A的这次读取操作就叫 <strong>脏读</strong></p>
 <ul>
-<li><p>因为 事务A 此时读取到的是 <strong>尚未被持久化的数据</strong> (事务B中修改的数据还不具备事务的 <code>持久性</code> 特性)</p>
+<li><p>因为 事务A 此时读取到的是 <strong>尚未最终持久化的数据</strong> (事务B中修改的数据还不具备事务的 <code>持久性</code> 特性)</p>
 </li>
 <li><p>事务A 此时读取的数据也叫 <strong>脏数据</strong><br>事务B 最终可能会因为内部其他后续操作的失败或者系统后续突然崩溃等原因, 导致事务B最终整体提交失败而回滚, 那么最终 事务A 拿到的自然就是 <strong>脏的数据</strong> 了;</p>
 </li>
