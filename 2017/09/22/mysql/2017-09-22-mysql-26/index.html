@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-25T06:23:37.000Z">
+<meta property="og:updated_time" content="2018-07-27T05:40:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="26. MVCC 多版本并发控制">
 <meta name="twitter:description" content="Multiversion Concurrency Control简介 阿里数据库内核’2017/12’月报中对 MVCC 的解释是:  多版本控制: 指的是一种 提高并发 的技术。 最早的数据库系统, 只有 读读 之间可以并发，读写，写读，写写 都要阻塞。 引入多版本之后，只有 写写 之间相互阻塞, 其他三种操作都可以并行，这样大幅度提高了InnoDB的并发度。   &amp;lt;高性能MySQL&amp;gt">
@@ -184,6 +184,9 @@
 <p>MySQL的大多数事务型存储引擎实现的其实都不是简单的行级锁。<br> <strong>基于提升并发性能的考虑</strong>, 它们一般都同时实现了多版本并发控制(MVCC)。<br> 不仅是MySQL, 包括Oracle, PostgreSQL 等其他数据库系统也都实现了MVCC, 但各自的实现机制不尽相同, 因为MVCC没有一个统一的实现标准。<br> 可以认为MVCC是行级锁的一个变种, 但是它在很多情况下避免了加锁操作, 因此开销更低。虽然实现机制有所不同, 但大都实现了非阻塞的读操作，写操作也只锁定必要的行。<br> <strong>MVCC只在 <code>READ COMMITTED</code> 和 <code>REPEATABLE READ</code> 两个隔离级别下工作。其他两个隔离级别和 MVCC 不兼容, 因为 <code>READ UNCOMMITTED</code> 总是读取最新的数据行, 而不是符合当前事务版本的数据行。而 <code>SERIALIZABLE</code> 则会对所有读取的行都加锁</strong></p>
 </blockquote>
 </li>
+</ol>
+<ol>
+<li>参考 <a href="http://mysql.taobao.org/monthly/2018/03/01/" target="_blank" rel="external">http://mysql.taobao.org/monthly/2018/03/01/</a></li>
 </ol>
 <p>~~未整理完待续</p>
 
