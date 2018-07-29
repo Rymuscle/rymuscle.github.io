@@ -13,22 +13,25 @@
     
     
     
-    <title>33 | Lant&#39;s Blog</title>
+    <title>33. 单机部署集群 -- 镜像模式 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="RabbitMQ">
-    <meta name="keywords" content="RabbitMQ">
+    <meta name="description" content="前言 上一篇在学习普通模式的集群时, 已经知道在该模式下, 队列只存活于集群中的一个节点上(在RabbitMQ2.6.0之前, 这也是唯一的选择); 在RabbitMQ2.6.0时, RabbitMQ团队带来了内建的双活冗余选项: 镜像队列;  像普通队列那样, 镜像队列的主拷贝仅存在于一个节点(主队列, master)上, 但与普通队列的不同点是, 镜像节点在集群中的其他节点上拥有从队列(sla">
+<meta name="keywords" content="RabbitMQ">
 <meta property="og:type" content="article">
-<meta property="og:title" content="33">
+<meta property="og:title" content="33. 单机部署集群 -- 镜像模式">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 上一篇在学习普通模式的集群时, 已经知道在该模式下, 队列只存活于集群中的一个节点上(在RabbitMQ2.6.0之前, 这也是唯一的选择); 在RabbitMQ2.6.0时, RabbitMQ团队带来了内建的双活冗余选项: 镜像队列;  像普通队列那样, 镜像队列的主拷贝仅存在于一个节点(主队列, master)上, 但与普通队列的不同点是, 镜像节点在集群中的其他节点上拥有从队列(sla">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-23T07:11:12.000Z">
+<meta property="og:updated_time" content="2018-07-27T12:40:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="33">
+<meta name="twitter:title" content="33. 单机部署集群 -- 镜像模式">
+<meta name="twitter:description" content="前言 上一篇在学习普通模式的集群时, 已经知道在该模式下, 队列只存活于集群中的一个节点上(在RabbitMQ2.6.0之前, 这也是唯一的选择); 在RabbitMQ2.6.0时, RabbitMQ团队带来了内建的双活冗余选项: 镜像队列;  像普通队列那样, 镜像队列的主拷贝仅存在于一个节点(主队列, master)上, 但与普通队列的不同点是, 镜像节点在集群中的其他节点上拥有从队列(sla">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -102,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">33</div>
+        <div class="flex-col header-title ellipsis">33. 单机部署集群 -- 镜像模式</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -124,7 +127,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">33</h1>
+        <h1 class="title">33. 单机部署集群 -- 镜像模式</h1>
         <h5 class="subtitle">
             
                 <time datetime="2018-06-29T13:28:16.000Z" itemprop="datePublished" class="page-time">
@@ -146,11 +149,18 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#声明并使用镜像队列"><span class="post-toc-number">2.</span> <span class="post-toc-text">声明并使用镜像队列</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-rabbitmq/2018-06-29-rabbitmq-33"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">33</h1>
+        <h1 class="post-card-title">33. 单机部署集群 -- 镜像模式</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-29 21:28:16" datetime="2018-06-29T13:28:16.000Z"  itemprop="datePublished">2018-06-29</time>
 
@@ -163,7 +173,19 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>上一篇在学习普通模式的集群时, 已经知道在该模式下, 队列只存活于集群中的一个节点上(在RabbitMQ2.6.0之前, 这也是唯一的选择);<br> 在RabbitMQ2.6.0时, RabbitMQ团队带来了内建的双活冗余选项: <strong>镜像队列</strong>;</p>
+</li>
+<li><p>像普通队列那样, 镜像队列的主拷贝仅存在于一个节点(主队列, master)上, 但与普通队列的不同点是, 镜像节点在集群中的其他节点上拥有从队列(slave拷贝); 一旦队列主节点不可用, 最老的从队列将会被选举为新的主队列; (这貌似就是探索集群时一直寻找的高可用)</p>
+</li>
+</ol>
+<h2 id="声明并使用镜像队列"><a href="#声明并使用镜像队列" class="headerlink" title="声明并使用镜像队列"></a>声明并使用镜像队列</h2><ol>
+<li><p>你的应用程序并不使用 <code>rabbitmqctl</code> 来定义镜像(mirrored)队列; 声明镜像队列就像声明普通队列一样, 不过, 你需要传入一个额外的参数 <code>x-ha-policy</code> 参数到 <code>queue.declare</code> 调用中;</p>
+</li>
+<li><p>测试:</p>
+</li>
+</ol>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -199,7 +221,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -209,7 +231,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -219,7 +241,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -249,7 +271,7 @@
       <div class="waves-block waves-effect prev">
         <a href="/2018/06/26/rabbitmq/2018-06-26-rabbitmq-32/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">32. 单机部署集群 -- 普通集群</h4>
+          <h4 class="title">32. 单机部署集群 -- 普通模式</h4>
         </a>
       </div>
     
@@ -352,7 +374,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -362,7 +384,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&title=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -372,7 +394,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33. 单机部署集群 -- 镜像模式》 — Lant's Blog&url=http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

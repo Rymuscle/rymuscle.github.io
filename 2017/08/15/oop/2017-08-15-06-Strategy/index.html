@@ -13,25 +13,25 @@
     
     
     
-    <title>28. 认识MySQL的 Binary Log | Lant&#39;s Blog</title>
+    <title>06. Strategy 策略模式 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="MySQL">
-    <meta name="description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
-<meta name="keywords" content="MySQL">
+    <meta name="keywords" content="OOP">
+    <meta name="description" content="问题场景策略模式的引入策略模式简单代码示例">
+<meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="28. 认识MySQL的 Binary Log">
-<meta property="og:url" content="http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/index.html">
+<meta property="og:title" content="06. Strategy 策略模式">
+<meta property="og:url" content="http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
+<meta property="og:description" content="问题场景策略模式的引入策略模式简单代码示例">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-27T06:21:53.000Z">
+<meta property="og:updated_time" content="2018-07-29T04:54:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="28. 认识MySQL的 Binary Log">
-<meta name="twitter:description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
+<meta name="twitter:title" content="06. Strategy 策略模式">
+<meta name="twitter:description" content="问题场景策略模式的引入策略模式简单代码示例">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">28. 认识MySQL的 Binary Log</div>
+        <div class="flex-col header-title ellipsis">06. Strategy 策略模式</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -127,15 +127,15 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">28. 认识MySQL的 Binary Log</h1>
+        <h1 class="title">06. Strategy 策略模式</h1>
         <h5 class="subtitle">
             
-                <time datetime="2017-09-30T14:16:31.000Z" itemprop="datePublished" class="page-time">
-  2017-09-30
+                <time datetime="2017-08-15T13:36:27.000Z" itemprop="datePublished" class="page-time">
+  2017-08-15
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
 
             
         </h5>
@@ -152,20 +152,20 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binary-Log"><span class="post-toc-number">1.</span> <span class="post-toc-text">Binary Log</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题场景"><span class="post-toc-number">1.</span> <span class="post-toc-text">问题场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式的引入"><span class="post-toc-number">2.</span> <span class="post-toc-text">策略模式的引入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">策略模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单代码示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">简单代码示例</span></a></li></ol>
         </nav>
     </aside>
     
-<article id="post-mysql/2017-09-30-mysql-28"
+<article id="post-oop/2017-08-15-06-Strategy"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">28. 认识MySQL的 Binary Log</h1>
+        <h1 class="post-card-title">06. Strategy 策略模式</h1>
         <div class="post-meta">
-            <time class="post-time" title="2017-09-30 22:16:31" datetime="2017-09-30T14:16:31.000Z"  itemprop="datePublished">2017-09-30</time>
+            <time class="post-time" title="2017-08-15 21:36:27" datetime="2017-08-15T13:36:27.000Z"  itemprop="datePublished">2017-08-15</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
 
 
 
@@ -173,8 +173,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Binary-Log"><a href="#Binary-Log" class="headerlink" title="Binary Log"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a></h2><p><a href="https://cloud.tencent.com/developer/article/1032755" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1032755</a><br><a href="https://www.jianshu.com/p/0f0c16c40a52" target="_blank" rel="external">https://www.jianshu.com/p/0f0c16c40a52</a></p>
-
+            <h2 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h2><h2 id="策略模式的引入"><a href="#策略模式的引入" class="headerlink" title="策略模式的引入"></a>策略模式的引入</h2><h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><h2 id="简单代码示例"><a href="#简单代码示例" class="headerlink" title="简单代码示例"></a>简单代码示例</h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -200,7 +199,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
 
 
             
@@ -210,7 +209,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&title=《06. Strategy 策略模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -220,22 +219,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&title=《06. Strategy 策略模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 认识MySQL的 Binary Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Strategy 策略模式》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -258,17 +257,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/09/27/mysql/2017-09-23-mysql-27/" id="post-prev" class="post-nav-link">
+        <a href="/2017/08/06/oop/2017-08-06-00-SOLID/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">27. 认识MySQL的 undo Log 和 redo Log</h4>
+          <h4 class="title">0. S.O.L.I.D 五大基本原则</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/09/02/oop/2017-09-02-07-Prototype/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. HTTP请求方法</h4>
+        <h4 class="title">07. Prototype 原型模式</h4>
       </a>
     </div>
   
@@ -370,7 +369,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&title=《06. Strategy 策略模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -380,22 +379,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&title=《28. 认识MySQL的 Binary Log》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&title=《06. Strategy 策略模式》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 认识MySQL的 Binary Log》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Strategy 策略模式》 — Lant's Blog&url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -406,7 +405,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMklEQVR42u3aS26EMBAFwNz/0kTKKlICvGczC+zyKhpmwMWi0x9/fcXr+Flnnxy/1tnVs2/+/fzv1ccWBgbGaxnH5ZrZ1tjWz357Q8XAwNiAcR1kr7+TP/ga3D4XAwMDow2aCS/P6zAwMDDmA25yNS9HkzQUAwMDIylin9pWnix+pBbHwMB4IeOpgPiJvz8438DAwHgJ4xhaebHaBtaxXWFgYKzNmEn7ku3ODCbbhh0GBsaqjLxZ3wbZNt1MAvTpHTAwMJZm5BdmhgRtAB0cDGBgYGzDyI9ZtC2zJLzmr2CwR4iBgfFaRvLIpHwd69gnZXDRbsPAwFiakZSseVmbB+68SL65GwYGxmaMse22xe38szAwMHZgtIGyPUiRH7bIE8p/fouBgbEBox1eziR2Y8POm1eDgYGxNCNv8Y+Rku22h8mKYxYYGBjLMdqDWe2QYGbwOTiDxcDAWIIxVqDmhzPaInbsiRgYGDsw2oNi7dGxPAWsG20YGBgbMNo2WXK7+c9njm5gYGCsyniqodaG1LzNF/1jwMDA2IaRb70dJ+QBPQnuN/8xMDAwlmO0IfWphLIOqfmvMDAwFmIc5RorO9uxQfsKMDAw1ma0hzDaMnhstUcxMDAwdmA8MDiMG/1JOtg25jAwMPZhzLTS8kRwJkzfvAIMDAyMOEWbKUfbchcDAwOjHUCOMa7vXwRoDAyMDRgzzfq8cE1e09hoEwMDY23GzGAgGRiMtd4+gsTAwHgf4xsocrJQA6J9SgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3aQW7jMBAEwPz/0w6w19hK94xoZ4HSybBlScUDZ9Tk11d8PP4dr775+Wv+31dXS/5124GHh4c3evRXx/U5+a/Xj5iQkjs+uT4eHh7eMd71hH59+xbT3qUdJjw8PLy/w0um8tmk35YNPDw8vP+LlxSJ6/Z3H4jg4eHh/QXeXYFCQspb8zb+wMPDw3sPbzMpf+rzwfU9PDw8vMWq+mZSTqbpJHrYHHh4eHgneEmIkG+iSpBJ+5s/SRQr4+Hh4d3KyxvZWaTbxr6bcvLkHDw8PLwDvKSdTZb5200ASey7D3/x8PDwTvCSy7Xn5MWgjYmHdQ8PDw/vVt5dE/dm8X42rKslMTw8PLw1b1Ye2il+P+nPShQeHh7eOV7+kp8vXOWRblIqhlfAw8PDO8Br44BZAWi3F2yuVr8r4OHh4Y14bSy7jyqSM/eRLh4eHt5pXvLoeWHIm+98cs9fAPDw8PBO8NpANpnE8w0E7cJ/vQ0LDw8P7zBv1l63AWve0LcB8ZPv8fDw8I7xZmVgv5VqFknUhQEPDw/vVl5++7a1naUgs01X0V3w8PDwbuLlLWxbGPJFsvZqRVnCw8PDO8BrH6td+po11sVK3WwI8PDw8Ba8R3DM2G0sO9us8Etzj4eHh3eAt98WsAksZoPbDjoeHh7evby8hc0jgHYgkkWvNmLGw8PD+xTvER9tyzsLO1ZvDHh4eHg38VbLSOuHmwXB+dYrPDw8vBO8R3m0Izf7NW+78fDw8N7Pa5fkZ2fmWwHuCo7x8PDwTvPyoCFfgppN93kAkQwTHh4e3mne9UmbNjcZsk0F++V8PDw8vI/y2qb2rmLQhg7DwoCHh4f3Ft4M2TbH7RXw8PDw3sPLw4gkcm0D4tnm1CNZCx4eHt52PSv6Q95wJ21x/s1sQPHw8PAWvG8S5TXKmcQ42AAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 
