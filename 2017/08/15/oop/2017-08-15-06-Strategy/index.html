@@ -20,18 +20,21 @@
     
     
     <meta name="keywords" content="OOP">
-    <meta name="description" content="问题场景策略模式的引入策略模式简单代码示例">
+    <meta name="description" content="场景举例 在软件开发中, 常常会遇到实现某个功能有多种途径, 每种途径对应着一种算法, 比如开发一个影院售票系统, 在该系统中需要为不同类型的用户提供不同的电影票打折方式, 具体打折方案如下:  学生凭学生证可享受票价8折优惠; 年龄在10周岁及以下的儿童可享受每张票减免10元的优惠(原始票价需大于等于20元); 影院VIP用户除享受票价半价优惠外还可进行积分, 积分累计到一定额度可换取电影院赠送">
 <meta name="keywords" content="OOP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="06. Strategy 策略模式">
 <meta property="og:url" content="http://blog.renyimin.com/2017/08/15/oop/2017-08-15-06-Strategy/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="问题场景策略模式的引入策略模式简单代码示例">
+<meta property="og:description" content="场景举例 在软件开发中, 常常会遇到实现某个功能有多种途径, 每种途径对应着一种算法, 比如开发一个影院售票系统, 在该系统中需要为不同类型的用户提供不同的电影票打折方式, 具体打折方案如下:  学生凭学生证可享受票价8折优惠; 年龄在10周岁及以下的儿童可享受每张票减免10元的优惠(原始票价需大于等于20元); 影院VIP用户除享受票价半价优惠外还可进行积分, 积分累计到一定额度可换取电影院赠送">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-29T04:54:30.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/strategy/strategy-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/strategy/strategy-02.png">
+<meta property="og:updated_time" content="2018-07-29T10:10:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="06. Strategy 策略模式">
-<meta name="twitter:description" content="问题场景策略模式的引入策略模式简单代码示例">
+<meta name="twitter:description" content="场景举例 在软件开发中, 常常会遇到实现某个功能有多种途径, 每种途径对应着一种算法, 比如开发一个影院售票系统, 在该系统中需要为不同类型的用户提供不同的电影票打折方式, 具体打折方案如下:  学生凭学生证可享受票价8折优惠; 年龄在10周岁及以下的儿童可享受每张票减免10元的优惠(原始票价需大于等于20元); 影院VIP用户除享受票价半价优惠外还可进行积分, 积分累计到一定额度可换取电影院赠送">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/strategy/strategy-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -152,7 +155,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题场景"><span class="post-toc-number">1.</span> <span class="post-toc-text">问题场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式的引入"><span class="post-toc-number">2.</span> <span class="post-toc-text">策略模式的引入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">策略模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单代码示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">简单代码示例</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#场景举例"><span class="post-toc-number">1.</span> <span class="post-toc-text">场景举例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式的引入"><span class="post-toc-number">2.</span> <span class="post-toc-text">策略模式的引入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#策略模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">策略模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单代码示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">简单代码示例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#打折算法解决方案"><span class="post-toc-number">5.</span> <span class="post-toc-text">打折算法解决方案</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">6.</span> <span class="post-toc-text">总结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -173,7 +176,91 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="问题场景"><a href="#问题场景" class="headerlink" title="问题场景"></a>问题场景</h2><h2 id="策略模式的引入"><a href="#策略模式的引入" class="headerlink" title="策略模式的引入"></a>策略模式的引入</h2><h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><h2 id="简单代码示例"><a href="#简单代码示例" class="headerlink" title="简单代码示例"></a>简单代码示例</h2>
+            <h2 id="场景举例"><a href="#场景举例" class="headerlink" title="场景举例"></a>场景举例</h2><ol>
+<li><p>在软件开发中, 常常会遇到实现某个功能有多种途径, 每种途径对应着一种算法, 比如开发一个影院售票系统, 在该系统中需要为不同类型的用户提供不同的电影票打折方式, 具体打折方案如下:</p>
+<ul>
+<li>学生凭学生证可享受票价8折优惠;</li>
+<li>年龄在10周岁及以下的儿童可享受每张票减免10元的优惠(原始票价需大于等于20元);</li>
+<li>影院VIP用户除享受票价半价优惠外还可进行积分, 积分累计到一定额度可换取电影院赠送的奖品;</li>
+</ul>
+</li>
+<li><p>在传统开发模式下, 为了满足上述需求, 你可能会设计一个类MovieTicket，其核心代码片段如下所示：</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">/**</div><div class="line"> * 电影票类</div><div class="line"> * Class MovieTicket</div><div class="line"> */</div><div class="line">class MovieTicket</div><div class="line">&#123;</div><div class="line">    private $doublePrice;</div><div class="line">    private $StringType;</div><div class="line"></div><div class="line">    public function setPrice($price)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;price = $price;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function setType($type)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;type = $type;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function getPrice()</div><div class="line">    &#123;</div><div class="line">        return $this-&gt;calculate();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 计算打折后的票价</div><div class="line">     * @return string</div><div class="line">     */</div><div class="line">    public function calculate()</div><div class="line">    &#123;</div><div class="line">        //学生票折后票价计算</div><div class="line">        if (&apos;student&apos; == $this-&gt;type) &#123;</div><div class="line">            echo &apos;学生票:&apos;;</div><div class="line">            return $this-&gt;price * 0.8;</div><div class="line"></div><div class="line">            //儿童票折后票价计算</div><div class="line">        &#125; else if (&apos;children&apos; == $this-&gt;type &amp;&amp; $this-&gt;price &gt;= 20) &#123;</div><div class="line">            echo &apos;儿童票:&apos;;</div><div class="line">            return $this-&gt;price - 10;</div><div class="line"></div><div class="line">            //VIP票折后票价计算</div><div class="line">        &#125; else if (&apos;vip&apos; == $this-&gt;type) &#123;</div><div class="line">            echo &apos;VIP票:&apos;;</div><div class="line">            echo &apos;增加积分!&apos;;</div><div class="line">            return $this-&gt;price * 0.5;</div><div class="line"></div><div class="line">            //不满足任何打折要求, 则返回原始票价</div><div class="line">        &#125; else &#123;</div><div class="line">            return $this-&gt;price;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">class Client</div><div class="line">&#123;</div><div class="line">    public function test()</div><div class="line">    &#123;</div><div class="line">        $movieTicket = new MovieTicket();</div><div class="line">        $originalPrice = 60.0;</div><div class="line">        $currentPrice = 60.0;</div><div class="line">        $movieTicket-&gt;setPrice($originalPrice);</div><div class="line">        var_dump(&apos;原始价为:&apos; . $originalPrice);</div><div class="line">        var_dump(&quot;---------------------------------&quot;);</div><div class="line"></div><div class="line">        // 可以根据session中的用户类型来进行设置</div><div class="line">        $movieTicket-&gt;setType(&apos;student&apos;); //学生票</div><div class="line">        $currentPrice = $movieTicket-&gt;getPrice();</div><div class="line">        var_dump(&apos;折后价为:&apos; . $currentPrice);</div><div class="line">        var_dump(&quot;---------------------------------&quot;);</div><div class="line"></div><div class="line">        $movieTicket-&gt;setType(&apos;children&apos;); //儿童票</div><div class="line">        $currentPrice = $movieTicket-&gt;getPrice();</div><div class="line">        var_dump(&apos;折后价为:&apos; . $currentPrice);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$client = new Client();</div><div class="line">$client-&gt;test();</div></pre></td></tr></table></figure>
+</li>
+<li><p>虽然该方案可以满足电影票打折问题, 该并不是一个好的解决方案, 它至少存在如下三个问题:</p>
+<ul>
+<li>MovieTicket类的 calculate() 方法非常庞大, 它包含各种打折算法的实现代码, 在代码中出现了较长的 if…else… 语句, 不利于测试和维护;</li>
+<li>增加新的打折算法或者对原有打折算法进行修改时必须修改 MovieTicket 类的源代码, <strong>违反了”开闭原则”</strong>, 系统的灵活性和可扩展性较差;</li>
+<li>算法的复用性差, 如果在另一个系统(如商场销售管理系统)中需要重用某些打折算法, 只能通过对源代码进行复制粘贴来重用, 无法单独重用其中的某个或某些算法(重用较为麻烦);</li>
+</ul>
+</li>
+</ol>
+<h2 id="策略模式的引入"><a href="#策略模式的引入" class="headerlink" title="策略模式的引入"></a>策略模式的引入</h2><ol>
+<li><p>通过分析, 导致上面问题的主要原因在于 MovieTicket 类职责过重, 它将各种打折算法都定义在一个类中, 这既不便于算法的重用, 也不便于算法的扩展;</p>
+</li>
+<li><p>因此你需要对 MovieTicket 类进行重构, 将原本庞大的 MovieTicket 类的职责进行分解, 将算法的定义和使用分离, 这就是策略模式所要解决的问题;</p>
+</li>
+</ol>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><ol>
+<li><p>策略模式(Strategy): 它定义了算法家族, 将每一个算法分别封装起来, 并让它们之间可以互相替换, 此模式让算法的变化独立于使用算法的客户; 也称为政策模式(Policy);<br> 策略模式是一种对象行为模式;</p>
+</li>
+<li><p>在策略模式中, 可以定义一些独立的类来封装不同的算法, 每一个类封装一种具体的算法, 每一个封装算法的类我们都可以称之为一种策略(Strategy);</p>
+</li>
+<li><p>策略模式的主要目的是将算法的行为和环境分开, 将算法的定义放在专门的策略类中, 每一个策略类封装了一种实现算法, 使用算法的环境类针对抽象策略类进行编程, <strong>符合依赖倒转原则</strong>, 在出现新的算法时, 只需要增加一个新的实现了抽象策略类的具体策略类即可;</p>
+</li>
+<li><p>UML图<br> <img src="/img/oop/strategy/strategy-01.png"></p>
+<ul>
+<li><p>Context(环境类): 环境类是使用算法的角色, 它在解决某个问题(即实现某个方法)时可以采用多种策略, 在环境类中维持一个对抽象策略类的引用实例, 用于定义所采用的策略;</p>
+</li>
+<li><p>Strategy(抽象策略类): 它为所支持的算法声明了抽象方法, 是所有策略类的父类, 它可以是抽象类或具体类, 也可以是接口; 环境类通过抽象策略类中声明的方法在运行时调用具体策略类中实现的算法;</p>
+</li>
+<li><p>ConcreteStrategy(具体策略类): 它实现了在抽象策略类中声明的算法, 在运行时, 具体策略类将覆盖在环境类中定义的抽象策略类对象, 使用一种具体的算法实现某个业务处理;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="简单代码示例"><a href="#简单代码示例" class="headerlink" title="简单代码示例"></a>简单代码示例</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">/**</div><div class="line"> * Created by PhpStorm.</div><div class="line"> * User: renyimin</div><div class="line"> * Date: 2018/7/29</div><div class="line"> * Time: 下午5:20</div><div class="line"> */</div><div class="line"></div><div class="line">/**</div><div class="line"> * 抽象策略类</div><div class="line"> * Class AbstractStrategy</div><div class="line"> */</div><div class="line">abstract class AbstractStrategy</div><div class="line">&#123;</div><div class="line">    public abstract function algorithm(); //声明抽象算法</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 具体策略类</div><div class="line"> * Class ConcreteStrategyA</div><div class="line"> */</div><div class="line">class ConcreteStrategyA extends AbstractStrategy</div><div class="line">&#123;</div><div class="line">    //算法的具体实现</div><div class="line">    public function algorithm() &#123;</div><div class="line">        //算法A</div><div class="line">        var_Dump(&apos;算法一&apos;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class ConcreteStrategyB extends AbstractStrategy</div><div class="line">&#123;</div><div class="line">    //算法的具体实现</div><div class="line">    public function algorithm() &#123;</div><div class="line">        var_Dump(&apos;算法一&apos;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Context</div><div class="line">&#123;</div><div class="line">    private $strategy; //维持一个对抽象策略类的引用</div><div class="line"></div><div class="line">    public function setStrategy(AbstractStrategy $strategy)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;strategy = $strategy;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //调用策略类中的算法</div><div class="line">    public function algorithm()</div><div class="line">    &#123;</div><div class="line">        $this-&gt;strategy-&gt;algorithm();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$context = new Context();</div><div class="line">$context-&gt;setStrategy(new ConcreteStrategyA);</div><div class="line">$context-&gt;algorithm();</div><div class="line">$context-&gt;setStrategy(new ConcreteStrategyB);</div><div class="line">$context-&gt;algorithm();</div></pre></td></tr></table></figure>
+</code></pre><h2 id="打折算法解决方案"><a href="#打折算法解决方案" class="headerlink" title="打折算法解决方案"></a>打折算法解决方案</h2><ol>
+<li><p>为了实现之前打折算法的复用, 并能够灵活地向系统中增加新的打折方式, 可以使用策略模式对电影院打折方案进行重构, 重构后基本结构如下:<br> <img src="/img/oop/strategy/strategy-02.png"></p>
+</li>
+<li><p>在向 MovieTicket 中注入具体策略对象时, 为了遵守 <strong>开闭原则</strong>, 可以根据用户session中的身份, 来决定使用的具体策略类, 比如vip用户使用VipDiscount类;</p>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><p>策略模式用于算法的自由切换和扩展, 它是应用较为广泛的设计模式之一, 策略模式对应于解决某一问题的一个算法族, 允许用户从该算法族中任选一个算法来解决某一问题, 同时可以方便地更换算法或者增加新的算法;<br> 只要涉及到算法的封装、复用和切换都可以考虑使用策略模式。</p>
+</li>
+<li><p>主要优点</p>
+<ul>
+<li><p>策略模式提供了对 <code>开闭原则</code> 的完美支持, 用户可以在不修改原有系统的基础上选择算法或行为, 也可以灵活地增加新的算法或行为;</p>
+</li>
+<li><p>策略模式提供了管理相关的算法族的办法, 策略类的等级结构定义了一个算法或行为族，恰当使用继承可以把公共的代码移到抽象策略类中，从而避免重复的代码;</p>
+</li>
+<li><p>策略模式提供了一种算法的复用机制, 由于将算法单独提取出来封装在策略类中, 因此不同的环境类可以方便地复用这些策略类;</p>
+</li>
+</ul>
+</li>
+<li><p>主要缺点</p>
+<ul>
+<li><p>客户端必须知道所有的策略类, 并自行决定使用哪一个策略类, 这就意味着客户端必须理解这些算法的区别, 以便适时选择恰当的算法;<br>换言之, 策略模式只适用于客户端知道所有的算法或行为的情况;</p>
+</li>
+<li><p>策略模式将造成系统产生很多具体策略类, 任何细小的变化都将导致系统要增加一个新的具体策略类;</p>
+</li>
+<li><p>无法同时在客户端使用多个策略类, 也就是说, 在使用策略模式时, 客户端每次只能使用一个策略类, 不支持使用一个策略类完成部分功能后再使用另一个策略类来完成剩余功能的情况;</p>
+</li>
+</ul>
+</li>
+<li><p>适用场景</p>
+<ul>
+<li><p>一个系统需要动态地在几种算法中选择一种, 那么可以将这些算法封装到一个个的具体算法类中, 而这些具体算法类都是一个抽象算法类的子类;<br>换言之, 这些具体算法类均有统一的接口, 根据 <code>里氏代换原则</code> 和面向对象的多态性, 客户端可以选择使用任何一个具体算法类, 并只需要维持一个数据类型是抽象算法类的对象 (只针对抽象编程);</p>
+</li>
+<li><p>一个对象有很多的行为，如果不用恰当的模式，这些行为就只好使用多重条件选择语句来实现。此时，使用策略模式，把这些行为转移到相应的具体策略类里面，就可以避免使用难以维护的多重条件选择语句。</p>
+</li>
+<li><p>不希望客户端知道复杂的与算法相关的数据结构, 在具体策略类中封装算法与相关的数据结构, 可以提高算法的保密性与安全性;</p>
+</li>
+</ul>
+</li>
+</ol>
+
         </div>
 
         <blockquote class="post-copyright">
