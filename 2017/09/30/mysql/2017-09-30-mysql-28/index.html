@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL">
-    <meta name="description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
+    <meta name="description" content="Binary Log概述 MySQL的二进制日志binlog可以说是MySQL最重要的日志, 它包含了描述数据库更改的”事件”, 例如 表创建操作 或 对表数据的更改; 它还包含可能进行更改的语句的事件(例如, 不匹配任何行的DELETE), 除非使用基于行的日志记录;  也就是说, mysql的binlog记录了所有的DDL和DML语句(除了select、show之类的语句), 以事件形式记录,">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="28. 认识MySQL的 Binary Log">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
+<meta property="og:description" content="Binary Log概述 MySQL的二进制日志binlog可以说是MySQL最重要的日志, 它包含了描述数据库更改的”事件”, 例如 表创建操作 或 对表数据的更改; 它还包含可能进行更改的语句的事件(例如, 不匹配任何行的DELETE), 除非使用基于行的日志记录;  也就是说, mysql的binlog记录了所有的DDL和DML语句(除了select、show之类的语句), 以事件形式记录,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-07-27T06:21:53.000Z">
+<meta property="og:updated_time" content="2018-08-02T10:21:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="28. 认识MySQL的 Binary Log">
-<meta name="twitter:description" content="Binary Loghttps://cloud.tencent.com/developer/article/1032755https://www.jianshu.com/p/0f0c16c40a52">
+<meta name="twitter:description" content="Binary Log概述 MySQL的二进制日志binlog可以说是MySQL最重要的日志, 它包含了描述数据库更改的”事件”, 例如 表创建操作 或 对表数据的更改; 它还包含可能进行更改的语句的事件(例如, 不匹配任何行的DELETE), 除非使用基于行的日志记录;  也就是说, mysql的binlog记录了所有的DDL和DML语句(除了select、show之类的语句), 以事件形式记录,">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binary-Log"><span class="post-toc-number">1.</span> <span class="post-toc-text">Binary Log</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binary-Log概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">Binary Log概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#binlog配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">binlog配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#binlog-相关操作命令"><span class="post-toc-number">3.</span> <span class="post-toc-text">binlog 相关操作命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据备份与恢复"><span class="post-toc-number">4.</span> <span class="post-toc-text">数据备份与恢复</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#mysqldump备份与恢复"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">mysqldump备份与恢复</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#binlog恢复"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">binlog恢复</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -173,7 +173,56 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Binary-Log"><a href="#Binary-Log" class="headerlink" title="Binary Log"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a></h2><p><a href="https://cloud.tencent.com/developer/article/1032755" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1032755</a><br><a href="https://www.jianshu.com/p/0f0c16c40a52" target="_blank" rel="external">https://www.jianshu.com/p/0f0c16c40a52</a></p>
+            <h2 id="Binary-Log概述"><a href="#Binary-Log概述" class="headerlink" title="Binary Log概述"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a>概述</h2><ol>
+<li><p>MySQL的二进制日志binlog可以说是MySQL最重要的日志, 它包含了描述数据库更改的”事件”, 例如 表创建操作 或 对表数据的更改; 它还包含可能进行更改的语句的事件(例如, 不匹配任何行的DELETE), 除非使用基于行的日志记录;</p>
+</li>
+<li><p>也就是说, mysql的binlog记录了所有的DDL和DML语句(除了select、show之类的语句), 以事件形式记录, 还包含语句所执行的消耗的时间;</p>
+</li>
+<li><p>开启Binlog的性能方面的损耗?</p>
+</li>
+</ol>
+<ol>
+<li><p>binlog日志有两个最重要的使用场景</p>
+<ul>
+<li><a href="">MySQL主从复制</a></li>
+<li><a href="">数据恢复</a></li>
+</ul>
+</li>
+<li><p>binlog日志包括两类文件:</p>
+<ul>
+<li>二进制日志索引文件(文件名后缀为<code>.index</code>) 用于记录所有的二进制文件</li>
+<li>二进制日志文件(文件名后缀为<code>.00000*</code>) 记录数据库所有的DDL和DML(除了数据查询语句select)语句事件</li>
+</ul>
+</li>
+</ol>
+<h2 id="binlog配置"><a href="#binlog配置" class="headerlink" title="binlog配置"></a>binlog配置</h2><ol>
+<li>开启binlog日志：<ul>
+<li>编辑打开mysql配置文件 <code>/etc/mys.cnf</code></li>
+<li>在 <code>[mysqld]</code> 区块添加 <code>log-bin=mysql-bin</code> 确认是打开状态( ‘mysql-bin’ 是日志的基本名或前缀名);</li>
+<li>重启mysqld使配置生效</li>
+</ul>
+</li>
+</ol>
+<h2 id="binlog-相关操作命令"><a href="#binlog-相关操作命令" class="headerlink" title="binlog 相关操作命令"></a>binlog 相关操作命令</h2><ol>
+<li><p>常用的binlog日志操作命令</p>
+<ul>
+<li>查看binlog是否开启 : <code>show variables like &#39;log_%&#39;;</code></li>
+<li>查看所有binlog日志列表 : <code>show master logs;</code></li>
+<li>查看master状态, 即, 最后(最新)一个binlog日志的编号名称, 及其最后一个操作事件pos结束点(Position)值 : <code>show master status;</code></li>
+<li>flush刷新log日志, 自此刻开始产生一个新编号的binlog日志文件 : <code>flush logs;</code><br>注意: 每当mysqld服务重启时, 会自动执行此命令, 刷新binlog日志; 在mysqldump备份数据时加 -F 选项也会刷新binlog日志;</li>
+<li>重置(清空)所有binlog日志 : <code>mysql&gt; reset master;</code></li>
+</ul>
+</li>
+<li><p>查看binlog日志内容, 常用有两种方式:</p>
+<ul>
+<li>注意 binlog 是二进制文件, 普通文件查看器无法打开, 可以使用自带的 <code>mysqlbinlog</code> 命令查看</li>
+<li>binlog日志与数据库文件在同目录中</li>
+<li>使用 mysqlbinlog 自带查看命令法:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 从下面结果可知mysql的存放目录为</div><div class="line">// 使用mysqlbinlog命令查看binlog日志内容, 下面截取其中的一个片段分析：</div><div class="line">mysqlbinlog mysql-bin.000002</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="数据备份与恢复"><a href="#数据备份与恢复" class="headerlink" title="数据备份与恢复"></a>数据备份与恢复</h2><h3 id="mysqldump备份与恢复"><a href="#mysqldump备份与恢复" class="headerlink" title="mysqldump备份与恢复"></a>mysqldump备份与恢复</h3><h3 id="binlog恢复"><a href="#binlog恢复" class="headerlink" title="binlog恢复"></a>binlog恢复</h3><p><a href="https://www.cnblogs.com/kevingrace/p/5907254.html" target="_blank" rel="external">https://www.cnblogs.com/kevingrace/p/5907254.html</a><br><a href="https://cloud.tencent.com/developer/article/1032755" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1032755</a><br><a href="https://www.jianshu.com/p/0f0c16c40a52" target="_blank" rel="external">https://www.jianshu.com/p/0f0c16c40a52</a></p>
 
         </div>
 
@@ -266,9 +315,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/11/30/http/2017-11-30-HTTP-02/" id="post-next" class="post-nav-link">
+      <a href="/2017/10/05/mysql/2017-10-05-mysql-29/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. HTTP请求方法</h4>
+        <h4 class="title">29. binlog 与 事务</h4>
       </a>
     </div>
   

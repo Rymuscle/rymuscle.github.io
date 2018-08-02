@@ -18,20 +18,6 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-21-02/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-21-02/</id>
-    <published>2018-08-01T03:02:02.000Z</published>
-    <updated>2018-08-01T03:02:02.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
     <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-06/"/>
     <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-06/</id>
     <published>2018-08-01T03:02:02.000Z</published>
@@ -46,8 +32,8 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
+    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-21-02/"/>
+    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-21-02/</id>
     <published>2018-08-01T03:02:02.000Z</published>
     <updated>2018-08-01T03:02:02.000Z</updated>
     
@@ -74,8 +60,8 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-24-04/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-24-04/</id>
+    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
+    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
     <published>2018-08-01T03:02:02.000Z</published>
     <updated>2018-08-01T03:02:02.000Z</updated>
     
@@ -293,19 +279,37 @@
   </entry>
   
   <entry>
+    <title>29. binlog 与 事务</title>
+    <link href="http://blog.renyimin.com/2017/10/05/mysql/2017-10-05-mysql-29/"/>
+    <id>http://blog.renyimin.com/2017/10/05/mysql/2017-10-05-mysql-29/</id>
+    <published>2017-10-05T14:16:31.000Z</published>
+    <updated>2018-08-02T09:25:48.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
+    
+    
+      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
+    
+  </entry>
+  
+  <entry>
     <title>28. 认识MySQL的 Binary Log</title>
     <link href="http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/"/>
     <id>http://blog.renyimin.com/2017/09/30/mysql/2017-09-30-mysql-28/</id>
     <published>2017-09-30T14:16:31.000Z</published>
-    <updated>2018-07-27T06:21:53.000Z</updated>
+    <updated>2018-08-02T10:21:32.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Binary-Log"><a href="#Binary-Log" class="headerlink" title="Binary Log"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a></h2><p><a href="https://cloud.tencent.com/developer/article/1032755" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1032755</a><br><a href="https://www.jianshu.com/p/0f0c16c40a52" target="_blank" rel="external">https://www.jianshu.com/p/0f0c16c40a52</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="Binary-Log概述"><a href="#Binary-Log概述" class="headerlink" title="Binary Log概述"></a><a href="https://dev.mysql.com/doc/refman/5.5/en/binary-log.html" target="_blank" rel="external">Binary Log</a>概述</h2><ol><li><p>MySQL的二进制日志binlog可以说是MySQL最重要的日志, 它包含了描述数据库更改的”事件”, 例如 表创建操作 或 对表数据的更改; 它还包含可能进行更改的语句的事件(例如, 不匹配任何行的DELETE), 除非使用基于行的日志记录;</p></li><li><p>也就是说, mysql的binlog记录了所有的DDL和DML语句(除了select、show之类的语句), 以事件形式记录, 还包含语句所执行的消耗的时间;</p></li><li><p>开启Binlog的性能方面的损耗?</p></li></ol><ol><li><p>binlog日志有两个最重要的使用场景</p><ul><li><a href="">MySQL主从复制</a></li><li><a href="">数据恢复</a></li></ul></li><li><p>binlog日志包括两类文件:</p><ul><li>二进制日志索引文件(文件名后缀为<code>.index</code>) 用于记录所有的二进制文件</li><li>二进制日志文件(文件名后缀为<code>.00000*</code>) 记录数据库所有的DDL和DML(除了数据查询语句select)语句事件</li></ul></li></ol><h2 id="binlog配置"><a href="#binlog配置" class="headerlink" title="binlog配置"></a>binlog配置</h2><ol><li>开启binlog日志：<ul><li>编辑打开mysql配置文件 <code>/etc/mys.cnf</code></li><li>在 <code>[mysqld]</code> 区块添加 <code>log-bin=mysql-bin</code> 确认是打开状态( ‘mysql-bin’ 是日志的基本名或前缀名);</li><li>重启mysqld使配置生效</li></ul></li></ol><h2 id="binlog-相关操作命令"><a href="#binlog-相关操作命令" class="headerlink" title="binlog 相关操作命令"></a>binlog 相关操作命令</h2><ol><li><p>常用的binlog日志操作命令</p><ul><li>查看binlog是否开启 : <code>show variables like &#39;log_%&#39;;</code></li><li>查看所有binlog日志列表 : <code>show master logs;</code></li><li>查看master状态, 即, 最后(最新)一个binlog日志的编号名称, 及其最后一个操作事件pos结束点(Position)值 : <code>show master status;</code></li><li>flush刷新log日志, 自此刻开始产生一个新编号的binlog日志文件 : <code>flush logs;</code><br>注意: 每当mysqld服务重启时, 会自动执行此命令, 刷新binlog日志; 在mysqldump备份数据时加 -F 选项也会刷新binlog日志;</li><li>重置(清空)所有binlog日志 : <code>mysql&gt; reset master;</code></li></ul></li><li><p>查看binlog日志内容, 常用有两种方式:</p><ul><li>注意 binlog 是二进制文件, 普通文件查看器无法打开, 可以使用自带的 <code>mysqlbinlog</code> 命令查看</li><li>binlog日志与数据库文件在同目录中</li><li>使用 mysqlbinlog 自带查看命令法:<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 从下面结果可知mysql的存放目录为</div><div class="line">// 使用mysqlbinlog命令查看binlog日志内容, 下面截取其中的一个片段分析：</div><div class="line">mysqlbinlog mysql-bin.000002</div></pre></td></tr></table></figure></li></ul></li></ol><h2 id="数据备份与恢复"><a href="#数据备份与恢复" class="headerlink" title="数据备份与恢复"></a>数据备份与恢复</h2><h3 id="mysqldump备份与恢复"><a href="#mysqldump备份与恢复" class="headerlink" title="mysqldump备份与恢复"></a>mysqldump备份与恢复</h3><h3 id="binlog恢复"><a href="#binlog恢复" class="headerlink" title="binlog恢复"></a>binlog恢复</h3><p><a href="https://www.cnblogs.com/kevingrace/p/5907254.html" target="_blank" rel="external">https://www.cnblogs.com/kevingrace/p/5907254.html</a><br><a href="https://cloud.tencent.com/developer/article/1032755" target="_blank" rel="external">https://cloud.tencent.com/developer/article/1032755</a><br><a href="https://www.jianshu.com/p/0f0c16c40a52" target="_blank" rel="external">https://www.jianshu.com/p/0f0c16c40a52</a></p>]]></content>
     
     <summary type="html">
     
       
       
-        &lt;h2 id=&quot;Binary-Log&quot;&gt;&lt;a href=&quot;#Binary-Log&quot; class=&quot;headerlink&quot; title=&quot;Binary Log&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.5/en/binary-
+        &lt;h2 id=&quot;Binary-Log概述&quot;&gt;&lt;a href=&quot;#Binary-Log概述&quot; class=&quot;headerlink&quot; title=&quot;Binary Log概述&quot;&gt;&lt;/a&gt;&lt;a href=&quot;https://dev.mysql.com/doc/refman/5.5/en/b
       
     
     </summary>
