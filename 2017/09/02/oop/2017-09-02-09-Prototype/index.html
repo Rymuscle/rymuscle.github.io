@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>09. Prototype 原型模式 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="OOP">
+    <meta name="description" content="场景举例 我们每周都会在wiki上创建文档写周报, 但其实每个人的周报格式都差不多, 只是内容细节不一样, 这样  如果每个人写周报都是在wiki中新建一个空白页, 然后再排格式、写内容、… 就会显得比较低效;  而如果每个人都可以根据已完成的周报 复制 一份作为模板, 在此基础上只用对周报内容做些修改, 既可以很容易完成工作, 又可以保证大家周报风格的一致;   这个问题映射到wiki系统的开发">
+<meta name="keywords" content="OOP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="09. Prototype 原型模式">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="场景举例 我们每周都会在wiki上创建文档写周报, 但其实每个人的周报格式都差不多, 只是内容细节不一样, 这样  如果每个人写周报都是在wiki中新建一个空白页, 然后再排格式、写内容、… 就会显得比较低效;  而如果每个人都可以根据已完成的周报 复制 一份作为模板, 在此基础上只用对周报内容做些修改, 既可以很容易完成工作, 又可以保证大家周报风格的一致;   这个问题映射到wiki系统的开发">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/prototype/prototype-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/oop/prototype/prototype-04.png">
+<meta property="og:updated_time" content="2018-08-03T03:37:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="09. Prototype 原型模式">
+<meta name="twitter:description" content="场景举例 我们每周都会在wiki上创建文档写周报, 但其实每个人的周报格式都差不多, 只是内容细节不一样, 这样  如果每个人写周报都是在wiki中新建一个空白页, 然后再排格式、写内容、… 就会显得比较低效;  而如果每个人都可以根据已完成的周报 复制 一份作为模板, 在此基础上只用对周报内容做些修改, 既可以很容易完成工作, 又可以保证大家周报风格的一致;   这个问题映射到wiki系统的开发">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/oop/prototype/prototype-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">09. Prototype 原型模式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">09. Prototype 原型模式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-02T03:18:21.000Z" itemprop="datePublished" class="page-time">
+  2017-09-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#场景举例"><span class="post-toc-number">1.</span> <span class="post-toc-text">场景举例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#原型模式的引入"><span class="post-toc-number">2.</span> <span class="post-toc-text">原型模式的引入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#原型模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">原型模式</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简单代码示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">简单代码示例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#深拷贝与浅拷贝"><span class="post-toc-number">5.</span> <span class="post-toc-text">深拷贝与浅拷贝</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#原型管理器"><span class="post-toc-number">6.</span> <span class="post-toc-text">原型管理器</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-oop/2017-09-02-09-Prototype"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">09. Prototype 原型模式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-02 11:18:21" datetime="2017-09-02T03:18:21.000Z"  itemprop="datePublished">2017-09-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/OOP/">OOP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="场景举例"><a href="#场景举例" class="headerlink" title="场景举例"></a>场景举例</h2><ol>
+<li><p>我们每周都会在wiki上创建文档写周报, 但其实每个人的周报格式都差不多, 只是内容细节不一样, 这样</p>
+<ul>
+<li>如果每个人写周报都是在wiki中新建一个空白页, 然后再排格式、写内容、… 就会显得比较低效; </li>
+<li>而如果每个人都可以根据已完成的周报 <strong>复制</strong> 一份作为模板, 在此基础上只用对周报内容做些修改, 既可以很容易完成工作, 又可以保证大家周报风格的一致;</li>
+</ul>
+</li>
+<li><p>这个问题映射到wiki系统的开发中, 其实也是类似的:</p>
+<ul>
+<li>如果在wiki的系统设计中, 每次在创建文档时, 都只能 <code>new</code> 一个新的文档对象, 然后针对new出的每个新对象都需要设置 文档排版、内容 等, 这样就会显得很低效;</li>
+<li>而如果能够以某个已经完成的文档对象为某种类型的文档对象模板(确定对象种类), 然后<strong>复制</strong>出新的文档对象, 用户仅需对此类对象做一些细节修改, 就会非常方便;</li>
+</ul>
+</li>
+</ol>
+<h2 id="原型模式的引入"><a href="#原型模式的引入" class="headerlink" title="原型模式的引入"></a>原型模式的引入</h2><ol>
+<li><p>通过上面的问题场景分析, 你需要对wiki的文档模块进行重新设计</p>
+<ul>
+<li>除了允许用户创建新文档外, 还允许用户对已经创建好的文档(比如周报文档)进行拷贝; </li>
+<li>用户再次创建同类型文档(比如周报文档)时, 既可以创建全新的文档, 也可以选择合适的模板<strong>复制</strong>一份新的文档;</li>
+</ul>
+</li>
+<li><p>这种操作非常类似于常用的 复制和粘贴; 要一个面向对象系统中实现对象的复制和粘贴, 这就要引入<strong>原型模式</strong>了;</p>
+</li>
+</ol>
+<h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><ol>
+<li><p>原型模式(Prototype  Pattern): 用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象;<br> <strong>原型模式是一种对象创建型模式;</strong></p>
+</li>
+<li><p>工作原理很简单: 核心就在于如何实现克隆方法</p>
+</li>
+<li><p>UML图:<br> <img src="/img/oop/prototype/prototype-01.png"></p>
+<ul>
+<li>Prototype(抽象原型类): 它是声明克隆方法的接口, 是所有具体原型类的父类, 可以是抽象类也可以是接口, 甚至还可以是具体实现类;</li>
+<li>ConcretePrototype(具体原型类): 它实现在抽象原型类中声明的克隆方法, 在克隆方法中返回自己的一个克隆对象;</li>
+<li>Client(客户类): 发起创建对象的动作, 让一个原型对象克隆其自身, 从而创建一个新的对象, 在客户类中只需要直接实例化或通过工厂方法等方式创建一个原型对象, 再通过调用该对象的克隆方法即可得到多个相同的对象;</li>
+</ul>
+</li>
+<li><p>由于客户类针对抽象原型类Prototype编程, 因此用户可以根据需要(的对象种类)选择具体原型类, 系统具有较好的可扩展性, 增加或更换具体原型类, 即增加或更换对象的种类(比如周报文档,或者建立文档..)都很方便;</p>
+</li>
+</ol>
+<h2 id="简单代码示例"><a href="#简单代码示例" class="headerlink" title="简单代码示例"></a>简单代码示例</h2><pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">/**</div><div class="line"> * 原型接口或抽象原型</div><div class="line"> * Interface Prototype</div><div class="line"> */</div><div class="line">interface Prototype</div><div class="line">&#123;</div><div class="line">    public function copy();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 周报具体原型类</div><div class="line"> * Class ConcretePrototype1</div><div class="line"> */</div><div class="line">class WeeklyNewspaper implements Prototype</div><div class="line">&#123;</div><div class="line">    public $title = &apos;统一周报模板&apos;;</div><div class="line">    public $content = &apos;技术方面: php开发, java准备; 业务方面: 熟悉新业务&apos;;</div><div class="line"></div><div class="line">    public function setTitle($title)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;title = $title;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function setContent()</div><div class="line">    &#123;</div><div class="line">        return $this-&gt;content;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function display()</div><div class="line">    &#123;</div><div class="line">        // 页面展示你的周报信息</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function copy() &#123;</div><div class="line">        return clone $this;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * 简历具体原型类</div><div class="line"> * Class ConcretePrototype2</div><div class="line"> */</div><div class="line">class Resume implements Prototype</div><div class="line">&#123;</div><div class="line">    public $title = &apos;PHP简历模板&apos;;</div><div class="line">    public $content = &apos;技术: php, mysql; 工具: vagrant, docker;&apos;;</div><div class="line"></div><div class="line">    public function setTitle($title)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;title = $title;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function setContent()</div><div class="line">    &#123;</div><div class="line">        return $this-&gt;content;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function display()</div><div class="line">    &#123;</div><div class="line">        // 页面展示你的简历信息</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function copy() &#123;</div><div class="line">        return clone $this;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Class Client</div><div class="line"> */</div><div class="line">class Client</div><div class="line">&#123;</div><div class="line">    /**</div><div class="line">     * 尝试创建多份简历</div><div class="line">     */</div><div class="line">    public function copyResume(Prototype $prototype)</div><div class="line">    &#123;</div><div class="line"></div><div class="line">        // 不需要再new对象了</div><div class="line">        return $prototype-&gt;copy();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 先实例化简历模板</div><div class="line">$weeklyNewspaper1 = new WeeklyNewspaper();</div><div class="line">$weeklyNewspaper1-&gt;title = &quot;这是一份统一的周报模板&quot;;</div><div class="line"></div><div class="line">// 复制周报模板, 不再需要new</div><div class="line">$client = new Client;</div><div class="line">$weeklyNewspaper2 = $client-&gt;copyResume($weeklyNewspaper1);</div><div class="line">$weeklyNewspaper3 = $client-&gt;copyResume($weeklyNewspaper1);</div><div class="line">$weeklyNewspaper4 = $client-&gt;copyResume($weeklyNewspaper1);</div><div class="line">// 两个对象相等</div><div class="line">var_dump($weeklyNewspaper1 == $weeklyNewspaper2);</div><div class="line">var_dump($weeklyNewspaper1 == $weeklyNewspaper3);</div><div class="line">var_dump($weeklyNewspaper1 == $weeklyNewspaper4);</div><div class="line">var_dump($weeklyNewspaper1 === $weeklyNewspaper2);</div><div class="line">// 重新编写周报</div><div class="line">$weeklyNewspaper2-&gt;title = &quot;这是PHP开发的周报模板&quot;;</div><div class="line">// 测试</div><div class="line">var_dump($weeklyNewspaper2-&gt;title);</div></pre></td></tr></table></figure>
+</code></pre><h2 id="深拷贝与浅拷贝"><a href="#深拷贝与浅拷贝" class="headerlink" title="深拷贝与浅拷贝"></a>深拷贝与浅拷贝</h2><ol>
+<li><p>浅拷贝: 被拷贝对象的所有变量都含有与原对象相同的值, 而且对其他对象的引用仍然是指向原来的对象, 即浅拷贝只负责当前对象实例, 对引用的对象不做拷贝;</p>
+</li>
+<li><p>深拷贝: 被拷贝对象的所有变量都含有与原对象相同的值, 除了那些引用其他对象的变量, 那些引用其他对象的变量将指向一个被拷贝的新对象，而不再是原来那些被引用的对象;(即深拷贝把要拷贝的对象所引用的对象也拷贝了一次, 而这种对被引用到的对象拷贝叫做间接拷贝)</p>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line"></div><div class="line">/**</div><div class="line"> * Interface Prototype</div><div class="line"> */</div><div class="line">interface Prototype</div><div class="line">&#123;</div><div class="line">    //浅拷贝</div><div class="line">    public function shallowCopy();</div><div class="line">    //深拷贝</div><div class="line">    public function deepCopy();</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Class ConcretePrototype</div><div class="line"> */</div><div class="line">class ConcretePrototype implements Prototype</div><div class="line">&#123;</div><div class="line">    public $testObject = null;</div><div class="line"></div><div class="line">    public function __construct($obj)</div><div class="line">    &#123;</div><div class="line">        $this-&gt;testObject = $obj;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //浅拷贝</div><div class="line">    public function shallowCopy()</div><div class="line">    &#123;</div><div class="line">        return clone $this;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //深拷贝</div><div class="line">    public function deepCopy()</div><div class="line">    &#123;</div><div class="line">        $deepObj = serialize($this);</div><div class="line">        $cloneObj = unserialize($deepObj);</div><div class="line">        return $cloneObj;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class Demo</div><div class="line">&#123;</div><div class="line">    public $title = &apos;测试类&apos;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Class Client</div><div class="line"> */</div><div class="line">class Client</div><div class="line">&#123;</div><div class="line">    public function shallow(Prototype $prototype)</div><div class="line">    &#123;</div><div class="line">        return $prototype-&gt;shallowCopy();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public function deep(Prototype $prototype)</div><div class="line">    &#123;</div><div class="line">        return $prototype-&gt;deepCopy();</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$client = new Client;</div><div class="line">$concretePrototype = new ConcretePrototype(new Demo());</div><div class="line">var_dump(&quot;浅拷贝:&quot;);</div><div class="line">$concretePrototype1 = $client-&gt;shallow($concretePrototype);</div><div class="line">var_dump($concretePrototype == $concretePrototype1);</div><div class="line">var_dump($concretePrototype === $concretePrototype1);</div><div class="line">var_dump($concretePrototype-&gt;testObject == $concretePrototype1-&gt;testObject);</div><div class="line">var_dump($concretePrototype-&gt;testObject === $concretePrototype1-&gt;testObject);</div><div class="line"></div><div class="line">var_dump(&quot;深拷贝:&quot;);</div><div class="line">$concretePrototype = new ConcretePrototype(new Demo());</div><div class="line">$concretePrototype2 = $client-&gt;deep($concretePrototype);</div><div class="line">var_dump($concretePrototype == $concretePrototype2);</div><div class="line">var_dump($concretePrototype === $concretePrototype2);</div><div class="line">var_dump($concretePrototype-&gt;testObject == $concretePrototype2-&gt;testObject);</div><div class="line">var_dump($concretePrototype-&gt;testObject === $concretePrototype2-&gt;testObject);</div></pre></td></tr></table></figure>
+</li>
+<li><p>结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:65:string &apos;浅拷贝:&apos; (length=10)</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:67:boolean true</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:68:boolean false</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:69:boolean true</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:70:boolean true</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:72:string &apos;深拷贝:&apos; (length=10)</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:75:boolean true</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:76:boolean false</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:77:boolean true</div><div class="line">/Users/renyimin/Desktop/www.test.com/oop/prototype.php:78:boolean false</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="原型管理器"><a href="#原型管理器" class="headerlink" title="原型管理器"></a>原型管理器</h2><ol>
+<li><p>原型管理器(Prototype Manager)是将多个原型对象存储在一个集合中, 供客户端使用; 它是一个专门负责克隆对象的工厂, 其中定义了一个集合用于存储原型对象, 如果需要某个原型对象的一个克隆，可以通过复制集合中对应的原型对象来获得;</p>
+</li>
+<li><p>在原型管理器中针对抽象原型类进行编程, 以便扩展, 其结构如下图:<br> <img src="/img/oop/prototype/prototype-04.png"></p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OOP/">OOP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&title=《09. Prototype 原型模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&title=《09. Prototype 原型模式》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. Prototype 原型模式》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/08/23/oop/2017-08-23-OOP-08-State/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">07. State Pattern 状态模式</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/09/16/mysql/2017-09-16-mysql-20/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">20. MySQL 事务简介</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&title=《09. Prototype 原型模式》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&title=《09. Prototype 原型模式》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. Prototype 原型模式》 — Lant's Blog&url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/02/oop/2017-09-02-09-Prototype/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwklEQVR42u3aS47bQAwFwLn/pRMg24ns98ju+QCllWHZUlcbEGmSHx/x8eff8fmdz+9/PtseT9d/uteBAw8PD2+09ORmr7/b3iU5m7//uBI8PDy8a7zXwSBf3OvvJlfL2UkAw8PDw/te3mw72s8kaT0eHh7eb+G1aXdSsMipeHh4eD+NlxdV89R59qDPXx+uteDh4eHFvK9ZytnXF/t7eHh4eIuu+qzYmpxtPz9cLR4eHt4F3usiQvRXvywxJFuWN9iisIGHh4d3gdfmpfuQkG9cHh7anwEPDw/vHq8tm84S6M3IQh5y8PDw8E7x2lQ1b4adap7lIwt4eHh4t3l5SposJY85eZk4WeGbKgseHh7eUV6bTLcZepsQb5Z7oIyLh4eHF/CSJDW/fTLquhk7yIPE42QEHh4e3pqXFA6SRZ8akJox3vw8eHh4eEd5bSKbt6baom1OLdpveHh4eJd57QO9bY+1+Hwk602VGg8PD+8Cr30cz5pks2Zb237Dw8PDu83blwDyYDC72iZBx8PDw7vHyxtd+RbMhgDa8FOPfOHh4eGteclDvC225sWIPGy0JYzHMi4eHh7emjdrX23aY21ZIS8H4+Hh4X0NL7lxUTAdwWabGKXdeHh4eNd4s5GmTbk2f/TPEvG6v4eHh4e34CULmk03JdfMg0TR7sLDw8O7wGvb87PEt02mN1vw+I8BDw8Pb83blFmThZ7dlGSD/nMXPDw8vKO8tsHfPuiv/Br5OvHw8PAu8/aFg30g2W/lR3JjPDw8vAUvP9qGVl7gmA0W5JuCh4eHd4OXBINoyCkuQORbMAsMjyUJPDw8vKO8dhF52aJdVj5AEA064OHh4X0rry0TzIYG8i2LUm08PDy8H8DLP3O2rTUr8uLh4eHd4yXFiFOYtsHWBi08PDy827xNA2zz4G4HDmYhBA8PD+8o7y9EtHOon+OtjwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
