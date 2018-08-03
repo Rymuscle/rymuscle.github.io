@@ -13,26 +13,26 @@
     
     
     
-    <title>05. nginx 基础配置 | Lant&#39;s Blog</title>
+    <title>05. nginx 配置文件简析 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Nginx">
-    <meta name="description" content="nginx服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块;">
+    <meta name="description" content="nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块">
 <meta name="keywords" content="Nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="05. nginx 基础配置">
+<meta property="og:title" content="05. nginx 配置文件简析">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="nginx服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块;">
+<meta property="og:description" content="nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/nginx/nginxconf.png">
-<meta property="og:updated_time" content="2018-08-02T09:12:02.000Z">
+<meta property="og:updated_time" content="2018-08-03T09:11:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="05. nginx 基础配置">
-<meta name="twitter:description" content="nginx服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块;">
+<meta name="twitter:title" content="05. nginx 配置文件简析">
+<meta name="twitter:description" content="nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/nginx/nginxconf.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
@@ -107,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">05. nginx 基础配置</div>
+        <div class="flex-col header-title ellipsis">05. nginx 配置文件简析</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -129,7 +129,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">05. nginx 基础配置</h1>
+        <h1 class="title">05. nginx 配置文件简析</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-04-27T12:56:27.000Z" itemprop="datePublished" class="page-time">
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx-conf-整体结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">nginx.conf 整体结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#全局块"><span class="post-toc-number">2.</span> <span class="post-toc-text">全局块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#events块"><span class="post-toc-number">3.</span> <span class="post-toc-text">events块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#http全局块"><span class="post-toc-number">4.</span> <span class="post-toc-text">http全局块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#server全局块"><span class="post-toc-number">5.</span> <span class="post-toc-text">server全局块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#location块"><span class="post-toc-number">6.</span> <span class="post-toc-text">location块</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx-conf-整体结构"><span class="post-toc-number">1.</span> <span class="post-toc-text">nginx.conf 整体结构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#全局块"><span class="post-toc-number">2.</span> <span class="post-toc-text">全局块</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nginx服务器的用户-组"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">nginx服务器的用户(组)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#worker-process数配置"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">worker process数配置</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nginx进程PID存放路径"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">nginx进程PID存放路径</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#错误日志存放路径和级别"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">错误日志存放路径和级别</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#events块"><span class="post-toc-number">3.</span> <span class="post-toc-text">events块</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#设置网络连接序列化"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">设置网络连接序列化</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#是否同时接收多个连接"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">是否同时接收多个连接</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#事件驱动模型选择"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">事件驱动模型选择</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#配置最大连接数"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">配置最大连接数</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#http全局块"><span class="post-toc-number">4.</span> <span class="post-toc-text">http全局块</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#自定义服务日志"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">自定义服务日志</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#server全局块"><span class="post-toc-number">5.</span> <span class="post-toc-text">server全局块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#location块"><span class="post-toc-number">6.</span> <span class="post-toc-text">location块</span></a></li></ol>
         </nav>
     </aside>
     
@@ -162,7 +162,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">05. nginx 基础配置</h1>
+        <h1 class="post-card-title">05. nginx 配置文件简析</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-04-27 20:56:27" datetime="2017-04-27T12:56:27.000Z"  itemprop="datePublished">2017-04-27</time>
 
@@ -175,7 +175,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>nginx服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法;</p>
+            <p>nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法;</p>
 <h2 id="nginx-conf-整体结构"><a href="#nginx-conf-整体结构" class="headerlink" title="nginx.conf 整体结构"></a>nginx.conf 整体结构</h2><ol>
 <li><p>nginx.conf主要由三部分组成: <code>全局块</code>, <code>events块</code>, <code>http块</code>;</p>
 <ul>
@@ -193,59 +193,93 @@
 <li>nginx进程PID存放路径</li>
 <li>错误日志存放路径和级别</li>
 <li>配置文件引入</li>
-<li>….</li>
+<li>….<h3 id="nginx服务器的用户-组"><a href="#nginx服务器的用户-组" class="headerlink" title="nginx服务器的用户(组)"></a>nginx服务器的用户(组)</h3></li>
 </ul>
 <ol>
-<li><p>nginx服务器的用户(组) ————— <strong>只能在全局块中配置</strong></p>
+<li><p><strong>只能在全局块中配置</strong></p>
+</li>
+<li><p>其所用指令为 <strong>user</strong>, 配置语法为 <code>user user [group]</code>;</p>
+</li>
+<li><p>只有被设置的用户或者用户组成员才有权限启动 Nginx 进程 </p>
 <ul>
-<li>其所用指令为 <strong>user</strong></li>
-<li>配置语法为 <code>user user [group]</code>;</li>
-<li>只有被设置的用户或者用户组成员才有权限启动 Nginx 进程; 如果是其他用户尝试启动, 将会报错;</li>
-<li>如果希望所有用户都可以启动nginx: 一种方法是将该行注释掉; 另一种方法是 <code>user nobody nobody</code>(将用户或者用户组设置为nobody);</li>
+<li>如果是其他用户尝试启动, 将会报错;</li>
+<li>如果希望所有用户都可以启动nginx:<br>一种方法是将该行注释掉;<br>另一种方法是 <code>user nobody nobody</code>(将用户或者用户组设置为nobody);</li>
 </ul>
 </li>
-<li><p>允许生成的 <code>worker process</code> 数 ————— <strong>只能在全局块中配置</strong></p>
+</ol>
+<h3 id="worker-process数配置"><a href="#worker-process数配置" class="headerlink" title="worker process数配置"></a>worker process数配置</h3><ol>
+<li><p><strong>只能在全局块中配置</strong></p>
+</li>
+<li><p><code>worker process</code> 是nginx服务器实现并发处理服务的关键所在, 理论上来说值越大则可以支持的并发量就越高, 但实际上也受到操作系统本身资源和硬件设备(CPU和磁盘驱动)等的制约;</p>
+</li>
+<li><p>配置允许生成 <code>worker process</code> 数的指令是 <strong>worker_process</strong>, 语法格式为 <code>worker_process number|auto</code></p>
 <ul>
-<li><code>worker process</code> 是nginx服务器实现并发处理服务的关键所在, 理论上来说值越大则可以支持的并发量就越高, 但实际上也受到操作系统本身资源和硬件设备(CPU和磁盘驱动)等的制约;</li>
-<li>配置允许生成 <code>worker process</code> 数的指令是 <strong>worker_process</strong></li>
-<li>语法格式为 <code>worker_process number|auto</code><br>number:指定nginx进程最多可以产生的worker process数量<br>auto:nginx进程将自动检测<br>默认配置文件中, 设置的number为1, 所以启动nginx之, 会看到除了 master process 主进程之外, 还生成了1个 worker process;<br>尝试将number改为3, 重启ngix之后, 会看到除了 master process 主进程之外, 还生成了3个 worker process;</li>
+<li><p>number: 指定nginx进程最多可以产生的worker process数量</p>
+</li>
+<li><p>auto: nginx进程将自动检测</p>
+</li>
+<li><p>默认配置文件中, 设置的number为1, 所以启动nginx之, 会看到除了 master process 主进程之外, 还生成了1个 worker process;<br>尝试将number改为3, 重启ngix之后, 会看到除了 master process 主进程之外, 还生成了3个 worker process;</p>
+</li>
 </ul>
 </li>
-<li><p>nginx进程PID存放路径 ————— <strong>只能在全局块中配置</strong></p>
+</ol>
+<h3 id="nginx进程PID存放路径"><a href="#nginx进程PID存放路径" class="headerlink" title="nginx进程PID存放路径"></a>nginx进程PID存放路径</h3><ol>
+<li><p><strong>只能在全局块中配置</strong></p>
+</li>
+<li><p>nginx进程作为系统的守护进程运行时, 需要在某文件中保存当前运行进程的主进程号, nginx支持对它的存放路径进行自定义配置, 指令是 <strong>pid</strong>, 语法格式为 <code>pid file</code></p>
 <ul>
-<li>nginx进程作为系统的守护进程运行时, 需要在某文件中保存当前运行进程的主进程号; nginx支持对它的存放路径进行自定义配置, 指令是 <strong>pid</strong></li>
-<li>语法格式为 <code>pid file</code><br>file指定的是path及filename (默认的路径在nginx安装路径的logs目录下, 文件名为nginx.pid; 指定file时, 必须设置文件名, 如果只设置路径path, 则会报错)<br>path可以是绝对路径, 也可以是<strong>以nginx安装目录为根目录的相对路径</strong></li>
-<li>比如要把nginx.pid放到nginx安装目录下的sbin目录下, 文件名为 nginx_web: <code>pid sbin/nginx_web</code></li>
+<li><p>file指定的是path及filename (默认的路径在nginx安装路径的logs目录下, 文件名为nginx.pid; 指定file时, 必须设置文件名, 如果只设置路径path, 则会报错)<br>path可以是绝对路径, 也可以是<strong>以nginx安装目录为根目录的相对路径</strong></p>
+</li>
+<li><p>比如要把nginx.pid放到nginx安装目录下的sbin目录下, 文件名为 nginx_web: <code>pid sbin/nginx_web</code></p>
+</li>
 </ul>
 </li>
-<li><p>错误日志存放路径和级别 ————— <strong>可以在全局块, http全局块, server全局块, location块 中配置</strong></p>
+</ol>
+<h3 id="错误日志存放路径和级别"><a href="#错误日志存放路径和级别" class="headerlink" title="错误日志存放路径和级别"></a>错误日志存放路径和级别</h3><ol>
+<li><p><strong>可以在全局块, http全局块, server全局块, location块 中配置</strong>, 只是作用域不同;</p>
+</li>
+<li><p>配置错误日志使用的指令是 <strong>error_log</strong>, 语法格式是 <code>error_log file|stderr [debug|info|notice|warn|rror|crit|alert|emerg]</code></p>
 <ul>
-<li>在全局块, http全局块, server全局块 中都可以对nginx服务器的日志进行相关配置, 只是作用域不同;</li>
-<li>配置错误日志使用的指令是 <strong>error_log</strong></li>
-<li>语法格式是 <code>error_log file|stderr [debug|info|notice|warn|rror|crit|alert|emerg]</code><br>可以看到, nginx服务器的日志支持输出到某一固定文件file, 或者输出到标准输出stderr;<br>日志的级别从左到右是从低到高, 设置某一级别后, 比这一级别高的日志都会被记录下来</li>
+<li>可以看到, nginx服务器的日志支持输出到某一固定文件file, 或者输出到标准输出stderr;</li>
+<li>日志的级别从左到右是从低到高, 设置某一级别后, 比这一级别高的日志都会被记录下来</li>
 <li>nginx默认的存放和日志级别设置为 <code>error_log logs/error error</code> (注意: <strong>路径如果不是绝对路径的话, 都是以nginx安装目录为根目录的相对路径</strong>)</li>
 <li>注意: <strong>指定的文件对于运行nginx进程的用户需要有写权限</strong></li>
 </ul>
 </li>
-<li><p>配置文件引入</p>
+<li><p><strong>配置文件引入</strong></p>
 <ul>
 <li>在一些情况下, 可能需要将其他的nginx配置或者第三方模块的配置引用到当前的主配置文件中;<br>一般nginx服务有上配置了多个虚拟站点的话, 每个站点都是各自独立配置自己的配置文件, 然后引入到主配置文件中, 一般会写成 <code>include conf.d/*.conf;</code>;</li>
 <li>语法结构 <code>include file</code>, file是要引入的配置文件, 支持相对路径</li>
-<li>注意: 新引入进来的文件要求nginx进程用户对其有写权限;</li>
+<li>注意: 新引入进来的配置文件要求nginx进程用户对其有写权限;</li>
 </ul>
 </li>
 </ol>
-<h2 id="events块"><a href="#events块" class="headerlink" title="events块"></a>events块</h2><h2 id="http全局块"><a href="#http全局块" class="headerlink" title="http全局块"></a>http全局块</h2><ol>
-<li><p>自定义服务日志</p>
-<ul>
-<li>log_format指令: 只能在 <strong>http全局块</strong> 中进行配置</li>
-<li>access_log指令: 可以在 <strong>http全局块, server全局块, location块 进行配置</strong></li>
-</ul>
-</li>
-<li><h2 id="server全局块"><a href="#server全局块" class="headerlink" title="server全局块"></a>server全局块</h2></li>
+<h2 id="events块"><a href="#events块" class="headerlink" title="events块"></a>events块</h2><h3 id="设置网络连接序列化"><a href="#设置网络连接序列化" class="headerlink" title="设置网络连接序列化"></a>设置网络连接序列化</h3><ol>
+<li><strong>只能在events块 中配置</strong></li>
+<li>为了防止惊群效应, nginx包含了指令 <strong>accept_mutex</strong>, 当其设置为开启时, 将会对多个nginx进程接收连接进行序列化, 防止多个进程对连接的争抢, 语法格式为 <code>accept_mutex on|off</code>;</li>
+<li>此指令默认为开启状态; </li>
 </ol>
-<h2 id="location块"><a href="#location块" class="headerlink" title="location块"></a>location块</h2><p>1. </p>
-
+<h3 id="是否同时接收多个连接"><a href="#是否同时接收多个连接" class="headerlink" title="是否同时接收多个连接"></a>是否同时接收多个连接</h3><ol>
+<li><strong>只能在events块 中配置</strong></li>
+<li>nginx的每个worker process都有能力同时接收多个新到达的网络连接, 但是这需要在配置文件中进行设置, 指令为 <strong>multi_accept</strong>, 语法为 <code>multi_accept on|off</code>;  </li>
+<li>此指令默认为关闭状态, 即每个 worker process 一次只能接收一个新到达的网络连接; </li>
+</ol>
+<h3 id="事件驱动模型选择"><a href="#事件驱动模型选择" class="headerlink" title="事件驱动模型选择"></a>事件驱动模型选择</h3><ol>
+<li><strong>只能在events块 中配置</strong></li>
+<li>nginx提供了多种事件驱动模型来处理网络消息, 可以使用 <strong>use</strong> 指令来强制nginx服务器选择哪种事件驱动模型进行消息处理, 语法格式为 <code>use method;</code><br> method的可选内容有: elect, poll, kqueue, epoll, rtsig, dev/poll, eventport, 关于事件驱动模型, 后面再细聊<br> 一般使用 <code>useepoll</code></li>
+</ol>
+<h3 id="配置最大连接数"><a href="#配置最大连接数" class="headerlink" title="配置最大连接数"></a>配置最大连接数</h3><ol>
+<li><strong>只能在events块 中配置</strong></li>
+<li>指令 <strong>worker_connections</strong> 主要用来设置允许每一个 worker process 同时开启的最大连接数, 语法格式为 <code>worker_connections number;</code><br> 默认 number为512</li>
+<li>注意: number不仅仅包括和前端用户建立的连接数, 而是包括所有可能的连接数; 另外, 最大连接数不能大于操作系统支持打开的最大文件句柄数量; </li>
+</ol>
+<h2 id="http全局块"><a href="#http全局块" class="headerlink" title="http全局块"></a>http全局块</h2><h3 id="自定义服务日志"><a href="#自定义服务日志" class="headerlink" title="自定义服务日志"></a>自定义服务日志</h3><ol>
+<li><p>log_format指令: 只能在 <strong>http全局块</strong> 中进行配置</p>
+</li>
+<li><p>access_log指令: 可以在 <strong>http全局块, server全局块, location块 进行配置</strong></p>
+</li>
+</ol>
+<h2 id="server全局块"><a href="#server全局块" class="headerlink" title="server全局块"></a>server全局块</h2><h2 id="location块"><a href="#location块" class="headerlink" title="location块"></a>location块</h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -281,7 +315,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 基础配置》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 配置文件简析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -291,7 +325,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 基础配置》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 配置文件简析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -301,7 +335,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. nginx 基础配置》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. nginx 配置文件简析》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -337,9 +371,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2017/08/06/oop/2017-08-06-00-SOLID/" id="post-next" class="post-nav-link">
+      <a href="/2017/04/28/nginx/2017-04-28-06/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">0. S.O.L.I.D 五大基本原则</h4>
+        <h4 class="title">06. 虚拟主机配置</h4>
       </a>
     </div>
   
@@ -441,7 +475,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 基础配置》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 配置文件简析》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -451,7 +485,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 基础配置》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&title=《05. nginx 配置文件简析》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -461,7 +495,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. nginx 基础配置》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. nginx 配置文件简析》 — Lant's Blog&url=http://blog.renyimin.com/2017/04/27/nginx/2017-04-27-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

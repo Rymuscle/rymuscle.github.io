@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;  配置错误日志使用的指令是 error_log   error">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-02T05:27:04.000Z">
+<meta property="og:updated_time" content="2018-08-03T11:05:37.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. error.log 和 access.log">
 <meta name="twitter:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;  配置错误日志使用的指令是 error_log   error">
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#error-log"><span class="post-toc-number">2.</span> <span class="post-toc-text">error.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#error-log-1"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">error_log</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#access-log"><span class="post-toc-number">3.</span> <span class="post-toc-text">access.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#access-log指令"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">access_log指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#log-format指令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">log_format指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自定义服务日志分隔"><span class="post-toc-number">4.</span> <span class="post-toc-text">自定义服务日志分隔</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#error-log"><span class="post-toc-number">2.</span> <span class="post-toc-text">error.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#error-log-1"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">error_log</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#access-log"><span class="post-toc-number">3.</span> <span class="post-toc-text">access.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#access-log指令"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">access_log指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#log-format指令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">log_format指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自定义服务日志切割"><span class="post-toc-number">4.</span> <span class="post-toc-text">自定义服务日志切割</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#logrotate"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">logrotate</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#shell"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">shell</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx日志落盘"><span class="post-toc-number">5.</span> <span class="post-toc-text">nginx日志落盘</span></a></li></ol>
         </nav>
     </aside>
     
@@ -266,8 +266,11 @@
 <li><p>也就是格式可以在http块全局块中定义多个, 然后http块中的每个server块可以设置自己的access.log文件位置及名称, 格式可以选择http全局块中定义的一种格式即可;</p>
 </li>
 </ol>
-<h2 id="自定义服务日志分隔"><a href="#自定义服务日志分隔" class="headerlink" title="自定义服务日志分隔"></a>自定义服务日志分隔</h2><ol>
+<h2 id="自定义服务日志切割"><a href="#自定义服务日志切割" class="headerlink" title="自定义服务日志切割"></a>自定义服务日志切割</h2><h3 id="logrotate"><a href="#logrotate" class="headerlink" title="logrotate"></a><a href="">logrotate</a></h3><p><a href="http://blog.51cto.com/wn2100/2074048" target="_blank" rel="external">http://blog.51cto.com/wn2100/2074048</a><br><a href="https://www.jianshu.com/p/514a9715de46" target="_blank" rel="external">https://www.jianshu.com/p/514a9715de46</a></p>
+<h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><ol>
 <li></li>
+<li><h2 id="nginx日志落盘"><a href="#nginx日志落盘" class="headerlink" title="nginx日志落盘"></a>nginx日志落盘</h2><p><a href="http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682" target="_blank" rel="external">http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682</a></p>
+</li>
 </ol>
 
         </div>
@@ -363,7 +366,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/04/27/nginx/2017-04-27-05/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">05. nginx 基础配置</h4>
+        <h4 class="title">05. nginx 配置文件简析</h4>
       </a>
     </div>
   
