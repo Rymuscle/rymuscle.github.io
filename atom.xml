@@ -32,20 +32,6 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
-    <published>2018-08-01T03:02:02.000Z</published>
-    <updated>2018-08-01T03:02:02.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title></title>
     <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/"/>
     <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/</id>
     <published>2018-08-01T03:02:02.000Z</published>
@@ -59,11 +45,25 @@
   </entry>
   
   <entry>
-    <title>33. 单机部署集群 -- 镜像模式</title>
+    <title></title>
+    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
+    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
+    <published>2018-08-01T03:02:02.000Z</published>
+    <updated>2018-08-01T03:02:02.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>33. 单机部署集群 -- 镜像模式 (x-ha-policy)</title>
     <link href="http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/"/>
     <id>http://blog.renyimin.com/2018/06/29/rabbitmq/2018-06-29-rabbitmq-33/</id>
     <published>2018-06-29T13:28:16.000Z</published>
-    <updated>2018-07-27T12:40:08.000Z</updated>
+    <updated>2018-08-04T13:04:36.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li><p>上一篇在学习普通模式的集群时, 已经知道在该模式下, 队列只存活于集群中的一个节点上(在RabbitMQ2.6.0之前, 这也是唯一的选择);<br> 在RabbitMQ2.6.0时, RabbitMQ团队带来了内建的双活冗余选项: <strong>镜像队列</strong>;</p></li><li><p>像普通队列那样, 镜像队列的主拷贝仅存在于一个节点(主队列, master)上, 但与普通队列的不同点是, 镜像节点在集群中的其他节点上拥有从队列(slave拷贝); 一旦队列主节点不可用, 最老的从队列将会被选举为新的主队列; (这貌似就是探索集群时一直寻找的高可用)</p></li></ol><h2 id="声明并使用镜像队列"><a href="#声明并使用镜像队列" class="headerlink" title="声明并使用镜像队列"></a>声明并使用镜像队列</h2><ol><li><p>你的应用程序并不使用 <code>rabbitmqctl</code> 来定义镜像(mirrored)队列; 声明镜像队列就像声明普通队列一样, 不过, 你需要传入一个额外的参数 <code>x-ha-policy</code> 参数到 <code>queue.declare</code> 调用中;</p></li><li><p>测试:</p></li></ol>]]></content>
     
