@@ -32,8 +32,8 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/</id>
+    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
+    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
     <published>2018-08-01T03:02:02.000Z</published>
     <updated>2018-08-01T03:02:02.000Z</updated>
     
@@ -46,8 +46,8 @@
   
   <entry>
     <title></title>
-    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/"/>
-    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-28-07/</id>
+    <link href="http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/"/>
+    <id>http://blog.renyimin.com/2018/08/01/nginx/2017-04-22-03/</id>
     <published>2018-08-01T03:02:02.000Z</published>
     <updated>2018-08-01T03:02:02.000Z</updated>
     
@@ -209,6 +209,32 @@
     
     
       <category term="RabbitMQ" scheme="http://blog.renyimin.com/tags/RabbitMQ/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>05. 容器</title>
+    <link href="http://blog.renyimin.com/2017/12/16/docker/2017-12-16-05-docker/"/>
+    <id>http://blog.renyimin.com/2017/12/16/docker/2017-12-16-05-docker/</id>
+    <published>2017-12-16T03:06:58.000Z</published>
+    <updated>2018-08-04T07:41:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h2><ol><li><p>镜像(Image)和容器(Container)的关系, 就像是面向对象程序设计中的 类 和 实例 的关系一样, 镜像是静态的定义, 容器是镜像运行时的实体; 容器可以被 <code>创建</code>、<code>启动</code>、<code>停止</code>、<code>删除</code>、<code>暂停</code>等;</p></li><li><p>容器的实质是<strong>进程</strong>, 但与直接在宿主执行的进程不同, 容器进程运行于属于自己的独立的命名空间</p><ul><li>因此容器可以拥有自己的 root 文件系统、自己的网络配置、自己的进程空间, 甚至自己的用户ID空间;</li><li>容器内的进程是运行在一个隔离的环境里, 使用起来, 就好像是在一个独立于宿主的系统下操作一样, 这种特性使得容器封装的应用比直接在宿主运行更加安全, 也因为这种隔离的特性, 很多人初学 Docker 时常常会把容器和虚拟机搞混;</li></ul></li><li><p>前面讲过镜像使用的是<strong>分层存储</strong>, 容器也是如此, 每一个容器运行时, 是以镜像为基础层, 在其上创建一个当前容器的存储层, 这是为容器运行时读写而准备的存储层;<br> <code>容器存储层</code>的生存周期和容器一样, 容器消亡时, 容器存储层也随之消亡, 因此, <strong>任何保存于容器存储层的信息都会随容器的删除而丢失</strong>;</p></li><li><p>按照 Docker 最佳实践的要求, 容器不应该向其存储层内写入任何数据, <strong>容器存储层要保持无状态化</strong></p><ul><li>所有的文件写入操作, 都应该使用 <code>数据卷(Volume)</code>、或者 <code>绑定宿主目录</code>, 在这些位置的读写会跳过容器存储层, 直接对宿主(或网络存储)发生读写, 其性能和稳定性更高;</li><li>数据卷的生存周期独立于容器, 容器消亡, 数据卷不会消亡, 因此, 使用数据卷后, 容器可以随意删除、重新run, 数据却不会丢失;</li></ul></li></ol><h2 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h2><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><ol><li><p>启动容器有两种方式：一种是基于镜像新建一个容器并启动; 另外一个是将在终止状态(stopped)的容器启动</p></li><li><p>创建并启动</p><ul><li>因为 Docker 的容器<strong>实在太轻量级了</strong>, 很多时候用户都是<strong>随时删除和新创建容器</strong>;</li><li>新建并启动一个容器所需的命令主要为 <code>docker run</code>, 例如: <code>$ docker run -d -p 5000:5000 --name myFirstRegistry registry</code>, 是根据名为registry的镜像创建并运行一个名为myFirstRegistry容器;</li></ul></li><li><p>当利用 <code>docker run</code> 来创建容器时, Docker 在后台运行的标准操作包括:</p><ul><li>检查本地是否存在指定的镜像, 不存在就从公有仓库下载</li><li>利用镜像创建并启动一个容器</li><li>分配一个文件系统, 并在只读的镜像层外面挂载一层可读写层 </li><li>从宿主主机配置的网桥接口中桥接一个虚拟接口到容器中去 </li><li>从地址池配置一个 ip 地址给容器</li><li>执行用户指定的应用程序</li><li>执行完毕后容器被终止</li></ul></li><li><p><strong>容器被启动后, 设置的挂载目录, 端口映射都会随着此容器, 容器stop后, 再次start, 这些设置都还在;</strong></p></li><li><p>启动已终止容器: 可以利用 <code>docker start [containerID or NAME]</code> 命令, 直接将一个已经终止的容器启动运行;</p></li></ol><h3 id="守护态运行容器"><a href="#守护态运行容器" class="headerlink" title="守护态运行容器"></a>守护态运行容器</h3><p>其实更多时候, 我们需要让容器在后台运行, 而不是直接运行容器并展示出结果, 此时只用在运行时加上 <code>-d 参数</code>即可; (在容器的第一种启动方式中已经介绍过了)</p><h3 id="查看容器信息"><a href="#查看容器信息" class="headerlink" title="查看容器信息"></a>查看容器信息</h3><p>可以通过 <code>docker ps</code> 命令来查看正在运行的容器信息</p><p>可以通过 <code>docker ps -a</code> 命令来查看 正在运行的和终止的 容器信息</p><h3 id="终止容器"><a href="#终止容器" class="headerlink" title="终止容器"></a>终止容器</h3><p>可以使用 <code>docker stop [containerID or NAME]</code> 来终止一个运行中的容器</p><h3 id="重启容器"><a href="#重启容器" class="headerlink" title="重启容器"></a>重启容器</h3><p>可以使用 <code>docker restart [containerID or NAME]</code> 来重启一个运行中的容器</p><h3 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h3><ol><li><p>可以使用 <code>docker rm 容器ID/容器NAME</code> 来删除一个<strong>处于终止状态</strong>的容器;</p></li><li><p>如果要删除一个运行中的容器，可以添加 <code>-f</code> 参数;</p></li></ol><h3 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h3><ol><li><p>可参考<a href="https://yeasy.gitbooks.io/docker_practice/content/container/attach_exec.html" target="_blank" rel="external">书中介绍</a></p></li><li><p>推荐使用 <code>docker exec -it [containerID or NAME] /bin/sh</code></p><ul><li>其中, <code>/bin/bash</code> 有可能是 <code>/bin/sh</code>，因为不一定所有的docker都安装了shell</li></ul></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;容器&quot;&gt;&lt;a href=&quot;#容器&quot; class=&quot;headerlink&quot; title=&quot;容器&quot;&gt;&lt;/a&gt;容器&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;镜像(Image)和容器(Container)的关系, 就像是面向对象程序设计中的 类 和 实例 的关系一样, 镜像是静态
+      
+    
+    </summary>
+    
+      <category term="Docker读书笔记" scheme="http://blog.renyimin.com/categories/Docker%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="Docker读书笔记" scheme="http://blog.renyimin.com/tags/Docker%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -449,34 +475,6 @@
       
       
         &lt;h2 id=&quot;Multiversion-Concurrency-Control简介&quot;&gt;&lt;a href=&quot;#Multiversion-Concurrency-Control简介&quot; class=&quot;headerlink&quot; title=&quot;Multiversion Concurrency
-      
-    
-    </summary>
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/categories/MySQL/"/>
-    
-    
-      <category term="MySQL" scheme="http://blog.renyimin.com/tags/MySQL/"/>
-    
-      <category term="事务" scheme="http://blog.renyimin.com/tags/%E4%BA%8B%E5%8A%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>25. 隔离级别 - READ COMMITTED</title>
-    <link href="http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-25/"/>
-    <id>http://blog.renyimin.com/2017/09/22/mysql/2017-09-22-mysql-25/</id>
-    <published>2017-09-22T06:50:52.000Z</published>
-    <updated>2018-07-24T09:43:55.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol><li><p><code>READ COMMITTED</code> 隔离级别可以解决高并发场景下, 事务 <code>脏读</code> 的问题; 在当前事务中, 只能读取到其他事务已完成(<code>提交/回滚</code>)的落地数据;</p></li><li><p>如果让你用 <code>锁</code> 来设计该隔离级别? 假设, 在事务A中读取数据前, 事务B对同一数据做了修改并且还没有完成(commit/rollback), 那如何让事务A无法读取事务B中 <code>尚未落地的脏数据</code> 呢?</p><ul><li><p>在当前事务对数据做写操作的时候, 给数据加上行级的 <code>排他锁(X lock)</code>; 其他事务在对同一数据做读操作时, 也别忘了加上 <code>共享锁(S lock)</code>, <strong>注意两种锁都要使用</strong>;<br>这样, 其他事务由于加不上 <code>共享锁/排他锁</code>, 自然只能阻塞等事务A完成后才能读取/修改数据了;</p></li><li><p>这样做的话确实实现了效果, 也就避免了<code>脏读</code>, 事实上, 也解决可了 <code>不可重复读</code> (因为一旦加了共享锁, 其他事务也无法加排他锁进行修改), 但问题是这是一种 <strong>很低效</strong> 的传统思路, 因为对于大部分应用来说, 读操作是多于写操作的, 当写操作加锁时, 那么读操作全部被阻塞, 这样在大用户量高并发的情况下, 会直接降低数据库的读效率。</p></li><li><p>所以, 为了提高并发性, MySQL是自然不会简单地使用传统直接加读写锁的方法来解决的问题;</p></li></ul></li><li><p><strong>注意</strong>: 如果只是 <code>写操作加排他锁的话</code> 是无法避免 <code>脏读</code> 的 (之前在了解 <code>READ UNCOMMITTED</code> 隔离级别时, 已经探讨过了);</p></li><li><p>事实上, MySQL是使用 <strong>写操作加排他锁</strong> 、<strong>读操作不加锁</strong> 、<a href="/2017/09/22/mysql/2017-09-22-mysql-26/">MVCC 多版本并发控制</a> 来实现该隔离级别的;</p></li></ol><h2 id="具体方案"><a href="#具体方案" class="headerlink" title="具体方案"></a>具体方案</h2><ol><li><p>MySQL 在事务隔离级别 <code>Read Committed</code> 、<code>Repeatable Read</code> 下, InnoDB 存储引擎采用 <code>非锁定的一致性读</code> －－ 即 <strong>读取数据不用加锁</strong>, 而是采用的是MVCC中 <code>一致性非锁定读</code> 模式; 从而做到: <strong>写不影响读，读不影响写，写只影响写, 只有写写会阻塞</strong>;</p></li><li><p>读不影响写: 当事务A中正在执行读操作时, 事务B的写操作不会因此去等待当前事务A上S锁的释放(因为事务A读取压根就没加锁), 所以事务B可以直接对数据加X锁;   </p></li><li><p>写不影响读: 当事务A中正在执行写操作时, 虽然对数据加了X锁, 但是事务B的读操作不会因此去等待当前事务行上X锁的释放, 而是会去读取快照数据 (注意: RC和RR因快照产生时机不同, 导致了两个隔离级别读取的落地数据不同, 从而导致两个隔离级别的不同)    </p></li></ol><p>所以总结来看, <code>READ UNCOMMITTED</code> 和 <code>REPEATABLE READ</code> 这两个隔离级别都是使用 <strong>写用排他锁、读用MVCC</strong>, 区别可以参考 <a href="/2017/09/17/2017-09-17-mysql-26/">MVCC 多版本并发控制</a></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;&lt;code&gt;READ COMMITTED&lt;/code&gt; 隔离级别可以解决高并发场景下, 事务 &lt;code&gt;脏读&lt;/code
       
     
     </summary>
