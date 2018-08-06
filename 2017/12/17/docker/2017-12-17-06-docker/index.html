@@ -13,25 +13,25 @@
     
     
     
-    <title>06. Docker数据管理 | Lant&#39;s Blog</title>
+    <title>06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件 | Lant&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Docker读书笔记">
+    <meta name="keywords" content="Docker,Docker 入门">
     <meta name="description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes)简介 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:  数据卷可以在容器之间共享和重用 对数据卷的修改会立马生效 对数据卷的更新,不会影响镜像 数据卷默认会一直存在, 即使容器被删除   注意: 数据卷的使用, 类似于 Linux">
-<meta name="keywords" content="Docker读书笔记">
+<meta name="keywords" content="Docker,Docker 入门">
 <meta property="og:type" content="article">
-<meta property="og:title" content="06. Docker数据管理">
+<meta property="og:title" content="06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录&#x2F;文件">
 <meta property="og:url" content="http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes)简介 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:  数据卷可以在容器之间共享和重用 对数据卷的修改会立马生效 对数据卷的更新,不会影响镜像 数据卷默认会一直存在, 即使容器被删除   注意: 数据卷的使用, 类似于 Linux">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/docker/volume-01.png">
-<meta property="og:updated_time" content="2018-08-04T11:27:01.000Z">
+<meta property="og:updated_time" content="2018-08-06T02:24:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="06. Docker数据管理">
+<meta name="twitter:title" content="06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录&#x2F;文件">
 <meta name="twitter:description" content="容器中管理数据主要有两种方式：数据卷(Volumes) 和 挂载主机目录(Bind mounts) 数据卷(Volumes)简介 数据卷 是一个可供一个或多个容器使用的特殊目录, 它绕过UFS, 可以提供很多有用的特性:  数据卷可以在容器之间共享和重用 对数据卷的修改会立马生效 对数据卷的更新,不会影响镜像 数据卷默认会一直存在, 即使容器被删除   注意: 数据卷的使用, 类似于 Linux">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/docker/volume-01.png">
     
@@ -107,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">06. Docker数据管理</div>
+        <div class="flex-col header-title ellipsis">06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -129,7 +129,7 @@
 <header class="content-header post-header">
 
     <div class="container fade-scale">
-        <h1 class="title">06. Docker数据管理</h1>
+        <h1 class="title">06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件</h1>
         <h5 class="subtitle">
             
                 <time datetime="2017-12-17T07:30:21.000Z" itemprop="datePublished" class="page-time">
@@ -137,7 +137,7 @@
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
 
             
         </h5>
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷-Volumes"><span class="post-toc-number">1.</span> <span class="post-toc-text">数据卷(Volumes)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据卷操作"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">数据卷操作</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动容器时挂载数据卷"><span class="post-toc-number">2.</span> <span class="post-toc-text">启动容器时挂载数据卷</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#挂载主机目录-文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">挂载主机目录/文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷挂载的问题"><span class="post-toc-number">4.</span> <span class="post-toc-text">数据卷挂载的问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#docker-cp-命令"><span class="post-toc-number">5.</span> <span class="post-toc-text">docker cp 命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#演示如何启动nginx容器"><span class="post-toc-number">6.</span> <span class="post-toc-text">演示如何启动nginx容器</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷-Volumes"><span class="post-toc-number">1.</span> <span class="post-toc-text">数据卷(Volumes)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据卷操作"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">数据卷操作</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动容器时挂载数据卷"><span class="post-toc-number">2.</span> <span class="post-toc-text">启动容器时挂载数据卷</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#挂载主机目录-文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">挂载主机目录/文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据卷挂载的问题"><span class="post-toc-number">4.</span> <span class="post-toc-text">数据卷挂载的问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#docker-cp-命令"><span class="post-toc-number">5.</span> <span class="post-toc-text">docker cp 命令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动nginx容器"><span class="post-toc-number">6.</span> <span class="post-toc-text">启动nginx容器</span></a></li></ol>
         </nav>
     </aside>
     
@@ -162,12 +162,12 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">06. Docker数据管理</h1>
+        <h1 class="post-card-title">06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-12-17 15:30:21" datetime="2017-12-17T07:30:21.000Z"  itemprop="datePublished">2017-12-17</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker读书笔记/">Docker读书笔记</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Docker/">Docker</a></li></ul>
 
 
 
@@ -223,7 +223,7 @@
 <ul>
 <li>如果容器中对应的目录不存在, 容器会自动创建目录;</li>
 <li>如果运行容器时, 加载的数据卷不存在, 则会自动创建, 通过<code>docker volume ls</code>也可以看到自动创建的数据卷</li>
-<li>数据卷只能挂在到容器中的目录, 不能挂载到文件</li>
+<li><strong>数据卷只能挂载目录, 不能挂载文件</strong></li>
 </ul>
 </li>
 <li><p>可以在主机里使用以下命令查看 <code>nginx</code> 容器的信息, 数据卷信息在 <code>&quot;Mounts&quot;</code> Key 下面</p>
@@ -285,7 +285,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="演示如何启动nginx容器"><a href="#演示如何启动nginx容器" class="headerlink" title="演示如何启动nginx容器"></a>演示如何启动nginx容器</h2><ol>
+<h2 id="启动nginx容器"><a href="#启动nginx容器" class="headerlink" title="启动nginx容器"></a>启动nginx容器</h2><ol>
 <li><p>先简单启动: </p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:html renyimin$ docker run -d -p 8005:80 --name nginx nginx:stable</div><div class="line">1b22387039746639bf5eec39c5eea597a078d0d6003c31c94bb65d82485f0da4</div><div class="line">renyimindeMacBook-Pro:html renyimin$ docker ps</div><div class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES</div><div class="line">1b2238703974        nginx:stable        &quot;nginx -g &apos;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:8005-&gt;80/tcp     nginx</div><div class="line">983a64953864        nginx:stable        &quot;nginx -g &apos;daemon ...&quot;   7 hours ago         Up 3 hours          0.0.0.0:8088-&gt;80/tcp     nginx_test</div><div class="line">0e7070854958        registry            &quot;/entrypoint.sh /e...&quot;   5 months ago        Up 5 days           0.0.0.0:5000-&gt;5000/tcp   registry</div></pre></td></tr></table></figure>
 </li>
@@ -330,7 +330,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker读书笔记/">Docker读书笔记</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker-入门/">Docker 入门</a></li></ul>
 
 
             
@@ -340,7 +340,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -350,7 +350,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -360,7 +360,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Docker数据管理》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -500,7 +500,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -510,7 +510,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理》 — Lant's Blog&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&title=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -520,7 +520,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Docker数据管理》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. Docker数据管理 - 数据卷(Volumes), 挂载主机目录/文件》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/17/docker/2017-12-17-06-docker/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
