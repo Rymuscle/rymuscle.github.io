@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="Nginx">
-    <meta name="description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;  配置错误日志使用的指令是 error_log   error">
+    <meta name="description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 配置错误日志使用的指令是 error_log, 其用于配置nginx进程运行时的日志存放和级别;   在 全局块, http全局块, server全局块, location块">
 <meta name="keywords" content="Nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="04. error.log 和 access.log">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/27/nginx/2017-04-24-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s Blog">
-<meta property="og:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;  配置错误日志使用的指令是 error_log   error">
+<meta property="og:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 配置错误日志使用的指令是 error_log, 其用于配置nginx进程运行时的日志存放和级别;   在 全局块, http全局块, server全局块, location块">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-03T11:05:37.000Z">
+<meta property="og:updated_time" content="2018-08-06T09:22:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="04. error.log 和 access.log">
-<meta name="twitter:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;  配置错误日志使用的指令是 error_log   error">
+<meta name="twitter:description" content="概述 nginx日志主要分为两种: 错误日志 和 自定义服务日志(也叫做访问日志);   nginx.conf中, 虽然两个日志的相关配置默认都是注释的, 但并不意味着是关闭的, 除非显示地关闭;   error.log 配置错误日志使用的指令是 error_log, 其用于配置nginx进程运行时的日志存放和级别;   在 全局块, http全局块, server全局块, location块">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
     
@@ -152,7 +152,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#error-log"><span class="post-toc-number">2.</span> <span class="post-toc-text">error.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#error-log-1"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">error_log</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#access-log"><span class="post-toc-number">3.</span> <span class="post-toc-text">access.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#access-log指令"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">access_log指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#log-format指令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">log_format指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自定义服务日志切割"><span class="post-toc-number">4.</span> <span class="post-toc-text">自定义服务日志切割</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#logrotate"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">logrotate</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#shell"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">shell</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx日志落盘"><span class="post-toc-number">5.</span> <span class="post-toc-text">nginx日志落盘</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#error-log"><span class="post-toc-number">2.</span> <span class="post-toc-text">error.log</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#access-log"><span class="post-toc-number">3.</span> <span class="post-toc-text">access.log</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#access-log指令"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">access_log指令</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#log-format指令"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">log_format指令</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#自定义服务日志切割"><span class="post-toc-number">4.</span> <span class="post-toc-text">自定义服务日志切割</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#logrotate"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">logrotate</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#shell"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">shell</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nginx日志落盘"><span class="post-toc-number">5.</span> <span class="post-toc-text">nginx日志落盘</span></a></li></ol>
         </nav>
     </aside>
     
@@ -180,12 +180,10 @@
 </li>
 </ol>
 <h2 id="error-log"><a href="#error-log" class="headerlink" title="error.log"></a>error.log</h2><ol>
-<li><p>在 全局块, http全局块, server全局块 中都可以对nginx的错误日志进行相关配置, 只是作用域不同;</p>
+<li><p>配置错误日志使用的指令是 <strong>error_log</strong>, 其用于配置nginx进程运行时的日志存放和级别; </p>
 </li>
-<li><p>配置错误日志使用的指令是 <strong>error_log</strong></p>
+<li><p>在 <strong>全局块, http全局块, server全局块, location块 </strong> 中都可以使用 error_log 指令对nginx的错误日志进行相关配置, 只是作用域不同;</p>
 </li>
-</ol>
-<h3 id="error-log-1"><a href="#error-log-1" class="headerlink" title="error_log"></a>error_log</h3><ol>
 <li><p><strong>error_log</strong> 语法格式是 <code>error_log file|stderr [debug|info|notice|warn|rror|crit|alert|emerg]</code></p>
 <ul>
 <li>nginx服务器的日志支持输出到某一固定文件file, 或者输出到标准输出stderr;</li>
@@ -200,17 +198,11 @@
 <li>正确的关闭 error.log 记录功能的方为 <code>error_log /dev/null</code> ; (表示将存储日志的路径设置为”垃圾桶”)</li>
 </ul>
 </li>
-<li><p>nginx的错误日志主要记录客户端访问nginx出错时的日志, 格式不支持自定义;</p>
-</li>
-<li><p><code>error_log</code>指令, 其用于配置nginx进程运行时的日志存放和级别; <code>error_log</code> 指令可以在 <strong>全局块, http全局块, server全局块, location块 中配置</strong></p>
+<li><p>nginx的错误日志主要记录客户端访问nginx出错时的日志, <strong>格式不支持自定义</strong>;</p>
 </li>
 </ol>
 <h2 id="access-log"><a href="#access-log" class="headerlink" title="access.log"></a>access.log</h2><ol>
-<li><p>之前在介绍过<code>error_log</code>指令, 其用于配置nginx进程运行时的日志存放和级别; <code>error_log</code> 指令可以在 <strong>全局块, http全局块, server全局块, location块 中配置</strong></p>
-</li>
-<li><p>而此处所指的日志和常规的日志不同, 它是记录nginx服务器提供服务过程应答前端请求的日志, 称为<strong>服务日志</strong></p>
-</li>
-<li><p>nginx的错误日志主要记录客户端访问nginx出错时的日志, 格式不支持自定义; 但是nginx的 <strong>自定义服务日志</strong>(访问日志)的格式是支持自定义的</p>
+<li><p>和常规的error.log日志不同, error.log主要记录nginx出错时的日志, 格式不支持自定义; 而access.log是记录nginx服务器提供服务过程应答前端请求的日志, 格式是支持自定义的, 因此也称为 <strong>自定义服务日志</strong>;</p>
 </li>
 <li><p>nginx服务器支持对服务日志的 格式, 大小, 输出 等进行配置, 需要用到两个指令 <strong>access_log</strong> 和 <strong>log_format</strong></p>
 </li>
@@ -251,7 +243,7 @@
 <li><p>$http_user_agent: 客户端浏览器信息, 配置 <code>ua=[$http_user_agent]</code> 可能如下: </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ua=[Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1]</div></pre></td></tr></table></figure>
 </li>
-<li><p>rrc nginx示例</p>
+<li><p>rrc 示例:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">log_format  main  &apos;remote_addr=[$remote_addr] http_x_forward=[$http_x_forwarded_for] time=[$time_local] request=[$request] &apos;</div><div class="line">                                &apos;status=[$status] byte=[$bytes_sent] elapsed=[$request_time] refer=[$http_referer] body=[$request_body] &apos;</div><div class="line">                                &apos;ua=[$http_user_agent] cookie=[$http_cookie] gzip=[$gzip_ratio]&apos;;</div></pre></td></tr></table></figure>
 </li>
 </ul>
@@ -259,12 +251,6 @@
 </ol>
 <ol>
 <li>只能在 <code>http全局块</code> 中进行配置</li>
-</ol>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ol>
-<li><p><code>access_log</code> 指令可以在 <strong>http全局块, server全局块, location块 进行配置</strong>; 而 <code>log_format</code> <strong>只能在http全局块` 中进行配置</strong>;</p>
-</li>
-<li><p>也就是格式可以在http块全局块中定义多个, 然后http块中的每个server块可以设置自己的access.log文件位置及名称, 格式可以选择http全局块中定义的一种格式即可;</p>
-</li>
 </ol>
 <h2 id="自定义服务日志切割"><a href="#自定义服务日志切割" class="headerlink" title="自定义服务日志切割"></a>自定义服务日志切割</h2><h3 id="logrotate"><a href="#logrotate" class="headerlink" title="logrotate"></a><a href="">logrotate</a></h3><p><a href="http://blog.51cto.com/wn2100/2074048" target="_blank" rel="external">http://blog.51cto.com/wn2100/2074048</a><br><a href="https://www.jianshu.com/p/514a9715de46" target="_blank" rel="external">https://www.jianshu.com/p/514a9715de46</a></p>
 <h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><ol>

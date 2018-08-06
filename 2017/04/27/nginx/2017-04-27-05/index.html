@@ -29,7 +29,7 @@
 <meta property="og:description" content="nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/nginx/nginxconf.png">
-<meta property="og:updated_time" content="2018-08-03T09:11:47.000Z">
+<meta property="og:updated_time" content="2018-08-06T09:06:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. nginx 配置文件简析">
 <meta name="twitter:description" content="nginx 服务器配置文件都存放在安装目录conf中, 主配置文件名为 nginx.conf , 本篇介绍其内容和基本配置方法; nginx.conf 整体结构 nginx.conf主要由三部分组成: 全局块, events块, http块;  在 http块 中又包含 http全局块 和 多个 server块; 每个 server块 中, 又包含 server全局块 和 多个 location块">
@@ -220,6 +220,8 @@
 </li>
 <li><p>默认配置文件中, 设置的number为1, 所以启动nginx之, 会看到除了 master process 主进程之外, 还生成了1个 worker process;<br>尝试将number改为3, 重启ngix之后, 会看到除了 master process 主进程之外, 还生成了3个 worker process;</p>
 </li>
+<li><p>rrc的线上配置是 auto;</p>
+</li>
 </ul>
 </li>
 </ol>
@@ -279,7 +281,7 @@
 <li><p>access_log指令: 可以在 <strong>http全局块, server全局块, location块 进行配置</strong></p>
 </li>
 </ol>
-<h2 id="server全局块"><a href="#server全局块" class="headerlink" title="server全局块"></a>server全局块</h2><h2 id="location块"><a href="#location块" class="headerlink" title="location块"></a>location块</h2>
+<h2 id="server全局块"><a href="#server全局块" class="headerlink" title="server全局块"></a>server全局块</h2><h2 id="location块"><a href="#location块" class="headerlink" title="location块"></a>location块</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">http &#123;</div><div class="line">    include       mime.types;</div><div class="line">    default_type  application/octet-stream;</div><div class="line"></div><div class="line">    server_tokens off;  # 不显示 nginx 版本</div></pre></td></tr></table></figure>
         </div>
 
         <blockquote class="post-copyright">
