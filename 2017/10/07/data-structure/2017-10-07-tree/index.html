@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>树和二叉树 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Data Structures,Tree">
+    <meta name="description" content="前言 树形结构是一类重要的非线性数据结构; 其中以树和二叉树最为常用;   树结构除了在客观世界中广泛存在, 如形象地表示人类社会的族谱关系和各种社会组织机构; 树在计算机领域也得到广泛应用, 如在数据库系统中, 树形结构也是信息的重要组织形式之一;   树(tree)的定义和基本术语 树是n(n≥0)个结点的有限集。在任意一个非空树中:  有且仅有一个特定的结点称为树的根(Root)结点; 当n">
+<meta name="keywords" content="Data Structures,Tree">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树和二叉树">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言 树形结构是一类重要的非线性数据结构; 其中以树和二叉树最为常用;   树结构除了在客观世界中广泛存在, 如形象地表示人类社会的族谱关系和各种社会组织机构; 树在计算机领域也得到广泛应用, 如在数据库系统中, 树形结构也是信息的重要组织形式之一;   树(tree)的定义和基本术语 树是n(n≥0)个结点的有限集。在任意一个非空树中:  有且仅有一个特定的结点称为树的根(Root)结点; 当n">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/tree-01.png">
+<meta property="og:updated_time" content="2018-08-09T05:17:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="树和二叉树">
+<meta name="twitter:description" content="前言 树形结构是一类重要的非线性数据结构; 其中以树和二叉树最为常用;   树结构除了在客观世界中广泛存在, 如形象地表示人类社会的族谱关系和各种社会组织机构; 树在计算机领域也得到广泛应用, 如在数据库系统中, 树形结构也是信息的重要组织形式之一;   树(tree)的定义和基本术语 树是n(n≥0)个结点的有限集。在任意一个非空树中:  有且仅有一个特定的结点称为树的根(Root)结点; 当n">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/data-structures/tree-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/t1.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">树和二叉树</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">树和二叉树</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-07T08:56:39.000Z" itemprop="datePublished" class="page-time">
+  2017-10-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#树-tree-的定义和基本术语"><span class="post-toc-number">2.</span> <span class="post-toc-text">树(tree)的定义和基本术语</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二叉树"><span class="post-toc-number">3.</span> <span class="post-toc-text">二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#完全二叉树"><span class="post-toc-number">4.</span> <span class="post-toc-text">完全二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#满二叉树"><span class="post-toc-number">5.</span> <span class="post-toc-text">满二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#平衡二叉树"><span class="post-toc-number">6.</span> <span class="post-toc-text">平衡二叉树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#BTree"><span class="post-toc-number">7.</span> <span class="post-toc-text">BTree</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#B-Tree"><span class="post-toc-number">8.</span> <span class="post-toc-text">B+Tree</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-data-structure/2017-10-07-tree"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">树和二叉树</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-07 16:56:39" datetime="2017-10-07T08:56:39.000Z"  itemprop="datePublished">2017-10-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>树形结构是一类重要的非线性数据结构; 其中以树和二叉树最为常用; </p>
+</li>
+<li><p>树结构除了在客观世界中广泛存在, 如形象地表示人类社会的族谱关系和各种社会组织机构; 树在计算机领域也得到广泛应用, 如在数据库系统中, 树形结构也是信息的重要组织形式之一;</p>
+</li>
+</ol>
+<h2 id="树-tree-的定义和基本术语"><a href="#树-tree-的定义和基本术语" class="headerlink" title="树(tree)的定义和基本术语"></a>树(tree)的定义和基本术语</h2><ol>
+<li><p>树是n(n≥0)个结点的有限集。在任意一个非空树中:</p>
+<ul>
+<li>有且仅有一个特定的结点称为树的根(Root)结点;</li>
+<li>当n＞1, 除根结点之外的其余结点被分成m(m&gt;0)个互不相交的有限集T1,T2,…,Tm, 其中每一个集合本身又是一棵树, 称为根结点的子树;</li>
+</ul>
+</li>
+<li><p>如下图:<br> <img src="/img/data-structures/tree-01.png" width="300/"></p>
+<ul>
+<li><p>(a) 是只有一个结点(根结点)的树;</p>
+</li>
+<li><p>(b) 是有13个结点的树, 其中A是根, 其余结点分成3个互不相交的子集:<br>T1 = {B,E,F,K,L}<br>T2 = {C,G}<br>T3 = {D,H,I,J,M}</p>
+</li>
+<li><p>T1,T2,T3都是根A的子树, 且本身也是一颗树, 例如, T1的根为B, 其余结点分为2个互不相交的子集:<br>T11 = {E,K,L}<br>T12 = {F}</p>
+</li>
+<li><p>T11和T12都是B的子树, 而T11中E是根, {K}和{L}是E的两棵互不相交的子树, 其本身又是只有一个结点(根结点)的树;</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>结点: 是数据元素的别名;</p>
+</li>
+<li><p>集合: 线性表对应的是序列, 树对应的是集合;</p>
+</li>
+<li><p>结点的度: 树中结点所拥有的子树的个数;</p>
+</li>
+<li><p>树的度: 树中各结点度的最大值; (二叉树的度为2)</p>
+</li>
+<li><p>叶子结点（终端结点）：度为0的结点。</p>
+<p>分枝结点（非终端结点）：度不为0的结点。<br>孩子：树中一个结点的子树的根结点。<br>双亲：树中一个孩子结点的上层结点（唯一）。<br>兄弟：具有同一个双亲的孩子结点互成为兄弟。<br>子孙：一个结点的所有子树中的结点称之为该结点的子孙节点。<br>祖先：从根结点到该结点所经分支上的所有结点。<br>层数：根结点的层数规定为1，其余结点的层数等于它的双亲结点的层数+1。<br>深度：所有结点的最大层次。<br>堂兄弟：双亲在同一层，且双亲不同的结点互为堂兄弟。<br>有序树：如果一棵树中结点的各子树从左到右是有次序的，即若交换了某结点各子树的相对位置则构成不同的树，称这棵树为有序树；反之，则称为无序树。<br>森林：m(m≥0)棵不相交的树的集合称为森林。自然界中树和森林是不同的概念，但在数据结构中，树和森林只有很小的差别，任何一棵树，删去根结点就变成了森林。<br><a href="https://github.com/xiufengcheng/DATASTRUCTURE/tree/master/Chapter_07_Tree#%E6%A3%AE%E6%9E%97" target="_blank" rel="external">https://github.com/xiufengcheng/DATASTRUCTURE/tree/master/Chapter_07_Tree#%E6%A3%AE%E6%9E%97</a></p>
+</li>
+<li></li>
+</ol>
+<h2 id="二叉树"><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h2><h2 id="完全二叉树"><a href="#完全二叉树" class="headerlink" title="完全二叉树"></a>完全二叉树</h2><h2 id="满二叉树"><a href="#满二叉树" class="headerlink" title="满二叉树"></a>满二叉树</h2><h2 id="平衡二叉树"><a href="#平衡二叉树" class="headerlink" title="平衡二叉树"></a>平衡二叉树</h2><h2 id="BTree"><a href="#BTree" class="headerlink" title="BTree"></a>BTree</h2><h2 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h2>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Data-Structures/">Data Structures</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tree/">Tree</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&title=《树和二叉树》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&title=《树和二叉树》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《树和二叉树》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/07/mysql/2017-10-07-mysql-42/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">42. MySQL高性能索引</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/08/mysql/2017-10-08-mysql-43/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">43. 索引类型</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&title=《树和二叉树》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&title=《树和二叉树》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《树和二叉树》 — Lant's Blog&url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/07/data-structure/2017-10-07-tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACr0lEQVR42u3aMXLDMAwEwPz/08lMqjSUDwARu1hVnli2uSxE5ICvr/j6/r3+vv77l+qdz/ec7j/94oULDw8Pr7X003W6p/ptp6UnG5Gs57g2PDw8vDXe5BFfPQySb0jW83wPHh4e3ifwnj91ur9XWM+3AA8PD++TeUm4kAcKH3cw4OHh4Q3CiLyY7h0qSdywmLXg4eHhxbxeA+y9r9f7e3h4eHitrvrzA7d3nEzi4/Jq8fDw8BZ41VK4+hDvBRO9863wHwMeHh7egNcLDqoNqnzsIP+2aNPx8PDw1nj5T+4FFnmkm5fgeHh4eHu8jXGo6mGQb2Vh/AsPDw9vgTcZZroVJVSHBqqbhYeHh3eXVw0a5qRJ8JEcOS/CCDw8PLwFXjWKLUQDxZK6t5Ioa8HDw8Mb8/KHde/dZDAr+Uv1uMLDw8Pb5lXL2Xl0WyiOJwEuHh4e3lVe74E+iQxycBV5vAcPDw/vKq86ENALJnpxbW87XmQteHh4eGNe8jieBwfV625RjoeHh3eXlxeveYGbbMStLXsBxsPDw1vjVcvf6ohVfmz0Yo4ojMDDw8Nb4FWL2iTenQ9gTbYADw8Pb4P3vIi8DdYLdvOCu3os4eHh4W3zqnFqcjBUx7CSZtukuMfDw8O7y8tHBPIBrDzmqAYi1YEtPDw8vLu8uyVy8tl5UJt8Px4eHt7/83qR7iRumH/qmLLg4eHhXeXdbTVNRrjyAOJCgIuHh4c34PXaXVHDvpip5uV4oUmGh4eHt8DrPXDzAyB5d9IYi1JqPDw8vAXeZKyqF0xsjBEctw8PDw9vjTeZVuota9LoKhw8eHh4eG/l5VFF/m5yROXFOh4eHt4n8zaK48lGHO/Hw8PDW+P1wohmwyke6uq1u/Dw8PC2eb0G2KRB1QuCe8MKeHh4eFd5P4t6NcoTSCs8AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

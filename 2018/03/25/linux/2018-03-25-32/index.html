@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>32. MySQL5.7.23 编译安装? | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Linux">
+    <meta name="description" content="本地下载mysql5.7.23, vagrant挂载目录到虚拟机内部 /test, 将Tarball包移动到 /usr/local/src 目录下, 并 tar -zxvf mysql-5.7.23.tar.gz 解压;   mysql源码编译所需的依赖安装, 可以参考  https://dev.mysql.com/doc/refman/5.7/en/source-installation.ht">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="32. MySQL5.7.23 编译安装?">
+<meta property="og:url" content="http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="本地下载mysql5.7.23, vagrant挂载目录到虚拟机内部 /test, 将Tarball包移动到 /usr/local/src 目录下, 并 tar -zxvf mysql-5.7.23.tar.gz 解压;   mysql源码编译所需的依赖安装, 可以参考  https://dev.mysql.com/doc/refman/5.7/en/source-installation.ht">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-13T02:21:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="32. MySQL5.7.23 编译安装?">
+<meta name="twitter:description" content="本地下载mysql5.7.23, vagrant挂载目录到虚拟机内部 /test, 将Tarball包移动到 /usr/local/src 目录下, 并 tar -zxvf mysql-5.7.23.tar.gz 解压;   mysql源码编译所需的依赖安装, 可以参考  https://dev.mysql.com/doc/refman/5.7/en/source-installation.ht">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/t1.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">32. MySQL5.7.23 编译安装?</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">32. MySQL5.7.23 编译安装?</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-03-25T12:43:26.000Z" itemprop="datePublished" class="page-time">
+  2018-03-25
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-linux/2018-03-25-32"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">32. MySQL5.7.23 编译安装?</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-03-25 20:43:26" datetime="2018-03-25T12:43:26.000Z"  itemprop="datePublished">2018-03-25</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ol>
+<li><p>本地下载mysql5.7.23, vagrant挂载目录到虚拟机内部 /test, 将Tarball包移动到 /usr/local/src 目录下, 并 tar -zxvf mysql-5.7.23.tar.gz 解压; </p>
+</li>
+<li><p>mysql源码编译所需的依赖安装, 可以参考</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/source-installation.html" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/source-installation.html</a> </li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html#binary-installation-layout" target="_blank" rel="external">https://dev.mysql.com/doc/refman/5.7/en/binary-installation.html#binary-installation-layout</a>:</li>
+</ul>
+</li>
+<li><p>依赖安装</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum -y install gcc gcc-c++ ncurses ncurses-devel bison libgcrypt perl make cmake</div></pre></td></tr></table></figure>
+</li>
+<li><p>mysql5.7系列还必须要求安装<a href="https://www.boost.org/users/history/" target="_blank" rel="external">boost_1_59_0(必须是该版本)</a></p>
+<ul>
+<li>本地<a href="https://jaist.dl.sourceforge.net/project/boost/boost/1.59.0/boost_1_59_0.tar.gz" target="_blank" rel="external">下载</a>boost_1_59_0, 并且将Tarball包移动到 /usr/local/src 目录下, 并 tar -zxvf mysql-5.7.23.tar.gz 解压;</li>
+<li>直接移动解压目录到 /usr/localboost : <code>cp -r boost_1_59_0 /usr/local/boost</code> (不用编译安装)</li>
+</ul>
+</li>
+<li><p>开始编译安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">cmake . -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_DATADIR=/usr/local/mysql/data -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_general_ci -DMYSQL_TCP_PORT=3306 -DMYSQL_USER=mysql -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_MEMORY_STORAGE_ENGINE=1 -DENABLE_DOWNLOADS=1 -DDOWNLOAD_BOOST=1 -DWITH_BOOST=/usr/local/boost</div><div class="line">make    // 花费时间可能会比较长</div><div class="line">make install</div></pre></td></tr></table></figure>
+<p>已经在/usr/local/生成mysql目录</p>
+</li>
+<li><p>编译安装完成后, 需要创建运行mysql程序的相关账户及目录相关权限</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">groupadd mysql</div><div class="line">useradd -r -g mysql -s /bin/false mysql</div><div class="line">chown -R mysql:mysql /usr/local/mysql/</div></pre></td></tr></table></figure>
+</li>
+<li><p>接下来需要设置mysql的配置文件my.cnf</p>
+<ul>
+<li>注意: mysql5.7.18之后, 貌似已经不在解压包的support-files目录中提供my-default.cnf文件</li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/option-files.html" target="_blank" rel="external">参考</a>在Unix和类Unix系统上，MySQL程序按照指定的顺序从下表中显示的文件中读取启动选项（首先列出的文件首先读取，后面读取的文件优先）</li>
+<li>你会发现在centos7-minimal系统的/etc下就有my.cnf文件<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">cp my.cnf my.cnf.bak</div><div class="line">vi my.cnf // 对文件进行编辑</div><div class="line">[client]</div><div class="line">port = 3306</div><div class="line">default-character-set = utf8</div><div class="line">socket = /usr/local/mysql/mysql.sock</div><div class="line"></div><div class="line">[mysql]</div><div class="line">port = 3306</div><div class="line">default-character-set = utf8</div><div class="line">socket = /usr/local/mysql/mysql.sock</div><div class="line"></div><div class="line">[mysqld]</div><div class="line">user = mysql</div><div class="line">basedir = /usr/local/mysql</div><div class="line">datadir=/usr/local/mysql/data</div><div class="line">port = 3306</div><div class="line">character_set_server=utf8</div><div class="line">pid-file=/usr/local/mysql/mysqld.pid</div><div class="line">socket=/usr/local/mysql/mysql.sock</div><div class="line">server-id=1</div><div class="line"></div><div class="line">#</div><div class="line"># include all files from the config directory</div><div class="line">#</div><div class="line">!includedir /etc/my.cnf.d</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>准备mysql用户权限等</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@lant src]# groupadd mysql</div><div class="line">[root@lant src]# useradd -r -g mysql -s /bin/false mysql</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置环境变量</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">echo &apos;PATH=/usr/local/mysql/bin:/usr/local/mysql/lib:$PATH&apos; &gt;&gt; /etc/profile // 设置环境变量, 并开机运行</div><div class="line">echo &apos;export PATH&apos; &gt;&gt; /etc/profile  //把PATH设为全局变量</div><div class="line">source /etc/profile</div></pre></td></tr></table></figure>
+<p> 此时就可以全局使用/usr/local/mysql/bin下的命令</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@lant vagrant]# mysqld --help</div><div class="line">mysqld  Ver 5.7.23 for Linux on x86_64 (Source distribution)</div><div class="line">Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation and/or its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Starts the MySQL database server.</div><div class="line"></div><div class="line">Usage: mysqld [OPTIONS]</div><div class="line"></div><div class="line">For more help options (several pages), use mysqld --verbose --help.</div><div class="line">[root@lant vagrant]#</div></pre></td></tr></table></figure>
+</li>
+<li><p>初始化数据库 (会自动在/usr/local/mysql下生成data目录, 并且是mysql用户身份)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">cd /usr/local/mysql/</div><div class="line"></div><div class="line">bin/mysqld \</div><div class="line">--initialize-insecure \</div><div class="line">--user=mysql \</div><div class="line">--basedir=/usr/local/mysql \</div><div class="line">--datadir=/usr/local/mysql/data</div></pre></td></tr></table></figure>
+</li>
+<li><p>将mysql添加到systemctl系统服务</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">cp /usr/local/src/mysql-5.7.23/scripts/systemd/mysqld.service.in /usr/lib/systemd/system/mysqld.service</div><div class="line">vi mysqld.service</div><div class="line"></div><div class="line">[Unit]</div><div class="line">Description=MySQL Server</div><div class="line">Documentation=man:mysqld(8)</div><div class="line">Documentation=http://dev.mysql.com/doc/refman/en/using-systemd.html</div><div class="line">After=network.target</div><div class="line">After=syslog.target</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div><div class="line"></div><div class="line">[Service]</div><div class="line">User=mysql</div><div class="line">Group=mysql</div><div class="line"></div><div class="line">Type=forking</div><div class="line"></div><div class="line">PIDFile=/usr/local/mysql/mysqld.pid</div><div class="line"></div><div class="line"># Disable service start and stop timeout logic of systemd for mysqld service.</div><div class="line">TimeoutSec=0</div><div class="line"></div><div class="line"># Execute pre and post scripts as root</div><div class="line">PermissionsStartOnly=true</div><div class="line"></div><div class="line"># Needed to create system tables // 这里没找到这个脚本, 就先注释掉了</div><div class="line">#ExecStartPre=/usr/local/mysql/bin/mysqld_pre_systemd</div><div class="line"></div><div class="line"># Start main service</div><div class="line">ExecStart=/usr/local/mysql/bin/mysqld --daemonize --pid-file=/usr/local/mysql/mysqld.pid $MYSQLD_OPTS</div><div class="line"></div><div class="line"># Use this to switch malloc implementation</div><div class="line">EnvironmentFile=-/etc/sysconfig/mysql</div><div class="line"></div><div class="line"># Sets open_files_limit</div><div class="line">LimitNOFILE = 5000</div><div class="line"></div><div class="line">Restart=on-failure</div><div class="line"></div><div class="line">RestartPreventExitStatus=1</div><div class="line"></div><div class="line">PrivateTmp=false</div></pre></td></tr></table></figure>
+<p>然后设置开机自动启动:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">systemctl daemon-reload</div><div class="line">systemctl start mysqld</div><div class="line">netstat -anpt | grep 3306</div><div class="line">systemctl enable mysqld</div><div class="line"></div><div class="line">[root@lant mysql]# ps aux |grep mysql</div><div class="line">mysql     2833  0.1  9.8 1768144 179708 ?      Sl   02:40   0:00 /usr/local/mysql/bin/mysqld --daemonize --pid-file=/usr/local/mysql/mysqld.pid</div><div class="line">root      2867  0.0  0.0 112704   972 pts/0    S+   02:43   0:00 grep --color=auto mysql</div><div class="line">[root@lant mysql]#</div></pre></td></tr></table></figure>
+</li>
+<li><p>默认没有密码, 所以直接设置新密码后即可登录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysqladmin -u root -p password &quot;renyimin&quot;;</div><div class="line">mysql -uroot -p</div></pre></td></tr></table></figure>
+</li>
+<li><p>外部客户端连接?</p>
+</li>
+</ol>
+<p>最后更新时间 2018/08/12</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&title=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&title=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/03/25/linux/2018-03-25-31/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">31. Nginx编译安装?</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/05/16/linux/2018-05-16-50/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">50. sort, uniq, wc</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&title=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&title=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《32. MySQL5.7.23 编译安装?》 — Lant's Blog&url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/03/25/linux/2018-03-25-32/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLklEQVR42u3aS67qMBAEUPa/ad70SryEKncYxDkeIYiMTwYt9+f1itf7Yx39+vebo8/nO3z+etnCwMC4LeN9uj6Pcn7QZM/8v5LnMTAwnsM4imB50EwOkUfO/GwYGBgY7dbJk/nVEwMDA6NlTEJzzsPAwMCYJLGjgBgH8Z/n4hgYGDdkTBLLX3/+SX8DAwPjVoxJ4f6qZ9og+5/dMDAwtmZMWphJaE6iYj6E8eW/MDAwNmUkyWEyZtHu0LYHvrwyDAyMBzDyoNkW6fI252jgAwMD4wGMa1cbiHPSZeU2DAyM7RjnF8Q8yCat0AS8WDXEwMC4LWN+1cvHuSYNy+IkGBgYWzOSAv35lS6/9iXtzFG7AgMDYyNGOwZxbaG/bXYengoDA2NrRnspbJPVdtiiRWJgYDyBkRTl8+biVYX++lQYGBhbMyblrUmYjkYoJk1NDAyMjRht2Ss/xKRV2abKGBgYezPyBDL5g7UrYNu7OHwRGBgYD2DME9G1cLn2UjAwMJ7MWOstnFPb4dRFKgYGxgMYScGrPdBa23JtNA0DA2NvRnvVa0cu2nLexRdQDAyMmzPe5coLZ20i2jYkXmuRHgMD44aM+fjFWnidjGKMZkkwMDBuy2iHJPLGZ5sGrw15YGBgPIexlo7WjcagadqOaGBgYGC0DYO2JNeW/r9k5BgYGBiDK13evMyfwcDAeBpjLYlteflueWKMgYHxBEY74pDHukkpbS0oY2BgbMf4B0sq9RtjYgkoAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

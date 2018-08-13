@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s Blog">
 <meta property="og:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令的执行过程  awk是逐行处理">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-07T03:29:05.000Z">
+<meta property="og:updated_time" content="2018-08-13T02:21:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="56. awk">
 <meta name="twitter:description" content="简介 Awk是一种便于使用且表达能力强的程序设计语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;  之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;  awk 命令的执行过程  awk是逐行处理">
@@ -52,14 +52,14 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/t1.png)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Lant</h5>
-          <a href="mailto:564613464@qq.com" title="564613464@qq.com" class="mail">564613464@qq.com</a>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
         </hgroup>
       </div>
     </div>
@@ -180,12 +180,12 @@
 </li>
 <li><p>awk 命令的执行过程</p>
 <ul>
-<li>awk是逐行处理的, 当处理一个文本时, 会一行一行进行处理, 处理完当前行, 再处理下一行, awk默认以 “换行符” 为标记来识别每一行, 每次遇到”回车换行”, 就认为是当前行的结束, 新的一行的开始;</li>
+<li>awk是逐行处理的, 当处理一个文本时, 会一行一行进行处理, 处理完当前行, 再处理下一行, awk默认以 <strong>换行符</strong> 为标记来识别每一行, 每次遇到”回车换行”, 就认为是当前行的结束, 新的一行的开始;</li>
 <li>awk在逐行处理文本时, 会搜索能够匹配程序中任意模式(也就是在awk命令中的’program’中可以有多个模式)的行, 每个模式依次测试每个输入行, 对于匹配到模式的行, 会执行awk命令中模式后面的动作(也许包含多步), 然后读取下一行并继续匹配, 直到所有的输入读取完毕;</li>
 <li>同时, awk会按照用户指定的分割符去分割当前行为多个字段(每个字段分别被标识为 <code>$1</code> 一直到 <code>$NF</code>, <code>$NF</code>为awk中的变量, 表示当前行被分隔出的最大字段数), 如果没有指定分割符, 默认使用空格作为分隔符, 另外, 默认会将空格符和制表符都视为空格, 而且多个连续的空格都视为一个;</li>
 </ul>
 </li>
-<li><p>作为一个PHP开发人员, 在工作中, 不一定要求会写比较复杂的awk语句, 但可能经常需要对开发, 沙盒, 预发, 线上等各环境的日志做分析工作;</p>
+<li><p>作为一个PHP开发人员, 在工作中, 可能经常需要对开发, 沙盒, 预发, 线上等各环境的日志做分析工作;</p>
 </li>
 </ol>
 <h2 id="语法结构"><a href="#语法结构" class="headerlink" title="语法结构"></a>语法结构</h2><p>基本语法结构为: <code>awk [options] &#39;program&#39; file1 , file2 ...</code>, 其中, <code>&#39;program&#39;</code> 又可以细分为 <code>pattern</code>模式 和 <code>action</code>动作; 也就是说, awk的完整语法其实为 <code>awk [options] &#39;pattern {action}&#39; file1 , file2 ...</code></p>
@@ -215,7 +215,7 @@
 <li><p>用来匹配awk命令所处理的文本中的每一行内容; </p>
 </li>
 <li><p><strong>注意模式匹配字符串时, 需要使用双引号</strong></p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ cat awk.log</div><div class="line">renyimin   200 1200W 		男</div><div class="line"></div><div class="line">renfumin 500 200W  男</div><div class="line">renjuanfang          1000 900W 女</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&quot;renyimin&quot; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line">renyimin 200 1200W</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&apos;renyimin&apos; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==renyimin &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ cat awk.log</div><div class="line">renyimin   200 1200W 		男</div><div class="line"></div><div class="line">renfumin 500 200W  男</div><div class="line">renjuanfang          1000 900W 女</div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&quot;renyimin&quot; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line">renyimin 200 1200W</div><div class="line">// 下面单引号就不行</div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==&apos;renyimin&apos; &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$ awk &apos;$1==renyimin &#123;print $1,$2,$3&#125;&apos; awk.log</div><div class="line"></div><div class="line"></div><div class="line">renyimindeMacBook-Pro:Desktop renyimin$</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <ol>
@@ -383,9 +383,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/05/16/linux/2018-05-16-50/" id="post-prev" class="post-nav-link">
+        <a href="/2018/05/16/linux/2018-03-18-23/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">50. sort, uniq, wc</h4>
+          <h4 class="title">30. 开机启动相关</h4>
         </a>
       </div>
     
