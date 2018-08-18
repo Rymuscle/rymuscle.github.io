@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03. php-fpm -- 慢日志, 错误日志 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="PHP">
+    <meta name="description" content="前言在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志;  php-fpm 慢日志 对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下  request_slowlog_timeout: 默认值为0, 表示不进行慢日志记录;可以设置为n(n&amp;gt;0)秒, 来打开慢查询日志的记录,">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03. php-fpm -- 慢日志, 错误日志">
+<meta property="og:url" content="http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="前言在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志;  php-fpm 慢日志 对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下  request_slowlog_timeout: 默认值为0, 表示不进行慢日志记录;可以设置为n(n&amp;gt;0)秒, 来打开慢查询日志的记录,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-18T04:51:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03. php-fpm -- 慢日志, 错误日志">
+<meta name="twitter:description" content="前言在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志;  php-fpm 慢日志 对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下  request_slowlog_timeout: 默认值为0, 表示不进行慢日志记录;可以设置为n(n&amp;gt;0)秒, 来打开慢查询日志的记录,">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/t1.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03. php-fpm -- 慢日志, 错误日志</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">03. php-fpm -- 慢日志, 错误日志</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-12-03T12:32:17.000Z" itemprop="datePublished" class="page-time">
+  2017-12-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-fpm-慢日志"><span class="post-toc-number">2.</span> <span class="post-toc-text">php-fpm 慢日志</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-fpm-错误日志"><span class="post-toc-number">3.</span> <span class="post-toc-text">php-fpm 错误日志</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-fpm与php-ini的error-log"><span class="post-toc-number">4.</span> <span class="post-toc-text">php-fpm与php.ini的error_log</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-php/2017-12-03-php-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03. php-fpm -- 慢日志, 错误日志</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-12-03 20:32:17" datetime="2017-12-03T12:32:17.000Z"  itemprop="datePublished">2017-12-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志; </p>
+<h2 id="php-fpm-慢日志"><a href="#php-fpm-慢日志" class="headerlink" title="php-fpm 慢日志"></a>php-fpm 慢日志</h2><ol>
+<li><p>对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下</p>
+<ul>
+<li><code>request_slowlog_timeout</code>: 默认值为0, 表示不进行慢日志记录;<br>可以设置为n(n&gt;0)秒, 来打开慢查询日志的记录, 表示执行时间超过n秒的脚本将记录进slowlog日志中;</li>
+<li><code>slowlog</code>: 用来设置慢日志的存放位置;</li>
+</ul>
+</li>
+<li><p>尝试如下配置</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vi /usr/local/php/etc/php-fpm.d/www.conf</div><div class="line">// 如下: slowlog的位置如果是相对路径, 则默认是以php的安装位置为根目录的, </div><div class="line">slowlog = log/$pool.log.slow</div><div class="line">request_slowlog_timeout = 2</div></pre></td></tr></table></figure>
+<p> 然后重启php-fpm (注意log目录必须存在且有权限, 不然会启动失败)</p>
+</li>
+<li><p>写如下php进行测试:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">echo 123;</div><div class="line">sleep(3);</div></pre></td></tr></table></figure>
+</li>
+<li><p>运行后, 果然记下了慢日志</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tailf /usr/local/php/log/www.log.slow</div><div class="line">// 结果如下</div><div class="line"></div><div class="line">[17-Aug-2018 10:00:48]  [pool www] pid 18139</div><div class="line">script_filename = /html/test.php</div><div class="line">[0x00007f2c36c140a0] sleep() /html/test.php:3</div></pre></td></tr></table></figure>
+</li>
+<li><p>日志说明</p>
+<ul>
+<li>script_filename: 是入口文件</li>
+<li>sleep() 这一行是说: 是执行这个方法的时候超过执行时间的</li>
+<li>每行冒号后面的数字是行号</li>
+</ul>
+</li>
+<li><p>另外, 在开启慢日志之后, 在phpfpm的错误日志中也有相关记录</p>
+</li>
+</ol>
+<h2 id="php-fpm-错误日志"><a href="#php-fpm-错误日志" class="headerlink" title="php-fpm 错误日志"></a>php-fpm 错误日志</h2><ol>
+<li><p>对于php-fpm的错误日志, 需要在全局配置文件 php-fpm.conf 中配置 <code>error_log = log/error.log</code></p>
+<ul>
+<li>注意该配置项不能放在进程池的配置文件中</li>
+<li>另外, 配置文件中说明了, 如果错误日志的路径是相对路径, 是以/usr/local/php/var 为根目录的</li>
+</ul>
+</li>
+<li><p>继续运行之前的那个超时脚本, 会发现, <strong>php-fpm的错误日志中也会记录这个超时日志</strong>:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">tailf /usr/local/php/var/log/error.log</div><div class="line">// 如下</div><div class="line"></div><div class="line">[17-Aug-2018 12:11:31] WARNING: [pool www] child 19238, script &apos;/html/test.php&apos; (request: &quot;GET /test.php&quot;) executing too slow (2.001552 sec), logging</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: child 19238 stopped for tracing</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: about to trace 19238</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: finished trace of 19238</div></pre></td></tr></table></figure>
+</li>
+<li><p>但是可以测试, 当PHP程序出问题时, 比如少一个分号, 会发现, php-fpm的error.log中并不会记录该错误!</p>
+</li>
+</ol>
+<h2 id="php-fpm与php-ini的error-log"><a href="#php-fpm与php-ini的error-log" class="headerlink" title="php-fpm与php.ini的error_log"></a>php-fpm与php.ini的error_log</h2><ol>
+<li><p>目前为止, php相关的错误日志既不会记录到php-fpm的error_log中, 也不会记录在php.ini中的error_log中; </p>
+</li>
+<li><p>一般情况, php-fpm的error_log不去记录代码逻辑的错误, 而是由 php.ini 的错误日志进行记录; </p>
+</li>
+<li><p>配置 php.ini 或者 php-fpm 来记录错误日志 </p>
+<ul>
+<li>第一种方法, 只用在php.ini中设定配置文件路径, 并且文件权限足够即可, 但是如果文件权限不够, 则php.ini和php-fpm都不会记录错误日志;</li>
+<li><p>第二种方法, 在php-fpm.conf中进行配置即可, 这种情况下, 如果php.ini中规定的错误日志文件权限不够, 则php-fpm的错误日志会自动记录;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 在php-fpm.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div><div class="line">// 同时需要在&quot;[global]&quot;下配置error_log的路径</div></pre></td></tr></table></figure>
+</li>
+<li><p>第三种方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 对php-fpm.conf中的error_log打开注释, 设置好路径即可, 不必须在[global]下, 然后在进程池的配置文件如www.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div></pre></td></tr></table></figure>
+<p>这种方法, 如果php.ini的日志文件权限不够, 则php-fpm和php.ini都不会记录错误日志;<br>但是当php.ini的错误日志权限够的话, 它会记录错误日志;</p>
+</li>
+</ul>
+</li>
+<li><p>php.ini配置:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">log_errors = On</div><div class="line">error_log = &quot;/usr/local/php/log/php_errors.log&quot;</div><div class="line">error_reporting=E_ALL</div></pre></td></tr></table></figure>
+</li>
+<li><p>只有php-fpm的error_log记录了错误日志, 而php.ini的error_log却不记录php错误日志的原因可能是:</p>
+<ul>
+<li>php-fpm.conf(或者线程池配置文件如www.conf)中的 php_admin_value[error_log] 参数被设置 (一般默认是关闭的)</li>
+<li>php.ini文件中指定的error_log日志文件没有可写权限</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&title=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&title=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/12/03/docker/2017-12-03-04-docker/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">04.定制镜像 - docker commit手动定制</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/12/16/docker/2017-12-16-05-docker/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">05. 容器</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&title=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&title=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. php-fpm -- 慢日志, 错误日志》 — Lant's Blog&url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/12/03/php/2017-12-03-php-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aQW7DMAwF0dz/0u6mixZFlPmkUsTUaBUYhqPnBU2RfDzwuv6sn9fJnetnPruyecmQIeO2jGu5yObIdtcbffZqyN5kyJBxDoP8PdkWCcokcvK9yZAhQ0b/Hh5GZciQIeM/A256oP3Q74YMGTI+jMGDYKc0tj7EksPzhrO4DBkybsjoBMF3/35Lf0OGDBm3YlzhIg3INJR39vP9HBkyZIxm8ADHByPSLdaOuzJkyDiHwUvzPASnwxlpQxSlhjJkyBjE4LeSLaY8coWDZciQMZvRqVntbR5saADIkCFjHINsgv8BKcDxg3FwSJYhQ8YxjM5wQ2fwopaGypAh4zQGby7WCv0kHKdP+/UEGTJkjGaQoMnLcJ0mAUko43KbDBkyRjB4QOw0Jnl7IB3aaD1ahgwZN2SkYxYkgMbdCUySIUPGOYxaCrirnVAbNUMZrgwZMgYxdiV5aUuy9lJefDdkyJBxAIM0BmrjFLznWNyJDBkyRjP6yRxPHOMRivT1yZAh4wAGD3O1GhdvYRaP0DJkyDiAwcMiH4aoNSzTkTIZMmScxuCNw7TE3zkMow+DDBkyhjKucKWpXocUUGXIkDGakY5qpSWzTmAtzozIkCFjKCMdieikiZ0U8MUohgwZMg5g7Ap86ShG+gVAwxYyZMiQ0S6orQ/AaRFQhgwZMtZpWdrg3MXbEHBlyJBxQwZvBvBmJ3lyLVmUIUPGaQx+dOwX1HjYTdsGMmTIGMr4At9F0T/YDrlxAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

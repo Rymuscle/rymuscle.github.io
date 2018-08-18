@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. PHP7编译安装 | Lant&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="PHP">
+    <meta name="description" content="编译安装 下载PHP7.0.15到 /usr/local/src 并解压缩  12wget http://cn2.php.net/distributions/php-7.0.15.tar.gztar -zxvf php-7.0.15.tar.gz  依赖安装  123yum install -y gcc gcc-c++ make automake autoconf gd file bison pa">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01. PHP7编译安装">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s Blog">
+<meta property="og:description" content="编译安装 下载PHP7.0.15到 /usr/local/src 并解压缩  12wget http://cn2.php.net/distributions/php-7.0.15.tar.gztar -zxvf php-7.0.15.tar.gz  依赖安装  123yum install -y gcc gcc-c++ make automake autoconf gd file bison pa">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-18T04:15:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01. PHP7编译安装">
+<meta name="twitter:description" content="编译安装 下载PHP7.0.15到 /usr/local/src 并解压缩  12wget http://cn2.php.net/distributions/php-7.0.15.tar.gztar -zxvf php-7.0.15.tar.gz  依赖安装  123yum install -y gcc gcc-c++ make automake autoconf gd file bison pa">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/t1.png)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01. PHP7编译安装</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">01. PHP7编译安装</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-20T12:58:13.000Z" itemprop="datePublished" class="page-time">
+  2017-11-20
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编译安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">编译安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置nginx"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置nginx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#增加扩展"><span class="post-toc-number">3.</span> <span class="post-toc-text">增加扩展</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#phpize-php-config"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">phpize,php-config</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#php-fpm-conf-与-php-ini"><span class="post-toc-number">4.</span> <span class="post-toc-text">php-fpm.conf 与 php.ini</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-php/2017-11-20-php-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01. PHP7编译安装</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-20 20:58:13" datetime="2017-11-20T12:58:13.000Z"  itemprop="datePublished">2017-11-20</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><ol>
+<li><p><a href="http://php.net/releases/" target="_blank" rel="external">下载</a>PHP7.0.15到 /usr/local/src 并解压缩</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">wget http://cn2.php.net/distributions/php-7.0.15.tar.gz</div><div class="line">tar -zxvf php-7.0.15.tar.gz</div></pre></td></tr></table></figure>
+</li>
+<li><p>依赖安装</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">yum install -y gcc gcc-c++ make automake autoconf gd file bison patch mlocate flex diffutils zlib zlib-devel pcre pcre-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel libxml2 libxml2-devel glibc glibc-devel glib2 glib2-devel bzip2 bzip2-devel ncurses ncurses-devel curl curl-devel libcurl libcurl-devel e2fsprogs e2fsprogs-devel krb5 krb5-devel openssl openssl-devel openldap openldap-devel nss_ldap openldap-clients openldap-servers openldap-devellibxslt-devel kernel-devel libtool-libs readline-devel gettext-devel libcap-devel php-mcrypt libmcrypt libmcrypt-devel recode-devel gmp-devel icu libxslt libxslt-devel php-devel</div><div class="line">// 如果出现 No package libmcrypt available.</div><div class="line">// 解决方法: yum  install epel-release  //扩展包更新包</div></pre></td></tr></table></figure>
+</li>
+<li><p>预编译, 编译, 安装</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 这里设置的config-file-path是php.ini文件的, 因此在安装好之后要将php.ini文件放在此处</div><div class="line">./configure --prefix=/usr/local/php --with-config-file-path=/usr/local/php/etc --with-mysql-sock --with-mysqli --with-libxml-dir --with-openssl --with-mcrypt --with-mhash --with-pcre-regex --with-zlib --with-iconv --with-bz2 --with-curl --with-cdb --with-pcre-dir --with-gd --with-openssl-dir --with-jpeg-dir --with-png-dir --with-zlib-dir --with-freetype-dir --with-gettext --with-gmp --with-mhash --with-libmbfl --with-onig --with-pdo-mysql --with-zlib-dir --with-readline --with-libxml-dir --with-xsl --with-pear --enable-fpm --enable-soap --enable-bcmath --enable-calendar --enable-dom --enable-exif --enable-fileinfo --enable-filter --enable-ftp --enable-gd-native-ttf --enable-gd-jis-conv --enable-json --enable-mbstring --enable-mbregex --enable-mbregex-backtrack --enable-pdo --enable-session --enable-shmop --enable-simplexml --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --enable-zip --enable-mysqlnd-compression-support</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
+</li>
+<li><p>拷贝配置文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">cp /usr/local/src/php-7.0.15/php.ini-production /usr/local/php/etc/php.ini</div><div class="line">cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf</div><div class="line">cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf</div><div class="line">// 把pid 改成 /run/php-fpm.pid</div><div class="line">vim /usr/local/php/etc/php-fpm.conf</div></pre></td></tr></table></figure>
+</li>
+<li><p>将php-fpm加入到system中管理</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">cd /lib/systemd/system</div><div class="line">vim php-fpm.service</div><div class="line"></div><div class="line">[Unit]</div><div class="line">Description=The PHP FastCGI Process Manager</div><div class="line">After=syslog.target network.target</div><div class="line"></div><div class="line">[Service]</div><div class="line">Type=simple</div><div class="line">PIDFile=/run/php-fpm.pid</div><div class="line">ExecStart=/usr/local/php/sbin/php-fpm --nodaemonize --fpm-config /usr/local/php/etc/php-fpm.conf</div><div class="line">ExecReload=/bin/kill -USR2 $MAINPID</div><div class="line">ExecStop=/bin/kill -SIGINT $MAINPID</div><div class="line"></div><div class="line">[Install]</div><div class="line">WantedBy=multi-user.target</div></pre></td></tr></table></figure>
+<ul>
+<li>启动php-fpm: <code>systemctl start php-fpm.service</code></li>
+<li>添加到开机启动: <code>systemctl enable php-fpm.service</code></li>
+</ul>
+</li>
+<li><p>注意:</p>
+<ul>
+<li>php.ini 配置文件的路径是在编译时通过 –with-config-file-path 设置的;</li>
+<li>而 php-fpm.conf 配置文件貌似是需要放在 安装目录下的etc目录中;</li>
+<li>php-fpm启动后, 会调用php-cgi解析器, 它会调用这两个配置文件;</li>
+</ul>
+</li>
+<li><p>如果nginx和php不在一台机器, 需要注意, php-fpm监听的不能是 127.0.0.1:9000, 而应该是对外ip:9000;</p>
+</li>
+</ol>
+<h2 id="配置nginx"><a href="#配置nginx" class="headerlink" title="配置nginx"></a>配置nginx</h2><ol>
+<li>配置比较简单, 在对应的server块中设置: <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">location ~ \.php$ &#123;</div><div class="line">    root /html;</div><div class="line">    // 一般nginx和php-fpm都在一台机器上, 此处不在同一机器, 需要保证php-fpm的配置listen不是127.0.0.1:9000, 而是其对外ip:9000</div><div class="line">    fastcgi_pass 192.168.3.121:9000;#php-fpm的默认端口是9000</div><div class="line">    fastcgi_index index.php;</div><div class="line">    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</div><div class="line">    include fastcgi_params;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li>注意, 如果php代码有错误, 但是访问只显示500状态码, 并不展示具体错误, 注意修改php-fpm.conf配置文件 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">vi /usr/local/php/etc/php-fpm.d/www.con</div><div class="line">// 打开下面配置, 并设置为on即可</div><div class="line">;php_flag[display_errors] = off</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="增加扩展"><a href="#增加扩展" class="headerlink" title="增加扩展"></a>增加扩展</h2><p>如何确保php在编译的时候, 该有的扩展都打开了? 哪些是默认打开的? 如何确定都要开启哪些扩展??<br>编译的时候打开的扩展和后面通过phpize编译的扩展有什么区别??<br>为什么编译时候打开的扩展在php.ini中并没有显示 extension=xxx.so??</p>
+<h3 id="phpize-php-config"><a href="#phpize-php-config" class="headerlink" title="phpize,php-config"></a>phpize,php-config</h3><ol>
+<li><p><code>phpize</code> 是用来扩展php模块的 </p>
+<ul>
+<li>在之前编译安装php时, <code>./configure</code> 预编译阶段会有一些 <code>--with</code> 参数, 就是说明需要打开的PHP模块, 不过有些些模块在php安装的时候可能没有编译进来, 所以如果以后我们还想再增加些其他模块, 但是又不想重新编译php, 这个是时候就可以用 <strong>phpize</strong> 了;</li>
+<li>当php编译完成后, phpize命令脚本一般会放在安装目录下的bin目录下;</li>
+<li>主要是用来侦测环境, 在扩展模块中创建 <code>configure文件</code>;</li>
+</ul>
+</li>
+<li><p>比如想在php中加入Xhprof性能分析模块, memcache扩展模块</p>
+<ul>
+<li><p>可以先到 <a href="http://pecl.php.net/" target="_blank" rel="external">pecl</a>, 或者 github 上找到合适的扩展模块tarball;</p>
+</li>
+<li><p>然后就可以执行phpize来编译要添加的模块;</p>
+</li>
+<li><p>如果你的系统中有多个php版本, 需要选择正确的php版本下的phpize命令;</p>
+</li>
+</ul>
+</li>
+<li><p>然后可以使用 <code>./configure</code> 命令编译扩展模块, 此时可以使用 <code>--with-php-config</code> 选项指明相应php安装目录下的 <code>php-config</code> 命令路径, 如 <code>./configure --with-php-config=/usr/local/php/bin/php-config</code></p>
+<ul>
+<li><code>php-config</code>是一个脚本文件, 用于获取所安装的php配置的信息</li>
+</ul>
+</li>
+</ol>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>[xhprof性能分析扩展包安装]</p>
+<p>[redis扩展包安装]</p>
+<p>[rabbitmq扩展包安装]</p>
+<h2 id="php-fpm-conf-与-php-ini"><a href="#php-fpm-conf-与-php-ini" class="headerlink" title="php-fpm.conf 与 php.ini"></a>php-fpm.conf 与 php.ini</h2><ol>
+<li>php-fpm.conf</li>
+<li>php.ini</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&title=《01. PHP7编译安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&title=《01. PHP7编译安装》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. PHP7编译安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/08/mysql/2017-10-08-mysql-43/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">43. 索引类型</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/21/php/2017-11-21-php-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02. php7常见扩展包的安装测试</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循 <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&title=《01. PHP7编译安装》 — Lant's Blog&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&title=《01. PHP7编译安装》 — Lant's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. PHP7编译安装》 — Lant's Blog&url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/20/php/2017-11-20-php-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aS3LCMBAFQO5/abJNFTF5TwMLS60VFYzl9mKi+Twe8Xr+Wq9/v7ry9dv390x+NVoYGBi3ZTzfrvfXXGGuqMnrSPb9Y0cMDIwDGMn2yWO1yHzff54ZAwMDo/ych933bAwMDIwJI3+INjXFwMDAmCSxSQFuUrbLk2cMDIzTGJMg+O3PX+lvYGBg3IrxLNdauT8Pl8+lhYGBsTcjD3B5ub99xLV0FwMD4xzGpGSWh+C10YoiVcbAwDiAkaSRSblt7RCZB9/LX2FgYGzNWCvZt/i2eTlqAGBgYGzHmBzm8hDcJsb5k2BgYJzDaEcfkivbtujay8XAwDiZkWzZJpltUa9IazEwMLZmTJLbBJkfOtvmaB3iMTAwbsvIm4uTxmQejtuhjeItYmBgbMdo18e6E2UDFQMD4zTGJOGcF/pHA2QYGBhbMz41frEWvtdCbf4tBgbGTow2LOaYJBFdo16mshgYGJsy2nGH/Ebt4TJ/6OI/BgYGxhaM9nbtGTMv0o12x8DAOIDRltUm16w1OKOAi4GBsTVjMh4xT0HXAjcGBsYJjLWhirZtsEYqqBgYGFsz2lGtvGFQHOnKIl09bIGBgbEFIwmyycExL66tHQGLqiEGBsamjG/E77X25CiVxcDAwAi2b1sFyY7Rq8HAwMCIxywmLYG2RTEKuBgYGDdkTIa3PtWwzA+LGBgYpzHy1DFvBkxKackdFpuaGBgY92P8AKC/Qc970agpAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
