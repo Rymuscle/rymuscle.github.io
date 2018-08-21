@@ -13,22 +13,25 @@
     
     
     
-    <title>06. 虚拟主机配置 | Rymuscle&#39;s</title>
+    <title>06. location块的配置 | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Nginx">
-    <meta name="keywords" content="Nginx">
+    <meta name="description" content="简介 location 有”定位”的意思, 在虚拟主机的配置中, 是不可缺少的一部分, 可以根据用户访问某个虚拟主机时URI中的资源标志符来将本次访问定位到不同的处理方式上; 比如碰到 .php, 如何调用PHP解释器? 这时就需要location  Location的语法结构为 : location [= | ~ | ~* | ^~ ] patt { ... } , 中括号[]中可以不写任何参数">
+<meta name="keywords" content="Nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="06. 虚拟主机配置">
+<meta property="og:title" content="06. location块的配置">
 <meta property="og:url" content="http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="简介 location 有”定位”的意思, 在虚拟主机的配置中, 是不可缺少的一部分, 可以根据用户访问某个虚拟主机时URI中的资源标志符来将本次访问定位到不同的处理方式上; 比如碰到 .php, 如何调用PHP解释器? 这时就需要location  Location的语法结构为 : location [= | ~ | ~* | ^~ ] patt { ... } , 中括号[]中可以不写任何参数">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-03T09:12:30.000Z">
+<meta property="og:updated_time" content="2018-08-21T09:51:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="06. 虚拟主机配置">
+<meta name="twitter:title" content="06. location块的配置">
+<meta name="twitter:description" content="简介 location 有”定位”的意思, 在虚拟主机的配置中, 是不可缺少的一部分, 可以根据用户访问某个虚拟主机时URI中的资源标志符来将本次访问定位到不同的处理方式上; 比如碰到 .php, 如何调用PHP解释器? 这时就需要location  Location的语法结构为 : location [= | ~ | ~* | ^~ ] patt { ... } , 中括号[]中可以不写任何参数">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -109,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">06. 虚拟主机配置</div>
+        <div class="flex-col header-title ellipsis">06. location块的配置</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -152,11 +155,18 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#精准匹配"><span class="post-toc-number">2.</span> <span class="post-toc-text">精准匹配</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一般匹配"><span class="post-toc-number">3.</span> <span class="post-toc-text">一般匹配</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#正则匹配"><span class="post-toc-number">4.</span> <span class="post-toc-text">正则匹配</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-nginx/2017-04-28-06"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">06. 虚拟主机配置</h1>
+        <h1 class="post-card-title">06. location块的配置</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-04-28 20:56:27" datetime="2017-04-28T12:56:27.000Z"  itemprop="datePublished">2017-04-28</time>
 
@@ -169,7 +179,63 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            
+            <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
+<li><p>location 有”定位”的意思, 在虚拟主机的配置中, 是不可缺少的一部分, 可以根据用户访问某个虚拟主机时URI中的资源标志符来将本次访问定位到不同的处理方式上; 比如碰到 <code>.php</code>, 如何调用PHP解释器? 这时就需要location</p>
+</li>
+<li><p>Location的语法结构为 : <code>location [= | ~ | ~* | ^~ ] patt { ... }</code> , 中括号[]中可以不写任何参数, 此时称为<strong>一般匹配</strong>, 也可以写参数;</p>
+</li>
+<li><p>其实Location的匹配可以划分为三种类型:</p>
+<ul>
+<li><code>location = patt {}</code>      // 精准匹配</li>
+<li><code>location patt {}</code>        // 一般匹配</li>
+<li><code>location ~ patt {}</code>      //正则匹配 ( location ~<em> patt {} )<br>(如果patt包含正则表达式, 就必须使用~或者~</em>)</li>
+</ul>
+</li>
+<li><p>那么location的这三种匹配类型在 nginx提供服务的时候是如何发挥作用的? 当一个URI访问到本虚拟主机时(即访问到某个Server块中时), 这个Server块中可能有多个Location块来决定这个URI应该如何进行访问, 接下来一一讨论;</p>
+</li>
+<li><p>location的这三种匹配类型的匹配顺序 </p>
+<ul>
+<li>先会匹配精准匹配;</li>
+<li>然后会先匹配一般匹配, 多个一般匹配中, 会把匹配度最高的先记录下来; </li>
+<li>然后再去匹配正则匹配, 如果正则匹配中有可以匹配成功的, 则使用之, 并且停止继续往下匹配(即使下面有匹配度更高的正则表达式, 也不会往下继续匹配了);<br>如果正则匹配匹配不到, 则使用之前记录下来的匹配度最高的那个”一般匹配”;</li>
+</ul>
+</li>
+</ol>
+<h2 id="精准匹配"><a href="#精准匹配" class="headerlink" title="精准匹配"></a>精准匹配</h2><ol>
+<li><p>这里只分析精准匹配, 所以所有的location都是设置的是精准匹配;</p>
+</li>
+<li><p>当用户url不包含uri部分时, 如果有精准匹配的 <code>patt</code> 为 <code>/</code></p>
+<ul>
+<li>系统首先会匹配到patt为<code>/</code>的精准匹配Location块 (如果没有匹配到, 则access_log会报错403 Forbidden, error_log日志也有详情)</li>
+<li><strong>重点</strong>: 然后会判断当前location的root选项指定的目录下, index选项指定的默认文件是否存在, 不存在则返回403;<br>存在, 则给用户的URL加上index选项指定的默认文件名构建一个新的URI, 然后重新从头开始进行location匹配定位;</li>
+<li>如果第二轮匹配不到location, 也是报404; 并且此时可以在<strong>错误日志</strong>中看到比较全的访问路径(目录/文件名);</li>
+<li>如果匹配到了新的location<br>最后需要判断在新匹配到的location中的root指定目录下有没有新URI中这个文件, 没有的话, 返回404，并且此时可以在<strong>错误日志</strong>中看到比较全的访问路径(目录/文件名);</li>
+</ul>
+</li>
+<li><p>测试: 用户访问 www.vhostnginx.com</p>
+<ul>
+<li><p>nginx配置如下, 第一轮匹配不到, 则会报错 304 Forbidden<br>如果是访问 www.vhostnginx.com/index.html 则会报错 404, 因为第一次匹配到了, 第二次匹配 时又匹配到了, 但是文件不存在</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> server &#123;</div><div class="line">    listen 80;</div><div class="line">    server_name www.vhostnginx.com;</div><div class="line">    root /html/test;    # 该目录下并没有 index.html 文件</div><div class="line">    location =/index.html &#123;       // 1. 先精准匹配到此处, url变为 www.vhostnginx.com/index.html, 结果 /html/jingzhun 下就没有index.html文件, 直接报错 403 Forbidden</div><div class="line">        root /html/jingzhun;    # 该目录下没有 index.html 文件</div><div class="line">        index index.html index.htm;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>第一轮匹配到了, 第二轮没有匹配到</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen 80;</div><div class="line">    server_name www.vhostnginx.com;</div><div class="line">    root /html/test;</div><div class="line">    location =/ &#123;       // 1. 先精准匹配到此处, url变为 www.vhostnginx.com/index.html, 开始下一轮匹配; 而第二轮发现匹配不到任何location, 所以报错404 </div><div class="line">        root /html/jingzhun;</div><div class="line">        index index.html index.htm;</div><div class="line">    &#125;</div><div class="line">    location =/test.html &#123;</div><div class="line">        index index.html;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<pre><code>- 第一轮匹配到了, 第二轮也匹配到了, 但是没有文件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> server &#123;</div><div class="line">    listen 80;</div><div class="line">    server_name www.vhostnginx.com;</div><div class="line">    root /html/test;    # 该目录下并没有 index.html 文件</div><div class="line">    location =/ &#123;       // 1. 先精准匹配到此处, url变为 www.vhostnginx.com/index.html, 开始下一轮匹配</div><div class="line">        root /html/jingzhun;</div><div class="line">        index index.html index.htm;</div><div class="line">    &#125;</div><div class="line">    location =/index.html &#123;  // 2. 第二轮匹配, 匹配到了此location, 但是/html/test/下没有 index.html 文件, access_log日志报404, 错误日志中可以看到详情 open /html/test/index.html 失败</div><div class="line">        index index.html;   # 和这行配置没关系</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre><h2 id="一般匹配"><a href="#一般匹配" class="headerlink" title="一般匹配"></a>一般匹配</h2><ol>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+<h2 id="正则匹配"><a href="#正则匹配" class="headerlink" title="正则匹配"></a>正则匹配</h2><ol>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -205,7 +271,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. 虚拟主机配置》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. location块的配置》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -215,7 +281,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. 虚拟主机配置》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. location块的配置》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -225,7 +291,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 虚拟主机配置》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. location块的配置》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -355,7 +421,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. 虚拟主机配置》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. location块的配置》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -365,7 +431,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. 虚拟主机配置》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&title=《06. location块的配置》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -375,7 +441,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 虚拟主机配置》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. location块的配置》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-06/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
