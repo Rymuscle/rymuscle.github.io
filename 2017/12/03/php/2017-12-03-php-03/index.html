@@ -188,14 +188,14 @@
 </ul>
 </li>
 <li><p>尝试如下配置</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vi /usr/local/php/etc/php-fpm.d/www.conf</div><div class="line">// 如下: slowlog的位置如果是相对路径, 则默认是以php的安装位置为根目录的, </div><div class="line">slowlog = log/$pool.log.slow</div><div class="line">request_slowlog_timeout = 2</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/php/etc/php-fpm.d/www.conf</span><br><span class="line">// 如下: slowlog的位置如果是相对路径, 则默认是以php的安装位置为根目录的, </span><br><span class="line">slowlog = log/$pool.log.slow</span><br><span class="line">request_slowlog_timeout = 2</span><br></pre></td></tr></table></figure>
 <p> 然后重启php-fpm (注意log目录必须存在且有权限, 不然会启动失败)</p>
 </li>
 <li><p>写如下php进行测试:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;?php</div><div class="line">echo 123;</div><div class="line">sleep(3);</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">echo 123;</span><br><span class="line">sleep(3);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行后, 果然记下了慢日志</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">tailf /usr/local/php/log/www.log.slow</div><div class="line">// 结果如下</div><div class="line"></div><div class="line">[17-Aug-2018 10:00:48]  [pool www] pid 18139</div><div class="line">script_filename = /html/test.php</div><div class="line">[0x00007f2c36c140a0] sleep() /html/test.php:3</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tailf /usr/local/php/log/www.log.slow</span><br><span class="line">// 结果如下</span><br><span class="line"></span><br><span class="line">[17-Aug-2018 10:00:48]  [pool www] pid 18139</span><br><span class="line">script_filename = /html/test.php</span><br><span class="line">[0x00007f2c36c140a0] sleep() /html/test.php:3</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>日志说明</p>
 <ul>
@@ -215,7 +215,7 @@
 </ul>
 </li>
 <li><p>继续运行之前的那个超时脚本, 会发现, <strong>php-fpm的错误日志中也会记录这个超时日志</strong>:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">tailf /usr/local/php/var/log/error.log</div><div class="line">// 如下</div><div class="line"></div><div class="line">[17-Aug-2018 12:11:31] WARNING: [pool www] child 19238, script &apos;/html/test.php&apos; (request: &quot;GET /test.php&quot;) executing too slow (2.001552 sec), logging</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: child 19238 stopped for tracing</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: about to trace 19238</div><div class="line">[17-Aug-2018 12:11:31] NOTICE: finished trace of 19238</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">tailf /usr/local/php/var/log/error.log</span><br><span class="line">// 如下</span><br><span class="line"></span><br><span class="line">[17-Aug-2018 12:11:31] WARNING: [pool www] child 19238, script &apos;/html/test.php&apos; (request: &quot;GET /test.php&quot;) executing too slow (2.001552 sec), logging</span><br><span class="line">[17-Aug-2018 12:11:31] NOTICE: child 19238 stopped for tracing</span><br><span class="line">[17-Aug-2018 12:11:31] NOTICE: about to trace 19238</span><br><span class="line">[17-Aug-2018 12:11:31] NOTICE: finished trace of 19238</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>但是可以测试, 当PHP程序出问题时, 比如少一个分号, 会发现, php-fpm的error.log中并不会记录该错误!</p>
 </li>
@@ -227,12 +227,12 @@
 </li>
 <li><p>要让php-fpm.conf的error_log可以记录错误日志, 配置如下:</p>
 <ul>
-<li>这种情况下, 如果php.ini中规定的错误日志文件权限不够, 则php-fpm的错误日志会自动记录, 如果权限够,则php.ini的错误日志会记录, 而php-fpm的错误日志不会记录;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 在php-fpm.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div><div class="line">// 同时需要在&quot;[global]&quot;下配置error_log的路径</div></pre></td></tr></table></figure>
+<li>这种情况下, 如果php.ini中规定的错误日志文件权限不够, 则php-fpm的错误日志会自动记录, 如果权限够,则php.ini的错误日志会记录, 而php-fpm的错误日志不会记录;<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// 在php-fpm.conf中配置</span><br><span class="line">[www]</span><br><span class="line">catch_workers_output = yes</span><br><span class="line">// 同时需要在&quot;[global]&quot;下配置error_log的路径</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 <li><p>php.ini配置:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">log_errors = On</div><div class="line">error_log = &quot;/usr/local/php/log/php_errors.log&quot;</div><div class="line">error_reporting=E_ALL</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log_errors = On</span><br><span class="line">error_log = &quot;/usr/local/php/log/php_errors.log&quot;</span><br><span class="line">error_reporting=E_ALL</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 
@@ -501,5 +501,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

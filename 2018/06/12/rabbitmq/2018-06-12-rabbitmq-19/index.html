@@ -179,7 +179,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="RabbitMQ关于吞吐量-延迟和带宽的一些理论"><a href="#RabbitMQ关于吞吐量-延迟和带宽的一些理论" class="headerlink" title="RabbitMQ关于吞吐量,延迟和带宽的一些理论"></a><a href="https://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/" target="_blank" rel="external">RabbitMQ关于吞吐量,延迟和带宽的一些理论</a></h2><ol>
+            <h2 id="RabbitMQ关于吞吐量-延迟和带宽的一些理论"><a href="#RabbitMQ关于吞吐量-延迟和带宽的一些理论" class="headerlink" title="RabbitMQ关于吞吐量,延迟和带宽的一些理论"></a><a href="https://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/" target="_blank" rel="noopener">RabbitMQ关于吞吐量,延迟和带宽的一些理论</a></h2><ol>
 <li><p>假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, <strong>队列可能会显示为空</strong>, 但是会有大量的 unacked 消息; 并且此时如果你添加新的消费者, 由于消息已经在现有的客户端中缓存, 队列中并没有 ready状态的 消息, 所以即使增加更多新的消费者, 也无法缓解队列中 unacked 消息数量, 这是相当次优的!</p>
 </li>
 <li><p>所以，默认的QoS预取给客户端(consumer)设置了无限的缓冲区, 这可能导致不良的行为和性能; 那么, 应该将QoS预取缓冲区大小设置为多少呢? 目标是让消费者保持工作饱和状态, <strong>但要尽量减少客户端的缓冲区大小, 以便让更多的消息保留在Rabbit的队列中, 这样就可以供新消费者来消费</strong>;</p>
@@ -226,7 +226,7 @@
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
 <li><p>针对Qos的提前预习</p>
 <ul>
-<li><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="external">信道预取设置(QoS)</a><br>由于消息是异步发送(推送)给客户端的, 因此在任何给定时刻通常都有不止一条消息在信道上运行; 此外, 客户的手动确认本质上也是异步的, 所以有一个 未确认的交付标签的滑动窗口, 开发人员通常会倾向于限制此窗口的大小, <strong>以避免消费者端无限制的缓冲区问题</strong>。<br>这是通过使用 <code>basic.qos</code> 方法设置 <code>预取计数</code> 值完成的, 该值定义了<strong>channel上允许的最大未确认递送数量</strong>, 一旦数字达到配置的计数, RabbitMQ将停止在通道上传送更多消息, 除非至少有一个未确认的消息被确认;<br>例如, 假设在通道 “Ch” 上有未确认的交付标签5,6,7和8, 并且通道 “Ch” 的预取计数(后面会学到是<code>prefetch_count</code>)设置为4, 则RabbitMQ将不会在 “Ch” 上推送更多交付, 除非至少有一个未完成的交付被确认(当确认帧在 <code>delivery_tag=8</code> 的频道上到达时, <strong>RabbitMQ将会注意到并再发送一条消息</strong>)</p>
+<li><p><a href="https://www.rabbitmq.com/confirms.html#channel-qos-prefetch" target="_blank" rel="noopener">信道预取设置(QoS)</a><br>由于消息是异步发送(推送)给客户端的, 因此在任何给定时刻通常都有不止一条消息在信道上运行; 此外, 客户的手动确认本质上也是异步的, 所以有一个 未确认的交付标签的滑动窗口, 开发人员通常会倾向于限制此窗口的大小, <strong>以避免消费者端无限制的缓冲区问题</strong>。<br>这是通过使用 <code>basic.qos</code> 方法设置 <code>预取计数</code> 值完成的, 该值定义了<strong>channel上允许的最大未确认递送数量</strong>, 一旦数字达到配置的计数, RabbitMQ将停止在通道上传送更多消息, 除非至少有一个未确认的消息被确认;<br>例如, 假设在通道 “Ch” 上有未确认的交付标签5,6,7和8, 并且通道 “Ch” 的预取计数(后面会学到是<code>prefetch_count</code>)设置为4, 则RabbitMQ将不会在 “Ch” 上推送更多交付, 除非至少有一个未完成的交付被确认(当确认帧在 <code>delivery_tag=8</code> 的频道上到达时, <strong>RabbitMQ将会注意到并再发送一条消息</strong>)</p>
 </li>
 <li><p>QoS预取设置对使用 <code>basic.get</code>(<code>pull API</code>) 获取的消息没有影响, 即使在手动确认模式下也是如此;</p>
 </li>
@@ -501,5 +501,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

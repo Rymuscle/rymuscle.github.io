@@ -207,10 +207,10 @@
 <li>事务会使得生产者应用程序变成同步的, 而你使用消息通信就是为了避免同步;</li>
 </ul>
 </li>
-<li><p>鉴于上面的问题, 你可能不会在生产中使用事务机制, 此处只做了个简单的事务测试, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TxController.php" target="_blank" rel="external">测试代码</a></p>
+<li><p>鉴于上面的问题, 你可能不会在生产中使用事务机制, 此处只做了个简单的事务测试, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/TxController.php" target="_blank" rel="noopener">测试代码</a></p>
 </li>
 </ol>
-<h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="external">Publisher Confirms</a></h2><ol>
+<h2 id="Publisher-Confirms"><a href="#Publisher-Confirms" class="headerlink" title="Publisher Confirms"></a><a href="https://www.rabbitmq.com/confirms.html#publisher-confirms" target="_blank" rel="noopener">Publisher Confirms</a></h2><ol>
 <li><p>既然事务存在的问题让你拒绝使用它, 但是<code>确保消息被成功投递到服务器</code>这个问题仍需要解决; 为了避免事务机制在解决问题时导致的新问题, RabbitMQ团队拿出了更好的方案来保证消息的投递: <strong>发送方确认模式</strong></p>
 </li>
 <li><p>它模仿协议中已经存在的 <strong>消费者确认机制</strong></p>
@@ -246,9 +246,9 @@
 </li>
 </ol>
 <h2 id="发布者确认存在的问题"><a href="#发布者确认存在的问题" class="headerlink" title="发布者确认存在的问题"></a>发布者确认存在的问题</h2><ol>
-<li><a href="https://yq.aliyun.com/articles/42206" target="_blank" rel="external">mandatory 属性问题</a></li>
+<li><a href="https://yq.aliyun.com/articles/42206" target="_blank" rel="noopener">mandatory 属性问题</a></li>
 </ol>
-<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>publisher confirm 不需要消费者参与, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PublisherConfirmController.php" target="_blank" rel="external">代码参考</a></p>
+<h2 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h2><p>publisher confirm 不需要消费者参与, <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PublisherConfirmController.php" target="_blank" rel="noopener">代码参考</a></p>
 
         </div>
 
@@ -515,5 +515,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

@@ -247,10 +247,10 @@
 <li>$upstream_response_time: 是指从Nginx向后端(php-cgi)建立连接开始到接受完数据然后关闭连接为止的时间;<br>从上面的描述可以看出, $request_time 肯定大于等于 $upstream_response_time, 特别是使用POST方式传递参数时, 因为Nginx会把request body缓存住, 接收完毕后才会把数据一起发给后端;<br>所以如果用户网络较差, 或者传递数据较大时, $request_time会比$upstream_response_time大很多;<br>所以如果使用nginx的accesslog查看php程序中哪些接口比较慢的话, 记得在log_format中加入$upstream_response_time;</li>
 <li>$remote_addr: 客户端的IP地址;</li>
 <li><p>$http_user_agent: 客户端浏览器信息, 配置 <code>ua=[$http_user_agent]</code> 可能如下: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ua=[Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ua=[Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1]</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>rrc 示例:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">log_format  main  &apos;remote_addr=[$remote_addr] http_x_forward=[$http_x_forwarded_for] time=[$time_local] request=[$request] &apos;</div><div class="line">                                &apos;status=[$status] byte=[$bytes_sent] elapsed=[$request_time] refer=[$http_referer] body=[$request_body] &apos;</div><div class="line">                                &apos;ua=[$http_user_agent] cookie=[$http_cookie] gzip=[$gzip_ratio]&apos;;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">log_format  main  &apos;remote_addr=[$remote_addr] http_x_forward=[$http_x_forwarded_for] time=[$time_local] request=[$request] &apos;</span><br><span class="line">                                &apos;status=[$status] byte=[$bytes_sent] elapsed=[$request_time] refer=[$http_referer] body=[$request_body] &apos;</span><br><span class="line">                                &apos;ua=[$http_user_agent] cookie=[$http_cookie] gzip=[$gzip_ratio]&apos;;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -258,10 +258,10 @@
 <ol>
 <li>只能在 <code>http全局块</code> 中进行配置</li>
 </ol>
-<h2 id="自定义服务日志切割"><a href="#自定义服务日志切割" class="headerlink" title="自定义服务日志切割"></a>自定义服务日志切割</h2><h3 id="logrotate"><a href="#logrotate" class="headerlink" title="logrotate"></a><a href="">logrotate</a></h3><p><a href="http://blog.51cto.com/wn2100/2074048" target="_blank" rel="external">http://blog.51cto.com/wn2100/2074048</a><br><a href="https://www.jianshu.com/p/514a9715de46" target="_blank" rel="external">https://www.jianshu.com/p/514a9715de46</a></p>
+<h2 id="自定义服务日志切割"><a href="#自定义服务日志切割" class="headerlink" title="自定义服务日志切割"></a>自定义服务日志切割</h2><h3 id="logrotate"><a href="#logrotate" class="headerlink" title="logrotate"></a><a href="">logrotate</a></h3><p><a href="http://blog.51cto.com/wn2100/2074048" target="_blank" rel="noopener">http://blog.51cto.com/wn2100/2074048</a><br><a href="https://www.jianshu.com/p/514a9715de46" target="_blank" rel="noopener">https://www.jianshu.com/p/514a9715de46</a></p>
 <h3 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h3><ol>
 <li></li>
-<li><h2 id="nginx日志落盘"><a href="#nginx日志落盘" class="headerlink" title="nginx日志落盘"></a>nginx日志落盘</h2><p><a href="http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682" target="_blank" rel="external">http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682</a></p>
+<li><h2 id="nginx日志落盘"><a href="#nginx日志落盘" class="headerlink" title="nginx日志落盘"></a>nginx日志落盘</h2><p><a href="http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682" target="_blank" rel="noopener">http://wiki.shanyishanmei.com/pages/viewpage.action?pageId=8989682</a></p>
 </li>
 </ol>
 
@@ -530,5 +530,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

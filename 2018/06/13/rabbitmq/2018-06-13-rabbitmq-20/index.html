@@ -187,7 +187,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a><a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="external">Consumer Prefetch</a></h2><ol>
+            <h2 id="Consumer-Prefetch"><a href="#Consumer-Prefetch" class="headerlink" title="Consumer Prefetch"></a><a href="https://www.rabbitmq.com/consumer-prefetch.html" target="_blank" rel="noopener">Consumer Prefetch</a></h2><ol>
 <li><p>作为限制 unacked 消息数量的更自然有效的方法; AMQP 0-9-1 指定了 <code>basic.qos</code> 方法, 以便你在消费者进行消费时, 可以限制channel(或connection)上未确认消息的数量; </p>
 <ul>
 <li>但是值得注意的是: channel 并不是理想的设定范围, 因为单个channel可能从多个队列进行消费, channel和queue需要为每个发送的消息相互协调, 以确保它们不会超出限制, 这在单台机器上会慢, 而在整个集群中使用时会非常慢;</li>
@@ -221,9 +221,9 @@
 </li>
 <li><p>准备</p>
 <ul>
-<li>创建消费者1 ‘qosCustomer1’ (简单打印消息内容) , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/qosConsumer1.php" target="_blank" rel="external">代码参考</a>, <strong>启动消费者</strong> <code>php artisan qosConsumer1</code></li>
-<li>创建消费者2 ‘qosCustomer2’ (sleep 5秒, 模拟处理能力比较差) , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/qosConsumer2.php" target="_blank" rel="external">代码参考</a>, <strong>启动消费者</strong>  <code>php artisan qosConsumer2</code></li>
-<li><p>创建生产者一次向队列 ‘qosQueue’ 中推送10条消息 , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/QosController.php" target="_blank" rel="external">代码参考</a>, <strong>请求一次生产者</strong> <a href="http://www.rabbit.com/testQos" target="_blank" rel="external">http://www.rabbit.com/testQos</a></p>
+<li>创建消费者1 ‘qosCustomer1’ (简单打印消息内容) , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/qosConsumer1.php" target="_blank" rel="noopener">代码参考</a>, <strong>启动消费者</strong> <code>php artisan qosConsumer1</code></li>
+<li>创建消费者2 ‘qosCustomer2’ (sleep 5秒, 模拟处理能力比较差) , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/qosConsumer2.php" target="_blank" rel="noopener">代码参考</a>, <strong>启动消费者</strong>  <code>php artisan qosConsumer2</code></li>
+<li><p>创建生产者一次向队列 ‘qosQueue’ 中推送10条消息 , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/QosController.php" target="_blank" rel="noopener">代码参考</a>, <strong>请求一次生产者</strong> <a href="http://www.rabbit.com/testQos" target="_blank" rel="noopener">http://www.rabbit.com/testQos</a></p>
 </li>
 <li><p>注意需要先启动消费者, 再请求生产者; (如果先请求了生产者, 可能在启动第一个消费者之后, 其会迅速消费完10条消息, 这样就无法模拟效果了)</p>
 </li>
@@ -244,17 +244,17 @@
 </li>
 <li><p>准备测试代码</p>
 <ul>
-<li><p>创建消费者1 ‘prefetchCountConsumer1’ (sleep 5秒, 模拟耗时业务需求; prefetch=100; 简单打印消息内容), <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/prefetchCountConsumer1.php" target="_blank" rel="external">代码参考</a></p>
+<li><p>创建消费者1 ‘prefetchCountConsumer1’ (sleep 5秒, 模拟耗时业务需求; prefetch=100; 简单打印消息内容), <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/prefetchCountConsumer1.php" target="_blank" rel="noopener">代码参考</a></p>
 </li>
-<li><p>创建消费者2 ‘prefetchCountConsumer2’ (sleep 5秒, 模拟耗时业务需求; prefetch=100; 简单打印消息内容), <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/prefetchCountConsumer2.php" target="_blank" rel="external">代码参考</a></p>
+<li><p>创建消费者2 ‘prefetchCountConsumer2’ (sleep 5秒, 模拟耗时业务需求; prefetch=100; 简单打印消息内容), <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Console/Commands/prefetchCountConsumer2.php" target="_blank" rel="noopener">代码参考</a></p>
 </li>
-<li><p>生产者一次向队列 ‘prefetchCountQueue’ 中推送100条消息 , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PrefetchCountController.php" target="_blank" rel="external">代码参考</a></p>
+<li><p>生产者一次向队列 ‘prefetchCountQueue’ 中推送100条消息 , <a href="https://github.com/rymuscle/Laravel-RabbitMQ/blob/master/app/Http/Controllers/Demo/PrefetchCountController.php" target="_blank" rel="noopener">代码参考</a></p>
 </li>
 </ul>
 </li>
 <li><p>测试:</p>
 <ul>
-<li><p>在生产者请求一次之后(<a href="http://www.rabbit.com/prefetchCount" target="_blank" rel="external">http://www.rabbit.com/prefetchCount</a>), <code>ready : 100, unacked: 0, total : 100</code>, 表示队列中已经有100条消息已经就绪, 等待发出<br><img src="/img/rabbitmq/qos-test01.png" width="450"></p>
+<li><p>在生产者请求一次之后(<a href="http://www.rabbit.com/prefetchCount" target="_blank" rel="noopener">http://www.rabbit.com/prefetchCount</a>), <code>ready : 100, unacked: 0, total : 100</code>, 表示队列中已经有100条消息已经就绪, 等待发出<br><img src="/img/rabbitmq/qos-test01.png" width="450"></p>
 </li>
 <li><p>运行第一个<code>php artisan prefetchCountConsumer1</code>之后, <code>ready : 0, unacked : 100, total : 100</code> (也就是说, queue中已经没有 ready状态, 即准备好待发送的消息了, 消息都传递给消费者1了)<br><img src="/img/rabbitmq/qos-test02.png" width="450"></p>
 </li>
@@ -285,13 +285,13 @@
 <h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><ol>
 <li><p>rabbitmq对 basic.qos 信令的处理</p>
 <ul>
-<li>首先, basic.qos 是针对 channel 进行设置的, 也就是说只有在channel建立之后才能发送basic.qos信令; RabbitMQ只支持通道级的预取计数, 而不是connection级的 或者 基于大小的预取;<br><a href="http://www.bubuko.com/infodetail-1955647.html" target="_blank" rel="external">预取</a></li>
+<li>首先, basic.qos 是针对 channel 进行设置的, 也就是说只有在channel建立之后才能发送basic.qos信令; RabbitMQ只支持通道级的预取计数, 而不是connection级的 或者 基于大小的预取;<br><a href="http://www.bubuko.com/infodetail-1955647.html" target="_blank" rel="noopener">预取</a></li>
 <li>在rabbitmq的实现中, 每个channel都对应会有一个rabbit_limiter进程, 当收到basic.qos信令后, 在rabbit_limiter进程中记录信令中prefetch_count的值, 同时记录的还有该channel未ack的消息个数;</li>
 </ul>
 </li>
 <li><p>在<code>php-amqplib</code>中, 可以使用 channel 的 <code>basic_qos()</code> 方法来进行控制, <code>basic_qos()</code> 有三个参数:</p>
 <ul>
-<li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端<strong>RabbitMQ系统没有实现该参数的功能</strong>, 还可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="external">此文</a>)<br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
+<li>prefetch_size : 限制预取的消息大小的参数, rabbitmq暂时没有实现 (如果prefetch_size字段不是默认值0, 则会通知客户端出错, 通知客户端<strong>RabbitMQ系统没有实现该参数的功能</strong>, 还可以参考<a href="https://github.com/sky-big/RabbitMQ/blob/d7a773e11f93fcde4497c764c9fa185aad049ce2/src/rabbit_channel.erl" target="_blank" rel="noopener">此文</a>)<br>当你设置prefetch_size大于0的时候, 会出现如下报错<br><img src="/img/rabbitmq/qos-prefetch-size-error.png" width="400"></li>
 <li>prefetch_count : 预取消息数量</li>
 <li>global: 在3.3.0版本中对global这个参数的含义进行了重新定义, 即glotal=true时表示在当前channel上所有的consumer都生效(包括已有的), 否则只对设置了之后新建的consumer生效;</li>
 </ul>
@@ -563,5 +563,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

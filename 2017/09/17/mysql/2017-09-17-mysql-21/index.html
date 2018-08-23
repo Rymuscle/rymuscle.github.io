@@ -204,7 +204,7 @@
 </li>
 <li><p><strong>解决方案</strong> : <code>RC+</code></p>
 <ul>
-<li>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 – <code>READ COMMITED</code>或<code>以上隔离级别</code> 解决了这个问题;</li>
+<li>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 — <code>READ COMMITED</code>或<code>以上隔离级别</code> 解决了这个问题;</li>
 <li><code>READ COMMITED</code> 隔离级别保证了: 在事务中, 某条语句执行前, 已经被其他事务提交的数据, 对该语句都是可见的;</li>
 </ul>
 </li>
@@ -217,11 +217,11 @@
 <li><p>试想, 如果在一个事务中多次读取同一个数据, 正好在两次读取之间, 另外一个事务已经完成了对该数据的修改并提交, 那问题就来了: <strong>两次读取的结果不一样了</strong><br> <img src="/img/mysql/transaction/unReRead.png"></p>
 </li>
 <li><p>多次读取数据不一致, 会导致什么问题呢? 一个事务中为什么要多次读取同一数据, 什么场景下需要这么做? 如下汇款案例:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">查询余额: 100</div><div class="line">给别人汇款: 20</div><div class="line">记录日志: ....</div><div class="line">返回余额(你可以直接计算然后返回80, 但如果你是查询的话, 就应该保证你查到的是80, 而不受其他事务干扰)</div></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">查询余额: 100</span><br><span class="line">给别人汇款: 20</span><br><span class="line">记录日志: ....</span><br><span class="line">返回余额(你可以直接计算然后返回80, 但如果你是查询的话, 就应该保证你查到的是80, 而不受其他事务干扰)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>解决方案</strong> : <code>RR+</code></p>
 <ul>
-<li><p>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 – <code>REPEATABLE READ</code>或<code>以上隔离级别</code> 解决了这个问题;</p>
+<li><p>在MySQL中, 事务已经用自身特性 <code>隔离性</code> 的 — <code>REPEATABLE READ</code>或<code>以上隔离级别</code> 解决了这个问题;</p>
 </li>
 <li><p><code>REPEATABLE READ</code> 级别保证了:<br>在事务中, 某条语句执行前, 已经被其他事务 提交/回滚 的落地数据, 对该语句都是可见的; (<code>READ COMMITED</code>)<br>在事务中, 多次读取同一个数据(在两次读取操作之间, 无论数据被 提交/回滚 多少次(即无论落地过多少遍), 每次读取的结果都应该是和事务中第一次读取的结果一样;  </p>
 </li>
@@ -229,7 +229,7 @@
 </li>
 </ol>
 <h3 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h3><ol>
-<li><p>可以参考 <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="external">MySQL官方文档对 Phantom Rows 的介绍</a> )</p>
+<li><p>可以参考 <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html" target="_blank" rel="noopener">MySQL官方文档对 Phantom Rows 的介绍</a> )</p>
 </li>
 <li><p><code>不可重复读</code> 和 <code>幻读</code> 这两个概念经常搞混</p>
 <ul>
@@ -256,21 +256,21 @@
 <li><p>需要注意的是: 这种情况在Mysql中不会出现;</p>
 <ul>
 <li><p>对于InnoDB事务的最低隔离级别 <code>READ UNCOMMITED</code>, 由于事务A对事务B中的每一步操作结果都是可见的, 更别说是事务B提交之后了, 所以, 事务A在T3阶段的修改其实已经是基于对其可见的(事务B最终提交的)数据了, 因此回滚的话, 也会回滚到事务B最终提交的数据; 测试:<br><img src="/img/mysql/transaction/lose_update_01_r_u.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age - 15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age-10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age - 15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>对于 <code>READ COMMITTED</code> 为提交读, 也就是在事务B提交之后, 事务A在T3阶段是可以select(快照读)到事务B最终提交的数据的, 更别说update(当前读)到了, 所以事务A最终的Rollback其实也是基于事务B提交后的数据的, 所以事务A的回滚最终会回滚到事务B提交的修改数据, 而不是事务A一早读取的数据;<br><img src="/img/mysql/transaction/lose_update_01_r_c.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age - 15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age-10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age - 15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>对于 <code>REPEATABLE READ</code> 可重复读, 事务A在T3阶段虽然select不到事务B最终提交的数据(快照读), 但是可以update(当前读)到事务B最终提交的数据的<br><img src="/img/mysql/transaction/lose_update_01_r_r.png"></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age+10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age-15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age+10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age-15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 <p>因为 <code>update</code> 为当前读(不会遵守可重复读的要求), 而select为快照读! 关于快照读和当前读, 可以参考后面的文章<a href="/2017/09/19/mysql/2017-09-19-mysql-22/">幻读, 快照读(snapshot read), 当前读 (current read)</a></p>
 </li>
 <li><p><code>SERIALIZABLE</code> 读写都加锁, 会出现死锁<br><img src="/img/mysql/transaction/lose_update_01_s.png"><br>为了不出现死锁: 也不会出现第一类丢失更新的问题</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">update test_transaction set age = age-10 where id=2;</div><div class="line">rollback;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</div><div class="line">SELECT @@SESSION.tx_isolation;</div><div class="line">begin;</div><div class="line">select * from test_transaction where id=2;</div><div class="line">update test_transaction set age = age -15 where id=2;</div><div class="line">commit;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">update test_transaction set age = age-10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age -15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -292,16 +292,16 @@
 </li>
 <li><p><strong>注意: 最高隔离级别 <code>Serializable</code> 在实际应用场景中并不被采用</strong></p>
 </li>
-<li><p>另外, 可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="external">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></p>
+<li><p>另外, 可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="noopener">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></p>
 </li>
 </ol>
 <p>参考资料:</p>
 <ul>
-<li><a href="http://mysql.taobao.org/monthly/2017/06/07/" target="_blank" rel="external">淘宝数据库内核6月报</a></li>
-<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="external">美团技术博客</a></li>
-<li><a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank" rel="external">MySQL官方文档</a></li>
+<li><a href="http://mysql.taobao.org/monthly/2017/06/07/" target="_blank" rel="noopener">淘宝数据库内核6月报</a></li>
+<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="noopener">美团技术博客</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank" rel="noopener">MySQL官方文档</a></li>
 <li>《高性能MySQL》</li>
-<li><a href="https://www.jianshu.com/p/d75fcdeb07a3" target="_blank" rel="external">https://www.jianshu.com/p/d75fcdeb07a3</a></li>
+<li><a href="https://www.jianshu.com/p/d75fcdeb07a3" target="_blank" rel="noopener">https://www.jianshu.com/p/d75fcdeb07a3</a></li>
 </ul>
 
         </div>
@@ -569,5 +569,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
