@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>07. Rewrite ?? | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Nginx">
+    <meta name="description" content="前言 Rewrite是Nginx服务器提供的一个重要的基本功能, 其在web服务器产品中几乎是必备的功能, 用于实现URL的重写 ;   Nginx服务器的Rewrite功能的实现依赖于PCRE(Perl Compatible Regular Expressions, Perl兼容的正则表达式)的支持, 因此在编译安装Nginx服务器之前, 需要安装PCRE库 ; Nginx服务器使用ngx_ht">
+<meta name="keywords" content="Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="07. Rewrite ??">
+<meta property="og:url" content="http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="前言 Rewrite是Nginx服务器提供的一个重要的基本功能, 其在web服务器产品中几乎是必备的功能, 用于实现URL的重写 ;   Nginx服务器的Rewrite功能的实现依赖于PCRE(Perl Compatible Regular Expressions, Perl兼容的正则表达式)的支持, 因此在编译安装Nginx服务器之前, 需要安装PCRE库 ; Nginx服务器使用ngx_ht">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-22T07:46:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="07. Rewrite ??">
+<meta name="twitter:description" content="前言 Rewrite是Nginx服务器提供的一个重要的基本功能, 其在web服务器产品中几乎是必备的功能, 用于实现URL的重写 ;   Nginx服务器的Rewrite功能的实现依赖于PCRE(Perl Compatible Regular Expressions, Perl兼容的正则表达式)的支持, 因此在编译安装Nginx服务器之前, 需要安装PCRE库 ; Nginx服务器使用ngx_ht">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">07. Rewrite ??</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-28T12:05:59.000Z" itemprop="datePublished" class="page-time">
+  2017-04-28
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Nginx/">Nginx</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#if-指令"><span class="post-toc-number">2.</span> <span class="post-toc-text">if 指令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#break-指令"><span class="post-toc-number">3.</span> <span class="post-toc-text">break 指令</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-nginx/2017-04-28-07"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">07. Rewrite ??</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-28 20:05:59" datetime="2017-04-28T12:05:59.000Z"  itemprop="datePublished">2017-04-28</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Nginx/">Nginx</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>Rewrite是Nginx服务器提供的一个重要的基本功能, 其在web服务器产品中几乎是必备的功能, 用于实现URL的重写 ; </p>
+<ul>
+<li>Nginx服务器的Rewrite功能的实现依赖于PCRE(Perl Compatible Regular Expressions, Perl兼容的正则表达式)的支持, 因此在编译安装Nginx服务器之前, 需要安装PCRE库 ;</li>
+<li>Nginx服务器使用ngx_http_rewrite_module模块解析和处理Rewrite功能的相关配置 , 该模块是Nginx服务器的标准HTTP模块; </li>
+</ul>
+</li>
+<li><p>在Nginx配置中, 有关Rewrite的配置指令不多, 但是已经能够提供比较完整的功能了!</p>
+</li>
+</ol>
+<h2 id="if-指令"><a href="#if-指令" class="headerlink" title="if 指令"></a>if 指令</h2><ol>
+<li><p>有关Rewrite配置的<code>if</code>指令: 用来支持条件判断, 并根据条件判断的结果选择不同的Nginx配置, 可以在server块或者location块中配置该指令, 其语法结构为: <code>if (condition) {....}</code>;</p>
+<ul>
+<li><strong>注意</strong>: if关键字 和 () 之间要有空格;</li>
+</ul>
+</li>
+<li><p><code>{}</code> 代表一个作用域, 形成一个if配置块, 是条件为真时的Nginx配置; </p>
+</li>
+<li><p><code>condition</code> 为判断条件(true/false), 它可以支持以下几种设置方法:</p>
+<ul>
+<li><p>变量名, 如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if ($slow) &#123;    # 注意if后面有空格</div><div class="line">...#Nginx配置</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意: 如果变量的值为 空字符串 或者 以”0”开头的任意字符串, if指令认为条件为false , 其他情况认为条件为true</p>
+</li>
+<li><p>使用 <code>=</code>(等号) 和 <code>!=</code> (不等号)比较变量和字符串是否相等, 相等时if指令认为条件为true, 反之为false</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if ($request_method = POST) &#123;    # 注意if后面有空格</div><div class="line">    return 405;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意: 这里的字符串不要加引号 ; </p>
+</li>
+<li><p>使用正则表达式对变量进行匹配, 匹配成功时, if条件为true, 否则为false ;<br>变量与正则表达式之间用 <code>~</code> , <code>~*</code>, <code>!~</code> 或 <code>!~*</code> 链接 ;<br><code>~</code>表示匹过程中对大小写敏感, <code>~*</code> 表示匹配过程中对大小写不敏感;<br><code>!~</code> 或 <code>!~*</code> 在匹配失败时, if指令认为条件为true, 否则为false ;<br>在正则表达式中可以使用小括号对变量进行截取, 在花括号中使用 $1…$9 引用截取的值;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if ($httpd_user_agent ~ MSIE) &#123;</div><div class="line">    #$httpd_user_agent的值中是否含有MSIE字符串, 如果包含, 则为true ;</div><div class="line">&#125;</div><div class="line">if ( $http_cookie ~* &quot;id=([^;]+)(?:;|$)&quot; ) &#123;</div><div class="line">    # Nginx配置, 可以使用$1和$2获取截取到的值, 如: </div><div class="line">    # set $id $1 ;将截取到的id赋值给$id变量以备后用 ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意: 整个正则表达式字符串一般不需要加引号, 但如果含有右花括号<code>}</code>, 或者分号<code>;</code>字符时, 必须要给整个正则表达式添加引号 </p>
+</li>
+<li><p>判断请求的文件是否存在使用 <code>-f</code> 和 <code>!-f</code> :<br>当使用<code>-f</code>时, 如果请求文件存在, if指令认为条件为true, 如果请求文件不存在则为false ;<br>使用<code>!-f</code>时, 如果请求的文件不存在, 但该文件所在的目录存在, if指令认为条件为true; 如果该文件和它所在的目录都不存在, 则为false; 如果仅请求的文件存在, 也为false;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (-f $request_filename) &#123;    #判断请求的文件是否存在</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">if (!-f $request_filename) &#123;    #判断请求的文件是否不存在</div><div class="line">   ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>判断请求的目录是否存在使用<code>-d</code>和<code>!-d</code> :<br>当使用<code>-d</code>时, 如果请求的目录存在, if指令认为条件为true, 如果请求的目录不存在则为false ;<br>使用<code>!-d</code>时, 如果请求的目录不存在, 但该目录所在的上级目录存在, if指令认为条件为true; 如果该目录和它的上级目录都不存在, 则为false; 如果请求的目录存在, 也为false;<br>判断规则和<code>-f</code>和<code>!-f</code>类似, 使用方法参见<code>-f</code>和<code>!-f</code>的使用 ;</p>
+</li>
+<li><p>判断请求的目录或文件是否存在使用<code>-e</code>和<code>!-e</code> :<br>当使用 <code>-e</code> 时, 如果请求的目录或文件存在, if指令认为条件为true, 否则为false ;<br>使用 <code>!-e</code> 时, 如果请求的文件和该文件所在路径上的目录都不存在, 为true , 否则为false ;<br>使用方法参见<code>-f</code>和<code>!-f</code>的使用</p>
+</li>
+<li><p>判断请求的文件是否可执行使用<code>-x</code>和<code>!-x</code>:<br>当使用<code>-x</code>时, 如果请求的文件可执行, if指令认为条件为true, 否则为false ;<br>使用<code>!-x</code>时, 如果请求的文件不可执行, 为true , 否则为false ;<br>使用方法参见<code>-f</code>和<code>!-f</code>的使用</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="break-指令"><a href="#break-指令" class="headerlink" title="break 指令"></a>break 指令</h2><ol>
+<li></li>
+<li></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Nginx/">Nginx</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&title=《07. Rewrite ??》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&title=《07. Rewrite ??》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. Rewrite ??》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/04/28/nginx/2017-04-28-06/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">06. location块的配置详解</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/29/nginx/2017-04-29-08/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">08. try_files</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&title=《07. Rewrite ??》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&title=《07. Rewrite ??》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. Rewrite ??》 — Rymuscle's&url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/04/28/nginx/2017-04-28-07/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIklEQVR42u3aQY7CMAwFUO5/6Y402xHlfwdGInlZISitXxeWE/vxiNf1u5Jfrz8rv3P+r+HCwMD4WsZ1u54xnj3yPpT7oO+/efGCMDAwDmDMUuEsrNn1L2LGwMDACELJS7orWBgYGBgrCTffmq5vfTEwMDDaTew9ZlYUzp6LgYFxGqNtDPzn5w/2NzAwML6EcZVrJXUm4V6jhYGBsTfj/nbJ1nTGWG8eRPMgGBgY2zFmSTPn5YVm0jrFwMA4kzEb4ZqVffkLLVoOGBgYWzNmW9NZkyBJpm2xiIGBcQIjP6DP243JEX8Sbl4BYmBg7M3I02LegJxhZs/CwMDYm7F+rFYnxNHo6ovkjoGBcQwjD2tWILYFaLEBxsDA2JqRhDVrA6xf2RagGBgYJzPyVmJy5azxWZwaYmBgbMdYbwnMGpn5CEWUcDEwMA5gtI9PQp+FlQ9hPC0KMTAwtmO0YxD5rfM75ENpbYsCAwNjP0abWFeO4fKkmZehGBgYuzJWkmCerPOjvXZbi4GBcQ7jXQGtNAyWRscwMDC2Zsz+0DYdV0rD4rgNAwNjU8ZVrnbYIknKb2gtYGBgbM1ok13eeszTbvssDAyMMxlJks0Hxdq+RJumnxaXGBgYBzBWGgOzwrHN/S/uhoGBgVEet+Ub1zaVY2BgYLSMlWIxKvjy1I+BgXEAIw/isbDagbDiOA8DA2NrxmwD2R7Ste2Ej7xWDAyM72P8AJwQnpxwx9wwAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

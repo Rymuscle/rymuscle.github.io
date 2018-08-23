@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,索引优化">
-    <meta name="description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;   基础 在MySQL中, 存储引">
+    <meta name="description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
 <meta name="keywords" content="MySQL,索引优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="42. MySQL高性能索引">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/07/mysql/2017-10-07-mysql-42/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;   基础 在MySQL中, 存储引">
+<meta property="og:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-08T10:19:37.000Z">
+<meta property="og:updated_time" content="2018-08-23T02:29:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="42. MySQL高性能索引">
-<meta name="twitter:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;   基础 在MySQL中, 存储引">
+<meta name="twitter:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -52,7 +52,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础"><span class="post-toc-number">2.</span> <span class="post-toc-text">基础</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引的物理位置"><span class="post-toc-number">3.</span> <span class="post-toc-text">索引的物理位置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MyISAM"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">MyISAM</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#INNODB"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">INNODB</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">示例</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础"><span class="post-toc-number">2.</span> <span class="post-toc-text">基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MyISAM索引文件"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">MyISAM索引文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#INNODB-索引文件"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">INNODB 索引文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">3.</span> <span class="post-toc-text">示例</span></a></li></ol>
         </nav>
     </aside>
     
@@ -186,6 +186,8 @@
 </li>
 <li><p>创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;</p>
 </li>
+<li><p>在mysql中, 索引是在存储引擎层(不是服务层)实现的; (所以不同存储引擎下的索引策略会有所不同)</p>
+</li>
 </ol>
 <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ol>
 <li><p>在MySQL中, 存储引擎使用 类似 书籍、字典查找内容的方法(想在一本书中找到某个特定主题, 一般会先看’索引’部分, 然后找到对应的页码) 来使用索引, 即, 首先在索引中找到对应值, 然后根据值所匹配的索引记录找到对应的数据行; </p>
@@ -195,19 +197,58 @@
 <p> 如果在 actor_id 列上建有索引, 则MySQL会先在索引中按照值5进行查找, 然后返回所有包含该值的数据行;</p>
 </li>
 </ol>
-<h2 id="索引的物理位置"><a href="#索引的物理位置" class="headerlink" title="索引的物理位置"></a>索引的物理位置</h2><h3 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h3><ol>
-<li><p>在MyISAM引擎中, <code>.myd</code> 文件是用来存放数据的文件, 而 <code>.myi</code> 是用来存放索引的文件;  数据和索引是分开存储的;</p>
+<h3 id="MyISAM索引文件"><a href="#MyISAM索引文件" class="headerlink" title="MyISAM索引文件"></a>MyISAM索引文件</h3><ol>
+<li><p>在MyISAM引擎中, 每张表会有三种文件:</p>
+<ul>
+<li><code>.MYD</code>: 文件是用来存放数据的文件;</li>
+<li><p><code>.MYI</code>: 是用来存放索引的文件; </p>
 </li>
-<li><p>删除掉表的 <code>.MYI</code> 文件会有影响么??</p>
+<li><p><strong>可以看到, 在 MyISAM 存储引擎中, 数据和索引是分开存储的;</strong></p>
+</li>
+<li><p><code>.frm</code>: 保存了每个表的元数据, 包括表结构的定义;<br><code>.frm</code>文件跟数据库存储引擎无关, 任何存储引擎的数据表都会有.frm文件, 命名方式为<code>数据表名.frm</code>, 如user.frm.<br>.frm文件可以用来在数据库崩溃时恢复表结构</p>
+</li>
+</ul>
+</li>
+<li><p>测试</p>
+<ul>
+<li><p>尝试创建 school 库(本操作在navicate工具中完成, 这里就不提供sql了), 结果会在数据库目录 /usr/local/mysql/data 下生成一个 <code>db.opt</code> 文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@lant school]# ls</div><div class="line">db.opt</div><div class="line">[root@lant school]# pwd</div><div class="line">/usr/local/mysql/data/school</div><div class="line">[root@lant school]#</div></pre></td></tr></table></figure>
+<p>该文件可以直接用文本编辑器打开, 内容比较简单, 用来记录该库的默认字符集和字符集排序规则, 内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">default-character-set=utf8</div><div class="line">default-collation=utf8_general_ci</div></pre></td></tr></table></figure>
+<p>如果删除这个文件, 那么MySQL在建表时, 则会参照全局的字符设置, 所以这个文件是在该库中新建表的时候才会有体现, 影响不大;</p>
+</li>
+<li><p>在school库中创建一张MyISAM的数据表 test_teacher</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">CREATE TABLE `test_teacher`  (</div><div class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</div><div class="line">  `teacher_id` int(11) NOT NULL DEFAULT 0,</div><div class="line">  `teacher_name` varchar(255) NOT NULL DEFAULT &apos;&apos;,</div><div class="line">  `created_at` int(11) NOT NULL,</div><div class="line">  `updated_at` int(11) NOT NULL,</div><div class="line">  PRIMARY KEY (`id`)</div><div class="line">) ENGINE = MyISAM;</div></pre></td></tr></table></figure>
+</li>
+</ul>
 </li>
 </ol>
-<h3 id="INNODB"><a href="#INNODB" class="headerlink" title="INNODB"></a>INNODB</h3><ol>
-<li><p>而在INNODB引擎中, <code>.ibd</code> 文件 或 <code>ibdata</code> 文件, 这两种文件都是存放Innodb数据和索引的; 数据和索引是存储在一起的;</p>
-</li>
-<li><p>之所以有两种文件来存放 Innodb 的数据和索引, 是因为 Innodb 的数据存储方式能够通过配置来决定是使用共享表空间存放存储数据, 还是独享表空间存放存储数据</p>
+<pre><code>- 查看/usr/local/mysql/data目录下文件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@lant school]# ls</div><div class="line">db.opt  test_class.frm  test_class.MYD  test_class.MYI</div><div class="line">[root@lant school]#</div></pre></td></tr></table></figure>
+</code></pre><ol>
+<li><p>注意: <code>.MYI</code>, <code>.MYD</code> 文件不能轻易删除, 目前只是比较简单的分析:</p>
 <ul>
-<li>独享表空间存储方式使用 <code>.ibd</code> 文件来存放数据和索引, 每张表都有自己的一个 <code>.ibd</code> 文件;</li>
-<li>共享表空间存储方式使用 <code>ibdata</code> 文件来存放数据和索引, 所有表共同使用一个(或者多个,可自行配置)ibdata 文件;<br>更多ibdata文件的配置细节请参考:<br><a href="https://www.cnblogs.com/wt645631686/p/8258070.html" target="_blank" rel="external">https://www.cnblogs.com/wt645631686/p/8258070.html</a><br><a href="https://blog.csdn.net/donghaixiaolongwang/article/details/60962560" target="_blank" rel="external">https://blog.csdn.net/donghaixiaolongwang/article/details/60962560</a></li>
+<li><p>本以为既然<code>.MYI</code>索引文件和<code>.MYD</code>数据文件是分开的, 那么删除表的 <code>.MYI</code> 文件, 应该只是会导致表的索引被删除;<br>但是结果发现, 在不重启mysql的情况下, 可以给表中添加数据, 也可以进行数据查询;<br>如果mysql重启后, 则表连查询也无法进行, 报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from test_teacher;</div><div class="line">ERROR 1017 (HY000): Can&apos;t find file: &apos;test_teacher&apos; (errno: 2 - No such file or directory)</div><div class="line">mysql&gt;</div></pre></td></tr></table></figure>
+</li>
+<li><p>.MYD 文件也是一样, 不能轻易认为删除后, 只是数据会丢失; 重启mysql后, </p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="INNODB-索引文件"><a href="#INNODB-索引文件" class="headerlink" title="INNODB 索引文件"></a>INNODB 索引文件</h3><ol>
+<li><p>而在INNODB引擎中, 每个表可能会有两种文件</p>
+<ul>
+<li><code>.frm</code> 文件: 和MyISAM的类似, 都是用来保存每个表的元数据;</li>
+<li><code>.ibd</code> 文件 或 <code>ibdata</code> 文件, 这两种文件都是存放Innodb数据和索引的; 数据和索引是存储在一起的;</li>
+</ul>
+</li>
+<li><p>之所以有两种文件来存放 Innodb 的数据和索引, 是因为 Innodb 的数据存储方式能够通过配置来决定是使用<strong>共享表空间</strong>存储数据, 还是<strong>独享表空间</strong>存储数据</p>
+<ul>
+<li><p>独享表空间存储方式使用 <code>.ibd</code> 文件来存放数据和索引, 每张表都有自己的一个 <code>.ibd</code> 文件<br>需要开启<code>innodb_file_per_table</code>参数, 该参数在mysql5.6.6及其后续版本默认开启, 开启该参数的时候, Innodb将每个新创建的表的数据及索引存储在一个独立的.ibd文件里, 而不是系统的表空间;</p>
+</li>
+<li><p>共享表空间存储方式使用 <code>ibdata</code> 文件来存放数据和索引, 所有表共同使用一个(或者多个,可自行配置)ibdata 文件;<br>更多ibdata文件的配置细节请参考: <a href="https://blog.csdn.net/jesseyoung/article/details/42236615" target="_blank" rel="external">https://blog.csdn.net/jesseyoung/article/details/42236615</a></p>
+</li>
 </ul>
 </li>
 <li><p>innodb的索引和数据存放在一起, 和聚簇索引特性有关么??</p>

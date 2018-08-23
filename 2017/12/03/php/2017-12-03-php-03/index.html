@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Rymuscle&#39;s">
 <meta property="og:description" content="前言在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志;  php-fpm 慢日志 对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下  request_slowlog_timeout: 默认值为0, 表示不进行慢日志记录;可以设置为n(n&amp;gt;0)秒, 来打开慢查询日志的记录,">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-18T04:53:17.000Z">
+<meta property="og:updated_time" content="2018-08-22T02:10:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. php-fpm -- 慢日志, 错误日志">
 <meta name="twitter:description" content="前言在生产环境中, 每隔一段时间(比如每周一次两次), 应该检查一些php脚本的运行状态, 观察那些php进程速度太慢, 或者有哪些错误日志;  php-fpm 慢日志 对于php-fpm的慢日志, php-fpm.conf 中有两个配置项需要关注一下  request_slowlog_timeout: 默认值为0, 表示不进行慢日志记录;可以设置为n(n&amp;gt;0)秒, 来打开慢查询日志的记录,">
@@ -52,7 +52,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -223,28 +223,16 @@
 <h2 id="php-fpm与php-ini的error-log"><a href="#php-fpm与php-ini的error-log" class="headerlink" title="php-fpm与php.ini的error_log"></a>php-fpm与php.ini的error_log</h2><ol>
 <li><p>目前为止, php相关的错误日志既不会记录到php-fpm的error_log中, 也不会记录在php.ini中的error_log中; </p>
 </li>
-<li><p>一般情况, php-fpm的error_log不去记录代码逻辑的错误, 而是由 php.ini 的错误日志进行记录; </p>
+<li><p>要让php.ini记录错误日志, 其实只用查看你的错误日志文件是否有权限, 只要设置好权限, php.ini就会记录错误日志; </p>
 </li>
-<li><p>配置 php.ini 或者 php-fpm 来记录错误日志 </p>
+<li><p>要让php-fpm.conf的error_log可以记录错误日志, 配置如下:</p>
 <ul>
-<li>第一种方法, 只用在php.ini中设定配置文件路径, 并且文件权限足够即可, 但是如果文件权限不够, 则php.ini和php-fpm都不会记录错误日志;</li>
-<li><p>第二种方法, 在php-fpm.conf中进行配置即可, 这种情况下, 如果php.ini中规定的错误日志文件权限不够, 则php-fpm的错误日志会自动记录;</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 在php-fpm.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div><div class="line">// 同时需要在&quot;[global]&quot;下配置error_log的路径</div></pre></td></tr></table></figure>
-</li>
-<li><p>第三种方法</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// 对php-fpm.conf中的error_log打开注释, 设置好路径即可, 不必须在[global]下, 然后在进程池的配置文件如www.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div></pre></td></tr></table></figure>
-<p>这种方法, 如果php.ini的日志文件权限不够, 则php-fpm和php.ini都不会记录错误日志;<br>但是当php.ini的错误日志权限够的话, 它会记录错误日志;</p>
+<li>这种情况下, 如果php.ini中规定的错误日志文件权限不够, 则php-fpm的错误日志会自动记录, 如果权限够,则php.ini的错误日志会记录, 而php-fpm的错误日志不会记录;<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 在php-fpm.conf中配置</div><div class="line">[www]</div><div class="line">catch_workers_output = yes</div><div class="line">// 同时需要在&quot;[global]&quot;下配置error_log的路径</div></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 <li><p>php.ini配置:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">log_errors = On</div><div class="line">error_log = &quot;/usr/local/php/log/php_errors.log&quot;</div><div class="line">error_reporting=E_ALL</div></pre></td></tr></table></figure>
-</li>
-<li><p>只有php-fpm的error_log记录了错误日志, 而php.ini的error_log却不记录php错误日志的原因可能是:</p>
-<ul>
-<li>php-fpm.conf(或者线程池配置文件如www.conf)中的 <code>php_admin_value[error_log]</code> 参数被设置 (一般默认是关闭的)</li>
-<li>php.ini文件中指定的error_log日志文件没有可写权限</li>
-</ul>
 </li>
 </ol>
 
