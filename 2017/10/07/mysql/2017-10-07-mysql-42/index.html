@@ -29,7 +29,7 @@
 <meta property="og:description" content="索引的本质 MySQL官方对索引的定义为: 索引(Index)是帮助MySQL高效获取数据的数据结构; 提取句子主干, 就可以得到索引的本质: 索引是数据结构;  我们知道, 查询是数据库的最主要功能之一; 我们都希望查询数据的速度能尽可能的快, 因此数据库系统的设计者会从查询算法的角度进行优化; 最基本的查询算法当然是 顺序查找(linear search), 这种复杂度为 O(n) 的算法在数">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/index/index-demo.png">
-<meta property="og:updated_time" content="2018-08-23T07:19:25.000Z">
+<meta property="og:updated_time" content="2018-08-23T07:42:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="42. MySQL高性能索引">
 <meta name="twitter:description" content="索引的本质 MySQL官方对索引的定义为: 索引(Index)是帮助MySQL高效获取数据的数据结构; 提取句子主干, 就可以得到索引的本质: 索引是数据结构;  我们知道, 查询是数据库的最主要功能之一; 我们都希望查询数据的速度能尽可能的快, 因此数据库系统的设计者会从查询算法的角度进行优化; 最基本的查询算法当然是 顺序查找(linear search), 这种复杂度为 O(n) 的算法在数">
@@ -160,7 +160,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引的本质"><span class="post-toc-number">1.</span> <span class="post-toc-text">索引的本质</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">2.</span> <span class="post-toc-text"> </span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MyISAM-索引文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">MyISAM 索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#INNODB-索引文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">INNODB 索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引背后的数据结构及算法"><span class="post-toc-number">5.</span> <span class="post-toc-text">索引背后的数据结构及算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL索引类型"><span class="post-toc-number">6.</span> <span class="post-toc-text">MySQL索引类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引相关操作"><span class="post-toc-number">7.</span> <span class="post-toc-text">索引相关操作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">8.</span> <span class="post-toc-text">示例</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引的本质"><span class="post-toc-number">1.</span> <span class="post-toc-text">索引的本质</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#B-Tree-和-B-Tree"><span class="post-toc-number">2.</span> <span class="post-toc-text">B-Tree 和 B+Tree</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#B-Tree"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">B-Tree</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MyISAM-索引文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">MyISAM 索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#INNODB-索引文件"><span class="post-toc-number">4.</span> <span class="post-toc-text">INNODB 索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引背后的数据结构及算法"><span class="post-toc-number">5.</span> <span class="post-toc-text">索引背后的数据结构及算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MySQL索引类型"><span class="post-toc-number">6.</span> <span class="post-toc-text">MySQL索引类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引相关操作"><span class="post-toc-number">7.</span> <span class="post-toc-text">索引相关操作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">8.</span> <span class="post-toc-text">示例</span></a></li></ol>
         </nav>
     </aside>
     
@@ -191,13 +191,39 @@
 <ul>
 <li>左边是数据表, 一共有两列七条记录;</li>
 <li>最左边的是数据记录的物理地址(注意逻辑上相邻的记录在磁盘上也并不是一定物理相邻的);</li>
-<li>为了加快Col2的查找, 可以维护一个右边所示的二叉查找树, 每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针, 这样就可以运用二叉查找在 O($log_2 10$) 的复杂度内获取到相应数据;</li>
+<li>为了加快Col2的查找, 可以维护一个右边所示的二叉查找树, 每个节点分别包含索引键值和一个指向对应数据记录物理地址的指针, 这样就可以运用二叉查找在$O(log_2 10)$的复杂度内获取到相应数据;</li>
 </ul>
 </li>
 <li><p>虽然上图也算是一个货真价实的索引, 但是实际的数据库系统几乎没有使用 二叉查找树 或其进化品种 红黑树(red-black tree) 来实现索引的, 原因会在下文介绍;</p>
 </li>
 </ol>
-<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><p>摘自: <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="noopener">http://blog.codinglabs.org/articles/theory-of-mysql-index.html</a></p>
+<h2 id="B-Tree-和-B-Tree"><a href="#B-Tree-和-B-Tree" class="headerlink" title="B-Tree 和 B+Tree"></a>B-Tree 和 B+Tree</h2><p>目前大部分数据库系统及文件系统都采用 <code>B-Tree</code> 或其变种 <code>B+Tree</code> 作为索引结构, 在本文的下一节会结合存储器原理及计算机存取原理讨论为什么B-Tree和B+Tree在被如此广泛用于索引, 这一节先单纯从数据结构角度描述它们;</p>
+<h3 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B-Tree"></a>B-Tree</h3><ol>
+<li><p>为了描述B-Tree, 首先定义一条数据记录: “[key, data]” (为一个二元组)</p>
+<ul>
+<li>key为记录的键值, 对于不同数据记录, key是互不相同的; </li>
+<li>data为数据记录除key外的数据; </li>
+</ul>
+</li>
+<li><p>那么B-Tree是满足下列条件的数据结构:</p>
+<ul>
+<li>d为大于1的一个正整数, 称为B-Tree的度;</li>
+<li>h为一个正整数, 称为B-Tree的高度;</li>
+<li>每个非叶子节点由n-1个key和n个指针组成, 其中 d&lt;=n&lt;=2d;</li>
+<li>每个叶子节点最少包含一个key和两个指针, 最多包含2d-1个key和2d个指针, 叶节点的指针均为null;</li>
+<li>所有叶节点具有相同的深度, 等于树高h;</li>
+<li>key和指针互相间隔, 节点两端是指针;</li>
+<li>一个节点中的key从左到右非递减排列;</li>
+<li>所有节点组成树结构;</li>
+</ul>
+<p>每个指针要么为null，要么指向另外一个节点。</p>
+<p>如果某个指针在节点node最左边且不为null，则其指向节点的所有key小于v(key1)，其中v(key1)为node的第一个key的值。</p>
+<p>如果某个指针在节点node最右边且不为null，则其指向节点的所有key大于v(keym)，其中v(keym)为node的最后一个key的值。</p>
+<p>如果某个指针在节点node的左右相邻key分别是keyi和keyi+1且不为null，则其指向节点的所有key小于v(keyi+1)且大于v(keyi)。</p>
+<p>图2是一个d=2的B-Tree示意图。</p>
+</li>
+</ol>
+<p>摘自: <a href="http://blog.codinglabs.org/articles/theory-of-mysql-index.html" target="_blank" rel="noopener">http://blog.codinglabs.org/articles/theory-of-mysql-index.html</a></p>
 <ol>
 <li><p>做为存储引擎用于快速找到记录的一种数据结构, 索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;</p>
 </li>
@@ -374,7 +400,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2017/10/07/data-structure/2017-10-07-tree/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">数据结构 -- 树的相关概念</h4>
+        <h4 class="title">Tree</h4>
       </a>
     </div>
   
