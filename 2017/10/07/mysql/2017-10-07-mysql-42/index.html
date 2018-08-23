@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,索引优化">
-    <meta name="description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
+    <meta name="description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在 MySQL 中, 索引是在存">
 <meta name="keywords" content="MySQL,索引优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="42. MySQL高性能索引">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/07/mysql/2017-10-07-mysql-42/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
+<meta property="og:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在 MySQL 中, 索引是在存">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-23T02:29:18.000Z">
+<meta property="og:updated_time" content="2018-08-23T03:04:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="42. MySQL高性能索引">
-<meta name="twitter:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在mysql中, 索引是在存储引">
+<meta name="twitter:description" content="概述 索引(在MySQL中也叫做键), 是存储引擎用于快速找到记录的一种数据结构。这是索引的基本功能, 除此之外, 还会讨论索引其他一些方面有用的属性;  索引对于良好的性能非常关键, 索引优化应该是对查询性能优化最有效的手段了, 索引能够轻易将查询性能提高几个数量级;  创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;  在 MySQL 中, 索引是在存">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#基础"><span class="post-toc-number">2.</span> <span class="post-toc-text">基础</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#MyISAM索引文件"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">MyISAM索引文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#INNODB-索引文件"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">INNODB 索引文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">3.</span> <span class="post-toc-text">示例</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MyISAM索引文件"><span class="post-toc-number">2.</span> <span class="post-toc-text">MyISAM索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#INNODB-索引文件"><span class="post-toc-number">3.</span> <span class="post-toc-text">INNODB 索引文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">示例</span></a></li></ol>
         </nav>
     </aside>
     
@@ -186,18 +186,14 @@
 </li>
 <li><p>创建一个最优的索引经常需要重写查询语句, 即 索引优化 经常需要与 查询优化 一起来实施;</p>
 </li>
-<li><p>在mysql中, 索引是在存储引擎层(不是服务层)实现的; (所以不同存储引擎下的索引策略会有所不同)</p>
+<li><p>在 MySQL 中, 索引是在存储引擎层(不是服务层)实现的; (所以不同存储引擎下的索引策略会有所不同)</p>
 </li>
-</ol>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ol>
-<li><p>在MySQL中, 存储引擎使用 类似 书籍、字典查找内容的方法(想在一本书中找到某个特定主题, 一般会先看’索引’部分, 然后找到对应的页码) 来使用索引, 即, 首先在索引中找到对应值, 然后根据值所匹配的索引记录找到对应的数据行; </p>
-</li>
-<li><p>索引作为一种优化查询速度的手段, <strong>主要是应用在查询语句的条件字段列上</strong>, 如下:</p>
+<li><p>在 MySQL 中, 存储引擎使用 类似 书籍、字典查找内容的方法(想在一本书中找到某个特定主题, 一般会先看’索引’部分, 然后找到对应的页码) 来使用索引, 即, 首先在索引中找到对应值, 然后根据值所匹配的索引记录找到对应的数据行;<br> 索引作为一种优化查询速度的手段, <strong>主要是应用在查询语句的条件字段列上</strong>, 如下:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">select first_name from actor where actor_id=5;</div></pre></td></tr></table></figure>
 <p> 如果在 actor_id 列上建有索引, 则MySQL会先在索引中按照值5进行查找, 然后返回所有包含该值的数据行;</p>
 </li>
 </ol>
-<h3 id="MyISAM索引文件"><a href="#MyISAM索引文件" class="headerlink" title="MyISAM索引文件"></a>MyISAM索引文件</h3><ol>
+<h2 id="MyISAM索引文件"><a href="#MyISAM索引文件" class="headerlink" title="MyISAM索引文件"></a>MyISAM索引文件</h2><ol>
 <li><p>在MyISAM引擎中, 每张表会有三种文件:</p>
 <ul>
 <li><code>.MYD</code>: 文件是用来存放数据的文件;</li>
@@ -236,7 +232,7 @@
 </ul>
 </li>
 </ol>
-<h3 id="INNODB-索引文件"><a href="#INNODB-索引文件" class="headerlink" title="INNODB 索引文件"></a>INNODB 索引文件</h3><ol>
+<h2 id="INNODB-索引文件"><a href="#INNODB-索引文件" class="headerlink" title="INNODB 索引文件"></a>INNODB 索引文件</h2><ol>
 <li><p>而在INNODB引擎中, 每个表可能会有两种文件</p>
 <ul>
 <li><code>.frm</code> 文件: 和MyISAM的类似, 都是用来保存每个表的元数据;</li>
