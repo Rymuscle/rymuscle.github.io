@@ -37,7 +37,8 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-07.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-08.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-09.png">
-<meta property="og:updated_time" content="2018-08-24T12:57:44.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-10.png">
+<meta property="og:updated_time" content="2018-08-24T13:05:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="B-Tree 之 2-3Tree">
 <meta name="twitter:description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
@@ -168,7 +169,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3树"><span class="post-toc-number">1.</span> <span class="post-toc-text">2-3树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3Tree的查找过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">2-3Tree的查找过程:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向-2-结点-中插入新键"><span class="post-toc-number">3.</span> <span class="post-toc-text">向 2-结点 中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一棵只含有一个-3-结点-的树中插入新键"><span class="post-toc-number">4.</span> <span class="post-toc-text">向一棵只含有一个 3-结点 的树中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是-2-结点-的-3-节-点中插入新键"><span class="post-toc-number">5.</span> <span class="post-toc-text">向一个父结点是 2-结点 的 3-节 点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是3-结点的3-结点中插入新键"><span class="post-toc-number">6.</span> <span class="post-toc-text">向一个父结点是3-结点的3-结点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分解根结点"><span class="post-toc-number">7.</span> <span class="post-toc-text">分解根结点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.</span> <span class="post-toc-text">小结</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#局部变换"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">局部变换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全局性质"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">全局性质</span></a></li></ol></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3树"><span class="post-toc-number">1.</span> <span class="post-toc-text">2-3树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3Tree的查找过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">2-3Tree的查找过程:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向-2-结点-中插入新键"><span class="post-toc-number">3.</span> <span class="post-toc-text">向 2-结点 中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一棵只含有一个-3-结点-的树中插入新键"><span class="post-toc-number">4.</span> <span class="post-toc-text">向一棵只含有一个 3-结点 的树中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是-2-结点-的-3-节-点中插入新键"><span class="post-toc-number">5.</span> <span class="post-toc-text">向一个父结点是 2-结点 的 3-节 点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是3-结点的3-结点中插入新键"><span class="post-toc-number">6.</span> <span class="post-toc-text">向一个父结点是3-结点的3-结点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分解根结点"><span class="post-toc-number">7.</span> <span class="post-toc-text">分解根结点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -240,21 +241,23 @@
 <h2 id="分解根结点"><a href="#分解根结点" class="headerlink" title="分解根结点"></a>分解根结点</h2><ol>
 <li>如果从插入结点到根结点一路都是 3-结点, 根结点最终将变成一个临时的4-结点; 这种情况可以照向一棵只有一个 3-结点 的树中插入新键的方法处理这个问题, 将根结点分解为3个2-结点, 使得树高加1<br> <img src="/img/data-structures/2-3tree-07.png"></li>
 </ol>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="局部变换"><a href="#局部变换" class="headerlink" title="局部变换"></a>局部变换</h3><ol>
-<li><p>将2-3树中的一个 4-结点 分解, 有六种情况: </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>局部变换</p>
 <ul>
-<li>4-结点是根结点</li>
-<li>4-结点是2-结点的左子结点</li>
-<li>4-结点是2-结点的右子结点</li>
-<li>4-结点是3-结点左子结点</li>
-<li>4-结点是3-结点中子结点</li>
-<li>4-结点是3-结点右子结点</li>
+<li><p>将2-3树中的一个 4-结点 分解, 有六种情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">4-结点是根结点</span><br><span class="line">4-结点是2-结点的左子结点</span><br><span class="line">4-结点是2-结点的右子结点</span><br><span class="line">4-结点是3-结点左子结点</span><br><span class="line">4-结点是3-结点中子结点</span><br><span class="line">4-结点是3-结点右子结点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2-3插入算法的根本在于这些变换都是局部的: 除了相关的结点和链接之外不必修改或者检查树的其他部分; 每次变换中, 变更的链接个数不会超过一个很小的常数;<br>每个变换都会将 4-结点中 的一个键送入它的父结点并重构相应的链接而不用改树的其他部分<br><img src="/img/data-structures/2-3tree-08.png"></p>
+</li>
 </ul>
 </li>
-<li><p>2-3插入算法的根本在于这些变换都是局部的: 除了相关的结点和链接之外不必修改或者检查树的其他部分; 每次变换中, 变更的链接个数不会超过一个很小的常数;<br> 每个变换都会将 4-结点中 的一个键送入它的父结点并重构相应的链接而不用改树的其他部分<br> <img src="/img/data-structures/2-3tree-08.png"></p>
+<li><p>全局性质: 上述哪些局部变换不会影响树的全局有序性和平衡性: 任何空链接到根结点的路径长度都是相等的;<br> <img src="/img/data-structures/2-3tree-09.png"></p>
+</li>
+<li><p>和标准的二叉树由上向下生长不同, 2-3树的生长是右下向上的, 可以研究一下下图, 就能很好滴理解 2-3树的构造方式<br> <img src="/img/data-structures/2-3tree-10.png"></p>
+</li>
+<li><p>曾记否, 在二叉查找树中, 按照升序插入10个键会得到高度为9的一棵最差查找树, 但是使用2-3树, 树的高度是2;</p>
 </li>
 </ol>
-<h3 id="全局性质"><a href="#全局性质" class="headerlink" title="全局性质"></a>全局性质</h3><p>上述哪些局部变换不会影响树的全局有序性和平衡性: 任何空链接到根结点的路径长度都是相等的;<br><img src="/img/data-structures/2-3tree-09.png"></p>
 <p>10、分析<br>结论：在一棵大小为N的2-3树中，查找和插入操作访问的结点必然不超过logN个。</p>
 <p>证明：一棵大小为N的2-3树中，其高度在logN和log3N之间。</p>
 <p>2-3树在最坏情况下仍有较好的性能，查找和插入的性能被保证在对数时间内。</p>
