@@ -13,22 +13,35 @@
     
     
     
-    <title>B-Tree | Rymuscle&#39;s</title>
+    <title>B-Tree 之 2-3Tree | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Data Structures">
-    <meta name="keywords" content="Data Structures">
+    <meta name="description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
+<meta name="keywords" content="Data Structures">
 <meta property="og:type" content="article">
-<meta property="og:title" content="B-Tree">
+<meta property="og:title" content="B-Tree 之 2-3Tree">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-23T07:46:42.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-05.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-06.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-07.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-08.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-09.png">
+<meta property="og:updated_time" content="2018-08-24T12:57:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="B-Tree">
+<meta name="twitter:title" content="B-Tree 之 2-3Tree">
+<meta name="twitter:description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -109,7 +122,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">B-Tree</div>
+        <div class="flex-col header-title ellipsis">B-Tree 之 2-3Tree</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -152,11 +165,18 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3树"><span class="post-toc-number">1.</span> <span class="post-toc-text">2-3树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3Tree的查找过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">2-3Tree的查找过程:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向-2-结点-中插入新键"><span class="post-toc-number">3.</span> <span class="post-toc-text">向 2-结点 中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一棵只含有一个-3-结点-的树中插入新键"><span class="post-toc-number">4.</span> <span class="post-toc-text">向一棵只含有一个 3-结点 的树中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是-2-结点-的-3-节-点中插入新键"><span class="post-toc-number">5.</span> <span class="post-toc-text">向一个父结点是 2-结点 的 3-节 点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是3-结点的3-结点中插入新键"><span class="post-toc-number">6.</span> <span class="post-toc-text">向一个父结点是3-结点的3-结点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分解根结点"><span class="post-toc-number">7.</span> <span class="post-toc-text">分解根结点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.</span> <span class="post-toc-text">小结</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#局部变换"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">局部变换</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全局性质"><span class="post-toc-number">8.2.</span> <span class="post-toc-text">全局性质</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-data-structure/2017-10-19-b-tree"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">B-Tree</h1>
+        <h1 class="post-card-title">B-Tree 之 2-3Tree</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-10-19 11:37:08" datetime="2017-10-19T03:37:08.000Z"  itemprop="datePublished">2017-10-19</time>
 
@@ -169,7 +189,77 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            
+            <h2 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h2><ol>
+<li><p><strong>2-3查找树</strong> 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:</p>
+<ul>
+<li><strong>2-结点</strong>: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 <strong>一个键</strong>(及其对应的值) 和 <strong>两条链接</strong> (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键)</li>
+<li><strong>3-结点</strong>: 含有 <strong>两个键</strong>(及其对应的值) 和 <strong>三条链接</strong>(左链接指向的结点的键都小于该结点的所有键, 右链接指向的结点的所有键都大于该结点的所有键, <strong>中链接指向的结点的所有键, 都位于该结点的两个键的中间</strong>)   </li>
+</ul>
+</li>
+<li><p>所以可以看出, 2-3树不是二叉树, 其结点可拥有3个孩子; <code>2-3树</code>与满二叉树比较相似, 高为h的<code>2-3树</code>包含的结点数大于等于高度为h的满二叉树的结点数, 即至少有 $2^h-1$ 个结点 (换个角度分析, 包含n的结点的2-3树的高度不大于 $log_2{n+1}$(即包含n个结点的二叉树的最小高度, 也即包含n个结点的满二叉树的高度))</p>
+<ul>
+<li>若某棵 <code>2-3树</code> 不包含<code>3-结点</code>, 则看上去像满二叉树;</li>
+<li>但是如果 <code>2-3树</code> 的一个内部结点确实有3个孩子, 那就比相同高度的满二叉树的结点更多</li>
+</ul>
+</li>
+<li><p>下面是一棵2-3查找树示意图:<br> <img src="/img/data-structures/2-3tree-01.png"></p>
+<ul>
+<li>一棵完美平衡的2-3Tree中的所有空链接到根结点的距离应该都是相同的; </li>
+<li><strong>为了简单起见, 接下来会用2-3Tree来指代一棵完美平衡的2-3Tree</strong>;</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-3Tree的查找过程"><a href="#2-3Tree的查找过程" class="headerlink" title="2-3Tree的查找过程:"></a>2-3Tree的查找过程:</h2><p><img src="/img/data-structures/2-3tree-02.png"></p>
+<h2 id="向-2-结点-中插入新键"><a href="#向-2-结点-中插入新键" class="headerlink" title="向 2-结点 中插入新键"></a>向 <strong>2-结点</strong> 中插入新键</h2><ol>
+<li><p>要在2-3树中插入一个新的结点, 可以像二叉查找树一样, 先进性一次未命中查找, 然后把新结点挂在树的底部; 但这样的话, 树无法保持完美平衡性;</p>
+</li>
+<li><p>而我们使用2-3树的原因就在于它能在插入后继续保持平衡: 如果未命中的查找结束于一个 2-结点, 那么将这个键加入这个 2-结点 中, 组成 <code>3-结点</code>;<br> <img src="/img/data-structures/2-3tree-03.png"></p>
+</li>
+<li><p>而如果未命中的查找结束于一个 3-结点, 就比较麻烦一些;</p>
+</li>
+</ol>
+<h2 id="向一棵只含有一个-3-结点-的树中插入新键"><a href="#向一棵只含有一个-3-结点-的树中插入新键" class="headerlink" title="向一棵只含有一个 3-结点 的树中插入新键"></a>向一棵只含有一个 <strong>3-结点</strong> 的树中插入新键</h2><ol>
+<li><p>在考虑一般情况之前, 先假设需要向一棵只含有一个 3-结点 的树中插入一个新键; </p>
+</li>
+<li><p>由于 <strong>3-结点</strong> 只有两个键, 所以在它唯一的结点中已经没有可插入新键的空间了, 为了将新键插入, 我们先临时将新键存入该结点中, 使之成为一个 4-结点, 它很自然地拓展了以前的结点并含有 3个键 和 4条链接; 然后将 4-结点 转换为由3个 2-结点 组成的2-3树, 其中, 中间的键所在 2-结点 成为了其他两个键所在结点的父结点;<br> <img src="/img/data-structures/2-3tree-04.png"></p>
+</li>
+</ol>
+<p><strong>这是2-3树生长的基本方式</strong></p>
+<h2 id="向一个父结点是-2-结点-的-3-节-点中插入新键"><a href="#向一个父结点是-2-结点-的-3-节-点中插入新键" class="headerlink" title="向一个父结点是 2-结点 的 3-节 点中插入新键"></a>向一个父结点是 2-结点 的 3-节 点中插入新键</h2><ol>
+<li>同样, 先将新键临时保存到该结点中, 组成4-结点并将其分解, 但此时不会为中键创建一个新结点; 而是将中键移到父结点中, 指向旧的 3-结点 的链接将被中键两边的两条链接替代, 并分别指向两个新的2-结点;<br> <img src="/img/data-structures/2-3tree-05.png"></li>
+<li>这次转换并不影响2-3树的主要性质, 树仍然是有序的, 仍然是完美平衡的(空链接到根结点的距离仍然相同)</li>
+</ol>
+<h2 id="向一个父结点是3-结点的3-结点中插入新键"><a href="#向一个父结点是3-结点的3-结点中插入新键" class="headerlink" title="向一个父结点是3-结点的3-结点中插入新键"></a>向一个父结点是3-结点的3-结点中插入新键</h2><ol>
+<li><p>同样, 先将新键临时保存到该结点中, 组成 4-结点 再将其分解, 将中键插入到父结点中, 同时指向 旧的3-结点的链接将被中键两边的两条链接替代, 父结点此时成为临时的4-结点;</p>
+</li>
+<li><p>对新的 4-结点 进行同样的处理, 即分解4-结点并将中键插入到父结点中;</p>
+</li>
+<li><p>推广到一般情况, 我们就这样一直向上不断分解临时的 4-结点 直到遇到一个 2-结点, 并将其替换成一个 3-结点, 或者一直到3-结点的根;<br> <img src="/img/data-structures/2-3tree-06.png"></p>
+</li>
+</ol>
+<h2 id="分解根结点"><a href="#分解根结点" class="headerlink" title="分解根结点"></a>分解根结点</h2><ol>
+<li>如果从插入结点到根结点一路都是 3-结点, 根结点最终将变成一个临时的4-结点; 这种情况可以照向一棵只有一个 3-结点 的树中插入新键的方法处理这个问题, 将根结点分解为3个2-结点, 使得树高加1<br> <img src="/img/data-structures/2-3tree-07.png"></li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><h3 id="局部变换"><a href="#局部变换" class="headerlink" title="局部变换"></a>局部变换</h3><ol>
+<li><p>将2-3树中的一个 4-结点 分解, 有六种情况: </p>
+<ul>
+<li>4-结点是根结点</li>
+<li>4-结点是2-结点的左子结点</li>
+<li>4-结点是2-结点的右子结点</li>
+<li>4-结点是3-结点左子结点</li>
+<li>4-结点是3-结点中子结点</li>
+<li>4-结点是3-结点右子结点</li>
+</ul>
+</li>
+<li><p>2-3插入算法的根本在于这些变换都是局部的: 除了相关的结点和链接之外不必修改或者检查树的其他部分; 每次变换中, 变更的链接个数不会超过一个很小的常数;<br> 每个变换都会将 4-结点中 的一个键送入它的父结点并重构相应的链接而不用改树的其他部分<br> <img src="/img/data-structures/2-3tree-08.png"></p>
+</li>
+</ol>
+<h3 id="全局性质"><a href="#全局性质" class="headerlink" title="全局性质"></a>全局性质</h3><p>上述哪些局部变换不会影响树的全局有序性和平衡性: 任何空链接到根结点的路径长度都是相等的;<br><img src="/img/data-structures/2-3tree-09.png"></p>
+<p>10、分析<br>结论：在一棵大小为N的2-3树中，查找和插入操作访问的结点必然不超过logN个。</p>
+<p>证明：一棵大小为N的2-3树中，其高度在logN和log3N之间。</p>
+<p>2-3树在最坏情况下仍有较好的性能，查找和插入的性能被保证在对数时间内。</p>
+<p>但是这样直接实现2-3树不是很现实，因为有很多情况需要处理。</p>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -205,7 +295,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree 之 2-3Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -215,7 +305,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree 之 2-3Tree》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -225,7 +315,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《B-Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《B-Tree 之 2-3Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -355,7 +445,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree 之 2-3Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -365,7 +455,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&title=《B-Tree 之 2-3Tree》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -375,7 +465,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《B-Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《B-Tree 之 2-3Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-b-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -435,5 +525,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
