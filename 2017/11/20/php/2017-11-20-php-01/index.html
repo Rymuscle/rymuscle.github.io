@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Rymuscle&#39;s">
 <meta property="og:description" content="编译安装 下载PHP7.0.15到 /usr/local/src 并解压缩  12wget http://cn2.php.net/distributions/php-7.0.15.tar.gztar -zxvf php-7.0.15.tar.gz  依赖安装  123yum install -y gcc gcc-c++ make automake autoconf gd file bison pa">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-24T08:14:21.000Z">
+<meta property="og:updated_time" content="2018-08-24T08:43:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. PHP7编译安装">
 <meta name="twitter:description" content="编译安装 下载PHP7.0.15到 /usr/local/src 并解压缩  12wget http://cn2.php.net/distributions/php-7.0.15.tar.gztar -zxvf php-7.0.15.tar.gz  依赖安装  123yum install -y gcc gcc-c++ make automake autoconf gd file bison pa">
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编译安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">编译安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置nginx"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置nginx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#增加扩展"><span class="post-toc-number">3.</span> <span class="post-toc-text">增加扩展</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#phpize-php-config"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">phpize,php-config</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小知识"><span class="post-toc-number">4.</span> <span class="post-toc-text">小知识</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#编译安装"><span class="post-toc-number">1.</span> <span class="post-toc-text">编译安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置nginx"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置nginx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#增加扩展-phpize-php-config"><span class="post-toc-number">3.</span> <span class="post-toc-text">增加扩展(phpize,php-config)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#测试"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">测试</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小知识"><span class="post-toc-number">4.</span> <span class="post-toc-text">小知识</span></a></li></ol>
         </nav>
     </aside>
     
@@ -217,8 +217,8 @@
 <li>注意, 如果php代码有错误, 但是访问只显示500状态码, 并不展示具体错误, 注意修改php-fpm.conf配置文件 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /usr/local/php/etc/php-fpm.d/www.con</span><br><span class="line">// 打开下面配置, 并设置为on即可</span><br><span class="line">;php_flag[display_errors] = off</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="增加扩展"><a href="#增加扩展" class="headerlink" title="增加扩展"></a>增加扩展</h2><p>如何确保php在编译的时候, 该有的扩展都打开了? 哪些是默认打开的? 如何确定都要开启哪些扩展??<br>编译的时候打开的扩展和后面通过phpize编译的扩展有什么区别??<br>为什么编译时候打开的扩展在php.ini中并没有显示 extension=xxx.so??<br>phpfpm -m 找到的扩展, 和phpinfo中的不一样, 前者貌似是包含的扩展, 后者是已经打开正在使用的扩展! </p>
-<h3 id="phpize-php-config"><a href="#phpize-php-config" class="headerlink" title="phpize,php-config"></a>phpize,php-config</h3><ol>
+<h2 id="增加扩展-phpize-php-config"><a href="#增加扩展-phpize-php-config" class="headerlink" title="增加扩展(phpize,php-config)"></a>增加扩展(<code>phpize</code>,<code>php-config</code>)</h2><p>如何确保php在编译的时候, 该有的扩展都打开了? 哪些是默认打开的? 如何确定都要开启哪些扩展??<br>编译的时候打开的扩展和后面通过phpize编译的扩展有什么区别??<br>为什么编译时候打开的扩展在php.ini中并没有显示 extension=xxx.so??<br>phpfpm -m 找到的扩展, 和phpinfo中的不一样, 前者貌似是包含的扩展, 后者是已经打开正在使用的扩展! </p>
+<ol>
 <li><p><code>phpize</code> 是用来扩展php模块的 </p>
 <ul>
 <li>在之前编译安装php时, <code>./configure</code> 预编译阶段会有一些 <code>--with</code> 参数, 就是说明需要打开的PHP模块, 不过有些些模块在php安装的时候可能没有编译进来, 所以如果以后我们还想再增加些其他模块, 但是又不想重新编译php, 这个是时候就可以用 <strong>phpize</strong> 了;</li>
@@ -518,21 +518,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
