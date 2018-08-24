@@ -37,7 +37,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_02_new.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
-<meta property="og:updated_time" content="2018-07-27T02:17:52.000Z">
+<meta property="og:updated_time" content="2018-08-23T11:30:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
@@ -268,7 +268,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age-15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 <p>因为 <code>update</code> 为当前读(不会遵守可重复读的要求), 而select为快照读! 关于快照读和当前读, 可以参考后面的文章<a href="/2017/09/19/mysql/2017-09-19-mysql-22/">幻读, 快照读(snapshot read), 当前读 (current read)</a></p>
 </li>
-<li><p><code>SERIALIZABLE</code> 读写都加锁, 会出现死锁<br><img src="/img/mysql/transaction/lose_update_01_s.png"><br>为了不出现死锁: 也不会出现第一类丢失更新的问题</p>
+<li><p><code>SERIALIZABLE</code> 读写都加锁, 最容易出现死锁 (那默认隔离RR级别,是否只有写写组合才会出现死锁, 读写组合不会出现死锁??)<br><img src="/img/mysql/transaction/lose_update_01_s.png"><br>为了不出现死锁: 也不会出现第一类丢失更新的问题</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">update test_transaction set age = age-10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age -15 where id=2;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure>
 </li>
