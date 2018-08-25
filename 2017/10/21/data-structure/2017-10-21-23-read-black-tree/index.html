@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>23. 红黑树 | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Data Structures">
+    <meta name="description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
+<meta name="keywords" content="Data Structures">
+<meta property="og:type" content="article">
+<meta property="og:title" content="23. 红黑树">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-05.png">
+<meta property="og:updated_time" content="2018-08-25T07:11:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="23. 红黑树">
+<meta name="twitter:description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/data-structures/red-black-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">23. 红黑树</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-21T02:57:09.000Z" itemprop="datePublished" class="page-time">
+  2017-10-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#红黑树定义"><span class="post-toc-number">1.</span> <span class="post-toc-text">红黑树定义</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#颜色表示"><span class="post-toc-number">2.</span> <span class="post-toc-text">颜色表示</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#旋转"><span class="post-toc-number">3.</span> <span class="post-toc-text">旋转</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">4.</span> <span class="post-toc-text"> </span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-data-structure/2017-10-21-23-read-black-tree"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">23. 红黑树</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-21 10:57:09" datetime="2017-10-21T02:57:09.000Z"  itemprop="datePublished">2017-10-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="红黑树定义"><a href="#红黑树定义" class="headerlink" title="红黑树定义"></a>红黑树定义</h2><ol>
+<li><p>上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;</p>
+</li>
+<li><p>红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:</p>
+<ul>
+<li>红链接将两个 2-结点 链接起来构成一个 3-结点;</li>
+<li>黑链接则是 2-3树中的普通链接;</li>
+</ul>
+</li>
+<li><p>确切地说:</p>
+<ul>
+<li>将3-结点表示为一条左斜的红色链接(两个结点其中之一是另一个左子结点)相连的两个2-结点:<br><img src="/img/data-structures/red-black-01.png"><br>这种表示法的一个优点是, 我们无需修改就可以直接使用标准的二叉查找树的get()方法, 对于任意的2-3树, 只要对结点进行转换, 我们都可以立即派生出一棵对应的二叉查找树。<br>我们把用这种方式表示2-3树的二叉查找树称为红黑二叉查找树, 简称<strong>红黑树</strong>;</li>
+</ul>
+</li>
+<li><p>等价定义: 红黑树的另一种定义是含有红黑链接并满足下列条件的二叉查找树</p>
+<ul>
+<li>红链接均为左链接</li>
+<li>没有任何一个节点同时和两条红链接相连</li>
+<li>该树是完美黑色平衡的, 即任意空链接到根节点的路径上的黑链接数量相同<br>满足这样定义的红黑树和相应的2-3树是一一对应的</li>
+</ul>
+</li>
+<li><p>一一对应: </p>
+<ul>
+<li>如果将一颗红黑树中的红链接画平, 那么所有的空链接到根节点的距离都将是相同的:<br><img src="/img/data-structures/red-black-02.png"></li>
+<li>如果将有红链接相连的结点合并, 得到的就是一棵 2-3树;<br>相反, 如果将一棵 2-3树中的 3-结点画作由红色左链接相连的两个2-结点, 那么不会存在能够和两条红链接相连的结点, 因为根据定义, 红黑树是完美黑色平衡的(即任意空链接到根节点的路径上的黑链接数量相同);<br><img src="/img/data-structures/red-black-03.png"></li>
+</ul>
+</li>
+</ol>
+<h2 id="颜色表示"><a href="#颜色表示" class="headerlink" title="颜色表示"></a>颜色表示</h2><ol>
+<li><p>因为每个结点都只会有一条指向自己的链接(从它的父结点指向它), 为了方便, 我们将链接的颜色保存在表示结点的Node数据类型的布尔变量color中, 如果指向它的链接是红色的, 那么该变量为true, 黑色则为false; </p>
+</li>
+<li><p>我们约定空链接为黑色;</p>
+</li>
+<li><p>当我们提到一个结点的颜色时, 其实指的是指向该节点的链接的颜色, 反之亦然;</p>
+</li>
+</ol>
+<h2 id="旋转"><a href="#旋转" class="headerlink" title="旋转"></a>旋转</h2><ol>
+<li><p>在我们实现的某些操作中可能会出现红色右链接或者两条连续的红链接, 但在操作完成前这些情况都会被小心地旋转并修复; 旋转操作会改变红链接的指向; 首先, 假设有一个红色右链接, 我们需要对其进行左旋转转化成左链接:</p>
+<ul>
+<li>左旋转方法接受一条指向红黑树中的某个节点的 链接h 作为参数, 假设被指向的结点的右链接是红色的, 这个方法会对树进行必要的调整</li>
+<li>左旋转方法会返回一个包含同一组键的子树, 且<strong>子树的左链接为红色的根节点的链接</strong><br><img src="/img/data-structures/red-black-04.png"></li>
+<li>其实操作很简单: 只是将 以两个键中的较小者作为根节点 变为 以较大者作根节点;</li>
+</ul>
+</li>
+<li><p>右旋转很好实现, 只需要将左右对调过来即可, 如下所示:<br> <img src="/img/data-structures/red-black-05.png"></p>
+</li>
+<li><p>在插入新键时, 我们可以使用旋转操作帮助我们保证2-3树和红黑树之间的一一对应关系, 因为旋转操作可以保持红黑树的两个重要性质: <strong>有序性</strong> 和 <strong>完美平衡性</strong>。</p>
+</li>
+</ol>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><p>¡¡<br><a href="https://www.cnblogs.com/songdechiu/p/6880485.html" target="_blank" rel="noopener">https://www.cnblogs.com/songdechiu/p/6880485.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Data-Structures/">Data Structures</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 红黑树》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/20/data-structure/2017-10-28-b-tree-b+tree/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">B-Tree(BTree),B+Tree</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/20/php/2017-11-20-php-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. PHP7编译安装</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 红黑树》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwElEQVR42u3aQW7jMBAEwPz/097LHrIwZHfPUIkXKJ2CWJZYPJDjHn59xdfj2/X9P89/P9///N38ma+fcOzCw8PDWwz96nGP4Lq68/ldLaYdDx4eHt7P8K5W1Nf3JAt98pzNFvLGgoeHh/dhvE0V35bLeHh4eP87b1Zk77cZPDw8vM/hJUOcFcGzO/Ni/VjWgoeHhxfz8vL3c/6+pb+Hh4eHt+6qtwv667bWLJhom3D/PAEPDw/vBt6p5lY+uJx9KsLAw8PDu5vX/shv72mL5v204uHh4d3Hmw30bImcvCWZgiiSwMPDw1vw9ttD/rR8M8gB0Qjx8PDwDvHyRTlZxPPgoJ24ZArqBAUPDw9vzXsNK3aY0dKfjKeeXDw8PLybecly3JbOeZyRbC31lOHh4eHdxmuL7LzgngUTeVkfnSnDw8PDu5lX/NQfLet5yz/fGKIzEXh4eHhHebPItQ0yNrFFGxxHYQQeHh7egtcerkoOGcxiiFlAHJ2GwMPDwzvEy9v8s2MH+SK+511+Fw8PD+8orz10ld+TB7ibhtmbt+Dh4eHdwMvjhlm0mh8U2By6KsJcPDw8vKO8/LRSztjcM9tCog/w8PDwbuC1sFnzbBY3tMU3Hh4e3lnepnR+fX8buW7e+GZLwMPDwzvKaxf0tgF2qsHWNs+iwwR4eHh4C16OyRflfF73ZXe9++Hh4eEd4rVxahsozALZA9OBh4eH9yO8zWvygruo8YNs4XJ7wMPDwzvKe5TX5nhBHkDsp+Pvp3h4eHg38DY9o6R5PyvQZxvV6sLDw8MreclmkDfAitNeoyMCbdCMh4eHdx9vE6cWycf6u3kwgYeHh/dpvDvaXbO4tmiA4eHh4f0SL296td+dHWvAw8PD+y3e/ihAS2oj46RAvyyp8fDw8I7yhj/yS3beGNsU9Kv+Hh4eHt77sf0BGh1K30ICwg8AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>22. 2-3Tree | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Data Structures">
+    <meta name="description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
+<meta name="keywords" content="Data Structures">
+<meta property="og:type" content="article">
+<meta property="og:title" content="22. 2-3Tree">
+<meta property="og:url" content="http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-05.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-06.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-07.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-08.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-09.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-10.png">
+<meta property="og:updated_time" content="2018-08-25T03:17:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="22. 2-3Tree">
+<meta name="twitter:description" content="2-3树 2-3查找树 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:  2-结点: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 一个键(及其对应的值) 和 两条链接 (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键) 3-结点: 含有 两个键(及其对应的值) 和 三条链接(左链接指向的结点的键都小于该结点的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/data-structures/2-3tree-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">22. 2-3Tree</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-19T03:37:08.000Z" itemprop="datePublished" class="page-time">
+  2017-10-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3树"><span class="post-toc-number">1.</span> <span class="post-toc-text">2-3树</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-3Tree的查找过程"><span class="post-toc-number">2.</span> <span class="post-toc-text">2-3Tree的查找过程:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向-2-结点-中插入新键"><span class="post-toc-number">3.</span> <span class="post-toc-text">向 2-结点 中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一棵只含有一个-3-结点-的树中插入新键"><span class="post-toc-number">4.</span> <span class="post-toc-text">向一棵只含有一个 3-结点 的树中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是-2-结点-的-3-节-点中插入新键"><span class="post-toc-number">5.</span> <span class="post-toc-text">向一个父结点是 2-结点 的 3-节 点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#向一个父结点是3-结点的3-结点中插入新键"><span class="post-toc-number">6.</span> <span class="post-toc-text">向一个父结点是3-结点的3-结点中插入新键</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分解根结点"><span class="post-toc-number">7.</span> <span class="post-toc-text">分解根结点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">8.</span> <span class="post-toc-text">小结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-data-structure/2017-10-19-22-2-3tree"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">22. 2-3Tree</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-19 11:37:08" datetime="2017-10-19T03:37:08.000Z"  itemprop="datePublished">2017-10-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Data-Structures/">Data Structures</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="2-3树"><a href="#2-3树" class="headerlink" title="2-3树"></a>2-3树</h2><ol>
+<li><p><strong>2-3查找树</strong> 是最简单的 B-Tree 结构, 一棵2-3树 或为一棵空树, 或者由以下结点组成:</p>
+<ul>
+<li><strong>2-结点</strong>: 确切地说, 一棵标准的二叉树中的结点都是2-结点, 含有 <strong>一个键</strong>(及其对应的值) 和 <strong>两条链接</strong> (左链接指向的结点的所有键都小于该结点的键, 右链接指向的结点的所有键都大于该结点的键)</li>
+<li><strong>3-结点</strong>: 含有 <strong>两个键</strong>(及其对应的值) 和 <strong>三条链接</strong>(左链接指向的结点的键都小于该结点的所有键, 右链接指向的结点的所有键都大于该结点的所有键, <strong>中链接指向的结点的所有键, 都位于该结点的两个键的中间</strong>)   </li>
+</ul>
+</li>
+<li><p>所以可以看出, 2-3树不是二叉树, 其结点可拥有3个孩子; <code>2-3树</code>与满二叉树比较相似, 高为h的<code>2-3树</code>包含的结点数大于等于高度为h的满二叉树的结点数, 即至少有 $2^h-1$ 个结点 (换个角度分析, 包含n的结点的2-3树的高度不大于 $log_2{n+1}$(即包含n个结点的二叉树的最小高度, 也即包含n个结点的满二叉树的高度))</p>
+<ul>
+<li>若某棵 <code>2-3树</code> 不包含<code>3-结点</code>, 则看上去像满二叉树;</li>
+<li>但是如果 <code>2-3树</code> 的一个内部结点确实有3个孩子, 那就比相同高度的满二叉树的结点更多</li>
+</ul>
+</li>
+<li><p>下面是一棵2-3查找树示意图:<br> <img src="/img/data-structures/2-3tree-01.png"></p>
+<ul>
+<li>一棵完美平衡的2-3Tree中的所有空链接到根结点的距离应该都是相同的; </li>
+<li><strong>为了简单起见, 接下来会用2-3Tree来指代一棵完美平衡的2-3Tree</strong>;</li>
+</ul>
+</li>
+</ol>
+<h2 id="2-3Tree的查找过程"><a href="#2-3Tree的查找过程" class="headerlink" title="2-3Tree的查找过程:"></a>2-3Tree的查找过程:</h2><p><img src="/img/data-structures/2-3tree-02.png"></p>
+<h2 id="向-2-结点-中插入新键"><a href="#向-2-结点-中插入新键" class="headerlink" title="向 2-结点 中插入新键"></a>向 <strong>2-结点</strong> 中插入新键</h2><ol>
+<li><p>要在2-3树中插入一个新的结点, 可以像二叉查找树一样, 先进性一次未命中查找, 然后把新结点挂在树的底部; 但这样的话, 树无法保持完美平衡性;</p>
+</li>
+<li><p>而我们使用2-3树的原因就在于它能在插入后继续保持平衡: 如果未命中的查找结束于一个 2-结点, 那么将这个键加入这个 2-结点 中, 组成 <code>3-结点</code>;<br> <img src="/img/data-structures/2-3tree-03.png"></p>
+</li>
+<li><p>而如果未命中的查找结束于一个 3-结点, 就比较麻烦一些;</p>
+</li>
+</ol>
+<h2 id="向一棵只含有一个-3-结点-的树中插入新键"><a href="#向一棵只含有一个-3-结点-的树中插入新键" class="headerlink" title="向一棵只含有一个 3-结点 的树中插入新键"></a>向一棵只含有一个 <strong>3-结点</strong> 的树中插入新键</h2><ol>
+<li><p>在考虑一般情况之前, 先假设需要向一棵只含有一个 3-结点 的树中插入一个新键; </p>
+</li>
+<li><p>由于 <strong>3-结点</strong> 只有两个键, 所以在它唯一的结点中已经没有可插入新键的空间了, 为了将新键插入, 我们先临时将新键存入该结点中, 使之成为一个 4-结点, 它很自然地拓展了以前的结点并含有 3个键 和 4条链接; 然后将 4-结点 转换为由3个 2-结点 组成的2-3树, 其中, 中间的键所在 2-结点 成为了其他两个键所在结点的父结点;<br> <img src="/img/data-structures/2-3tree-04.png"></p>
+</li>
+</ol>
+<p><strong>这是2-3树生长的基本方式</strong></p>
+<h2 id="向一个父结点是-2-结点-的-3-节-点中插入新键"><a href="#向一个父结点是-2-结点-的-3-节-点中插入新键" class="headerlink" title="向一个父结点是 2-结点 的 3-节 点中插入新键"></a>向一个父结点是 2-结点 的 3-节 点中插入新键</h2><ol>
+<li>同样, 先将新键临时保存到该结点中, 组成4-结点并将其分解, 但此时不会为中键创建一个新结点; 而是将中键移到父结点中, 指向旧的 3-结点 的链接将被中键两边的两条链接替代, 并分别指向两个新的2-结点;<br> <img src="/img/data-structures/2-3tree-05.png"></li>
+<li>这次转换并不影响2-3树的主要性质, 树仍然是有序的, 仍然是完美平衡的(空链接到根结点的距离仍然相同)</li>
+</ol>
+<h2 id="向一个父结点是3-结点的3-结点中插入新键"><a href="#向一个父结点是3-结点的3-结点中插入新键" class="headerlink" title="向一个父结点是3-结点的3-结点中插入新键"></a>向一个父结点是3-结点的3-结点中插入新键</h2><ol>
+<li><p>同样, 先将新键临时保存到该结点中, 组成 4-结点 再将其分解, 将中键插入到父结点中, 同时指向 旧的3-结点的链接将被中键两边的两条链接替代, 父结点此时成为临时的4-结点;</p>
+</li>
+<li><p>对新的 4-结点 进行同样的处理, 即分解4-结点并将中键插入到父结点中;</p>
+</li>
+<li><p>推广到一般情况, 我们就这样一直向上不断分解临时的 4-结点 直到遇到一个 2-结点, 并将其替换成一个 3-结点, 或者一直到3-结点的根;<br> <img src="/img/data-structures/2-3tree-06.png"></p>
+</li>
+</ol>
+<h2 id="分解根结点"><a href="#分解根结点" class="headerlink" title="分解根结点"></a>分解根结点</h2><ol>
+<li>如果从插入结点到根结点一路都是 3-结点, 根结点最终将变成一个临时的4-结点; 这种情况可以照向一棵只有一个 3-结点 的树中插入新键的方法处理这个问题, 将根结点分解为3个2-结点, 使得树高加1<br> <img src="/img/data-structures/2-3tree-07.png"></li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>局部变换</p>
+<ul>
+<li><p>将2-3树中的一个 4-结点 分解, 有六种情况</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">4-结点是根结点</span><br><span class="line">4-结点是2-结点的左子结点</span><br><span class="line">4-结点是2-结点的右子结点</span><br><span class="line">4-结点是3-结点左子结点</span><br><span class="line">4-结点是3-结点中子结点</span><br><span class="line">4-结点是3-结点右子结点</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>2-3插入算法的根本在于这些变换都是局部的: 除了相关的结点和链接之外不必修改或者检查树的其他部分; 每次变换中, 变更的链接个数不会超过一个很小的常数;<br>每个变换都会将 4-结点中 的一个键送入它的父结点并重构相应的链接而不用改树的其他部分<br><img src="/img/data-structures/2-3tree-08.png"></p>
+</li>
+</ul>
+</li>
+<li><p>全局性质: 上述哪些局部变换不会影响树的全局有序性和平衡性: 任何空链接到根结点的路径长度都是相等的;<br> <img src="/img/data-structures/2-3tree-09.png"></p>
+</li>
+<li><p>和标准的二叉树由上向下生长不同, 2-3树的生长是右下向上的, 可以研究一下下图, 就能很好滴理解 2-3树的构造方式<br> <img src="/img/data-structures/2-3tree-10.png"></p>
+</li>
+<li><p>曾记否, 在二叉查找树中, 按照升序插入10个键会得到高度为9的一棵最差查找树, 但是使用2-3树, 树的高度是2;</p>
+</li>
+<li><p>分析</p>
+<ul>
+<li>在一棵大小为N的2-3树中, 查找和插入操作访问的结点必然不超过 $log_2N$ 个;</li>
+<li>证明: 一棵大小为N的2-3树中, 其高度在 $log_3N$(树中全是 3-节点) 和 $logN$(树中全是 2-节点) 之间;</li>
+</ul>
+</li>
+<li><p>所以可以确定, 2-3树 在最坏情况下仍有较好的性能, 查找和插入的性能被控制在对数时间级别;</p>
+</li>
+<li><p>完美平衡的 2-3树 要平展的多, 一棵含有10亿个结点的 2-3树, 其高度仅在19-30之间, 最多访问30个结点就能够在10亿个键中进行任意查找和插入操作, 这是相当惊人的;<br> 完美平衡 Perfect balance: 实际上就是每条从根节点到叶节点的路径的高度都是一样的(Every path from root to leaf has same length)</p>
+</li>
+<li><p>但是这样直接实现2-3树不是很现实, 因为有很多情况需要处理<br> 我们需要维护两种不同类型的结点, 将被查找的键和结点中的每个键进行比较, 将链接和其他信息从一种结点复制到另一种结点, 将结点从一种数据类型转换到另一种数据类型, 等等;<br> 实现这些不仅需要大量的代码, 而且他们所产生的额外开销可能会使算法比标准的二叉查找树更慢; 平衡一棵树的初衷是为了消除最坏情况, 但我们希望这种保障所需的代码能够越少越好, 幸运的是你将看到, 我们只需要一点点代价就能用一种统一的方式完成所有变换。</p>
+</li>
+</ol>
+<p>参考:</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Data-Structures/">Data Structures</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&title=《22. 2-3Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&title=《22. 2-3Tree》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 2-3Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/10/08/mysql/2017-10-08-mysql-43/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">43. 索引类型</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/10/20/data-structure/2017-10-28-b+tree/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">B+Tree</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&title=《22. 2-3Tree》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&title=《22. 2-3Tree》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 2-3Tree》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/10/19/data-structure/2017-10-19-22-2-3tree/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACs0lEQVR42u3aSY7CMBAFUO5/6e5tS03Ir8HA4mWFUAa/ILnMdz0e8fHz5/j7zdWZyVVXd/h/7f/7LB94eHh4g6Ff3e7qAcnjX1+VYPLzn4wBDw8P7xgvmeJfU/PykMze87KEh4eH9228ybI7ZyfjwcPDw/t+XvL4CXsSZODh4eG9k5fEAcljqtcmgcKbshY8PDy8mDdZzn7q85H9PTw8PLzxrnqyHdVbHOcxbl4MntwBDw8P7wCvFw1UQ4dCcHAgwsDDw8Pb5VWbAKrgyfmTGAIPDw/vHG/yh7+37M7PmTS/jvbx8PDw8F6eP9mOSu6Tv4jJ7xPFEHh4eHhLvMlid2sovWV9YZx4eHh4B3j5KnQrcq3i85Jz83Q8PDy8Ma9XDE4sfKtL+ahU4OHh4X2INw8L8hIyWY7f9JTh4eHhHeBVJ+7JZth86k8+4+Hh4b2Hl0ziyeS+Fb+OxoCHh4d3gDfZZMobC5JX0NsMK4QpeHh4eEu8PD7oxbjJoLd4Nz1leHh4eKu8HJDHE/nyel5+LksFHh4e3jFe8id/vlDuLbuTb26yFjw8PLxV3qRD6fXDJjFE9RVHfw/w8PDwlnj5ZlLy+GqbVN4i0Fx84+Hh4R3g5YvXakgx2fivFqFyxcPDw8Nb4vVKQjWunRSV5gjx8PDwDvOqDVhbr2YePRRar/Dw8PAO8E6EsI/46JUZPDw8vPfzeuUhan6KB/poHTdFBQ8PD2+V91M88lv3uhh6EfDlffDw8PAO8KqT76SloPqa8s8LBx4eHl6RN2+NyuPX3ktMCsPlaPHw8PCO8XoBbh4EJ0ViXtmeXIWHh4f3Nbx8O3+L0SsYeHh4eN/Dm0/31VfWC5rx8PDwzvGSMCJpOU0GVM1dk1dwUxjw8PDwVnm95WyvCTWf1qthx8L+Hh4eHt497xca04dcniM8WwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
