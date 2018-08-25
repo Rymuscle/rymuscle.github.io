@@ -13,7 +13,7 @@
     
     
     
-    <title>23. 红黑树 | Rymuscle&#39;s</title>
+    <title>23. R-B Tree (红黑树) | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,7 +23,7 @@
     <meta name="description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
 <meta name="keywords" content="Data Structures">
 <meta property="og:type" content="article">
-<meta property="og:title" content="23. 红黑树">
+<meta property="og:title" content="23. R-B Tree (红黑树)">
 <meta property="og:url" content="http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
 <meta property="og:description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
@@ -33,9 +33,9 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-04.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/data-structures/red-black-05.png">
-<meta property="og:updated_time" content="2018-08-25T07:11:42.000Z">
+<meta property="og:updated_time" content="2018-08-25T11:34:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="23. 红黑树">
+<meta name="twitter:title" content="23. R-B Tree (红黑树)">
 <meta name="twitter:description" content="红黑树定义 上篇已经介绍了 2-3树, 现在要学习的是一种名为红黑二叉查找树的简单数据结构来表达并实现它;  红黑二叉树背后的基本思想是用 标准的二叉查找树(完全由2-结点构成) 和 一些额外的信息(替换 3-结点) 来表示2-3树; 我们将树中的链接分为两种类型:  红链接将两个 2-结点 链接起来构成一个 3-结点; 黑链接则是 2-3树中的普通链接;   确切地说:  将3-结点表示为一条左">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/data-structures/red-black-01.png">
     
@@ -118,7 +118,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">23. 红黑树</div>
+        <div class="flex-col header-title ellipsis">23. R-B Tree (红黑树)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -172,7 +172,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">23. 红黑树</h1>
+        <h1 class="post-card-title">23. R-B Tree (红黑树)</h1>
         <div class="post-meta">
             <time class="post-time" title="2017-10-21 10:57:09" datetime="2017-10-21T02:57:09.000Z"  itemprop="datePublished">2017-10-21</time>
 
@@ -271,7 +271,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. R-B Tree (红黑树)》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -281,7 +281,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. R-B Tree (红黑树)》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -291,7 +291,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 红黑树》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. R-B Tree (红黑树)》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -319,9 +319,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2017/10/20/data-structure/2017-10-28-b+tree/" id="post-prev" class="post-nav-link">
+        <a href="/2017/10/20/data-structure/2017-10-28-b-tree-b+tree/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">B+Tree</h4>
+          <h4 class="title">B-Tree(BTree),B+Tree</h4>
         </a>
       </div>
     
@@ -421,7 +421,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. R-B Tree (红黑树)》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -431,7 +431,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. 红黑树》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&title=《23. R-B Tree (红黑树)》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -441,7 +441,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. 红黑树》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. R-B Tree (红黑树)》 — Rymuscle's&url=http://blog.renyimin.com/2017/10/21/data-structure/2017-10-21-23-read-black-tree/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -501,21 +501,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
