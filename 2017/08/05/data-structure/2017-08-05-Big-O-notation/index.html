@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>大O表示法 | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="algorithm">
+    <meta name="description" content="前言计算机科学中, 大O表示法被用来描述一个算法的性能或复杂度; 大O表示法可以用来描述一个算法的最差情况, 或者一个算法执行的耗时或占用空间(例如内存或磁盘占用);相信许多人读过《Programming Pearls》(《编程珠玑》)或者其他计算机科学书籍时, 在看到大O符号或者其他奇怪的语法符号时都会感觉到自己遇到了一堵无法翻越的高墙。那这篇文章将会带领大家对大O表示法以及对数级算法有一个最简">
+<meta name="keywords" content="algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大O表示法">
+<meta property="og:url" content="http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="前言计算机科学中, 大O表示法被用来描述一个算法的性能或复杂度; 大O表示法可以用来描述一个算法的最差情况, 或者一个算法执行的耗时或占用空间(例如内存或磁盘占用);相信许多人读过《Programming Pearls》(《编程珠玑》)或者其他计算机科学书籍时, 在看到大O符号或者其他奇怪的语法符号时都会感觉到自己遇到了一堵无法翻越的高墙。那这篇文章将会带领大家对大O表示法以及对数级算法有一个最简">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-08T10:00:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="大O表示法">
+<meta name="twitter:description" content="前言计算机科学中, 大O表示法被用来描述一个算法的性能或复杂度; 大O表示法可以用来描述一个算法的最差情况, 或者一个算法执行的耗时或占用空间(例如内存或磁盘占用);相信许多人读过《Programming Pearls》(《编程珠玑》)或者其他计算机科学书籍时, 在看到大O符号或者其他奇怪的语法符号时都会感觉到自己遇到了一堵无法翻越的高墙。那这篇文章将会带领大家对大O表示法以及对数级算法有一个最简">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">大O表示法</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-08-05T06:12:37.000Z" itemprop="datePublished" class="page-time">
+  2017-08-05
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#O-1"><span class="post-toc-number">2.</span> <span class="post-toc-text">O(1)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#O-N"><span class="post-toc-number">3.</span> <span class="post-toc-text">O(N)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#O-N-2"><span class="post-toc-number">4.</span> <span class="post-toc-text">O(N^2)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#O-2-N"><span class="post-toc-number">5.</span> <span class="post-toc-text">O(2^N)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对数"><span class="post-toc-number">6.</span> <span class="post-toc-text">对数</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-data-structure/2017-08-05-Big-O-notation"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">大O表示法</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-08-05 14:12:37" datetime="2017-08-05T06:12:37.000Z"  itemprop="datePublished">2017-08-05</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/algorithm/">algorithm</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>计算机科学中, 大O表示法被用来描述一个算法的性能或复杂度; 大O表示法可以用来描述一个算法的最差情况, 或者一个算法执行的耗时或占用空间(例如内存或磁盘占用);<br>相信许多人读过《Programming Pearls》(《编程珠玑》)或者其他计算机科学书籍时, 在看到大O符号或者其他奇怪的语法符号时都会感觉到自己遇到了一堵无法翻越的高墙。那这篇文章将会带领大家对大O表示法以及对数级算法有一个最简单的认识;<br>首先作为一个程序员, 其次作为一个数学家, 我(Rob Bell)发现透彻的理解大O表示法的最好方式就是来尝试一些代码示例。<br>下面按照算法的增长级别, 展示了一些常见的算法描述, 同时针对每个算法给出了一个简单的示例。</p>
+<h2 id="O-1"><a href="#O-1" class="headerlink" title="O(1)"></a>O(1)</h2><ol>
+<li>O(1)表示该算法的执行时间(或执行时占用空间)总是为一个常量, 不论输入的数据集是大是小</li>
+</ol>
+<h2 id="O-N"><a href="#O-N" class="headerlink" title="O(N)"></a>O(N)</h2><ol>
+<li><p>O(N)表示一个算法的性能会随着输入数据的大小变化而<strong>线性变化</strong>;</p>
+</li>
+<li><p>下面的例子表明了大O表示法其实是用来描述一个算法的最差情况的: 在for循环中, 一旦程序找到了输入数据中与第二个传入的string匹配时, 程序就会提前退出, 然而大O表示法却总是假定程序会运行到最差情况(在这个例子中, 意味着大O会表示程序全部循环完成时的性能)</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="O-N-2"><a href="#O-N-2" class="headerlink" title="O(N^2)"></a>O(N^2)</h2><ol>
+<li><p>O(N^2)表示一个算法的性能将会随着输入数据的增长而呈现出二次增长; 最常见的算法就是对输入数据进行嵌套循环, 如果嵌套层级不断深入的话, 算法的性能将会变为O(N^3), O(N^4), 以此类推;</p>
+</li>
+<li><p>例子:</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="O-2-N"><a href="#O-2-N" class="headerlink" title="O(2^N)"></a>O(2^N)</h2><ol>
+<li><p>O(2^N)表示一个算法的性能将会随着输入数据的每次增加而增大两倍; O(2^N)的增长曲线是一条爆炸式增长曲线——开始时较为平滑, 但数据增长后曲线增长非常陡峭;</p>
+</li>
+<li><p>一个典型的O(2^N)方法就是裴波那契数列的递归计算实现</p>
+ <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="对数"><a href="#对数" class="headerlink" title="对数"></a>对数</h2><ol>
+<li></li>
+</ol>
+<p>转载自<a href="https://blog.csdn.net/yuhk231/article/details/60099774" target="_blank" rel="noopener">CSDN</a></p>
+<p><a href="https://github.com/PuShaoWei/arithmetic-php" target="_blank" rel="noopener">https://github.com/PuShaoWei/arithmetic-php</a></p>
+<p>大O表示法: <a href="https://blog.csdn.net/yuhk231/article/details/60099774" target="_blank" rel="noopener">大O表示法初学者指南</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithm/">algorithm</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&title=《大O表示法》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&title=《大O表示法》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《大O表示法》 — Rymuscle's&url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/07/21/mysql/2017-07-21-mysql-12/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">12. MySQL5.7.23 编译安装?</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/08/06/oop/2017-08-06-00-SOLID/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">0. S.O.L.I.D 五大基本原则</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&title=《大O表示法》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&title=《大O表示法》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《大O表示法》 — Rymuscle's&url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/05/data-structure/2017-08-05-Big-O-notation/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtUlEQVR42u3aMVLEQAwEQP7/6aOK9M7LSLLAQTuiDNjbG1iqWX19xdfr57q6//7b19t19Zz8ztUabrjw8PDwWku/uqrL7S2rt03nNePh4eFt887FYP6Jz0tLvp6ogOHh4eH9Ky9Z1vl+vn29goSHh4f3fN55EZP2+hGFAQ8PD+/IS8KI5HFX/5U06EncsJi14OHh4cW86gHYE35ePN/Dw8PDG5yq5+HCZEHVZr2wWjw8PLwF3nws4K7WPAkjesMHeHh4ePfy8iXm7XVSNnqlqBzy4uHh4S3w8qP9atg6P8RK1hONIODh4eEt8PIUtNdeTyLjanhRaMrx8PDwxrzqB70HqJafuwa58PDw8O7inRvc6gvmEW3y20JEgoeHh7fA6wWj1VY7H0I9/1dewPDw8PC2eZMwolpa8s/6vGjh4eHh7fFyfW+satJ2J0+OAlw8PDy8W3mTF/Qig3lLnf89Hh4e3r28SSObfI7L+9p67+WW4eHh4a3xqtFAb/gg36Ae78PT8PDw8NZ41Wa39yk/hxfVEhW9Fw8PD2+Nlz86/zT3Wure0NUvYQQeHh7erbxqwJoHtefWvFd+qluAh4eHt8FLykBvifnu9gYRoiAYDw8Pb42Xt62TAjCZg+qVEDw8PLwNXvKaeatdbaZ7B3LRhuLh4eGNefnnu9d83zVe0NtiPDw8vL/hJcdLOaD6nN7AweUT8PDw8BZ4vcOtXoTRG0coxw3nkAIPDw9vzHsVr3xx1bi2OsIVrQEPDw9vgTc/OZqMYVVDjcVygoeHh1fk9SKJ6p1ewag+7cN9PDw8vDVe75WT0YGkFOV/iYeHh/dM3uRKqJPg43I78PDw8B7A6zW4VczkyO1DGIGHh4e3wKt+0MtTCfE25cdv0R08PDy8Bd7kACyPU5MII2+Um+d4eHh4eFPeN5YvDQHPQZApAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
