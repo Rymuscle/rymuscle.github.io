@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03. Query DSL, 查询上下文, 过滤上下文 了解 | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="ElasticSearch">
+    <meta name="description" content="Query DSLElasticsearch 提供基于JSON的完整 Query DSL(领域特定语言) 来定义查询, 主要由两种类型的子句组成:  叶查询: 叶查询语句查找特定字段中的特定值, 例如 match, term or range 查询, 这些查询可以单独使用; 复合查询: 复合查询子句包装其他叶子或复合查询, 用于以逻辑方式组合多个查询(例如bool或dis_max查询), 或更改其">
+<meta name="keywords" content="ElasticSearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03. Query DSL, 查询上下文, 过滤上下文 了解">
+<meta property="og:url" content="http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="Query DSLElasticsearch 提供基于JSON的完整 Query DSL(领域特定语言) 来定义查询, 主要由两种类型的子句组成:  叶查询: 叶查询语句查找特定字段中的特定值, 例如 match, term or range 查询, 这些查询可以单独使用; 复合查询: 复合查询子句包装其他叶子或复合查询, 用于以逻辑方式组合多个查询(例如bool或dis_max查询), 或更改其">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-30T17:08:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03. Query DSL, 查询上下文, 过滤上下文 了解">
+<meta name="twitter:description" content="Query DSLElasticsearch 提供基于JSON的完整 Query DSL(领域特定语言) 来定义查询, 主要由两种类型的子句组成:  叶查询: 叶查询语句查找特定字段中的特定值, 例如 match, term or range 查询, 这些查询可以单独使用; 复合查询: 复合查询子句包装其他叶子或复合查询, 用于以逻辑方式组合多个查询(例如bool或dis_max查询), 或更改其">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03. Query DSL, 查询上下文, 过滤上下文 了解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-08T08:45:57.000Z" itemprop="datePublished" class="page-time">
+  2018-04-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticSearch/">ElasticSearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Query-DSL"><span class="post-toc-number">1.</span> <span class="post-toc-text">Query DSL</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查询上下文"><span class="post-toc-number">2.</span> <span class="post-toc-text">查询上下文</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#过滤上下文"><span class="post-toc-number">3.</span> <span class="post-toc-text">过滤上下文</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">4.</span> <span class="post-toc-text">测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#如何选择查询与过滤"><span class="post-toc-number">5.</span> <span class="post-toc-text">如何选择查询与过滤</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-04-09-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03. Query DSL, 查询上下文, 过滤上下文 了解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-08 16:45:57" datetime="2018-04-08T08:45:57.000Z"  itemprop="datePublished">2018-04-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticSearch/">ElasticSearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Query-DSL"><a href="#Query-DSL" class="headerlink" title="Query DSL"></a>Query DSL</h2><p>Elasticsearch 提供基于JSON的完整 Query DSL(领域特定语言) 来定义查询, 主要由两种类型的子句组成:</p>
+<ol>
+<li>叶查询: 叶查询语句查找特定字段中的特定值, 例如 <code>match</code>, <code>term</code> or <code>range</code> 查询, 这些查询可以单独使用;</li>
+<li>复合查询: 复合查询子句包装其他叶子或复合查询, 用于以逻辑方式组合多个查询(例如<code>bool</code>或<code>dis_max</code>查询), 或更改其行为(如<code>constant_score</code>查询)</li>
+<li>query子句的行为取决于它是在<strong>查询上下文中</strong>还是在<strong>过滤器上下文中</strong>使用;</li>
+<li>Elasticsearch 默认按照<code>相关性得分</code>排序, 即每个文档跟查询的<code>匹配程度</code> (Elasticsearch中的 <code>相关性</code> 概念非常重要, 也是完全区别于传统关系型数据库的一个概念, 数据库中的一条记录要么匹配要么不匹配;)</li>
+</ol>
+<h2 id="查询上下文"><a href="#查询上下文" class="headerlink" title="查询上下文"></a>查询上下文</h2><ol>
+<li><p>查询上下文中使用的查询子句回答了 “此文档与此查询子句的匹配程度如何?”, 即 除了确定文档是否匹配之外, <strong>查询子句还计算一个_score, 表示文档相对于其他文档的匹配程度</strong>;</p>
+</li>
+<li><p>只要将查询子句传递给查询参数, 查询上下文就会生效;</p>
+</li>
+</ol>
+<h2 id="过滤上下文"><a href="#过滤上下文" class="headerlink" title="过滤上下文"></a>过滤上下文</h2><ol>
+<li><p>在过滤器上下文中, 查询子句回答了 “此文档是否与此查询子句匹配?” <strong>答案是简单的是或否, 不计算任何分数</strong>; </p>
+</li>
+<li><p><strong>过滤器上下文主要用于过滤结构化数据</strong>, 例如:</p>
+<ul>
+<li>此时间戳是否属于2015年至2016年的范围？</li>
+<li>状态字段是否设置为“已发布”？</li>
+</ul>
+</li>
+<li><p>Elasticsearch会自动缓存经常使用的过滤器, 以加快性能; </p>
+</li>
+<li><p>只要将查询子句传递给过滤器参数, 过滤器上下文就会生效, 例如 <code>bool</code> 查询中的 <code>filter</code> 或 <code>must_not</code> 参数, <code>constant_score</code> 查询中的filter参数或<code>filter</code>聚合;</p>
+</li>
+<li><p>一般是 全文匹配 + 过滤(精确匹配)</p>
+</li>
+</ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li>下面是在搜索API中的 查询上下文 和 过滤器上下文 中使用的查询子句的示例, 查询将匹配满足以下所有条件的文档: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">标题字段包含单词搜索;</span><br><span class="line">内容字段包含单词elasticsearch;</span><br><span class="line">状态字段包含已发布的确切单词;</span><br><span class="line">publish_date字段包含从2015年1月1日起的日期;</span><br><span class="line"></span><br><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;bool&quot;: &#123; </span><br><span class="line">      &quot;must&quot;: [</span><br><span class="line">        &#123; &quot;match&quot;: &#123; &quot;title&quot;:   &quot;Search&quot;        &#125;&#125;, </span><br><span class="line">        &#123; &quot;match&quot;: &#123; &quot;content&quot;: &quot;Elasticsearch&quot; &#125;&#125;  </span><br><span class="line">      ],</span><br><span class="line">      &quot;filter&quot;: [ </span><br><span class="line">        &#123; &quot;term&quot;:  &#123; &quot;status&quot;: &quot;published&quot; &#125;&#125;, </span><br><span class="line">        &#123; &quot;range&quot;: &#123; &quot;publish_date&quot;: &#123; &quot;gte&quot;: &quot;2015-01-01&quot; &#125;&#125;&#125; </span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="如何选择查询与过滤"><a href="#如何选择查询与过滤" class="headerlink" title="如何选择查询与过滤"></a>如何选择查询与过滤</h2><p>通常的规则是, 使用 <code>查询(query)</code> 来进行<code>全文搜索</code>或者其它任何需要影响<code>相关性得分</code>的搜索; 除此以外的情况都使用过滤(filters)</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&title=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&title=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/04/08/elasticsearch/2018-04-08-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. 简介</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/09/elasticsearch/2018-04-08-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. 搜索</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&title=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&title=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. Query DSL, 查询上下文, 过滤上下文 了解》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-09-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3aQY7jMAwEwPz/07MP2LW3m5SADFA+GYljq3SwlCY/n/j4eTj+vubpPD/en/u5ceDh4eEdGvr7EJ/u8P7503l+t3zMeHh4eLd5T495uqZFvl+Tf5uPGQ8PD+87ee0mOKcm23Q8PDy838LLQ4f2tf5+Hzw8PLxv4yVhRLJIJHHG/rdXshY8PDy8mJdXkb7n/Ep9Dw8PD29dVZ+9cGcDmhXh/vMrPDw8vAu8fBD7wtU+2hiOEw8PD+8oLwlhN+X85JPk8zaGwMPDw7vHy4cyA89i32QhaVsQ8PDw8E7xNrdrmwDya/JFKIoh8PDw8I7ykmap2SPzjXI+Bcl4ih4uPDw8vAWvLWjlDVj5NbOt84HWKzw8PLwRr84t1tORD3QTGePh4eHd4O1fvrPQdpY359Pxj54yPDw8vEO8/M9/G1608cQmgKjvj4eHh3eIN9v4tkHw/p550Q4PDw/vBi//e59viNvtcvtJHgrj4eHh3eC1ccOpV38+KS0varrCw8PDW/DyFqsZqa1GzYKJx3vi4eHhXeDtG61mXV1tiSsfSV0Aw8PDwxvx2pD0bNksb0eYTRkeHh7eWd4mHp3FFu1AZ9vuogCGh4eHV/LaH8zanjYTkQcQbVMXHh4e3lne2ean5PHJ8jMbDx4eHt4NXhvFttvle0FwsQzg4eHhXeC1Zad2YcgDhRYW9ZTh4eHhXePNtrltYHGgajcrg+Hh4eGteT/lkT9gVlrLA99o6vHw8PAu8NoX7r4ZKz9PNuufUwceHh7eqEUgjxg2TQNtrJAvDI9gPDw8vGu89oXeBr6zpWizgOHh4eF9Gy+PHjYtArNF6MDCgIeHh3eUN4ti8+vfx1BPEB4eHt41Xh4EnPqnv5m4fILw8PDwbvBm29lTEW27JHxuHHh4eHjp8QfcLZxx4GVLHAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

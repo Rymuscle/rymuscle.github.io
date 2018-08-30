@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. 简介 | Rymuscle&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="初识 Elasticsearch Elasticsearch 是一个基于Lucene的(隐藏内部引擎Lucene的复杂运行原理)的, 高度可扩展, 且开源的全文检索和分析引擎, 可以快速且近实时(从文档索引到可以被检索只有轻微延时, 约1s)地存储, 检索以及分析海量数据, 通常用作那些具有复杂搜索功能和需求的应用的底层引擎或者技术;   它是面向文档型数据库, 存储的是整个对象或者文档, 它不但">
+<meta name="keywords" content="Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01. 简介">
+<meta property="og:url" content="http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/index.html">
+<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:description" content="初识 Elasticsearch Elasticsearch 是一个基于Lucene的(隐藏内部引擎Lucene的复杂运行原理)的, 高度可扩展, 且开源的全文检索和分析引擎, 可以快速且近实时(从文档索引到可以被检索只有轻微延时, 约1s)地存储, 检索以及分析海量数据, 通常用作那些具有复杂搜索功能和需求的应用的底层引擎或者技术;   它是面向文档型数据库, 存储的是整个对象或者文档, 它不但">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-29T07:54:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01. 简介">
+<meta name="twitter:description" content="初识 Elasticsearch Elasticsearch 是一个基于Lucene的(隐藏内部引擎Lucene的复杂运行原理)的, 高度可扩展, 且开源的全文检索和分析引擎, 可以快速且近实时(从文档索引到可以被检索只有轻微延时, 约1s)地存储, 检索以及分析海量数据, 通常用作那些具有复杂搜索功能和需求的应用的底层引擎或者技术;   它是面向文档型数据库, 存储的是整个对象或者文档, 它不但">
+    
+        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Rymuscle</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/rymuscle" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01. 简介</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-08T06:24:25.000Z" itemprop="datePublished" class="page-time">
+  2018-04-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#初识-Elasticsearch"><span class="post-toc-number">1.</span> <span class="post-toc-text">初识 Elasticsearch</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#版本选择"><span class="post-toc-number">2.</span> <span class="post-toc-text">版本选择</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#路径-‘-megacorp-employee-1’-包含了三部分的信息"><span class="post-toc-number"></span> <span class="post-toc-text">路径 ‘/megacorp/employee/1’ 包含了三部分的信息:</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#megacorp-索引名称"><span class="post-toc-number"></span> <span class="post-toc-text">megacorp: 索引名称,</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#employee-类型名称"><span class="post-toc-number"></span> <span class="post-toc-text">employee: 类型名称,</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-特定雇员的ID"><span class="post-toc-number"></span> <span class="post-toc-text">1: 特定雇员的ID</span></a>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-04-08-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01. 简介</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-08 14:24:25" datetime="2018-04-08T06:24:25.000Z"  itemprop="datePublished">2018-04-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="初识-Elasticsearch"><a href="#初识-Elasticsearch" class="headerlink" title="初识 Elasticsearch"></a>初识 Elasticsearch</h2><ol>
+<li><p>Elasticsearch 是一个基于Lucene的(隐藏内部引擎Lucene的复杂运行原理)的, 高度可扩展, 且开源的全文检索和分析引擎, 可以快速且近实时(从文档索引到可以被检索只有轻微延时, 约1s)地存储, 检索以及分析海量数据, 通常用作那些具有复杂搜索功能和需求的应用的底层引擎或者技术; </p>
+<ul>
+<li>它是面向文档型数据库, 存储的是整个对象或者文档, 它不但会存储它们, 还会为它们建立索引;</li>
+<li>提供了一套基于Restful风格的全文检索服务组件, 基本上所有操作(索引、查询、甚至是配置)都可以通过 HTTP 接口进行;</li>
+</ul>
+</li>
+<li><p>使用案例</p>
+<ul>
+<li>最简单的案例就是, 在微服务架构下的多数据源聚合列表页, 即, 一个页面中的数据来自多个服务, 且筛选条件也涉及到多个服务中的数据字段;</li>
+<li>您想要去收集日志或交易数据, 并且还想要去分析和挖掘这些数据来找出趋势, 统计, 或者异常现, 在这种情况下, 您可以使用 Logstash(Elasticsearch/Logstash/Kibana) 技术栈中的一部分, 来收集, 聚合, 以及解析数据, 然后让 Logstash 发送这些数据到 Elasticsearch; 如果这些数据存在于 Elasticsearch 中, 您就可以执行搜索和聚合以挖掘出任何您感兴趣的信息;</li>
+<li>…</li>
+<li>GitHub 使用 Elasticsearch 对1300亿行代码进行查询;</li>
+</ul>
+</li>
+</ol>
+<h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><ol>
+<li><p>目前(04/2018)为止, Elasticsearch已经到6.X了, 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/index.html" target="_blank" rel="noopener">官网文档</a>; </p>
+</li>
+<li><p>不过中文文档翻译进度比较滞后, 当前阿里云的Elasticsearch云服务为5.5.3, 所以可以针对5.X版本进行学习, 可参考:</p>
+<ul>
+<li><a href="http://cwiki.apachecn.org/pages/viewpage.action?pageId=4260366" target="_blank" rel="noopener">http://cwiki.apachecn.org/pages/viewpage.action?pageId=4260366</a></li>
+<li><a href="https://blog.csdn.net/u011781521/article/category/7096008" target="_blank" rel="noopener">https://blog.csdn.net/u011781521/article/category/7096008</a></li>
+<li>… 资料颇多, 可自行查找 </li>
+</ul>
+</li>
+</ol>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li><p>elasticsearch 下载安装: <a href="https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener">https://www.elastic.co/downloads/past-releases</a> (可选择需要的版本), 此处选择了5.5.3 (Mac版)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">// 这里是使用tar包进行安装, 当然你也可以选择去用brew安装</span><br><span class="line">$ cd ~/Desktop/est</span><br><span class="line">$ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.5.3.tar.gz</span><br><span class="line">$ tar -zxvf elasticsearch-5.5.3.tar.gz</span><br><span class="line"></span><br><span class="line">$ cd elasticsearch-5.5.3</span><br><span class="line">$ ls</span><br><span class="line">elasticsearch			elasticsearch-keystore.bat	elasticsearch-plugin.bat	elasticsearch-service-x64.exe	elasticsearch-service.bat	elasticsearch-translog		elasticsearch.bat		elasticsearch.in.sh</span><br><span class="line">elasticsearch-keystore		elasticsearch-plugin		elasticsearch-service-mgr.exe	elasticsearch-service-x86.exe	elasticsearch-systemd-pre-exec	elasticsearch-translog.bat	elasticsearch.in.bat</span><br><span class="line">// 启动</span><br><span class="line">$ ./elasticsearch</span><br><span class="line">....</span><br><span class="line">....</span><br><span class="line">[2018-08-28T20:10:54,296][INFO ][o.e.h.n.Netty4HttpServerTransport] [eCgKpl8] publish_address &#123;127.0.0.1:9200&#125;, bound_addresses &#123;[fe80::1]:9200&#125;, &#123;[::1]:9200&#125;, &#123;127.0.0.1:9200&#125;</span><br><span class="line">[2018-08-28T20:10:54,296][INFO ][o.e.n.Node               ] [eCgKpl8] started</span><br><span class="line">// 然后直接访问 127.0.0.1:9200, 结果如下:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;eCgKpl8&quot;,</span><br><span class="line">  &quot;cluster_name&quot; : &quot;elasticsearch&quot;,</span><br><span class="line">  &quot;cluster_uuid&quot; : &quot;ExAhdS8VSnKNcr-waUCumA&quot;,</span><br><span class="line">  &quot;version&quot; : &#123;</span><br><span class="line">    &quot;number&quot; : &quot;5.5.3&quot;,</span><br><span class="line">    &quot;build_hash&quot; : &quot;9305a5e&quot;,</span><br><span class="line">    &quot;build_date&quot; : &quot;2017-09-07T15:56:59.599Z&quot;,</span><br><span class="line">    &quot;build_snapshot&quot; : false,</span><br><span class="line">    &quot;lucene_version&quot; : &quot;6.6.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;tagline&quot; : &quot;You Know, for Search&quot;</span><br><span class="line">&#125;</span><br><span class="line">- curl直接请求</span><br></pre></td></tr></table></figure>
+<p> renyimindeMacBook-Pro:config renyimin$ curl ‘<a href="http://localhost:9200/?pretty" target="_blank" rel="noopener">http://localhost:9200/?pretty</a>‘<br> {<br>   “name” : “eCgKpl8”,<br>   “cluster_name” : “elasticsearch”,<br>   “cluster_uuid” : “ExAhdS8VSnKNcr-waUCumA”,<br>   “version” : {</p>
+<pre><code> &quot;number&quot; : &quot;5.5.3&quot;,
+ &quot;build_hash&quot; : &quot;9305a5e&quot;,
+ &quot;build_date&quot; : &quot;2017-09-07T15:56:59.599Z&quot;,
+ &quot;build_snapshot&quot; : false,
+ &quot;lucene_version&quot; : &quot;6.6.0&quot;
+</code></pre><p>   },<br>   “tagline” : “You Know, for Search”<br> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">    - 上面就意味着你现在已经启动并运行了一个 Elasticsearch 节点了, 你可以用它做实验了, 单个节点可以作为一个运行中的 Elasticsearch 的实例; 而一个集群是一组拥有相同 `cluster.name` 的节点, 他们能一起工作并共享数据, 还提供容错与可伸缩性; </span><br><span class="line">   </span><br><span class="line">2. Elasticsearch Head:</span><br><span class="line">    - Est 启动后, 访问127.0.0.1:9200可以查看版本等一些信息, 但这不是图形化的界面, 操作起来不是很方便, 所以希望能有一个可视化的环境来操作它, 可以通过安装 Elasticsearch Head 这个插件来进行管理:</span><br><span class="line">    - Elasticsearch Head是集群管理、数据可视化、增删改查、查询语句可视化工具, 在最新的ES5中安装方式和ES2以上的版本有很大的不同, 在ES2中可以直接在bin目录下执行 `plugin install xxxx` 来进行安装, 但是在ES5中这种安装方式变了, 要想在ES5中安装Elasticsearch Head必须要安装NodeJs, 然后通过NodeJS来启动Head, 具体安装步骤如下:</span><br></pre></td></tr></table></figure>
+<p> cd ~/Desktop/est<br> // 安装nodejs<br> // github下载 Elasticsearch Head 源码:<a href="https://github.com/mobz/elasticsearch-head" target="_blank" rel="noopener">https://github.com/mobz/elasticsearch-head</a><br> git clone git://github.com/mobz/elasticsearch-head.git<br> cd elasticsearch-head<br> npm install<br> // 安装NodeJS之后, 使用npm安装grunt<br> npm install -g grunt -cli<br> // 然后在目录下执行<br> cnpm install</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 修改Elasticsearch配置文件, 编辑elasticsearch-5.5.3/config/elasticsearch.yml,加入以下内容:</span><br></pre></td></tr></table></figure>
+<p> http.cors.enabled:true<br> http.cors.allow-origin:”*”</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 编辑elasticsearch-head-master文件下的Gruntfile.js, 修改服务器监听地址, 增加hostname属性, 将其值设置为 * :</span><br></pre></td></tr></table></figure>
+<p> vi ~/Desktop/est/elasticsearch-head/Gruntfile.js</p>
+<p> connect: {</p>
+<pre><code> hostname: &quot;*&quot;,  // 此处
+ server: {
+     options: {
+         port: 9100,
+         base: &#39;.&#39;,
+         keepalive: true
+     }
+ }
+</code></pre><p> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 编辑elasticsearch-head-master/_site/app.js,修改head连接es的地址，将localhost修改为es的IP地址 (注意:如果ES是在本地,就不要修改,默认就是localhost)</span><br></pre></td></tr></table></figure>
+<p> this.base_uri = this.config.base_uri || this.prefs.get(“app-base_uri”) || “<a href="http://localhost:9200" target="_blank" rel="noopener">http://localhost:9200</a>“;</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">    - 在启动elasticsearch-head之前要先启动elasticsearch, 然后在elasticsearch-head-master/目录下，运行启动命令 `grunt server`; (在非elasticsearch-head目录中启动server会失败, 因为grunt需要读取目录下的Gruntfile.js)</span><br><span class="line">    - 最后访问 127.0.0.1:9100</span><br><span class="line"></span><br><span class="line">3. 注意, 目前为止 elasticsearch 和 elasticsearch-head 均为前台启动, 如果终端退出, 服务也都会随之关闭;</span><br><span class="line"></span><br><span class="line">4. [Kibana](https://www.elastic.co/cn/products/kibana): 为 ElasticSearch 提供的数据分析的 Web 接口, 可使用它对日志进行高效的搜索、可视化、分析等各种操作;</span><br><span class="line">    - 下载安装: https://www.elastic.co/downloads/past-releases (可选择需要的版本), 此处选择了5.5.3 (Mac版)</span><br></pre></td></tr></table></figure>
+<p> cd ~/Desktop/est<br> wget <a href="https://artifacts.elastic.co/downloads/kibana/kibana-5.5.3-darwin-x86_64.tar.gz" target="_blank" rel="noopener">https://artifacts.elastic.co/downloads/kibana/kibana-5.5.3-darwin-x86_64.tar.gz</a><br> tar -zxvf kibana-5.5.3-darwin-x86_64.tar.gz</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 修改config/kibana.yml文件, 加入以下内容:</span><br></pre></td></tr></table></figure>
+<p> server.port: 5601<br> server.name: “kibana”<br> server.host: “127.0.0.1”<br> elasticsearch.url: “<a href="http://127.0.0.1:9200" target="_blank" rel="noopener">http://127.0.0.1:9200</a>“</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 然后启动kibana服务:</span><br></pre></td></tr></table></figure>
+<p> cd ~/Desktop/est/kibana-5.5.3-darwin-x86_64/bin<br> ./kibana</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">    - 浏览器访问地址:http://127.0.0.1:5601/, 如下是因为</span><br><span class="line">    &lt;img src=&quot;/img/est/kibana-init-error.png&quot;/&gt;</span><br><span class="line">    - 使用可参考: https://yq.aliyun.com/ziliao/310009</span><br><span class="line"></span><br><span class="line">5. DevTools 与 5.x之前版本的Sense</span><br><span class="line">   - Sense 是一个 Kibana 应用它提供交互式的控制台, 通过你的浏览器直接向 Elasticsearch 提交请求, 操作es中的数据</span><br><span class="line">   - 现在不用安装了, 可以直接使用Kibana提供的 **DevTools**</span><br><span class="line">   &lt;img src=&quot;/img/est/kibana-devtools.png&quot; width=450/&gt;</span><br><span class="line"></span><br><span class="line">## 术语</span><br><span class="line">1. **索引** 一词在 Elasticsearch 语境中包含多重意思, 有必要说明一下:</span><br><span class="line">    - 索引(名词): 一个索引类似于传统关系数据库中的一个数据库, 是一个存储关系型文档的地方; 复数词为 indices 或 indexes</span><br><span class="line">    - 索引(动词): 索引一个文档, 就是存储一个文档到一个索引(名词)中, 以便它可以被检索和查询到;</span><br><span class="line">    这非常类似于 SQL 语句中的 INSERT 关键词(不过在此处, 文档已存在时新文档会替换旧文档)</span><br><span class="line">    </span><br><span class="line">2. 一个 Elasticsearch 集群可以包含多个**索引**(n), 每个索引可以包含多个**类型**, 这些不同的类型存储着多个**文档**, 每个文档又有多个**属性**, 简单理解如下:</span><br><span class="line">    - 索引对应mysql的数据库</span><br><span class="line">    - 类型对应mysql数据库中的表</span><br><span class="line">    - 文档对应mysql表中的一条记录</span><br><span class="line">    - 属性对应字段</span><br><span class="line"></span><br><span class="line">## 简单操作</span><br><span class="line">有两种形式的搜索API:</span><br><span class="line">- 一种是 `轻量的` 查询字符串版本, 要求在查询字符串中传递所有的参数;</span><br><span class="line">- 另一种是更完整的 `请求体` 版本, 要求使用 JSON 格式和更丰富的查询表达式作为搜索语言</span><br><span class="line"></span><br><span class="line">1. 索引(v:存储)文档: 索引一个雇员文档, 每个文档都将是&apos;employee&apos;类型, 该类型位于索引(n)&apos;megacorp&apos; 内, 该索引(n)保存在我们的 Elasticsearch 集群中</span><br><span class="line">    - 可以通过一条命令完成所有这些动作:</span><br></pre></td></tr></table></figure>
+<h1 id="路径-‘-megacorp-employee-1’-包含了三部分的信息"><a href="#路径-‘-megacorp-employee-1’-包含了三部分的信息" class="headerlink" title="路径 ‘/megacorp/employee/1’ 包含了三部分的信息:"></a>路径 ‘/megacorp/employee/1’ 包含了三部分的信息:</h1><h1 id="megacorp-索引名称"><a href="#megacorp-索引名称" class="headerlink" title="megacorp: 索引名称,"></a>megacorp: 索引名称,</h1><h1 id="employee-类型名称"><a href="#employee-类型名称" class="headerlink" title="employee: 类型名称,"></a>employee: 类型名称,</h1><h1 id="1-特定雇员的ID"><a href="#1-特定雇员的ID" class="headerlink" title="1: 特定雇员的ID"></a>1: 特定雇员的ID</h1><p> PUT /megacorp/employee/1<br> {<br>   “first_name” : “John”,<br>   “last_name” :  “Smith”,<br>   “age” :        25,<br>   “about” :      “I love to go rock climbing”,<br>   “interests”: [ “sports”, “music” ]<br> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 索引(v)更多员工信息</span><br></pre></td></tr></table></figure>
+<p> PUT /megacorp/employee/2<br> {</p>
+<pre><code> &quot;first_name&quot; :  &quot;Jane&quot;,
+ &quot;last_name&quot; :   &quot;Smith&quot;,
+ &quot;age&quot; :         32,
+ &quot;about&quot; :       &quot;I like to collect rock albums&quot;,
+ &quot;interests&quot;:  [ &quot;music&quot; ]
+</code></pre><p> }<br> ……</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 检索文档 - 轻量搜索: 检索到单个雇员的数据, 在 Elasticsearch 中很简单, 执行一个HTTP GET 请求, 并指定文档的地址(使用`索引库`、`类型`和`ID`这三个信息即可返回原始的 JSON 文档)</span><br><span class="line">    - 返回结果包含了文档的一些 元数据, 以及 `_source` 属性(内容是John Smith雇员的原始JSON文档)</span><br></pre></td></tr></table></figure>
+<p> GET /megacorp/employee/1<br> {<br>   “_index”: “megacorp”,<br>   “_type”: “employee”,<br>   “_id”: “1”,<br>   “_version”: 5,<br>   “found”: true,<br>   “_source”: {</p>
+<pre><code> &quot;first_name&quot;: &quot;John&quot;,
+ &quot;last_name&quot;: &quot;Smith&quot;,
+ &quot;age&quot;: 25,
+ &quot;about&quot;: &quot;I love to go rock climbing&quot;,
+ &quot;interests&quot;: [
+   &quot;sports&quot;,
+   &quot;music&quot;
+ ]
+</code></pre><p>   }<br> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">3. 删除文档:</span><br></pre></td></tr></table></figure>
+<p> DELETE /megacorp/employee/1<br> {<br>   “found”: true,<br>   “_index”: “megacorp”,<br>   “_type”: “employee”,<br>   “_id”: “1”,<br>   “_version”: 11,<br>   “result”: “deleted”,<br>   “_shards”: {</p>
+<pre><code> &quot;total&quot;: 2,
+ &quot;successful&quot;: 1,
+ &quot;failed&quot;: 0
+</code></pre><p>   }<br> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">4. 检查文档是否存在:</span><br></pre></td></tr></table></figure>
+<p> HEAD /megacorp/employee/1<br> 404 - Not Found</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">5. `_search`: 搜索 `索引/类型` 中所有雇员</span><br><span class="line">    - 可以看到, 我们仍然使用索引库 megacorp 以及类型 employee, 但与指定一个文档 ID 不同, 这次使用 `_search`, 返回结果包括了所有文档, 放在数组 `hits` 中;</span><br></pre></td></tr></table></figure>
+<p> GET /megacorp/employee/_search<br> {<br>   “took”: 0,<br>   “timed_out”: false,<br>   “_shards”: {</p>
+<pre><code> &quot;total&quot;: 5,
+ &quot;successful&quot;: 5,
+ &quot;failed&quot;: 0
+</code></pre><p>   },<br>   “hits”: {</p>
+<pre><code> &quot;total&quot;: 2,
+ &quot;max_score&quot;: 1,
+ &quot;hits&quot;: [
+   {
+     &quot;_index&quot;: &quot;megacorp&quot;,
+     &quot;_type&quot;: &quot;employee&quot;,
+     &quot;_id&quot;: &quot;2&quot;,
+     &quot;_score&quot;: 1,
+     &quot;_source&quot;: {
+       &quot;first_name&quot;: &quot;Jane&quot;,
+       &quot;last_name&quot;: &quot;Smith&quot;,
+       &quot;age&quot;: 32,
+       &quot;about&quot;: &quot;I like to collect rock albums&quot;,
+       &quot;interests&quot;: [
+         &quot;music&quot;
+       ]
+     }
+   },
+   {
+     &quot;_index&quot;: &quot;megacorp&quot;,
+     &quot;_type&quot;: &quot;employee&quot;,
+     &quot;_id&quot;: &quot;1&quot;,
+     &quot;_score&quot;: 1,
+     &quot;_source&quot;: {
+       &quot;first_name&quot;: &quot;John&quot;,
+       &quot;last_name&quot;: &quot;Smith&quot;,
+       &quot;age&quot;: 25,
+       &quot;about&quot;: &quot;I love to go rock climbing&quot;,
+       &quot;interests&quot;: [
+         &quot;sports&quot;,
+         &quot;music&quot;
+       ]
+     }
+   }
+ ]
+</code></pre><p>   }<br> }</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">6. 使用**请求体方法**的等价搜索是 (有两种形式的 搜索 API：一种是 “轻量的” 查询字符串 版本，要求在查询字符串中传递所有的 参数，另一种是更完整的 请求体 版本，要求使用 JSON 格式和更丰富的查询表达式作为搜索语言)</span><br></pre></td></tr></table></figure>
+<p> curl -XPOST “<a href="http://localhost:9200/megacorp/employee/_search" target="_blank" rel="noopener">http://localhost:9200/megacorp/employee/_search</a>“ -H ‘Content-Type: application/json’ -d’<br> {<br> “query”: { “match_all”: {} }<br> }’<br> ```</p>
+</li>
+<li><p>搜索姓氏为”Smith”的雇员, 这里使用一个<strong>高亮</strong>搜索, 这个方法一般涉及到一个查询字符串 <strong><code>?q=</code></strong> ： 仍然在请求路径中使用 <code>_search</code> 端点, 并将查询本身赋值给参数 <code>q=</code> , 返回结果给出了所有的 Smith: <code>GET /megacorp/employee/_search?q=first_name:Jane</code></p>
+</li>
+</ol>
+<p>参考:</p>
+<ul>
+<li><a href="https://blog.csdn.net/u011781521/article/category/7096008" target="_blank" rel="noopener">https://blog.csdn.net/u011781521/article/category/7096008</a></li>
+<li><a href="https://yq.aliyun.com/ziliao/310009" target="_blank" rel="noopener">https://yq.aliyun.com/ziliao/310009</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Rymuscle">
+            Rymuscle
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&title=《01. 简介》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&title=《01. 简介》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 简介》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/04/07/jwt/2018-04-07/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">JWT(JSON Web Token)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/08/elasticsearch/2018-04-09-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. Query DSL, 查询上下文, 过滤上下文 了解</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Rymuscle &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&title=《01. 简介》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&title=《01. 简介》 — Rymuscle's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 简介》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtUlEQVR42u3a0W7CMAwFUP7/p5m01yndtV13TDp9QlDanCA14dqvV3y8v4/T+6dPk3Pel0d+l9GBh4eH1xr65AbXZ/78Vj7Q03WSMePh4eFt86qDzs85Dag6HdfnHN/Hw8PD+1Ne/vi+fohXpw8PDw/vv/OS10kkUQ0X8PDw8D6Nl4QRvZB3EiUkG/HbshY8PDy8mDePU59/vVjfw8PDwxtU1XuP7F7rwGRUx9Hi4eHhLfBui0qD0CEvffVaDQr/GPDw8PAGvOrf++qAkjaCvIRWDj7w8PDwHuFNQttqrJDjm1fGw8PDW+BNtrzVgHWy608WsOO98PDw8BZ4vVrSfKD5JFaXkGZ9Dw8PDy/m5YWuXjm/ullPMIWCHB4eHt4Cb7IZ7TUQzCe0uVTg4eHhjXnzhqdqk0Evis033MfWATw8PLybeNXtbLWQP2ks6JXQ8PDw8J7h5Y/v3hB7i1A+nubqh4eHhzfg5ZfoxbXzhSTfuB+vgIeHh3cTr1qer5ag8s10L9r45cfAw8PDe4RXLcz3It18i9zbuOPh4eE9z+sFAfMGrF7T1XGK8fDw8BZ4eTjbgyVDqTZ+5a1deHh4eHu8pMkpDwWuSb1PR1ODh4eHt8DLv5xvlPMGqXxy8+UKDw8Pb5tXvUH1EV9tk+otVMc74uHh4d3KKwSgcSlr0gSQLC355OLh4eFt8/LH9yRmzTE3xCV4eHh4C7zebXplqiR66MUizaYBPDw8vBbvXTxerWMyKb3Y95eeMjw8PLwBrzfEvHhWLYxV2wgSPB4eHt4GrxqS3tV2kJfZ8t8HDw8P70le9fbV//vVIU4Kcnh4eHifw8sfx1FR6tbA9zhCPDw8vI/k5dvreWNBviDh4eHhbfOqYcSkYStZYOZtCnh4eHh7vF4BLA9ek+VnI9LFw8PDW+B9AX2rpkv9iW/ZAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
