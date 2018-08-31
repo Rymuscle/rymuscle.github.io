@@ -20,13 +20,13 @@
     
     
     <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
+    <meta name="description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐">
 <meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="21. MySQL 高并发事务问题">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/17/mysql/2017-09-17-mysql-21/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
+<meta property="og:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/unReRead.png">
@@ -37,10 +37,10 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_02_new.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
-<meta property="og:updated_time" content="2018-08-23T11:30:06.000Z">
+<meta property="og:updated_time" content="2018-08-31T06:02:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发事务问题">
-<meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分">
+<meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
@@ -189,7 +189,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上一篇<a href="/2017/09/16/mysql/2017-09-16-mysql-20/">MySQL事务简介</a>中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 在实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题; </p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>上一篇<a href="/2017/09/16/mysql/2017-09-16-mysql-20/">MySQL事务简介</a>中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题; </p>
 <h2 id="高并发事务问题"><a href="#高并发事务问题" class="headerlink" title="高并发事务问题"></a>高并发事务问题</h2><p>在并发量比较大的时候, 很容易出现 <strong>多个事务并行</strong> 的情况;<br>假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 <strong>过分乐观</strong>, 从而并没有对自己所操作的数据做一定的保护处理, 所以 <strong>最终导致了一些问题的出现</strong>;</p>
 <h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ol>
 <li><p>如果 事务A 读取了另一个并行 事务B <strong>未最终提交的写数据</strong>, 那事务A的这次读取操作就叫 <strong>脏读</strong></p>
@@ -210,14 +210,12 @@
 </li>
 </ol>
 <h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><ol>
-<li><p>现在, 上面的 <code>脏读问题</code> 已经被解决了, 那就意味着事务中的每条语句读取到的数据都是 <code>持久性</code> 的数据(被别的事务最终 提交/回滚 的具有持久性的落地数据);</p>
+<li><p>现在, <code>脏读问题</code> 已经被解决了, 那就意味着事务中的每条语句读取到的数据都是 <code>持久性</code> 的落地数据; 但脏读问题的解决, 也仅仅只能保证你在事务中每次读到的数据都是持久性的数据<strong>而已</strong>;</p>
 </li>
-<li><p>但脏读问题的解决, 也仅仅只能保证你在事务中每次读到的数据都是持久性的数据而已;</p>
-</li>
-<li><p>试想, 如果在一个事务中多次读取同一个数据, 正好在两次读取之间, 另外一个事务已经完成了对该数据的修改并提交, 那问题就来了: <strong>两次读取的结果不一样了</strong><br> <img src="/img/mysql/transaction/unReRead.png"></p>
+<li><p>如果在一个事务中多次读取同一个数据, 正好在两次读取之间, 另外一个事务已经完成了对该数据的修改并提交, 那问题就来了: <strong>两次读取的结果不一样了</strong><br> <img src="/img/mysql/transaction/unReRead.png"></p>
 </li>
 <li><p>多次读取数据不一致, 会导致什么问题呢? 一个事务中为什么要多次读取同一数据, 什么场景下需要这么做? 如下汇款案例:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">查询余额: 100</span><br><span class="line">给别人汇款: 20</span><br><span class="line">记录日志: ....</span><br><span class="line">返回余额(你可以直接计算然后返回80, 但如果你是查询的话, 就应该保证你查到的是80, 而不受其他事务干扰)</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">查询余额: 100</span><br><span class="line">给别人汇款: 20</span><br><span class="line">依据余额做一些其他操作 (你可以直接计算然后返回80, 但如果你是再次查询的话, 就应该保证你查到的是80, 而不受其他事务干扰)</span><br></pre></td></tr></table></figure>
 </li>
 <li><p><strong>解决方案</strong> : <code>RR+</code></p>
 <ul>
@@ -239,7 +237,7 @@
 </li>
 <li><p><strong>解决方案</strong>: <code>RR + MVCC</code></p>
 <ul>
-<li>其实对于 <code>幻读</code>, 在Mysql的InnoDB存储引擎中, 事务默认的 <code>RR</code> 级别已经通过 <code>MVCC机制</code> 帮我们解决了(并非完全解决), 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把 <code>幻读</code> 和 <code>不可重复读</code> 搞混淆, 所以这可能就是比较头痛的点吧!  </li>
+<li>其实对于 <code>幻读</code> 问题, 在Mysql的InnoDB存储引擎中, 事务默认的 <code>RR</code> 级别已经通过结合 <code>MVCC机制</code> 帮我们解决了(并非完全解决), 所以该级别下, 你也模拟不出幻读的场景; 退回到 <code>RC</code> 隔离级别的话, 你又容易把 <code>幻读</code> 和 <code>不可重复读</code> 搞混淆, 所以这可能就是比较头痛的点吧!  </li>
 <li>另外可以参考《高性能MySQL》对 <code>RR</code> 隔离级别的描述 <blockquote>
 <p>理论上, RR级别是无法解决幻读的问题, 但是由于InnoDB引擎的RR级别还使用了MVCC, 所以也就避免了幻读的出现!</p>
 </blockquote>
@@ -297,10 +295,10 @@
 </ol>
 <p>参考资料:</p>
 <ul>
+<li>《高性能MySQL》</li>
 <li><a href="http://mysql.taobao.org/monthly/2017/06/07/" target="_blank" rel="noopener">淘宝数据库内核6月报</a></li>
 <li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="noopener">美团技术博客</a></li>
 <li><a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank" rel="noopener">MySQL官方文档</a></li>
-<li>《高性能MySQL》</li>
 <li><a href="https://www.jianshu.com/p/d75fcdeb07a3" target="_blank" rel="noopener">https://www.jianshu.com/p/d75fcdeb07a3</a></li>
 </ul>
 
