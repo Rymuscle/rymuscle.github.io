@@ -35,7 +35,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/zuse.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lock_result.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/transaction_state_01.png">
-<meta property="og:updated_time" content="2018-07-27T02:13:46.000Z">
+<meta property="og:updated_time" content="2018-08-31T06:08:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="24. 隔离级别 - READ UNCOMMITTED 未提交读">
 <meta name="twitter:description" content="简介 READ UNCOMMITTED 隔离级别会引起 脏读(Dirty Read) 现象的出现: 也就是说, 在该隔离级别下, 当前事务 可以读取 其他事务 未提交的(尚未具备持久性的)数据; 事务A中对数据所做的修改, 在还未最终被提交时, 对其他事务也都会是可见的;   这个级别会导致很多问题, 而且从性能上来说, READ COMMITTED 并不会比其他的级别好太多, 却缺乏其他级别的很">
@@ -210,7 +210,7 @@
 </li>
 </ol>
 <h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
-<li><p>客户端1 开启事务, 并执行一个查询 ‘读取数据’, <strong>注意, 客户端1 的事务并未提交</strong></p>
+<li><p>客户端1 开启事务, 并执行一个查询 ‘读取数据’, <strong>注意, 本次事务并未结束</strong></p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT @@SESSION.tx_isolation;</span><br><span class="line">+------------------------+</span><br><span class="line">| @@SESSION.tx_isolation |</span><br><span class="line">+------------------------+</span><br><span class="line">| READ-UNCOMMITTED       |</span><br><span class="line">+------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; select * from test_transaction where id=2;</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">| id | user_name | age | gender | desctiption        |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>客户端2 开启事务, 并修改客户端1查询的数据</p>

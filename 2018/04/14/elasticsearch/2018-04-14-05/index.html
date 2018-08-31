@@ -19,19 +19,19 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="ElasticSearch">
-    <meta name="description" content="#全文搜索 截止目前的搜索相对都很简单:单个姓名, 通过年龄过滤; 现在尝试下稍微高级点儿的全文搜索 — 一项传统数据库确实很难搞定的任务 搜索下所有喜欢攀岩（rock climbing）的雇员：  12345678GET /megacorp/employee/_search&amp;#123;    &amp;quot;query&amp;quot; : &amp;#123;        &amp;quot;match&amp;quot;">
-<meta name="keywords" content="ElasticSearch">
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="桶 与 指标 其实简单来说, 桶 和 指标 其实就是以前关系型数据中常用的 分组 和 统计;  桶 能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算;分桶是一种达到目的的手段:它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标。 指标 大多数指标是简单的数学运算(例如最小值、平均值、最大值, 还有汇总), 这些是通过文档的值来计算在实践中, 指标能让你">
+<meta name="keywords" content="Elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="05. 聚合查询">
 <meta property="og:url" content="http://blog.renyimin.com/2018/04/14/elasticsearch/2018-04-14-05/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="#全文搜索 截止目前的搜索相对都很简单:单个姓名, 通过年龄过滤; 现在尝试下稍微高级点儿的全文搜索 — 一项传统数据库确实很难搞定的任务 搜索下所有喜欢攀岩（rock climbing）的雇员：  12345678GET /megacorp/employee/_search&amp;#123;    &amp;quot;query&amp;quot; : &amp;#123;        &amp;quot;match&amp;quot;">
+<meta property="og:description" content="桶 与 指标 其实简单来说, 桶 和 指标 其实就是以前关系型数据中常用的 分组 和 统计;  桶 能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算;分桶是一种达到目的的手段:它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标。 指标 大多数指标是简单的数学运算(例如最小值、平均值、最大值, 还有汇总), 这些是通过文档的值来计算在实践中, 指标能让你">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-31T05:50:23.000Z">
+<meta property="og:updated_time" content="2018-08-31T09:57:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="05. 聚合查询">
-<meta name="twitter:description" content="#全文搜索 截止目前的搜索相对都很简单:单个姓名, 通过年龄过滤; 现在尝试下稍微高级点儿的全文搜索 — 一项传统数据库确实很难搞定的任务 搜索下所有喜欢攀岩（rock climbing）的雇员：  12345678GET /megacorp/employee/_search&amp;#123;    &amp;quot;query&amp;quot; : &amp;#123;        &amp;quot;match&amp;quot;">
+<meta name="twitter:description" content="桶 与 指标 其实简单来说, 桶 和 指标 其实就是以前关系型数据中常用的 分组 和 统计;  桶 能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算;分桶是一种达到目的的手段:它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标。 指标 大多数指标是简单的数学运算(例如最小值、平均值、最大值, 还有汇总), 这些是通过文档的值来计算在实践中, 指标能让你">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -141,7 +141,7 @@
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticSearch/">ElasticSearch</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
             
         </h5>
@@ -158,7 +158,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"> </span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#-1"><span class="post-toc-number"></span> <span class="post-toc-text">#</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全文搜索"><span class="post-toc-number">0.1.</span> <span class="post-toc-text">全文搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#短语搜索"><span class="post-toc-number">0.2.</span> <span class="post-toc-text">短语搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#高亮搜索"><span class="post-toc-number">0.3.</span> <span class="post-toc-text">高亮搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分析"><span class="post-toc-number">0.4.</span> <span class="post-toc-text">分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#交互"><span class="post-toc-number">1.</span> <span class="post-toc-text">交互</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#桶-与-指标"><span class="post-toc-number">1.</span> <span class="post-toc-text">桶 与 指标</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#全文搜索"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">全文搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#短语搜索"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">短语搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#高亮搜索"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">高亮搜索</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分析"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">分析</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#交互"><span class="post-toc-number">3.</span> <span class="post-toc-text">交互</span></a></li></ol>
         </nav>
     </aside>
     
@@ -171,7 +171,7 @@
             <time class="post-time" title="2018-04-14 11:21:46" datetime="2018-04-14T03:21:46.000Z"  itemprop="datePublished">2018-04-14</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticSearch/">ElasticSearch</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -179,7 +179,37 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id=""><a href="#" class="headerlink" title=" "></a> </h2><h1 id="-1"><a href="#-1" class="headerlink" title="#"></a>#</h1><h3 id="全文搜索"><a href="#全文搜索" class="headerlink" title="全文搜索"></a>全文搜索</h3><ol>
+            <h2 id="桶-与-指标"><a href="#桶-与-指标" class="headerlink" title="桶 与 指标"></a>桶 与 指标</h2><ol>
+<li><p>其实简单来说, 桶 和 指标 其实就是以前关系型数据中常用的 分组 和 统计;</p>
+<ul>
+<li><strong>桶</strong> 能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算;<br>分桶是一种达到目的的手段:它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标。</li>
+<li><strong>指标</strong> 大多数指标是简单的数学运算(例如最小值、平均值、最大值, 还有汇总), 这些是通过文档的值来计算<br>在实践中, 指标能让你计算像平均薪资、最高出售价格、95%的查询延迟这样的数据</li>
+</ul>
+</li>
+<li><p>聚合其实就是由桶和指标组成的 (可能只有一个桶, 可能只有一个指标, 或者可能两个都有; 也有可能有一些桶嵌套在其他桶里面)</p>
+</li>
+<li><p>由于桶可以被嵌套, 所以我们可以实现非常多并且非常复杂的聚合, 如:<br> 通过国家划分文档(桶), 然后通过性别划分每个国家(桶), 然后通过年龄区间划分每种性别（桶）, 最后，为每个年龄区间计算平均薪酬（指标）<br> 结果将告诉你每个 <code>&lt;国家, 性别, 年龄&gt;</code> 组合的平均薪酬, 所有的这些都在一个请求内完成并且只遍历一次数据！</p>
+</li>
+</ol>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><ol>
+<li><p>构建数据 _bulk</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">POST /_bulk</span><br><span class="line">&#123; &quot;create&quot;: &#123; &quot;_index&quot;: &quot;aggregations&quot;, &quot;_type&quot;: &quot;test&quot;, &quot;_id&quot;:1&#125;&#125;</span><br><span class="line">&#123;  &quot;country&quot;: &quot;Uruguay&quot;, &quot;gender&quot;: &quot;female&quot;, &quot;age&quot;: &quot;29&quot;&#125;</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>求 <code>/aggregations/test/</code> 所有文档中的平均年龄</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /aggregations/test/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot; : 0,</span><br><span class="line">  &quot;aggs&quot; : &#123; </span><br><span class="line">    &quot;people_avg_age&quot; : &#123; </span><br><span class="line">      &quot;avg&quot; : &#123; &quot;field&quot; : &quot;age&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>求 <code>/aggregations/test/</code> 所有文档中按某字段去重后的数量</p>
+<ul>
+<li>去重是一个很常见的操作,可以回答很多基本的业务问题:<br>网站独立访客是多少?<br>卖了多少种汽车?<br>每月有多少独立用户购买了商品?</li>
+<li>例子: 不同年龄的总共有多少人<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /aggregations/test/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot; : 0,</span><br><span class="line">  &quot;aggs&quot; : &#123; </span><br><span class="line">    &quot;people_avg_age&quot; : &#123; </span><br><span class="line">      &quot;avg&quot; : &#123; &quot;field&quot; : &quot;age&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>安时间统计 (比如: 今年每月销售多少台汽车)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="全文搜索"><a href="#全文搜索" class="headerlink" title="全文搜索"></a>全文搜索</h3><ol>
 <li><p>截止目前的搜索相对都很简单:单个姓名, 通过年龄过滤; 现在尝试下稍微高级点儿的<strong>全文搜索</strong> — 一项传统数据库确实很难搞定的任务<br> 搜索下所有喜欢攀岩（rock climbing）的雇员：</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot; : &#123;</span><br><span class="line">        &quot;match&quot; : &#123;</span><br><span class="line">            &quot;about&quot; : &quot;rock climbing&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
@@ -282,7 +312,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
             
