@@ -20,18 +20,18 @@
     
     
     <meta name="keywords" content="MySQL,事务">
-    <meta name="description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
+    <meta name="description" content="锁 行锁 与 表锁  MyISAM只支持表锁, InnoDB可以支持行锁;MyISAM：执行读写SQL语句时，会对表加锁，所以数据量大，并发量高时，性能会急剧下降。InnoDB：细粒度行锁，在数据量大，并发量高时，性能比较优异  InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。https://mp.weixin.qq.co">
 <meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
 <meta property="og:title" content="22. 锁">
 <meta property="og:url" content="http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
+<meta property="og:description" content="锁 行锁 与 表锁  MyISAM只支持表锁, InnoDB可以支持行锁;MyISAM：执行读写SQL语句时，会对表加锁，所以数据量大，并发量高时，性能会急剧下降。InnoDB：细粒度行锁，在数据量大，并发量高时，性能比较优异  InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。https://mp.weixin.qq.co">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-01T12:45:11.000Z">
+<meta property="og:updated_time" content="2018-09-01T12:53:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="22. 锁">
-<meta name="twitter:description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
+<meta name="twitter:description" content="锁 行锁 与 表锁  MyISAM只支持表锁, InnoDB可以支持行锁;MyISAM：执行读写SQL语句时，会对表加锁，所以数据量大，并发量高时，性能会急剧下降。InnoDB：细粒度行锁，在数据量大，并发量高时，性能比较优异  InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。https://mp.weixin.qq.co">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -180,7 +180,14 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><ol>
-<li></li>
+<li><p>行锁 与 表锁</p>
+<ul>
+<li><p>MyISAM只支持表锁, InnoDB可以支持行锁;<br>MyISAM：执行读写SQL语句时，会对表加锁，所以数据量大，并发量高时，性能会急剧下降。<br>InnoDB：细粒度行锁，在数据量大，并发量高时，性能比较优异</p>
+</li>
+<li><p>InnoDB的行锁是实现在索引上的，而不是锁在物理行记录上。潜台词是，如果访问没有命中索引，也无法使用行锁，将要退化为表锁。<br><a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961428&amp;idx=1&amp;sn=31a9eb967941d888fbd4bb2112e9602b&amp;chksm=bd2d0d888a5a849e7ebaa7756a8bc1b3d4e2f493f3a76383fc80f7e9ce7657e4ed2f6c01777d&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651961428&amp;idx=1&amp;sn=31a9eb967941d888fbd4bb2112e9602b&amp;chksm=bd2d0d888a5a849e7ebaa7756a8bc1b3d4e2f493f3a76383fc80f7e9ce7657e4ed2f6c01777d&amp;scene=21#wechat_redirect</a></p>
+</li>
+</ul>
+</li>
 <li></li>
 <li></li>
 </ol>

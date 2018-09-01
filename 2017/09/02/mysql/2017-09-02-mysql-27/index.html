@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Rymuscle&#39;s">
 <meta property="og:description" content="RR + MVCC 虽然解决了 幻读 问题, 但要注意, 幻读针对的是读操作(对于其他操作就不一样了); 演示 打开 两个客户端 1,2 确保隔离级别为默认级别RR, 提供语句:  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-01T12:47:12.000Z">
+<meta property="og:updated_time" content="2018-09-01T13:51:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="27. 幻读, 快照读(snapshot read), 当前读 (current read)">
 <meta name="twitter:description" content="RR + MVCC 虽然解决了 幻读 问题, 但要注意, 幻读针对的是读操作(对于其他操作就不一样了); 演示 打开 两个客户端 1,2 确保隔离级别为默认级别RR, 提供语句:  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx">
@@ -193,12 +193,12 @@
 <li><p>回到 客户端2 的事务中再次查询数据, 发现数据没有变化(表示<strong>可以重复读, 并且克服了 <code>select</code> 幻读</strong>)!! </p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; select * from test_transaction;</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">| id | user_name | age | gender | desctiption        |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</span><br><span class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</span><br><span class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test_transaction;</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">| id | user_name | age | gender | desctiption        |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">|  1 | 金刚狼 | 127 |      1 | 我有一双铁爪 |</span><br><span class="line">|  2 | 钢铁侠 | 120 |      1 | 我有一身铁甲 |</span><br><span class="line">|  3 | 绿巨人 |   0 |      2 | 我有一身肉    |</span><br><span class="line">+----+-----------+-----+--------+--------------------+</span><br><span class="line">3 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>但如果尝试在客户端2的事务中执行 <code>insert/delete/update</code> , 会发现此类操作都可以感知到客户端1的新数据</p>
+<li><p>但如果尝试在客户端2的事务中执行 <code>insert/delete/update</code> , 却会发现此类操作都可以感知到客户端1提交的新数据</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; insert into test_transaction (`id`,`user_name`,`age`,`gender`,`desctiption`) values (4, &apos;死侍&apos;, 18, 0, &apos;A bad boy&apos;);</span><br><span class="line">1062 - Duplicate entry &apos;4&apos; for key &apos;PRIMARY&apos;    //( 后面会看到: 其实是因为insert是当前读)</span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
-<li><p>虽然发现已经克服了幻读问题; 但当 在客户端2事务中 <code>insert</code> 插入一条id为4的新数据, 发现提示数据已经存在, 那么这是什么问题呢?</p>
+<li><p>虽然发现已经克服了幻读问题; 但当 在客户端2事务中 <code>insert</code> 插入一条id为4的新数据, 却发现提示数据已经存在, 那么这是什么问题呢?</p>
 <ul>
 <li>可以参考<a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-consistent-read.html" target="_blank" rel="noopener">MySQL官方文档 — 一致性非阻塞读</a>中的一段介绍<blockquote>
 <p>The snapshot of the database state applies to SELECT statements within a transaction, not necessarily to DML statements. If you insert or modify some rows and then commit that transaction, a DELETE or UPDATE statement issued from another concurrent REPEATABLE READ transaction could affect those just-committed rows, even though the session could not query them. If a transaction does update or delete rows committed by a different transaction, those changes do become visible to the current transaction.<br>个人认为应该翻译为: 数据库的快照适用于事务中的SELECT语句, 而不一定适用于所有DML语句。 如果插入或修改某些行, 然后提交该事务, 则从另一个并发REPEATABLE READ事务发出的DELETE或UPDATE语句就可能会影响那些刚刚提交的行, 即使该事务无法查询到它们。<br>如果一个事务去更新或删除其他事务提交的行, 则那些更改对当前事务就变得可见;<br>但是如果事务select由不同事务提交的行, 则那些更改对当前事务就不可见(此时算是rr的可重复读);</p>
@@ -208,7 +208,7 @@
 </li>
 <li><p>也就是RR隔离级别, 在同一事务中多次读取的话, 对 <code>select</code> 克服了 <code>幻读</code>; 但是对其他DML并没有做到(其他DML能察觉到数据被别的事务提交过了)!</p>
 </li>
-<li><p>这就引出了新的两个概念</p>
+<li><p>这就引出了新的两个概念: 当前读 和 快照读</p>
 </li>
 </ol>
 <h2 id="当前读-和-快照读"><a href="#当前读-和-快照读" class="headerlink" title="当前读 和 快照读"></a>当前读 和 快照读</h2><p>通常在RC,RR隔离级别下, 不做特殊处理, 使用的 <code>select</code> 都是快照读, 其他dml就算是当前读; (MVCC写阻塞写)</p>
