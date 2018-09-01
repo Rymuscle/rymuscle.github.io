@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_r_r.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update-02.png">
-<meta property="og:updated_time" content="2018-09-01T05:52:58.000Z">
+<meta property="og:updated_time" content="2018-09-01T07:17:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发下常见的事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的 基本概念 及 特性 做了简单介绍; 接下来会分析在实际生产环境中面对高并发场景时, 事务会出现的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况; 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐观, 从而并没有对自己所操作的数据做一定的保护">
@@ -273,7 +273,7 @@
 </li>
 </ol>
 <h4 id="RR-级别演示"><a href="#RR-级别演示" class="headerlink" title="RR 级别演示"></a>RR 级别演示</h4><ol>
-<li><p>对于 <code>REPEATABLE READ</code> 可重复读, 事务A在T3阶段虽然select不到事务B最终提交的数据(<strong>快照读</strong>), 但是可以update(<strong>当前读</strong>)到事务B最终提交的数据的<br> <img src="/img/mysql/transaction/lose_update_01_r_r.png"><br> (注意: RR与RC虽然都会有快照读, 但是快照读的结果却不一致, 后面会讲解)</p>
+<li><p>对于 <code>REPEATABLE READ</code> 可重复读, 事务A在T3阶段虽然select不到事务B最终提交的数据(<strong>快照读</strong>), 但是可以update(<strong>当前读</strong>)到事务B最终提交的数据的<br> <img src="/img/mysql/transaction/lose_update_01_r_r.png"><br> (注意: RR与RC虽然都会有快照读, 但是快照读的结果却不一致, 其实是因为两者的MVCC机制快找时机不同导致的, 后面会讲解)</p>
 </li>
 <li><p>语句如下:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line"></span><br><span class="line">select * from test_transaction where id=2;</span><br><span class="line">update test_transaction set age = age+10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
