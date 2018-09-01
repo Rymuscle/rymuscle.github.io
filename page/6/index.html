@@ -472,7 +472,7 @@ READ UNCOMMITTED 未提交读READ COMMITTED 提交读...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/09/17/mysql/2017-09-17-mysql-21/">21. MySQL 高并发事务问题</a>
+      <a class="post-title-link" href="/2017/09/17/mysql/2017-09-17-mysql-21/">21. MySQL 高并发下常见的事务问题</a>
     </h3>
   
 
@@ -482,8 +482,8 @@ READ UNCOMMITTED 未提交读READ COMMITTED 提交读...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言上一篇MySQL事务简介中对MySQL事务的相关基本概念及特性做了简单描述, 但仅仅了解这些还是不够的, 实际场景中, 你可能经常会面对一些高并发应用, 此时就需要进一步了解高并发下事务中的一些常见问题; 
-高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况;假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 ...
+        前言上一篇MySQL事务简介中对MySQL事务的 基本概念 及 特性 做了简单介绍; 接下来会分析在实际生产环境中面对高并发场景时, 事务会出现的一些常见问题; 
+高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况; 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐观, 从而并没有对自己所操作的数据做一定...
     
 
         <a href="/2017/09/17/mysql/2017-09-17-mysql-21/" class="post-more waves-effect waves-button">
@@ -531,9 +531,9 @@ READ UNCOMMITTED 未提交读READ COMMITTED 提交读...
 
     
         事务的概念
-事务：可以理解为一个 独立的 工作单元, 在这个 独立的 工作单元中, 可以有 一组 操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败。
+事务：可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败
 
-仍然通过最经典的银行转账应用来解释一下: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过该银行应用给 ‘Wolverine’ 转账1...
+随处可见的例子: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过银行应用给 ‘Wolverine’ 转账100元, 那么本次转账操作至少需要三个...
     
 
         <a href="/2017/09/16/mysql/2017-09-16-mysql-20/" class="post-more waves-effect waves-button">
