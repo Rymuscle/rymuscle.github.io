@@ -13,25 +13,25 @@
     
     
     
-    <title>No title | Rymuscle&#39;s</title>
+    <title>22. 锁 | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="PHP">
-    <meta name="description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
-<meta name="keywords" content="PHP">
+    <meta name="keywords" content="MySQL,事务">
+    <meta name="description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
+<meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="No title">
-<meta property="og:url" content="http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/index.html">
+<meta property="og:title" content="22. 锁">
+<meta property="og:url" content="http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
+<meta property="og:description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-15T10:23:35.000Z">
+<meta property="og:updated_time" content="2018-09-01T12:45:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="No title">
-<meta name="twitter:description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
+<meta name="twitter:title" content="22. 锁">
+<meta name="twitter:description" content="锁     锁与事务事务事务隔离级别与锁锁与索引索引系列锁与索引https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">No title</div>
+        <div class="flex-col header-title ellipsis">22. 锁</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,12 +136,12 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-05-02T14:26:39.000Z" itemprop="datePublished" class="page-time">
-  2018-05-02
+                <time datetime="2017-08-27T03:03:19.000Z" itemprop="datePublished" class="page-time">
+  2017-08-27
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
             
         </h5>
@@ -155,16 +155,23 @@
 
 <div class="container body-wrap">
     
-<article id="post-php/2018-05-06-opcache"
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁"><span class="post-toc-number">1.</span> <span class="post-toc-text">锁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁与事务"><span class="post-toc-number">2.</span> <span class="post-toc-text">锁与事务</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#事务"><span class="post-toc-number">3.</span> <span class="post-toc-text">事务</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#事务隔离级别与锁"><span class="post-toc-number">4.</span> <span class="post-toc-text">事务隔离级别与锁</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#锁与索引"><span class="post-toc-number">5.</span> <span class="post-toc-text">锁与索引</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#索引系列"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">索引系列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#锁与索引-1"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">锁与索引</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-08-27-mysql-22"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">No title</h1>
+        <h1 class="post-card-title">22. 锁</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-05-02 22:26:39" datetime="2018-05-02T14:26:39.000Z"  itemprop="datePublished">2018-05-02</time>
+            <time class="post-time" title="2017-08-27 11:03:19" datetime="2017-08-27T03:03:19.000Z"  itemprop="datePublished">2017-08-27</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -172,8 +179,12 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p><a href="https://www.abcdocker.com/abcdocker/2151" target="_blank" rel="noopener">https://www.abcdocker.com/abcdocker/2151</a><br><a href="https://www.cnblogs.com/wajika/p/6249003.html" target="_blank" rel="noopener">https://www.cnblogs.com/wajika/p/6249003.html</a></p>
-<p><a href="http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html" target="_blank" rel="noopener">http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html</a></p>
+            <h2 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h2><ol>
+<li></li>
+<li></li>
+<li></li>
+</ol>
+<h2 id="锁与事务"><a href="#锁与事务" class="headerlink" title="锁与事务"></a>锁与事务</h2><h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><h2 id="事务隔离级别与锁"><a href="#事务隔离级别与锁" class="headerlink" title="事务隔离级别与锁"></a>事务隔离级别与锁</h2><h2 id="锁与索引"><a href="#锁与索引" class="headerlink" title="锁与索引"></a>锁与索引</h2><h3 id="索引系列"><a href="#索引系列" class="headerlink" title="索引系列"></a>索引系列</h3><h3 id="锁与索引-1"><a href="#锁与索引-1" class="headerlink" title="锁与索引"></a>锁与索引</h3><p><a href="https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/wGOxro3uShp2q5w97azx5A</a></p>
 
         </div>
 
@@ -200,7 +211,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
 
             
@@ -210,7 +221,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&title=《22. 锁》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -220,22 +231,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&title=《22. 锁》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — Rymuscle's&url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 锁》 — Rymuscle's&url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -258,17 +269,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/05/02/php/2018-05-02-Xhprof/" id="post-prev" class="post-nav-link">
+        <a href="/2017/08/18/oop/2017-08-18-OOP-07-Chain-of-Responsibility/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">PHP 性能追踪及分析工具(XHPROF)</h4>
+          <h4 class="title">07. Chain of Responsibility 责任链模式</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/16/linux/2018-05-16-50/" id="post-next" class="post-nav-link">
+      <a href="/2017/08/27/mysql/2017-08-27-mysql-25/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">50. sort, uniq, wc</h4>
+        <h4 class="title">25. MySQL 事务简介</h4>
       </a>
     </div>
   
@@ -360,7 +371,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&title=《22. 锁》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -370,22 +381,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&title=《22. 锁》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — Rymuscle's&url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《22. 锁》 — Rymuscle's&url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/08/27/mysql/2017-08-27-mysql-22/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -396,7 +407,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACI0lEQVR42u3a26riQBAFUP//px0475q9q+NAuleeJGDSS6Go2+sVX++/6/v999fr03c/PeH1iwsDA+OxjOT1s8/JnRx28dNgYGAcwMiDaRKOvx9lhfrxPgYGBkZAykN2wsPAwMC4q0BNStM2ccTAwMBYKWLbEJykj/l7b6vFMTAwHshoBwP/8/MP5xsYGBgPYbzLK0nXkkO0ZfDFqTAwMLZmJG39/P7KkLItd4vcEwMD4+GMWRk5y9ZmI4fovRgYGMcw2iJ2tkKxfuiPSSEGBsbWjLY0bRv3s7ZaMYTAwMA4jNGmdOsp4MozMTAwTmbkhWgbiNvFiyhkY2BgHM9oU7dfjDMvqBgYGAcwZqE2OcR64I7ei4GBsTUjb9CvB992TXbYdMPAwNia0S5pJSOB2QhztrKGgYGxNyMvPvPm/iztWwq4GBgYWzPe5ZUni+2xklAb/QMYGBgbMdbHk78IrHWTDgMDY2vGrAWWr0fk300Cdx7uMTAwdmK0a1vtMkQ7hmyfhoGBcQ6jTdGSQrRtxuXp5sXwEgMDYztGOyasS8dbM1YMDIwzGSsjgTz5m40EitECBgbG1oz1pttsveyuBQsMDIxzGLPViqTI/P7MlfSxThAxMDC2YMya+LO2/iz2X3wLAwMDo0zgZqOCZGCAgYGB0RaT7YCzTvjyUI6BgXEAYzYMaEvWlbFBNInFwMDYlLEyGLjr0MnPdMPaBwYGxvMY/wAK8+ZU9VYuFQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aS27DMAxF0ex/0yrQUYHA6n2kG9TU1SgI/NHxgCBFvl54re919fvnP1d3vV//fu/+aTcsGTJkPJaxtmv/gv319957db0MGTLOYZAgS8IruTINwSSUy5AhQ0YtHSShlr9XhgwZMlIGeSVJ+2TIkCGDM9IUbeG1Twd5cL+tFpchQ8YDGf3GwN/9/mh/Q4YMGf+SscLVCdD8A8W7kiFDxmgGbyXyWLdPJclz+BuLW5EhQ8ajGGlLkhe0BJOWspcYGTJkHMDgQw/pURc/pEuTThkyZJzJ4G1IEmprZ2XFUTMZMmQcxqi9Mv0cpGEZlM0yZMgYzSADEPwYLi1ZeYgn/8iQIWMqozbukBaxnVIZ7USGDBmjGbU0jo9ZpKGZBOVfhi1kyJAxjsEzx34JykNn2gSVIUPGbAYJi3cNT3TGv9CnkSFDxmhGp5WYFpy1FkIw9iFDhozRjPShQc8hPPS/4cPJkCFjEINviKdoaaDsNANkyJBxAoMUn7WUsTbyhba7r8VlyJAxjkHSslqp2R/UCJoEMmTIOIZRI/G2AW8VxKWyDBkyRjNqh/g8HewH3FaIlyFDxgjGCleHnX6IoCSWIUPGaEatmOwPT/BitfY0GTJkzGP0gyAP0J0mqAwZMmTUDuVrSSEJ3HEZLEOGDBm4sEwL3X7rVIYMGTJ4AO2H3c5+ZMiQcQIjHXGojUGkLc+gVJYhQ8ZoRlo6puVrWmnW3itDhoyhjC/wu8xSJJj1CQAAAABJRU5ErkJggg==" alt="微信分享二维码">
 </div>
 
 

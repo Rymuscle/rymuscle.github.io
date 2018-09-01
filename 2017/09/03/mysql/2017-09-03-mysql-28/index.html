@@ -13,25 +13,25 @@
     
     
     
-    <title>No title | Rymuscle&#39;s</title>
+    <title>28. 隔离级别 与 锁 | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="PHP">
-    <meta name="description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
-<meta name="keywords" content="PHP">
+    <meta name="keywords" content="MySQL,事务">
+    <meta name="description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
+<meta name="keywords" content="MySQL,事务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="No title">
-<meta property="og:url" content="http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/index.html">
+<meta property="og:title" content="28. 隔离级别 与 锁">
+<meta property="og:url" content="http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
+<meta property="og:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-15T10:23:35.000Z">
+<meta property="og:updated_time" content="2018-09-01T12:47:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="No title">
-<meta name="twitter:description" content="https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html">
+<meta name="twitter:title" content="28. 隔离级别 与 锁">
+<meta name="twitter:description" content="前言 之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的4种隔离级别 结合 MVCC机制 来进行解决;  而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;   READ UNCOMMITTED 未提交读READ COMMITTED 提交读MVC">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -112,7 +112,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">No title</div>
+        <div class="flex-col header-title ellipsis">28. 隔离级别 与 锁</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,12 +136,12 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-05-02T14:26:39.000Z" itemprop="datePublished" class="page-time">
-  2018-05-02
+                <time datetime="2017-09-03T06:20:52.000Z" itemprop="datePublished" class="page-time">
+  2017-09-03
 </time>
 
 
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
             
         </h5>
@@ -155,16 +155,23 @@
 
 <div class="container body-wrap">
     
-<article id="post-php/2018-05-06-opcache"
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-UNCOMMITTED-未提交读"><span class="post-toc-number">2.</span> <span class="post-toc-text">READ UNCOMMITTED 未提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#READ-COMMITTED-提交读"><span class="post-toc-number">3.</span> <span class="post-toc-text">READ COMMITTED 提交读</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#MVCC-多版本并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">MVCC 多版本并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#REPEATABLE-READ-可重复读"><span class="post-toc-number">5.</span> <span class="post-toc-text">REPEATABLE READ 可重复读</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-mysql/2017-09-03-mysql-28"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">No title</h1>
+        <h1 class="post-card-title">28. 隔离级别 与 锁</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-05-02 22:26:39" datetime="2018-05-02T14:26:39.000Z"  itemprop="datePublished">2018-05-02</time>
+            <time class="post-time" title="2017-09-03 14:20:52" datetime="2017-09-03T06:20:52.000Z"  itemprop="datePublished">2017-09-03</time>
 
             
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -172,8 +179,17 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p><a href="https://www.abcdocker.com/abcdocker/2151" target="_blank" rel="noopener">https://www.abcdocker.com/abcdocker/2151</a><br><a href="https://www.cnblogs.com/wajika/p/6249003.html" target="_blank" rel="noopener">https://www.cnblogs.com/wajika/p/6249003.html</a></p>
-<p><a href="http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html" target="_blank" rel="noopener">http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>之前几篇博文已经介绍了Mysql事务, 高并发下事务将会面对的问题 及 MySQL的解决方案; MySQL主要采用 事务隔离性中的<strong>4种隔离级别</strong> 结合 <strong>MVCC机制</strong> 来进行解决;</p>
+</li>
+<li><p>而事务隔离级别的核心就是锁, 各隔离级别使用了不同的加锁策略; 接下来看一下各隔离级别是如何实现及如何解决高并发事务问题的;</p>
+</li>
+</ol>
+<h2 id="READ-UNCOMMITTED-未提交读"><a href="#READ-UNCOMMITTED-未提交读" class="headerlink" title="READ UNCOMMITTED 未提交读"></a><a href="/2017/09/21/mysql/2017-09-21-mysql-24/">READ UNCOMMITTED 未提交读</a></h2><h2 id="READ-COMMITTED-提交读"><a href="#READ-COMMITTED-提交读" class="headerlink" title="READ COMMITTED 提交读"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-25/">READ COMMITTED 提交读</a></h2><h2 id="MVCC-多版本并发控制"><a href="#MVCC-多版本并发控制" class="headerlink" title="MVCC 多版本并发控制"></a><a href="/2017/09/22/mysql/2017-09-22-mysql-26/">MVCC 多版本并发控制</a></h2><h2 id="REPEATABLE-READ-可重复读"><a href="#REPEATABLE-READ-可重复读" class="headerlink" title="REPEATABLE READ 可重复读"></a><a href="/2017/09/17/mysql/2017-09-17-mysql-27/">REPEATABLE READ 可重复读</a></h2><p>参考资料:<br>-《高性能MySQL》</p>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/5.6/en/innodb-consistent-read.html" target="_blank" rel="noopener">MySQL官方文档</a></li>
+<li><a href="https://tech.meituan.com/innodb-lock.html" target="_blank" rel="noopener">美团技术博客</a></li>
+</ul>
 
         </div>
 
@@ -200,7 +216,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
 
             
@@ -210,7 +226,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&title=《28. 隔离级别 与 锁》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -220,22 +236,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&title=《28. 隔离级别 与 锁》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — Rymuscle's&url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 隔离级别 与 锁》 — Rymuscle's&url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -258,17 +274,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/05/02/php/2018-05-02-Xhprof/" id="post-prev" class="post-nav-link">
+        <a href="/2017/09/02/mysql/2017-09-02-mysql-27/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">PHP 性能追踪及分析工具(XHPROF)</h4>
+          <h4 class="title">27. 幻读, 快照读(snapshot read), 当前读 (current read)</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/05/16/linux/2018-05-16-50/" id="post-next" class="post-nav-link">
+      <a href="/2017/10/07/data-structure/2017-10-07-tree/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">50. sort, uniq, wc</h4>
+        <h4 class="title">Tree</h4>
       </a>
     </div>
   
@@ -360,7 +376,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&title=《28. 隔离级别 与 锁》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -370,22 +386,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&title=《No title》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&title=《28. 隔离级别 与 锁》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《No title》 — Rymuscle's&url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《28. 隔离级别 与 锁》 — Rymuscle's&url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/05/02/php/2018-05-06-opcache/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/09/03/mysql/2017-09-03-mysql-28/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -396,7 +412,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACI0lEQVR42u3a26riQBAFUP//px0475q9q+NAuleeJGDSS6Go2+sVX++/6/v999fr03c/PeH1iwsDA+OxjOT1s8/JnRx28dNgYGAcwMiDaRKOvx9lhfrxPgYGBkZAykN2wsPAwMC4q0BNStM2ccTAwMBYKWLbEJykj/l7b6vFMTAwHshoBwP/8/MP5xsYGBgPYbzLK0nXkkO0ZfDFqTAwMLZmJG39/P7KkLItd4vcEwMD4+GMWRk5y9ZmI4fovRgYGMcw2iJ2tkKxfuiPSSEGBsbWjLY0bRv3s7ZaMYTAwMA4jNGmdOsp4MozMTAwTmbkhWgbiNvFiyhkY2BgHM9oU7dfjDMvqBgYGAcwZqE2OcR64I7ei4GBsTUjb9CvB992TXbYdMPAwNia0S5pJSOB2QhztrKGgYGxNyMvPvPm/iztWwq4GBgYWzPe5ZUni+2xklAb/QMYGBgbMdbHk78IrHWTDgMDY2vGrAWWr0fk300Cdx7uMTAwdmK0a1vtMkQ7hmyfhoGBcQ6jTdGSQrRtxuXp5sXwEgMDYztGOyasS8dbM1YMDIwzGSsjgTz5m40EitECBgbG1oz1pttsveyuBQsMDIxzGLPViqTI/P7MlfSxThAxMDC2YMya+LO2/iz2X3wLAwMDo0zgZqOCZGCAgYGB0RaT7YCzTvjyUI6BgXEAYzYMaEvWlbFBNInFwMDYlLEyGLjr0MnPdMPaBwYGxvMY/wAK8+ZU9VYuFQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMElEQVR42u3azU7sMAwGUN7/pQfpri4C2s92KjHJyWpU1DSnC1P/fHzE6/Vv/f87uZLc+/36978uWxgYGG/LeF2uybF6R//t3hsqBgbGAYwkyF5vnTz4Gnz93JszY2BgYATH/S2YXj8lD74YGBgYecDtMapJMgYGBkYvic2P+0QCvCwXx8DAeEPGqoD4xO/H+xsYGBh/nvFqrV6zs9dsiM6DgYGxNWOScCalt0ljslqww8DA2JWRF+vzon+vxNYbDvvyfwMDA2NTRhIKqyMR16X8atG/2d/AwMDYmjFPPhN28pTyxysGBsamjOqQRHK4asU+CfRR1RADA2NTxqotqmMT1WgZPREDA+MwxqTEnye6yb3JDhgYGHszJo3DJGXNX83oXgwMjAMYSVRe9WHXa3behGkMDIyDGVVA3njojW40Ay4GBsZGjHwwqzpmMdlhWQ8WAwPjzRnztmVvkKJ56OtcHAMDYztGPoCVgPMUNG8VNFNfDAyM7RhJklkOeYN9mqMbGBgYRzLyEls+ojEZ47gJ9xgYGAcweg2A68PlV6qfgz+cCgMDY2vGJBPMD5eH4DwZXpbQYmBg/GHGq7gmRbr8g6/6CjAwMPZm9Iplk9bjE6MYGBgYJzCqaWQ13a0G8WphDgMD4xxGL8jmRbd5mL55BRgYGBjV+bJFrc3FnVgMDIwDGNUPxGpLcpQqY2BgHMCYF+uTPXNwuYSHgYGxNaNarJ/clR/3ESQGBsb7MT4B1pCJhw3E27oAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 
