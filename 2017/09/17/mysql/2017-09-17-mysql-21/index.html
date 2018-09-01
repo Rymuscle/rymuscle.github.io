@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_r_r.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update_01_s.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/lose_update-02.png">
-<meta property="og:updated_time" content="2018-09-01T07:17:16.000Z">
+<meta property="og:updated_time" content="2018-09-01T12:34:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="21. MySQL 高并发下常见的事务问题">
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的 基本概念 及 特性 做了简单介绍; 接下来会分析在实际生产环境中面对高并发场景时, 事务会出现的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况; 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐观, 从而并没有对自己所操作的数据做一定的保护">
@@ -281,7 +281,7 @@
 </li>
 </ol>
 <h4 id="SERIALIZABLE-演示"><a href="#SERIALIZABLE-演示" class="headerlink" title="SERIALIZABLE 演示"></a>SERIALIZABLE 演示</h4><ol>
-<li><p><code>SERIALIZABLE</code> 串行化: 读写都加锁, 最容易出现死锁, 所以也不会出现第一类丢失更新的问题, 直接就死锁了<br> <img src="/img/mysql/transaction/lose_update_01_s.png"></p>
+<li><p><code>SERIALIZABLE</code> 串行化: <strong>读写都加锁</strong>, 最容易出现死锁, 所以也不会出现第一类丢失更新的问题, 直接就死锁了<br> <img src="/img/mysql/transaction/lose_update_01_s.png"></p>
 </li>
 <li><p>语句如下:</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</span><br><span class="line">SELECT @@SESSION.tx_isolation;</span><br><span class="line">begin;</span><br><span class="line">update test_transaction set age = age-10 where id=2;</span><br><span class="line">rollback;</span><br></pre></td></tr></table></figure>
@@ -291,9 +291,9 @@
 <h3 id="第二类丢失更新-提交覆盖"><a href="#第二类丢失更新-提交覆盖" class="headerlink" title="第二类丢失更新(提交覆盖)"></a>第二类丢失更新(提交覆盖)</h3><ol>
 <li><p>直接上图<br> <img src="/img/mysql/transaction/lose_update-02.png"></p>
 </li>
-<li><p><strong>另外, 这里可以解释一下诶什么 SERIALIZABLE级别 通常不会不被采用</strong></p>
+<li><p><strong>另外, 这里可以解释一下为什么 SERIALIZABLE级别 通常不会不被采用</strong></p>
 <ul>
-<li>其实 SERIALIZABLE 虽然做了串行化, 但是判断库存的读操作放在事务内会死锁, 放在事务外, 就仍然是避免不了第二类丢失更新问题的, 仍然会造成<strong>超卖</strong>等问题;</li>
+<li>其实 SERIALIZABLE 虽然做了串行化, 其实也就是对读写都加了锁, 但一旦事务并行, 如果将判断库存的读操作放在事务内就很容易会死锁<br>而放在事务外, 由于更新操作仍然会依据上一个查询的结果, 所以仍然是避免不了第二类丢失更新问题的, 会造成<strong>超卖</strong>等问题;</li>
 <li>SERIALIZABLE 的串行化本身也太低效</li>
 <li>另外, 可以参考: <a href="https://segmentfault.com/q/1010000010353164/a-1020000010353684" target="_blank" rel="noopener">https://segmentfault.com/q/1010000010353164/a-1020000010353684</a></li>
 </ul>

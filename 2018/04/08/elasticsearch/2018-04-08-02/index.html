@@ -13,25 +13,22 @@
     
     
     
-    <title>02. 搜索 | Rymuscle&#39;s</title>
+    <title>02. 集群, 分片 | Rymuscle&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Elasticsearch">
-    <meta name="description" content="有两种形式的搜索API:  一种是 轻量的 查询字符串版本, 要求在查询字符串中传递所有的参数; 另一种是更完整的 请求体 版本, 要求使用 JSON 格式和更丰富的查询表达式作为搜索语言  空搜索 简单地返回集群中所有索引下的所有文档 轻量: GET /_search 请求体:1234GET /_search&amp;#123;  &amp;#125;     多索引,多类型 要在一个或多个索引 或者 在一个或">
-<meta name="keywords" content="Elasticsearch">
+    <meta name="keywords" content="Elasticsearch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="02. 搜索">
+<meta property="og:title" content="02. 集群, 分片">
 <meta property="og:url" content="http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/index.html">
 <meta property="og:site_name" content="Rymuscle&#39;s">
-<meta property="og:description" content="有两种形式的搜索API:  一种是 轻量的 查询字符串版本, 要求在查询字符串中传递所有的参数; 另一种是更完整的 请求体 版本, 要求使用 JSON 格式和更丰富的查询表达式作为搜索语言  空搜索 简单地返回集群中所有索引下的所有文档 轻量: GET /_search 请求体:1234GET /_search&amp;#123;  &amp;#125;     多索引,多类型 要在一个或多个索引 或者 在一个或">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-08-31T09:57:00.000Z">
+<meta property="og:updated_time" content="2018-09-01T11:11:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="02. 搜索">
-<meta name="twitter:description" content="有两种形式的搜索API:  一种是 轻量的 查询字符串版本, 要求在查询字符串中传递所有的参数; 另一种是更完整的 请求体 版本, 要求使用 JSON 格式和更丰富的查询表达式作为搜索语言  空搜索 简单地返回集群中所有索引下的所有文档 轻量: GET /_search 请求体:1234GET /_search&amp;#123;  &amp;#125;     多索引,多类型 要在一个或多个索引 或者 在一个或">
+<meta name="twitter:title" content="02. 集群, 分片">
     
         <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
     
@@ -112,7 +109,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">02. 搜索</div>
+        <div class="flex-col header-title ellipsis">02. 集群, 分片</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -136,7 +133,7 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-04-08T13:03:25.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2018-04-08T14:02:30.000Z" itemprop="datePublished" class="page-time">
   2018-04-08
 </time>
 
@@ -158,7 +155,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#空搜索"><span class="post-toc-number">1.</span> <span class="post-toc-text">空搜索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#多索引-多类型"><span class="post-toc-number">2.</span> <span class="post-toc-text">多索引,多类型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#过滤"><span class="post-toc-number">3.</span> <span class="post-toc-text">过滤</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"> </span></a></li></ol>
         </nav>
     </aside>
     
@@ -166,9 +163,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">02. 搜索</h1>
+        <h1 class="post-card-title">02. 集群, 分片</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-04-08 21:03:25" datetime="2018-04-08T13:03:25.000Z"  itemprop="datePublished">2018-04-08</time>
+            <time class="post-time" title="2018-04-08 22:02:30" datetime="2018-04-08T14:02:30.000Z"  itemprop="datePublished">2018-04-08</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -179,52 +176,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>有两种形式的搜索API:</p>
-<ul>
-<li>一种是 <code>轻量的</code> 查询字符串版本, 要求在查询字符串中传递所有的参数;</li>
-<li>另一种是更完整的 <code>请求体</code> 版本, 要求使用 JSON 格式和更丰富的查询表达式作为搜索语言</li>
-</ul>
-<h2 id="空搜索"><a href="#空搜索" class="headerlink" title="空搜索"></a>空搜索</h2><ol>
-<li>简单地返回集群中所有索引下的所有文档<ul>
-<li>轻量: <code>GET /_search</code></li>
-<li>请求体:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="多索引-多类型"><a href="#多索引-多类型" class="headerlink" title="多索引,多类型"></a>多索引,多类型</h2><ol>
-<li><p>要在一个或多个索引 或者 在一个或多个类型中进行搜索:</p>
-<ul>
-<li><p>轻量: 可以通过在URL中指定特殊的索引和类型达到这种效果</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/gb/_search : 在 gb 索引中搜索所有的类型</span><br><span class="line">/gb,us/_search : 在 gb 和 us 索引中搜索所有的文档</span><br><span class="line">/g*,u*/_search : 在任何以 g 或者 u 开头的索引中搜索所有的类型  (正则只能用于索引, 不可以用于类型GET /megacorp/e*/_search, GET /megacorp/*/_search do都不可以)</span><br><span class="line">/gb/user/_search : 在 gb 索引中搜索 user 类型的所有文档</span><br><span class="line">/gb,us/user,tweet/_search : 在 gb 和 us 索引中搜索 user 和 tweet 类型的所有文档</span><br><span class="line">/_all/user,tweet/_search : 在所有的索引中搜索 user 和 tweet 类型的所有文档</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>请求体: URL中 索引和类型的指定同上</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /index_2014*/type1,type2/_search</span><br><span class="line">&#123;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h2><ol>
-<li><p>轻量搜索: <strong>?q</strong></p>
-<ul>
-<li>单个字段过滤 <code>GET /megacorp/employee/_search?q=last_name:Smith</code></li>
-<li><p>多字段 <strong>OR</strong> 过滤, <strong>default_operator</strong>参数的使用,  可参考<a href="http://cwiki.apachecn.org/display/Elasticsearch/URI+Search" target="_blank" rel="noopener">http://cwiki.apachecn.org/display/Elasticsearch/URI+Search</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/_search?default_operator=OR&amp;q=last_name:Smith+first_name:Jane</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>多字段 <strong>AND</strong> 过滤, <strong>default_operator</strong>参数的使用,  可参考<a href="http://cwiki.apachecn.org/display/Elasticsearch/URI+Search" target="_blank" rel="noopener">http://cwiki.apachecn.org/display/Elasticsearch/URI+Search</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/_search?default_operator=AND&amp;q=last_name:Smith+first_name:Jane</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>返回指定字段,<strong>_source_include</strong>,<strong>_source_excludes</strong> 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.5/search-request-source-filtering.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/elasticsearch/reference/5.5/search-request-source-filtering.html</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/_search?default_operator=AND&amp;_source_include=first_name,age&amp;q=last_name:Smith+first_name:Jane</span><br><span class="line">GET /megacorp/employee/_search?default_operator=AND&amp;_source_include=*e&amp;q=last_name:Smith+first_name:Jane</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>分页: size 和 from(从0开始)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /megacorp/employee/_search?q=first_name:Jane&amp;size=1&amp;from=0</span><br></pre></td></tr></table></figure>
-</li>
-<li></li>
-</ul>
-</li>
-</ol>
-
+            <h2 id=""><a href="#" class="headerlink" title=" "></a> </h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -260,7 +212,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 搜索》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 集群, 分片》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -270,7 +222,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 搜索》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 集群, 分片》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -280,7 +232,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 搜索》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 集群, 分片》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -308,9 +260,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/04/08/elasticsearch/2018-04-08-01/" id="post-prev" class="post-nav-link">
+        <a href="/2018/04/08/elasticsearch/2018-04-08-03/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">01. 简介, 安装</h4>
+          <h4 class="title">02. 搜索</h4>
         </a>
       </div>
     
@@ -410,7 +362,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 搜索》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 集群, 分片》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -420,7 +372,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 搜索》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&title=《02. 集群, 分片》 — Rymuscle's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -430,7 +382,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 搜索》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 集群, 分片》 — Rymuscle's&url=http://blog.renyimin.com/2018/04/08/elasticsearch/2018-04-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
