@@ -432,10 +432,10 @@ READ UNCOMMITTED 未提交读READ COMMITTED 提交读...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        RR + MVCC 虽然解决了 幻读 问题, 但严格来说, 只是部分解决幻读问题
+        RR + MVCC 虽然解决了 幻读 问题, 但要注意, 幻读针对的是读操作(对于其他操作就不一样了);
 演示
-打开 客户端1 查看隔离级别及初始数据
- 12345678910111213141516171819mysql&gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx_isolation |+----------...
+打开 两个客户端 1,2 确保隔离级别为默认级别RR, 提供语句:
+ 12345678910111213141516171819mysql&gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION...
     
 
         <a href="/2017/09/19/mysql/2017-09-19-mysql-22/" class="post-more waves-effect waves-button">
