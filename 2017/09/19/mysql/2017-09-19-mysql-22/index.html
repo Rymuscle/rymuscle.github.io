@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Rymuscle&#39;s">
 <meta property="og:description" content="RR + MVCC 虽然解决了 幻读 问题, 但要注意, 幻读针对的是读操作(对于其他操作就不一样了); 演示 打开 两个客户端 1,2 确保隔离级别为默认级别RR, 提供语句:  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-01T06:10:10.000Z">
+<meta property="og:updated_time" content="2018-09-01T06:14:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="22. 幻读, 快照读(snapshot read), 当前读 (current read)">
 <meta name="twitter:description" content="RR + MVCC 虽然解决了 幻读 问题, 但要注意, 幻读针对的是读操作(对于其他操作就不一样了); 演示 打开 两个客户端 1,2 确保隔离级别为默认级别RR, 提供语句:  12345678910111213141516171819mysql&amp;gt; SELECT @@SESSION.tx_isolation;+------------------------+| @@SESSION.tx">
@@ -218,7 +218,7 @@
 <li><p>快照读： 是通过MVVC(多版本控制)和 <code>undo log</code> 来实现的, 常见语句如下(貌似就是常见的悲观锁么):</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">简单的select操作 (不包括: `select ... lock in share mode`, `select ... for update`)</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>而 <code>当前读</code> 根本不会创建任何快照, insert, update, delete都是当前读, 所以这几个操作会察觉到其他事务对数据做的更改(select察觉不到):                      </p>
+<li><p>而 <code>当前读</code> 根本不会创建任何快照, insert, update, delete都是当前读, 所以这几个操作会察觉到其他事务对数据做的更改(而普通select是察觉不到的):                      </p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">select ... lock in share mode</span><br><span class="line">select ... for update</span><br><span class="line">insert</span><br><span class="line">update</span><br><span class="line">delete</span><br></pre></td></tr></table></figure></li>
 </ol>
 
