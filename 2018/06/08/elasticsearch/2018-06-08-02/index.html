@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>02. 适应一下ES | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="文档该章节比较基础, 主要是为了对 Elasticsearch 有一个基本印象, 通过对雇员文档的基本操作, 了解 索引、搜索 及 聚合 等基础概念;可能有会遇到有些语句在5.X中无法运行, 比如   进行聚合操作时提示 Fielddata is disabled on text fields by default, 可参考此文章">
+<meta name="keywords" content="Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02. 适应一下ES">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="文档该章节比较基础, 主要是为了对 Elasticsearch 有一个基本印象, 通过对雇员文档的基本操作, 了解 索引、搜索 及 聚合 等基础概念;可能有会遇到有些语句在5.X中无法运行, 比如   进行聚合操作时提示 Fielddata is disabled on text fields by default, 可参考此文章">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-18T07:44:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="02. 适应一下ES">
+<meta name="twitter:description" content="文档该章节比较基础, 主要是为了对 Elasticsearch 有一个基本印象, 通过对雇员文档的基本操作, 了解 索引、搜索 及 聚合 等基础概念;可能有会遇到有些语句在5.X中无法运行, 比如   进行聚合操作时提示 Fielddata is disabled on text fields by default, 可参考此文章">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">02. 适应一下ES</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-08T13:23:07.000Z" itemprop="datePublished" class="page-time">
+  2018-06-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-elasticsearch/2018-06-08-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">02. 适应一下ES</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-08 21:23:07" datetime="2018-06-08T13:23:07.000Z"  itemprop="datePublished">2018-06-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>文档该<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_indexing_employee_documents.html" target="_blank" rel="noopener">章节</a>比较基础, 主要是为了对 Elasticsearch 有一个基本印象, 通过对雇员文档的基本操作, 了解 <code>索引</code>、<code>搜索</code> 及 <code>聚合</code> 等基础概念;<br>可能有会遇到有些语句在5.X中无法运行, 比如 </p>
+<ul>
+<li>进行聚合操作时提示 Fielddata is disabled on text fields by default, 可参考<a href="https://blog.csdn.net/u011403655/article/details/71107415" target="_blank" rel="noopener">此文章</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&title=《02. 适应一下ES》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&title=《02. 适应一下ES》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 适应一下ES》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. Elasticsearch 入门 及 简单安装</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/10/elasticsearch/2018-06-10-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. 集群相关</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&title=《02. 适应一下ES》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&title=《02. 适应一下ES》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 适应一下ES》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3aQW7DMAwEwPz/0ynQU4HCyZIUnaIYnwo3sTU6iMpSj0d8Pb+v5P7PO89f19UTrq7fn3lsXHh4eHitoVdfkA8iuZNM6+uJu5wCPDw8vDVe8ujCQ4P1+fU0XX23Wqjw8PDwPsvLy0lebJKigoeHh/efeK+pvcW9ur3Gw8PD+xSvuogn1N4GvboRP5a14OHh4fVzg3Kcev/fi/09PDw8vEFXPW/8V8vM5AmF0eLh4eEt8HpRaa+QnD188LoKFDpveHh4eEVe/iM/X8rfzGUQ6VajkMvP4OHh4S3wklg2KSG9CCPHVwMLPDw8vHt4vcNSo6Z+XDBGpQsPDw9vjRflFsVDAPPteK+EPKqvxMPDw4t5ycY0uZ8AkvKQY6LjWXh4eHhrvLwF1QtYq0cKqiHv5Xfx8PDwFni9JlbOS8C9Blj5uAMeHh7eIV5+HKp6v7r0H2h04eHh4d3CS6LVakOrF+Dm4W91C46Hh4e3wctDhzySqAYW8wkttMTw8PDwxrz8KECvHVUtGxPem7qHh4eHd4iXDzdfxHsRQ+/QVbkBhoeHhzfgTZb+s02vyaGry008Hh4e3jJvcqSp+uJ8Cnr/xcPDw9vj9Rpg1SlIIuBeQBzh8fDw8BZ4vcbVvBjkpHz7joeHh3cP79SP/17zbH744M0b8fDw8I7y8lbWqYW7FygkE4eHh4f3KV51Q5wPuoqZb/fx8PDwNni9ocy30ZMDBNXjCHh4eHhnec/ilVN7s5tvtaMgAw8PD2+B1ysJk41vLw6eNOTw8PDwNnjNkLS1uOfRcG8MeHh4eHfyek2vPKSoDjGfrDdbajw8PLyP8qrLd+8YQS/wvZwyPDw8vD/Aq8YQ1aA2aYYVQmc8PDy8Nd5kK7z3hMmk4OHh4e3x7myAJcHrqUgXDw8Pb4H3BXvzQQUgDhTXAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

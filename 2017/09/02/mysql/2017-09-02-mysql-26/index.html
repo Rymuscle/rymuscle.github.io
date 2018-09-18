@@ -13,7 +13,7 @@
     
     
     
-    <title>26. MySQL 高并发下常见的事务问题 | Rymuscle&#39;s</title>
+    <title>26. MySQL 高并发下常见的事务问题 | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -25,7 +25,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="26. MySQL 高并发下常见的事务问题">
 <meta property="og:url" content="http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/index.html">
-<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="前言上一篇MySQL事务简介中对MySQL事务的 基本概念 及 特性 做了简单介绍; 接下来会分析在实际生产环境中面对高并发场景时, 事务会出现的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况; 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐观, 从而并没有对自己所操作的数据做一定的保护">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
@@ -42,7 +42,7 @@
 <meta name="twitter:description" content="前言上一篇MySQL事务简介中对MySQL事务的 基本概念 及 特性 做了简单介绍; 接下来会分析在实际生产环境中面对高并发场景时, 事务会出现的一些常见问题;  高并发事务问题在并发量比较大的时候, 很容易出现 多个事务并行 的情况; 假设有两个事务正在同时进行, 值得注意的是: 它们两者之间是互相不知道对方的存在的, 各自都对自身所处的环境 过分乐观, 从而并没有对自己所操作的数据做一定的保护">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/transaction/dirty_read.png">
     
-        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="/css/style.css?v=1.6.13">
@@ -67,7 +67,7 @@
           <img src="/img/avatar.jpeg">
         </a>
         <hgroup class="introduce">
-          <h5 class="nickname">Rymuscle</h5>
+          <h5 class="nickname">Lant</h5>
           <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
         </hgroup>
       </div>
@@ -317,8 +317,8 @@
     </div>
     <footer>
         <a href="http://blog.renyimin.com">
-            <img src="/img/avatar.jpeg" alt="Rymuscle">
-            Rymuscle
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
         </a>
     </footer>
 </blockquote>
@@ -342,7 +342,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -352,7 +352,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -362,7 +362,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MySQL 高并发下常见的事务问题》 — Lant's&url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -474,7 +474,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Rymuscle &copy; 2016 - 2018</span>
+        <p><span>Lant &copy; 2016 - 2018</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -492,7 +492,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -502,7 +502,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&title=《26. MySQL 高并发下常见的事务问题》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -512,7 +512,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MySQL 高并发下常见的事务问题》 — Rymuscle's&url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《26. MySQL 高并发下常见的事务问题》 — Lant's&url=http://blog.renyimin.com/2017/09/02/mysql/2017-09-02-mysql-26/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -572,21 +572,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

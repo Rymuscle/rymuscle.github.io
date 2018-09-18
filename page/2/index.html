@@ -13,7 +13,7 @@
     
     
     
-    <title>Rymuscle&#39;s</title>
+    <title>Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -21,14 +21,14 @@
     
     <meta name="keywords" content="">
     <meta property="og:type" content="website">
-<meta property="og:title" content="Rymuscle&#39;s">
+<meta property="og:title" content="Lant&#39;s">
 <meta property="og:url" content="http://blog.renyimin.com/page/2/index.html">
-<meta property="og:site_name" content="Rymuscle&#39;s">
+<meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Rymuscle&#39;s">
+<meta name="twitter:title" content="Lant&#39;s">
     
-        <link rel="alternate" type="application/atom+xml" title="Rymuscle&#39;s" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" href="/css/style.css?v=1.6.13">
@@ -53,7 +53,7 @@
           <img src="/img/avatar.jpeg">
         </a>
         <hgroup class="introduce">
-          <h5 class="nickname">Rymuscle</h5>
+          <h5 class="nickname">Lant</h5>
           <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
         </hgroup>
       </div>
@@ -89,13 +89,6 @@
               </a>
             </li>
         
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/rymuscle" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
       </ul>
     </div>
   </div>
@@ -107,7 +100,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">Rymuscle&#39;s</div>
+        <div class="flex-col header-title ellipsis">Lant&#39;s</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -146,14 +139,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-06-12-rabbitmq-19"
+            <article id="post-mysql/2017-08-27-mysql-25"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-12 11:26:55" datetime="2018-06-12T03:26:55.000Z"  itemprop="datePublished">2018-06-12</time>
+        <time class="post-time" title="2017-08-27 19:31:07" datetime="2017-08-27T11:31:07.000Z"  itemprop="datePublished">2017-08-27</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
 
 
 
@@ -164,7 +157,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/">19. 消费者预取 Consumer Prefetch (避免队列大量unacked积压及Consumer假死)</a>
+      <a class="post-title-link" href="/2017/08/27/mysql/2017-08-27-mysql-25/">25. MySQL 事务简介</a>
     </h3>
   
 
@@ -174,476 +167,20 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        RabbitMQ关于吞吐量,延迟和带宽的一些理论
-假设你在Rabbit中有一个队列, 并有一些客户端从这个队列中进行消费, 如果你根本没有设置QoS, 那么Rabbit将尽可能快地按照网络和客户端允许的速度将所有队列的消息推送到客户端; 因此, 消费者所占用的内存将会激增, 因为它们将所有消息都缓存在自己的RAM中; 同时, 值得注意的是: 此时如果你询问Rabbit, 队列可能会显示为空,...
+        事务的概念
+事务：可以理解为一个 独立的工作单元, 在这个独立的工作单元中, 可以有一组操作; 放在这个独立工作单元中的一组操作, 要么全部执行成功, 要么全部执行失败
+
+随处可见的例子: 假设有两个角色 ‘Iron Man’(余额500), ‘Wolverine’(余额15), 现在 ‘Iron Man’ 通过银行应用给 ‘Wolverine’ 转账100元, 那么本次转账操作至少需要三个...
     
 
-        <a href="/2018/06/12/rabbitmq/2018-06-12-rabbitmq-19/" class="post-more waves-effect waves-button">
+        <a href="/2017/08/27/mysql/2017-08-27-mysql-25/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-06-05-rabbitmq-08"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-06-05 19:20:56" datetime="2018-06-05T11:20:56.000Z"  itemprop="datePublished">2018-06-05</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/">08. 事务 VS Publisher Confirms(发布者确认机制)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        问题的出现
-和消息持久化相关的一个概念是 AMQP 的事务(transaction)机制;
-
-到目前为止, 我们讨论的是将 消息, 队列 和 交换器 设置为持久化; 这一切都工作的很好, 并且RabbitMQ也负责保证消息的安全, 但是由于 发布消息的操作并不会反回任何信息给生产者, 所以你也无法得知是否消息已经到达了服务器并且服务器是否已经将消息持久化到了硬盘;
-
-服务器可能会在把消息写入...
-    
-
-        <a href="/2018/06/05/rabbitmq/2018-06-05-rabbitmq-08/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-rabbitmq/2018-05-28-rabbitmq-06"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-28 17:32:11" datetime="2018-05-28T09:32:11.000Z"  itemprop="datePublished">2018-05-28</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/">06. 持久化策略</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        持久化原理
-RabbitMQ 默认情况下, Exchange, 队列, 消息 都是非持久的, 这意味着一旦消息服务器重启, 所有已声明的 Exchange, 队列, 以及 队列中的消息 都会丢失;
-
-RabbitMQ确保持久化的消息能在服务器重启之后恢复的方式是, 将它们写入磁盘上的一个持久化日志文件。当发布一条持久性消息到一个持久交换机上时, Rabbit会在消息提交到日志文件中之后才发送...
-    
-
-        <a href="/2018/05/28/rabbitmq/2018-05-28-rabbitmq-06/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-linux/2018-05-18-56"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-18 10:03:51" datetime="2018-05-18T02:03:51.000Z"  itemprop="datePublished">2018-05-18</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/18/linux/2018-05-18-56/">56. awk</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介
-Awk是一种便于使用且表达能力强的程序设计语言, 它拥有数组, 支持if-else控制语句, for/while循环语句, 内置函数等功能; 同时, 它是一个强大的文本分析工具;
-
-之所以叫AWK是因为其取了三位创始人 Alfred Aho，Peter Weinberger, 和 Brian Kernighan 的Family Name的首字符;
-
-awk 命令的执行过程
-
-awk是逐...
-    
-
-        <a href="/2018/05/18/linux/2018-05-18-56/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-linux/2018-05-16-50"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-16 15:28:21" datetime="2018-05-16T07:28:21.000Z"  itemprop="datePublished">2018-05-16</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/16/linux/2018-05-16-50/">50. sort, uniq, wc</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        sort
-Linux sort命令用于将文本文件内容以 行 为单位进行排序; 
-语法: sort [-bcdfimMnr][-o&lt;输出文件&gt;][-t&lt;分隔字符&gt;][+&lt;起始栏位&gt;-&lt;结束栏位&gt;][--help][--verison][文件] sort 命令既可以从特定的文件, 也可以从 stdin 中获取输入;
-
-选项
- 12345678910...
-    
-
-        <a href="/2018/05/16/linux/2018-05-16-50/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-linux/2018-03-18-23"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-16 15:28:21" datetime="2018-05-16T07:28:21.000Z"  itemprop="datePublished">2018-05-16</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/16/linux/2018-03-18-23/">30. 开机启动相关</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        initsystemctl加入systemctl, 设置开机启动设置环境变量, 设置开机启动
-init 开机启动
-
-    
-
-        <a href="/2018/05/16/linux/2018-03-18-23/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-php/2018-05-02-Xhprof"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-02 22:26:39" datetime="2018-05-02T14:26:39.000Z"  itemprop="datePublished">2018-05-02</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/02/php/2018-05-02-Xhprof/">PHP 性能追踪及分析工具(XHPROF)</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        简介
-Xhprof 是facebook开源出来的一个php轻量级的性能分析工具, 跟Xdebug类似, 但性能开销更低, 还可以用在生产环境中, 也可以由程序开关来控制是否进行profile;
-
-XHProf的一些特性:
-
-Flat Profile: 提供函数级的汇总信息, 比如调用次数、执行时间、内存使用、CPU占用等;
-
-Hierarchical Profile: 对每个程序, 进行了父...
-    
-
-        <a href="/2018/05/02/php/2018-05-02-Xhprof/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-php/2018-05-06-opcache"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-05-02 22:26:39" datetime="2018-05-02T14:26:39.000Z"  itemprop="datePublished">2018-05-02</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/05/02/php/2018-05-06-opcache/">No title</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        https://www.abcdocker.com/abcdocker/2151https://www.cnblogs.com/wajika/p/6249003.html
-http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
-
-    
-
-        <a href="/2018/05/02/php/2018-05-06-opcache/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-04-14-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-14 11:21:46" datetime="2018-04-14T03:21:46.000Z"  itemprop="datePublished">2018-04-14</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/14/elasticsearch/2018-04-14-05/">05. 聚合查询</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        桶 与 指标
-其实简单来说, 桶 和 指标 其实就是以前关系型数据中常用的 分组 和 统计;
-
-桶 能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算;分桶是一种达到目的的手段:它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标。
-指标 大多数指标是简单的数学运算(例如最小值、平均值、最大值, 还有汇总), 这些是通过文档的值来计算在实践中, 指标...
-    
-
-        <a href="/2018/04/14/elasticsearch/2018-04-14-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-guzzle/2018-04-11"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-04-11 13:16:21" datetime="2018-04-11T05:16:21.000Z"  itemprop="datePublished">2018-04-11</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/杂项/">杂项</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/04/11/guzzle/2018-04-11/">No title</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        
-    
-
-        <a href="/2018/04/11/guzzle/2018-04-11/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/杂项/">杂项</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事务/">事务</a></li></ul>
 
     </div>
     
@@ -656,7 +193,7 @@ http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </div>
 </nav>
 
@@ -665,7 +202,7 @@ http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Rymuscle &copy; 2016 - 2018</span>
+        <p><span>Lant &copy; 2016 - 2018</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -683,7 +220,7 @@ http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/page/2/&title=Rymuscle's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/page/2/&title=Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -693,7 +230,7 @@ http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/page/2/&title=Rymuscle's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/page/2/&title=Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -703,7 +240,7 @@ http://gywbd.github.io/posts/2016/1/best-config-for-zend-opcache.html
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Rymuscle's&url=http://blog.renyimin.com/page/2/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Lant's&url=http://blog.renyimin.com/page/2/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -763,21 +300,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
