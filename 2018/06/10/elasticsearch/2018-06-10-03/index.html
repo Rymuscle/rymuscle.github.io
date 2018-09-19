@@ -13,7 +13,7 @@
     
     
     
-    <title>03. 集群相关 | Lant&#39;s</title>
+    <title>03. 集群相关 (节点, 分片及角色, 扩容, 故障测试) | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,16 +23,18 @@
     <meta name="description" content="前言 ElasticSearch 的主旨是随时可用和按需扩容, 这里主要是说 水平(横向)扩容 — 为集群添加更多的节点将负载压力分散到这些节点中; ElastiSearch 天生就是分布式的, 它知道如何通过管理多节点来提高扩容性和可用性; 接下来将讲述如何按需配置集群、节点和分片, 并在硬件故障时确保数据安全  节点 及其 角色 节点: 一个运行中的 Elasticsearch 实例就称为一个">
 <meta name="keywords" content="Elasticsearch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="03. 集群相关">
+<meta property="og:title" content="03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="前言 ElasticSearch 的主旨是随时可用和按需扩容, 这里主要是说 水平(横向)扩容 — 为集群添加更多的节点将负载压力分散到这些节点中; ElastiSearch 天生就是分布式的, 它知道如何通过管理多节点来提高扩容性和可用性; 接下来将讲述如何按需配置集群、节点和分片, 并在硬件故障时确保数据安全  节点 及其 角色 节点: 一个运行中的 Elasticsearch 实例就称为一个">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-unassigned-yellow.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green.png">
-<meta property="og:updated_time" content="2018-09-18T12:26:40.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green-03.png">
+<meta property="og:updated_time" content="2018-09-19T06:38:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="03. 集群相关">
+<meta name="twitter:title" content="03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)">
 <meta name="twitter:description" content="前言 ElasticSearch 的主旨是随时可用和按需扩容, 这里主要是说 水平(横向)扩容 — 为集群添加更多的节点将负载压力分散到这些节点中; ElastiSearch 天生就是分布式的, 它知道如何通过管理多节点来提高扩容性和可用性; 接下来将讲述如何按需配置集群、节点和分片, 并在硬件故障时确保数据安全  节点 及其 角色 节点: 一个运行中的 Elasticsearch 实例就称为一个">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/est/blogs-unassigned-yellow.png">
     
@@ -108,7 +110,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">03. 集群相关</div>
+        <div class="flex-col header-title ellipsis">03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -154,7 +156,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#节点-及其-角色"><span class="post-toc-number">2.</span> <span class="post-toc-text">节点 及其 角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分片"><span class="post-toc-number">4.</span> <span class="post-toc-text">分片</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障转移"><span class="post-toc-number">5.</span> <span class="post-toc-text">故障转移</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#水平扩容"><span class="post-toc-number">6.</span> <span class="post-toc-text">水平扩容</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#节点-及其-角色"><span class="post-toc-number">2.</span> <span class="post-toc-text">节点 及其 角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分片"><span class="post-toc-number">4.</span> <span class="post-toc-text">分片</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障转移"><span class="post-toc-number">5.</span> <span class="post-toc-text">故障转移</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#水平扩容"><span class="post-toc-number">6.</span> <span class="post-toc-text">水平扩容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更多的扩容提升搜索性能"><span class="post-toc-number">7.</span> <span class="post-toc-text">更多的扩容提升搜索性能</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障测试"><span class="post-toc-number">8.</span> <span class="post-toc-text">故障测试</span></a></li></ol>
         </nav>
     </aside>
     
@@ -162,7 +164,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">03. 集群相关</h1>
+        <h1 class="post-card-title">03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-10 14:26:39" datetime="2018-06-10T06:26:39.000Z"  itemprop="datePublished">2018-06-10</time>
 
@@ -282,6 +284,48 @@
 </li>
 </ol>
 <h2 id="水平扩容"><a href="#水平扩容" class="headerlink" title="水平扩容"></a>水平扩容</h2><ol>
+<li><p>如何为我们的正在增长中的应用程序按需扩容呢? 再次尝试启动第三个新的节点, 会发现集群状态如下:<br> <img src="/img/est/blogs-green-03.png"></p>
+</li>
+<li><p>可以看到 Node 1 和 Node 2 上各有一个分片被迁移到了新的 Node 3 节点</p>
+<ul>
+<li>现在每个节点上都拥有2个分片, 而不是之前的3个, 这表示每个节点的硬件资源(CPU, RAM, I/O)将被更少的分片所共享, 每个分片的性能将会得到提升</li>
+<li>分片是一个功能完整的搜索引擎, 它拥有使用一个节点上的所有资源的能力<br>也就是说, 目前我们这个拥有6个分片(3个主分片和3个副本分片)的索引, 可以最大扩容到6个节点, 让每个节点上只有该索引的一个分片(也可能会有其他索引的分片哦);</li>
+</ul>
+</li>
+<li><p>分片数量一定, 增加节点, 则每个分片性能将会提升, 因为被赋予的更多的硬件资源; 但是当一个索引的分片数量和集群的节点数量达到一致时, 其分片性能达到最高, 继续增加更多的副本分片是不能提高性能的, 因为每个分片从节点上获得的资源会变少, 你需要增加更多的硬件资源来提升吞吐量;</p>
+</li>
+</ol>
+<h2 id="更多的扩容提升搜索性能"><a href="#更多的扩容提升搜索性能" class="headerlink" title="更多的扩容提升搜索性能"></a>更多的扩容提升搜索性能</h2><ol>
+<li><p>想要继续扩容超过6个节点, 需要先知道:</p>
+<ul>
+<li>由于索引的主分片数目在索引创建时就已经确定了, 这个数目定义了这个索引能够 存储 的最大数据量<br>也就是索引能存储的最大数据量在创建索引的时候就通过设置主分片数确定了(不过实际大小还取决于你的数据、硬件和使用场景)</li>
+<li>由于 <strong>搜索操作 和 返回数据操作 可以同时被主分片 或 副本分片所处理</strong>, 所以当你拥有越多的副本分片时, 也将拥有越高的吞吐量</li>
+</ul>
+</li>
+<li><p>在运行中的集群上是可以动态调整副本分片数目的, 比如, 可以把副本数从默认的 1 增加到 2 :</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /blogs/_settings</span><br><span class="line">&#123;</span><br><span class="line">  &quot;number_of_replicas&quot; : 2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>blogs 索引现在拥有9个分片: 3个主分片和6个副本分片; 这就意味着可以将集群扩容到9个节点(每个节点上只放该索引的一个分片), 相比原来3个节点时(每个节点两个分片), 虽然存储量不变, 但是集群搜索性能可以提升 3 倍;</p>
+</li>
+<li><p>当一个索引的分片数量和集群的节点数量达到一致时, 其分片性能将达到最高, 无法再提升分片的性能! 此时可以 <strong>通过增加更多的副本分片, 同时增加节点来提升集群的搜索性能</strong>!</p>
+</li>
+<li><p>集群的整体性能还是需要通过增加节点来提高!</p>
+</li>
+</ol>
+<h2 id="故障测试"><a href="#故障测试" class="headerlink" title="故障测试"></a>故障测试</h2><ol>
+<li><p>目前的集群状态如下:<br> <img src="/img/est/blogs-green-03.png"></p>
+</li>
+<li><p>如果关闭<strong>主节点</strong></p>
+<ul>
+<li>由于而集群必须拥有一个主节点来保证正常工作, 所以发生的第一件事情就是选举一个新的主节点;</li>
+<li><p>在我们关闭主节点的同时也失去了主分片 1 和 2, 并且在缺失主分片的时候索引也不能正常工作, 如果此时来检查集群的状况, 我们看到的状态将会为 red: 不是所有主分片都在正常工作</p>
+</li>
+<li><p>幸运的是, 在其它节点上存在着主节点上这两个主分片的完整副本, 所以新的主节点会立即将这两个主分片在 另外两个节点上 对应的副本分片提升为主分片, 此时集群的状态将会为 yellow: 这个提升主分片的过程是瞬间发生的, 如同按下一个开关一般<br>此时, 虽然我们又拥有所有的三个主分片, 但是由于之前设置了每个主分片需要对应2份副本分片, 而此时只有两个几点, 只存在一份副本分片, 所以集群不能为 green 的状态;</p>
+</li>
+<li><p>如果重新启动之前关闭的节点, 集群可以将缺失的副本分片再次进行分配, 如果它依然拥有着之前的分片, 它将尝试去重用它们, 同时仅从主分片复制发生了修改的数据文件;</p>
+</li>
+</ul>
+</li>
 <li></li>
 </ol>
 
@@ -320,7 +364,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -330,7 +374,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -340,7 +384,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 集群相关》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -470,7 +514,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -480,7 +524,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&title=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -490,7 +534,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 集群相关》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-03/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -550,5 +594,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
