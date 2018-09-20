@@ -32,7 +32,11 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green-03.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/blogs-green-03.png">
-<meta property="og:updated_time" content="2018-09-19T06:38:48.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/9200-down.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/9201-green.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/9202-green.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/node-ok.png">
+<meta property="og:updated_time" content="2018-09-19T12:31:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)">
 <meta name="twitter:description" content="前言 ElasticSearch 的主旨是随时可用和按需扩容, 这里主要是说 水平(横向)扩容 — 为集群添加更多的节点将负载压力分散到这些节点中; ElastiSearch 天生就是分布式的, 它知道如何通过管理多节点来提高扩容性和可用性; 接下来将讲述如何按需配置集群、节点和分片, 并在硬件故障时确保数据安全  节点 及其 角色 节点: 一个运行中的 Elasticsearch 实例就称为一个">
@@ -156,7 +160,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#节点-及其-角色"><span class="post-toc-number">2.</span> <span class="post-toc-text">节点 及其 角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分片"><span class="post-toc-number">4.</span> <span class="post-toc-text">分片</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障转移"><span class="post-toc-number">5.</span> <span class="post-toc-text">故障转移</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#水平扩容"><span class="post-toc-number">6.</span> <span class="post-toc-text">水平扩容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更多的扩容提升搜索性能"><span class="post-toc-number">7.</span> <span class="post-toc-text">更多的扩容提升搜索性能</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障测试"><span class="post-toc-number">8.</span> <span class="post-toc-text">故障测试</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#节点-及其-角色"><span class="post-toc-number">2.</span> <span class="post-toc-text">节点 及其 角色</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群"><span class="post-toc-number">3.</span> <span class="post-toc-text">集群</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分片"><span class="post-toc-number">4.</span> <span class="post-toc-text">分片</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障转移"><span class="post-toc-number">5.</span> <span class="post-toc-text">故障转移</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#水平扩容"><span class="post-toc-number">6.</span> <span class="post-toc-text">水平扩容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更多的扩容提升搜索性能"><span class="post-toc-number">7.</span> <span class="post-toc-text">更多的扩容提升搜索性能</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#故障测试"><span class="post-toc-number">8.</span> <span class="post-toc-text">故障测试</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置相关"><span class="post-toc-number">9.</span> <span class="post-toc-text">配置相关</span></a></li></ol>
         </nav>
     </aside>
     
@@ -318,13 +322,18 @@
 <li><p>如果关闭<strong>主节点</strong></p>
 <ul>
 <li>由于而集群必须拥有一个主节点来保证正常工作, 所以发生的第一件事情就是选举一个新的主节点;</li>
-<li><p>在我们关闭主节点的同时也失去了主分片 1 和 2, 并且在缺失主分片的时候索引也不能正常工作, 如果此时来检查集群的状况, 我们看到的状态将会为 red: 不是所有主分片都在正常工作</p>
+<li><p>在我们关闭主节点的同时也失去了主分片 1 和 2, 并且在缺失主分片的时候索引也不能正常工作, 如果此时来检查集群的状况, 我们看到的状态将会为 red: 不是所有主分片都在正常工作<br><img src="/img/est/9200-down.png"></p>
 </li>
-<li><p>幸运的是, 在其它节点上存在着主节点上这两个主分片的完整副本, 所以新的主节点会立即将这两个主分片在 另外两个节点上 对应的副本分片提升为主分片, 此时集群的状态将会为 yellow: 这个提升主分片的过程是瞬间发生的, 如同按下一个开关一般<br>此时, 虽然我们又拥有所有的三个主分片, 但是由于之前设置了每个主分片需要对应2份副本分片, 而此时只有两个几点, 只存在一份副本分片, 所以集群不能为 green 的状态;</p>
+<li><p>幸运的是, 在其它节点上存在着主节点上这两个主分片的完整副本, 所以新的主节点会立即将这两个主分片在 另外两个节点上 对应的副本分片提升为主分片, 此时集群的状态将会为 yellow: 这个提升主分片的过程是瞬间发生的, 如同按下一个开关一般<br>此时, 虽然我们又拥有所有的三个主分片, 但是由于之前设置了每个主分片需要对应2份副本分片, 而此时只有两个几点, 只存在一份副本分片, 所以集群不能为 green 的状态;<br>注意连接的端口:<br><img src="/img/est/9201-green.png"></p>
+<p><img src="/img/est/9202-green.png"></p>
 </li>
-<li><p>如果重新启动之前关闭的节点, 集群可以将缺失的副本分片再次进行分配, 如果它依然拥有着之前的分片, 它将尝试去重用它们, 同时仅从主分片复制发生了修改的数据文件;</p>
+<li><p>如果重新启动之前关闭的节点, 集群可以将缺失的副本分片再次进行分配, 如果它依然拥有着之前的分片, 它将尝试去重用它们, 同时仅从主分片复制发生了修改的数据文件;<br><img src="/img/est/node-ok.png"></p>
 </li>
 </ul>
+</li>
+</ol>
+<h2 id="配置相关"><a href="#配置相关" class="headerlink" title="配置相关"></a>配置相关</h2><ol>
+<li><p>注意: discovery.zen.minimum_master_nodes ??</p>
 </li>
 <li></li>
 </ol>
@@ -420,9 +429,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/06/16/elasticsearch/2018-06-16-04/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/10/elasticsearch/2018-06-10-04/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">04. 过滤</h4>
+        <h4 class="title">04. 文档的概念 及 ES乐观并发控制</h4>
       </a>
     </div>
   
@@ -594,21 +603,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

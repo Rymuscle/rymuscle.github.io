@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>04. 文档的概念 及 ES乐观并发控制 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
+<meta name="keywords" content="Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04. 文档的概念 及 ES乐观并发控制">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
+<meta property="og:updated_time" content="2018-09-20T07:04:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="04. 文档的概念 及 ES乐观并发控制">
+<meta name="twitter:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">04. 文档的概念 及 ES乐观并发控制</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-10T06:29:07.000Z" itemprop="datePublished" class="page-time">
+  2018-06-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档"><span class="post-toc-number">2.</span> <span class="post-toc-text">文档</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES文档的丢失更新问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">ES文档的丢失更新问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES乐观并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">ES乐观并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档的部分更新-update"><span class="post-toc-number">5.</span> <span class="post-toc-text">文档的部分更新 - _update</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-06-10-04"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">04. 文档的概念 及 ES乐观并发控制</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-10 14:29:07" datetime="2018-06-10T06:29:07.000Z"  itemprop="datePublished">2018-06-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/data-in-data-out.html" target="_blank" rel="noopener">前言</a></h2><ol>
+<li><p>传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;</p>
+<ul>
+<li><p>面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体 </p>
+</li>
+<li><p>而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSON, 它被称为一个 JSON 文档;<br>JSON文档可以将我们的对象按对象的方式来存储, 这样我们就能更加专注于 使用 数据, 而不是在电子表格的局限性下对我们的应用建模; 我们可以重新利用对象的灵活性;</p>
+</li>
+<li><p>Elastcisearch 是分布式的 文档 存储, 它能存储和检索复杂的数据结构—序列化成为JSON文档</p>
+</li>
+</ul>
+</li>
+<li><p>现存的 NoSQL 解决方案虽然允许我们以文档的形式存储对象, 但是他们仍旧需要我们思考如何查询我们的数据, 以及确定哪些字段需要被索引以加快数据检索; <strong>而在 ES 中, 每个字段的所有数据都是默认被索引的, 即每个字段都有为了快速检索设置的专用倒排索引</strong>; 而且, 不像其他多数的数据库, 它<strong>能在相同的查询中使用所有这些倒排索引, 并以惊人的速度返回结果</strong>;</p>
+</li>
+</ol>
+<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><ol>
+<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_Document_Metadata.html" target="_blank" rel="noopener">文档及其元数据介绍</a></li>
+<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/index-doc.html" target="_blank" rel="noopener">索引文档</a>, 注意 <code>PUT</code> 和 <code>POST</code> 两个谓词的使用场景;</li>
+<li><p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/create-doc.html" target="_blank" rel="noopener">小心<strong>覆盖创建</strong></a></p>
+<ul>
+<li>当我们索引一个文档, 怎么确认我们正在创建一个完全新的文档, 而不是覆盖现有的呢?</li>
+<li>最简单办法是, 使用索引请求的 POST 形式让 Elasticsearch 自动生成唯一 _id;</li>
+<li>另外, 如果有自己的文档ID, 防止覆盖 (成功会返回 401码, 冲突则会返回 409码)<figure class="highlight plain"><figcaption><span>/website/blog/123?op_type</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT /website/blog/123/_create</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/get-doc.html#_返回文档的一部分" target="_blank" rel="noopener">返回文档中的部分字段</a></p>
+</li>
+<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/update-doc.html" target="_blank" rel="noopener">更新<strong>整个</strong>文档</a>, 注意, ES中文档不能修改, 需要重建或者替换</li>
+<li>删除比较简单…</li>
+</ol>
+<h2 id="ES文档的丢失更新问题"><a href="#ES文档的丢失更新问题" class="headerlink" title="ES文档的丢失更新问题"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/version-control.html" target="_blank" rel="noopener">ES文档的丢失更新问题</a></h2><ol>
+<li><p>在使用 index API 更新文档时, 一般会先读取原始文档, 然后做我们的修改, 最后重新索引整个文档; 如果两个进程同时做这系列操作的话, 最后的索引请求将获胜, 当然, 有人的更改将丢失。</p>
+</li>
+<li><p>假设我们使用 Elasticsearch 存储我们网上商城商品库存的数量, 每次我们卖一个商品的时候, 在 Elasticsearch 中将库存数量减少; 有一天, 管理层决定做一次促销, 突然地, 每秒要卖好几个商品, 假设有两个 web 程序并行运行, 每一个都同时处理所有商品的销售<br> <img src="/img/est/es-concurrency.png"><br> 可以看到: web_1 对 stock_count 所做的更改已经丢失; 结果就会出现超卖现象;</p>
+</li>
+<li><p>在数据库领域中, 有两种方法通常被用来确保并发更新时变更不会丢失:</p>
+<ul>
+<li><strong>悲观并发控制</strong> : 这种方法被关系型数据库广泛使用, 它假定有变更冲突可能发生, 因此阻塞访问资源以防止冲突;<br>一个典型的例子是读取一行数据之前先将其锁住, 确保只有放置锁的线程能够对这行数据进行修改。</li>
+<li><strong>乐观并发控制</strong> : Elasticsearch 中使用的这种方法假定冲突是不可能发生的, 并且不会阻塞正在尝试的操作, 不过, 如果源数据在读写当中被修改, 更最后在更新时将会失败; 应用程序接下来将决定该如何解决冲突, 例如, 可以重试更新、使用新的数据、或者将相关情况报告给用户;</li>
+</ul>
+</li>
+</ol>
+<h2 id="ES乐观并发控制"><a href="#ES乐观并发控制" class="headerlink" title="ES乐观并发控制"></a>ES乐观并发控制</h2><ol>
+<li><p>ES 是分布式的, 当文档创建、更新或删除时, 新版本的文档必须复制到集群中的其他节点, 而 Elasticsearch 也是异步和并发的, 这意味着这些复制请求是被并行发送的, 所以到达目的地时也许<strong>顺序是乱的</strong>;</p>
+</li>
+<li><p>因此 Elasticsearch 需要一种方法确保文档的旧版本不会覆盖新的版本:</p>
+<ul>
+<li>ES的每个文档都有一个 <strong>_version</strong> (版本)号, 当文档被修改时版本号递增;</li>
+<li>ES正是使用这个 <strong>_version</strong> 号来确保变更以正确顺序得到执行 (如果旧版本的文档在新版本之后到达, 它会被直接忽略)</li>
+</ul>
+</li>
+<li><p>我们可以利用 _version 号来确保 应用中相互冲突的变更不会导致数据丢失, 通过指定想要修改文档的 version 号来达到这个目的, 如果该版本不是当前版本号, 我们的请求将会失败</p>
+</li>
+<li><p>测试</p>
+<ul>
+<li><p>创建一个新文档 (当然, 响应体会告诉我们, 该文档版本号目前是1)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUT /website/blog/1/_create</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;My first blog entry&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;Just trying this out...&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>现在假设我们想编辑这个文档: 一般是先查询,将文档数据加载到 web 表单中; 然后做一些修改, 保存新的版本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 查询文档, 响应体中可以看到版本号仍为1</span><br><span class="line">GET /website/blog/1</span><br><span class="line"></span><br><span class="line">// 尝试通过重建文档的索引来保存修改, 我们指定 version 为我们的修改会被应用的版本:</span><br><span class="line">// 也就是我们想要索引中的文档只有 _version 为 1 时, 本次更新才能成功; </span><br><span class="line">// 最后此请求成功, 并且响应体告诉我们 _version 已经递增到 2</span><br><span class="line">PUT /website/blog/1?version=1 </span><br><span class="line">&#123;</span><br><span class="line"> &quot;title&quot;: &quot;My first blog entry&quot;,</span><br><span class="line"> &quot;text&quot;:  &quot;Starting to get the hang of this...&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然而, 如果我们重新运行相同的索引请求, 仍然指定 version=1, Elasticsearch 返回 <strong>409 Conflict</strong> HTTP 响应码, 和一个如下所示的响应体:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;error&quot;: &#123;</span><br><span class="line">    &quot;root_cause&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;type&quot;: &quot;version_conflict_engine_exception&quot;,</span><br><span class="line">        &quot;reason&quot;: &quot;[blog][1]: version conflict, current version [2] is different than the one provided [1]&quot;,</span><br><span class="line">        &quot;index_uuid&quot;: &quot;llBrPVECRFuD45NCpJaDfg&quot;,</span><br><span class="line">        &quot;shard&quot;: &quot;3&quot;,</span><br><span class="line">        &quot;index&quot;: &quot;website&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;type&quot;: &quot;version_conflict_engine_exception&quot;,</span><br><span class="line">    &quot;reason&quot;: &quot;[blog][1]: version conflict, current version [2] is different than the one provided [1]&quot;,</span><br><span class="line">    &quot;index_uuid&quot;: &quot;llBrPVECRFuD45NCpJaDfg&quot;,</span><br><span class="line">    &quot;shard&quot;: &quot;3&quot;,</span><br><span class="line">    &quot;index&quot;: &quot;website&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;status&quot;: 409</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>更多请参考文档: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/optimistic-concurrency-control.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/optimistic-concurrency-control.html</a> </p>
+</li>
+</ol>
+<h2 id="文档的部分更新-update"><a href="#文档的部分更新-update" class="headerlink" title="文档的部分更新 - _update"></a>文档的部分更新 - <code>_update</code></h2><ol>
+<li><p>之前在介绍 “更新整个文档” 时, 已经了解到, 文档是不可变的, 他们不能被修改, 只能被替换; 更新一个文档的方法是检索并修改它, 然后<strong>重新索引整个文档</strong>;</p>
+</li>
+<li><p>但其实使用 update API 我们还可以<strong>部分更新文档</strong>, 但是, update API 必须遵循同样的规则, 从外部来看, 我们在一个文档的某个位置进行部分更新, 然而在内部, update API 简单使用与之前描述相同的 <code>检索-修改-重建索引</code> 的处理过程</p>
+<ul>
+<li>区别在于这个过程发生在分片内部, 这样就避免了多次请求的网络开销; 通过减少检索和重建索引步骤之间的时间, 我们也减少了其他进程的变更带来冲突的可能性。</li>
+<li>update 请求最简单的一种形式是接收文档的一部分作为 doc 的参数, 它只是与现有的文档进行合并, 对象被合并到一起, 覆盖现有的字段, 增加新的字段</li>
+</ul>
+</li>
+<li><p>例如, 我们对 博客文章 增加字段 tags 和 views , 并修改 text 字段, 如下所示:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 测试成功:</span><br><span class="line">POST /website/blog/1/_update</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot; : &#123;</span><br><span class="line">    &quot;tags&quot; : [ &quot;testing&quot; ],</span><br><span class="line">    &quot;views&quot;: 0,</span><br><span class="line">    &quot;text&quot;: &quot;哈哈&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>更多部分更新相关内容, 可参考手册: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html</a><br> 未完待续~~</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/04/elastic-stack/2018-09-04-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. 从ELK Stack 到 Elastic Stack</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3a0U4DMQwEQP7/p0HiCam6Y23HV4TmnqoWmkyQErPxx0f8fH4/P1+/vnP/kz/ff/3mq+dqxMMPHh4eXmvq+QD3w7x+mryTL2s+Zzw8PLxtXn4YXA15tWT37yffWR0XDw8P7+/wegVusjTJcuDh4eH9J151otXC+n4+eHh4eO/iJWFELyaYRAl5OHIga8HDw8OLefM49fnX6/d7eHh4eK1b9We27OTI6T14eHh4G7xTl1vVAjr/nvxIKPzHgIeHhzfm5cX0/WadLFkvCK4GuAUkHh4e3gIvmW4vtug1bJ1ta8DDw8Ob85JNvLdmvbI4DzuisfDw8PCO8iarMokVeoDyKYeHh4d3iJe0VfWihF5MkHxaiD/w8PDw1njVq6+EUe2AmoS8l7+Lh4eHt8CbX0dNrvwnF2CFPwweHh7eI7xq2Dopf89eoeHh4eE9w6syJo1WkyK7GgTj4eHhbfCqjU35Vt5rNs1HiUbHw8PDW+Dl23S+NfeK6WqInBw5eHh4eBu8SQBxNrRNFiuH4eHh4e3xJtHDJAIuT+627B5dg+Hh4eEd5fWCg2Tg/AjpfYqHh4e3x+ttskkLVLVNKgk+ykuDh4eHt8DrxQS9C7C81WAyHzw8PLwnedVDIv+02gVWbT74JfbFw8PDO8rrxQrV2GKel/QKdzw8PLxtXrXI7kW0k6aEcqmNh4eHt8DLr7UmBXEePWy0I+Dh4eGd5X0Wn0mrwdm2gGhx8fDw8BZ41cK3GjFUS/BqG0HvYMPDw8Ob86oh6WTrzyOPKKgNyn08PDy8PV510r1yPJ9ivli//Bnw8PDw3sqbNA1Uf7Ia+F4uGR4eHt4f4CVh7qTdKrkMK4TOeHh4eGu8SSl8qpiuXq1FhxAeHh7eAq8auSZbdvXabCPSxcPDw1vgfQFN3uQpwQ6JtgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
