@@ -13,7 +13,7 @@
     
     
     
-    <title>04. 文档的概念 及 ES乐观并发控制 | Lant&#39;s</title>
+    <title>04. 文档的概念, ES乐观并发控制, 文档基本操作 | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,15 +23,15 @@
     <meta name="description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
 <meta name="keywords" content="Elasticsearch">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04. 文档的概念 及 ES乐观并发控制">
+<meta property="og:title" content="04. 文档的概念, ES乐观并发控制, 文档基本操作">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
-<meta property="og:updated_time" content="2018-09-20T07:04:48.000Z">
+<meta property="og:updated_time" content="2018-09-20T07:25:26.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04. 文档的概念 及 ES乐观并发控制">
+<meta name="twitter:title" content="04. 文档的概念, ES乐观并发控制, 文档基本操作">
 <meta name="twitter:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
     
@@ -107,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04. 文档的概念 及 ES乐观并发控制</div>
+        <div class="flex-col header-title ellipsis">04. 文档的概念, ES乐观并发控制, 文档基本操作</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -153,7 +153,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档"><span class="post-toc-number">2.</span> <span class="post-toc-text">文档</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES文档的丢失更新问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">ES文档的丢失更新问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES乐观并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">ES乐观并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档的部分更新-update"><span class="post-toc-number">5.</span> <span class="post-toc-text">文档的部分更新 - _update</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档"><span class="post-toc-number">2.</span> <span class="post-toc-text">文档</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES文档的丢失更新问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">ES文档的丢失更新问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES乐观并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">ES乐观并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档的部分更新-update"><span class="post-toc-number">5.</span> <span class="post-toc-text">文档的部分更新 - _update</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#取回多文档"><span class="post-toc-number">6.</span> <span class="post-toc-text">取回多文档</span></a></li></ol>
         </nav>
     </aside>
     
@@ -161,7 +161,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04. 文档的概念 及 ES乐观并发控制</h1>
+        <h1 class="post-card-title">04. 文档的概念, ES乐观并发控制, 文档基本操作</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-10 14:29:07" datetime="2018-06-10T06:29:07.000Z"  itemprop="datePublished">2018-06-10</time>
 
@@ -258,7 +258,7 @@
 <li><p>更多部分更新相关内容, 可参考手册: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html</a><br> 未完待续~~</p>
 </li>
 </ol>
-
+<h2 id="取回多文档"><a href="#取回多文档" class="headerlink" title="取回多文档"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_Retrieving_Multiple_Documents.html" target="_blank" rel="noopener">取回多文档</a></h2>
         </div>
 
         <blockquote class="post-copyright">
@@ -294,7 +294,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -304,7 +304,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -314,7 +314,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -350,9 +350,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/09/04/elastic-stack/2018-09-04-01/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/16/elasticsearch/2018-06-16-05/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">01. 从ELK Stack 到 Elastic Stack</h4>
+        <h4 class="title">05. Mapping 映射</h4>
       </a>
     </div>
   
@@ -444,7 +444,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -454,7 +454,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -464,7 +464,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念 及 ES乐观并发控制》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -524,5 +524,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
