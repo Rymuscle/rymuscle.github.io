@@ -28,13 +28,13 @@
 <meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="virtualenv 在开发Python应用程序的时候, 如果系统只安装了一个Python版本, 那么所有第三方的包都会被pip安装到这个Python的 site-packages 目录下; 如果要同时开发多个应用程序, 这些应用程序就会共用这一个Python环境, 如果应用A需要 jinja 2.7, 而应用B需要jinja 2.6怎么办?  这种情况下, 每个应用可能需要各自拥有一套 各自独立">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/python/virtualenv_01.png">
-<meta property="og:image" content="http://blog.renyimin.com/img/python/virtualenv_02.png">
-<meta property="og:updated_time" content="2018-09-30T03:23:04.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/python/python-env-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/python/virtualenv01.png">
+<meta property="og:updated_time" content="2018-09-30T07:12:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. 基础 - virtualenv , virtualenvwrapper">
 <meta name="twitter:description" content="virtualenv 在开发Python应用程序的时候, 如果系统只安装了一个Python版本, 那么所有第三方的包都会被pip安装到这个Python的 site-packages 目录下; 如果要同时开发多个应用程序, 这些应用程序就会共用这一个Python环境, 如果应用A需要 jinja 2.7, 而应用B需要jinja 2.6怎么办?  这种情况下, 每个应用可能需要各自拥有一套 各自独立">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/python/virtualenv_01.png">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/python/python-env-01.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv"><span class="post-toc-number">1.</span> <span class="post-toc-text">virtualenv</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv虚拟环境管理"><span class="post-toc-number">2.</span> <span class="post-toc-text">virtualenv虚拟环境管理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv包管理"><span class="post-toc-number">3.</span> <span class="post-toc-text">virtualenv包管理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenvwrapper"><span class="post-toc-number">4.</span> <span class="post-toc-text">virtualenvwrapper</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建虚拟环境的时候-python版本如何指定"><span class="post-toc-number">5.</span> <span class="post-toc-text">创建虚拟环境的时候, python版本如何指定</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv"><span class="post-toc-number">1.</span> <span class="post-toc-text">virtualenv</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv虚拟环境管理"><span class="post-toc-number">2.</span> <span class="post-toc-text">virtualenv虚拟环境管理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenv包管理"><span class="post-toc-number">3.</span> <span class="post-toc-text">virtualenv包管理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#virtualenvwrapper"><span class="post-toc-number">4.</span> <span class="post-toc-text">virtualenvwrapper</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建虚拟环境的时候-python版本如何指定"><span class="post-toc-number">5.</span> <span class="post-toc-text">创建虚拟环境的时候, python版本如何指定</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -281,14 +281,22 @@
 </ul>
 </li>
 </ol>
-<ol>
-<li><p>如何让某个项目使用指定的虚拟环境: 可以在Pycharm中直接指定</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li><p>目前本机环境有</p>
 <ul>
-<li>按照如下截图指定:<br><img src="/img/python/virtualenv_01.png" atl="virtualenv_01"></li>
-<li>重启PyCharm之后, 会发现, 终端自动进入了之前指定的虚拟环境下:<br><img src="/img/python/virtualenv_02.png" width="600" height="300" atl="virtualenv_01"></li>
+<li>Mac 自带的Python2.7</li>
+<li>自己安装的Python3.7</li>
+<li>后来又装了Anaconda (其中包含默认的3.6, 自己创建的两个虚拟环境3.6版本和2.7版本)</li>
+<li>virtualenv 中创建的两个虚拟环境3.7和2.7版本</li>
 </ul>
 </li>
-<li><p>也可以进入你的虚拟环境之后, 通过命令来运行你某个目录下的项目文件</p>
+<li><p>在pycharm中引入本地的虚拟环境(可以看到也可以在pycharm中直接使用 conda 或者 virtualenv 来新建虚拟环境, 不过由于之前已经了一些虚拟环境了, 所以直接add即可)<br> <img src="/img/python/python-env-01.png" width="500"></p>
+</li>
+<li><p>在 pycharm 的 左下角有 <code>Python Console</code> 和 <code>Terminal</code> 两个终端, 但是发现在切换 <code>conda</code> 或者 <code>virtual</code> 虚拟环境时:</p>
+<ul>
+<li>virtual 虚拟环境切换时候, 两个终端都会切换<br><img src="/img/python/virtualenv01.png" width="500"></li>
+<li>conda 不会切换 <code>Terminal</code> 终端到虚拟环境的python版本</li>
+</ul>
 </li>
 </ol>
 
