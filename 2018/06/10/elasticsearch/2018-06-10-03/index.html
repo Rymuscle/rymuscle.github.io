@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/est/9201-green.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/9202-green.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/node-ok.png">
-<meta property="og:updated_time" content="2018-09-19T12:31:02.000Z">
+<meta property="og:updated_time" content="2018-09-28T10:11:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)">
 <meta name="twitter:description" content="前言 ElasticSearch 的主旨是随时可用和按需扩容, 这里主要是说 水平(横向)扩容 — 为集群添加更多的节点将负载压力分散到这些节点中; ElastiSearch 天生就是分布式的, 它知道如何通过管理多节点来提高扩容性和可用性; 接下来将讲述如何按需配置集群、节点和分片, 并在硬件故障时确保数据安全  节点 及其 角色 节点: 一个运行中的 Elasticsearch 实例就称为一个">
@@ -205,19 +205,17 @@
 <li><p>节点既不会成为主节点, 也不会存储数据 (也叫协调节点/路由节点)<br>这个节点的意义是作为一个client(客户端)节点, 主要是针对海量请求的时候可以进行负载均衡</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node.master: false</span><br><span class="line">node.data: false</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>既有成为主节点的资格, 又存储数据:<br>如果这个节点被选举成了真正的主节点, 那么它除了干主节点要干的活, 还要存储数据, 这样对于这个节点的压力就比较大;<br>elasticsearch 默认每个节点都是这样的配置, 在测试环境下这样做没问题, 但是实际工作中建议不要这样设置; 因为这样相当于 主节点 和 数据节点 的角色混合到一块了;</p>
+<li><p>既有成为主节点的资格, 又存储数据:  默认情况下, 每个节点都有成为主节点的资格, 也会存储数据, 还会处理客户端的请求<br>如果这个节点被选举成了真正的主节点, 那么它除了干主节点要干的活, 还要存储数据, 这样对于这个节点的压力就比较大;<br>elasticsearch 默认每个节点都是这样的配置, 在测试环境下这样做没问题, 但是实际工作中建议不要这样设置; 因为这样相当于 主节点 和 数据节点 的角色混合到一块了;</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node.master: false</span><br><span class="line">node.data: true</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>默认情况下, 每个节点都有成为主节点的资格, 也会存储数据, 还会处理客户端的请求;</p>
-</li>
-<li><p>根据前面节点及其角色的介绍, 如果尝试配置唯一的节点为 <code>node.master: true node.data: false</code>, 则节点中的所有分片都会是未分配状态</p>
-</li>
-<li>如果配置为 <code>node.master: false node.data: false</code>, 貌似无法启动</li>
 </ul>
 </li>
-<li><p>在生产集群中我们可以对这些节点的职责进行划分</p>
-<ul>
-<li>建议集群中设置3台以上的节点作为master节点 <code>node.master: true node.data: false</code>, 这些节点只负责成为主节点, 维护整个集群的状态;</li>
+</ol>
+<pre><code>- 根据前面节点及其角色的介绍, 如果尝试配置唯一的节点为 `node.master: true node.data: false`, 则节点中的所有分片都会是未分配状态, 因为节点不是数据结点, 无法存放数据
+- 如果配置为 `node.master: false node.data: false`, 貌似无法启动
+</code></pre><ol>
+<li>在生产集群中我们可以对这些节点的职责进行划分<ul>
+<li>建议集群中设置3台以上的节点作为 master节点 <code>node.master: true node.data: false</code>, 这些节点只负责成为主节点, 维护整个集群的状态;</li>
 <li>再根据数据量设置一批data节点 <code>node.master: false node.data: true</code>, 这些节点只负责存储数据, 后期提供建立索引和查询索引的服务, 这样的话如果用户请求比较频繁, 这些节点的压力也会比较大;</li>
 <li>所以在集群中建议再设置一批client节点 <code>node.master: false node.data: false</code>, 这些节点只负责处理用户请求, 实现请求转发, 负载均衡等功能;<br>master节点: 普通服务器即可(CPU 内存 消耗一般)<br>data节点: 主要消耗磁盘, 内存<br>client节点: 普通服务器即可(如果要进行分组聚合操作的话, 建议这个节点内存也分配多一点)</li>
 </ul>

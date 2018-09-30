@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>10. 聚合 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="聚合 聚合允许我们向数据提出一些复杂的问题, 虽然功能完全不同于搜索, 但它使用相同的数据结构, 这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的;  要掌握聚合, 你只需要明白两个主要的概念:   桶(Buckets) : 满足特定条件的文档的集合 (桶在概念上类似于SQL的分组（GROUP BY）) 指标(Metrics) : 对桶内的文档进行统计计算 (而指标则类似于 COUNT()">
+<meta name="keywords" content="Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10. 聚合">
+<meta property="og:url" content="http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="聚合 聚合允许我们向数据提出一些复杂的问题, 虽然功能完全不同于搜索, 但它使用相同的数据结构, 这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的;  要掌握聚合, 你只需要明白两个主要的概念:   桶(Buckets) : 满足特定条件的文档的集合 (桶在概念上类似于SQL的分组（GROUP BY）) 指标(Metrics) : 对桶内的文档进行统计计算 (而指标则类似于 COUNT()">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-09-28T09:13:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10. 聚合">
+<meta name="twitter:description" content="聚合 聚合允许我们向数据提出一些复杂的问题, 虽然功能完全不同于搜索, 但它使用相同的数据结构, 这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的;  要掌握聚合, 你只需要明白两个主要的概念:   桶(Buckets) : 满足特定条件的文档的集合 (桶在概念上类似于SQL的分组（GROUP BY）) 指标(Metrics) : 对桶内的文档进行统计计算 (而指标则类似于 COUNT()">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">10. 聚合</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-07-09T02:41:07.000Z" itemprop="datePublished" class="page-time">
+  2018-07-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#聚合"><span class="post-toc-number">1.</span> <span class="post-toc-text">聚合</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#桶"><span class="post-toc-number">2.</span> <span class="post-toc-text">桶</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#指标"><span class="post-toc-number">3.</span> <span class="post-toc-text">指标</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#桶和指标组合的例子"><span class="post-toc-number">4.</span> <span class="post-toc-text">桶和指标组合的例子</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#嵌套桶"><span class="post-toc-number">5.</span> <span class="post-toc-text">嵌套桶</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-07-08-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">10. 聚合</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-07-09 10:41:07" datetime="2018-07-09T02:41:07.000Z"  itemprop="datePublished">2018-07-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/aggregations.html" target="_blank" rel="noopener">聚合</a></h2><ol>
+<li><p>聚合允许我们向数据提出一些复杂的问题, 虽然功能完全不同于搜索, 但它使用相同的数据结构, 这意味着聚合的执行速度很快并且就像搜索一样几乎是实时的;</p>
+</li>
+<li><p>要掌握聚合, 你只需要明白两个主要的概念: </p>
+<ul>
+<li><strong>桶(Buckets)</strong> : 满足特定条件的文档的集合 (桶在概念上类似于SQL的分组（GROUP BY）)</li>
+<li><strong>指标(Metrics)</strong> : 对桶内的文档进行统计计算 (而指标则类似于 COUNT() 、 SUM() 、 MAX() 等统计方法)</li>
+<li><p>翻译成粗略的SQL语句来解释：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(color) </span><br><span class="line">FROM table</span><br><span class="line">GROUP BY color</span><br></pre></td></tr></table></figure>
+<p><strong>COUNT(color) 相当于指标</strong><br><strong>GROUP BY color 相当于桶</strong></p>
+</li>
+</ul>
+</li>
+<li><p>每个聚合都是一个或者多个桶和零个或者多个指标的组合 (<strong>聚合是由桶和指标组成的</strong>)</p>
+</li>
+</ol>
+<h2 id="桶"><a href="#桶" class="headerlink" title="桶"></a>桶</h2><ol>
+<li><p>当聚合开始被执行, 每个文档里面的值通过计算来决定符合哪个桶的条件, 如果匹配到, 文档将放入相应的桶并接着进行聚合操作;</p>
+</li>
+<li><p>桶也可以被嵌套在其他桶里面, 提供层次化的或者有条件的划分方案; (例如, 辛辛那提会被放入俄亥俄州这个桶, 而整个俄亥俄州桶会被放入美国这个桶)</p>
+<blockquote>
+<p>Elasticsearch 有很多种类型的桶, 能让你通过很多种方式来划分文档(时间、最受欢迎的词、年龄区间、地理位置等等);<br> <strong>其实根本上都是通过同样的原理进行操作: 基于条件来划分文档;</strong></p>
+</blockquote>
+</li>
+</ol>
+<h2 id="指标"><a href="#指标" class="headerlink" title="指标"></a>指标</h2><ol>
+<li><p>桶能让我们划分文档到有意义的集合, 但是最终我们需要的是对这些桶内的文档进行一些指标的计算; 分桶是一种达到目的的手段: 它提供了一种给文档分组的方法来让我们可以计算感兴趣的指标;</p>
+</li>
+<li><p>大多数指标是简单的数学运算(例如最小值、平均值、最大值、还有汇总), 这些是通过文档的值来计算; 在实践中, 指标能让你计算像平均薪资、最高出售价格、95%的查询延迟这样的数据;</p>
+</li>
+<li><p>桶的使用, 例子, 可参考 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_aggregation_test_drive.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_aggregation_test_drive.html</a>, 可能语法有些在ES5.X已经不能使用, 下面列出新的例子</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">DELETE /cars/</span><br><span class="line">PUT /cars/</span><br><span class="line">&#123;</span><br><span class="line">  &quot;mappings&quot; : &#123;</span><br><span class="line">    &quot;transactions&quot; : &#123;</span><br><span class="line">      &quot;properties&quot;: &#123;</span><br><span class="line">        &quot;color&quot;: &#123; </span><br><span class="line">          &quot;type&quot;:     &quot;keyword&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;make&quot;: &#123; </span><br><span class="line">          &quot;type&quot;:     &quot;keyword&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">POST /cars/transactions/_bulk</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:1&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 10000, &quot;color&quot; : &quot;red&quot;, &quot;make&quot; : &quot;honda&quot;, &quot;sold&quot; : &quot;2014-10-28&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:2&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 20000, &quot;color&quot; : &quot;red&quot;, &quot;make&quot; : &quot;honda&quot;, &quot;sold&quot; : &quot;2014-11-05&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:3&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 30000, &quot;color&quot; : &quot;green&quot;, &quot;make&quot; : &quot;ford&quot;, &quot;sold&quot; : &quot;2014-05-18&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:4&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 15000, &quot;color&quot; : &quot;blue&quot;, &quot;make&quot; : &quot;toyota&quot;, &quot;sold&quot; : &quot;2014-07-02&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:5&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 12000, &quot;color&quot; : &quot;green&quot;, &quot;make&quot; : &quot;toyota&quot;, &quot;sold&quot; : &quot;2014-08-19&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:6&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 20000, &quot;color&quot; : &quot;red&quot;, &quot;make&quot; : &quot;honda&quot;, &quot;sold&quot; : &quot;2014-11-05&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:7&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 80000, &quot;color&quot; : &quot;red&quot;, &quot;make&quot; : &quot;bmw&quot;, &quot;sold&quot; : &quot;2014-01-01&quot; &#125;</span><br><span class="line">&#123; &quot;index&quot;: &#123;&quot;_id&quot;:8&#125;&#125;</span><br><span class="line">&#123; &quot;price&quot; : 25000, &quot;color&quot; : &quot;blue&quot;, &quot;make&quot; : &quot;ford&quot;, &quot;sold&quot; : &quot;2014-02-12&quot; &#125;</span><br><span class="line">GET /cars/transactions/_mapping</span><br><span class="line">GET /cars/transactions/_search</span><br><span class="line">GET /cars/transactions/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot; : 0,   </span><br><span class="line">  &quot;aggs&quot; : &#123; </span><br><span class="line">    &quot;popular_colors&quot; : &#123; </span><br><span class="line">      &quot;terms&quot; : &#123; </span><br><span class="line">        &quot;field&quot; : &quot;color&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="桶和指标组合的例子"><a href="#桶和指标组合的例子" class="headerlink" title="桶和指标组合的例子"></a>桶和指标组合的例子</h2><ol>
+<li>例子, 参考: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_adding_a_metric_to_the_mix.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_adding_a_metric_to_the_mix.html</a></li>
+</ol>
+<h2 id="嵌套桶"><a href="#嵌套桶" class="headerlink" title="嵌套桶"></a>嵌套桶</h2><ol>
+<li>例子, 参考: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_buckets_inside_buckets.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_buckets_inside_buckets.html</a></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&title=《10. 聚合》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&title=《10. 聚合》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. 聚合》 — Lant's&url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/07/07/elasticsearch/2018-07-07-09/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">09. 排序, 相关性</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/04/elastic-stack/2018-09-04-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. 从ELK Stack 到 Elastic Stack</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&title=《10. 聚合》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&title=《10. 聚合》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. 聚合》 — Lant's&url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/07/09/elasticsearch/2018-07-08-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACqElEQVR42u3aQW7jMBAEQP//01lgTwsEtrs5HCcLlE6GIogsHkSmZx6P+Pr6e32/8+/17P73Z16/5/U7HxsXHh4e3tHU8wFeT/T172d3kmU9XEQ8PDy8NV7y6nyw9plkOV4/8/Q+Hh4e3o/yzpajxecHdzw8PLz/i5dMpd0Azo7XeHh4eD/Faz/i81ghiRIuhMV4eHh4W3WoUZz6+d+L9T08PDy8QVW9DQImrQOTWT0dCw8PD2+BN4lK8+aANp44azUo/mPAw8PDG/Am08o/7u0C5VHIm0M/Hh4e3hpv0uTUTnqCr9+Mh4eHt8bLY4X2iHwWFufH7jdHcDw8PLwF3oSUH8fbw3cbARcLioeHh3eVl0/6bBJt8Sxf+uSveHh4eBu8s6nMo4o2ChltFXh4eHiXeMnnPm+lmi9QzoviZjw8PLwF3tmQ7QK1R+ez+eDh4eF9hpcXtCaH7CQ+ONts3swTDw8P7ypvDps0SLUhbLst4eHh4e3xWkAbYUzKbC3vaU8ZHh4e3iXepEGq6OSKI4ZJU8KbAhgeHh7eJd48923BbawwymPx8PDwlnktaTJw+/6z5cbDw8P7PC//TE+aCfImqnpp8PDw8D7IO9sS2s0gJ7XtCHh4eHh7vElhPv/Et11gbfNBFPvi4eHhXeLlpaY2FDhrAki2lnxx8fDw8LZ5+TDzMlg7ytlWgYeHh7fBaz/lZ+2nefSQx7V5OwIeHh7eXd5Xec2pt9oCoiADDw8Pb4E3KX1NIuA2dDgLc/Hw8PD2eGchaT5wexROPvrF0R8PDw9vjdcOX5ejyimeldnw8PDwfhuvBZ+1EZwFvte6yfDw8PAWeO2BexJqJJHxm9Hx8PDw1nhngI3DdN7sFTVd4eHh4S3wzgpgbaNAHrzeWiw8PDy8Bd4f7dADJ9dhAtwAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
