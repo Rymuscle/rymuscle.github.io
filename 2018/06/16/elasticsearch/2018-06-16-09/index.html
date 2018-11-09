@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>09. 简单了解ES 分布式, 扩容, 分片, 数据路由 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="前言 通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;  在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解   复杂分布式的透明 之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的; 另外, 之">
+<meta name="keywords" content="Elasticsearch(一)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="09. 简单了解ES 分布式, 扩容, 分片, 数据路由">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="前言 通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;  在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解   复杂分布式的透明 之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的; 另外, 之">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/es/yellow-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/es/green-01.png">
+<meta property="og:updated_time" content="2018-11-09T03:45:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="09. 简单了解ES 分布式, 扩容, 分片, 数据路由">
+<meta name="twitter:description" content="前言 通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;  在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解   复杂分布式的透明 之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的; 另外, 之">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/es/yellow-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">09. 简单了解ES 分布式, 扩容, 分片, 数据路由</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-16T06:01:19.000Z" itemprop="datePublished" class="page-time">
+  2018-06-16
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#复杂分布式的透明"><span class="post-toc-number">2.</span> <span class="post-toc-text">复杂分布式的透明</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#垂直扩容-与-水平扩容"><span class="post-toc-number">3.</span> <span class="post-toc-text">垂直扩容 与 水平扩容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#容错性分析"><span class="post-toc-number">4.</span> <span class="post-toc-text">容错性分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#分片再次梳理"><span class="post-toc-number">5.</span> <span class="post-toc-text">分片再次梳理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据路由"><span class="post-toc-number">6.</span> <span class="post-toc-text">数据路由</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-06-16-09"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">09. 简单了解ES 分布式, 扩容, 分片, 数据路由</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-16 14:01:19" datetime="2018-06-16T06:01:19.000Z"  itemprop="datePublished">2018-06-16</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li><p>通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;</p>
+</li>
+<li><p>在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解</p>
+</li>
+</ol>
+<h2 id="复杂分布式的透明"><a href="#复杂分布式的透明" class="headerlink" title="复杂分布式的透明"></a>复杂分布式的透明</h2><ol>
+<li>之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的;</li>
+<li>另外, 之前在用ES做了很多实验之后, 如果留意的话, 你会发现<ul>
+<li>ES集群状态仍然是 <code>yellow</code>:<br><img src="/img/es/yellow-01.png"></li>
+<li>如果想让集群达到 <code>green</code> 状态, 之前在 <a href="">ES 一些基本概念</a>中也介绍过, 此处由于 product 索引默认是 5个primary shard,每个主节点各1个副本节点, 所以需要再启用 1个 ES节点, 集群状态即可变为 <code>GREEN</code>;<br><img src="/img/es/green-01.png"></li>
+<li>而启动节点之后, 我们也并没有关心集群是如何发现该节点的</li>
+<li>并且之前未被分配的 replica shard 也自动被<strong>均匀</strong>分配到了新的节点上, 这也不用我们去关心;</li>
+</ul>
+</li>
+<li>ES的复杂分布式对使用它的开发人员来说,都是非常透明的</li>
+</ol>
+<h2 id="垂直扩容-与-水平扩容"><a href="#垂直扩容-与-水平扩容" class="headerlink" title="垂直扩容 与 水平扩容"></a>垂直扩容 与 水平扩容</h2><ol>
+<li><p>垂直扩容: 一般是指 对服务器进行升配 或者 采购更强大的服务器; 这种方式会有瓶颈, 而且成本较高;</p>
+</li>
+<li><p><strong>水平扩容</strong>: 比较常用, 可以通过采购更多的普通服务器 来构成强大的计算和存储能力, 成本比较低(10台普通服务器的价钱 和 与其等性能的1台强大服务器相比, 成本相对还是比较低), 而且扩展比较方便, 对开发人员也是透明的;</p>
+</li>
+<li><p>一个扩容的案例: 假设有5台服务器, 每台可以容纳1T数据, 当数据量要涨到7T时</p>
+<ul>
+<li>如果采用垂直扩容: 比如重新替换两台容纳2T数据的服务器, 3+2*2 即可达到7T</li>
+<li>如果采用水平扩容: 直接启两台容纳2T数据的服务器, 5+2*1 即可达到7T</li>
+</ul>
+</li>
+<li><p><strong>水平扩容极限</strong>? 假设一个分片对应了3个主分片, 每个主分片对应1个副本分片, 总共6个分片</p>
+<ul>
+<li><p>此时, 只需要2个节点(<code>number_of_replicas+1</code>), 就可以保证集群是 green 状态, 但此时性能并不优, 每个点上节有3个shard, 也就是3个shard共享了节点的资源;<br>如果进行水平扩容的话, 极限就是最多启动6个ES节点, 此时, 每个分片都可以独占单台服务器, 性能最好;</p>
+</li>
+<li><p>要超出上面的极限, 可以通过<strong>动态修改</strong>索引对应的副本分片数, 比如修改每个主分片对应2个副本分片, 此时 3+3*2=9 个分片<br>虽然只用3个节点(<code>number_of_replicas+1</code>)就可以保证集群是green<br>但如果要达到极限扩容, 可以最多将ES节点增加到9个, 很显然, 9个节点相比集群刚好green时的3个节点, 吞吐量直接是其3倍</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="容错性分析"><a href="#容错性分析" class="headerlink" title="容错性分析"></a>容错性分析</h2><ol>
+<li><p><strong>容错性分析</strong>: 一个索引</p>
+<ul>
+<li><p>如果对应 3个 Primary-shard, 每个 Primary-shard 对应2个 replica-shard, 总共 3+3*2 = 9<br>首先要知道的是, 要保证集群是 green, 共需要启动3个节点(<code>number_of_replicas+1</code>)<br>如果启动3个节点(此时的shard分配类似 <code>[P1,R2,R3]</code>, <code>[P2,R1,R3]</code>, <code>[P3,R1,R2]</code>), 此时可以允许有2台机器宕机, 仍然可以提供完整数据<br>如果启动到性能最优的9个节点, 不仅性能会最优, 而且可以容许最多6台机器宕机;</p>
+</li>
+<li><p>如果对应 3个 Primary-shard, 每个 Primary-shard 对应1个 replica-shard, 总共 3+3*1 = 6<br>如果启动2个节点(此时的shard分配类似 <code>[P1,P2,P3]</code>, <code>[R1,R2,R3]</code>), 此时可以允许有1台机器宕机, 仍然可以提供完整数据<br>如果启动3个节点(此时的shard分配类似 <code>[P1,P2]</code>, <code>[R2,R3]</code>, <code>[P3,R1]</code>), 此时可以允许有1台机器宕机, 仍然可以提供完整数据, 2台则不行;<br>如果启动到性能最优的6个节点, 不仅性能会最优, 而且可以容许最多3台机器宕机;</p>
+</li>
+</ul>
+</li>
+<li><p>容错大致过程</p>
+<ul>
+<li>如果master节点宕机, es会自动选举一个新的节点作为master节点, 承担master节点的责任;</li>
+<li>新master将丢失的 primary-shard 的某个 replica-shard 提升为 primary-shard, 此时 cluster status 会变为yellow, 因为节点宕机后, 自然有 shard 会处于未分配状态;</li>
+<li>重启故障的 节点, 如果在重启后有新的 replica-shard, 这些shard会被copy到启动的节点上, 而对于宕机前该node已有的shard, 该node自然会使用之前已有的shard数据, 只是会同步一下宕机后发生过的修改; </li>
+</ul>
+</li>
+</ol>
+<h2 id="分片再次梳理"><a href="#分片再次梳理" class="headerlink" title="分片再次梳理"></a>分片再次梳理</h2><ol>
+<li>ES中, 每个 index 默认会物理地对应5个shard; 每个shard都是一个lucene实例, 也是ES中最小的工作单元, 它承载了index中的部分数据; </li>
+<li>ES集群增加节点时, shard会自动在节点中均匀分布</li>
+<li>shard 可以分为 <code>primary shard</code> 和 <code>replica shard</code><ul>
+<li>index中每个document只存在于一个 <code>primary shard</code>(及该主分片的所有 <code>replica shard</code>)中, 不可能存在于多个 <code>primary shard</code> 中;</li>
+<li><code>replica shard</code> 是 <code>primary shard</code> 的副本, 负责<strong>容灾</strong>以及<strong>分担请求负载</strong></li>
+<li><code>primary shard</code> 的数量是在创建索引时就固定的(默认为5个主分片,每个主分片有1个副本分片), 而 <code>replica shard</code> 的数量可以随时修改</li>
+<li><strong><code>primary shard</code> 不会和自己的 <code>replica shard</code> 放在同一个节点上; 多个相同的<code>replica shard</code>也不能放在同一个节点上; (否则该节点宕机, 主分片和副本分片就都丢失, 起不到容错作用)</strong><br>不过 <code>primary shard</code> 可以和其他 index 的<code>primary shard</code> 或 <code>replica shard</code>放在同一节点上;</li>
+</ul>
+</li>
+<li>两个具有相同内容的分片在同一个节点上是起不到容灾作用的, 因此:<ul>
+<li>对于每个索引, 必须保证 <code>ES节点数 &gt;= number_of_replicas+1</code>, 才能保证该索引的所有包含相同内容的分片都能成功被分配到不同的节点中;</li>
+<li>对于任何一个索引, 只要有任何具有相同内容的分片在同一个节点上(相同主分片的两个副本分片在同一节点, 或者主分片和其某个副本分片在同一节点), 集群状态就不可能是green而是yellow;    </li>
+</ul>
+</li>
+</ol>
+<h2 id="数据路由"><a href="#数据路由" class="headerlink" title="数据路由"></a>数据路由</h2><ol>
+<li><p>数据路由: 之前已经了解到, 在ES中, 每个index会对应多个物理分片, 所以index中的document也都会分布在各个分片上, 一个document也只可能存在于一个shard中, 那么document分配到哪个分片是如何决定的?</p>
+<ul>
+<li>路由算法: <code>hash(routing)%number_of_primary_shards</code> 决定了文档会被放在哪个 primary-shard 上;</li>
+<li>默认情况下, 每次增删改查一个document的时候, 都会带过来一个routing, 默认就是document的id(可以手动指定,也可以自动生成)</li>
+<li>也可以手动指定 routing: <code>put /index/type/id?routing=user_id</code><br><strong>手动指定 routing 是很有用的, 这样可以保证某一类document一定被路由到一个shard上去, 在后续进行应用级别的负载均衡, 以及提升批量读取的性能的时候, 是很有帮助的</strong> </li>
+</ul>
+</li>
+<li><p>primary-shard数量不可变的谜底<br> 上面已经了解到了 document 被分配到哪个 primary-shard 是由<code>hash(routing)%number_of_primary_shards</code>决定, 但是如果在后续查询该文档的时候, 你变更了该索引的主分片数, 即number_of_primary_shards, 那么自然就找不到该文档了</p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&title=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&title=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/16/elasticsearch/2018-06-16-08/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">08. ES 乐观锁并发控制</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/17/elasticsearch/2018-06-17-10/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">10. ES的写一致机制</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&title=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&title=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. 简单了解ES 分布式, 扩容, 分片, 数据路由》 — Lant's&url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/16/elasticsearch/2018-06-16-09/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3awW7cMAwE0P3/n26vBZq4M6S0WRTPp0WysfV8kJghX6/4+vXNlX8zv57v9rpx4eHh4R1a+p+3Sx7wvLi/v5O8oO/un78gPDw8vHu85+UmsM0BkLzE/NXg4eHhfSYv/22yuSeHDR4eHt7/xDu1uOcAAg8PD+/TeEkYsWHkQW0ShVzJWvDw8PC6HOC13+Lf+flKfw8PDw9v3VVPmvp5rNCupG16fXEHPDw8vAu8NlbYhAizY6Atl/Hw8PDew5s9pg0a6vh1EUPg4eHhvYeXL2u2fc+K46R8rwt6PDw8vAVv3/7fv9ezBffwfwU8PDy8ES8PbfctqzZoSNbzas8iPDw8vBFv35rKi+AkbP2B0Ss8PDy8EW+2TbeFb9sky4v7fxwVeHh4eJd5+bhAG+Dm7bGkrC8aYHh4eHgXeO12f2rcKg9K8rGD4njAw8PDW/PaUCAfnGpDjc3P66ErPDw8vKO8ZHH7MYJNsy0PMvDw8PBO8doiNQ9SN62yDS+aKcPDw8Nb88629vPtOz+vZq8SDw8P7x5vc6N8c5/Vunko/MVnPDw8vAu8/NZ5ULuPcWdpShHd4uHh4S14s4ZTOw61Weis7P7i3MPDw8M7ystHBGYDBMlTbhT3eHh4eDd4p9pXz9TNwNZ+GAsPDw/vBq8NZ/NoNY9fk8J9OEeGh4eHd43XXrNiOl9J/p3oxMPDw8O7wMsf04a8s6dEXbu2DYaHh4e35m0Og/YVJH+bBx9ReIGHh4d3gdduuLOiuW1cJQ25GoCHh4d3lJccBklrP19oHiu0d8PDw8N7J68tizfHyTA1mT0RDw8P7wN47RGyGRHYBxx4eHh4n8nLGW2csR/PwsPDw7vHmwUBbeT6fIc8Mi6iZDw8PLwLvE05O2PM2maHe3p4eHh4E95v5G8r8GObLWYAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

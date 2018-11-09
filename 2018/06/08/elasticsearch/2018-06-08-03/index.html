@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03. ES 一些基本概念 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="近实时 从文档被索引到可以被检索会有轻微延时, 约1s  Index(索引 n) 这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方 一个Index可以包含多个 type (索引的复数词为 indices 或 indexes)  index 名称必须是小写, 不能用下划线开头, 不能包含逗号 一般将不同的项目数据放到不同的index中  每个index会物理地">
+<meta name="keywords" content="Elasticsearch(一)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03. ES 一些基本概念">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="近实时 从文档被索引到可以被检索会有轻微延时, 约1s  Index(索引 n) 这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方 一个Index可以包含多个 type (索引的复数词为 indices 或 indexes)  index 名称必须是小写, 不能用下划线开头, 不能包含逗号 一般将不同的项目数据放到不同的index中  每个index会物理地">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-09T03:45:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03. ES 一些基本概念">
+<meta name="twitter:description" content="近实时 从文档被索引到可以被检索会有轻微延时, 约1s  Index(索引 n) 这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方 一个Index可以包含多个 type (索引的复数词为 indices 或 indexes)  index 名称必须是小写, 不能用下划线开头, 不能包含逗号 一般将不同的项目数据放到不同的index中  每个index会物理地">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03. ES 一些基本概念</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-08T10:23:07.000Z" itemprop="datePublished" class="page-time">
+  2018-06-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#近实时"><span class="post-toc-number">1.</span> <span class="post-toc-text">近实时</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Index-索引-n"><span class="post-toc-number">2.</span> <span class="post-toc-text">Index(索引 n)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Type-类型"><span class="post-toc-number">3.</span> <span class="post-toc-text">Type(类型)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Document-文档"><span class="post-toc-number">4.</span> <span class="post-toc-text">Document(文档)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Cluster-集群"><span class="post-toc-number">5.</span> <span class="post-toc-text">Cluster(集群)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Shard-分片"><span class="post-toc-number">6.</span> <span class="post-toc-text">Shard(分片):</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集群状态-yellow"><span class="post-toc-number">7.</span> <span class="post-toc-text">集群状态 yellow</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-06-08-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03. ES 一些基本概念</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-08 18:23:07" datetime="2018-06-08T10:23:07.000Z"  itemprop="datePublished">2018-06-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="近实时"><a href="#近实时" class="headerlink" title="近实时"></a>近实时</h2><ol>
+<li>从文档被索引到可以被检索会有轻微延时, 约1s</li>
+</ol>
+<h2 id="Index-索引-n"><a href="#Index-索引-n" class="headerlink" title="Index(索引 n)"></a>Index(索引 n)</h2><ol>
+<li>这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方</li>
+<li>一个Index可以包含多个 type (索引的复数词为 indices 或 indexes) </li>
+<li>index 名称必须是小写, 不能用下划线开头, 不能包含逗号</li>
+<li>一般将不同的项目数据放到不同的index中 </li>
+<li><p>每个index会物理地对应多个分片, 这样, 每个项目都有自己的分片, 互相物理地独立开, 如果有项目是做复杂运算的, 也不会影响其他项目的分片</p>
+</li>
+<li><p>索引(v) : ES中的还会提到 <strong>索引一个文档</strong>, 这里的 索引 是动词, 存储文档并建立倒排索引的意思;</p>
+</li>
+</ol>
+<h2 id="Type-类型"><a href="#Type-类型" class="headerlink" title="Type(类型)"></a>Type(类型)</h2><ol>
+<li>一个Index中可以有多个type</li>
+<li>代表document属于index中的哪个类别(type 可以对同一个index中不同类型的document进行逻辑上的划分,可以粗略地理解成传统数据库中的数据表?)</li>
+<li><p>名称可以是大小写, 不能用下划线开头, 不能包含逗号</p>
+</li>
+<li><p>注意: <strong>type是对index做的逻辑划分, 而shard是对index做的物理划分</strong></p>
+</li>
+</ol>
+<h2 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document(文档)"></a>Document(文档)</h2><ol>
+<li><p>ES中的最小数据单元, ES使用 JSON 作为文档的序列化格式 (ES中的文档可以通俗地理解成传统数据库表中的一条记录)</p>
+</li>
+<li><p><code>_id</code>: 文档id 可以手动指定, 也可以由es为我们生成;</p>
+<ul>
+<li><p>手动指定id: 根据应用情况来判断是否符合手动指定 document id, 一般如果是从某些其他的系统中导入数据到es, 就会采用这种方式, 就是使用系统中已有的数据的唯一标识作为es中的document的id;<br>比如从数据库中迁移数据到es中, 就比较适合采用数据在数据库中已有的primary key;<br><code>put /index/type/id</code></p>
+</li>
+<li><p>自动生成id: 如果说我们目前要做的系统主要就是将数据存储到es中, 数据产生出来以后直接就会存放到es, 所以不需要手动指定document id的形式, 可以直接让es自动生成id即可;<br><code>post /index/type</code><br>es自动生成的id长度为20个字符, URL安全, base64编码, <strong>GUID</strong>, <strong>分布式并行生成时, es会通过全局id来保证不会发生冲突</strong>;</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Cluster-集群"><a href="#Cluster-集群" class="headerlink" title="Cluster(集群)"></a>Cluster(集群)</h2><ol>
+<li>集群是由一个或者多个拥有相同 <code>cluster.name</code> 配置项的节点组成, 一个ES节点属于哪个集群, 是由其配置中的 <code>cluster.name</code> 决定的; <ul>
+<li>节点启动后, 其默认name是<code>elasticsearch</code>, 因此如果在一个机器中启动一堆节点, 那它们会自动组成一个es集群(因为它们的<code>cluster.name</code>都是<code>elasticsearch</code>)</li>
+<li>这些节点共同承担数据和负载的压力; 当有节点加入集群中或者从集群中移除节点时, 集群将会重新平均分布所有的数据;</li>
+</ul>
+</li>
+</ol>
+<h2 id="Shard-分片"><a href="#Shard-分片" class="headerlink" title="Shard(分片):"></a>Shard(分片):</h2><ol>
+<li><p><strong>type是对index做的逻辑划分, 而shard是对index做的物理划分</strong></p>
+</li>
+<li><p>一个分片就是一个 Lucene 的实例, 它是一个底层的工作单元, 其本身就是一个完整的搜索引擎; </p>
+</li>
+<li><p>分片是数据的容器, 文档其实是保存在分片中的: 当我们将很多条document数据添加到索引中时, 索引实际上是指向一个或者多个<strong>物理分片</strong>; 因此, 你要存储到索引中的数据其实会被分发到不同的分片中, 而每个分片也仅保存了整个索引中的一部分文档;</p>
+</li>
+<li><p>当你的集群规模扩大或者缩小时(即增加或减少节点时), ES 会自动的在各节点中迁移分片, 而数据是存放在shard中的, 所以最终会使得数据仍然均匀分布在集群里</p>
+</li>
+<li><p>shard 可以分为 <code>primary shard</code>(主分片), <code>replica shard</code>(副本分片)</p>
+<ul>
+<li><code>replica shard</code> 可以容灾, 水平扩容节点时, 还可以自动分配来提高系统负载</li>
+<li>默认情况下, 每个index有5个<code>parimary shard</code>, 而每个<code>parimary shard</code>都有1个<code>replica shard</code>, 即每个index默认会对应10个shard</li>
+<li>另外, ES规定了, 每个index的 <code>parimary shard</code> 和 <code>replica shard</code> 不能在全部都在同一个节点上, 相同内容的 <code>replica shard</code> 也不能在同一节点上, 不然起不到容灾作用;</li>
+</ul>
+</li>
+</ol>
+<h2 id="集群状态-yellow"><a href="#集群状态-yellow" class="headerlink" title="集群状态 yellow"></a>集群状态 yellow</h2><ol>
+<li><p>在ES中, 每个索引可能对应多个主分片, 每个主分片也都可能对应多个副本分片</p>
+</li>
+<li><p><strong>对于每个索引, 要保证不会导致es集群为 yellow, 需要注意</strong>: <code>es节点数 &gt;= number_of_replicas+1</code></p>
+<pre><code> 当索引的 `number_of_replicas=1` 时, 无论 `number_of_shards` 为多少, 2个节点 (`es节点数 = number_of_replicas+1`) 就可以保证集群是 green;
+ 当索引的 `number_of_replicas&gt;1` 时, 只有当 `es节点数 = number_of_replicas+1` 时, 集群才会变为green;
+</code></pre></li>
+<li>对于任何一个索引, 由于任何具有相同内容的分片(相同主分片的两个副本分片, 或者主分片和其某个副本分片)不会被放在同一个节点上, 所以如果节点数量不够的话, 有些replica-shard分片会处于未分配状态, 集群状态就不可能是green而是yellow;<br> 比如索引 test 有 3个主分片, 每个主分片对应3个副本分片(该索引总共 3+3*3=12 个分片), 那么至少得4(<code>number_of_replicas+1</code>)个节点, 才能保证每个节点上都不会出现具有相同内容的分片, 即可以保证集群是green;</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&title=《03. ES 一些基本概念》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&title=《03. ES 一些基本概念》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. ES 一些基本概念》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-02/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02. ES 版本选择及简单安装</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/08/elasticsearch/2018-06-08-04/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">04. 简单尝试 CURD</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&title=《03. ES 一些基本概念》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&title=《03. ES 一些基本概念》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. ES 一些基本概念》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrUlEQVR42u3aQW7DMAwEwPz/0+m1QGtnSYqBD6NTkCauRgUkdqnXKx7vi/H3M8m37sf9E14bAw8PD+/Q1H8/LpnKFTV5fTWf+2dGs8LDw8Nb4/WmmO/G91PPf5rPGQ8PD+85vCop2dwnBwweHh7e83nV7b66WPeHCh4eHt5zeEkYcerYmEQhi1kLHh4eXszLu0jPeb3S38PDw8Mbd9Wr7a7JVCZNuMtv4eHh4S3w5gVxEgfkscLkssLlPPHw8PCO8pIWfvUiaR5h5O9XYwg8PDy8bV5+PbQ66eSoqIbIhfYbHh4e3td5p0rkSZBRLbj/+V8BDw8P7ygvL6OTwrpXKOdLkB9FeHh4eNu8fPNNqHkJnjzhwNUrPDw8vC/yzha++ZJVl+/DUYGHh4e3xksi1N4Vq7wcr/KiOePh4eEd5eVRwqREzheiF0BEfzc8PDy8Q7zJJac8tK0W05P3C+U1Hh4eXotX7ZL1otU8uk3eKTTh8PDw8NZ4vcK62q/PN/QJb3SnDA8PDy/eIPOtefJr8qOiGkx8eCYeHh7eAm/eZ68eIfkhlLzTzFrw8PDwWrxe8z4pxCcxbiFuuF8yPDw8vAVer4VfnfRkor2yu0DFw8PDO8TLH1f95KnGWK+Ux8PDw9vj5e2x3lWDajwxuYyFh4eHt8Grtrvet6OKrD6teizh4eHh7fF6AWsePZwq08snHh4eHt4XefNCuXr8zNtaeHh4eNu8d3Hkbar8Ymsv8I2OKDw8PLwFXi+Q7QUH1dfVJRsNPDw8vHEPPSmaq9t0Hhb3DoZLMB4eHt4aL9/QJ43/UWrSuqyAh4eH9wTevEnWu87VCzjw8PDwnsM7dZWqFxYXFggPDw9vjVcNAvJgN2+V5e2xQiyCh4eHt8DrlbPVFv7ZqwmHBx4eHl46fgBiRzXKyxgv6QAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

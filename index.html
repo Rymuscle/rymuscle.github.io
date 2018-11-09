@@ -139,14 +139,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-15-Python-18"
+            <article id="post-elasticsearch/2018-06-17-10"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-15 16:29:56" datetime="2018-10-15T08:29:56.000Z"  itemprop="datePublished">2018-10-15</time>
+        <time class="post-time" title="2018-06-17 16:43:02" datetime="2018-06-17T08:43:02.000Z"  itemprop="datePublished">2018-06-17</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -157,7 +157,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/15/python/2018-10-15-Python-18/">18. Closure</a>
+      <a class="post-title-link" href="/2018/06/17/elasticsearch/2018-06-17-10/">10. ES的写一致机制</a>
     </h3>
   
 
@@ -167,22 +167,23 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        装饰器
-在面向对象(OOP)的设计模式中, decorator被称为装饰模式, OOP的装饰模式需要通过 继承 和 组合 来实现, 而Python除了能支持OOP的decorator外, 直接从语法层次支持decorator, Python的decorator可以用函数实现, 也可以用类实现;
+        
+当我们在发送任何一个增删改操作时, 比如 put /index/type/id, 都可以带上一个 consistency 参数, 指明我们想要的写一致性是什么
 
-decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用起来非常灵活和方便
+consistency 有如下几个值
 
-示例...
+one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行
+all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
     
 
-        <a href="/2018/10/15/python/2018-10-15-Python-18/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/17/elasticsearch/2018-06-17-10/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -191,14 +192,14 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-15-Python-17"
+            <article id="post-elasticsearch/2018-06-16-09"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-15 14:34:28" datetime="2018-10-15T06:34:28.000Z"  itemprop="datePublished">2018-10-15</time>
+        <time class="post-time" title="2018-06-16 14:01:19" datetime="2018-06-16T06:01:19.000Z"  itemprop="datePublished">2018-06-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -209,7 +210,7 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/15/python/2018-10-15-Python-17/">17. Closure</a>
+      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-09/">09. 简单了解ES 分布式, 扩容, 分片, 数据路由</a>
     </h3>
   
 
@@ -219,21 +220,25 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        闭包
-当一个函数返回了一个函数后，其内部的局部变量还被新函数引用，所以，闭包用起来简单，但其内部实现起来可不容易
+        前言
+通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;
 
-坑: 如下, 返回的三个函数在最终被调用后, 返回的是 9，9，9 而不是 1，4，9
- 1234567891011def count():    fs = []    for i in range(1, 4):        def f():             retu...
+在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解
+
+
+复杂分布式的透明
+之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的;
+另外...
     
 
-        <a href="/2018/10/15/python/2018-10-15-Python-17/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/16/elasticsearch/2018-06-16-09/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -242,14 +247,14 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-14-Python-16"
+            <article id="post-elasticsearch/2018-06-16-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-12 11:52:31" datetime="2018-10-12T03:52:31.000Z"  itemprop="datePublished">2018-10-12</time>
+        <time class="post-time" title="2018-06-16 13:21:07" datetime="2018-06-16T05:21:07.000Z"  itemprop="datePublished">2018-06-16</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -260,7 +265,7 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/12/python/2018-10-14-Python-16/">15. 函数式编程</a>
+      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-08/">08. ES 乐观锁并发控制</a>
     </h3>
   
 
@@ -270,21 +275,32 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        高阶函数
-在Python中, 函数本身也可以赋值给变量, 即 变量可以指向函数; 如果一个变量指向了一个函数, 那么你可以通过该变量来调用这个函数, 如下直接调用abs()函数和调用变量f()完全相同
- 123&gt;&gt;&gt; f = abs&gt;&gt;&gt; f(-10)10
+        前言
+悲观锁: 
 
-函数名其实就是指向函数的变量, 对于abs()这个函数, 完全可以把函数名abs看成变量, 它指向...
+优点: 方便, 直接, 对应用程序来说不需要做额外的操作(比如重试之类的操作)
+缺点: 同一时间只有一个线程对数据做操作, 并发能力很低
+
+
+乐观锁: 
+
+优点: 比悲观锁的并发能力要高
+缺点: 应用程序在提交时需要对比版本号, 然后可能还需要做一些额外的重试工作;
+
+
+es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
+
+首先乐观锁是不会对数据进行加锁的, 因此...
     
 
-        <a href="/2018/10/12/python/2018-10-14-Python-16/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/16/elasticsearch/2018-06-16-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -293,14 +309,14 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-12-Python-14"
+            <article id="post-elasticsearch/2018-06-10-07"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-12 11:19:31" datetime="2018-10-12T03:19:31.000Z"  itemprop="datePublished">2018-10-12</time>
+        <time class="post-time" title="2018-06-10 20:09:13" datetime="2018-06-10T12:09:13.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -311,7 +327,7 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/12/python/2018-10-12-Python-14/">14. 迭代, 生成器</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-07/">07. ES 批量操作 mget, bulk</a>
     </h3>
   
 
@@ -321,20 +337,19 @@ decorator可以增强函数的功能, 定义起来虽然有点复杂, 但使用�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        迭代
-如果给定一个list或tuple, 我们可以通过for循环来遍历这个list或tuple, 这种遍历我们称为迭代(Iteration); 在Python中, 迭代是通过 for ... in 来完成的
-
-Python的for循环抽象程度要高于C的for循环, 因为Python的for循环不仅可以用在list或tuple上, 还可以作用在其他可迭代对象上, 如 dict 和 str 都是...
+        mget 批量查询
+批量查询可以只发送一次网络请求, 返回多条查询结果, 能大大缩减网络请求的性能开销
+练习 : 12345678GET /_mget&#123;  &quot;docs&quot; : [    &#123;&quot;_index&quot;:&quot;products&quot;,&quot;_type&quot;:&quot;computer&quot;,&quot...
     
 
-        <a href="/2018/10/12/python/2018-10-12-Python-14/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-07/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -343,14 +358,14 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-14-Python-15"
+            <article id="post-elasticsearch/2018-06-10-06"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-12 11:19:31" datetime="2018-10-12T03:19:31.000Z"  itemprop="datePublished">2018-10-12</time>
+        <time class="post-time" title="2018-06-10 14:36:57" datetime="2018-06-10T06:36:57.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -361,7 +376,7 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/12/python/2018-10-14-Python-15/">15</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-06/">06. 提前了解查询相关知识点概要, 练习</a>
     </h3>
   
 
@@ -371,25 +386,24 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
-可以直接作用于for循环的数据类型有以下几种:
+        提前接触ES的查询和过滤
+在es中检索文档时候, 对文档的筛选分为 查询和过滤, 这两种方式是不太一样的, 现在只用先简单了解到
 
-一类是集合数据类型: 如 list、tuple、dict、set、str 等;
-一类是 generator, 包括生成器 和 带yield的 generator function;
-这些可以直接作用于for循环的对象统称为可迭代对象 Iterable可以使用isinstance()判断一个对象是否是Iterable对象
+ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter过滤语句中, 不会进行分词和相关度排名, 但会对过滤进行缓存
+而 全文检索(全文类型字段的检索) 一般用查询语句进行筛选, 全文检索会进行分词和相关度排名
 
 
-而生成器不但可以...
+练习, 搜索商品desc字段中包含...
     
 
-        <a href="/2018/10/12/python/2018-10-14-Python-15/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-06/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -398,14 +412,14 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-11-Python-13"
+            <article id="post-elasticsearch/2018-06-10-05"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-11 21:41:39" datetime="2018-10-11T13:41:39.000Z"  itemprop="datePublished">2018-10-11</time>
+        <time class="post-time" title="2018-06-10 11:05:39" datetime="2018-06-10T03:05:39.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -416,7 +430,7 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/11/python/2018-10-11-Python-13/">13. 切片</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-05/">05. ES的搜索方式 Query-string 与 query DSL</a>
     </h3>
   
 
@@ -426,24 +440,22 @@ Python的for循环抽象程度要高于C的for循环, 因为Python的for循环�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        切片Slice
-取一个 list 或 tuple 的部分元素是非常常见的操作; 但是这种经常取指定索引范围的操作, 用循环十分繁琐; 因此，Python提供了切片（Slice）操作符，能大大简化这种操作
+        Query-string 搜索
+之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的
 
-可以取单个索引处的元素, 如 L[2], L[-2]
+练习, 搜索全部商品 GET /products/computer/_search
 
-也可以取范围索引的多个元素
-
-L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, 即索引0，1，2，正好是3个元素;...
+练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:di...
     
 
-        <a href="/2018/10/11/python/2018-10-11-Python-13/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-05/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -452,14 +464,14 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-10-Python-12"
+            <article id="post-elasticsearch/2018-06-08-04"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-10 18:00:31" datetime="2018-10-10T10:00:31.000Z"  itemprop="datePublished">2018-10-10</time>
+        <time class="post-time" title="2018-06-08 21:33:46" datetime="2018-06-08T13:33:46.000Z"  itemprop="datePublished">2018-06-08</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -470,7 +482,7 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/10/python/2018-10-10-Python-12/">12. 函数的参数</a>
+      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-04/">04. 简单尝试 CURD</a>
     </h3>
   
 
@@ -480,23 +492,21 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Python的函数定义非常简单, 但灵活度却非常大, 除了正常定义的 必选参数 外, 还可以使用 默认参数, 可变参数 和 关键字参数, 使得函数定义出来的接口, 不但能处理复杂的参数, 还可以简化调用者的代码; 
-必选参数即, 函数调用时必须要传的参数
-默认参数
-设置默认参数时, 有几点要注意：
+        Cat Api
+ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/cluster 几个层次
 
-必选参数在前, 默认参数在后, 否则Python的解释器会报错;
-当函数有多个参数时, 把变...
+尝试使用 GET /_cat/health?v 查看 时间戳、集群名称、集群状态、集群中节点的数量 等等
+ 12epoch      timestamp cluster       status node.total node.data shards pri r...
     
 
-        <a href="/2018/10/10/python/2018-10-10-Python-12/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-04/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -505,14 +515,14 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-10-Python-11"
+            <article id="post-elasticsearch/2018-06-08-03"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-10 17:52:45" datetime="2018-10-10T09:52:45.000Z"  itemprop="datePublished">2018-10-10</time>
+        <time class="post-time" title="2018-06-08 18:23:07" datetime="2018-06-08T10:23:07.000Z"  itemprop="datePublished">2018-06-08</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -523,7 +533,7 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/10/python/2018-10-10-Python-11/">11. 函数</a>
+      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-03/">03. ES 一些基本概念</a>
     </h3>
   
 
@@ -533,20 +543,25 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        函数
-抽象是数学中非常常见的概念, 如计算数列的和, 比如：1 + 2 + 3 + … + 100, 写起来十分不方便, 于是数学家发明了求和符号 ∑, 这种抽象记法非常强大，因为我们看到 ∑ 就可以理解成求和，而不是还原成低级的加法运算; 而函数就是最基本的一种代码抽象的方式; 
+        近实时
+从文档被索引到可以被检索会有轻微延时, 约1s
 
-在Python中，定义一个函数要使用def语句，依次写出函数名、括号、括号中的参数和冒号:，然后，在缩进块中...
+Index(索引 n)
+这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方
+一个Index可以包含多个 type (索引的复数词为 indices 或 indexes) 
+index 名称必须是小写, 不能用下划线开头, 不能包含逗号
+一般将不同的项目数据放到不同的index中 
+每个index会...
     
 
-        <a href="/2018/10/10/python/2018-10-10-Python-11/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -555,14 +570,14 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-10-Python-10"
+            <article id="post-elasticsearch/2018-06-08-02"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-10 10:54:35" datetime="2018-10-10T02:54:35.000Z"  itemprop="datePublished">2018-10-10</time>
+        <time class="post-time" title="2018-06-08 14:25:01" datetime="2018-06-08T06:25:01.000Z"  itemprop="datePublished">2018-06-08</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -573,7 +588,7 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/10/python/2018-10-10-Python-10/">10. 条件判断, 循环, 列表生成式</a>
+      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-02/">02. ES 版本选择及简单安装</a>
     </h3>
   
 
@@ -583,17 +598,24 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431675624710bb20e9734ef343bbb4bd64bcd37d4b52000https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f4499...
+        版本选择
+ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X; 
+
+此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  
+
+
+安装
+安装Java, 推荐使用Java 8 : yum instal...
     
 
-        <a href="/2018/10/10/python/2018-10-10-Python-10/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-02/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -602,14 +624,14 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-10-Python-09"
+            <article id="post-elasticsearch/2018-06-08-01"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-10 10:53:33" datetime="2018-10-10T02:53:33.000Z"  itemprop="datePublished">2018-10-10</time>
+        <time class="post-time" title="2018-06-08 14:24:25" datetime="2018-06-08T06:24:25.000Z"  itemprop="datePublished">2018-06-08</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -620,7 +642,7 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/10/python/2018-10-10-Python-09/">09. dict 和 set</a>
+      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-01/">01. 初识 Elasticsearch</a>
     </h3>
   
 
@@ -630,21 +652,24 @@ L[0:3] 表示从索引0开始取，直到索引3为止，但不包括索引3, �
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        dict {}
-Python内置了字典 dict 的支持, dict全称dictionary, 在其他语言中也称为map, 使用键-值(key-value)存储, 具有极快的查找速度;
+        
+可以通过如下几个特点来认识ES:
 
-举个例子, 假设要根据同学的名字查找对应的成绩, 如果用list实现, 需要两个list:
- 12names = [&apos;Michael&apos;, &apos;Bob&apos;, &apos;T...
+开源
+
+基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API
+
+高性能全文检索和分析...
     
 
-        <a href="/2018/10/10/python/2018-10-10-Python-09/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/08/elasticsearch/2018-06-08-01/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -655,12 +680,6 @@ Python内置了字典 dict 的支持, dict全称dictionary, 在其他语言中�
     </ul>
 
     
-<nav id="page-nav">
-    <div class="inner">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
-    </div>
-</nav>
-
 
 </div>
 

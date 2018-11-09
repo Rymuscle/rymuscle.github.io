@@ -13,28 +13,28 @@
     
     
     
-    <title>01. Elasticsearch 入门 及 简单安装 | Lant&#39;s</title>
+    <title>01. 初识 Elasticsearch | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Elasticsearch">
-    <meta name="description" content="主要是简单过一下 Elasticsearch 权威指南, 做一下学习记录~~ 简介 Elasticsearch 是一个基于 Lucene 的开源, 高性能, 全文检索 和 分析引擎, 可以快速且近实时地存储, 检索以及分析海量数据;  当然, ES 不仅仅是 Lucene, 也不仅仅只是一个全文搜索引擎, 它可以被下面这样准确的形容:  一个分布式近实时分析搜索引擎; 海量数据检索及分析: 可以扩">
-<meta name="keywords" content="Elasticsearch">
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+<meta name="keywords" content="Elasticsearch(一)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01. Elasticsearch 入门 及 简单安装">
+<meta property="og:title" content="01. 初识 Elasticsearch">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="主要是简单过一下 Elasticsearch 权威指南, 做一下学习记录~~ 简介 Elasticsearch 是一个基于 Lucene 的开源, 高性能, 全文检索 和 分析引擎, 可以快速且近实时地存储, 检索以及分析海量数据;  当然, ES 不仅仅是 Lucene, 也不仅仅只是一个全文搜索引擎, 它可以被下面这样准确的形容:  一个分布式近实时分析搜索引擎; 海量数据检索及分析: 可以扩">
+<meta property="og:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/est-9100.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/kibana-devtools.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/est-9100-yellow.png">
-<meta property="og:updated_time" content="2018-09-20T07:06:25.000Z">
+<meta property="og:updated_time" content="2018-11-09T03:44:49.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01. Elasticsearch 入门 及 简单安装">
-<meta name="twitter:description" content="主要是简单过一下 Elasticsearch 权威指南, 做一下学习记录~~ 简介 Elasticsearch 是一个基于 Lucene 的开源, 高性能, 全文检索 和 分析引擎, 可以快速且近实时地存储, 检索以及分析海量数据;  当然, ES 不仅仅是 Lucene, 也不仅仅只是一个全文搜索引擎, 它可以被下面这样准确的形容:  一个分布式近实时分析搜索引擎; 海量数据检索及分析: 可以扩">
+<meta name="twitter:title" content="01. 初识 Elasticsearch">
+<meta name="twitter:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/est/est-9100.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
@@ -109,7 +109,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01. Elasticsearch 入门 及 简单安装</div>
+        <div class="flex-col header-title ellipsis">01. 初识 Elasticsearch</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -155,7 +155,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#版本选择"><span class="post-toc-number">2.</span> <span class="post-toc-text">版本选择</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装"><span class="post-toc-number">3.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动坑点"><span class="post-toc-number">4.</span> <span class="post-toc-text">启动坑点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Elasticsearch-Head-安装"><span class="post-toc-number">5.</span> <span class="post-toc-text">Elasticsearch Head 安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Kibana安装"><span class="post-toc-number">6.</span> <span class="post-toc-text">Kibana安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">7.</span> <span class="post-toc-text">小结</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#版本选择"><span class="post-toc-number">1.</span> <span class="post-toc-text">版本选择</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#安装"><span class="post-toc-number">2.</span> <span class="post-toc-text">安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#启动坑点"><span class="post-toc-number">3.</span> <span class="post-toc-text">启动坑点</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Elasticsearch-Head-安装"><span class="post-toc-number">4.</span> <span class="post-toc-text">Elasticsearch Head 安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Kibana安装"><span class="post-toc-number">5.</span> <span class="post-toc-text">Kibana安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
         </nav>
     </aside>
     
@@ -163,7 +163,7 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01. Elasticsearch 入门 及 简单安装</h1>
+        <h1 class="post-card-title">01. 初识 Elasticsearch</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-08 14:24:25" datetime="2018-06-08T06:24:25.000Z"  itemprop="datePublished">2018-06-08</time>
 
@@ -176,32 +176,40 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>主要是简单过一下 Elasticsearch 权威指南, 做一下学习记录~~</p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><ol>
-<li><p>Elasticsearch 是一个基于 Lucene 的开源, 高性能, 全文检索 和 分析引擎, 可以快速且近实时地存储, 检索以及分析海量数据;</p>
-</li>
-<li><p>当然, ES 不仅仅是 Lucene, 也不仅仅只是一个全文搜索引擎, 它可以被下面这样准确的形容:</p>
+            <ol>
+<li><p>可以通过如下几个特点来认识ES:</p>
 <ul>
-<li>一个分布式近实时分析搜索引擎;</li>
-<li>海量数据检索及分析: 可以扩展到上百台服务器, 处理PB级结构化或非结构化数据;</li>
-<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/near-real-time.html" target="_blank" rel="noopener">近实时搜索</a>: 从文档索引到可以被检索只有轻微延时, 约1s</li>
-<li>RESTful API: ES 建立在全文搜索引擎 Lucene 之上, 通过简单的 RESTful API 来隐藏 Lucene 的复杂性, 从而让全文搜索变得简单, 各种语言的客户端甚至命令行都可以与之交互;</li>
-<li>面向文档型数据库, 存储的是整个对象或者文档, 它不但会存储它们, 还会为它们建立索引;</li>
+<li><p>开源</p>
+</li>
+<li><p>基于 Lucene, 提供比较简单的Restful API<br>Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)<br>但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API</p>
+</li>
+<li><p><strong>高性能全文检索和分析引擎, 并可根据相关度对结果进行排序</strong></p>
+</li>
+<li><p>可以快速且 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/near-real-time.html" target="_blank" rel="noopener">近实时</a> 地存储,检索(从文档被索引到可以被检索只有轻微延时, 约1s)以及分析</p>
+</li>
+<li><p>海量数据检索及分析: 可以扩展到上百台服务器, 处理PB级 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/structured-search.html" target="_blank" rel="noopener">结构化</a> 或 非结构化 数据 </p>
+</li>
+<li><p>面向文档型数据库, 存储的是整个对象或者文档, 它不但会存储它们, 还会为它们建立索引</p>
+</li>
 </ul>
 </li>
-<li><p>使用案例</p>
+<li><p>应用场景</p>
 <ul>
-<li>在微服务架构下的多数据源聚合列表页(一个页面中的数据来自多个服务, 且筛选条件也涉及到多个服务中的数据字段), 如果用传统数据库解决该问题, 会大费周折, 并且效果并不好, 而如果使用 ES 来作数据聚合服务, 效果就比较清晰明了了;</li>
-<li>您想要去收集日志或交易数据, 并且还想要去分析和挖掘这些数据来找出趋势, 统计, 或者异常现, 在这种情况下, 您可以使用 Logstash(Elasticsearch/Logstash/Kibana) 技术栈中的一部分, 来收集, 聚合, 以及解析数据, 然后让 Logstash 发送这些数据到 Elasticsearch; 如果这些数据存在于 Elasticsearch 中, 您就可以执行搜索和聚合以挖掘出任何您感兴趣的信息;</li>
-<li>GitHub 使用 Elasticsearch 对1300亿行代码进行查询;</li>
-<li>……</li>
+<li><p>当你的应用数据量很大, 数据结构灵活多变, 数据之间的结构比较复杂, 如果用传统数据库, 可能不仅需要面对大量的表设计及数据库的性能问题, 此时可以考虑使用ES, 它不仅可以处理非结构化数据, 而且可以帮你快速进行扩容, 承载大量数据;</p>
+</li>
+<li><p>具体比如多数据源聚合大列表页: 微服务架构是目前很多公司都采用的架构, 所以经常会面对 多数据源聚合的 大列表页, 一个列表中的筛选字段,展示字段可能会来自多个服务, 同时涉及到分页, 所以传统方案可能比较吃力, 而且也得不到比较好的效果; (RRC这边目前是使用 ES 做 <strong>数据视图服务</strong>, 对这种大列表页所用到的数据源字段做统一配置和聚合)</p>
+</li>
+<li><p>日志数据分析, RRC 使用 ElasticStack 技术栈来很方便地对各服务的日志进行查询,分析,统计;</p>
+</li>
+<li><p>站内搜索(电商, 招聘, 门户 等等)都可以使用 ES 来做全文检索并根据相关性进行排名, 高亮展示关键词等;</p>
+</li>
 </ul>
 </li>
 </ol>
 <h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><ol>
-<li><p>ES 的版本变更比较快, 目前(06/2018)为止, Elasticsearch已经到6.X了, 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/index.html" target="_blank" rel="noopener">官网文档</a>, 可能很多公司还在用2.X, 或者刚切到5.X, 而且中文文档进度也比较滞后, 这也是让很多兄弟比较头疼的事情;</p>
+<li><p>ES 的版本变更比较快, 目前(06/2018)为止, 已经到6.X了, 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/index.html" target="_blank" rel="noopener">官网文档</a>, 可能很多公司还在用2.X, 或者刚切到5.X; </p>
 </li>
-<li><p>其实可以根据公司所选的云服务上 ES版本 来决定你的学习版本 (当前阿里云的Elasticsearch云服务为5.5.3, 因此此处也是针对5.X版本进行学习调研);</p>
+<li><p>我之所以使用5.5.3来学习调研, 主要也是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  </p>
 </li>
 </ol>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
@@ -215,15 +223,15 @@
 </li>
 <li><p>验证es是否安装成功</p>
 <ul>
-<li>可以在浏览器中打开 127.0.0.1:9200 (这里使用的是vagrant设定了虚拟主机的ip, 所以访问 <a href="http://192.168.3.200:9200/" target="_blank" rel="noopener">http://192.168.3.200:9200/</a>, 不过有些<strong>小坑</strong>下面会介绍 )</li>
+<li>可以在浏览器中打开 127.0.0.1:9200 (此处使用的是vagrant设定了虚拟主机的ip, 所以访问 <a href="http://192.168.3.200:9200/" target="_blank" rel="noopener">http://192.168.3.200:9200/</a>, 不过有些<strong>小坑</strong>下面会介绍 )</li>
 <li>或者可以 <code>curl -X GET http://192.168.3.200:9200</code> </li>
 </ul>
 </li>
 </ol>
-<h2 id="启动坑点"><a href="#启动坑点" class="headerlink" title="启动坑点"></a>启动坑点</h2><p>启动可能会报一些错</p>
+<h2 id="启动坑点"><a href="#启动坑点" class="headerlink" title="启动坑点"></a>启动坑点</h2><p>启动可能会报一些错(调研使用的是 centos7-minimal 版)</p>
 <ol>
 <li><p>每个进程最大同时打开文件数太小</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</span><br><span class="line">[2]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span><br><span class="line">```    </span><br><span class="line">解决方案: 切换到root, 可通过下面2个命令查看当前数量</span><br><span class="line">```     </span><br><span class="line">$ ulimit -Hn</span><br><span class="line">4096</span><br><span class="line">$ ulimit -Sn</span><br><span class="line">1024</span><br><span class="line"></span><br><span class="line">// 编辑如下文件</span><br><span class="line">vi /etc/security/limits.conf</span><br><span class="line">// 增加配置</span><br><span class="line">*               soft    nofile          65536</span><br><span class="line">*               hard    nofile          65536</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65536]</span><br><span class="line">[2]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span><br><span class="line">```    </span><br><span class="line">解决方案: 切换到root, 可通过下面2个命令查看当前数量</span><br><span class="line">```     </span><br><span class="line">$ ulimit -Hn</span><br><span class="line">4096</span><br><span class="line">$ ulimit -Sn</span><br><span class="line">1024</span><br><span class="line"></span><br><span class="line">// 编辑如下文件</span><br><span class="line">vi /etc/security/limits.conf</span><br><span class="line">// 增加如下两行配置</span><br><span class="line">*               soft    nofile          65536</span><br><span class="line">*               hard    nofile          65536</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>elasticsearch用户拥有的内存权限太小, 至少需要262144</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR: [1] bootstrap checks failed</span><br><span class="line">[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</span><br></pre></td></tr></table></figure>
@@ -231,6 +239,8 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/sysctl.conf </span><br><span class="line">添加 vm.max_map_count=262144</span><br><span class="line">执行 sysctl -p</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>默认9200端口是给本机访问的, 因此es在成功启动后, 如果使用 192.168.3.200:9200 来访问, 可能失败, 因此需要在es配置文件elasticsearch.yml中增加 <strong>network.bind_host: 0.0.0.0</strong>, 重启后则可以正常访问</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;rjAFeY9&quot;,   # node 节点名称</span><br><span class="line">  &quot;cluster_name&quot; : &quot;elasticsearch&quot;, # 节点默认的集群名称 (可以在es节点的配置文件elasticsearch.yml中进行配置)</span><br><span class="line">  &quot;cluster_uuid&quot; : &quot;zaJApkNPRryFohhEMEVH5w&quot;,</span><br><span class="line">  &quot;version&quot; : &#123;     # es 版本号</span><br><span class="line">    &quot;number&quot; : &quot;5.5.3&quot;,</span><br><span class="line">    &quot;build_hash&quot; : &quot;9305a5e&quot;,</span><br><span class="line">    &quot;build_date&quot; : &quot;2017-09-07T15:56:59.599Z&quot;,</span><br><span class="line">    &quot;build_snapshot&quot; : false,</span><br><span class="line">    &quot;lucene_version&quot; : &quot;6.6.0&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;tagline&quot; : &quot;You Know, for Search&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 上面未解释的信息暂时先不用了解</p>
 </li>
 <li><p>如果想启动多个结点, 还可能会报如下几个错</p>
 <ul>
@@ -246,7 +256,7 @@
 </ul>
 </li>
 </ol>
-<h2 id="Elasticsearch-Head-安装"><a href="#Elasticsearch-Head-安装" class="headerlink" title="Elasticsearch Head 安装"></a><a href="https://github.com/mobz/elasticsearch-head" target="_blank" rel="noopener">Elasticsearch Head 安装</a></h2><p>es 启动后, 访问 127.0.0.1:9200 可以查看版本集集群相关的信息, 但这不是图形化的界面, 操作起来不是很方便, 如果希望能有一个可视化的环境来操作它, 可以通过安装 Elasticsearch Head 这个插件来进行管理;<br>Elasticsearch Head 是集群管理、数据可视化、增删改查、查询语句可视化工具, 在最新的ES5中安装方式和ES2以上的版本有很大的不同, 在ES2中可以直接在bin目录下执行 <code>plugin install xxxx</code> 来进行安装, 但是在ES5中这种安装方式变了, 要想在ES5中安装则必须要安装NodeJs, 然后通过NodeJS来启动Head, 具体过程如下:</p>
+<h2 id="Elasticsearch-Head-安装"><a href="#Elasticsearch-Head-安装" class="headerlink" title="Elasticsearch Head 安装"></a><a href="https://github.com/mobz/elasticsearch-head" target="_blank" rel="noopener">Elasticsearch Head 安装</a></h2><p>es 启动后, 访问 127.0.0.1:9200 可以查看版本和集群相关的信息, 但如果能有一个可视化的环境来操作它可能会更直观一些, 可以通过安装 Elasticsearch Head 这个插件来进行管理;<br>Elasticsearch Head 是集群管理、数据可视化、增删改查、查询语句可视化工具, 在最新的ES5中安装方式和ES2以上的版本有很大的不同, 在ES2中可以直接在bin目录下执行 <code>plugin install xxxx</code> 来进行安装, 但是在ES5中这种安装方式变了, 要想在ES5中安装则必须要安装NodeJs, 然后通过NodeJS来启动Head, 具体过程如下:</p>
 <ol>
 <li><p>nodejs 安装</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 更新node.js各版本yum源(Node.js v8.x)</span><br><span class="line">curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -</span><br><span class="line">yum install -y nodejs</span><br></pre></td></tr></table></figure>
@@ -269,7 +279,8 @@
 <li><p>最后验证 <a href="http://192.168.3.200:9100/" target="_blank" rel="noopener">http://192.168.3.200:9100/</a><br> <img src="/img/est/est-9100.png"></p>
 </li>
 </ol>
-<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a><a href="https://www.elastic.co/cn/products/kibana" target="_blank" rel="noopener">Kibana</a>安装</h2><ol>
+<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a><a href="https://www.elastic.co/cn/products/kibana" target="_blank" rel="noopener">Kibana</a>安装</h2><p>Kibana 是一个开源的分析和可视化平台, 属于 Elastic stack 技术栈中的一部分, Kibana 主要提供搜索、查看和与存储在 Elasticsearch 索引中的数据进行交互的功能, 开发者或运维人员可以轻松地执行高级数据分析, 并在各种图表、表格和地图中可视化数据;<br>接下来主要就是使用Kibana的DevTools提供的控制台进行ES的学习</p>
+<ol>
 <li><p><a href="https://www.elastic.co/downloads/past-releases" target="_blank" rel="noopener">下载</a>, 此处选择了5.5.3</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.3-linux-x86_64.tar.gz</span><br><span class="line">tar -zxvf kibana-5.5.3-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
 </li>
@@ -288,10 +299,10 @@
 <li>现在不用安装了, 可以直接使用Kibana提供的 <strong>DevTools</strong><br><img src="/img/est/kibana-devtools.png" width="450/"></li>
 </ul>
 </li>
-<li><p>注意此时, 之前的es集群变成yellow状态了<br> <img src="/img/est/est-9100-yellow.png"></p>
+<li><p>注意此时, 之前的es集群变成yellow状态了 (因为kibana有个副本分片并没有处于正常状态, 因为当前只有一个节点, 副本分片无法被分配到其他节点, 具体细节先不用着急, 后面会进行分析)<br> <img src="/img/est/est-9100-yellow.png"></p>
 </li>
 </ol>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到此为止, 正常学习的Es环境已经安装完毕, 不要纠结这些服务的开机启动, 调优配置, 集群, 高可用, 监控……<br>骚年, 暂时先让它能跑起来就行!</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到此为止, 应该对ES有了最基础的了解, 且基本环境已经安装完毕, 暂时就够</p>
 
         </div>
 
@@ -318,7 +329,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
 
             
@@ -328,7 +339,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. Elasticsearch 入门 及 简单安装》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -338,7 +349,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. Elasticsearch 入门 及 简单安装》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -348,7 +359,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. Elasticsearch 入门 及 简单安装》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 初识 Elasticsearch》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -373,20 +384,13 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between">
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
   
-      <div class="waves-block waves-effect prev">
-        <a href="/2017/09/03/mysql/2017-09-03-mysql-28/" id="post-prev" class="post-nav-link">
-          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">28. 隔离级别 与 锁</h4>
-        </a>
-      </div>
-    
   
     <div class="waves-block waves-effect next">
       <a href="/2018/06/08/elasticsearch/2018-06-08-02/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. 适应一下ES</h4>
+        <h4 class="title">02. ES 版本选择及简单安装</h4>
       </a>
     </div>
   
@@ -478,7 +482,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. Elasticsearch 入门 及 简单安装》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -488,7 +492,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. Elasticsearch 入门 及 简单安装》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -498,7 +502,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. Elasticsearch 入门 及 简单安装》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 初识 Elasticsearch》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

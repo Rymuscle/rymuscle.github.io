@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>10. ES的写一致机制 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="当我们在发送任何一个增删改操作时, 比如 put /index/type/id, 都可以带上一个 consistency 参数, 指明我们想要的写一致性是什么  consistency 有如下几个值  one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行 all : 要求这个写操作, 必须所有的 primary-shard 和 replic">
+<meta name="keywords" content="Elasticsearch(一)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10. ES的写一致机制">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="当我们在发送任何一个增删改操作时, 比如 put /index/type/id, 都可以带上一个 consistency 参数, 指明我们想要的写一致性是什么  consistency 有如下几个值  one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行 all : 要求这个写操作, 必须所有的 primary-shard 和 replic">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-09T03:46:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10. ES的写一致机制">
+<meta name="twitter:description" content="当我们在发送任何一个增删改操作时, 比如 put /index/type/id, 都可以带上一个 consistency 参数, 指明我们想要的写一致性是什么  consistency 有如下几个值  one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行 all : 要求这个写操作, 必须所有的 primary-shard 和 replic">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">10. ES的写一致机制</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-17T08:43:02.000Z" itemprop="datePublished" class="page-time">
+  2018-06-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-elasticsearch/2018-06-17-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">10. ES的写一致机制</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-17 16:43:02" datetime="2018-06-17T08:43:02.000Z"  itemprop="datePublished">2018-06-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ol>
+<li><p>当我们在发送任何一个增删改操作时, 比如 <code>put /index/type/id</code>, 都可以带上一个 <code>consistency</code> 参数, 指明我们想要的写一致性是什么</p>
+</li>
+<li><p>consistency 有如下几个值</p>
+<ul>
+<li>one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行</li>
+<li>all : 要求这个写操作, 必须所有的 primary-shard 和 replica-shard 都是活跃可用的, 才可以执行</li>
+<li>quorum : 默认的值, 要求所有的shard中, 必须是大部分的shard都是活跃可用的, 才可以执行</li>
+</ul>
+</li>
+<li><p>quorum机制:写之前必须确保大多数shard都是可用的</p>
+<ul>
+<li>quorum的计算公式: <code>quorum = int(primary+number_of_replicas) / 2) + 1</code></li>
+<li>如果节点数少于quorum的数量, 可能会导致quorum不齐全, 进而无法执行任何写操作<br>比如有一个index对应3个primary-shard, number_of_replica=1, 总共有 3+3*1=6 个shard<br>quorum=int((3+1)/2)+1=3, 所以要求6个shard中至少有3个shard是active状态, 对该文档的写操作才可以执行<br>假设此时只有2个node是active的, 则该document所在的分片, 最多也就只有2个shard是活跃的, 不满足quorum, 所以对该文档的写操作不能执行成功</li>
+<li>quorum不齐全时, 会 wait(等待) 1分钟 (默认1分钟, 可以设置timeout手动去调, 默认单位毫秒)<br>等待期间, 期望活跃的shard数量可以增加, 最后实在不行就会timeout, 我们其实可以在写操作的时加一个timeout参数,比如说 <code>PUT /index/type/id?timeout=30s</code>, 自己去设定quorum不齐全的时候, ES的timeout时长<br>默认是毫秒, 加个s代表秒</li>
+<li>另外, ES提供了一种特殊处理场景, 当number_of_replicas&gt;1时才生效, 假如就一个primary shard, replica=1,此时就2个shard, ((1 + 1) / 2) + 1 = 2<br>要求必须有2个shard是活跃的, 但如果此时只有1个node, 即只有1个shard是活跃的, 若你不特殊处理的话, 会导致单节点集群无法工作</li>
+<li><code>put /index/type/id/consistency=quorun</code></li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&title=《10. ES的写一致机制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&title=《10. ES的写一致机制》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. ES的写一致机制》 — Lant's&url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/16/elasticsearch/2018-06-16-09/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">09. 简单了解ES 分布式, 扩容, 分片, 数据路由</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&title=《10. ES的写一致机制》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&title=《10. ES的写一致机制》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. ES的写一致机制》 — Lant's&url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/17/elasticsearch/2018-06-17-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3a0W7bMAwF0P7/T3evG1Zn95IS4AHHT0GSWjouIDIkv77i6/u36+n9vz99+s7nq73/gQsPDw9vsfWn2z29kwOe/qp9lPme8fDw8G7znpbJt9WGgRzWPho8PDy89/OSMPD5cP/8sPDw8PD+d15CSmB5aMHDw8N7Jy8vIuSF3VkhOC+FHK614OHh4XV1gKiL9J7XV/p7eHh4eOuuen7gtiWGTRpd7BYPDw/vAi8/cJPRqHxgK3/dpst4eHh4t3mb1ldbMqjLr4syBB4eHt49XpIi56NR7chUnha3D7GorODh4eGVvLzlvxmNStinEu7H3wp4eHh4F3i3iwtJZyoPVFGUw8PDw7vAy1tQbXtsP7B1fbIMDw8Pb8Rrb5SD8w3tE/fHUIGHh4d3gdc2nzYJehIe9oXgH3aCh4eHd5TX3q49oOum/qgA8Y//Gx4eHt5RXr7FUwnxLMnO34/iHh4eHt6ClyfNs5ZVPpowO8mjoSs8PDy8o7y2wT9Lf/O6yL6dFqXUeHh4eId4ySjAvkHVJuKbpB8PDw/vBq89cDeDVrOCbDvQ8EMxAg8PD+8ory0TJAf9voy7D0vF5AIeHh7eiJcg8xR5drc8PMwSejw8PLxTvH1IyNtX7dhBW4C4kkzj4eHhlYn150M5KVLkaXeySpua4+Hh4d3j5cvny8yS781Q1/SnBB4eHt6cl7e1jsWi0aZXEQ8PDw/vKG923EfNpzhg1G2t5Pt4eHh4R3nf5bVvjOV/Owszf3yKh4eHd4HXHrjJ8nmxIy9PzEIRHh4e3j1eu/VZATcPIe26xdAAHh4e3lHerDG2GT6oqyZlFMDDw8N7D2+/cNsYS/YQNcDw8PDwXsDLx6facnB7/zrC4OHh4a15efMp30T+abJW3jbDw8PDu82bpbMbRh4w9kUNPDw8vKO8XxVGK/CtpRC8AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
