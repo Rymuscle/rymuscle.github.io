@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>09. dict 和 set | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Python">
+    <meta name="description" content="dict {} Python内置了字典 dict 的支持, dict全称dictionary, 在其他语言中也称为map, 使用键-值(key-value)存储, 具有极快的查找速度;  举个例子, 假设要根据同学的名字查找对应的成绩, 如果用list实现, 需要两个list:  12names = [&amp;apos;Michael&amp;apos;, &amp;apos;Bob&amp;apos;, &amp;apos;Trac">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="09. dict 和 set">
+<meta property="og:url" content="http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="dict {} Python内置了字典 dict 的支持, dict全称dictionary, 在其他语言中也称为map, 使用键-值(key-value)存储, 具有极快的查找速度;  举个例子, 假设要根据同学的名字查找对应的成绩, 如果用list实现, 需要两个list:  12names = [&amp;apos;Michael&amp;apos;, &amp;apos;Bob&amp;apos;, &amp;apos;Trac">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-10-12T06:32:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="09. dict 和 set">
+<meta name="twitter:description" content="dict {} Python内置了字典 dict 的支持, dict全称dictionary, 在其他语言中也称为map, 使用键-值(key-value)存储, 具有极快的查找速度;  举个例子, 假设要根据同学的名字查找对应的成绩, 如果用list实现, 需要两个list:  12names = [&amp;apos;Michael&amp;apos;, &amp;apos;Bob&amp;apos;, &amp;apos;Trac">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">09. dict 和 set</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-10-10T02:53:33.000Z" itemprop="datePublished" class="page-time">
+  2018-10-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#dict"><span class="post-toc-number">1.</span> <span class="post-toc-text">dict {}</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#set-set"><span class="post-toc-number">3.</span> <span class="post-toc-text">set set([])</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-python/2018-10-10-Python-09"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">09. dict 和 set</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-10-10 10:53:33" datetime="2018-10-10T02:53:33.000Z"  itemprop="datePublished">2018-10-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="dict"><a href="#dict" class="headerlink" title="dict {}"></a>dict <code>{}</code></h2><ol>
+<li><p>Python内置了字典 <code>dict</code> 的支持, dict全称dictionary, 在其他语言中也称为map, 使用键-值(key-value)存储, 具有极快的查找速度;</p>
+</li>
+<li><p>举个例子, 假设要根据同学的名字查找对应的成绩, 如果用list实现, 需要两个list:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">names = [&apos;Michael&apos;, &apos;Bob&apos;, &apos;Tracy&apos;]</span><br><span class="line">scores = [95, 75, 85]</span><br></pre></td></tr></table></figure>
+<p> 给定一个名字，要查找对应的成绩，就先要在names中找到对应的位置，再从scores取出对应的成绩, <strong>list越长耗时越长</strong></p>
+</li>
+<li><p>而如果用dict实现, 只需要一个 “名字”-“成绩” 的对照表, 直接根据名字查找成绩, 无论这个表有多大, 查找速度都不会变慢, 用Python写一个dict如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; d = &#123;&apos;Michael&apos;: 95, &apos;Bob&apos;: 75, &apos;Tracy&apos;: 85&#125;</span><br><span class="line">&gt;&gt;&gt; d[&apos;Michael&apos;]</span><br><span class="line">95</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为什么dict查找速度这么快?</p>
+<ul>
+<li>因为dict的实现原理和查字典是一样的, 假设字典包含了1万个汉字, 我们要查某一个字, 一个办法是把字典从第一页往后翻, 直到找到我们想要的字为止, 这种方法就是在list中查找元素的方法, list越大, 查找越慢;</li>
+<li>第二种方法是先在字典的索引表里(比如部首表)查这个字对应的页码, 然后直接翻到该页, 找到这个字;无论找哪个字, 这种查找速度都非常快, 不会随着字典大小的增加而变慢<br>dict就是第二种实现方式，给定一个名字，比如’Michael’，dict在内部就可以直接计算出Michael对应的存放成绩的“页码”，也就是95这个数字存放的内存地址，直接取出来，所以速度非常快。<br>这种key-value存储方式，在放进去的时候，必须根据key算出value的存放位置，这样，取的时候才能根据key直接拿到value。</li>
+</ul>
+</li>
+<li><p>把数据放入dict的方法，除了初始化时指定外，还可以通过key放入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; d[&apos;Adam&apos;] = 67</span><br><span class="line">&gt;&gt;&gt; d[&apos;Adam&apos;]</span><br><span class="line">67</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果获取的key不存在，dict就会报错：</p>
+<ul>
+<li><p>要避免key不存在的错误，有两种办法，一是通过in判断key是否存在：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; &apos;Thomas&apos; in d</span><br><span class="line">False</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>二是通过dict提供的get()方法，如果key不存在，可以返回None，或者自己指定的value：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; d.get(&apos;Thomas&apos;)</span><br><span class="line">&gt;&gt;&gt; d.get(&apos;Thomas&apos;, -1)</span><br><span class="line">-1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意：返回None的时候Python的交互环境不显示结果。</strong></p>
+</li>
+<li><p>要删除一个key，用pop(key)方法，对应的value也会从dict中删除；</p>
+</li>
+<li><p>和list比较，dict有以下几个特点：</p>
+<ul>
+<li>查找和插入的速度极快，不会随着key的增加而变慢；</li>
+<li>需要占用大量的内存，内存浪费多。</li>
+<li>而list相反：<br>查找和插入的时间随着元素的增加而增加；<br>占用空间小，浪费内存很少。<br>所以，dict是用空间来换取时间的一种方法。</li>
+</ul>
+</li>
+<li><p>dict可以用在需要高速查找的很多地方，在Python代码中几乎无处不在，正确使用dict非常重要，需要牢记的第一条就是dict的key必须是不可变对象。这是因为dict根据key来计算value的存储位置，如果每次计算相同的key得出的结果不同，那dict内部就完全混乱了。这个通过key计算位置的算法称为哈希算法（Hash）。<br> 要保证hash的正确性，作为key的对象就不能变。<strong>在Python中，字符串、整数等都是不可变的，因此，可以放心地作为key。而list是可变的，就不能作为key</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; key = [1, 2, 3]</span><br><span class="line">&gt;&gt;&gt; d[key] = &apos;a list&apos;</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span><br><span class="line">TypeError: unhashable type: &apos;list&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>dict 也可以使用 for … in 来进行迭代</p>
+<ul>
+<li>因为dict的存储不是按照list的方式顺序排列, 所以, 迭代出的结果顺序很可能不一样</li>
+<li>默认情况下, dict迭代的是key; 如果要迭代value, 可以用 <code>for value in d.values()</code>; 如果要同时迭代key和value, 可以用 <code>for k, v in d.items()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dict = &#123;0:&quot;renyimin&quot;, &quot;age&quot;:500&#125;</span><br><span class="line"># 注意: 下面不能写成  for k, v in dict:</span><br><span class="line">for k, v in dict.items():</span><br><span class="line">    print(&apos;k=&gt;v : %s =&gt; %s&apos; % (k, v))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
+<li>顺序存储, 链式存储, hash : <a href="https://yq.aliyun.com/ziliao/430573" target="_blank" rel="noopener">https://yq.aliyun.com/ziliao/430573</a></li>
+</ol>
+<h2 id="set-set"><a href="#set-set" class="headerlink" title="set set([])"></a>set <code>set([])</code></h2><ol>
+<li>set和dict类似, 不过它只是一组key的集合, 不存储value; 另外, 它的 key不重复;</li>
+<li><p>要创建一个set, 需要提供一个list作为输入集合:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; s = set([1, 1, 2, 2, 3, 3])</span><br><span class="line">&gt;&gt;&gt; s</span><br><span class="line">&#123;1, 2, 3&#125;</span><br></pre></td></tr></table></figure>
+<p>注意, 传入的参数 <code>[1, 2, 3]</code> 是一个list, 而显示的 <code>{1, 2, 3}</code> 只是告诉你这个set内部有1，2，3这3个元素，<strong>显示的顺序也不表示set是有序的</strong>; <strong>重复元素在set中自动被过滤</strong></p>
+</li>
+<li>通过 <code>add(key)</code> 方法可以添加元素到set中，可以重复添加，但不会有效果;</li>
+<li><code>remove(key)</code> 方法可以删除元素</li>
+<li><p><strong>set可以看成数学意义上的无序和无重复元素的集合，因此，两个set可以做数学意义上的交集、并集等操作</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; s1 = set([1, 2, 3])</span><br><span class="line">&gt;&gt;&gt; s2 = set([2, 3, 4])</span><br><span class="line">&gt;&gt;&gt; s1 &amp; s2</span><br><span class="line">&#123;2, 3&#125;</span><br><span class="line">&gt;&gt;&gt; s1 | s2</span><br><span class="line">&#123;1, 2, 3, 4&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>set的原理和dict一样，所以，同样不可以放入可变对象，因为无法判断两个可变对象是否相等，也就无法保证set内部“不会有重复元素”; </p>
+<ul>
+<li>set和dict的唯一区别仅在于没有存储对应的value;</li>
+<li>如果把list放入set, 会报错<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; s = set([1,2,3,4,2,3,4,[57,8]])</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;</span><br><span class="line">TypeError: unhashable type: &apos;list&apos;</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>对于不变对象来说，调用对象自身的任意方法，也不会改变该对象自身的内容。相反，这些方法会创建新的对象并返回，这样，就保证了不可变对象本身永远是不可变的。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># str是不变对象</span><br><span class="line">&gt;&gt;&gt; a = &apos;abc&apos;</span><br><span class="line">&gt;&gt;&gt; a.replace(&apos;a&apos;, &apos;A&apos;)</span><br><span class="line">&apos;Abc&apos;</span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">&apos;abc&apos;</span><br><span class="line"># 而list是可变对象</span><br><span class="line">&gt;&gt;&gt; b = [&apos;c&apos;, &apos;b&apos;, &apos;a&apos;]</span><br><span class="line">&gt;&gt;&gt; b.sort()</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">[&apos;a&apos;, &apos;b&apos;, &apos;c&apos;]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&title=《09. dict 和 set》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&title=《09. dict 和 set》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. dict 和 set》 — Lant's&url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/10/09/python/2018-10-09-Python-08/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">08. list 和 tuple</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/10/10/python/2018-10-10-Python-10/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">10. 条件判断, 循环, 列表生成式</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&title=《09. dict 和 set》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&title=《09. dict 和 set》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《09. dict 和 set》 — Lant's&url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/10/10/python/2018-10-10-Python-09/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtklEQVR42u3aQW4CMQwFUO5/aSp11c1kvu1kQNXLChU6yQtSbBy/XvF4/47166t3/46rJ+effJ0YeHh4eK2lr6dJ/rL+ZG+hyXputgYPDw/vGC8JBmvSGplvU76eKHjg4eHhfZQ3z1fXqfl6O/Dw8PD+Ky9JjstL/J7AgIeHh1c83Ocl3WTGXrDZUGvBw8PDi3m7LsCefP2B+z08PDy81gGdJ7iThoBtIQQPDw/vAK9XKu0VF6rtCNWQUPjFgIeHhzfm5U0Deek2CSq91LnX5oWHh4e3l5cfu71Lr7xRIGkjKDd74eHh4W3l5UnzJAzM0+Jeeo2Hh4d3mteMKkHa3UuIN2wZHh4e3gFe77Y9LxP0Cg2TAsfNLHh4eHibePPpk4urSYNpXsjAw8PDe543f1x+9ZUXeSfhCg8PD28vr3c095oMqqnzpFyCh4eH9wyvWk7Nm1CTAu6k5HEZZvDw8PAO8/IA0JwseE7vgu1yc/Hw8PAO8PJEtnd8V5sPJun7zZeBh4eHd4DXO8SrF1d5iaEXrqLCLh4eHt6A10tSy3u26TnlFeLh4eEd4FVT2GTpvXQ5Soh7T8DDw8PbysuP4PxaK39a/m4Tj4eHh3eA1wsMvaaBSevqqIyLh4eHd4xXTYgnTVQJaXJ5hoeHh3eOV22Qql7YV1uvqrzoAgwPDw/vGC8/ppP0Oi+/9hoFoo3Gw8PDe7yfc3LEJ+XaPDXPL8xuPo+Hh4c35r2Lo9o0sCt4VMu+l3EPDw8Pb8zLR680kIeKahvBvLULDw8Pb8JLgkH+478K7rUmFL4fPDw8vGO8vYueLLEawdZBAg8PD++zvF5pNZ+lV/C9mQUPDw/vC3jVIsWkwJo8LerGxcPDwzvA6xUj8taBvKiRB4YoLOHh4eEd4FX/odcmVU2pe+GnOfDw8PBS3g9eV/fdQfxSTgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
