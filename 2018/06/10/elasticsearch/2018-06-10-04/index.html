@@ -13,27 +13,27 @@
     
     
     
-    <title>04. 文档的概念, ES乐观并发控制, 文档基本操作 | Lant&#39;s</title>
+    <title>04. 简单尝试 CURD | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Elasticsearch">
-    <meta name="description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
-<meta name="keywords" content="Elasticsearch">
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="Cat Api ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/cluster 几个层次  尝试使用 GET /_cat/health?v 查看 时间戳、集群名称、集群状态、集群中节点的数量 等等  12epoch      timestamp cluster       status node.total node.data shards pri relo">
+<meta name="keywords" content="Elasticsearch(一)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="04. 文档的概念, ES乐观并发控制, 文档基本操作">
+<meta property="og:title" content="04. 简单尝试 CURD">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
+<meta property="og:description" content="Cat Api ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/cluster 几个层次  尝试使用 GET /_cat/health?v 查看 时间戳、集群名称、集群状态、集群中节点的数量 等等  12epoch      timestamp cluster       status node.total node.data shards pri relo">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
-<meta property="og:updated_time" content="2018-09-20T07:25:26.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/es/products-computer.png">
+<meta property="og:updated_time" content="2018-11-11T05:52:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="04. 文档的概念, ES乐观并发控制, 文档基本操作">
-<meta name="twitter:description" content="前言 传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;  面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体   而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSO">
-<meta name="twitter:image" content="http://blog.renyimin.com/img/est/es-concurrency.png">
+<meta name="twitter:title" content="04. 简单尝试 CURD">
+<meta name="twitter:description" content="Cat Api ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/cluster 几个层次  尝试使用 GET /_cat/health?v 查看 时间戳、集群名称、集群状态、集群中节点的数量 等等  12epoch      timestamp cluster       status node.total node.data shards pri relo">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/es/products-computer.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
@@ -54,7 +54,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -107,7 +107,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">04. 文档的概念, ES乐观并发控制, 文档基本操作</div>
+        <div class="flex-col header-title ellipsis">04. 简单尝试 CURD</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -131,7 +131,7 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-06-10T06:29:07.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2018-06-10T02:36:57.000Z" itemprop="datePublished" class="page-time">
   2018-06-10
 </time>
 
@@ -153,7 +153,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档"><span class="post-toc-number">2.</span> <span class="post-toc-text">文档</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES文档的丢失更新问题"><span class="post-toc-number">3.</span> <span class="post-toc-text">ES文档的丢失更新问题</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ES乐观并发控制"><span class="post-toc-number">4.</span> <span class="post-toc-text">ES乐观并发控制</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文档的部分更新-update"><span class="post-toc-number">5.</span> <span class="post-toc-text">文档的部分更新 - _update</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#取回多文档"><span class="post-toc-number">6.</span> <span class="post-toc-text">取回多文档</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Cat-Api"><span class="post-toc-number">1.</span> <span class="post-toc-text">Cat Api</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#索引文档"><span class="post-toc-number">2.</span> <span class="post-toc-text">索引文档</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#PUT"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">PUT</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#POST"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">POST</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#检索文档"><span class="post-toc-number">3.</span> <span class="post-toc-text">检索文档</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#更新文档-PUT、POST"><span class="post-toc-number">4.</span> <span class="post-toc-text">更新文档 PUT、POST</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#删除文档"><span class="post-toc-number">5.</span> <span class="post-toc-text">删除文档</span></a></li></ol>
         </nav>
     </aside>
     
@@ -161,9 +161,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">04. 文档的概念, ES乐观并发控制, 文档基本操作</h1>
+        <h1 class="post-card-title">04. 简单尝试 CURD</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-06-10 14:29:07" datetime="2018-06-10T06:29:07.000Z"  itemprop="datePublished">2018-06-10</time>
+            <time class="post-time" title="2018-06-10 10:36:57" datetime="2018-06-10T02:36:57.000Z"  itemprop="datePublished">2018-06-10</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -174,91 +174,58 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/data-in-data-out.html" target="_blank" rel="noopener">前言</a></h2><ol>
-<li><p>传统上, 我们以 行和列的形式 存储数据到关系型数据库中, 相当于使用电子表格; 正因为我们使用了这种不灵活的存储媒介导致所有我们使用对象的灵活性都丢失了;</p>
-<ul>
-<li><p>面向对象编程语言如此流行的原因之一是对象帮我们表示和处理现实世界具有潜在的复杂的数据结构的实体 </p>
+            <h2 id="Cat-Api"><a href="#Cat-Api" class="headerlink" title="Cat Api"></a>Cat Api</h2><ol>
+<li><p>ES提供的 <code>Cat Api</code> 可以用来查看 集群当前状态, 涉及到 <code>shard</code>/<code>node</code>/<code>cluster</code> 几个层次</p>
 </li>
-<li><p>而 JSON 正是一种以人可读的文本表示对象的方法, 它已经变成 NoSQL 世界交换数据的事实标准, 当一个对象被序列化成为 JSON, 它被称为一个 JSON 文档;<br>JSON文档可以将我们的对象按对象的方式来存储, 这样我们就能更加专注于 使用 数据, 而不是在电子表格的局限性下对我们的应用建模; 我们可以重新利用对象的灵活性;</p>
-</li>
-<li><p>Elastcisearch 是分布式的 文档 存储, 它能存储和检索复杂的数据结构—序列化成为JSON文档</p>
-</li>
-</ul>
-</li>
-<li><p>现存的 NoSQL 解决方案虽然允许我们以文档的形式存储对象, 但是他们仍旧需要我们思考如何查询我们的数据, 以及确定哪些字段需要被索引以加快数据检索; <strong>而在 ES 中, 每个字段的所有数据都是默认被索引的, 即每个字段都有为了快速检索设置的专用倒排索引</strong>; 而且, 不像其他多数的数据库, 它<strong>能在相同的查询中使用所有这些倒排索引, 并以惊人的速度返回结果</strong>;</p>
+<li><p>尝试使用 <code>GET /_cat/health?v</code> 查看 <code>时间戳</code>、<code>集群名称</code>、<code>集群状态</code>、<code>集群中节点的数量</code> 等等</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">epoch      timestamp cluster       status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent</span><br><span class="line">1540815645 20:20:45  elasticsearch yellow          1         1      6   6    0    0        6             0                  -                 50.0%</span><br></pre></td></tr></table></figure>
+<p> 返回信息 和 集群健康API(<code>GET _cluster/health</code>) 返回都一样</p>
 </li>
 </ol>
-<h2 id="文档"><a href="#文档" class="headerlink" title="文档"></a>文档</h2><ol>
-<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_Document_Metadata.html" target="_blank" rel="noopener">文档及其元数据介绍</a></li>
-<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/index-doc.html" target="_blank" rel="noopener">索引文档</a>, 注意 <code>PUT</code> 和 <code>POST</code> 两个谓词的使用场景;</li>
-<li><p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/create-doc.html" target="_blank" rel="noopener">小心<strong>覆盖创建</strong></a></p>
-<ul>
-<li>当我们索引一个文档, 怎么确认我们正在创建一个完全新的文档, 而不是覆盖现有的呢?</li>
-<li>最简单办法是, 使用索引请求的 POST 形式让 Elasticsearch 自动生成唯一 _id;</li>
-<li>另外, 如果有自己的文档ID, 防止覆盖 (成功会返回 401码, 冲突则会返回 409码)<figure class="highlight plain"><figcaption><span>/website/blog/123?op_type</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PUT /website/blog/123/_create</span><br></pre></td></tr></table></figure>
+<h2 id="索引文档"><a href="#索引文档" class="headerlink" title="索引文档"></a>索引文档</h2><p>ES 中可以使用 <strong>POST</strong> 或 <strong>PUT</strong> 来索引一个新文档, 熟悉HTTP协议的话, 应该知道 PUT是幂等的, 而POST是非幂等的, ES也遵循了这一点</p>
+<h3 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h3><ol>
+<li><strong>PUT</strong> 创建文档的时候需要手动设定文档ID (类似已知id, 进行修改) </li>
+<li>如果文档不存在, 则会创建新文档; 如果文档存在, 则会覆盖整个文档 (所以需要留意)</li>
+<li>虽然使用PUT可以防止POST非幂等引起的多次创建, 但也要留意使用PUT带来的文档覆盖问题</li>
+<li><p>练习:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 此处创建一个 索引为 products , 类型为 computer, 文档ID为1的商品 </span><br><span class="line">PUT /products/computer/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;lenovo&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;lianxiang diannao chaobao&quot;,</span><br><span class="line">  &quot;price&quot; : 4500,</span><br><span class="line">  &quot;tag&quot; : [&quot;jieneng&quot;, &quot;xuhang&quot;, &quot;chaobao&quot;] </span><br><span class="line">&#125;</span><br><span class="line"># 返回</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_index&quot;: &quot;products&quot;, </span><br><span class="line">  &quot;_type&quot;: &quot;computer&quot;,</span><br><span class="line">  &quot;_id&quot;: &quot;1&quot;,</span><br><span class="line">  &quot;_version&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &quot;created&quot;,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 2, # 表示应该写入的有两个分片(1个主分片和1个副本分片, 但注意: 这里代表的可不是总分片数, 显然es的索引默认对应5个主分片, 每个主分片又对应一个副本分片, 总共会有10个分片)  </span><br><span class="line">    &quot;successful&quot;: 1, # 表示成功写入一个分片, 即写入了主分片, 但是副本分片并未写入, 因为目前只启了一个节点</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;created&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> <img src="/img/es/products-computer.png"></p>
 </li>
-</ul>
-</li>
-<li><p><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/get-doc.html#_返回文档的一部分" target="_blank" rel="noopener">返回文档中的部分字段</a></p>
-</li>
-<li><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/update-doc.html" target="_blank" rel="noopener">更新<strong>整个</strong>文档</a>, 注意, ES中文档不能修改, 需要重建或者替换</li>
-<li>删除比较简单…</li>
+<li>另外, 注意: 使用<code>PUT</code>创建文档时, 如果不指定ID, 则会报错</li>
 </ol>
-<h2 id="ES文档的丢失更新问题"><a href="#ES文档的丢失更新问题" class="headerlink" title="ES文档的丢失更新问题"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/version-control.html" target="_blank" rel="noopener">ES文档的丢失更新问题</a></h2><ol>
-<li><p>在使用 index API 更新文档时, 一般会先读取原始文档, 然后做我们的修改, 最后重新索引整个文档; 如果两个进程同时做这系列操作的话, 最后的索引请求将获胜, 当然, 有人的更改将丢失。</p>
+<h3 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h3><ol>
+<li><p><strong>POST</strong> 创建文档时不需要手动传递文档ID, es会自动生成全局唯一的文档ID</p>
 </li>
-<li><p>假设我们使用 Elasticsearch 存储我们网上商城商品库存的数量, 每次我们卖一个商品的时候, 在 Elasticsearch 中将库存数量减少; 有一天, 管理层决定做一次促销, 突然地, 每秒要卖好几个商品, 假设有两个 web 程序并行运行, 每一个都同时处理所有商品的销售<br> <img src="/img/est/es-concurrency.png"><br> 可以看到: web_1 对 stock_count 所做的更改已经丢失; 结果就会出现超卖现象;</p>
-</li>
-<li><p>在数据库领域中, 有两种方法通常被用来确保并发更新时变更不会丢失:</p>
-<ul>
-<li><strong>悲观并发控制</strong> : 这种方法被关系型数据库广泛使用, 它假定有变更冲突可能发生, 因此阻塞访问资源以防止冲突;<br>一个典型的例子是读取一行数据之前先将其锁住, 确保只有放置锁的线程能够对这行数据进行修改。</li>
-<li><strong>乐观并发控制</strong> : Elasticsearch 中使用的这种方法假定冲突是不可能发生的, 并且不会阻塞正在尝试的操作, 不过, 如果源数据在读写当中被修改, 更最后在更新时将会失败; 应用程序接下来将决定该如何解决冲突, 例如, 可以重试更新、使用新的数据、或者将相关情况报告给用户;</li>
-</ul>
+<li><p>练习</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">POST /products/computer/</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;huawei&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;china best diannao gaoqing&quot;,</span><br><span class="line">  &quot;price&quot; : 6080,</span><br><span class="line">  &quot;tag&quot; : [&quot;gaoxingneng&quot;, &quot;gaoqing&quot;, &quot;jieneng&quot;] </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 返回, 可以看到文档ID是自动生成的, 其他字段和使用`PUT`时返回的信息相同</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_index&quot;: &quot;products&quot;,</span><br><span class="line">  &quot;_type&quot;: &quot;computer&quot;,</span><br><span class="line">  &quot;_id&quot;: &quot;AWa_MgAhWC0s-aachNUS&quot;,</span><br><span class="line">  &quot;_version&quot;: 1,</span><br><span class="line">  &quot;result&quot;: &quot;created&quot;,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 2,</span><br><span class="line">    &quot;successful&quot;: 1,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;created&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h2 id="ES乐观并发控制"><a href="#ES乐观并发控制" class="headerlink" title="ES乐观并发控制"></a>ES乐观并发控制</h2><ol>
-<li><p>ES 是分布式的, 当文档创建、更新或删除时, 新版本的文档必须复制到集群中的其他节点, 而 Elasticsearch 也是异步和并发的, 这意味着这些复制请求是被并行发送的, 所以到达目的地时也许<strong>顺序是乱的</strong>;</p>
+<h2 id="检索文档"><a href="#检索文档" class="headerlink" title="检索文档"></a>检索文档</h2><p>先尝试最简单的一种 query-string 查询方式: <code>GET /products/computer/_search</code> : 查询/products/computer/下的所有文档</p>
+<h2 id="更新文档-PUT、POST"><a href="#更新文档-PUT、POST" class="headerlink" title="更新文档 PUT、POST"></a>更新文档 PUT、POST</h2><ol>
+<li><p><strong>PUT</strong> 对整个文档进行覆盖更新</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT /products/computer/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;acer-hongji&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>因此 Elasticsearch 需要一种方法确保文档的旧版本不会覆盖新的版本:</p>
+<li><p>partial update: 如果只是想更新文档的部分指定字段, 可以使用 <code>POST</code> 结合 <code>_update</code>  :  (<strong>partial update内置乐观锁并发控制</strong>)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST /products/computer/2/_update?retry_on_conflict=5</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot;: &#123;</span><br><span class="line">    &quot;name&quot; : &quot;acer-hongji-鸿基&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里注意一下_update的内部机制其实是: es先获取整个文档, 然后更新部分字段, 最后老文档标记为deleted, 然后创建新文档<br>此时在标记老文档为deleted时就可能会出现并发问题, 如果线程1抢先一步将老文档标注为deleted, 那么线程2在将新文档标注为deleted时就会失败(version内部乐观锁机制)<br>此时在es内部会做处理, 他内部完成了对乐观锁的实现, 如果失败后, 其实也是进行重试, 你可以手动传递 <code>retry_on_conflict</code>参数来决定其内部的重试次数</p>
+</li>
+<li><p><strong>PUT如何只创建不替换</strong>: 由于创建文档与全量替换文档的语法是一样的, 都是 <code>PUT</code>, 而有时我们只是想新建文档, 不想替换文档</p>
 <ul>
-<li>ES的每个文档都有一个 <strong>_version</strong> (版本)号, 当文档被修改时版本号递增;</li>
-<li>ES正是使用这个 <strong>_version</strong> 号来确保变更以正确顺序得到执行 (如果旧版本的文档在新版本之后到达, 它会被直接忽略)</li>
-</ul>
-</li>
-<li><p>我们可以利用 _version 号来确保 应用中相互冲突的变更不会导致数据丢失, 通过指定想要修改文档的 version 号来达到这个目的, 如果该版本不是当前版本号, 我们的请求将会失败</p>
-</li>
-<li><p>测试</p>
-<ul>
-<li><p>创建一个新文档 (当然, 响应体会告诉我们, 该文档版本号目前是1)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">PUT /website/blog/1/_create</span><br><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;My first blog entry&quot;,</span><br><span class="line">  &quot;text&quot;:  &quot;Just trying this out...&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>现在假设我们想编辑这个文档: 一般是先查询,将文档数据加载到 web 表单中; 然后做一些修改, 保存新的版本</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// 查询文档, 响应体中可以看到版本号仍为1</span><br><span class="line">GET /website/blog/1</span><br><span class="line"></span><br><span class="line">// 尝试通过重建文档的索引来保存修改, 我们指定 version 为我们的修改会被应用的版本:</span><br><span class="line">// 也就是我们想要索引中的文档只有 _version 为 1 时, 本次更新才能成功; </span><br><span class="line">// 最后此请求成功, 并且响应体告诉我们 _version 已经递增到 2</span><br><span class="line">PUT /website/blog/1?version=1 </span><br><span class="line">&#123;</span><br><span class="line"> &quot;title&quot;: &quot;My first blog entry&quot;,</span><br><span class="line"> &quot;text&quot;:  &quot;Starting to get the hang of this...&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>然而, 如果我们重新运行相同的索引请求, 仍然指定 version=1, Elasticsearch 返回 <strong>409 Conflict</strong> HTTP 响应码, 和一个如下所示的响应体:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;error&quot;: &#123;</span><br><span class="line">    &quot;root_cause&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;type&quot;: &quot;version_conflict_engine_exception&quot;,</span><br><span class="line">        &quot;reason&quot;: &quot;[blog][1]: version conflict, current version [2] is different than the one provided [1]&quot;,</span><br><span class="line">        &quot;index_uuid&quot;: &quot;llBrPVECRFuD45NCpJaDfg&quot;,</span><br><span class="line">        &quot;shard&quot;: &quot;3&quot;,</span><br><span class="line">        &quot;index&quot;: &quot;website&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;type&quot;: &quot;version_conflict_engine_exception&quot;,</span><br><span class="line">    &quot;reason&quot;: &quot;[blog][1]: version conflict, current version [2] is different than the one provided [1]&quot;,</span><br><span class="line">    &quot;index_uuid&quot;: &quot;llBrPVECRFuD45NCpJaDfg&quot;,</span><br><span class="line">    &quot;shard&quot;: &quot;3&quot;,</span><br><span class="line">    &quot;index&quot;: &quot;website&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;status&quot;: 409</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>可以使用 <code>op_type=create</code> 来说明此命令只是用来执行创建操作的<br><code>PUT /index/type/id?op_type=create</code> 或 <code>PUT /index/type/id/_create</code></li>
+<li>可以看到, 此时, 如果文档已经存在, 会进行报错提示冲突, 而不会帮你直接替换<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">PUT /products/computer/1?op_type=create</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;huawei create&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;china best diannao gaoqing create&quot;,</span><br><span class="line">  &quot;price&quot; : 6080,</span><br><span class="line">  &quot;tag&quot; : [&quot;gaoxingneng&quot;, &quot;gaoqing&quot;, &quot;jieneng&quot;, &quot;create&quot;] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-<li><p>更多请参考文档: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/optimistic-concurrency-control.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/optimistic-concurrency-control.html</a> </p>
 </li>
 </ol>
-<h2 id="文档的部分更新-update"><a href="#文档的部分更新-update" class="headerlink" title="文档的部分更新 - _update"></a>文档的部分更新 - <code>_update</code></h2><ol>
-<li><p>之前在介绍 “更新整个文档” 时, 已经了解到, 文档是不可变的, 他们不能被修改, 只能被替换; 更新一个文档的方法是检索并修改它, 然后<strong>重新索引整个文档</strong>;</p>
+<h2 id="删除文档"><a href="#删除文档" class="headerlink" title="删除文档"></a>删除文档</h2><ol>
+<li><p><strong>ES的文档替换</strong>: 上面已经了解过, 其实就是<code>PUT</code>创建文档, 如果传递的文档id不存在, 就是创建, 如果文档id已经存在, 则是替换操作;<br> 注意: es在做文档的替换操作时, 会将老的document标记为deleted, 然后新增我们给定的那个document, 当后续创建越来越多的document时, es会在适当的时机在后台自动删除标记为delete的document;</p>
 </li>
-<li><p>但其实使用 update API 我们还可以<strong>部分更新文档</strong>, 但是, update API 必须遵循同样的规则, 从外部来看, 我们在一个文档的某个位置进行部分更新, 然而在内部, update API 简单使用与之前描述相同的 <code>检索-修改-重建索引</code> 的处理过程</p>
-<ul>
-<li>区别在于这个过程发生在分片内部, 这样就避免了多次请求的网络开销; 通过减少检索和重建索引步骤之间的时间, 我们也减少了其他进程的变更带来冲突的可能性。</li>
-<li>update 请求最简单的一种形式是接收文档的一部分作为 doc 的参数, 它只是与现有的文档进行合并, 对象被合并到一起, 覆盖现有的字段, 增加新的字段</li>
-</ul>
+<li><p><strong>ES的删除</strong>: 不会直接进行物理删除, 而是在数据越来越多的时候, es在合适的时候在后台进行删除</p>
 </li>
-<li><p>例如, 我们对 博客文章 增加字段 tags 和 views , 并修改 text 字段, 如下所示:</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 测试成功:</span><br><span class="line">POST /website/blog/1/_update</span><br><span class="line">&#123;</span><br><span class="line">  &quot;doc&quot; : &#123;</span><br><span class="line">    &quot;tags&quot; : [ &quot;testing&quot; ],</span><br><span class="line">    &quot;views&quot;: 0,</span><br><span class="line">    &quot;text&quot;: &quot;哈哈&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>更多部分更新相关内容, 可参考手册: <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/cn/partial-updates.html</a><br> 未完待续~~</p>
-</li>
+<li><p>练习:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DELETE /products/computer/2</span><br><span class="line"># 返回</span><br><span class="line">&#123;</span><br><span class="line">  &quot;found&quot;: true,</span><br><span class="line">  &quot;_index&quot;: &quot;products&quot;,</span><br><span class="line">  &quot;_type&quot;: &quot;computer&quot;,</span><br><span class="line">  &quot;_id&quot;: &quot;2&quot;,</span><br><span class="line">  &quot;_version&quot;: 6,    </span><br><span class="line">  &quot;result&quot;: &quot;deleted&quot;,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 2,</span><br><span class="line">    &quot;successful&quot;: 1,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h2 id="取回多文档"><a href="#取回多文档" class="headerlink" title="取回多文档"></a><a href="https://www.elastic.co/guide/cn/elasticsearch/guide/cn/_Retrieving_Multiple_Documents.html" target="_blank" rel="noopener">取回多文档</a></h2>
+
         </div>
 
         <blockquote class="post-copyright">
@@ -284,7 +251,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
 
             
@@ -294,7 +261,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 简单尝试 CURD》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -304,7 +271,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 简单尝试 CURD》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -314,7 +281,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 简单尝试 CURD》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -342,17 +309,17 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/10/elasticsearch/2018-06-10-03/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/09/elasticsearch/2018-06-09-03/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">03. 集群相关 (节点, 分片及角色, 扩容, 故障测试)</h4>
+          <h4 class="title">03. ES 一些基本概念</h4>
         </a>
       </div>
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/06/16/elasticsearch/2018-06-16-05/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/10/elasticsearch/2018-06-10-05/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">05. Mapping 映射</h4>
+        <h4 class="title">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</h4>
       </a>
     </div>
   
@@ -444,7 +411,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 简单尝试 CURD》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -454,7 +421,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&title=《04. 简单尝试 CURD》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -464,7 +431,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 文档的概念, ES乐观并发控制, 文档基本操作》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《04. 简单尝试 CURD》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-04/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>

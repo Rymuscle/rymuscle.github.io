@@ -47,7 +47,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -139,14 +139,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-09-Python-08"
+            <article id="post-elasticsearch/2018-06-09-03"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-09 22:06:23" datetime="2018-10-09T14:06:23.000Z"  itemprop="datePublished">2018-10-09</time>
+        <time class="post-time" title="2018-06-09 18:23:07" datetime="2018-06-09T10:23:07.000Z"  itemprop="datePublished">2018-06-09</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -157,7 +157,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/09/python/2018-10-09-Python-08/">08. list 和 tuple</a>
+      <a class="post-title-link" href="/2018/06/09/elasticsearch/2018-06-09-03/">03. ES 一些基本概念</a>
     </h3>
   
 
@@ -167,19 +167,25 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        list []
-Python内置的有序列表list, 可以随时添加和删除其中的元素
- 1234&gt;&gt;&gt; classmates = [&apos;小明&apos;, &apos;小强&apos;, &apos;小张&apos;, &apos;小明&apos;]&gt;&gt;&gt; classmates[&apos;小明&apos;, &apos;小强&apos;, &apo...
+        近实时
+从文档被索引到可以被检索会有轻微延时, 约1s
+
+Index(索引 n)
+这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方
+一个Index可以包含多个 type (索引的复数词为 indices 或 indexes) 
+index 名称必须是小写, 不能用下划线开头, 不能包含逗号
+一般将不同的项目数据放到不同的index中 
+每个index会...
     
 
-        <a href="/2018/10/09/python/2018-10-09-Python-08/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/09/elasticsearch/2018-06-09-03/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -188,14 +194,14 @@ Python内置的有序列表list, 可以随时添加和删除其中的元素
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-10-09-Python-07"
+            <article id="post-elasticsearch/2018-06-09-02"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-10-09 17:36:27" datetime="2018-10-09T09:36:27.000Z"  itemprop="datePublished">2018-10-09</time>
+        <time class="post-time" title="2018-06-09 14:56:01" datetime="2018-06-09T06:56:01.000Z"  itemprop="datePublished">2018-06-09</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -206,7 +212,7 @@ Python内置的有序列表list, 可以随时添加和删除其中的元素
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/09/python/2018-10-09-Python-07/">07. 字符串相关</a>
+      <a class="post-title-link" href="/2018/06/09/elasticsearch/2018-06-09-02/">02. ES 版本选择及简单安装</a>
     </h3>
   
 
@@ -216,206 +222,24 @@ Python内置的有序列表list, 可以随时添加和删除其中的元素
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        概述
-Python 不支持单字符类型, 单字符在 Python 中也是作为一个字符串使用, 也就是字符和字符串都一样, 都是 单引号或双引号包起来即可;
-Python 访问子字符串
-可以使用 [索引] 来获取字符串
-也可以使用 切片Slice (str[0:3], str[-3:-2]) 来截取字符串 (切片遵循左闭右开原则, 即左边包含,右边不包含)
+        版本选择
+ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X; 
 
+此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  
 
-字符串运算符
-
-拼接用 + (注意...
-    
-
-        <a href="/2018/10/09/python/2018-10-09-Python-07/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-python/2018-10-08-Python-05"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-10-08 20:36:23" datetime="2018-10-08T12:36:23.000Z"  itemprop="datePublished">2018-10-08</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/10/08/python/2018-10-08-Python-05/">05. 基本数据类型简介</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        概述
-Python3 六个标准数据类型
-
-Number(数字)
-String(字符串)
-List(列表)
-Tuple(元组)
-Set(集合)
-Dictionary(字典)
-
-
-注意: 
-
-不可变数据(3 个): Number、String、Tuple
-可变数据(3 个): List、Dictionary、Set
-
-
-内置的 type() 函数可以用来查询变量所指的对象类型
-
-
-Number(...
-    
-
-        <a href="/2018/10/08/python/2018-10-08-Python-05/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-python/2018-09-30-Python-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-09-30 15:38:57" datetime="2018-09-30T07:38:57.000Z"  itemprop="datePublished">2018-09-30</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/30/python/2018-09-30-Python-04/">04. 基础语法</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        两种执行模式
-命令行模式
-
-可以执行 python XXX.py 运行一个.py文件
-可以执行 python 进入Python交互模式
-
-
-Python交互模式
-
-进入到Python交互模式, 它的提示符是 &gt;&gt;&gt;
-在Python交互模式下输入 exit() 并回车, 就退出了Python交互模式, 并回到命令行模式 (也可以 Ctrl+d)
-
-
-两种模式小区别:
-
-进入p...
-    
-
-        <a href="/2018/09/30/python/2018-09-30-Python-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-python/2018-09-29-Python-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-09-29 15:41:12" datetime="2018-09-29T07:41:12.000Z"  itemprop="datePublished">2018-09-29</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/29/python/2018-09-29-Python-02/">01. 基础 - Anaconda 环境管理</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Anaconda
-在使用Python时，我们经常需要用到很多第三方库，例如，Pillow，MySQL驱动程序，Web框架Flask，科学计算Numpy等。用pip一个一个安装费时费力，还需要考虑兼容性。我们推荐直接使用Anaconda，它已经内置了许多非常有用的第三方库，我们装上Anaconda，就相当于把数十个第三方模块自动安装好了，非常简单易用;
 
 安装
-在安装Anaconda之前, 其...
+安装Java, 推荐使用Java 8 : yum instal...
     
 
-        <a href="/2018/09/29/python/2018-09-29-Python-02/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/09/elasticsearch/2018-06-09-02/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -424,14 +248,14 @@ Python交互模式
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-09-29-Python-03"
+            <article id="post-elasticsearch/2018-06-09-01"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-09-29 15:41:12" datetime="2018-09-29T07:41:12.000Z"  itemprop="datePublished">2018-09-29</time>
+        <time class="post-time" title="2018-06-09 14:24:25" datetime="2018-06-09T06:24:25.000Z"  itemprop="datePublished">2018-06-09</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -442,7 +266,7 @@ Python交互模式
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/29/python/2018-09-29-Python-03/">03. 基础 - virtualenv , virtualenvwrapper</a>
+      <a class="post-title-link" href="/2018/06/09/elasticsearch/2018-06-09-01/">01. 初识 Elasticsearch</a>
     </h3>
   
 
@@ -452,20 +276,24 @@ Python交互模式
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        virtualenv
-在开发Python应用程序的时候, 如果系统只安装了一个Python版本, 那么所有第三方的包都会被pip安装到这个Python的 site-packages 目录下; 如果要同时开发多个应用程序, 这些应用程序就会共用这一个Python环境, 如果应用A需要 jinja 2.7, 而应用B需要jinja 2.6怎么办?
+        
+可以通过如下几个特点来认识ES:
 
-这种情况下, 每个应用可能需要各自拥有一套 各...
+开源
+
+基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API
+
+高性能全文检索和分析...
     
 
-        <a href="/2018/09/29/python/2018-09-29-Python-03/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/09/elasticsearch/2018-06-09-01/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
 
     </div>
     
@@ -474,14 +302,14 @@ Python交互模式
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-python/2018-09-29-Python-01"
+            <article id="post-swoole/2017-11-03-02"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-09-29 12:11:12" datetime="2018-09-29T04:11:12.000Z"  itemprop="datePublished">2018-09-29</time>
+        <time class="post-time" title="2017-11-03 18:36:52" datetime="2017-11-03T10:36:52.000Z"  itemprop="datePublished">2017-11-03</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Python/">Python</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Swoole/">Swoole</a></li></ul>
 
 
 
@@ -492,57 +320,7 @@ Python交互模式
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/29/python/2018-09-29-Python-01/">01. 基础 - Python 环境安装</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Python安装
-目前, Python有两个版本, 一个是2.x版, 一个是3.x版, 这两个版本是不兼容的; 
-
-MacOS 是10.8或者最新的10.9 Mavericks，恭喜你，系统自带了Python 2.7目前自带的是Python2.7版本12345renyimindembp:~ renyimin$ pythonPython 2.7.10 (default, Feb  7 2017...
-    
-
-        <a href="/2018/09/29/python/2018-09-29-Python-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elastic-stack/2018-09-08-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-09-08 10:50:15" datetime="2018-09-08T02:50:15.000Z"  itemprop="datePublished">2018-09-08</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elastic-Stack/">Elastic-Stack</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/08/elastic-stack/2018-09-08-03/">03.</a>
+      <a class="post-title-link" href="/2017/11/03/swoole/2017-11-03-02/">02. 环境准备</a>
     </h3>
   
 
@@ -555,14 +333,14 @@ MacOS 是10.8或者最新的10.9 Mavericks，恭喜你，系统自带了Python 2
         
     
 
-        <a href="/2018/09/08/elastic-stack/2018-09-08-03/" class="post-more waves-effect waves-button">
+        <a href="/2017/11/03/swoole/2017-11-03-02/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elastic-Stack/">Elastic-Stack</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swoole/">Swoole</a></li></ul>
 
     </div>
     
@@ -571,14 +349,14 @@ MacOS 是10.8或者最新的10.9 Mavericks，恭喜你，系统自带了Python 2
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-elastic-stack/2018-09-08-02"
+            <article id="post-swoole/2017-11-03-01"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-09-08 10:46:43" datetime="2018-09-08T02:46:43.000Z"  itemprop="datePublished">2018-09-08</time>
+        <time class="post-time" title="2017-11-03 10:45:17" datetime="2017-11-03T02:45:17.000Z"  itemprop="datePublished">2017-11-03</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elastic-Stack/">Elastic-Stack</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Swoole/">Swoole</a></li></ul>
 
 
 
@@ -589,7 +367,7 @@ MacOS 是10.8或者最新的10.9 Mavericks，恭喜你，系统自带了Python 2
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/08/elastic-stack/2018-09-08-02/">02. 安装配置</a>
+      <a class="post-title-link" href="/2017/11/03/swoole/2017-11-03-01/">01. swoole简介 及 知识扫盲</a>
     </h3>
   
 
@@ -599,69 +377,19 @@ MacOS 是10.8或者最新的10.9 Mavericks，恭喜你，系统自带了Python 2
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        安装Elasticsearch安装Kibana安装Logstash安装Filebeat
+        简介引用swoole官网对swoole的介绍
+
+Swoole:面向生产环境的 PHP 异步网络通信引擎   使 PHP 开发人员可以编写高性能的异步并发 TCP、UDP、Unix Socket、HTTP，WebSocket 服务。Swoole 可以广泛应用于互联网、移动通信、企业软件、云计算、网络游戏、物联网（IOT）、车联网、智能家居等领域。 使用 PHP + Swoole 作为网络通信框...
     
 
-        <a href="/2018/09/08/elastic-stack/2018-09-08-02/" class="post-more waves-effect waves-button">
+        <a href="/2017/11/03/swoole/2017-11-03-01/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elastic-Stack/">Elastic-Stack</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elastic-stack/2018-09-04-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-09-04 17:36:39" datetime="2018-09-04T09:36:39.000Z"  itemprop="datePublished">2018-09-04</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elastic-Stack/">Elastic-Stack</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/09/04/elastic-stack/2018-09-04-01/">01. 从ELK Stack 到 Elastic Stack</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        ELK Stack 简介ELK Stack 是三个开源工具的统称: Elasticsearch, Logstash 和 Kibana
-
-Logstash: 开源的日志收集工具, 能按你所定义的配置信息来规范化数据, 并根据需要将其他送到指定的目的地; (监听9600端口)
-
-拥有非常多的Input输入数据类型的插件, 这些Input插件可以用于从大量不同来源的信息中读取数据;
-同时, 它也拥...
-    
-
-        <a href="/2018/09/04/elastic-stack/2018-09-04-01/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elastic-Stack/">Elastic-Stack</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swoole/">Swoole</a></li></ul>
 
     </div>
     
@@ -674,7 +402,7 @@ Logstash: 开源的日志收集工具, 能按你所定义的配置信息来规�
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页</a>
+    <a class="extend prev" rel="prev" href="/">上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </div>
 </nav>
 

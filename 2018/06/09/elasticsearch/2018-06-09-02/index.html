@@ -13,28 +13,28 @@
     
     
     
-    <title>01. 初识 Elasticsearch | Lant&#39;s</title>
+    <title>02. ES 版本选择及简单安装 | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="Elasticsearch(一)">
-    <meta name="description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+    <meta name="description" content="版本选择 ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X;   此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)     安装 安装Java, 推荐使用Java 8 : yum install j">
 <meta name="keywords" content="Elasticsearch(一)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01. 初识 Elasticsearch">
-<meta property="og:url" content="http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/index.html">
+<meta property="og:title" content="02. ES 版本选择及简单安装">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+<meta property="og:description" content="版本选择 ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X;   此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)     安装 安装Java, 推荐使用Java 8 : yum install j">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/est-9100.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/kibana-devtools.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/est/est-9100-yellow.png">
-<meta property="og:updated_time" content="2018-11-09T03:44:49.000Z">
+<meta property="og:updated_time" content="2018-11-11T05:48:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01. 初识 Elasticsearch">
-<meta name="twitter:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+<meta name="twitter:title" content="02. ES 版本选择及简单安装">
+<meta name="twitter:description" content="版本选择 ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X;   此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)     安装 安装Java, 推荐使用Java 8 : yum install j">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/est/est-9100.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
@@ -56,7 +56,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -109,7 +109,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01. 初识 Elasticsearch</div>
+        <div class="flex-col header-title ellipsis">02. ES 版本选择及简单安装</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -133,8 +133,8 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-06-08T06:24:25.000Z" itemprop="datePublished" class="page-time">
-  2018-06-08
+                <time datetime="2018-06-09T06:56:01.000Z" itemprop="datePublished" class="page-time">
+  2018-06-09
 </time>
 
 
@@ -159,13 +159,13 @@
         </nav>
     </aside>
     
-<article id="post-elasticsearch/2018-06-08-01"
+<article id="post-elasticsearch/2018-06-09-02"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01. 初识 Elasticsearch</h1>
+        <h1 class="post-card-title">02. ES 版本选择及简单安装</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-06-08 14:24:25" datetime="2018-06-08T06:24:25.000Z"  itemprop="datePublished">2018-06-08</time>
+            <time class="post-time" title="2018-06-09 14:56:01" datetime="2018-06-09T06:56:01.000Z"  itemprop="datePublished">2018-06-09</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -176,40 +176,10 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <ol>
-<li><p>可以通过如下几个特点来认识ES:</p>
-<ul>
-<li><p>开源</p>
+            <h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><ol>
+<li><p>ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/index.html" target="_blank" rel="noopener">官网文档</a>, 可能很多公司还在用2.X, 或者刚切到5.X; </p>
 </li>
-<li><p>基于 Lucene, 提供比较简单的Restful API<br>Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)<br>但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API</p>
-</li>
-<li><p><strong>高性能全文检索和分析引擎, 并可根据相关度对结果进行排序</strong></p>
-</li>
-<li><p>可以快速且 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/near-real-time.html" target="_blank" rel="noopener">近实时</a> 地存储,检索(从文档被索引到可以被检索只有轻微延时, 约1s)以及分析</p>
-</li>
-<li><p>海量数据检索及分析: 可以扩展到上百台服务器, 处理PB级 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/structured-search.html" target="_blank" rel="noopener">结构化</a> 或 非结构化 数据 </p>
-</li>
-<li><p>面向文档型数据库, 存储的是整个对象或者文档, 它不但会存储它们, 还会为它们建立索引</p>
-</li>
-</ul>
-</li>
-<li><p>应用场景</p>
-<ul>
-<li><p>当你的应用数据量很大, 数据结构灵活多变, 数据之间的结构比较复杂, 如果用传统数据库, 可能不仅需要面对大量的表设计及数据库的性能问题, 此时可以考虑使用ES, 它不仅可以处理非结构化数据, 而且可以帮你快速进行扩容, 承载大量数据;</p>
-</li>
-<li><p>具体比如多数据源聚合大列表页: 微服务架构是目前很多公司都采用的架构, 所以经常会面对 多数据源聚合的 大列表页, 一个列表中的筛选字段,展示字段可能会来自多个服务, 同时涉及到分页, 所以传统方案可能比较吃力, 而且也得不到比较好的效果; (RRC这边目前是使用 ES 做 <strong>数据视图服务</strong>, 对这种大列表页所用到的数据源字段做统一配置和聚合)</p>
-</li>
-<li><p>日志数据分析, RRC 使用 ElasticStack 技术栈来很方便地对各服务的日志进行查询,分析,统计;</p>
-</li>
-<li><p>站内搜索(电商, 招聘, 门户 等等)都可以使用 ES 来做全文检索并根据相关性进行排名, 高亮展示关键词等;</p>
-</li>
-</ul>
-</li>
-</ol>
-<h2 id="版本选择"><a href="#版本选择" class="headerlink" title="版本选择"></a>版本选择</h2><ol>
-<li><p>ES 的版本变更比较快, 目前(06/2018)为止, 已经到6.X了, 可参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/index.html" target="_blank" rel="noopener">官网文档</a>, 可能很多公司还在用2.X, 或者刚切到5.X; </p>
-</li>
-<li><p>我之所以使用5.5.3来学习调研, 主要也是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  </p>
+<li><p>此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  </p>
 </li>
 </ol>
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
@@ -302,7 +272,7 @@
 <li><p>注意此时, 之前的es集群变成yellow状态了 (因为kibana有个副本分片并没有处于正常状态, 因为当前只有一个节点, 副本分片无法被分配到其他节点, 具体细节先不用着急, 后面会进行分析)<br> <img src="/img/est/est-9100-yellow.png"></p>
 </li>
 </ol>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到此为止, 应该对ES有了最基础的了解, 且基本环境已经安装完毕, 暂时就够</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>到此为止, 应该对ES有了最基础的了解, 且基本环境已经安装完毕, 对于后续的练习暂时就够了</p>
 
         </div>
 
@@ -339,7 +309,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&title=《02. ES 版本选择及简单安装》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -349,22 +319,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&title=《02. ES 版本选择及简单安装》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 初识 Elasticsearch》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. ES 版本选择及简单安装》 — Lant's&url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -384,13 +354,20 @@
     </div>
 
     
-<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+<nav class="post-nav flex-row flex-justify-between">
   
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/09/elasticsearch/2018-06-09-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. 初识 Elasticsearch</h4>
+        </a>
+      </div>
+    
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/06/08/elasticsearch/2018-06-08-02/" id="post-next" class="post-nav-link">
+      <a href="/2018/06/09/elasticsearch/2018-06-09-03/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">02. ES 版本选择及简单安装</h4>
+        <h4 class="title">03. ES 一些基本概念</h4>
       </a>
     </div>
   
@@ -482,7 +459,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&title=《02. ES 版本选择及简单安装》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -492,22 +469,22 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&title=《01. 初识 Elasticsearch》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&title=《02. ES 版本选择及简单安装》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
       <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/" data-title=" Facebook">
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/" data-title=" Facebook">
           <i class="icon icon-facebook"></i>
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 初识 Elasticsearch》 — Lant's&url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. ES 版本选择及简单安装》 — Lant's&url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
       <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/08/elasticsearch/2018-06-08-01/" data-title=" Google+">
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-02/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -518,7 +495,7 @@
 <div class="page-modal wx-share" id="wxShare">
     <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACu0lEQVR42u3aQW4bMQwFUN//0i3QVRex539SSlrgaWUk8AyfFhJN8vWK168/6+/P79a77+br83dfNxYeHh7eKPTPL/v84ncbkQeavHe4xXh4eHjXePllkPw3CTo57vPtfvt3PDw8vB/ltblru2V5DHh4eHj/Cy9Ju2eH+Gxr8PDw8H6Wl4e+vx6ScPMk/litBQ8PD6/rUtUNsJ/9fL2/h4eHhzfqqrdNqfaIL9LiWbR4eHh4F3h5iPsXt0WHz1HlJQ88PDy8s7yk2Z+MBSSJ+H7j2tIJHh4e3g3evoaRp8s5LG+qRVcOHh4e3gVe3vhvU+r2yfnz88IHHh4e3j1eexDfKF7sU/O6JYaHh4dX8tojuz3u84D2Uw+ruw4PDw9v/YQ2tf2cfM+S6bagXFDx8PDw1rxZGt2y22Gstrz70ADDw8PDO8o7dei3DapZ22yYvuPh4eEd4uUB7UcKkithcyE9/DLAw8PDu8DbJM2bFtr+MniYhsDDw8M7ytsUC9o0d9NamyX6eHh4eDd4+4HRYhdHiXjeu/siNjw8PLwLvISxedlsNCG/luptxcPDw1vzNoXU/b6241b5AAEeHh7ebd6mEDC7KophqVHaHVVT8PDw8Ea8zQ/+Nu2+N271QMXDw8M7ymuP/mSAoG1r5YD6BwAeHh7eNd5s+Km9QtpkelaMiMq4eHh4eAve/ihP8FFTvywfF9cVHh4e3lFekhznjfzZ4NSmpPvwfDw8PLzLvGTNXtOWfWdJ9sPFgIeHh3eIl6+8HLBvXOVliNephYeHh1fyNgMBeQreJuvHWmt4eHh413htEDNqXuCYFX8fBgjw8PDwvp23Kbxuyhz5DBUeHh7ev8nLW2J5YTe5bPKYhyk1Hh4eXslLihGbkkQ7iLBpm+Hh4eHd5s3S2TyBzscUNm883N/Dw8PD+3r9Bu4KK/DjYXVxAAAAAElFTkSuQmCC" alt="微信分享二维码">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACt0lEQVR42u3aQW7jMBAEwPz/095rgER294zoNXaLp0CxaBUDiJMefn3F4/FtXF1JPpmMq9l+/va2gYeHh7d49KvpkuvPZ/v+258/P1+gq3uTBcLDw8M7x7v6muef2WwS+Tzt0uDh4eF9Gi8pcNuX+/N58PDw8P4l3r3FdDI/Hh4e3ufwZg+XB695ULuJPPDw8PDew8u7SJ/z85H+Hh4eHt66q5409fNY4UR//8VdeHh4eAd4+Qs3KbLbgriNPGbPiYeHh/ceXvs1bVQRxa+LGAIPDw/vHO+Fe7RJJI/elsV5pLt6UDw8PLyS176a22J6M3/+vb/seHh4eHi38op/6duXclwoJ4+Vl+Z1ZoyHh4dX8pKIoT0+1R7MyptqdTCBh4eHd4B3osHfhrD7sPi2E2d4eHh4MW/WsF+189cF+rC/h4eHh7fmDddjVPK2u9Ps2MHw74aHh4cX804fsWqjjf31G/Y9PDw8vAVvUyLPwt/kSh4K4+Hh4Z3j5RFtcgRqU6xvAtzob4iHh4e35j2CkQQQ7RmnWRCcl/WXJyPw8PDw1rz2hruOPbUtrnxxizAXDw8Pb8G7N4zYx7izuOFNWQseHt5/z2sZLX7/oLOy+5dDV3h4eHg38dop9p+/qzFW/6+Ah4eHd4w3iwBm9+bxxOYwFh4eHt77efu0Y7ZAs0Ck3pfw8PDwFrxZ8ZpfyQOFTUQShbl4eHh4N/H2L/3n89zctWvbYHh4eHg38R7laEvkFtYe8HqxbeDh4eEd4LUv3ASWN/XzeCL/ruHAw8PDK3n5ZtCGCG00vNkYLp8QDw8P7xgvf6G328Zsj9rc9UskgYeHh/dXebMgYHZEIF/uor+Hh4eH9zG8GSZvmw0XCA8PD+8Yb9P0apdm3x7LIw88PDy8E7x9OZuU1/nRhGRRbh54eHh46fgDnJ8DJxL3F5cAAAAASUVORK5CYII=" alt="微信分享二维码">
 </div>
 
 

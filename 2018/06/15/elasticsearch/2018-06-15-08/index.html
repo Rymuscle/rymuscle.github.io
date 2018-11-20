@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>08. 全文检索,结构化精确检索,短语检索,统计 预习 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Elasticsearch(一)">
+    <meta name="description" content="查询和过滤 在es中检索文档时候, 对文档的筛选分为 查询 和 过滤, 这两种方式是不太一样的  练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品  1234567891011121314151617GET /products/computer/_search&amp;#123;  &amp;quot;query&amp;quot; : &amp;#123;    &amp;quot;bool&amp;quo">
+<meta name="keywords" content="Elasticsearch(一)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="08. 全文检索,结构化精确检索,短语检索,统计 预习">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="查询和过滤 在es中检索文档时候, 对文档的筛选分为 查询 和 过滤, 这两种方式是不太一样的  练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品  1234567891011121314151617GET /products/computer/_search&amp;#123;  &amp;quot;query&amp;quot; : &amp;#123;    &amp;quot;bool&amp;quo">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-11T05:46:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="08. 全文检索,结构化精确检索,短语检索,统计 预习">
+<meta name="twitter:description" content="查询和过滤 在es中检索文档时候, 对文档的筛选分为 查询 和 过滤, 这两种方式是不太一样的  练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品  1234567891011121314151617GET /products/computer/_search&amp;#123;  &amp;quot;query&amp;quot; : &amp;#123;    &amp;quot;bool&amp;quo">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">08. 全文检索,结构化精确检索,短语检索,统计 预习</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-15T10:56:31.000Z" itemprop="datePublished" class="page-time">
+  2018-06-15
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查询和过滤"><span class="post-toc-number">1.</span> <span class="post-toc-text">查询和过滤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#full-text-检索"><span class="post-toc-number">2.</span> <span class="post-toc-text">full-text 检索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结构化精确检索"><span class="post-toc-number">3.</span> <span class="post-toc-text">结构化精确检索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#phrase-search-短语搜索"><span class="post-toc-number">4.</span> <span class="post-toc-text">phrase search(短语搜索)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#提前了解ES统计语法"><span class="post-toc-number">5.</span> <span class="post-toc-text">提前了解ES统计语法</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-elasticsearch/2018-06-15-08"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">08. 全文检索,结构化精确检索,短语检索,统计 预习</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-15 18:56:31" datetime="2018-06-15T10:56:31.000Z"  itemprop="datePublished">2018-06-15</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="查询和过滤"><a href="#查询和过滤" class="headerlink" title="查询和过滤"></a>查询和过滤</h2><ol>
+<li><p>在es中检索文档时候, 对文档的筛选分为 <strong>查询</strong> 和 <strong>过滤</strong>, 这两种方式是不太一样的</p>
+</li>
+<li><p>练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;must&quot; : &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">          &quot;desc&quot;:&quot;diannao&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;filter&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">          &quot;price&quot; : &#123;&quot;gt&quot;: 5000&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意:</p>
+<ul>
+<li><code>结构化检索</code>(精确类型字段的检索) 一般会被放到filter过滤语句中, 不会进行分词和相关度排名, 但会对过滤进行缓存</li>
+<li><code>全文检索</code>(全文类型字段的检索) 一般用查询语句进行筛选, 会进行分词和相关度排名</li>
+</ul>
+</li>
+</ol>
+<h2 id="full-text-检索"><a href="#full-text-检索" class="headerlink" title="full-text 检索"></a>full-text 检索</h2><ol>
+<li><p>ES可以进行全文检索并可以进行相关度排名</p>
+</li>
+<li><p>重新准备数据</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">DELETE /products</span><br><span class="line">PUT /products/computer/1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;lenovo&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;lianxiang diannao chaobao&quot;,</span><br><span class="line">  &quot;price&quot; : 4500,</span><br><span class="line">  &quot;tag&quot; : [&quot;jieneng&quot;, &quot;xuhang&quot;, &quot;chaobao&quot;] </span><br><span class="line">&#125;</span><br><span class="line">PUT /products/computer/2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;acer&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;gaoqing hongji diannao&quot;,</span><br><span class="line">  &quot;price&quot; : 4870,</span><br><span class="line">  &quot;tag&quot; : [&quot;jieneng&quot;, &quot;chaobao&quot;, &quot;gaoqing&quot;] </span><br><span class="line">&#125;</span><br><span class="line">PUT /products/computer/3</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;dell&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;daier chaoji diannao&quot;,</span><br><span class="line">  &quot;price&quot; : 5499,</span><br><span class="line">  &quot;tag&quot; : [&quot;shishang&quot;, &quot;gaoqing&quot;, &quot;gaoxingneng&quot;] </span><br><span class="line">&#125;</span><br><span class="line">POST /products/computer/</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;huawei&quot;,</span><br><span class="line">  &quot;desc&quot; : &quot;china best diannao gaoqing&quot;,</span><br><span class="line">  &quot;price&quot; : 6080,</span><br><span class="line">  &quot;tag&quot; : [&quot;gaoxingneng&quot;, &quot;gaoqing&quot;, &quot;jieneng&quot;] </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习, 全文检索</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;desc&quot;:&quot;gaoqing diannao&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习 全文高亮检索</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;match&quot; : &#123;</span><br><span class="line">      &quot;desc&quot;:&quot;gaoqing diannao&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;: &#123;</span><br><span class="line">    &quot;fields&quot; : &#123;</span><br><span class="line">      &quot;desc&quot; : &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 2,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 4,</span><br><span class="line">    &quot;max_score&quot;: 0.5753642,</span><br><span class="line">    &quot;hits&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot;: &quot;products&quot;,</span><br><span class="line">        &quot;_type&quot;: &quot;computer&quot;,</span><br><span class="line">        &quot;_id&quot;: &quot;AWbE6HmlWC0s-aachNUv&quot;,</span><br><span class="line">        &quot;_score&quot;: 0.5753642,</span><br><span class="line">        &quot;_source&quot;: &#123;</span><br><span class="line">          &quot;name&quot;: &quot;huawei&quot;,</span><br><span class="line">          &quot;desc&quot;: &quot;china best diannao gaoqing&quot;,</span><br><span class="line">          &quot;price&quot;: 6080,</span><br><span class="line">          &quot;tag&quot;: [</span><br><span class="line">            &quot;gaoxingneng&quot;,</span><br><span class="line">            &quot;gaoqing&quot;,</span><br><span class="line">            &quot;jieneng&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;highlight&quot;: &#123;</span><br><span class="line">          &quot;desc&quot;: [</span><br><span class="line">            &quot;china best &lt;em&gt;diannao&lt;/em&gt; &lt;em&gt;gaoqing&lt;/em&gt;&quot;</span><br><span class="line">          ]</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    ......</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="结构化精确检索"><a href="#结构化精确检索" class="headerlink" title="结构化精确检索"></a>结构化精确检索</h2><h2 id="phrase-search-短语搜索"><a href="#phrase-search-短语搜索" class="headerlink" title="phrase search(短语搜索)"></a>phrase search(短语搜索)</h2><ol>
+<li><p>与全文索引不同, 全文索引会对你发送的 查询串 进行拆分(做分词处理), 然后去倒排索引中与之前在存储文档时分好的词项进行匹配, 只要你发送的查询内容拆分后, 有一个词能匹配到倒排索引中的词项, 该词项所对应的文档就可以返回;  </p>
+</li>
+<li><p>phrase search(短语搜索)则不会对你发送的 查询串 进行分词, 而是要求在指定查询的字段中必须包含和你发送的查询串一模一样的内容 才算是匹配, 否则该文档不能作为结果返回; </p>
+</li>
+<li><p><strong>短语搜索 和 结构化搜索还是不一样</strong></p>
+<ul>
+<li>结构化搜索是 你的查询串 和 指定的文档字段内容 是完全一致的, 查询串和字段本身都不会做分词, 一般该字段也是精确类型的字段类型;</li>
+<li>而 短语搜索 则是, 你的 查询串 不会做分词, 但是你查询的字段可能会做分词, 你的查询串需要包含在 指定字段中;</li>
+</ul>
+</li>
+<li><p>搜索商品desc字段中包含 ‘gaoqing diannao’短语 的文档</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 短语检索</span><br><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;match_phrase&quot; : &#123;</span><br><span class="line">      &quot;desc&quot;: &quot;diannao gaoqing&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>结果发现, 虽然还是查询的全文字段desc, 但是结果却只有一个</li>
+</ul>
+</li>
+</ol>
+<h2 id="提前了解ES统计语法"><a href="#提前了解ES统计语法" class="headerlink" title="提前了解ES统计语法"></a>提前了解ES统计语法</h2><ol>
+<li><p>统计商品 每个tag下的商品数量, 即, 根据商品的tag进行分组</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;aggs&quot; : &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;&quot;field&quot;:&quot;tag&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>初次运行报错</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;error&quot;: &#123;</span><br><span class="line">    &quot;root_cause&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;type&quot;: &quot;illegal_argument_exception&quot;,</span><br><span class="line">        &quot;reason&quot;: &quot;Fielddata is disabled on text fields by default. Set fielddata=true on [tag] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead.&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    &quot;type&quot;: &quot;search_phase_execution_exception&quot;,</span><br><span class="line">    &quot;reason&quot;: &quot;all shards failed&quot;,</span><br><span class="line">    &quot;phase&quot;: &quot;query&quot;,</span><br><span class="line">    &quot;grouped&quot;: true,</span><br><span class="line">    &quot;failed_shards&quot;: [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;shard&quot;: 0,</span><br><span class="line">        &quot;index&quot;: &quot;products&quot;,</span><br><span class="line">        &quot;node&quot;: &quot;eCgKpl8JRbqwL3QY0Vuz3A&quot;,</span><br><span class="line">        &quot;reason&quot;: &#123;</span><br><span class="line">          &quot;type&quot;: &quot;illegal_argument_exception&quot;,</span><br><span class="line">          &quot;reason&quot;: &quot;Fielddata is disabled on text fields by default. Set fielddata=true on [tag] in order to load fielddata in memory by uninverting the inverted index. Note that this can however use significant memory. Alternatively use a keyword field instead.&quot;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;status&quot;: 400</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>解决方案: 将文本field的 filedata 属性设置为true (现在不用知道这玩意儿, 先尽快解决, 看到聚合分析的预发和效果, 后面讲在详聊该问题)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PUT /products/_mapping/computer</span><br><span class="line">&#123;</span><br><span class="line">  &quot;properties&quot;: &#123;</span><br><span class="line">    &quot;tag&quot;: &#123;</span><br><span class="line">      &quot;type&quot;: &quot;text&quot;,</span><br><span class="line">      &quot;fielddata&quot;: true</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重新执行统计语句, 发现返回中除了分析的结果, 还包含了查询的文档内容; 如果只想显示聚合分析的结果, 可以如下设置size为0:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot; : &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;&quot;field&quot;:&quot;tag&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习, 针对名称中包含”china”的商品, 计算每个tag下的商品数</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot; : &#123;</span><br><span class="line">      &quot;desc&quot; : &quot;gaoqing&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_tag&quot; : &#123;</span><br><span class="line">      &quot;terms&quot; : &#123;&quot;field&quot;: &quot;tag&quot;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习, 计算每个tag下商品的平均价格 (先分组, 再计算每组的平均值)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;: 0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;&quot;field&quot;: &quot;tag&quot;&#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;avg_by_price&quot; : &#123;</span><br><span class="line">          &quot;avg&quot; : &#123;&quot;field&quot;:&quot;price&quot;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 5,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 16,</span><br><span class="line">    &quot;max_score&quot;: 0,</span><br><span class="line">    &quot;hits&quot;: []</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggregations&quot;: &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">      &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">      &quot;buckets&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;gaoqing&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 3,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5483</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;jieneng&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 3,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5150</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;chaobao&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 4685</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;gaoxingneng&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5789.5</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;shishang&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5499</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;xuhang&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 4500</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习, 计算每个tag下商品的平均价格, 并且按照平均价格进行排序 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;:0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;terms&quot;: &#123;&quot;field&quot;:&quot;tag&quot;, &quot;order&quot;: &#123;&quot;avg_by_price&quot;:&quot;desc&quot;&#125;&#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;avg_by_price&quot;: &#123;</span><br><span class="line">          &quot;avg&quot;: &#123;&quot;field&quot;: &quot;price&quot;&#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 3,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 16,</span><br><span class="line">    &quot;max_score&quot;: 0,</span><br><span class="line">    &quot;hits&quot;: []</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggregations&quot;: &#123;</span><br><span class="line">    &quot;group_by_tag&quot;: &#123;</span><br><span class="line">      &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">      &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">      &quot;buckets&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;gaoxingneng&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5789.5</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;shishang&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5499</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;gaoqing&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 3,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5483</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;jieneng&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 3,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 5150</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;chaobao&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 4685</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;xuhang&quot;,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;avg_by_price&quot;: &#123;</span><br><span class="line">            &quot;value&quot;: 4500</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>练习, 按照指定的价格范围区间进行分组, 然后再每个分组内再按照tag进行分组, 最后在计算每组的平均价格</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;size&quot;:0,</span><br><span class="line">  &quot;aggs&quot;: &#123;</span><br><span class="line">    &quot;group_by_price_range&quot;: &#123;</span><br><span class="line">      &quot;range&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;price&quot;,</span><br><span class="line">        &quot;ranges&quot;: [</span><br><span class="line">          &#123;&quot;from&quot;:4500, &quot;to&quot;:5000&#125;,</span><br><span class="line">          &#123;&quot;from&quot;:5000, &quot;to&quot;:5500&#125;,</span><br><span class="line">          &#123;&quot;from&quot;:5500, &quot;to&quot;:6100&#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;aggs&quot;: &#123;</span><br><span class="line">        &quot;group_by_tags&quot;: &#123;</span><br><span class="line">          &quot;terms&quot;: &#123;&quot;field&quot;: &quot;tag&quot;&#125;,</span><br><span class="line">          &quot;aggs&quot;:&#123;</span><br><span class="line">            &quot;avg_by_price&quot;: &#123;</span><br><span class="line">              &quot;avg&quot;: &#123;&quot;field&quot;:&quot;price&quot;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果: </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;took&quot;: 1,</span><br><span class="line">  &quot;timed_out&quot;: false,</span><br><span class="line">  &quot;_shards&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 5,</span><br><span class="line">    &quot;successful&quot;: 5,</span><br><span class="line">    &quot;failed&quot;: 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot;: &#123;</span><br><span class="line">    &quot;total&quot;: 16,</span><br><span class="line">    &quot;max_score&quot;: 0,</span><br><span class="line">    &quot;hits&quot;: []</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;aggregations&quot;: &#123;</span><br><span class="line">    &quot;group_by_price_range&quot;: &#123;</span><br><span class="line">      &quot;buckets&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;4500.0-5000.0&quot;,</span><br><span class="line">          &quot;from&quot;: 4500,</span><br><span class="line">          &quot;to&quot;: 5000,</span><br><span class="line">          &quot;doc_count&quot;: 2,</span><br><span class="line">          &quot;group_by_tags&quot;: &#123;</span><br><span class="line">            &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">            &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">            &quot;buckets&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;chaobao&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 2,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 4685</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;jieneng&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 2,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 4685</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;gaoqing&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 4870</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;xuhang&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 4500</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;5000.0-5500.0&quot;,</span><br><span class="line">          &quot;from&quot;: 5000,</span><br><span class="line">          &quot;to&quot;: 5500,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;group_by_tags&quot;: &#123;</span><br><span class="line">            &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">            &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">            &quot;buckets&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;gaoqing&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 5499</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;gaoxingneng&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 5499</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;shishang&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 5499</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;key&quot;: &quot;5500.0-6100.0&quot;,</span><br><span class="line">          &quot;from&quot;: 5500,</span><br><span class="line">          &quot;to&quot;: 6100,</span><br><span class="line">          &quot;doc_count&quot;: 1,</span><br><span class="line">          &quot;group_by_tags&quot;: &#123;</span><br><span class="line">            &quot;doc_count_error_upper_bound&quot;: 0,</span><br><span class="line">            &quot;sum_other_doc_count&quot;: 0,</span><br><span class="line">            &quot;buckets&quot;: [</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;gaoqing&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 6080</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;gaoxingneng&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 6080</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;,</span><br><span class="line">              &#123;</span><br><span class="line">                &quot;key&quot;: &quot;jieneng&quot;,</span><br><span class="line">                &quot;doc_count&quot;: 1,</span><br><span class="line">                &quot;avg_by_price&quot;: &#123;</span><br><span class="line">                  &quot;value&quot;: 6080</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;</span><br><span class="line">            ]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&title=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&title=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/14/elasticsearch/2018-06-14-07/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">07. 查询小优化</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/16/elasticsearch/2018-06-16-09/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">09. 组合多条件搜索</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&title=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&title=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《08. 全文检索,结构化精确检索,短语检索,统计 预习》 — Lant's&url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/15/elasticsearch/2018-06-15-08/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrklEQVR42u3aS24jMQwE0Nz/0pkDjD9VpJQ4wOuVYbjder2QiCK/vuLr+8n1+vev703+M3/i6sLDw8M7tPRnS8wX/Yz6/+dn65m9Mjw8PLyf4SWbe7LE2QHwGta+Gjw8PLzP573+Jtnc89IcDw8P7y/y2t/MfpmX5nh4eHi/xZsFCnnImwe1+ygEDw8P7zYv7yJ9zucr/T08PDy8dVc9PySKAnddRherxcPDw7vAyxexYcyGCWblMh4eHt5tXn5DGygksDxKbmMIPDw8vHu8hJSPCOQB7tkivg5w8fDw8Na82ZhUW+C2W/+s4H7T38PDw8Nb82YN+GREIC+U8yfWATEeHh7eBV5bsOaYfEgrZw9Hr/Dw8PCO8tohgE3hmwe+eXH/5qjAw8PDu8Cbldezw2MWDeexyJtSHg8PD+8Qr21itYNZdVN/FEA8/X88PDy8H+FtCtxZ+Hv2+zcHAx4eHt6a1y731LLaA2AWCuPh4eHd5rXd9k13Po99W14xMYGHh4e35uVxQztSMAttZ0fF0//Ew8PDO8RLBgXa4afkZc0Cjnp8AQ8PD+8CLx+rahe6iXFncUMxdIWHh4e34CWDVvu21mahs7L7QX8PDw8P7xAvKkZHYe6mQJ8FEMXQAB4eHt6at2HMYos2ntiMLODh4eHd4J0NYfPWV54Y5M86kLLg4eHhlbzZ5p7A8kChhb15Ch4eHt5l3ld8zbbyw127tg2Gh4eHt+Z9l1cb++4PkjZNeTCuioeHh3eUtzkG9tQ8nqgbXe2Fh4eHV/Jmo1ftwEEe784Ohqinh4eHh3eUN9vQk7tmZ9TmrgeRBB4eHt6v8mb42YjAPuDAw8PD+wResvXnmCSWXb0gPDw8vGu8NgjYHBvtN+2rxMPDw7vNm5WzCWmzrZ8KNfDw8PCO8v4B41uccVmNA8IAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

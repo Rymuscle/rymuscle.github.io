@@ -47,7 +47,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -139,11 +139,11 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-17-10"
+            <article id="post-elasticsearch/2018-06-19-13"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-17 16:43:02" datetime="2018-06-17T08:43:02.000Z"  itemprop="datePublished">2018-06-17</time>
+        <time class="post-time" title="2018-06-19 19:21:52" datetime="2018-06-19T11:21:52.000Z"  itemprop="datePublished">2018-06-19</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -157,7 +157,61 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/17/elasticsearch/2018-06-17-10/">10. ES的写一致机制</a>
+      <a class="post-title-link" href="/2018/06/19/elasticsearch/2018-06-19-13/">13. mapping</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        mapping核心数据类型
+es的文档中, 每个字段都有一个数据类型, 可以是:
+
+一个简单的类型, 如 text, keyword, date, long, double, boolean 或 ip-支持JSON的分层特性的类型,如对象或嵌套
+或者像 geo_point, geo_shape 或 completion 这样的特殊类型
+
+
+为不同目的以不同方式索引相同字段通常很有用, 例如,...
+    
+
+        <a href="/2018/06/19/elasticsearch/2018-06-19-13/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-17-12"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-17 17:05:52" datetime="2018-06-17T09:05:52.000Z"  itemprop="datePublished">2018-06-17</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/17/elasticsearch/2018-06-17-12/">12. 分词器</a>
     </h3>
   
 
@@ -168,15 +222,115 @@
 
     
         
-当我们在发送任何一个增删改操作时, 比如 put /index/type/id, 都可以带上一个 consistency 参数, 指明我们想要的写一致性是什么
+之前在介绍mapping时, 已经了解到, ES会根据文档的字段类型, 来决定该字段是否需要进行分词和倒排索引, 而分词器的主要工作就是对字段内容进行分词, 通过分词器处理好的结果才会拿去建立倒排索引;
+ES内置的分词器:
+standard analyzer
+simple analyzer
+whitespace analyzer
+language analyzer
 
-consistency 有如下几个值
 
-one : 要求这个写操作, 只要有一个 primary-shard 是active活跃可用的, 就可以执行
-all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
+测试分词器: 123...
     
 
-        <a href="/2018/06/17/elasticsearch/2018-06-17-10/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/17/elasticsearch/2018-06-17-12/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-16-11"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-16 19:23:16" datetime="2018-06-16T11:23:16.000Z"  itemprop="datePublished">2018-06-16</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-11/">11. 诡异的搜索结果 引出 mapping</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        诡异的搜索结果
+构造数据
+ 1234567891011121314151617181920DELETE /websiteGET /website/_mappingPUT /website/article/1&#123;  &quot;post_date&quot;: &quot;2018-06-20&quot;,  &quot;title&quot;: &quot;php&quot;,  &...
+    
+
+        <a href="/2018/06/16/elasticsearch/2018-06-16-11/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-16-10"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-16 14:29:39" datetime="2018-06-16T06:29:39.000Z"  itemprop="datePublished">2018-06-16</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-10/">10. 了解 `_all` field</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        _all
+对于在学习 query-string 搜索时, 一般这样来用 GET /products/computer/_search?q=desc:diannao&amp;sort=price:desc 这种查指定字段进行筛选的方式; 其实ES还可以直接 GET /products/computer/_search?q=diaonao 来进行检索, 这种检索方式会对文档中的所有字段进行匹配;...
+    
+
+        <a href="/2018/06/16/elasticsearch/2018-06-16-10/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -196,7 +350,7 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-16 14:01:19" datetime="2018-06-16T06:01:19.000Z"  itemprop="datePublished">2018-06-16</time>
+        <time class="post-time" title="2018-06-16 10:07:26" datetime="2018-06-16T02:07:26.000Z"  itemprop="datePublished">2018-06-16</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -210,7 +364,7 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-09/">09. 简单了解ES 分布式, 扩容, 分片, 数据路由</a>
+      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-09/">09. 组合多条件搜索</a>
     </h3>
   
 
@@ -220,15 +374,11 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-通过之前的几篇文章应该大概了解了ES是什么, 它能做些什么, 并且简单尝试了一下它的几种查询方式, 聚合分析功能; 这些简单的尝试会让你提前对其语法有个大概认识;
+        查询
+虽然 Elasticsearch 自带了很多的查询, 但经常用到的也就那么几个 
 
-在继续深入ES的相关用法前, 这里也准备先提前对ES的一些基础架构相关内容有个简单了解
-
-
-复杂分布式的透明
-之前在使用ES索引的数据时, 我们并没有关心过数据是如何进行分片的, 也没有关心过数据是到哪个分片中去的;
-另外...
+match_all : 简单的匹配所有文档, 在没有指定查询方式时(即查询体为空时), 它是默认的查询
+match : 无论你在任何字段上进行的是全文搜索还是精确查询, match 查询都是你可用的标准查询如果你在一个全文字段上使用 match 查询，在执行查询前，它将用正确的分析器去分析查询字符串如果...
     
 
         <a href="/2018/06/16/elasticsearch/2018-06-16-09/" class="post-more waves-effect waves-button">
@@ -247,11 +397,11 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-16-08"
+            <article id="post-elasticsearch/2018-06-15-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-16 13:21:07" datetime="2018-06-16T05:21:07.000Z"  itemprop="datePublished">2018-06-16</time>
+        <time class="post-time" title="2018-06-15 18:56:31" datetime="2018-06-15T10:56:31.000Z"  itemprop="datePublished">2018-06-15</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -265,7 +415,7 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/16/elasticsearch/2018-06-16-08/">08. ES 乐观锁并发控制</a>
+      <a class="post-title-link" href="/2018/06/15/elasticsearch/2018-06-15-08/">08. 全文检索,结构化精确检索,短语检索,统计 预习</a>
     </h3>
   
 
@@ -275,25 +425,14 @@ all : 要求这个写操作, 必须所有的 primary-shard 和 rep...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        前言
-悲观锁: 
+        查询和过滤
+在es中检索文档时候, 对文档的筛选分为 查询 和 过滤, 这两种方式是不太一样的
 
-优点: 方便, 直接, 对应用程序来说不需要做额外的操作(比如重试之类的操作)
-缺点: 同一时间只有一个线程对数据做操作, 并发能力很低
-
-
-乐观锁: 
-
-优点: 比悲观锁的并发能力要高
-缺点: 应用程序在提交时需要对比版本号, 然后可能还需要做一些额外的重试工作;
-
-
-es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
-
-首先乐观锁是不会对数据进行加锁的, 因此...
+练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品
+ 1234567891011121314151617GET /products/computer/_search&#123;  &quot;query&quot; : &#123;    &quot;bool&...
     
 
-        <a href="/2018/06/16/elasticsearch/2018-06-16-08/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/15/elasticsearch/2018-06-15-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -309,11 +448,11 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-10-07"
+            <article id="post-elasticsearch/2018-06-14-07"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-10 20:09:13" datetime="2018-06-10T12:09:13.000Z"  itemprop="datePublished">2018-06-10</time>
+        <time class="post-time" title="2018-06-14 10:50:39" datetime="2018-06-14T02:50:39.000Z"  itemprop="datePublished">2018-06-14</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -327,7 +466,7 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-07/">07. ES 批量操作 mget, bulk</a>
+      <a class="post-title-link" href="/2018/06/14/elasticsearch/2018-06-14-07/">07. 查询小优化</a>
     </h3>
   
 
@@ -337,12 +476,11 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        mget 批量查询
-批量查询可以只发送一次网络请求, 返回多条查询结果, 能大大缩减网络请求的性能开销
-练习 : 12345678GET /_mget&#123;  &quot;docs&quot; : [    &#123;&quot;_index&quot;:&quot;products&quot;,&quot;_type&quot;:&quot;computer&quot;,&quot...
+        
+由于你的每个查询操作都可能会被转发到不同node的shard去执行, 现在假设你的查询, 会打到不同的10个shard上, 每个shard上都要花费1秒钟才能出结果, 这样你总共10s后才会给用户响应, 如果是个商品列表, 用户体验就会非常差 假设本来需要在10秒钟拿到100条数据(每个shard上10条), 现在你可以设置让es在1秒钟就让请求返回, 只拿到部分数据即可 此时可以在查询请...
     
 
-        <a href="/2018/06/10/elasticsearch/2018-06-10-07/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/14/elasticsearch/2018-06-14-07/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -362,7 +500,7 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-10 14:36:57" datetime="2018-06-10T06:36:57.000Z"  itemprop="datePublished">2018-06-10</time>
+        <time class="post-time" title="2018-06-10 17:06:39" datetime="2018-06-10T09:06:39.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -376,7 +514,7 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-06/">06. 提前了解查询相关知识点概要, 练习</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-06/">06. mget, bulk 批量操作</a>
     </h3>
   
 
@@ -386,14 +524,9 @@ es是使用乐观锁进行并发控制的: 主要是为了防止写覆盖问题
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        提前接触ES的查询和过滤
-在es中检索文档时候, 对文档的筛选分为 查询和过滤, 这两种方式是不太一样的, 现在只用先简单了解到
-
-ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter过滤语句中, 不会进行分词和相关度排名, 但会对过滤进行缓存
-而 全文检索(全文类型字段的检索) 一般用查询语句进行筛选, 全文检索会进行分词和相关度排名
-
-
-练习, 搜索商品desc字段中包含...
+        mget 批量查询
+批量查询可以只发送一次网络请求, 返回多条查询结果, 能大大缩减网络请求的性能开销
+练习 : 12345678GET /_mget&#123;  &quot;docs&quot; : [    &#123;&quot;_index&quot;:&quot;products&quot;,&quot;_type&quot;:&quot;computer&quot;,&quot...
     
 
         <a href="/2018/06/10/elasticsearch/2018-06-10-06/" class="post-more waves-effect waves-button">
@@ -416,7 +549,7 @@ ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter�
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-10 11:05:39" datetime="2018-06-10T03:05:39.000Z"  itemprop="datePublished">2018-06-10</time>
+        <time class="post-time" title="2018-06-10 14:33:46" datetime="2018-06-10T06:33:46.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -430,7 +563,7 @@ ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-05/">05. ES的搜索方式 Query-string 与 query DSL</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-05/">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</a>
     </h3>
   
 
@@ -464,11 +597,11 @@ ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-08-04"
+            <article id="post-elasticsearch/2018-06-10-04"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2018-06-08 21:33:46" datetime="2018-06-08T13:33:46.000Z"  itemprop="datePublished">2018-06-08</time>
+        <time class="post-time" title="2018-06-10 10:36:57" datetime="2018-06-10T02:36:57.000Z"  itemprop="datePublished">2018-06-10</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -482,7 +615,7 @@ ES中的 结构化检索(精确类型字段的检索) 一般会被放到filter�
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-04/">04. 简单尝试 CURD</a>
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-04/">04. 简单尝试 CURD</a>
     </h3>
   
 
@@ -499,170 +632,7 @@ ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/
  12epoch      timestamp cluster       status node.total node.data shards pri r...
     
 
-        <a href="/2018/06/08/elasticsearch/2018-06-08-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-08-03"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-06-08 18:23:07" datetime="2018-06-08T10:23:07.000Z"  itemprop="datePublished">2018-06-08</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-03/">03. ES 一些基本概念</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        近实时
-从文档被索引到可以被检索会有轻微延时, 约1s
-
-Index(索引 n)
-这里的Index是个名词, 类似于传统RDS的一个数据库, 是存储document的地方
-一个Index可以包含多个 type (索引的复数词为 indices 或 indexes) 
-index 名称必须是小写, 不能用下划线开头, 不能包含逗号
-一般将不同的项目数据放到不同的index中 
-每个index会...
-    
-
-        <a href="/2018/06/08/elasticsearch/2018-06-08-03/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-08-02"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-06-08 14:25:01" datetime="2018-06-08T06:25:01.000Z"  itemprop="datePublished">2018-06-08</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-02/">02. ES 版本选择及简单安装</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        版本选择
-ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考官网文档, 可能很多公司还在用2.X, 或者刚切到5.X; 
-
-此处之所以选用5.5.3来学习调研, 主要是因为公司选用的阿里云服务提供的是 ES 5.5.3版本 (所以你在选择版本时, 也可以根据 自建、购买云服务 来决定)  
-
-
-安装
-安装Java, 推荐使用Java 8 : yum instal...
-    
-
-        <a href="/2018/06/08/elasticsearch/2018-06-08-02/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-elasticsearch/2018-06-08-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2018-06-08 14:24:25" datetime="2018-06-08T06:24:25.000Z"  itemprop="datePublished">2018-06-08</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2018/06/08/elasticsearch/2018-06-08-01/">01. 初识 Elasticsearch</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        
-可以通过如下几个特点来认识ES:
-
-开源
-
-基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API
-
-高性能全文检索和分析...
-    
-
-        <a href="/2018/06/08/elasticsearch/2018-06-08-01/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-04/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
@@ -680,6 +650,12 @@ ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考�
     </ul>
 
     
+<nav id="page-nav">
+    <div class="inner">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页</a>
+    </div>
+</nav>
+
 
 </div>
 

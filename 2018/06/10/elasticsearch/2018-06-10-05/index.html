@@ -13,7 +13,7 @@
     
     
     
-    <title>05. ES的搜索方式 Query-string 与 query DSL | Lant&#39;s</title>
+    <title>05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式 | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
@@ -23,14 +23,14 @@
     <meta name="description" content="Query-string 搜索 之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的  练习, 搜索全部商品 GET /products/computer/_search  练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:diann">
 <meta name="keywords" content="Elasticsearch(一)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="05. ES的搜索方式 Query-string 与 query DSL">
+<meta property="og:title" content="05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="Query-string 搜索 之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的  练习, 搜索全部商品 GET /products/computer/_search  练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:diann">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-09T03:45:09.000Z">
+<meta property="og:updated_time" content="2018-11-20T04:56:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="05. ES的搜索方式 Query-string 与 query DSL">
+<meta name="twitter:title" content="05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式">
 <meta name="twitter:description" content="Query-string 搜索 之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的  练习, 搜索全部商品 GET /products/computer/_search  练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:diann">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
@@ -52,7 +52,7 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand3.jpg)">
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
           <img src="/img/avatar.jpeg">
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">05. ES的搜索方式 Query-string 与 query DSL</div>
+        <div class="flex-col header-title ellipsis">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -129,7 +129,7 @@
     <div class="container fade-scale">
         <h5 class="subtitle">
             
-                <time datetime="2018-06-10T03:05:39.000Z" itemprop="datePublished" class="page-time">
+                <time datetime="2018-06-10T06:33:46.000Z" itemprop="datePublished" class="page-time">
   2018-06-10
 </time>
 
@@ -151,7 +151,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Query-string-搜索"><span class="post-toc-number">1.</span> <span class="post-toc-text">Query-string 搜索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#query-DSL"><span class="post-toc-number">2.</span> <span class="post-toc-text">query DSL</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Query-string-搜索"><span class="post-toc-number">1.</span> <span class="post-toc-text">Query-string 搜索</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#query-DSL"><span class="post-toc-number">2.</span> <span class="post-toc-text">query DSL</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#multi-index-multi-type搜索模式"><span class="post-toc-number">3.</span> <span class="post-toc-text">multi-index, multi-type搜索模式</span></a></li></ol>
         </nav>
     </aside>
     
@@ -159,9 +159,9 @@
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">05. ES的搜索方式 Query-string 与 query DSL</h1>
+        <h1 class="post-card-title">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</h1>
         <div class="post-meta">
-            <time class="post-time" title="2018-06-10 11:05:39" datetime="2018-06-10T03:05:39.000Z"  itemprop="datePublished">2018-06-10</time>
+            <time class="post-time" title="2018-06-10 14:33:46" datetime="2018-06-10T06:33:46.000Z"  itemprop="datePublished">2018-06-10</time>
 
             
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
@@ -196,11 +196,17 @@
 </li>
 <li><p>练习, 指定需要返回的字段 (使用<code>_source</code>元数据: 可以指定返回哪些field)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/1?_source=name,price</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;_source&quot; : [&quot;name&quot;, &quot;desc&quot;, &quot;tag&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>query DSL 可以在HTTP请求体中构建非常复杂的查询语句, 所以比较常用; 更多复杂用法后面会聊到;</p>
 </li>
 </ol>
-<pre><code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">GET /products/computer/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot; : &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;_source&quot; : [&quot;name&quot;, &quot;desc&quot;, &quot;tag&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</code></pre><ol>
-<li>query DSL 可以在HTTP请求体中构建非常复杂的查询语句, 所以比较常用; 更多复杂用法后面会聊到;</li>
+<h2 id="multi-index-multi-type搜索模式"><a href="#multi-index-multi-type搜索模式" class="headerlink" title="multi-index, multi-type搜索模式"></a>multi-index, multi-type搜索模式</h2><ol>
+<li><code>GET /_search</code> : 检索所有index, 所有type下的数据</li>
+<li><code>GET /index/_search</code> : 指定一个index, 搜索其下所有type的数据</li>
+<li><code>GET /index1,index2/_search</code> : 指定多个index, 搜索他们下面所有type的数据</li>
+<li><code>GET /index1,index2/type1,type2/_search</code> : 指定多个index, 搜索他们下面指定的多个type的数据</li>
+<li><code>_all/type1,type2/_search</code> : 搜索所有index下指定的多个type的数据</li>
 </ol>
 
         </div>
@@ -238,7 +244,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -248,7 +254,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -258,7 +264,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -286,7 +292,7 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/08/elasticsearch/2018-06-08-04/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-04/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
           <h4 class="title">04. 简单尝试 CURD</h4>
         </a>
@@ -296,7 +302,7 @@
     <div class="waves-block waves-effect next">
       <a href="/2018/06/10/elasticsearch/2018-06-10-06/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">06. 提前了解查询相关知识点概要, 练习</h4>
+        <h4 class="title">06. mget, bulk 批量操作</h4>
       </a>
     </div>
   
@@ -388,7 +394,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -398,7 +404,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&title=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -408,7 +414,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. ES的搜索方式 Query-string 与 query DSL》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式》 — Lant's&url=http://blog.renyimin.com/2018/06/10/elasticsearch/2018-06-10-05/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
