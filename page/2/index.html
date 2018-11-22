@@ -139,6 +139,109 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-10-05"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 14:33:46" datetime="2018-06-10T06:33:46.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-05/">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Query-string 搜索
+之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的
+
+练习, 搜索全部商品 GET /products/computer/_search
+
+练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:di...
+    
+
+        <a href="/2018/06/10/elasticsearch/2018-06-10-05/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-10-04"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 10:36:57" datetime="2018-06-10T02:36:57.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-04/">04. 简单尝试 CURD</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Cat Api
+ES提供的 Cat Api 可以用来查看 集群当前状态, 涉及到 shard/node/cluster 几个层次
+
+尝试使用 GET /_cat/health?v 查看 时间戳、集群名称、集群状态、集群中节点的数量 等等
+ 12epoch      timestamp cluster       status node.total node.data shards pri r...
+    
+
+        <a href="/2018/06/10/elasticsearch/2018-06-10-04/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
             <article id="post-elasticsearch/2018-06-09-03"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -185,7 +288,7 @@ index 名称必须是小写, 不能用下划线开头, 不能包含逗号
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
 
     </div>
     
@@ -239,7 +342,7 @@ ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考�
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
 
     </div>
     
@@ -293,7 +396,7 @@ ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考�
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch-一/">Elasticsearch(一)</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
 
     </div>
     
@@ -330,7 +433,9 @@ ES 的版本迭代比较快, 目前(06/2018)为止, 已经到6.X了, 可参考�
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
+        前置
+此处使用的是 Vagrant+VirtualBox+CentOS7.2 进行系统环境部署 (如有对Vagrant不熟悉的兄dei~可以提前去了解一下, 也比较简单)
+VagrantFile 1234567891011Vagrant.configure(&quot;2&quot;) do |config|     config.vm.define :swoole do |swoole| ...
     
 
         <a href="/2017/11/03/swoole/2017-11-03-02/" class="post-more waves-effect waves-button">

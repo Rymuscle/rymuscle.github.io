@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. 认识Elastic-Job | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="ElasticJob">
+    <meta name="description" content="引出Elastic-Job 在项目中使用定时任务是避免不了的, 而在部署定时任务时, 由于部署多台机器会导致同一个任务会执行多次, 因此通常只部署一台机器 比如给用户发送邮件的定时任务, 每天定时的给用户下发邮件, 如果部署了多台, 同一个用户将发送多份邮件; 但是只部署一台机器, 可用性又无法保证   Elastic-Job 就可以帮助解决定时任务在集群部署情况下的协调调度问题, 保证任务不重复">
+<meta name="keywords" content="ElasticJob">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01. 认识Elastic-Job">
+<meta property="og:url" content="http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="引出Elastic-Job 在项目中使用定时任务是避免不了的, 而在部署定时任务时, 由于部署多台机器会导致同一个任务会执行多次, 因此通常只部署一台机器 比如给用户发送邮件的定时任务, 每天定时的给用户下发邮件, 如果部署了多台, 同一个用户将发送多份邮件; 但是只部署一台机器, 可用性又无法保证   Elastic-Job 就可以帮助解决定时任务在集群部署情况下的协调调度问题, 保证任务不重复">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-22T04:36:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01. 认识Elastic-Job">
+<meta name="twitter:description" content="引出Elastic-Job 在项目中使用定时任务是避免不了的, 而在部署定时任务时, 由于部署多台机器会导致同一个任务会执行多次, 因此通常只部署一台机器 比如给用户发送邮件的定时任务, 每天定时的给用户下发邮件, 如果部署了多台, 同一个用户将发送多份邮件; 但是只部署一台机器, 可用性又无法保证   Elastic-Job 就可以帮助解决定时任务在集群部署情况下的协调调度问题, 保证任务不重复">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01. 认识Elastic-Job</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-09-15T06:07:21.000Z" itemprop="datePublished" class="page-time">
+  2018-09-15
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticJob/">ElasticJob</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#引出Elastic-Job"><span class="post-toc-number">1.</span> <span class="post-toc-text">引出Elastic-Job</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Elastic-Job简介"><span class="post-toc-number">2.</span> <span class="post-toc-text">Elastic-Job简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#主要功能"><span class="post-toc-number">3.</span> <span class="post-toc-text">主要功能</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Elastic-Job/2018-09-15-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01. 认识Elastic-Job</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-09-15 14:07:21" datetime="2018-09-15T06:07:21.000Z"  itemprop="datePublished">2018-09-15</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/ElasticJob/">ElasticJob</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="引出Elastic-Job"><a href="#引出Elastic-Job" class="headerlink" title="引出Elastic-Job"></a>引出Elastic-Job</h2><ol>
+<li>在项目中使用定时任务是避免不了的, 而在部署定时任务时, 由于部署多台机器会导致同一个任务会执行多次, 因此通常只部署一台机器<ul>
+<li>比如给用户发送邮件的定时任务, 每天定时的给用户下发邮件, 如果部署了多台, 同一个用户将发送多份邮件;</li>
+<li>但是只部署一台机器, 可用性又无法保证</li>
+</ul>
+</li>
+<li>Elastic-Job 就可以帮助解决定时任务在集群部署情况下的协调调度问题, 保证任务不重复不遗漏的执行;</li>
+</ol>
+<h2 id="Elastic-Job简介"><a href="#Elastic-Job简介" class="headerlink" title="Elastic-Job简介"></a>Elastic-Job简介</h2><ol>
+<li><p>Elastic-Job 是当当开源的一款非常好用的分布式调度框架, 有两个互相独立的子项目组成</p>
+<ul>
+<li>Elastic-Job-Cloud: 以私有云平台的方式提供集资源、调度以及分片为一体的全量级解决方案, 依赖Mesos和Zookeeper</li>
+<li>Elastic-Job-Lite: 定位为轻量级无中心化解决方案, 使用jar包的形式提供分布式任务的协调服务</li>
+<li>Elastic-Job-Lite 和 Elastic-Job-Cloud 提供同一套API开发作业, 开发者仅需一次开发, 然后可根据需要以Lite或Cloud的方式部署</li>
+</ul>
+</li>
+<li><p>这里主要以Elastic-Job-Lite进行调研学习</p>
+</li>
+</ol>
+<h2 id="主要功能"><a href="#主要功能" class="headerlink" title="主要功能"></a>主要功能</h2><ol>
+<li>定时任务: 基于成熟的定时任务作业框架Quartz cron表达式执行定时任务</li>
+<li>作业注册中心: 基于Zookeeper和其客户端Curator实现的全局作业注册控制中心, 用于注册, 控制和协调分布式作业执行</li>
+<li>作业分片: 将一个任务分片成为多个小任务项在多服务器上同时执行</li>
+<li>弹性扩容缩容: 运行中的作业服务器崩溃或新增加n台作业服务器, 作业框架将在下次作业执行前重新分片, 不影响当前作业执行</li>
+<li>支持多种作业执行模式: 支持OneOff, Perpetual和SequencePerpetual三种作业模式</li>
+<li>失效转移: 运行中的作业服务器崩溃不会导致重新分片, 只会在下次作业启动时分片, 启用失效转移功能可以在本次作业执行过程中监测其他作业服务器空闲, 抓取未完成的孤儿分片项执行</li>
+<li>运行时状态收集: 监控作业运行时状态, 统计最近一段时间处理的数据成功和失败数量, 记录作业上次运行开始时间, 结束时间和下次运行时间</li>
+<li>作业停止, 恢复和禁用: 用于操作作业启停, 并可以禁止某作业运行(上线时常用)</li>
+<li>被错过执行的作业重触发: 自动记录错过执行的作业, 并在上次作业完成后自动触发, 可参考Quartz的misfire</li>
+<li>多线程快速处理数据: 使用多线程处理抓取到的数据, 提升吞吐量</li>
+<li>幂等性: 重复作业任务项判定, 不重复执行已运行的作业任务项, 由于开启幂等性需要监听作业运行状态, 对瞬时反复运行的作业对性能有较大影响</li>
+<li>容错处理: 作业服务器与Zookeeper服务器通信失败则立即停止作业运行, 防止作业注册中心将失效的分片分项配给其他作业服务器, 而当前作业服务器仍在执行任务, 导致重复执行</li>
+<li>Spring支持: 支持spring容器, 自定义命名空间, 支持占位符</li>
+<li>运维平台: 提供运维界面, 可以管理作业和注册中心</li>
+</ol>
+<p><a href="https://blog.csdn.net/adi851270440/article/details/80493367" target="_blank" rel="noopener">https://blog.csdn.net/adi851270440/article/details/80493367</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ElasticJob/">ElasticJob</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&title=《01. 认识Elastic-Job》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&title=《01. 认识Elastic-Job》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 认识Elastic-Job》 — Lant's&url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/21/elasticsearch/2018-06-21-14/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">14. 建立双索引--- text分词 + 排序</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&title=《01. 认识Elastic-Job》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&title=《01. 认识Elastic-Job》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 认识Elastic-Job》 — Lant's&url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/09/15/Elastic-Job/2018-09-15-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aMW7DMAwF0Nz/0i7QrUOUTzIuYOlpMhLL1vNAiCJfr3hcv+PdL9dyrJ/57jmvOwYGBsZjGcki1ow1bDKr8IEwMDAOYKyD7DoUJotbX68ZyRsxMDAwqgvtbQqT92JgYGD00tTCy5YYDAwMjDUjSWLXm7lqgE7m3pKLY2BgPJBRLQz85/WN9Q0MDIyHMK7iyAuQ821fYVUYGBhbM/LyZDUpreKrRc1yPwgGBsZjGb2SwDp9nfzbbBTDwMA4gFE9xpoc9/fmfrgHAwNja0Y1gZwcz/WKDb1mDgwMjF0ZSZhLrnNw/sZ8FgYGxq6MSapZPVzLk+FysRMDA2NTxrz9q3oMN096P1RiMTAwDmD0igRJQTQJrM1tKAYGxgGMvMWh2gRW/RBVEgYGxgmM724H8+aMpACQ/4KBgbE34wpGfsQ2KUZWn/92h4uBgbEpI2+SWIfmJEz37vxQZsDAwNiaUW1r6MGSReRht9y7gYGBsR0j2fBVg3WvwSJJsDEwME5gJCnrJChXo2JvE4mBgXEC4760Nv93EnwxMDD2ZtwRXpNiZyE1xcDAOJ5xFUfh28TJai9Y/7nGwMDYmlENdtUtYx6Ck4VWn4yBgbETY55STgL3JExjYGCcxvhu90I+N4/9H2ZhYGBgxAG3emTWezIGBgZGzsgDaHPDlzdeYGBgHMBIktjenflBW749LRcyMTAwHs6YJJC9Q/zqEyaHdxgYGA9n/ADTJ4mHyNXuYQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
