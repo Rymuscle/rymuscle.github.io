@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>02. 选择 merge 还是 rebase? | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="git">
+    <meta name="description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+<meta name="keywords" content="git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02. 选择 merge 还是 rebase?">
+<meta property="og:url" content="http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/gitrebase.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase05.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase10.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase11.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase12.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase13.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-03.png">
+<meta property="og:updated_time" content="2018-12-14T06:27:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="02. 选择 merge 还是 rebase?">
+<meta name="twitter:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/git/gitrebase.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">02. 选择 merge 还是 rebase?</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-12-12T09:01:23.000Z" itemprop="datePublished" class="page-time">
+  2018-12-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/git/">git</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#git-rebase-介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">git rebase 介绍</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#尝试"><span class="post-toc-number">2.</span> <span class="post-toc-text">尝试</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主分支没有commit时"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">主分支没有commit时</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主分支有commit且出现冲突时"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">主分支有commit且出现冲突时</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#主分支有commit但无冲突"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">主分支有commit但无冲突</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#rebase-使用技巧"><span class="post-toc-number">4.</span> <span class="post-toc-text">rebase 使用技巧</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-git/2018-12-12-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">02. 选择 merge 还是 rebase?</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-12-12 17:01:23" datetime="2018-12-12T09:01:23.000Z"  itemprop="datePublished">2018-12-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/git/">git</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="git-rebase-介绍"><a href="#git-rebase-介绍" class="headerlink" title="git rebase 介绍"></a>git rebase 介绍</h2><ol>
+<li>rebase: 变基, 即改变分支的根基;</li>
+<li>从某种程度来说, <code>git rebase</code> 和 <code>git merge</code> 都可以完成类似的合并工作, 但实际上两者有着本质的不同;</li>
+<li><p>假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 <code>git rebase</code> (虽然 <code>git merge</code> 也可以实现, 但是一旦合并遇到冲突时, 还是会出现分叉) </p>
+<ul>
+<li>如下命令: 会把你的 origin 分支从 mywork 切出来后的每个提交(commit)取消掉, 并且把它们临时保存为补丁(patch)(这些补丁放到”.git/rebase”目录中), 然后把 origin 分支更新到最新的 mywork 分支, 最后把保存的这些补丁应用到 mywork 分支上。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout mywork</span><br><span class="line">$ git rebase origin</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>具体如下图:<br> <img src="/img/git/gitrebase.png"></p>
+</li>
+</ol>
+<h2 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h2><h3 id="主分支没有commit时"><a href="#主分支没有commit时" class="headerlink" title="主分支没有commit时"></a>主分支没有commit时</h3><ol>
+<li><code>git init</code> 初始化一个仓库, 在默认的 master分支创建一个index.php文件并提交 (新建分支的话, 必须要保证初始分支的仓库中是有内容的) (下面做了两次提交)<br> <img src="/img/git/rebase01.png"></li>
+<li><p><code>git log --graph</code> 查看master日志<br> <img src="/img/git/rebase02.png"></p>
+</li>
+<li><p>新建并切换到 dev 分支, 对index.php文件做改动并提交 (不修改同一行,先不构造冲突)</p>
+</li>
+<li><p><code>git log --graph</code> 查看dev日志<br> <img src="/img/git/rebase03.png"></p>
+</li>
+<li><p><code>git rebase</code> 合并<br> <img src="/img/git/rebase04.png"></p>
+</li>
+<li><p>发现效果和之前的 <code>git merge</code> fast-forward无冲突时 貌似没什么区别<br> <img src="/img/git/rebase05.png"></p>
+</li>
+</ol>
+<h3 id="主分支有commit且出现冲突时"><a href="#主分支有commit且出现冲突时" class="headerlink" title="主分支有commit且出现冲突时"></a>主分支有commit且出现冲突时</h3><ol>
+<li><p>接着上面的例子, master 和 dev 分别修改同一行内容, 构造冲突<br> <img src="/img/git/rebase10.png"></p>
+</li>
+<li><p>切换到 master 分支, <code>git rebase</code> 合并dev分支<br> <img src="/img/git/rebase11.png"></p>
+</li>
+<li><p>如上 <code>git rebase</code> 在出现冲突时, Git会停止rebase并会让你去解决冲突, 在解决完冲突后, 用 <code>git add</code> 命令去更新这些内容的索引(index), 然后, 你无需执行 <code>git-commit</code>, 只要执行: <code>git rebase --continue</code> （当然, 无冲突时, 直接 <code>git rebase</code> 就直接完成了合并）<br> <img src="/img/git/rebase12.png"></p>
+</li>
+<li><p>发现好像之前master上的那次提交的信息(时间, 日志等信息)都在, 但是取而代之的是一个新的commit_id, <strong>rebase会修改 根基之后 的提交历史</strong><br> <img src="/img/git/rebase13.png"></p>
+</li>
+</ol>
+<h3 id="主分支有commit但无冲突"><a href="#主分支有commit但无冲突" class="headerlink" title="主分支有commit但无冲突"></a>主分支有commit但无冲突</h3><ol>
+<li>经过测试, 即便无冲突, master分支的新commit也会丢失</li>
+<li>测试如下:<ul>
+<li>master, dev两个分支基点相同<br><img src="/img/git/rebase-no-conflict-01.png"></li>
+<li>master, dev两个分支各自做改动, 但是改动并不不冲突<br><img src="/img/git/rebase-no-conflict-02.png"></li>
+<li>发现master进行 <code>git rebase dev</code> 直接就合并成功了, 虽然没有冲突, 但是master的commit历史确实还是被改掉了!!<br><img src="/img/git/rebase-no-conflict-03.png"></li>
+</ul>
+</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><ol>
+<li>不要在master和其他协作分支上使用 <code>git rebase</code>, 它会修改提交历史;</li>
+<li>当使用git做合并操作时, 如果没有冲突, 则 <code>git merge(fast-forward)</code> 和 <code>git rebase</code> 效果一样都是直线, 而<code>git merge --no-ff</code>会出现分叉和新提交点;</li>
+<li>当使用git做合并操作时, 如果出现冲突, 则 <code>git merge(fast-forward)</code> 和 <code>git merge --no-ff</code> 一样都会出现分叉和新提交点, <code>git rebase</code>则不同, 它是直线, 但会修改历史提交点;</li>
+</ol>
+<h2 id="rebase-使用技巧"><a href="#rebase-使用技巧" class="headerlink" title="rebase 使用技巧"></a>rebase 使用技巧</h2><ol>
+<li><code>git rebase</code> 由于会改变历史提交点, 所以一定不能用在协作分支上</li>
+<li>使用rebase既可以保证分支直线美观, 也可以保证在<code>git push</code>时不出现类似 “Merge remote-tracking branch…” 问题</li>
+<li>通常如下来使用, 下文在解决 类似 “Merge remote-tracking branch…” 问题时, 会有详细过程: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">git checkout master</span><br><span class="line">git pull</span><br><span class="line"></span><br><span class="line"># 主要是此处, 将协作分支master rebase 到自己的dev分支</span><br><span class="line">git checkout dev</span><br><span class="line">git rebase master</span><br><span class="line"></span><br><span class="line">git checkout master</span><br><span class="line">git merge dev</span><br><span class="line"></span><br><span class="line">git push origin feature</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&title=《02. 选择 merge 还是 rebase?》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&title=《02. 选择 merge 还是 rebase?》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 选择 merge 还是 rebase?》 — Lant's&url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/12/git/2018-12-12-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. git merge 对比 fast-forward 与 --no-ff</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/12/14/git/2018-12-14-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. git push 时出现 &#34;Merge branch &#39;master&#39; of ...&#34;</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&title=《02. 选择 merge 还是 rebase?》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&title=《02. 选择 merge 还是 rebase?》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. 选择 merge 还是 rebase?》 — Lant's&url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3awXLDIAxF0fz/T7szXXVjuE9yOom4XmXSgDksVAnxeuHn+n3+fl5/w39J5nnskSFDxtcyruXDX7CegWzNGraZWYYMGQcw0iBLAih/y3r70GwyZMiQgRfBg+/DmyJDhgwZ4dQkgPa3T4YMGacxeIqWBt+Pq8VlyJDxhYxaY+B/Pr+9vyFDhoyPZ1zhw4tP8sY0vN6uSoYMGaMZvODspJI8jNY2QoYMGbMZ6bUt8g0fy0vlTYiXIUPGAYx0ufzqWHq9jLcWZMiQcQ4jvTZRW1ytrC22BGTIkDGa0S9cO5tSK2Jvfy9DhoxxjHTq9ct48pc2TTchXoYMGQcwOgli7QBuPTY+CpQhQ8ZQBm9GklYlX2IarNGpoQwZMoYy0sSucy0sbQmk7VIZMmRMZTxw0aExlrM3eBkyZIxmkGYATwE7BW2nwSlDhozZjDQRJMtNL5M90DqVIUPGaEatMdD/K08BgwM7GTJkHMOoXbZIg286Fs0mQ4aMoYxaupaWuJ1LY8GpoQwZMo5h1EInOTjjWxCvR4YMGaMZtRfw4/sarNPUlCFDxjzGFT61AnU9lh/P3Y6SIUPGaEYnmeOFKG9wpmWwDBkyzmF0gmxa1qZBOSieZciQcQCjU9B20sr0P0Bw2UKGDBlHMvixWu1An8y/SQ1lyJAho9QYSNnF9ciQIeMABk/pyMFZerjWST1lyJBxAqNWOnauVrzjGE6GDBlDGT/Oox3z+/ES4QAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

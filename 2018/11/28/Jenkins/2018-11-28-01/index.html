@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. 持续集成 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Jenkins">
+    <meta name="description" content="Continuous integration (CI) 互联网软件的开发和发布, 已经形成了一套标准流程, 最重要的组成部分就是持续集成(Continuous integration, 简称 CI), 下面引用的是百度百科的解释  持续集成是一种软件开发实践, 即团队开发成员经常集成他们的工作, 通常每个成员至少集成一次, 每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译(可选), 发">
+<meta name="keywords" content="Jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01. 持续集成">
+<meta property="og:url" content="http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="Continuous integration (CI) 互联网软件的开发和发布, 已经形成了一套标准流程, 最重要的组成部分就是持续集成(Continuous integration, 简称 CI), 下面引用的是百度百科的解释  持续集成是一种软件开发实践, 即团队开发成员经常集成他们的工作, 通常每个成员至少集成一次, 每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译(可选), 发">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-02T05:21:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01. 持续集成">
+<meta name="twitter:description" content="Continuous integration (CI) 互联网软件的开发和发布, 已经形成了一套标准流程, 最重要的组成部分就是持续集成(Continuous integration, 简称 CI), 下面引用的是百度百科的解释  持续集成是一种软件开发实践, 即团队开发成员经常集成他们的工作, 通常每个成员至少集成一次, 每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译(可选), 发">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01. 持续集成</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-11-28T14:16:08.000Z" itemprop="datePublished" class="page-time">
+  2018-11-28
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Jenkins/">Jenkins</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Continuous-integration-CI"><span class="post-toc-number">1.</span> <span class="post-toc-text">Continuous integration (CI)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持续交付"><span class="post-toc-number">2.</span> <span class="post-toc-text">持续交付</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持续部署"><span class="post-toc-number">3.</span> <span class="post-toc-text">持续部署</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Jenkins/2018-11-28-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01. 持续集成</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-11-28 22:16:08" datetime="2018-11-28T14:16:08.000Z"  itemprop="datePublished">2018-11-28</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Jenkins/">Jenkins</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="Continuous-integration-CI"><a href="#Continuous-integration-CI" class="headerlink" title="Continuous integration (CI)"></a>Continuous integration (CI)</h2><ol>
+<li><p>互联网软件的开发和发布, 已经形成了一套标准流程, 最重要的组成部分就是持续集成(Continuous integration, 简称 CI), 下面引用的是百度百科的解释</p>
+<blockquote>
+<p>持续集成是一种软件开发实践, 即团队开发成员经常集成他们的工作, 通常每个成员至少集成一次, 每天可能会发生多次集成。每次集成都通过自动化的构建(包括编译(可选), 发布, 自动化测试)来验证, 从而尽快地发现集成错误, 许多团队发现这个过程可以大大减少集成的问题, 让团队能够更快的开发内聚的软件;</p>
+</blockquote>
+</li>
+<li><p>持续集成通俗地来讲, 就是团队中的每个RD每天都会频繁地将代码集成到主干。它的好处主要有两个:</p>
+<ul>
+<li>快速发现错误: 每完成一点更新, 就集成到主干, 可以快速发现错误, 定位错误也比较容易</li>
+<li>防止分支大幅偏离主干: 如果不是经常集成, 主干又在不断更新, 会导致以后集成的难度变大, 甚至难以集成</li>
+</ul>
+</li>
+<li><p>持续集成的目的, 就是让产品可以快速迭代, 同时还能保持高质量; <strong>它的核心措施是, 代码集成到主干之前, 必须通过自动化测试, 只要有一个测试用例失败, 就不能集成;</strong></p>
+<ul>
+<li>持续集成要求每当开发人员提交了新代码之后, 就对整个应用进行构建, 并对其执行全面的自动化测试集合。根据构建和测试结果, 我们可以确定新代码和原有代码是否正确的集成在一起。如果失败, 开发团队就要停下手中的工作, 立即修复它。</li>
+<li>Martin Fowler 说过 “持续集成并不能消除 Bug, 而是让它们非常容易发现和改正。”</li>
+</ul>
+</li>
+<li><p>与持续集成相关的, 还有两个概念, 分别是 持续交付 和 持续部署</p>
+</li>
+</ol>
+<h2 id="持续交付"><a href="#持续交付" class="headerlink" title="持续交付"></a>持续交付</h2><ol>
+<li><p>持续交付(Continuous delivery)指的是, 频繁地将软件的新版本, 交付给质量团队或者用户以供评审。这样可以以可持续的方式快速向客户端发布新的更改, 如果评审通过, 代码就进入生产阶段。(小版本快速迭代)<br> 持续交付是在持续集成的基础上, 将集成后的代码部署到更贴近真实运行环境的「类生产环境」（production-like environments）中, 比如, 完成单元测试后, 可以把代码部署到 testing 环境中进行更多的测试, 如果代码没有问题, 可以继续<strong>手动部署</strong>到生产环境中。</p>
+</li>
+<li><p>持续交付可以看作持续集成的下一步。它强调的是, 不管怎么更新, 软件是随时随地可以交付的。</p>
+</li>
+</ol>
+<h2 id="持续部署"><a href="#持续部署" class="headerlink" title="持续部署"></a>持续部署</h2><ol>
+<li><p>持续部署(continuous deployment)是持续交付的下一步, 指的是代码通过质量团队或者用户评审以后, 把部署到生产环境的过程自动化。</p>
+</li>
+<li><p>持续部署的目标是, 代码在任何时刻都是可部署的, 可以进入生产阶段。</p>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html</a></li>
+<li><a href="https://www.sohu.com/a/236703123_711529" target="_blank" rel="noopener">https://www.sohu.com/a/236703123_711529</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jenkins/">Jenkins</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&title=《01. 持续集成》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&title=《01. 持续集成》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 持续集成》 — Lant's&url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/09/15/Elastic-Job/2018-09-15-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. 认识Elastic-Job</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/11/28/Jenkins/2018-11-28-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">02. 认识 Jenkins</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&title=《01. 持续集成》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&title=《01. 持续集成》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 持续集成》 — Lant's&url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/11/28/Jenkins/2018-11-28-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3awU7DMBBF0f7/TwcJsWBBnftmXKSMr1coLU5OkB72jF8vPK7vUbvy+/r1Zrz7/uYhQ4aMxzKu5Vg/EJ+B3L01swwZMg5grEOWRCefjaRlPJsMGTJk4GUfWQJ27itDhgwZKYMEdCdMZciQIaN2ywuPdOPKy3MyZMg4jZE2Bv7z5w/2N2TIkPEQxhUOvolNW6G1QP/5LRkyZIxm9IvyPDT5kjFtecqQIeMERq30z4tuaVu09VJkyJAxjvGJ5R0v0u1aOMqQIWM2Y53BPBDJK+Cfpoc2ZMiQcQKDbxF5gPKjYLXFZfEvI0OGjIcz+scpaos/HsHrKzJkyJjN6IdgbUHZeR1/PIkMGTKGMmqlsdoR1dqjo2/KkCFjNCNtHNau98ttKPplyJAxlLGOubgcv6vml26JZciQMZrBi1nridIt7q5CmwwZMs5hpJh0KZneZR27N3eUIUPGaEa6sSTby9qB1M7hMxkyZExlkIlIq6ATrPzF3VQNZciQMY5ROxiRYvrNg5snlCFDxjGM9di7fOxvldF/DBkyZIxgpFG4t9mZjqBqKEOGjEGMKxydfKtdQbErQ4aM0Yxak2BX8zLYpobHxWTIkDGPQUI2jT+yfSXtz+D1yZAh4wAGD8H0OFe/tRkctpAhQ8bxDF50S1sFteAuBq4MGTIOYKTHL8h2t/YdGTJknMZIN7FpQY2U7XjIypAh4zRGpzGQtjZ5CyFtGMiQIWMo4wtIjifNcvmKsQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

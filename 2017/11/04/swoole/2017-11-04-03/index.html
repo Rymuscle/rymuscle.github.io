@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03. 小试牛刀 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Swoole">
+    <meta name="description" content="前言本篇主要是通过简单过一下Swoole的基本功能点来对swoole有个比较基础的认知 TCP Server server 代码 (在虚拟机中通过 php server.php 启动服务器)  123456789101112131415161718192021222324252627282930313233&amp;lt;?php// 创建tcpserver服务器对象$tcpServer = new sw">
+<meta name="keywords" content="Swoole">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03. 小试牛刀">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="前言本篇主要是通过简单过一下Swoole的基本功能点来对swoole有个比较基础的认知 TCP Server server 代码 (在虚拟机中通过 php server.php 启动服务器)  123456789101112131415161718192021222324252627282930313233&amp;lt;?php// 创建tcpserver服务器对象$tcpServer = new sw">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-11-28T06:13:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03. 小试牛刀">
+<meta name="twitter:description" content="前言本篇主要是通过简单过一下Swoole的基本功能点来对swoole有个比较基础的认知 TCP Server server 代码 (在虚拟机中通过 php server.php 启动服务器)  123456789101112131415161718192021222324252627282930313233&amp;lt;?php// 创建tcpserver服务器对象$tcpServer = new sw">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03. 小试牛刀</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-04T09:11:37.000Z" itemprop="datePublished" class="page-time">
+  2017-11-04
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Swoole/">Swoole</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TCP-Server"><span class="post-toc-number">2.</span> <span class="post-toc-text">TCP Server</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#UDP-Server"><span class="post-toc-number">3.</span> <span class="post-toc-text">UDP Server</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#undefined"><span class="post-toc-number"></span> <span class="post-toc-text">Hello Swoole. #&quot; . rand(1000, 9999) . &quot;</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"> </span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-swoole/2017-11-04-03"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03. 小试牛刀</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-04 17:11:37" datetime="2017-11-04T09:11:37.000Z"  itemprop="datePublished">2017-11-04</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Swoole/">Swoole</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本篇主要是通过简单过一下Swoole的基本功能点来对swoole有个比较基础的认知</p>
+<h2 id="TCP-Server"><a href="#TCP-Server" class="headerlink" title="TCP Server"></a>TCP Server</h2><ol>
+<li><p>server 代码 (在虚拟机中通过 php server.php 启动服务器)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">// 创建tcpserver服务器对象</span><br><span class="line">$tcpServer = new swoole_server(&quot;192.168.1.110&quot;, 8088, SWOOLE_PROCESS, SWOOLE_SOCK_TCP);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * $server: swoole_server对象</span><br><span class="line"> * $fd: TCP客户端连接的唯一标识符</span><br><span class="line"> * $reactor_id(该形参也常被命名为 $from_id): TCP连接所在的Reactor线程ID</span><br><span class="line"> */</span><br><span class="line">$tcpServer-&gt;on(&apos;connect&apos;, function ($server, $fd, $reactor_id) &#123;</span><br><span class="line">    echo &quot;Client:Connect, fd:&#123;$fd&#125;, reactor_id:&#123;$reactor_id&#125; \n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * $server: swoole_server对象</span><br><span class="line"> * $fd: TCP客户端连接的唯一标识符</span><br><span class="line"> * $reactor_id(该形参也常被命名为 $from_id): TCP连接所在的Reactor线程ID</span><br><span class="line"> * $data: 收到的数据内容，可能是文本或者二进制内容</span><br><span class="line"> */</span><br><span class="line">$tcpServer-&gt;on(&apos;receive&apos;, function ($server, $fd, $reactor_id, $data) &#123;</span><br><span class="line">    // 此处还根据收到的消息内容做出不同的响应(当然这属于业务部分)</span><br><span class="line">    $server-&gt;send($fd, &quot;fd:&#123;$fd&#125;, reactor_id:&#123;$reactor_id&#125;, receive:&#123;$data&#125; \n&quot;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * $server: swoole_server对象</span><br><span class="line"> * $fd: TCP客户端连接的唯一标识符</span><br><span class="line"> */</span><br><span class="line">$tcpServer-&gt;on(&apos;close&apos;, function ($server, $fd, $reactor_id) &#123;</span><br><span class="line">    echo &quot;Client: Close.\n&quot;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$tcpServer-&gt;start();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>物理机上使用 telnet 命令测试 <code>telnet 192.168.1.110 8088</code> (telnet 退出: <code>ctrl+]</code>, 然后输入 <code>quit</code>)</p>
+</li>
+</ol>
+<h2 id="UDP-Server"><a href="#UDP-Server" class="headerlink" title="UDP Server"></a>UDP Server</h2><ol>
+<li><p>server 代码 (在虚拟机中通过 php server.php 启动服务器)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$udpServer = new swoole_server(&quot;192.168.1.110&quot;, 8088, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * UDP服务器与TCP服务器不同, UDP没有连接的概念</span><br><span class="line"> * 启动Server后, 客户端无需Connect, 直接可以向Server监听的端口发送数据包, 对应的事件为 onPacket</span><br><span class="line"> * $clientInfo: 是客户端的相关信息, 是一个数组, 有客户端的IP和端口等内容</span><br><span class="line"> * 调用 $server-&gt;sendto 方法向客户端发送数据</span><br><span class="line"> */</span><br><span class="line">$udpServer-&gt;on(&apos;Packet&apos;, function ($server, $data, $clientInfo) &#123;</span><br><span class="line">    $server-&gt;sendto($clientInfo[&apos;address&apos;], $clientInfo[&apos;port&apos;], &quot;data: &quot; . $data);</span><br><span class="line">    var_dump($clientInfo);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">$udpServer-&gt;start();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>telnet 用于测试 tcp 协议的端口测试,但貌似无法用于udp协议, UDP服务器可以使用 <code>netcat -u</code> 来连接测试</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    brew install netcat</span><br><span class="line">    </span><br><span class="line">    nc -v 或者 netcat -v </span><br><span class="line">    netcat (The GNU Netcat) 0.7.1</span><br><span class="line">    ```                                        </span><br><span class="line">3. 测试向UDP服务器发送数据包 :</span><br></pre></td></tr></table></figure>
+<p> netcat -u 192.168.1.110 8088<br> hello<br> data: hello</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## HTTP Server</span><br><span class="line">1. server 代码 (在虚拟机中通过 php server.php 启动服务器)</span><br></pre></td></tr></table></figure>
+<p> &lt;?php<br> // 通过几行代码即可写出一个异步非阻塞多进程的Http服务器<br> /**</p>
+<ul>
+<li><p>Http\Server继承自Server, 是一个完整的http服务器实现, Http\Server支持同步和异步2种模式<br>*/<br>$http = new Swoole\Http\Server(“192.168.1.110”, 8080);</p>
+<p>$http-&gt;on(‘request’, function ($request, $response) {<br> echo “client request, host: {$request-&gt;header[‘host’]}, getParam: {$request-&gt;get[‘name’]} \n”;<br> $response-&gt;end(“</p><h1>Hello Swoole. #" . rand(1000, 9999) . "</h1>“);<br>});<br>$http-&gt;start();<p></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">2. 物理机访问 http://192.168.1.110:8080/?name=lant</span><br><span class="line">    </span><br><span class="line">## [Websocket Server](https://wiki.swoole.com/wiki/page/397.html)</span><br><span class="line"></span><br><span class="line">## 异步毫秒定时器</span><br><span class="line">1. 场景: 定时任务(毫秒级别)</span><br><span class="line">2. 示例代码</span><br></pre></td></tr></table></figure>
+<p>&lt;?php<br>/**</p>
+</li>
+<li>毫秒精度的定时器</li>
+<li><p>底层基于 epoll_wait 和 setitimer 实现, 数据结构使用最小堆, 可支持添加大量定时器<br>*/</p>
+<p>// 循环执行定时器<br>swoole_timer_tick(3000, function () {<br> echo “after 3000ms.\n”;<br>});</p>
+<p>// 单次执行定时器<br>swoole_timer_after(3000, function () {<br> echo “after 14000ms.\n”;<br>});<br>```</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swoole/">Swoole</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&title=《03. 小试牛刀》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&title=《03. 小试牛刀》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 小试牛刀》 — Lant's&url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/11/03/swoole/2017-11-03-02/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02. 环境准备</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/04/网络编程/2018-11-29-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. 基本概念扫盲</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&title=《03. 小试牛刀》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&title=《03. 小试牛刀》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. 小试牛刀》 — Lant's&url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/04/swoole/2017-11-04-03/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJElEQVR42u3aQY7DIAwF0N7/0p0DjCb9H+hIwMuqUpvAy8I1tl+v+HpPX89P/r3K6xsXBgbGtoxk+ecFnjfdPvmvbz+8GgwMjAsYSShMlnn+/fMq+b0YGBgY7dYTzEwuh4GBgTHDmA+p+boYGBgYeeDLi2jPB9r54I6BgXEPI6+6///nr/Q3MDAwtmKsbUO2QXPZrjAwMI5m5AEuL4fNNzLb/WBgYNzGaBuK7WF1rJAXJYsYGBiHMtohibWtymVgDAyMCxht8StvZ44lfHmzc7AWiIGBsRWjfVwboNuD6OCYBQYGxtGMJC1ry2d5EM/TwQ8hGwMD4wLGWArYVvXG2pzRDjEwMI5mtKWxPBC3T0saA0XDAAMD4wJGXp7LD67tvUnC+mpvxsDA2JwRDYmWW2ypeQqIgYFxG6Mtb7VBdqYAV/weAwPjaMbalsDMQGo7bIGBgXEbI0/I2vLZfFEvf8UYGBhnM9qj7NqD7ljrtPjHwMDA2JyRD3UlwXTt6yiGLTAwMK5hzLcKkoGJNumMwi4GBsYFjJniV1tQa8P34CkcAwPjCMa7vMYwY6SCioGBcTSjHdUaSwrbQY2Z4QwMDIxTGfNBNjmyti2E+qVgYGBcwMgDXz6k1TYP2tCPgYGBkaRlSeMzTzTbo3JdNcTAwLiGkTcmx7ae/2bB/wYGBsZWjHbcIT9etsMWg+U/DAyMoxn5bWNF/Pbgmnw72NTEwMDYj/EDeWMD8c03DvUAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

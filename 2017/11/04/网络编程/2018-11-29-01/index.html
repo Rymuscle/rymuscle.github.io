@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>01. 基本概念扫盲 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="网络编程">
+    <meta name="description" content="文件描述符 维基百科 文件描述符(File descriptor)是一个用于表述在操作系统中, 指向一个文件(文件可理解为信息载体, 包括socket)的引用指针的抽象化概念 对一个 socket 的读写也会有相应的描述符, 称为 socketfd(socket 描述符) 文件描述符形式上是一个非负整数, 实际上, 它是一个索引值, 指向内核中为每个进程所维护的该进程打开文件的记录表,   当程序">
+<meta name="keywords" content="网络编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="01. 基本概念扫盲">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="文件描述符 维基百科 文件描述符(File descriptor)是一个用于表述在操作系统中, 指向一个文件(文件可理解为信息载体, 包括socket)的引用指针的抽象化概念 对一个 socket 的读写也会有相应的描述符, 称为 socketfd(socket 描述符) 文件描述符形式上是一个非负整数, 实际上, 它是一个索引值, 指向内核中为每个进程所维护的该进程打开文件的记录表,   当程序">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/systemcall.jpg">
+<meta property="og:updated_time" content="2018-11-30T05:07:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="01. 基本概念扫盲">
+<meta name="twitter:description" content="文件描述符 维基百科 文件描述符(File descriptor)是一个用于表述在操作系统中, 指向一个文件(文件可理解为信息载体, 包括socket)的引用指针的抽象化概念 对一个 socket 的读写也会有相应的描述符, 称为 socketfd(socket 描述符) 文件描述符形式上是一个非负整数, 实际上, 它是一个索引值, 指向内核中为每个进程所维护的该进程打开文件的记录表,   当程序">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/IO/systemcall.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">01. 基本概念扫盲</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-04T09:11:37.000Z" itemprop="datePublished" class="page-time">
+  2017-11-04
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/网络编程/">网络编程</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#文件描述符"><span class="post-toc-number">1.</span> <span class="post-toc-text">文件描述符</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#上下文"><span class="post-toc-number">2.</span> <span class="post-toc-text">上下文</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#用户空间与内核空间"><span class="post-toc-number">3.</span> <span class="post-toc-text">用户空间与内核空间</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Socket"><span class="post-toc-number">4.</span> <span class="post-toc-text">Socket</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IO模型"><span class="post-toc-number">5.</span> <span class="post-toc-text">IO模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同步和异步"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">同步和异步</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-网络编程/2018-11-29-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">01. 基本概念扫盲</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-04 17:11:37" datetime="2017-11-04T09:11:37.000Z"  itemprop="datePublished">2017-11-04</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/网络编程/">网络编程</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><ol>
+<li><a href="https://en.wikipedia.org/wiki/File_descriptor" target="_blank" rel="noopener">维基百科</a></li>
+<li>文件描述符(File descriptor)是一个用于表述在操作系统中, 指向一个文件(文件可理解为信息载体, 包括socket)的引用指针的抽象化概念<ul>
+<li>对一个 socket 的读写也会有相应的描述符, 称为 socketfd(socket 描述符)</li>
+<li>文件描述符形式上是一个非负整数, 实际上, 它是一个索引值, 指向内核中为每个进程所维护的该进程打开文件的记录表,</li>
+</ul>
+</li>
+<li><p>当程序打开一个文件或者新创建一个文件, 内核就会向进程返回一个对应的文件描述符(fd) (这个概念只适用于unix、linux操作系统)</p>
+</li>
+<li><p>更详细可参考: <a href="https://learn-linux.readthedocs.io/zh_CN/latest/system-programming/file-io/file-descriptor.html" target="_blank" rel="noopener">https://learn-linux.readthedocs.io/zh_CN/latest/system-programming/file-io/file-descriptor.html</a> </p>
+</li>
+</ol>
+<h2 id="上下文"><a href="#上下文" class="headerlink" title="上下文"></a>上下文</h2><p>当一个进程在执行时, CPU 的所有寄存器中的值、进程的状态以及堆栈中的内容被称为该进程的上下文</p>
+<h2 id="用户空间与内核空间"><a href="#用户空间与内核空间" class="headerlink" title="用户空间与内核空间"></a>用户空间与内核空间</h2><ol>
+<li><p>Linux从整体上可以分为内核态与用户态<br> 内核态就是内核所处的空间, 内核负责调用底层硬件资源, 并为上层应用程序提供运行环境, 用户态即应用程序的活动空间<br> 比如一个32位的操作系统, 寻址地址(虚拟内存空间)是2的32次方, 也就是4G, 操作系统将较高的1G字节作为内核空间, 而将较低的3G字节作为用户空间, 内核空间具有用户空间所不具备的操作权限。</p>
+</li>
+<li><p>应用程序的运行必须依托于内核提供的硬件资源(如cpu\存储\IO), 内核通过暴露外部接口以便应用程序调用 — 称为 <strong>“SystemCall, 系统调用”</strong><br> <img src="/img/IO/systemcall.jpg" width="400/"></p>
+</li>
+<li><p>系统调用是操作系统的最小功能单位, 应用程序通常运行在用户空间, 当某些操作需要内核权限时, 就会通过系统调用(System calls), 进入内核态执行, 这也就是一次用户态\内核态的转换, 切换过程中涉及了各种函数的调用以及数据的复制</p>
+</li>
+<li><p>虽然用户态下和内核态下工作的程序有很多差别, 但最重要的差别就在于特权级的不同, 即权力的不同。运行在用户态下的程序不能直接访问操作系统内核数据结构和程序<br> 熟悉Unix/Linux系统的人都知道, fork() 的工作实际上是以系统调用的方式完成相应功能的, 具体的工作是由系统级的 sys_fork() 负责实施, 其实无论是不是Unix或者Linux, 对于任何操作系统来说, 创建一个新的进程都是属于核心功能, 因为它要做很多底层细致地工作, 消耗系统的物理资源, 比如分配物理内存, 从父进程拷贝相关信息, 拷贝设置页目录页表等等, 这些显然不能随便让哪个程序就能去做, 于是就自然引出特权级别的概念, 显然, 最关键性的权力必须由高特权级的程序来执行, 这样才可以做到集中管理, 减少有限资源的访问和使用冲突</p>
+</li>
+<li><p>很多程序开始时运行于用户态, 但在执行的过程中, 一些操作需要在内核权限下才能执行, 这就涉及到一个从用户态切换到内核态的过程, 一般存在以下三种需要切换的情况:</p>
+<ul>
+<li>系统调用<br>比如调用fork()函数产生进程的时候</li>
+<li>程序异常<br>比如5/0, 当除数为0的时候, 就会产生异常</li>
+<li>外围设备的中断: 当外围设备完成用户请求的操作后, 会向CPU发出相应的中断信号, 这时CPU会暂停执行下一条即将要执行的指令转而去执行与中断信号对应的处理程序, 如果先前执行的指令是用户态下的程序, 那么这个转换的过程自然也就发生了由用户态到内核态的切换。比如硬盘读写操作完成, 系统会切换到硬盘读写的中断处理程序中执行后续操作等</li>
+</ul>
+</li>
+<li><p>最终通过内核态、用户态的划分与协助, 保证了操作系统的安全性、稳定性</p>
+</li>
+</ol>
+<h2 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h2><ol>
+<li><p>socket也叫套接字, 起源于Unix, 而Unix/Linux基本哲学之一就是<strong>一切皆文件</strong>, 都可以用 “打开open –&gt; 读写write/read –&gt; 关闭close” 模式来操作, 而Socket就是该模式的一个实现, 所以可以认为Socket是一种特殊的文件;</p>
+</li>
+<li><p>Socket是应用层与TCP/IP协议族通信的中间软件抽象层, 它是一组接口, 在设计模式中, Socket其实就是一个门面模式, 它把复杂的TCP/IP协议族隐藏在Socket接口后面</p>
+</li>
+<li><p>对于网络中进程之间的通信, 应用程序几乎都使用的是socket</p>
+</li>
+</ol>
+<h2 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h2><h3 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h3><ol>
+<li><p>其实网上有很多资料在描述 同步, 异步, 阻塞, 非阻塞 之前的关系, 往往举了一大堆例子, 最终还是说不太清除。 其实应用程序要进行网络通信, <code>应用程序</code> 必然会进行 <code>系统调用</code></p>
+</li>
+<li><p>对于 同步和异步 来说, 我们不需要关注 同步调用在等待期间 或者 异步调用在立即返回后 应用程序是 休眠等待或者活跃去处理其他任务, 而重点关注的是 消息的通信机制, 也就是结果是应用程序主动去等待获取, 还是由系统将结果通知给应用程序</p>
+</li>
+</ol>
+<ol>
+<li>同步和异步关注的是消息通信机制<ul>
+<li>同步: 发出一个调用后, 一直等待, 直到这个调用结果完成后, 才返回 (同步主要体现在主动获取结果) </li>
+<li>异步: 发出一个调用后, 立刻返回, 不需要等待调用结果, 而是在结果处理完成后, 通过 通知机制 或者 回调函数 进行通知 (异步主要体现在结果的回调通知)</li>
+</ul>
+</li>
+</ol>
+<p>阻塞和非阻塞关注的是程序在等待调用结果（消息, 返回值）时的状态.<br>阻塞：发出调用后, 当前线程被挂起, 直到结果返回。<br>非阻塞：发出调用后, 当前线程继续保持运行状态。<br>总之, 同步异步要看是否需要等待操作执行的结构。阻塞非阻塞指请求后是否能够理解返回保持Running的状态。</p>
+<p>参考:</p>
+<ul>
+<li><a href="https://blog.csdn.net/lemon89/article/details/78290389" target="_blank" rel="noopener">https://blog.csdn.net/lemon89/article/details/78290389</a></li>
+<li><a href="https://blog.csdn.net/orchestra56/article/details/81005494" target="_blank" rel="noopener">https://blog.csdn.net/orchestra56/article/details/81005494</a></li>
+<li><a href="https://learn-linux.readthedocs.io/zh_CN/latest/system-programming/file-io/file-descriptor.html" target="_blank" rel="noopener">https://learn-linux.readthedocs.io/zh_CN/latest/system-programming/file-io/file-descriptor.html</a><br>持续扫盲中~~</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络编程/">网络编程</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&title=《01. 基本概念扫盲》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&title=《01. 基本概念扫盲》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 基本概念扫盲》 — Lant's&url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/11/04/swoole/2017-11-04-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03. 小试牛刀</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/13/DataStructure/2017-11-13-10/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">01. 数据结构 概述</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&title=《01. 基本概念扫盲》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&title=《01. 基本概念扫盲》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 基本概念扫盲》 — Lant's&url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/04/网络编程/2018-11-29-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuklEQVR42u3a224bMQwE0Pz/T6dAn1I0dmZIyXWBs0+GLzKPDCxlkh8f8fX5+/r6+Oszfz//6D2P3pm8+mi1AxceHh7eKPTnwT3iPf/KPMQZNdpQPDw8vGu8JBnkIeafTVJIGwMeHh7e+/Dyg3IbRHtAx8PDw/tfeElhok0JN5ITHh4e3mt4yY24LarmCaBNBldqLXh4eHgxb9YA+7ePr/f38PDw8EZd9eS2ux8pyMsNdZx4eHh4F3hJC+peUtkUcIuEgYeHh3eNd6owkd+yk6Qy+zG+SQx4eHh4h3gtYPb+Dft5woh+Nzw8PLyjvM35c9MAa0sSz9cpirx4eHh4h3j7YkSeQvKmWl7Y/UGBh4eHd5TXLpo39fOGWb7ReSsODw8P7x6veDkuMcxO9DlsWOTFw8PDO8SbfeWmSLEp9SY/xsMjNR4eHt4hXktqB6dmm5UHnZd98fDw8G7wZs3+2XDVrHycJww8PDy827z82Lopy84O3O3AQdHfw8PDwxvx2lZTvvQszbQx/LDFeHh4eC/hzY6/swN0PogwO3Dj4eHhvZKXH2H341DJJrbr4+Hh4d3jteNWmwZYHmibrob/G/Dw8PCu8fJSbBJWDmgbYz80wPDw8PAu8PI21XCe69oIV9Hfw8PDw7vGyxtR+dBVG+KxpIKHh4d3gTdrO80GsGbr71fDw8PDO7taW0TYjBHMBrPaAkc9eoWHh4e35rXB5SHmmzVLJEWVGg8PD2/E+yyv2Q16VsiYlUX+iA0PDw/vAm9TGtiEuxkLyFtieHh4ePd4bUD7g3KebGatuGgyAg8PD2/Na1tQyaBVWwJuh7eiaPHw8PDegJcMOZ0Cb4rFeHh4eO/Ay1NFO/vUblxR2sDDw8O7xpu1/GfDVXnxty1h4OHh4b2G1/7VT8qs+a2/LXy0m4iHh4d3lPcLKkKxhi6D/z4AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

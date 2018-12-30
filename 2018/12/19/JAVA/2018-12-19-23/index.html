@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>23. HashMap 和 Hashtable 的区别 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JAVASE">
+    <meta name="description" content="Hashtable 是个过时的集合类, 存在于Java API中很久了, 在Java 4中被重写了, 实现了Map接口, 所以自此以后也成了Java集合框架中的一部分  HashMap 和 Hashtable 都实现了Map接口, 但决定用哪一个之前先要弄清楚它们之间的分别, 主要的区别有: 线程安全性, 同步(synchronization), 以及速度  HashMap 几乎可以等价于 Has">
+<meta name="keywords" content="JAVASE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="23. HashMap 和 Hashtable 的区别">
+<meta property="og:url" content="http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="Hashtable 是个过时的集合类, 存在于Java API中很久了, 在Java 4中被重写了, 实现了Map接口, 所以自此以后也成了Java集合框架中的一部分  HashMap 和 Hashtable 都实现了Map接口, 但决定用哪一个之前先要弄清楚它们之间的分别, 主要的区别有: 线程安全性, 同步(synchronization), 以及速度  HashMap 几乎可以等价于 Has">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-22T06:08:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="23. HashMap 和 Hashtable 的区别">
+<meta name="twitter:description" content="Hashtable 是个过时的集合类, 存在于Java API中很久了, 在Java 4中被重写了, 实现了Map接口, 所以自此以后也成了Java集合框架中的一部分  HashMap 和 Hashtable 都实现了Map接口, 但决定用哪一个之前先要弄清楚它们之间的分别, 主要的区别有: 线程安全性, 同步(synchronization), 以及速度  HashMap 几乎可以等价于 Has">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">23. HashMap 和 Hashtable 的区别</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-12-19T06:05:10.000Z" itemprop="datePublished" class="page-time">
+  2018-12-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JAVASE/">JAVASE</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-JAVA/2018-12-19-23"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">23. HashMap 和 Hashtable 的区别</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-12-19 14:05:10" datetime="2018-12-19T06:05:10.000Z"  itemprop="datePublished">2018-12-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JAVASE/">JAVASE</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Hashtable 是个过时的集合类, 存在于Java API中很久了, 在Java 4中被重写了, 实现了Map接口, 所以自此以后也成了Java集合框架中的一部分</p>
+<ol>
+<li><p>HashMap 和 Hashtable 都实现了Map接口, 但决定用哪一个之前先要弄清楚它们之间的分别, 主要的区别有: 线程安全性, 同步(synchronization), 以及速度</p>
+<ul>
+<li>HashMap 几乎可以等价于 Hashtable, 除了HashMap是非synchronized的, 并可以接受null(HashMap可以接受为null的键值(key)和值(value), 而Hashtable则不行)</li>
+<li>HashMap是非synchronized, 而Hashtable是synchronized<br>这意味着Hashtable是线程安全的, 多个线程可以共享一个Hashtable, 而如果没有正确的同步的话, 多个线程是不能共享HashMap的<br>Java 5提供了ConcurrentHashMap, 它是HashTable的替代, 比HashTable的扩展性更好</li>
+<li>另一个区别是 HashMap 的迭代器(Iterator)是 fail-fast 迭代器, 而 Hashtable 的 enumerator迭代器不是 fail-fast 的, 所以当有其它线程改变了HashMap的结构(增加或者移除元素), 将会抛出 ConcurrentModificationException, 但迭代器本身的remove()方法移除元素则不会抛出ConcurrentModificationException异常, 但这并不是一个一定发生的行为, 要看JVM, 这条同样也是Enumeration和Iterator的区别<br>由于Hashtable是线程安全的也是synchronized, 所以在单线程环境下它比HashMap要慢, 如果你不需要同步, 只需要单一线程, 那么使用HashMap性能要好过Hashtable<br>HashMap不能保证随着时间的推移Map中的元素次序是不变的</li>
+</ul>
+</li>
+<li><p>要注意的一些重要术语：<br>1) sychronized意味着在一次仅有一个线程能够更改Hashtable。就是说任何线程要更新Hashtable时要首先获得同步锁，其它线程要等到同步锁被释放之后才能再次获得同步锁更新Hashtable。</p>
+<p>2) Fail-safe和iterator迭代器相关。如果某个集合对象创建了Iterator或者ListIterator，然后其它的线程试图“结构上”更改集合对象，将会抛出ConcurrentModificationException异常。但其它线程可以通过set()方法更改集合对象是允许的，因为这并没有从“结构上”更改集合。但是假如已经从结构上进行了更改，再调用set()方法，将会抛出IllegalArgumentException异常。</p>
+<p>3) 结构上的更改指的是删除或者插入一个元素，这样会影响到map的结构。</p>
+<p>我们能否让HashMap同步？<br>HashMap可以通过下面的语句进行同步：<br>Map m = Collections.synchronizeMap(hashMap);</p>
+<p>结论<br>Hashtable和HashMap有几个主要的不同：线程安全以及速度。仅在你需要完全的线程安全的时候使用Hashtable，而如果你使用Java 5或以上的话，请使用ConcurrentHashMap吧。 </p>
+</li>
+<li></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JAVASE/">JAVASE</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&title=《23. HashMap 和 Hashtable 的区别》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&title=《23. HashMap 和 Hashtable 的区别》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. HashMap 和 Hashtable 的区别》 — Lant's&url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/19/JAVA/2018-12-19-22/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">22. JCF - Java集合框架</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/12/20/JAVA/2018-12-20-26/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">26. Set的contains()方法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2018</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&title=《23. HashMap 和 Hashtable 的区别》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&title=《23. HashMap 和 Hashtable 的区别》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《23. HashMap 和 Hashtable 的区别》 — Lant's&url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/19/JAVA/2018-12-19-23/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACPklEQVR42u3aQY6EMAwFUe5/aWbbEkOob9MtYSqrFpoJeSwsO/a24bV/rM8nx99nT477HHc4Pr95yZAh47GMfbnODn129PWBOu+6oMqQIeMFjLMIRsLrOuyuA+g6WPN3yZAhQwZJBHlKRwKxDBkyZNQY64TvGwWwDBkyZKSFJXlBLe3j13A31OIyZMh4ICNN5n75+yv9DRkyZDyKsYeLJ3xpgcqD7D+7yZAhYzSj01Yk5S7/G/6xTlNPGTJkjGakYS69yk8bBrxMlSFDxhsYtaZj5/KLtxaC0TQZMmS8gJFeypOX8f/tDG1s5KAyZMgYwUjDIi8sO1dsQaCXIUPGaAYPnXcNkHXGyFAgliFDxlBGzZ0ObPVbmKi/IUOGjHGM9Li1UNsftrhoo8qQIeM1jLSATJuUadIZFNgyZMh4AYOnZf0BMn7QoOUpQ4aM0QyyBQmInfL1601NGTJkPJyRlpTpCBdZ5DzxfaEMGTIGMXgJyi/C0qu6Wrp5UZHLkCFjKIMfsVbc8tDJh9JkyJAhIy1i0zDaqrbXd4cyZMgYzeCBL73orw2Q8bJWhgwZsxm1I3aGMzqhNm4VyJAh4+GMPVwkTeR39Xyk42I3GTJkjGbUwhxvLpJWaFoe3zBLIkOGjAcyeJDtNABqKWOxFpchQ8ZQBgmdtUEu3pJsfQgZMmTIKDUP+M61D3dzwJUhQ8YgBk/a+qNmQSNBhgwZL2DUitiUnTYYgnRThgwZoxm8dOSkdGCC7BCkiTJkyJjD+ANPa0a8WH7svwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>
