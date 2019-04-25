@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>21. Redis Persistence | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis">
+    <meta name="description" content="Redis 在运行时, 是以数据结构的形式将数据维持在内存中的, 所以为了将数据从掉电易失的内存存放到能够永久存储的设备上(让这些数据在 Redis 重启之后仍然可用), Redis 分别提供了 RDB 和 AOF 两种持久化模式 RDB(Redis DataBase) RDB持久化默认是开启的, 关闭方式: 注释掉配置文件中默认的几行 save策略 或者 在save策略下添加一行 save &amp;q">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="21. Redis Persistence">
+<meta property="og:url" content="http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="Redis 在运行时, 是以数据结构的形式将数据维持在内存中的, 所以为了将数据从掉电易失的内存存放到能够永久存储的设备上(让这些数据在 Redis 重启之后仍然可用), Redis 分别提供了 RDB 和 AOF 两种持久化模式 RDB(Redis DataBase) RDB持久化默认是开启的, 关闭方式: 注释掉配置文件中默认的几行 save策略 或者 在save策略下添加一行 save &amp;q">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-03-11T02:05:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="21. Redis Persistence">
+<meta name="twitter:description" content="Redis 在运行时, 是以数据结构的形式将数据维持在内存中的, 所以为了将数据从掉电易失的内存存放到能够永久存储的设备上(让这些数据在 Redis 重启之后仍然可用), Redis 分别提供了 RDB 和 AOF 两种持久化模式 RDB(Redis DataBase) RDB持久化默认是开启的, 关闭方式: 注释掉配置文件中默认的几行 save策略 或者 在save策略下添加一行 save &amp;q">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">21. Redis Persistence</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-04-05T05:36:52.000Z" itemprop="datePublished" class="page-time">
+  2018-04-05
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RDB-Redis-DataBase"><span class="post-toc-number">1.</span> <span class="post-toc-text">RDB(Redis DataBase)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建RDB文件三种方式的区别"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">创建RDB文件三种方式的区别</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SAVE命令"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">SAVE命令</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#BGSAVE-命令"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">BGSAVE 命令</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#save-对比-bgsave"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">save 对比 bgsave</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BGSAVE的执行流程浅析"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">BGSAVE的执行流程浅析</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RDB持久化的优点"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">RDB持久化的优点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#RDB持久化的缺点"><span class="post-toc-number">1.5.</span> <span class="post-toc-text">RDB持久化的缺点</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#AOF-Append-Only-File"><span class="post-toc-number">2.</span> <span class="post-toc-text">AOF (Append Only File)</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#AOF仍然会丢数据"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">AOF仍然会丢数据</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BGREWRITEAOF"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">BGREWRITEAOF</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BGREWRITEAOF-导致的主线程阻塞"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">BGREWRITEAOF 导致的主线程阻塞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#AOF文件出错"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">AOF文件出错</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RDB与AOF对比"><span class="post-toc-number">3.</span> <span class="post-toc-text">RDB与AOF对比</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#RDB-AOF"><span class="post-toc-number">4.</span> <span class="post-toc-text">RDB + AOF</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内存的飙升"><span class="post-toc-number">5.</span> <span class="post-toc-text">内存的飙升</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#持久化恢复步骤"><span class="post-toc-number">6.</span> <span class="post-toc-text">持久化恢复步骤</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">7.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-redis/2018-04-05-redis-21"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">21. Redis Persistence</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-04-05 13:36:52" datetime="2018-04-05T05:36:52.000Z"  itemprop="datePublished">2018-04-05</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Redis 在运行时, 是以数据结构的形式将数据维持在内存中的, 所以为了将数据从掉电易失的内存存放到能够永久存储的设备上(让这些数据在 Redis 重启之后仍然可用), Redis 分别提供了 <code>RDB</code> 和 <code>AOF</code> 两种持久化模式</p>
+<h2 id="RDB-Redis-DataBase"><a href="#RDB-Redis-DataBase" class="headerlink" title="RDB(Redis DataBase)"></a>RDB(Redis DataBase)</h2><ol>
+<li><p>RDB持久化默认是开启的, 关闭方式: 注释掉配置文件中默认的几行 save策略 或者 在save策略下添加一行 <code>save &quot;&quot;</code> 策略</p>
+</li>
+<li><p>RDB模式可以将redis服务器包含的所有数据库数据以 二进制 <code>.rdb</code> 文件的形式保存到硬盘</p>
+<ul>
+<li>默认文件名为 <code>dump.rdb</code> (文件名配置: <code>dbfilename dump.rdb</code>)</li>
+<li>.rdb文件存放路径配置: <code>dir /usr/local/redis-4.0.12/persistence-db-dir</code></li>
+</ul>
+</li>
+<li><p>创建 <code>.rdb</code> 文件常见的三种方式:</p>
+<ul>
+<li>手动在客户端向redis服务器发送 <code>SAVE</code> 命令</li>
+<li>手动在客户端向redis服务器发送 <code>BGSAVE</code> 命令</li>
+<li>在配置文件中配置rdb持久化的 <code>save策略</code>, redis服务运行期间, 如果配置选项被满足, 则服务器会自动执行 <code>BGSAVE</code></li>
+<li>这三种创建RDB的方式, 前两种需要手动去执行, 而第三种是服务器自动执行的</li>
+</ul>
+</li>
+</ol>
+<h3 id="创建RDB文件三种方式的区别"><a href="#创建RDB文件三种方式的区别" class="headerlink" title="创建RDB文件三种方式的区别"></a>创建RDB文件三种方式的区别</h3><h4 id="SAVE命令"><a href="#SAVE命令" class="headerlink" title="SAVE命令"></a>SAVE命令</h4><p>手动在客户端向redis服务器发送 SAVE命令</p>
+<ol>
+<li><p><strong>速度</strong>优点: 相对于下面介绍的 <code>BGSAVE</code> 命令, SAVE命令执行时, redis主进程不会fork新的进程, 所以可以集中资源来创建.rdb文件, 速度相对比 <code>BGSAVE</code> 命令 要快</p>
+</li>
+<li><p>缺点: </p>
+<ul>
+<li><strong>阻塞</strong>: 在redis服务器执行SAVE命令的过程中(即创建RDB文件的过程中), redis服务器将被阻塞, 服务器端无法再去处理客户端发送的命令, 只有在SAVE命令执行完毕之后, 服务器才会重新开始处理客户端发送的命令请求</li>
+<li><strong>安全性</strong>: <code>.rdb</code> 文件覆盖创建的安全性问题</li>
+</ul>
+</li>
+</ol>
+<h4 id="BGSAVE-命令"><a href="#BGSAVE-命令" class="headerlink" title="BGSAVE 命令"></a>BGSAVE 命令</h4><p>bgsave命令的执行可以分为手动或者自动</p>
+<ol>
+<li><p>手动在客户端向redis服务器发送 <code>BGSAVE</code> 命令</p>
+</li>
+<li><p>自动创建.rdb文件</p>
+<ul>
+<li><p>通过在redis配置文件中配置redis服务器生成.rdb文件的条件, 就可以让服务器在满足save策略时, 自动去创建.rdb文件</p>
+</li>
+<li><p>redis默认情况下就是开启REDB持久化的, 并且默认设置了几个save的策略:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">save 900 1    #900秒 (15分钟) 内至少1个key值改变 (则进行数据库保存--持久化)     </span><br><span class="line">save 300 10   #300秒 (5分钟) 内至少10个key值改变 (则进行数据库保存--持久化)   </span><br><span class="line">save 60 10000 #60秒 (1分钟) 内至少10000个key值改变 (则进行数据库保存--持久化)</span><br><span class="line">// 只要三个条件中的任意一个条件被满足时, 服务器就会自动执行 BGSAVE 命令来创建新的.rdb文件</span><br><span class="line">// 每次创建完.rdb文件之后, 服务器为实现自动持久化, 会将&apos;为实现持久化而设置的时间计数器和次数计数器清零并重新开始计数&apos;, 所以多个保存条件的效果是不会叠加的</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>非阻塞</strong> 优点: <code>BGSAVE</code> 命令不会造成服务器阻塞, redis服务器在执行BGSAVE命令的过程中, 仍然可以正常的处理其他客户端发送的命令 </p>
+<blockquote>
+<p>BGSAVE命令不会造成服务器阻塞的原因在于:<br> 当redis服务器接收到BGSAVE命令后, 它不会亲自去创建rdb持久化文件, 而是通过 fork 一个子进程,<br> 然后由子进程去生成.rdb文件, 主进程则继续处理客户端的命令请求,<br> 当子进程创建好.rdb文件并退出后, 它会向父进程发送一个信号, 告知redis服务器.rdb文件已经创建完毕</p>
+</blockquote>
+</li>
+<li><p>缺点: </p>
+<ul>
+<li><p>性能的额外消耗: fork子进程会消耗额外的内存</p>
+<blockquote>
+<p>RDB经常需要 fork() 才能使用子进程将数据持久存储在磁盘上,<br>如果数据集很大, fork() 可能会非常耗时,<br>如果数据集非常大且CPU性能不佳, 可能会导致Redis停止服务客户端几毫秒甚至一秒钟<br>AOF重写也需要fork(), 但你可以调整你想要重写日志的频率而不需要对耐久性进行任何权衡</p>
+</blockquote>
+</li>
+<li><p>速度的降低: 相比 <code>save</code> 命令, 由于 fork子进程会消耗额外性能, 所以 bgsave创建.rdb文件的速度其实会比save慢</p>
+</li>
+<li><p><strong>可能产生的阻塞</strong>:<br>父进程 fork 子进程, 这个过程中父进程是阻塞的, Redis 不能执行来自客户端的任何命令</p>
+<blockquote>
+<p>RDB经常需要 fork() 才能使用子进程将数据持久存储在磁盘上,<br>如果数据集很大, fork() 可能会非常耗时,<br>如果数据集非常大且CPU性能不佳, 可能会导致Redis停止服务客户端几毫秒甚至一秒钟<br>AOF重写也需要fork(), 但你可以调整你想要重写日志的频率而不需要对耐久性进行任何权衡</p>
+</blockquote>
+</li>
+<li><p>.rdb文件覆盖创建的安全性问题</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="save-对比-bgsave"><a href="#save-对比-bgsave" class="headerlink" title="save 对比 bgsave"></a>save 对比 bgsave</h3><p><code>save</code> 和 <code>bgsave</code> 这两个命令没有孰好孰坏, 你要考虑哪个更适合你</p>
+<ol>
+<li><p>如果你的数据库正在上线当中, 自然使用 <code>bgsave</code> (让服务器以非阻塞方式进行最好); 相反, 如果你需要在凌晨3点钟维护你的redis, 比如维护需要停机一小时, 这时系统被阻塞了也是没关系的, 这时候你使用save命令就会好一点 </p>
+</li>
+<li><p><strong>都会阻塞</strong>: </p>
+<ul>
+<li>save会阻塞redis响应客户端请求</li>
+<li>bgsave在 fork() 时, 如果数据集很大, 也可能造成几毫秒甚至一秒钟的阻塞</li>
+</ul>
+</li>
+<li><p>.rdb文件覆盖创建的安全性问题: 无论以上哪种方式去生成.rdb文件, 由于每次都是<strong>覆盖创建</strong></p>
+<ul>
+<li>所以之前的.rdb文件你可以用定时脚本定时地拷走(可以发送到自己的云服务器进行备份), 防止外一客户端执行了 <code>flush db</code> 并且服务器进行了 <code>save</code>, 此时旧的rdb会被新的rdb文件覆盖掉, 那就完蛋了!!!</li>
+<li>事实上在生产环境中 <code>FLUSHDB</code>、<code>FLUSHALL</code> 等命令都属于必禁命令<br>(如果开启AOF的话, 如果.aof文件尚未被重写, 你还可以停止服务, 打开.aof文件, 删除执行的flush命令, 然后重启, 不过线上可能会涌入大量的命令, 导致你找flush命令都是个问题)</li>
+</ul>
+</li>
+</ol>
+<h3 id="BGSAVE的执行流程浅析"><a href="#BGSAVE的执行流程浅析" class="headerlink" title="BGSAVE的执行流程浅析"></a>BGSAVE的执行流程浅析</h3><ol>
+<li><p>Redis 父进程首先判断: 当前是否存在正在执行 bgsave/bgrewriteaof 子进程, 如果有子进程正在执行, 则 bgsave 命令直接返回</p>
+</li>
+<li><p><strong>bgsave/bgrewriteaof 的子进程不能同时执行</strong>, 主要是基于性能方面的考虑: 两个并发的子进程同时执行大量的磁盘写操作, 可能引起严重的性能问题</p>
+</li>
+<li><p>父进程 fork 子进程, 这个过程中父进程是阻塞的, Redis 不能执行来自客户端的任何命令</p>
+</li>
+<li><p>父进程 fork 后, bgsave 命令返回 “Background saving started” 信息并不再阻塞父进程</p>
+</li>
+<li><p>子进程创建 .rdb 文件, 根据父进程内存快照生成临时快照文件, 完成后对原有文件进行原子替换</p>
+</li>
+<li><p>子进程发送信号给父进程表示完成, 父进程更新统计信息</p>
+</li>
+</ol>
+<h3 id="RDB持久化的优点"><a href="#RDB持久化的优点" class="headerlink" title="RDB持久化的优点"></a>RDB持久化的优点</h3><ol>
+<li><p>RDB对于灾难恢复非常好，因为一个紧凑的文件可以传输到远程数据中心 (你可能想要归档最近的24小时内每个小时的RDB文件, 并且每个归档保存30天, 这允许你再灾难发生的时候开业轻松地恢复数据集到不同版本)</p>
+</li>
+<li><p>重建快: (<code>重建数据库</code>是指将数据从硬盘移到内存, 并建立起数据库的过程)</p>
+<ul>
+<li>因为对于RDB模式来说, 重建就是把 <code>dump.rdb</code> 文件加载到内存, 并解压字符串, 就建立起了数据库</li>
+<li>而对于AOF模式来说, 则是在启动Redis服务器的时候, 运行 <code>appendonly.aof</code> 日志文件, 在内存中重新建立数据库</li>
+</ul>
+</li>
+</ol>
+<h3 id="RDB持久化的缺点"><a href="#RDB持久化的缺点" class="headerlink" title="RDB持久化的缺点"></a>RDB持久化的缺点</h3><ol>
+<li><p>意外宕机的数据丢失问题:</p>
+<ul>
+<li>当你正常关闭redis的时候, redis服务器不会参考配置中的save策略, 而是会直接先调用save命令, 将redis所有数据持久化到磁盘之后才会真正进行退出</li>
+<li>但是当redis出现意外断电宕机时, 你会发现从上一次快照之后的数据将全部丢失, 这是因为 RDB持久化 无法频繁执行导致的<blockquote>
+<p>由于创建RDB文件需要将服务器所有的数据库的数据都保存起来, <strong>这是一个非常消耗资源和时间的操作</strong>, 所以服务器需要隔一段时间再来创建一个新的rdb文件, 也就是说<strong>rdb文件的创建操作不能执行的过于频繁, 否则将会严重影响服务器的性能</strong><br>由于save策略设置的是每隔一段时间再去创建.rdb文件, 所以如果在间隔的这段时间中服务器宕机, 那这段间隔中的数据就丢失了</p>
+</blockquote>
+</li>
+<li>为了解决这个问题, <code>rdb可以结合aof来一起进行持久化</code>, AOF持久化模式就解决了服务器不能频繁执行rdb持久化的问题</li>
+<li>如果你非常关心你的数据，但是在发生灾难时仍然可以忍受几分钟的数据丢失，那么你可以只使用RD</li>
+</ul>
+</li>
+<li><p>.rdb文件每次都是<strong>覆盖创建</strong>, 所以为了安全起见, 需要不时地去备份已经生成的rdb文件</p>
+</li>
+</ol>
+<h2 id="AOF-Append-Only-File"><a href="#AOF-Append-Only-File" class="headerlink" title="AOF (Append Only File)"></a>AOF (Append Only File)</h2><p>由于RDB的持久化策略的执行时间间隔不能设置的特别频繁, 所以在服务器意外宕机的情况下造成的数据丢失问题可能就会比较严重, 为此redis提供了另外一种持久化方案 AOF持久化</p>
+<ol>
+<li><p>AOF模式是将 <code>操作日志</code> 记在 <code>appendonly.aof</code> 文件里, 每次启动服务器就会运行 <code>appendonly.aof</code> 里的 <code>命令</code> 重新建立数据库    </p>
+</li>
+<li><p>默认AOF模式是关闭的, 可以在redis配置文件(redis.conf)中, 配置 <code>appendonly yes</code> 来打开AOF模式</p>
+</li>
+</ol>
+<h3 id="AOF仍然会丢数据"><a href="#AOF仍然会丢数据" class="headerlink" title="AOF仍然会丢数据"></a>AOF仍然会丢数据</h3><ol>
+<li><p>在AOF持久化模式下, 虽然redis服务器在执行修改数据的命令后, 会把执行的命令写入到aof文件中, <strong>但这并不意味着aof文件持久化不会丢失任何数据</strong></p>
+<blockquote>
+<ul>
+<li>在常见的操作系统中, 执行系统调用write函数, 将一些内容写到某个文件中时, 为了提高效率, 系统通常不会直接将内容写入到磁盘里面, 而是先将内容放入一个内存缓冲区(buffer)里面, 等到缓冲区被填满, 或者用户执行 <code>fsync</code> 调用和 <code>fdatasync</code> 调用时, 系统才会将存储在缓冲区里面的内容真正写入到硬盘里<br>所以对AOF持久化来说, 只有当一条命令真正的被写入到硬盘里面时, 这条命令才不会因停机而意外丢失<br>因此, 相对于rdb模式的save策略来看, rdb模式的策略由于可能会出现的较长时间间隔, 所以在redis意外宕机时, aof丢失的命令显然可能会少很多, 但仍然可能丢失命令</li>
+<li>aof持久化在遭遇意外停机时所丢失的命令数量, 取决于命令被写入到硬盘的时间<br>越早将命令写入到硬盘, 发生意外停机时丢失的数据就越少, 而越迟将命令写入硬盘,发生意外停机时丢失的数据就越多<br>为此, AOF为我们提供了几个尽快将数据写入磁盘的追加策略</li>
+</ul>
+</blockquote>
+</li>
+<li><p>由于AOF仍然面临丢失命令的风险, AOF模式提供了三种 <code>追加</code> 策略, 这三种追加策略主要就是用来指定什么时机将操作日志<strong>真正追加</strong>到 appendonly.aof 文件里</p>
+<ul>
+<li><p><code>always</code> : 服务器每写入一个命令, 就调用一次fdatasync, 将缓冲区里面的命令写入到磁盘文件中, 在这种模式下, 服务器即使遭遇意外停机, 也不会丢失任何自己已经成功执行的命令数据<br>比较安全, 但比较慢; (类似mysql了)</p>
+</li>
+<li><p><code>everysec</code>: 服务器每一秒重新调用一次fdatasync, 将缓冲区里面的操作日志写入到磁盘文件中, 这是系统默认的方式, 是一种<strong>权衡折衷</strong><br>通常这种方式会比较好, 在这种模式下, 服务器即使遭遇意外停机时, <strong>最多只丢失一秒钟的内执行的命令</strong><br>相比RDB由于不能频繁执行而设置的save策略可能会间隔较长的时间, 在出现redis意外宕机时, 这种方式只会丢失1秒的数据显然要好多了 </p>
+</li>
+<li><p><code>no</code>: 服务器不主动调用fdatasync, 由操作系统去决定什么时候将缓冲区里面的命令写入到硬盘里面<br>在这种模式下,服务器遭遇意外停机时, <strong>丢失的命令数量是不确定的</strong></p>
+</li>
+</ul>
+</li>
+<li><p>可以在redis.conf中配置AOF的追加策略, 可以看到默认使用的是everysec这种折中策略</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># appendfsync always</span><br><span class="line">appendfsync everysec</span><br><span class="line"># appendfsync no</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="BGREWRITEAOF"><a href="#BGREWRITEAOF" class="headerlink" title="BGREWRITEAOF"></a>BGREWRITEAOF</h3><ol>
+<li><p>由于redis只会写一个aof文件, 随着AOF文件越来越大, 里面会有大部分是重复命令或者可以合并的命令(100次incr = set key 100)</p>
+</li>
+<li><p>为了让aof文件的大小控制在合理的范围, 避免它疯狂增长, redis提供了<strong>AOF重写功能</strong>, 通过这个功能, 服务器可以产生一个新的aof文件<br> 重写的好处: 减少AOF日志尺寸, 减少内存占用, 加快数据库恢复时间</p>
+</li>
+<li><p>有两种方法可以触发aof文件重写</p>
+<ul>
+<li>客户端手动向服务器发送 <code>BGREWRITEAOF</code> 命令</li>
+<li><p>通过设置配置文件选项来让服务器自动执行<code>BGWRITEAOF</code> 命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">auto-aof-rewrite-min-size &lt;size&gt;</span><br><span class="line">触发aof重写所需的最小体积: 只要aof文件的体积大于等于size时,服务器才会考虑是否需要进行aof重写, 这个选项用于避免对体积过小的aof文件进行重写</span><br><span class="line"></span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">指定触发重写所需的aof文件增长体积的百分比, 当aof文件增长的体积大于auto-aof-rewrite-min-size指定的体积, 并且超过上一次重写之后的aof文件体积的percent%时, 就会触发aof重写, (如果服务器启动刚刚不就,还没有进行过aof重写,那么使用服务器启动时载入的aof文件体积来作为基准值)将这个值设置为0表示关闭自动aof重写</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//只有当aof文件的增量大于100%的时候才进行重写</span><br><span class="line">auto-aof-rewrite-percentage 100</span><br><span class="line">// 当aof文件大于64mb之后才考虑进行aof重写, 还需要看上一条的百分比增量够不够</span><br><span class="line">auto-aof-rewrite-min-size 64mb</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>AOF重写命令是redis通过fork子进程在后台执行的</p>
+<ul>
+<li>AOF重写并不需要对原有AOF文件进行任何的读取, 写入, 分析等操作, 这个功能是通过读取服务器当前的数据库状态来实现的</li>
+<li>新的aof文件会使用尽可能少的命令来记录数据库数据, 因此新的aof文件的体积通常会比原有aof文件的体积要小得多</li>
+<li>aof重写期间, <strong>服务器不会被阻塞</strong>, 可以正常处理客户端发送的命令请求</li>
+<li>新的aof文件创建完成后, 旧的aof文件会被删除</li>
+</ul>
+</li>
+<li><p><strong>aof文件的重写机制</strong>: 整个过程还是比较谨慎的, 即使redis出现意外宕机, 老的.aof文件还在</p>
+<ul>
+<li>redis fork一个子进程</li>
+<li>子进程基于当前内存中的数据, 往一个新的临时的AOF文件中写入日志</li>
+<li>同时, redis主进程仍然继续处理新的请求, 在接收到client新的写操作之后, redis会在内存中写入日志, 同时新的日志也继续写入旧的AOF文件</li>
+<li>子进程写完新的日志文件之后, redis主进程将内存中的新日志再次追加到新的AOF文件中</li>
+<li>用新的日志文件替换掉旧的日志文件</li>
+</ul>
+</li>
+</ol>
+<h3 id="BGREWRITEAOF-导致的主线程阻塞"><a href="#BGREWRITEAOF-导致的主线程阻塞" class="headerlink" title="BGREWRITEAOF 导致的主线程阻塞"></a>BGREWRITEAOF 导致的主线程阻塞</h3><ol>
+<li><p>bgrewriteaof 是主进程fork的子进程来执行的, 按照正常逻辑, 不应该影响 Redis 主进程的正常服务</p>
+</li>
+<li><p>但其实问题是出在硬盘上: Redis 服务设置了 appendfsync everysec, 主进程每秒钟便会调用 fsync(), 要求内核将数据写到存储硬件里<br> 但由于此时 bgrewriteaof子进程 同时也在写硬盘, 从而导致主进程 fsync()/write() 操作被阻塞, 最终导致 Redis 主进程阻塞了</p>
+</li>
+</ol>
+<h3 id="AOF文件出错"><a href="#AOF文件出错" class="headerlink" title="AOF文件出错"></a>AOF文件出错</h3><ol>
+<li><p>服务器可能在程序正在对AOF文件进行写入时发生意外宕机, 如果造成了AOF文件出错(corrupt), 那么 Redis 在重启时会拒绝载入这个 AOF 文件, 从而确保数据的一致性不会被破坏</p>
+</li>
+<li><p>当发生这种情况时, 可以用以下方法来修复出错的 AOF 文件:</p>
+<ul>
+<li>首先必须先为现有的 AOF 文件创建一个备份文件</li>
+<li>然后使用 Redis 附带的 <code>redis-check-aof</code> 程序, 对原来的 AOF 文件进行修复: <code>$ redis-check-aof --fix</code></li>
+<li>(可选)使用 <code>diff -u</code> 对比修复后的 AOF 文件和原始 AOF文件的备份, 查看两个文件之间的不同之处</li>
+<li>重启 Redis 服务器, 等待服务器载入修复后的 AOF 文件, 并进行数据恢复</li>
+</ul>
+</li>
+<li><p>模拟让aof破损</p>
+<ul>
+<li>打开文件, 在末尾随意删除两行 (造成aof出错一般是redis意外宕机导致的文件末尾出错, 你不能在aof文件中间随意删除几行然后指望fix, 显然不太现实)</li>
+<li>然后fix (会有一条数据会被fix删除)</li>
+<li>用fix的aof文件去重启redis, 发现数据确实只剩下一条了</li>
+</ul>
+</li>
+</ol>
+<h2 id="RDB与AOF对比"><a href="#RDB与AOF对比" class="headerlink" title="RDB与AOF对比"></a>RDB与AOF对比</h2><ol>
+<li><p>Redis的配置文件中, 两者有各自的配置方式, 默认是开启了RDB</p>
+</li>
+<li><p>Redis的写操作在RDB模式下比AOF模式下要快:</p>
+<ul>
+<li>因为RDB模式下, redis的每次写操作都是直接写redis内存, 只有当满足save策略时, 会持久化一份.rdb文件 </li>
+<li>而AOF模式下, redis的每次写操作都会触发一次os cache的写入, 然后根据追加策略的不同, 写入.aof文件</li>
+</ul>
+</li>
+<li><p>当然, .rdb文件每次都是新生成(比较耗内存), 而.aof文件只有一份,是一直追加的</p>
+</li>
+<li><p>RDB意外宕机丢失数据的量看上去比AOF要大</p>
+<ul>
+<li>RDB模式的策略不能太频繁(创建RDB文件需要将服务器所有的数据库的数据都保存起来, <strong>这是一个非常消耗资源和时间的操作</strong>), 如果redis出现意外宕机, 那从上次宕机到当前时刻, redis的数据就会都丢失</li>
+<li>而AOF模式可以做到在redis出现意外宕机时, 最多丢失1秒的数据 </li>
+</ul>
+</li>
+<li><p>.rdb文件是二进制文件, 而.aof文件对我们可读<br> 由于AOF以易于理解和解析的格式, 因此你可以轻松导出AOF文件<br> 假设你意外执行了 FLUSHALL 命令刷新了所有数据, 如果开启了AOF, 并且在此期间未执行重写日志<br> 你仍然可以恢复尽可能新的数据, 只需停止服务器, 删除AOF上的最新命令, 然后重新启动Redis</p>
+</li>
+<li><p>.rdb文件恢复数据时, 重建比较快, 而 .aof文件恢复相对比较慢</p>
+</li>
+<li><p>aof文件和rdb的数据是不一样的: aof文件中的数据显然要比rdb文件中的数据要新一些, 所以rdb和aof都开启的情况下, redis会优先使用aof日志进行恢复 </p>
+</li>
+</ol>
+<h2 id="RDB-AOF"><a href="#RDB-AOF" class="headerlink" title="RDB + AOF"></a>RDB + AOF</h2><p>在redis使用中, 可以组合AOF和RDB, 组合使用导致的阻塞问题:</p>
+<ol>
+<li><p>子进程互相阻塞问题</p>
+<ul>
+<li>如果RDB在执行snapshotting操作, 那么redis不会执行AOF bgrewrite; 如果redis在执行AOF bgrewrite, 那么就不会执行 RDB snapshotting</li>
+<li>如果RDB在执行snapshotting, 此时用户执行 BGREWRITEAOF 命令, 那么等RDB快照生成之后, 才会去执行AOF rewrite</li>
+</ul>
+</li>
+<li><p>子进程阻塞导致主进程阻塞: 在BGREWRITEAOF写硬盘期间, 也会阻塞AOF每秒对.aof文件的写入</p>
+</li>
+<li><p>另外注意: 那么redis重启的时候, <strong>会优先使用AOF进行数据恢复</strong>, 因为aof的日志相比rdb会更完整<br> 在有rdb的dump和aof的appendonly的同时, rdb里有数据, aof里也有数据, 但是由于aof的日志是每个命令每个一秒都会写入, 所以也更新, 如果redis意外宕机, 也不可能去优先拿rdb中的旧数据</p>
+</li>
+</ol>
+<h2 id="内存的飙升"><a href="#内存的飙升" class="headerlink" title="内存的飙升"></a>内存的飙升</h2><ol>
+<li>AOF重写</li>
+<li>SAVE, BGSAVE</li>
+<li>上述两种情况都会出现在内存中持有的 .aof/.rdb文件的情况, 内存自然会飙升, 比如可能会出现如下错误: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">25018:C 15 May 06:12:46.416 # Write error writing append only file on disk: No space left on device</span><br><span class="line">1548:M 15 May 06:12:48.146 # Short write while writing to the AOF file: (nwritten=309, expected=37399)</span><br><span class="line">1548:M 15 May 06:12:48.526 # AOF write error looks solved, Redis can write again.</span><br><span class="line">1548:M 15 May 06:12:48.928 # Background AOF rewrite terminated with error</span><br><span class="line">1548:M 15 May 06:12:49.029 * Starting automatic rewriting of AOF on 108% growth</span><br><span class="line">1548:M 15 May 06:12:49.368 * Background append only file rewriting started by pid 25502</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="持久化恢复步骤"><a href="#持久化恢复步骤" class="headerlink" title="持久化恢复步骤"></a>持久化恢复步骤</h2><ol>
+<li><p>在redis出现意外宕机后, 如果要进行数据恢复, 注意:</p>
+<ul>
+<li><p>如果你直接将云服务器上定期备份的 .rdb 文件直接拷贝到redis指定的生成rdb文件的目录下, 然后试图重启redis<br>重启后你可能会发现redis中并没有.rdb文件中的数据<br>原因是线上redis一般使用 appendonly.aof + dump.rdb 的方式进行持久化, 而redis重启后会优先用 appendonly.aof 去恢复数据, 而没有用.rdb文件的数据<br>并且redis启动的时候, 自动重新基于内存的数据, 生成了一份最新的rdb快照, 即直接用空的数据, 覆盖掉了你刚刚拷贝过去的那份dump.rdb文件</p>
+</li>
+<li><p>所以, 你停止redis之后, 其实应该先删除 appendonly.aof, 然后将我们的dump.rdb拷贝过去, 然后再重启redis, 但是重启后发现仍然没有 aof 文件中的数据<br>原因很简单, 虽然你删除了 appendonly.aof, 但是因为aof持久化是打开的, redis就一定会优先基于aof去恢复, 即使文件不在, 它也会在启动后立刻创建一个新的空的aof文件</p>
+</li>
+</ul>
+</li>
+<li><p>正确操作: </p>
+<ul>
+<li>停止redis, 暂时在配置中关闭aof, 然后拷贝一份rdb过来, 再重启redis, 数据能不能恢复过来, 可以恢复过来</li>
+<li>之后, 如果你再关掉redis, 手动修改配置文件, 打开aof, 再重启redis, 数据又没了, 因为之前redis内存中的数据并不会生成aof文件, 而打开aof重启redis后, 才会又创建新的空的aof文件, 然后以新的aof文件进行恢复<br>并且会覆盖之前的rdb文件</li>
+</ul>
+</li>
+<li><p>在数据安全丢失的情况下, 基于rdb冷备, 如何完美的恢复数据, 同时还保持aof和rdb的双开</p>
+<ul>
+<li>停止redis, 关闭aof, 拷贝rdb备份, 重启redis, 确认数据恢复, 直接在命令行 config set 热修改配置参数, 打开aof, 这样redis就会将内存中的数据, 写入aof文件中</li>
+<li>此时aof和rdb两份数据文件的数据就同步了</li>
+<li>由于配置文件中的实际的参数没有被持久化的修改, 再次停止redis, 手动修改配置文件, 打开aof的命令, 再次重启redis</li>
+</ul>
+</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://www.cnblogs.com/kismetv/p/9137897.html#t53" target="_blank" rel="noopener">https://www.cnblogs.com/kismetv/p/9137897.html#t53</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&title=《21. Redis Persistence》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&title=《21. Redis Persistence》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《21. Redis Persistence》 — Lant's&url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/03/10/redis/2018-03-10-redis-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">03. 杂项</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/04/06/redis/2018-04-06-redis-23/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">23. Redis Replication</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&title=《21. Redis Persistence》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&title=《21. Redis Persistence》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《21. Redis Persistence》 — Lant's&url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/04/05/redis/2018-04-05-redis-21/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aUY7iQAwEUO5/6dkDIKDKhpXSeflCM5D0y0epbffjEV9/T9fz35+//+rzq++/+u/XLgwMjMsy/t5ez0vJf9te79kfqBgYGDdgvFpiG5r7GM1fHwYGBsZ7xuYO7dYTAwMDI19EEpqbjeZ/ClwMDIzLMpIHzwK0DfGf1+IYGBgXZGwKy19//sl8AwMD41KMWeM+L2XbAcBwVRgYGEczZmXnd4ed+SGMD6UsBgbG0Yy27GyL23Z42bb2MDAw7sPISZvm1yZq60EFBgbGEYw2XpNiNY/O2a+i3MXAwDiOsT8G0RauLaDoGmJgYBzNSFpa+cPaA2dtoNe1LwYGxmUZeetq/7D94CFq5GFgYBzHyBv9+QhzNhadjSges0VjYGBcipHfYjY2mAXuDImBgXEqI7lRcSRrNi8d3QEDA+NujGLLVZa17VBhOM7EwMC4DSNv97cbxFkXsNieYmBgHM1oYzEJxPxAxqYZ94GKgYFxKGPf4m+L1Xy5ReBiYGAcysjbW8XZjcXAYPgKMDAwbsBoW2C/G1sOD2pgYGAczdg0+ttW3bD1nwc0BgbGcYxZE38T0Ml7HYYsBgbGoYy2XExu9H5BSazvXxAGBsZ5jE3rf3aEYhPEUS2OgYFxKCOPzllyt0Fc1+IYGBgYcUPtWwcs6nEpBgYGRryZmx2kaAecGBgY92TkRWy7rLwozZ/yhXYbBgbGpRizzVzb7v/WeHI11MTAwLge4x+VHtYsZDpZSQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

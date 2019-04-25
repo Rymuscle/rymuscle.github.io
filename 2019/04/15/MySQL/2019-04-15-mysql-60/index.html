@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>60. EXPLAIN -- Extra | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="《高性能MySQL》">
+    <meta name="description" content="Extra列包含有关MySQL如何解析查询的其他信息, 该列显示的是不在其他列显示的额外信息; 此字段能够给出让我们深入理解执行计划进一步的细节信息, 比如是否使用ICP, MRR等 Using filesort 当 SQL 中包含 ORDER BY, 而且无法利用索引完成排序操作的时候, MySQL Query Optimizer 不得不选择相应的排序算法来实现; 数据较少时从内存排序, 否则从">
+<meta name="keywords" content="《高性能MySQL》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="60. EXPLAIN -- Extra">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="Extra列包含有关MySQL如何解析查询的其他信息, 该列显示的是不在其他列显示的额外信息; 此字段能够给出让我们深入理解执行计划进一步的细节信息, 比如是否使用ICP, MRR等 Using filesort 当 SQL 中包含 ORDER BY, 而且无法利用索引完成排序操作的时候, MySQL Query Optimizer 不得不选择相应的排序算法来实现; 数据较少时从内存排序, 否则从">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-17T08:36:06.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="60. EXPLAIN -- Extra">
+<meta name="twitter:description" content="Extra列包含有关MySQL如何解析查询的其他信息, 该列显示的是不在其他列显示的额外信息; 此字段能够给出让我们深入理解执行计划进一步的细节信息, 比如是否使用ICP, MRR等 Using filesort 当 SQL 中包含 ORDER BY, 而且无法利用索引完成排序操作的时候, MySQL Query Optimizer 不得不选择相应的排序算法来实现; 数据较少时从内存排序, 否则从">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">60. EXPLAIN -- Extra</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-15T08:53:49.000Z" itemprop="datePublished" class="page-time">
+  2019-04-15
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-filesort"><span class="post-toc-number">1.</span> <span class="post-toc-text">Using filesort</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-index-主键-覆盖索引"><span class="post-toc-number">2.</span> <span class="post-toc-text">Using index 主键-覆盖索引</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-where-Using-index-二级索引-覆盖索引"><span class="post-toc-number">3.</span> <span class="post-toc-text">Using where; Using index 二级索引-覆盖索引</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-index-condition-二级索引-非覆盖索引"><span class="post-toc-number">4.</span> <span class="post-toc-text">Using index condition 二级索引-非覆盖索引</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-index-condition-Using-where"><span class="post-toc-number">5.</span> <span class="post-toc-text">Using index condition; Using where</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Using-where-未用到索引"><span class="post-toc-number">6.</span> <span class="post-toc-text">Using where 未用到索引</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#未完待续"><span class="post-toc-number">7.</span> <span class="post-toc-text">未完待续</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#const-row-not-found"><span class="post-toc-number">8.</span> <span class="post-toc-text">const row not found</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#no-matching-row-in-const-table"><span class="post-toc-number">8.1.</span> <span class="post-toc-text">no matching row in const table</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#问题"><span class="post-toc-number">9.</span> <span class="post-toc-text">问题</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL/2019-04-15-mysql-60"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">60. EXPLAIN -- Extra</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-15 16:53:49" datetime="2019-04-15T08:53:49.000Z"  itemprop="datePublished">2019-04-15</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain-extra-information" target="_blank" rel="noopener">Extra</a>列包含有关MySQL如何解析查询的其他信息, 该列显示的是不在其他列显示的额外信息; 此字段能够给出让我们深入理解执行计划进一步的细节信息, 比如是否使用ICP, MRR等</p>
+<h2 id="Using-filesort"><a href="#Using-filesort" class="headerlink" title="Using filesort"></a>Using filesort</h2><ol>
+<li><p>当 SQL 中包含 ORDER BY, 而且无法利用索引完成排序操作的时候, MySQL Query Optimizer 不得不选择相应的排序算法来实现; 数据较少时从内存排序, 否则从磁盘排序; Explain不会显示的告诉客户端用哪种排序</p>
+</li>
+<li><p>官方解释: “MySQL需要额外的一次传递, 以找出如何按排序顺序检索行, 通过根据联接类型浏览所有行并为所有匹配WHERE子句的行保存排序关键字和行的指针来完成排序。然后关键字被排序, 并按排序顺序检索行”</p>
+</li>
+<li><p>示例: 使用的排序字段并没有为其创建索引</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select `name` from t3 where id in (1,2) order by name;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+---------+---------+------+------+----------+-----------------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key     | key_len | ref  | rows | filtered | Extra                       |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+---------+---------+------+------+----------+-----------------------------+</span><br><span class="line">|  1 | SIMPLE      | t3    | NULL       | range | PRIMARY       | PRIMARY | 4       | NULL |    2 |   100.00 | Using where; Using filesort |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+---------+---------+------+------+----------+-----------------------------+</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Using-index-主键-覆盖索引"><a href="#Using-index-主键-覆盖索引" class="headerlink" title="Using index 主键-覆盖索引"></a>Using index 主键-覆盖索引</h2><ol>
+<li><p>直接在主键索引上完成查询和所有数据的获取, 一般是只获取主键ID  (<strong>主键 覆盖索引</strong>)</p>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select id from explain_goods where id=1;</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------------+</span><br><span class="line">| id | select_type | table         | type  | possible_keys | key     | key_len | ref   | rows | Extra       |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | const | PRIMARY       | PRIMARY | 4       | const |    1 | Using index |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例: 如果使用的是主键, 但是select的字段列表不止主键id, Extra 为 NULL</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select id,goods_name from explain_goods where id=1;</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">| id | select_type | table         | type  | possible_keys | key     | key_len | ref   | rows | Extra |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | const | PRIMARY       | PRIMARY | 4       | const |    1 | NULL  |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; explain select * from explain_goods where id=1;</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">| id | select_type | table         | type  | possible_keys | key     | key_len | ref   | rows | Extra |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | const | PRIMARY       | PRIMARY | 4       | const |    1 | NULL  |</span><br><span class="line">+----+-------------+---------------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>小结: where条件使用了主键索引, 且 select 只有主键</p>
+</li>
+</ol>
+<h2 id="Using-where-Using-index-二级索引-覆盖索引"><a href="#Using-where-Using-index-二级索引-覆盖索引" class="headerlink" title="Using where; Using index 二级索引-覆盖索引"></a>Using where; Using index 二级索引-覆盖索引</h2><ol>
+<li><p>直接在二级索引(覆盖索引)上获取全部数据 </p>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select id from explain_goods where goods_name=&quot;华为&quot;;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                    |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using where; Using index |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; explain select id,goods_name from explain_goods where goods_name=&quot;华为&quot;;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                    |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using where; Using index |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+--------------------------+</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>小结: where条件用到了二级索引, 并且 select 做到覆盖索引</p>
+</li>
+</ol>
+<h2 id="Using-index-condition-二级索引-非覆盖索引"><a href="#Using-index-condition-二级索引-非覆盖索引" class="headerlink" title="Using index condition 二级索引-非覆盖索引"></a>Using index condition 二级索引-非覆盖索引</h2><ol>
+<li><p>where条件用到了二级索引, 但无法提供所有select字段: </p>
+<ul>
+<li>先在二级索引上使用索引查找到主键ID, 然后在主键索引上通过主键ID进行查找</li>
+<li>这里之所以需要去主键索引上查, 是因为 select 需要的数据, 二级索引不能完全提供</li>
+</ul>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from explain_goods where goods_name=&quot;华为&quot;;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                 |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using index condition |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; explain select id,goods_name,goods_status from explain_goods where goods_name=&quot;华为&quot;;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                 |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using index condition |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>小结: where条件用到了二级索引, 只不过 select 未做到覆盖索引</p>
+</li>
+<li><p>注意: 如果是范围查找, 优化器会在索引存在的情况下，通过符合 RANGE 范围的条数和总数的比例来选择是使用索引还是进行全表遍历</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">// 正常情况下</span><br><span class="line">mysql&gt; explain select stock,goods_status from explain_goods where stock&gt;1;</span><br><span class="line">+----+-------------+---------------+-------+---------------+-----------+---------+------+------+-----------------------+</span><br><span class="line">| id | select_type | table         | type  | possible_keys | key       | key_len | ref  | rows | Extra                 |</span><br><span class="line">+----+-------------+---------------+-------+---------------+-----------+---------+------+------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | range | idx_stock     | idx_stock | 4       | NULL |    2 | Using index condition |</span><br><span class="line">+----+-------------+---------------+-------+---------------+-----------+---------+------+------+-----------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">// 而如下一张实战的表, `car_id varchar(45)` 为单列普通索引, 表数据量比较大, mysql优化器最终变成了全表扫描  (全表扫描, 参考 type 列)</span><br><span class="line">mysql&gt; explain select * from cm_bid_history where car_id&gt;&quot;1000&quot;;</span><br><span class="line">+----+-------------+----------------+------+---------------+------+---------+------+--------+-------------+</span><br><span class="line">| id | select_type | table          | type | possible_keys | key  | key_len | ref  | rows   | Extra       |</span><br><span class="line">+----+-------------+----------------+------+---------------+------+---------+------+--------+-------------+</span><br><span class="line">|  1 | SIMPLE      | cm_bid_history | ALL  | car_id        | NULL | NULL    | NULL | 141048 | Using where |</span><br><span class="line">+----+-------------+----------------+------+---------------+------+---------+------+--------+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意: 二级索引貌似为 字符类型  时, 才会是上述结果, 如果为int, Extra 可能会是 null</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;  explain select stock,goods_name from explain_goods where stock=&quot;1&quot;;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                 |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_stock     | idx_stock | 33      | const |    1 | Using index condition |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-----------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt;  explain select stock,goods_name from explain_goods where stock=1;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_stock     | idx_stock | 4       | const |    1 | NULL  |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="Using-index-condition-Using-where"><a href="#Using-index-condition-Using-where" class="headerlink" title="Using index condition; Using where"></a>Using index condition; Using where</h2><ol>
+<li><p>where 条件有二级索引, 也有 非索引字段时</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from explain_goods where goods_name=&quot;华为&quot; and stock=1;</span><br><span class="line"></span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                              |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using index condition; Using where |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt; explain select id from explain_goods where goods_name=&quot;华为&quot; and stock=1;</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key       | key_len | ref   | rows | Extra                              |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ref  | idx_goods     | idx_goods | 302     | const |    1 | Using index condition; Using where |</span><br><span class="line">+----+-------------+---------------+------+---------------+-----------+---------+-------+------+------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>小结: where 条件有二级索引, 也有 非索引字段时, 和覆盖不覆盖没有关系</p>
+</li>
+</ol>
+<h2 id="Using-where-未用到索引"><a href="#Using-where-未用到索引" class="headerlink" title="Using where 未用到索引"></a>Using where 未用到索引</h2><ol>
+<li><p>普通where条件, 无索引 (全表扫描, 参考 type 列)</p>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt;  explain select * from explain_goods where stock=1;</span><br><span class="line"></span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key  | key_len | ref  | rows | Extra       |</span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ALL  | NULL          | NULL | NULL    | NULL |    2 | Using where |</span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"> </span><br><span class="line">mysql&gt;  explain select * from explain_goods where goods_status=1;</span><br><span class="line"></span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">| id | select_type | table         | type | possible_keys | key  | key_len | ref  | rows | Extra       |</span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">|  1 | SIMPLE      | explain_goods | ALL  | NULL          | NULL | NULL    | NULL |    2 | Using where |</span><br><span class="line">+----+-------------+---------------+------+---------------+------+---------+------+------+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>…<br>…<br>…<br>…</p>
+<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a>未完待续</h2><h2 id="const-row-not-found"><a href="#const-row-not-found" class="headerlink" title="const row not found"></a>const row not found</h2><ol>
+<li>For a query such as SELECT … FROM tbl_name, the table was empty (类似于select … from tbl_name, 而表记录为空)</li>
+</ol>
+<h3 id="no-matching-row-in-const-table"><a href="#no-matching-row-in-const-table" class="headerlink" title="no matching row in const table"></a>no matching row in const table</h3><ol>
+<li>表为空或者表中根据唯一键查询时没有匹配的行</li>
+<li><p>示例: MySQL 5.7.25</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select * from t1 where id= 1;</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                          |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">|  1 | SIMPLE      | NULL  | NULL       | NULL | NULL          | NULL | NULL    | NULL | NULL |     NULL | no matching row in const table |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">1 row in set, 1 warning (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例: MySQL 5.6.35</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain select `name` from t1 where id = 12;</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+------+------+-----------------------------------------------------+</span><br><span class="line">| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra                                               |</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+------+------+-----------------------------------------------------+</span><br><span class="line">|  1 | SIMPLE      | NULL  | NULL | NULL          | NULL | NULL    | NULL | NULL | Impossible WHERE noticed after reading const tables |</span><br><span class="line">+----+-------------+-------+------+---------------+------+---------+------+------+-----------------------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>问题参考: <a href="https://segmentfault.com/q/1010000004197413" target="_blank" rel="noopener">https://segmentfault.com/q/1010000004197413</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&title=《60. EXPLAIN -- Extra》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&title=《60. EXPLAIN -- Extra》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《60. EXPLAIN -- Extra》 — Lant's&url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/15/MySQL/2019-04-15-mysql-57/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">57. EXPLAIN -- key_len 检测多列索引的使用情况</h4>
+        </a>
+      </div>
+    
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&title=《60. EXPLAIN -- Extra》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&title=《60. EXPLAIN -- Extra》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《60. EXPLAIN -- Extra》 — Lant's&url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/15/MySQL/2019-04-15-mysql-60/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aQXKDMAwF0Nz/0nSm2xTyJZFOYj+vmJaAHwuNJOvxiNfxu56vk788X5/df/bf2xYGBsbXMo7Ldb3R6231tn722xdUDAyMDRh5kM0Bk/vzvWFgYGCcBc0kgcvvzwM9BgYGRrVwTdK+SZGMgYGBUS1io2Iy3la1AL6tFsfAwPhCxl0B8R3X/3S+gYGB8cGMo7Wqm7gO39Ug+8d+MDAwlma8o+CsJoVJMhoFYgwMjEUZ1ddUtzuf7Io+KAYGxgaMZADirlb+W4YtMDAwNmDkxWfS40o2lzyhkLxiYGAszchf2auPq827XhsOAwNjB0Y+6JAPTPRGKyZHCxgYGKsyJm39HiNvrhWSRQwMjKUZ+eMmITIvdEe/xcDA2IaR97J6QXly2HnDWBgGBsYXMvKGfnSUWGzezVPSQhcQAwNjCUY+klXu4Q0GNQqHlxgYGBswkrI2b7oln6a5aQwMjM0YkxRt0kTLn5mPZWBgYOzDqPbqeungpOh9EZoxMDAWZVQ3Vw2O83SzWcpiYGAszagWtPn9k3TwRVDGwMBYmlFN4/Iw2gvB1ZELDAyMtRlHcVXb99Ug2/sEGBgYazOqJ4OT0rf3rhsSRAwMjCUYvcZZ8pr8+ZNRDwwMjH0YeeBLRsqSMvXmKhwDAwOjeOg4b7pVwzQGBgZGr/WWt/7zY0sMDIydGb1m/fxpzfCKgYGxGaN3MJA066sNuCTc33yEiYGB8emMH8NM+ghn4XhgAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

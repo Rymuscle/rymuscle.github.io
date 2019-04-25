@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>10. char(M) 和 varchar(M) | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="char(M) char(M) 中的 M 用于指定该字段可存储的 字符(注意不是字节) 的最大个数 M 最大可以设置到 255 , 即 char(M) 最大可以存储 255个字符  注意: 在任何字符集下, M的最大值都是 255, why?  因为不管在什么字符集下, 对于char(M), MySQL都会首先给该字段的分配 M*3(utf8) 个字节, 那这个字段的所有数据占用的空间都是定长的字">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10. char(M) 和 varchar(M)">
+<meta property="og:url" content="http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="char(M) char(M) 中的 M 用于指定该字段可存储的 字符(注意不是字节) 的最大个数 M 最大可以设置到 255 , 即 char(M) 最大可以存储 255个字符  注意: 在任何字符集下, M的最大值都是 255, why?  因为不管在什么字符集下, 对于char(M), MySQL都会首先给该字段的分配 M*3(utf8) 个字节, 那这个字段的所有数据占用的空间都是定长的字">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_05.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_04.png">
+<meta property="og:updated_time" content="2019-03-30T09:07:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10. char(M) 和 varchar(M)">
+<meta name="twitter:description" content="char(M) char(M) 中的 M 用于指定该字段可存储的 字符(注意不是字节) 的最大个数 M 最大可以设置到 255 , 即 char(M) 最大可以存储 255个字符  注意: 在任何字符集下, M的最大值都是 255, why?  因为不管在什么字符集下, 对于char(M), MySQL都会首先给该字段的分配 M*3(utf8) 个字节, 那这个字段的所有数据占用的空间都是定长的字">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/data_type/varchar_01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">10. char(M) 和 varchar(M)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-03-30T10:51:28.000Z" itemprop="datePublished" class="page-time">
+  2019-03-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#char-M"><span class="post-toc-number">1.</span> <span class="post-toc-text">char(M)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#varchar-M"><span class="post-toc-number">2.</span> <span class="post-toc-text">varchar(M)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#varchar-坑来了"><span class="post-toc-number">3.</span> <span class="post-toc-text">varchar 坑来了</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#验证"><span class="post-toc-number">4.</span> <span class="post-toc-text">验证</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#text-可忽略"><span class="post-toc-number">5.</span> <span class="post-toc-text">text (可忽略)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL/2017-08-23-mysql-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">10. char(M) 和 varchar(M)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-03-30 18:51:28" datetime="2019-03-30T10:51:28.000Z"  itemprop="datePublished">2019-03-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="char-M"><a href="#char-M" class="headerlink" title="char(M)"></a>char(M)</h2><ol>
+<li><p>char(M) 中的 <code>M</code> 用于指定该字段可存储的 <strong>字符(注意不是字节)</strong> 的最大个数<br> M 最大可以设置到 255 , 即 char(M) 最大可以存储 255个字符</p>
+</li>
+<li><p>注意: 在任何字符集下, M的最大值都是 255, why?</p>
+<ul>
+<li>因为不管在什么字符集下, 对于char(M), MySQL都会首先给该字段的分配 M*3(utf8) 个字节, 那这个字段的所有数据占用的空间都是定长的字节数了</li>
+<li>所以char(M)的存储空间就是这么定长的, 并且你永远不可能超过MySQL分配给 char(M) 的字节数, 因为在这之前你已经被M所限制的字符个数限制住了</li>
+</ul>
+</li>
+</ol>
+<h2 id="varchar-M"><a href="#varchar-M" class="headerlink" title="varchar(M)"></a>varchar(M)</h2><ol>
+<li><p>varchar(M) 中的 <code>M</code> 也是用于指定该字段可存储的 <strong>字符(注意不是字节)</strong> 的最大个数</p>
+</li>
+<li><p>不过 varchar(M) 中的 <code>M</code> <strong>和 字符编码有关</strong>, 由于 varchar最大长度是65535个<strong>字节</strong>, 所以:</p>
+<ul>
+<li>在utf-8编码下, M值不应该超过 21845  (因为M超过255后, 会有两个字节用于记录M的大小, 所以虽然M的最大值为 21845, 但实际能存储的最大字符数为: <code>65535-2</code> / <code>3</code> = <code>21844</code> )</li>
+<li>在GBK编码下, M值也不应该超过 32767   (最大有效字符能存储, …. <code>65535-2</code> / <code>2</code> = <code>32766</code>)</li>
+<li>在utfbbm4编码下, M值也不应该超过 16383   (最大有效字符能存储, … <code>65535-2</code> / <code>4</code> = <code>16383</code>)</li>
+</ul>
+</li>
+<li><p>另外, 由于varchar(M)是不定长的, 因此, 每次在读取数据的时候需要知道这个数据有多少个字符, 这样才能算出总字节, 从而完整地把varchar(M)字段的数据读出来, 所以varchar事实上还会提供一个值来记录每个数据的字符长度, 这个值会占用 1-2 个字节的空间<br> 为什么该值是 1-2 个字节, 不是固定的字节? 因为1个字节可以表示的最大数值255, 而如果varchar(M)的M指定的字符数超过了255, 一个字节就不够了, 那MySQL就需要两个字节来记录字符的长度 </p>
+</li>
+</ol>
+<h2 id="varchar-坑来了"><a href="#varchar-坑来了" class="headerlink" title="varchar 坑来了"></a>varchar 坑来了</h2><ol>
+<li><p>表中只要有字段没有设置为 <code>not null</code> 属性, 每行记录就会浪费一个字节来记录null字段(具体也不知道为什么要记录), 只有所有的字段都为not null的时候, 才不会浪费一个字节来记录null</p>
+</li>
+<li><p>表中一旦有了varchar(M)字段之后, 表中的每行记录都自动有了每行记录的总长度, 也是65535个字节, 所以, varchar(M)的M一般不可能达到最大值</p>
+</li>
+</ol>
+<h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><ol>
+<li><p>如下, 你觉着如下的varchar(M), M最大可设置为多少?<br> <img src="/img/mysql/data_type/varchar_01.png" width="500/"></p>
+</li>
+<li><p>推算:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">表中一旦有了varchar(M)字段之后, 表中的每行记录都自动有了每行记录的总长度, 也是65535个字节</span><br><span class="line">65535(行记录的总字节数) - 4*3(3个int字段) - 10*3+1(varchar(10)字段, 1个字节记录长度) = 65492</span><br><span class="line">65492/3 = 21830.67</span><br><span class="line">所以最大可以设置为21830</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设置为 varchar(21831) 报错, 设置 varchar(21830) 就ok了<br> <img src="/img/mysql/data_type/varchar_02.png" width="500/"></p>
+</li>
+<li><p>由于表中只要有字段没有设置为 <code>not null</code> 属性, 每行记录就会浪费一个字节来记录null字段, 此时如果设置一个字段为null, 会发现又不够了<br> <img src="/img/mysql/data_type/varchar_05.png" width="500/"></p>
+</li>
+</ol>
+<h2 id="text-可忽略"><a href="#text-可忽略" class="headerlink" title="text (可忽略)"></a>text (可忽略)</h2><ol>
+<li>每个BLOB和TEXT列, 账户只占其中的5至9个字节, BLOB和TEXT类型需要 1、2、3或者4个字节来记录列值的长度，取决于该类型的最大可能的长度</li>
+<li>varchar(21830) —&gt; varchar(21826) 少了4个utf8字符, 即12字节：<br><img src="/img/mysql/data_type/varchar_03.png" width="500/"></li>
+<li>再增一个text字段, varchar(21826) —&gt; varchar(21823) 少了3个utf8字符, 即9字节:<br> <img src="/img/mysql/data_type/varchar_04.png" width="500/"></li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>在建表选择字段时, 当使用varchar(M)的M值较大时, 需要注意以上内容</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&title=《10. char(M) 和 varchar(M)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&title=《10. char(M) 和 varchar(M)》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. char(M) 和 varchar(M)》 — Lant's&url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/03/29/MySQL/2018-10-13-mysql-04/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">04. MySQL5.7 - YUM 安装</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/03/30/MySQL/2018-10-13-mysql-05/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">05. MySQL5.7 源码编译安装</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&title=《10. char(M) 和 varchar(M)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&title=《10. char(M) 和 varchar(M)》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《10. char(M) 和 varchar(M)》 — Lant's&url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/30/MySQL/2017-08-23-mysql-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aQW7EIAwF0Nz/0tN1VU3ybYhU4GVVdabAy8I1tq8rfj4DT7Ly312uNx4MDIxlGckhRo6er3wPe3hBGBgYBzCSUPht6fsDVcPot30fzoyBgYHxJYzeZ2hJCpiEYwwMDIwe456XJIv/IuBiYGAsxegFvuTTuWnohLs4BgbGgoyRi+XbP7/S38DAwFiK0Sv3J79JCnMjV9xfa2JgYGzNyANctWGZr9BrIWBgYJzGqGZZ1aJb78oaHXckWcTAwFiQMd4GGAnW+TDHw74YGBjbMfKLaA/TS/jKLQcMDIytGdUBiJEraIKvhl0MDIxzGCNDWtV2QpVdCNkYGBibMqrFtV4xLg/ZvW9iYGDszchTtN6gWG/9fEcMDIzTGL1iXF5cy8NoPrRxTdBjYGDswMgHIHrJYq89gIGBcTJjhFRNCmcNZGBgYJzAuN9yVhpXbXPmIxoYGBh7M2Ztcx9wq+3P8qgZBgbG1oxZjck8iUyCaTVNxMDAOIfRK+5XSb01ox0xMDAOYCRp36wUcNboWPkWjoGBsRGjV0TrjWWMFAQxMDBOYHyKzzhybkMCAwPjBMZ4sOulib0VXunTYmBgLMKoFuLzZmcvcDdbCxgYGAcwktGKPCnMw2X1P8DDsAUGBgZG6/KZ56f5y7ryDzAwMI5k9MbIRsbFopeFgYFxAKPXmKyOWSTjX83yHwYGxtaM/M/y1LB6iOorazY1MTAw1mP8ALh2N/XNJn7sAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

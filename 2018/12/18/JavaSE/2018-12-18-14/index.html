@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>14. Generics 泛型 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaSE">
+    <meta name="description" content="泛型(Generics): 参数化类型, 将 ‘类型’ 定义成 ‘参数’, 然后在调用时传入具体的类型; 泛型是 JDK5 中引入的一个新特性, 在java中有很重要的地位, 在面向对象编程及各种设计模式中有非常广泛的应用泛型的本质是为了将类型 参数化, 在泛型使用过程中, ‘数据类型’ 被指定为一个参数, 这种参数类型可以用在 类、接口 和 方法中, 分别被称为 泛型类、泛型接口、泛型方法 集合">
+<meta name="keywords" content="JavaSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="14. Generics 泛型">
+<meta property="og:url" content="http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="泛型(Generics): 参数化类型, 将 ‘类型’ 定义成 ‘参数’, 然后在调用时传入具体的类型; 泛型是 JDK5 中引入的一个新特性, 在java中有很重要的地位, 在面向对象编程及各种设计模式中有非常广泛的应用泛型的本质是为了将类型 参数化, 在泛型使用过程中, ‘数据类型’ 被指定为一个参数, 这种参数类型可以用在 类、接口 和 方法中, 分别被称为 泛型类、泛型接口、泛型方法 集合">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/generics-01.png">
+<meta property="og:updated_time" content="2019-01-31T02:11:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="14. Generics 泛型">
+<meta name="twitter:description" content="泛型(Generics): 参数化类型, 将 ‘类型’ 定义成 ‘参数’, 然后在调用时传入具体的类型; 泛型是 JDK5 中引入的一个新特性, 在java中有很重要的地位, 在面向对象编程及各种设计模式中有非常广泛的应用泛型的本质是为了将类型 参数化, 在泛型使用过程中, ‘数据类型’ 被指定为一个参数, 这种参数类型可以用在 类、接口 和 方法中, 分别被称为 泛型类、泛型接口、泛型方法 集合">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/javase/generics-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">14. Generics 泛型</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-12-18T05:43:51.000Z" itemprop="datePublished" class="page-time">
+  2018-12-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#集合类对泛型的使用"><span class="post-toc-number">1.</span> <span class="post-toc-text">集合类对泛型的使用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型类"><span class="post-toc-number">2.</span> <span class="post-toc-text">泛型类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型变量"><span class="post-toc-number">3.</span> <span class="post-toc-text">泛型变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型接口"><span class="post-toc-number">4.</span> <span class="post-toc-text">泛型接口</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#非泛型类实现泛型接口"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">非泛型类实现泛型接口</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#泛型类实现泛型接口"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">泛型类实现泛型接口</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#多泛型变量泛型类继承泛型接口"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">多泛型变量泛型类继承泛型接口</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型方法"><span class="post-toc-number">5.</span> <span class="post-toc-text">泛型方法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#静态泛型方法的使用"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">静态泛型方法的使用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#普通泛型方法的使用"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">普通泛型方法的使用</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Static-与-泛型方法"><span class="post-toc-number">6.</span> <span class="post-toc-text">Static 与 泛型方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#进阶—返回值中存在泛型"><span class="post-toc-number">7.</span> <span class="post-toc-text">进阶—返回值中存在泛型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Class类传递"><span class="post-toc-number">8.</span> <span class="post-toc-text">Class类传递</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型数组"><span class="post-toc-number">9.</span> <span class="post-toc-text">泛型数组</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型与继承"><span class="post-toc-number">10.</span> <span class="post-toc-text">泛型与继承</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型注意事项"><span class="post-toc-number">11.</span> <span class="post-toc-text">泛型注意事项</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#类型擦除"><span class="post-toc-number">12.</span> <span class="post-toc-text">类型擦除??</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#泛型通配符"><span class="post-toc-number">13.</span> <span class="post-toc-text">泛型通配符</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2018-12-18-14"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">14. Generics 泛型</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-12-18 13:43:51" datetime="2018-12-18T05:43:51.000Z"  itemprop="datePublished">2018-12-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>泛型(Generics): 参数化类型, 将 ‘类型’ 定义成 ‘参数’, 然后在调用时传入具体的类型; 泛型是 JDK5 中引入的一个新特性, 在java中有很重要的地位, 在面向对象编程及各种设计模式中有非常广泛的应用<br>泛型的本质是为了将类型 参数化, 在泛型使用过程中, ‘数据类型’ 被指定为一个参数, 这种参数类型可以用在 类、接口 和 方法中, 分别被称为 <code>泛型类</code>、<code>泛型接口</code>、<code>泛型方法</code></p>
+<h2 id="集合类对泛型的使用"><a href="#集合类对泛型的使用" class="headerlink" title="集合类对泛型的使用"></a>集合类对泛型的使用</h2><ol>
+<li><p>之前学过的集合类, 很多都使用了 泛型, 比如 <code>ArrayList</code> 类:</p>
+<ul>
+<li><p>下面构造了三个List, 分别盛装String、Integer和Double这就是ArrayList的过人之处: 即各种类型的变量都可以组装成对应的List, 而不必针对每个类型分别实现一个构建ArrayList的类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ArrayList&lt;String&gt; strList = new ArrayList&lt;String&gt;();  </span><br><span class="line">ArrayList&lt;Integer&gt; intList = new ArrayList&lt;Integer&gt;();  </span><br><span class="line">ArrayList&lt;Double&gt; doubleList = new ArrayList&lt;Double&gt;();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当然, ArrayList也可以不用泛型, 如果在实例化时没有使用泛型的话, 那么默认的泛型是 Object类, 即能够传入任意类型的实例</p>
+</li>
+</ul>
+</li>
+<li><p>集合使用泛型的好处:</p>
+<ul>
+<li>通过上述案例, 可以看到, 使用泛型, 减少了对大量相同结构的类的创建; 同时, 在不使用泛型时, 默认又可以传递任意类型的实例, 非常方便</li>
+<li><p>另外, 泛型提供了 <strong>编译时类型安全检测机制</strong>, 允许我们在编译时检测到非法的类型:<br>在使用集合时, 如果不使用泛型, 而是往集合中存放了多个类型不同的对象, 在读取时, 可能会面临类型转换的错误: <code>Exception in thread &quot;main&quot; java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer</code><br>为了避免在集合中随意存放不同的类型, 导致在遍历时类型转换可能的错误, 所以集合类使用了泛型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 如果没有使用泛型, 任何Object及其子类的对象都可以添加进集合中</span><br><span class="line">List list = new ArrayList();</span><br><span class="line">list.add(100);</span><br><span class="line">list.add(100);</span><br><span class="line">list.add(&quot;AA&quot;);</span><br><span class="line">for (int i = 0; i &lt; list.size(); i++) &#123;</span><br><span class="line">    int score = (Integer)list.get(i);</span><br><span class="line">    System.out.println(score);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>强制转换时, 不会出错, 因为编译器也不知道你传进去的是什么; 而如果使用泛型, 在编译阶段即可检查到错误:<br><img src="/img/javase/generics-01.png" width="400/"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h2><ol>
+<li><p>泛型类的定义: 在类名后面加一对尖括号 <code>&lt;&gt;</code>, 括号里是一个大写字母, 叫 预设类型 (可以是任何大写字母)</p>
+</li>
+<li><p>示例: 泛型类的定义和使用</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class GenericTest&lt;T&gt; &#123;</span><br><span class="line">    private T key;</span><br><span class="line"></span><br><span class="line">    public T getKey() &#123;</span><br><span class="line">        return key;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public GenericTest(T key)</span><br><span class="line">    &#123;</span><br><span class="line">        this.key = key;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        /**</span><br><span class="line">         * 这里与普通构造类实例的不同之点在于, 普通类构造函数是这样的：GenericTest g = new GenericTest() ;</span><br><span class="line">         * 而泛型类的构造则需要在类名后添加上&lt;String&gt;, 即一对尖括号, 中间写上要传入的类型</span><br><span class="line">         * 因为类定义为 class GenericTest&lt;T&gt;, 所以在使用的时候也要在 GenericTest 后加上类型来定义 T 代表的意义</span><br><span class="line">         * 然后在 getKey() 时就没有什么特殊的了, 直接调用即可</span><br><span class="line">         * 从上面的使用时, 明显可以看出泛型的作用, 在构造泛型类的实例的时候: 尖括号中, 你传进去的是什么, T就代表什么类型</span><br><span class="line">         */</span><br><span class="line">        // 传入的 类型 实参 需与泛型的 类型参数 类型相同, 即为Integer</span><br><span class="line">        GenericTest&lt;Integer&gt; genericInteger = new GenericTest&lt;Integer&gt;(123456);</span><br><span class="line"></span><br><span class="line">        //传入的实参类型需与泛型的类型参数类型相同, 即为String.</span><br><span class="line">        GenericTest&lt;String&gt; genericString = new GenericTest&lt;String&gt;(&quot;test&quot;);</span><br><span class="line">        System.out.println(&quot;key is &quot; + genericInteger.getKey());</span><br><span class="line">        System.out.println(&quot;key is &quot; + genericString.getKey());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>很显然, PHP是弱类型, 所以不存在需要根据某种数据类型来定义特定的类, 所以也就不需要泛型类</p>
+</li>
+</ol>
+<h2 id="泛型变量"><a href="#泛型变量" class="headerlink" title="泛型变量"></a>泛型变量</h2><ol>
+<li><p>命名规范: 为了简化命名, 通常只用一个字母来命名 泛型变量(预设类型), 常用字母如下:</p>
+<ul>
+<li><code>E</code>: 代表Element (在集合中使用, 因为集合中存放的是元素, <code>ArrayList</code> 用的就是 <code>E</code>)</li>
+<li><code>T</code>: Type (表示派生自Object类的任何类)</li>
+<li><code>K</code> <code>V</code>: 分别代表键值中的Key和Value</li>
+<li><code>N</code>: Number(数值类型)</li>
+<li><code>?</code>: 表示不确定的类型</li>
+</ul>
+</li>
+<li><p>多泛型变量定义: 上面在定义泛型类时, 只定义了一个泛型变量 <code>class GenericTest&lt;T&gt;</code>, 如果需要传进去多个泛型, 只用 <code>class GenericTest&lt;T,U&gt;</code>、<code>class GenericTest&lt;T,U,A,B,C&gt;</code> 即可 (多个类型参数之间用逗号分隔)</p>
+</li>
+</ol>
+<h2 id="泛型接口"><a href="#泛型接口" class="headerlink" title="泛型接口"></a>泛型接口</h2><p>在接口上定义泛型与在类中定义泛型是一样的, 与泛型类的定义一样, 也是在接口名后加尖括号<code>&lt;&gt;</code><br>这里用如下两种方法来使用泛型接口:</p>
+<h3 id="非泛型类实现泛型接口"><a href="#非泛型类实现泛型接口" class="headerlink" title="非泛型类实现泛型接口"></a>非泛型类实现泛型接口</h3><ol>
+<li><p>代码如下: </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line"></span><br><span class="line">interface Info&lt;T&gt;&#123;          // 在接口上定义泛型</span><br><span class="line">    public T getVar() ;     // 定义抽象方法, 抽象方法的返回值就是泛型类型</span><br><span class="line">    public void setVar(T x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class InfoImpl implements Info&lt;String&gt;&#123;     // 定义泛型接口的子类</span><br><span class="line">    private String var ;                    // 定义属性</span><br><span class="line">    public InfoImpl(String var)&#123;            // 通过构造方法设置属性内容</span><br><span class="line">        this.setVar(var) ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 由于在定义类时, 实现了泛型接口Info, 并指明了参数类型为 String, 接口中的 T 也就都是String类型</span><br><span class="line">     * 因此重写时, 参数类型也需要是String类型</span><br><span class="line">     *</span><br><span class="line">     * 使用IDE自动生成的话, 会也我们直接生成String类型的重写函数</span><br><span class="line">     * @param var</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void setVar(String var)&#123;</span><br><span class="line">        this.var = var ;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public String getVar()&#123;</span><br><span class="line">        return this.var ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class GenericTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void test()</span><br><span class="line">    &#123;</span><br><span class="line">        // 使用时比较简单</span><br><span class="line">        InfoImpl i = new InfoImpl(&quot;test&quot;);</span><br><span class="line">        System.out.println(i.getVar()) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意: InfoImpl 只是实现了泛型接口, 它本身并不是一个泛型类, 因为它的类名后没有 <code>&lt;T&gt;</code></p>
+</li>
+</ol>
+<h3 id="泛型类实现泛型接口"><a href="#泛型类实现泛型接口" class="headerlink" title="泛型类实现泛型接口"></a>泛型类实现泛型接口</h3><ol>
+<li>在方法1中, 在定义类实现接口时, 我们直接把 Info<t> 接口的 类型参数 给填充成了 String 类型: <code>class InfoImpl implements Info&lt;String&gt;</code>; 但我们的类其实是可以构造成泛型类的</t></li>
+<li>在下面构造泛型类 InfoImpl<t> 时, 同样是实现泛型接口 Info<t>, 但我们并没有填充泛型接口的类型参数, 而是把泛型类InfoImpl<t>的泛型变量T传给了泛型接口Info<t>, 即, 接口 和 泛型类使用的都是同一个泛型变量<br> 然后在使用时, 就是构造一个泛型类的实例的过程, 使用过程也不变</t></t></t></t></li>
+<li>使用泛型类来继承泛型接口的作用就是<strong>让用户来定义接口所使用的变量类型</strong>, 而不是像方法1中那样, 在类中写死</li>
+<li>代码如下: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line"></span><br><span class="line">public class GenericTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void test()</span><br><span class="line">    &#123;</span><br><span class="line">        Info&lt;String&gt; i = new InfoImpl&lt;String&gt;(&quot;test&quot;);</span><br><span class="line">        System.out.println(i.getVar()) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">interface Info&lt;T&gt;&#123;</span><br><span class="line">    public T getVar();</span><br><span class="line">    public void setVar(T x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class InfoImpl&lt;T&gt; implements Info&lt;T&gt;&#123;</span><br><span class="line">    private T var;</span><br><span class="line">    public InfoImpl(T var)&#123;</span><br><span class="line">        this.setVar(var) ;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void setVar(T var)&#123;</span><br><span class="line">        this.var = var ;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public T getVar()&#123;</span><br><span class="line">        return this.var ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="多泛型变量泛型类继承泛型接口"><a href="#多泛型变量泛型类继承泛型接口" class="headerlink" title="多泛型变量泛型类继承泛型接口"></a>多泛型变量泛型类继承泛型接口</h3><ol>
+<li>最后, 构造一个多个泛型变量的类, 并继承自Info接口</li>
+<li>代码如下: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line"></span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class GenericTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void test()</span><br><span class="line">    &#123;</span><br><span class="line">        InfoImpl&lt;Integer,String,Double&gt; i = new InfoImpl&lt;Integer,String,Double&gt;(12.5);</span><br><span class="line">        System.out.println(i.getVar()) ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 泛型变量的标识符, 在传递时, 和实参-&gt;形参类似</span><br><span class="line"> * 实参和形参名字可以不同 (正如本例中, 泛型类InfoImpl的泛型变量U 和 泛型接口Info的泛型变量I)</span><br><span class="line"> * @param &lt;I&gt;</span><br><span class="line"> */</span><br><span class="line">interface Info&lt;I&gt;&#123;</span><br><span class="line">    public I getVar();</span><br><span class="line">    public void setVar(I x);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * T, K 两个泛型变量是泛型类InfoImpl自己使用</span><br><span class="line"> * 而泛型变量 U 是泛型类填充给泛型接口的, 所以Info接口所使用的类型就是由泛型变量U来决定的</span><br><span class="line"> * @param &lt;T&gt;</span><br><span class="line"> * @param &lt;K&gt;</span><br><span class="line"> * @param &lt;U&gt;</span><br><span class="line"> */</span><br><span class="line">class InfoImpl&lt;T,K,U&gt; implements Info&lt;U&gt;&#123;</span><br><span class="line">    private U var ;</span><br><span class="line">    private T x;                    // T, K 两个泛型变量是 泛型类自己使用</span><br><span class="line">    private K y;</span><br><span class="line">    public InfoImpl(U var)&#123;        // 通过构造方法设置属性内容</span><br><span class="line">        this.setVar(var) ;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public void setVar(U var)&#123;</span><br><span class="line">        this.var = var ;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public U getVar()&#123;</span><br><span class="line">        return this.var ;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><ol>
+<li><p>定义及使用: 上面我们讲解了类和接口的泛型使用, 下面我们再说说, 怎么单独在一个函数里使用泛型, 比如我们在新建一个普通的类 StaticFans, 然后在其中定义了两个 泛型方法:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">import org.junit.Test;</span><br><span class="line"></span><br><span class="line">public class GenericTest &#123;</span><br><span class="line">    @Test</span><br><span class="line">    public void test() &#123;</span><br><span class="line">        //静态方法</span><br><span class="line">        StaticFans.StaticMethod(&quot;adfdsa&quot;);//使用方法一</span><br><span class="line">        StaticFans.&lt;String&gt;StaticMethod(&quot;adfdsa&quot;);//使用方法二</span><br><span class="line"></span><br><span class="line">        //常规方法</span><br><span class="line">        StaticFans staticFans = new StaticFans();</span><br><span class="line">        staticFans.OtherMethod(new Integer(123));//使用方法一</span><br><span class="line">        staticFans.&lt;Integer&gt;OtherMethod(new Integer(123));//使用方法二</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class StaticFans &#123;</span><br><span class="line">    //静态方法</span><br><span class="line">    public static &lt;T&gt; void StaticMethod(T a) &#123;</span><br><span class="line">        System.out.println(&quot;StaticMethod: &quot; + a.toString());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //普通方法</span><br><span class="line">    public &lt;T&gt; void OtherMethod(T a) &#123;</span><br><span class="line">        System.out.println(&quot;OtherMethod: &quot; + a.toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上面分别是 静态 泛型方法 和 常规 泛型方法 的定义方法, 与以往方法的唯一不同点就是在返回值前加上 <code>&lt;T&gt;</code> 来指明这个函数是一个 泛型方法, 使用的泛型变量名为 <code>T</code><br> <strong>注意</strong>: <code>使用了泛型变量 || 返回值是泛型变量</code>的方法, 并不算是泛型方法, 泛型方法是需要在方法返回值前加上 <code>&lt;T&gt;</code> 来定义的</p>
+</li>
+</ol>
+<h3 id="静态泛型方法的使用"><a href="#静态泛型方法的使用" class="headerlink" title="静态泛型方法的使用"></a>静态泛型方法的使用</h3><ol>
+<li><p>静态泛型方法的使用有两种方式:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">StaticFans.StaticMethod(&quot;adfdsa&quot;);//使用方法一  </span><br><span class="line">StaticFans.&lt;String&gt;StaticMethod(&quot;adfdsa&quot;);//使用方法二  推荐本方法</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从结果看的话, 这两种方法的结果是完全一样的, 但它们还有些区别:</p>
+<ul>
+<li>方法一, 可以像普通方法一样, 直接传值, 任何值都可以(但必须是派生自Object类的类型, 比如String,Integer等), 函数会在内部根据传进去的参数来识别当前T的类别, 但尽量不要使用这种隐式的传递方式, 代码不利于阅读和维护, 因为<strong>从外观根本看不出来你调用的是一个 泛型方法</strong>;</li>
+<li><strong>方法二</strong>, 与方法一不同的地方在于, 在调用方法前加了一个 <string> 来指定传给 <t> 的值, 如果加了这个 <string> 来指定参数的值的话, 那 StaticMethod() 函数里所有用到的T类型也就是强制指定了是String类型, 传递过来的参数如果不是String那么编译器就会报错, <strong>这是我们建议使用的方式</strong></string></t></string></li>
+</ul>
+</li>
+</ol>
+<h3 id="普通泛型方法的使用"><a href="#普通泛型方法的使用" class="headerlink" title="普通泛型方法的使用"></a>普通泛型方法的使用</h3><ol>
+<li><p>普通泛型方法的使用也有这两种方式:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">StaticFans staticFans = new StaticFans();  </span><br><span class="line">staticFans.OtherMethod(new Integer(123));//使用方法一  </span><br><span class="line">staticFans.&lt;Integer&gt;OtherMethod(new Integer(123));//使用方法二</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可以看到, 与平常一样, 先创建类的实例, 然后调用 泛型方法</p>
+<ul>
+<li>方法一, 隐式传递了T的类型, 与上面一样, 不建议这么做</li>
+<li>方法二, 显示将T赋值为Integer类型, 这样 OtherMethod(T a) 传递过来的参数如果不是Integer那么编译器就会报错</li>
+</ul>
+</li>
+</ol>
+<h2 id="Static-与-泛型方法"><a href="#Static-与-泛型方法" class="headerlink" title="Static 与 泛型方法"></a>Static 与 泛型方法</h2><ol>
+<li>可以看到, 泛型方法可以被 <code>static</code> 关键字修饰为静态方法, 因为泛型方法的泛型变量是方法自己的局部变量, 并不是通过泛型类传递的;</li>
+<li>而泛型类中 <code>使用了泛型变量 || 返回值是泛型变量</code>的方法 不能被 <code>static</code> 关键字修饰, 因为泛型变量是需要类被实例化之后才能确定具体类型值;</li>
+</ol>
+<h2 id="进阶—返回值中存在泛型"><a href="#进阶—返回值中存在泛型" class="headerlink" title="进阶—返回值中存在泛型"></a>进阶—返回值中存在泛型</h2><ol>
+<li><p>上面我们的函数中, 返回值都是void, 但现实中不可能都是void, 有时, 我们需要将泛型变量返回, 比如下面这个函数:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt; List&lt;T&gt; parseArray(String response, Class&lt;T&gt; object)&#123;  </span><br><span class="line">    List&lt;T&gt; modelList = JSON.parseArray(response, object);  </span><br><span class="line">    return modelList;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数返回值是 List<t> 类型, 至于传入参数 <code>Class&lt;T&gt; object</code> 的意义, 后面会讲<br> 这里也就是想通过这个例子来告诉大家, 泛型变量其实跟 String,Integer, Double等等的类的使用上没有任何区别, T只是一个符号, 可以代表String,Integer, Double……这些类型<br> 在泛型函数使用时, 直接把T看成String,Integer, Double……中的任一个来写代码就可以了, 唯一不同的是, 要在函数定义的中在返回值前加上<t>标识泛型;</t></t></p>
+</li>
+</ol>
+<h2 id="Class类传递"><a href="#Class类传递" class="headerlink" title="Class类传递"></a>Class<t>类传递</t></h2><ol>
+<li><p>使用 Class<t> 传递泛型类Class对象 : 有时，我们会遇到一个情况，比如，我们在使用JSON解析字符串的时候，代码一般是这样的</t></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public static List&lt;SuccessModel&gt; parseArray(String response)&#123;  </span><br><span class="line">    List&lt;SuccessModel&gt; modelList = JSON.parseArray(response, SuccessModel.class);  </span><br><span class="line">    return modelList;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其中SuccessModel是自定义的解析类，代码如下，其实大家不用管SuccessModel的定义，只考虑上面的那段代码就行了。写出来SuccessModel的代码，只是不想大家感到迷惑，其实，这里只是fastJson的基本用法而已。<br>这段代码的意义就是根据SuccessModel解析出List<successmodel>的数组。</successmodel></p>
+</li>
+</ol>
+<h2 id="泛型数组"><a href="#泛型数组" class="headerlink" title="泛型数组"></a>泛型数组</h2><p>摘自: <a href="https://blog.csdn.net/harvic880925/article/details/49872903#" target="_blank" rel="noopener">https://blog.csdn.net/harvic880925/article/details/49872903#</a></p>
+<h2 id="泛型与继承"><a href="#泛型与继承" class="headerlink" title="泛型与继承"></a>泛型与继承</h2><ol>
+<li></li>
+<li></li>
+</ol>
+<h2 id="泛型注意事项"><a href="#泛型注意事项" class="headerlink" title="泛型注意事项"></a>泛型注意事项</h2><ol>
+<li>前后泛型的类型要一致 (即便前后的类型有继承关系也不可以) :  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 即便Student类继承自Person类, 也不会通过编译</span><br><span class="line">List&lt;Person&gt; list = new ArrayList&lt;Student&gt;();</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<pre><code>- 在向集合中添加元素时, 可以添加泛型类型的子类型:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Person&gt; list = new ArrayList&lt;Person&gt;();</span><br><span class="line">list.add(new Student());</span><br></pre></td></tr></table></figure>
+
+
+- 在jdk7推出了一个新特性, 泛型的菱形语法, 即 后面的泛型类型可以省略 (因为编译器可以从前面(List)推断出推断出类型参数, 所以后面的ArrayList之后可以不用写泛型参数, 只用一对空着的尖括号就可以):
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// 在Java SE 7之前, 声明泛型对象的代码如下:</span><br><span class="line">List&lt;Person&gt; list = new ArrayList&lt;Person&gt;();</span><br><span class="line">// 而在Java 7中, 可以使用如下代码:</span><br><span class="line">List&lt;Person&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">list.add(new Student());</span><br><span class="line">// 如下也行, 但是会有警告</span><br><span class="line">List&lt;Person&gt; list = new ArrayList();</span><br><span class="line">list.add(new Student());</span><br></pre></td></tr></table></figure>
+
+- **泛型只支持对象类型**, 如下是错误示例:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;int&gt; list = new ArrayList&lt;int&gt;();</span><br></pre></td></tr></table></figure>
+</code></pre><ol>
+<li>??注意: 不能对确切的泛型类型使用 <code>instanceof</code> 操作, 如下面的操作是非法的, 编译时会出错</li>
+</ol>
+<h2 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除??"></a>类型擦除??</h2><ol>
+<li><p>泛型是 Java 1.5 版本才引进的概念, 在这之前是没有泛型的概念的, 但显然, 泛型代码能够很好地和之前版本的代码很好地兼容。 这是因为, 泛型信息只存在于代码编译阶段, 在进入 JVM 之前, 与泛型相关的信息会被擦除掉, 专业术语叫做<strong>类型擦除</strong>;</p>
+</li>
+<li><p>通俗地讲, 泛型类和普通类在 java 虚拟机内是没有什么特别的地方, 对于下面的代码, 打印的结果为 true, 是因为 List<string> 和 List<integer> 在 jvm 中的 Class 都是 List.class, <strong>泛型信息被擦除了</strong></integer></string></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; l1 = new ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; l2 = new ArrayList&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">System.out.println(l1.getClass() == l2.getClass());</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果使用泛型, <strong>编译器会在编译阶段就能够帮我们发现类似这样的问题</strong></p>
+</li>
+</ol>
+<h2 id="泛型通配符"><a href="#泛型通配符" class="headerlink" title="泛型通配符"></a>泛型通配符</h2><ol>
+<li>无边界? 和 Object 不一样么?<br> Object 不接受子类</li>
+<li></li>
+<li><p>类型边界</p>
+<ul>
+<li>extends 可以实现接口</li>
+<li>既继承父类又实现接口 注意 <code>&amp;</code> 符号, 类在前, 接口在后</li>
+<li></li>
+<li>super</li>
+<li>固定上边界通配符</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaSE/">JavaSE</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&title=《14. Generics 泛型》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&title=《14. Generics 泛型》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《14. Generics 泛型》 — Lant's&url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/16/JavaSE/2018-12-16-13/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">13. 遍历</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/12/19/JavaSE/2018-12-19-16/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">16. Java 反射</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&title=《14. Generics 泛型》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&title=《14. Generics 泛型》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《14. Generics 泛型》 — Lant's&url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/18/JavaSE/2018-12-18-14/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aS27DMAxF0ex/0y7QaWL3PlIpIOpqFDiorNMBI35eL7yu35V++/78ulnv376+sWTIkLEt43pc/PXPe5L3vu9GziZDhoxzGM/h8u6PyXF5yCb/oNvnMmTIkPEYBPnzzntlyJAhI92udnFMjyhDhgwZaRLLGeQQnLo4F5chQ8aGjLQx8J+fv9jfkCFDxiaMK1xpmey5PFc7w4c3ypAhYzSjdrEjl8VOY4BH11ZvQYYMGZsw+NhWOoqRpr7pZfHD74YMGTJGM9IxLx4iyT61Ep4MGTLOYaTpZVqMS2tlaXM02E6GDBnbMmoNwk46yg/NuwAyZMiYzahd5tIhibSgtmA3GTJkjGZ0giZ5Wdrm5LvJkCFjKoNvyhPU2rUybZ3e9jdkyJAxlEG26D9Pxyl4E1SGDBmnMdL2IR/CqGFQy1OGDBkHMFaFxTT15QA0MyJDhoyhDHKIZdMcOFXmwT2I0DJkyNiW0b+68aZjv0V6mzbLkCFjNCMda0gbkJ1Qy5NqGTJkzGbw613aPOinsvx6KkOGjDMZKE6HATptUpLLogwZMk5goOQQF+vJPjwlJsFahgwZJzCucNUKZ50npC0hQ4aM2YxOQERRvL0PL73JkCFjNoOnr+R5v2FQG/6QIUPGCYy4HB8muv3xjmDYQoYMGQczVo1idOqCf1wNZciQIaNdFFs7zCFDhozTGDyJ5bBaca2YKsuQIWM0I00dF/ccQDK8aqRDhgwZGzJ+AMOMrWPrL2vFAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

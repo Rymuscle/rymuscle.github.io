@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>24. Redis Replication 搭建 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Redis">
+    <meta name="description" content="动态配置 动态配置有两种方式:  在启动新的redis实例的时候, 设置这个新的实例为某个redis主服务器的Slave: redis-server --port  6380  --slaveof 127.0.0.1  6379 对一个已经启动的redis服务发送命令: slaveof ip port, 则会将当前服务器从 Master 修改为别的服务器的 slave   尝试向从服务器发送写命令">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="24. Redis Replication 搭建">
+<meta property="og:url" content="http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="动态配置 动态配置有两种方式:  在启动新的redis实例的时候, 设置这个新的实例为某个redis主服务器的Slave: redis-server --port  6380  --slaveof 127.0.0.1  6379 对一个已经启动的redis服务发送命令: slaveof ip port, 则会将当前服务器从 Master 修改为别的服务器的 slave   尝试向从服务器发送写命令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/redis/sentinel_01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/redis/sentinel_02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/redis/sentinel_conf.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/redis/sentinel_conf_01.png">
+<meta property="og:updated_time" content="2019-02-27T06:19:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="24. Redis Replication 搭建">
+<meta name="twitter:description" content="动态配置 动态配置有两种方式:  在启动新的redis实例的时候, 设置这个新的实例为某个redis主服务器的Slave: redis-server --port  6380  --slaveof 127.0.0.1  6379 对一个已经启动的redis服务发送命令: slaveof ip port, 则会将当前服务器从 Master 修改为别的服务器的 slave   尝试向从服务器发送写命令">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/redis/sentinel_01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">24. Redis Replication 搭建</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-27T11:43:11.000Z" itemprop="datePublished" class="page-time">
+  2017-06-27
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#动态配置"><span class="post-toc-number">1.</span> <span class="post-toc-text">动态配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置文件配置"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置文件配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#QPS-10万"><span class="post-toc-number">3.</span> <span class="post-toc-text">QPS 10万+</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#sentinel哨兵"><span class="post-toc-number">4.</span> <span class="post-toc-text">sentinel哨兵</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#引出sentinel"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">引出sentinel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#简介"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#实战"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">实战</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Sentinel之间的自动发现机制"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">Sentinel之间的自动发现机制</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-redis/2018-04-06-redis-24"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">24. Redis Replication 搭建</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-27 19:43:11" datetime="2017-06-27T11:43:11.000Z"  itemprop="datePublished">2017-06-27</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="动态配置"><a href="#动态配置" class="headerlink" title="动态配置"></a>动态配置</h2><ol>
+<li><p>动态配置有两种方式:</p>
+<ul>
+<li>在启动新的redis实例的时候, 设置这个新的实例为某个redis主服务器的Slave: <code>redis-server --port  6380  --slaveof 127.0.0.1  6379</code></li>
+<li>对一个已经启动的redis服务发送命令: <code>slaveof ip port</code>, 则会将当前服务器从 Master 修改为别的服务器的 slave</li>
+</ul>
+</li>
+<li><p>尝试向从服务器发送写命令, 发现不会成功</p>
+</li>
+<li><p>在master上添加一个键值对, 发现从服务器上立马就会同步到这条数据</p>
+</li>
+</ol>
+<h2 id="配置文件配置"><a href="#配置文件配置" class="headerlink" title="配置文件配置"></a>配置文件配置</h2><ol>
+<li><p>为每个准备启动的redis从服务, 创建各自的配置文件, 然后在启动redis新实例的时候, 为新实例指定各自的配置文件即可 </p>
+</li>
+<li><p>比如一个6380的从实例, 其配置文件为: <code>redis-server /usr/local/redis/etc/redis-6380.conf</code>, 配置文件内容如下:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slaveof 127.0.0.1 6379</span><br><span class="line">port 6380</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ol>
+<h2 id="QPS-10万"><a href="#QPS-10万" class="headerlink" title="QPS 10万+"></a>QPS 10万+</h2><ol>
+<li><p>比如一个电商平台的详情页, 要做到超高并发, QPS上十万, 甚至是百万, 一秒钟百万的请求量, 不可避免地就要把底层的缓存搞得很好</p>
+</li>
+<li><p>首先, 光是redis自然是不够的, 但是redis是整个大型的缓存架构中, 支撑高并发的架构里面, 非常重要的一个环节, 如果redis要支撑超过10万+的并发, 那应该怎么做?<br> 单机的redis几乎不太可能说QPS超过10万+, 一般在1万+, 除非一些特殊情况, 比如你的机器性能特别好, 配置特别高, 物理机, 维护做的特别好, 而且你的整体的操作不是太复杂</p>
+</li>
+<li><p>要做到高并发, 提高QPS, 可以将redis做主从架构(读写分离)</p>
+<ul>
+<li>一般来说, 对缓存, 都是用来支撑读高并发的, 写的请求是比较少的, 可能写请求也就一秒钟几千, 一两千, 大量的请求都是读, 一秒钟二十万次读</li>
+<li>主从架构 -&gt; 读写分离 -&gt; 支撑10万+读QPS的架构</li>
+</ul>
+</li>
+<li><p>redis主从架构 -&gt; 读写分离架构 -&gt; 可支持水平扩展的读高并发架构</p>
+</li>
+</ol>
+<h2 id="sentinel哨兵"><a href="#sentinel哨兵" class="headerlink" title="sentinel哨兵"></a>sentinel哨兵</h2><h3 id="引出sentinel"><a href="#引出sentinel" class="headerlink" title="引出sentinel"></a>引出sentinel</h3><ol>
+<li><p>之前的主从配置可以为我们解决一个redis实例读压力大的问题, 可以在一台服务器上进行主从多实例的配置, 也可以在不同机器之间进行主从配置;</p>
+</li>
+<li><p>如果slave服务器挂掉, 只是读性能会下降, 现在的问题是, 如果一旦主redis服务器(也就是master实例)挂了, 你目前貌似只能手动去把这台master实例启动起来; </p>
+<ul>
+<li>如果确实这台机器/实例就是启动不起来的话, 那你可能就需要手动去将当前的某一个slave实例切换为master:<br><code>slaveof no one</code>  //先把这个slave实例变成一个master实例<br><code>slaveof ip port</code>  //在之前的从实例中执行, 将他们的master重新切换到这个新的master上</li>
+</ul>
+</li>
+<li><p>这种手动操作明显不可能被接收, 我们需要当master主挂了之后, 自动有一个slave能够勇于承担地顶上来(因为slave相对于之前的master除了分担读压力外, 还是之前master的备份), 这就引出了redis的<code>sentinel</code>哨兵;</p>
+</li>
+</ol>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><ol>
+<li><p><code>sentinel哨兵</code> 是redis官方提供的高可用解决方案, 可以用它来管理多个redis服务的实例;</p>
+</li>
+<li><p>之前在编译安装好redis之后, 就可以在 <code>/usr/local/redis/src/</code> 目录下看到 <code>redis-sentinel</code> 等很多命令;</p>
+</li>
+<li><p>sentinel的监控: 它会不断地检查master和slaves是否正常; 一个sentinel可以监控任意多个master及其下的slaves;<br> <img src="/img/redis/sentinel_01.png" width="400/"></p>
+</li>
+<li><p>当然, sentinel也可能挂掉, 也有<code>单点问题</code> (还好Sentinel是一个分布式系统, 可以在一个架构中运行多个Sentinel进程, 他们可以组成一个sentinel网络, 之间是可以互相通信的, 可以通过”投票”来决定master是否挂了)</p>
+<ul>
+<li><p>当一个sentinel认为被监控的服务已经下线时, 它会向网络中的其他sentinel进行确认, 判断该服务器是否真的下线;<br><img src="/img/redis/sentinel_02.png" width="400/"></p>
+</li>
+<li><p>如果下线的是一个主服务器, 那么sentinel将会对下线的主服务器进行 <code>自动故障转移</code><br>通过将下线主服务器的某个从服务器提升为新的主服务器;<br>并将下线主服务器下的从服务器重新指向新的主服务器;<br>来让系统从新回到正常;</p>
+</li>
+<li><p>之前的master下线后, 如果重新上线了, sentinel会让它作为一个salve,  去新的master中同步数据</p>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="实战"><a href="#实战" class="headerlink" title="实战"></a>实战</h3><ol>
+<li><p>启动sentinel: 将 <code>/usr/local/src/</code> 目录下的<code>redis-sentinel</code>程序文件复制到 <code>/usr/local/redis/bin</code> 目录下;</p>
+</li>
+<li><p>启动一个运行在sentinel模式下的redis服务实例(两种方式):</p>
+<ul>
+<li><code>redis-sentinel</code>  </li>
+<li>或者 <code>redis-server /usr/local/redis/sentinel.conf  --sentinel</code></li>
+</ul>
+</li>
+<li><p>sentinel配置<br> <img src="/img/redis/sentinel_conf.png" width="400/"><br> <img src="/img/redis/sentinel_conf_01.png" width="400/"></p>
+</li>
+</ol>
+<h3 id="Sentinel之间的自动发现机制"><a href="#Sentinel之间的自动发现机制" class="headerlink" title="Sentinel之间的自动发现机制"></a>Sentinel之间的自动发现机制</h3><p>虽然sentinel集群中各个sentinel都互相连接彼此来检查对方的可用性以及互相发送消息, 但其实你是不用在任何一个sentinel中配置任何其它的sentinel的节点的, 因为sentinel利用了master的发布/订阅机制去自动发现其它也监控了同一master的sentinel节点。</p>
+<p>同样, 你也不需要在sentinel中配置某个master的所有slave的地址, sentinel会通过询问master来得到这些slave的地址的。</p>
+<p><a href="https://www.cnblogs.com/leeSmall/p/8398401.html" target="_blank" rel="noopener">https://www.cnblogs.com/leeSmall/p/8398401.html</a><br><a href="https://www.cnblogs.com/kismetv/p/9236731.html#t1" target="_blank" rel="noopener">https://www.cnblogs.com/kismetv/p/9236731.html#t1</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&title=《24. Redis Replication 搭建》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&title=《24. Redis Replication 搭建》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《24. Redis Replication 搭建》 — Lant's&url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/06/25/redis/2017-06-25-redis-22/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">22</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/06/29/redis/2017-06-29-redis-31/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">31. Lua脚本</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&title=《24. Redis Replication 搭建》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&title=《24. Redis Replication 搭建》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《24. Redis Replication 搭建》 — Lant's&url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/06/27/redis/2018-04-06-redis-24/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMklEQVR42u3a0Y6jMAwF0Pn/n+5K+7RSC1zbTLUkhyfUNpCTkTyOnZ+f+Hr9vf69f//k/PdHY98/f//2tgsDA+OxjNfpdTTRc9Jk6kdjL6gYGBgbMJIgmwff/PV5sL6YMwYGBkYw3SQQ53kdBgYGxiTg5t9WGV/9v4GBgfFARrKJTRK7PJVMnvkre3EMDIwHMnqNge/c/3p/AwMD479nvFrXPLxOmgEfnoCBgbE04zztS+JbtRk5SUYvZoiBgbE0Iy/T9wpkvQVKRhX+PhgYGI9l9MpnE0YVGc0HAwNjacZ3EsG8hFdtS2BgYOzAqA6othKr5bbkkNlF1RADA2M5Rp6c3XUUY3Jc4+KNGBgYGzAmAbG30c2DbDQKAwNjUUYSKHsby+oBi6SlejgWAwNjA0YzFbu1PNdrcH5oYWJgYCzHqKZxt3UbAna1UYqBgbEqI9k6JoEvTxar99GSYWBgbMNoPqJX4Rss4ocnYGBgbMPoHeHqhenesbDDJcbAwFiaUT30UJ1cdYEm78XAwFibManSTZqa1TdehHUMDIwNGPlWsxDFWxvd3hE0DAyMtRnVhGze/uwV9QqjMDAwFmK8itd50jYPstUkEgMDYwfGvChW3b72mhDV5cPAwFiP0Quyk8Tx3sIcBgbGPoz51vS8YHfXIbBRDxYDA2MzRrWgVg3B1VYBBgYGxrwoNj9ehoGBgTEp1p+/Mhk1OeqBgYGxA2PSGOg1AyYt0t4RDQwMjMcy/gCpFJNhNn7WggAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>33. 事务, redolog, undolog | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="MySQL">
+    <meta name="description" content="https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html redo 概述 redo log 也叫重做日志, 用来实现事务的持久性, 即 ACID 中的 D, 其由两部分组成:  一是 内存中的 重做日志缓冲(redo log buffer), 其是易失的 二是 重做日志文件(redo log file), 其是持久的">
+<meta name="keywords" content="MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="33. 事务, redolog, undolog">
+<meta property="og:url" content="http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html redo 概述 redo log 也叫重做日志, 用来实现事务的持久性, 即 ACID 中的 D, 其由两部分组成:  一是 内存中的 重做日志缓冲(redo log buffer), 其是易失的 二是 重做日志文件(redo log file), 其是持久的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/技术内幕/01/redo01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/mysql/技术内幕/01/redo02.png">
+<meta property="og:updated_time" content="2019-04-08T13:45:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="33. 事务, redolog, undolog">
+<meta name="twitter:description" content="https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html redo 概述 redo log 也叫重做日志, 用来实现事务的持久性, 即 ACID 中的 D, 其由两部分组成:  一是 内存中的 重做日志缓冲(redo log buffer), 其是易失的 二是 重做日志文件(redo log file), 其是持久的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/mysql/技术内幕/01/redo01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">33. 事务, redolog, undolog</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-03-10T14:48:49.000Z" itemprop="datePublished" class="page-time">
+  2019-03-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#redo-概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">redo 概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#log-block"><span class="post-toc-number">2.</span> <span class="post-toc-text">log block</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#redo-与-binlog"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">redo 与 binlog</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#undolog"><span class="post-toc-number">3.</span> <span class="post-toc-text">undolog</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL/2019-03-10-mysql-33"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">33. 事务, redolog, undolog</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-03-10 22:48:49" datetime="2019-03-10T14:48:49.000Z"  itemprop="datePublished">2019-03-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p><a href="https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html" target="_blank" rel="noopener">https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html</a></p>
+<h2 id="redo-概述"><a href="#redo-概述" class="headerlink" title="redo 概述"></a>redo 概述</h2><ol>
+<li><p>redo log 也叫重做日志, 用来实现事务的持久性, 即 ACID 中的 D, 其由两部分组成:</p>
+<ul>
+<li>一是 <code>内存中的 重做日志缓冲(redo log buffer)</code>, 其是易失的</li>
+<li>二是 <code>重做日志文件(redo log file)</code>, 其是持久的</li>
+</ul>
+</li>
+<li><p>InnoDB存储引擎通过 Force Log at Commit 机制实现事务的持久性, 即当事务提交(COMMIT)时, 必须先将该事务的所有日志写入到磁盘上的 <code>重做日志文件</code> 进行持久化<br> 注意: 这里的重做日志, 不是特指 redo log, 这里说的重做日志是包含了 redo log, undo log 两部分</p>
+</li>
+<li><p>为了确保事务在提交时, 其所有日志都能写入到 重做日志文件 中, 在每次将 log buffer 中的日志写入日志文件的过程中都会调用一次操作系统的 <code>fsync</code> 操作(即 fsync系统调用)<br> 在 InnoDB存储引擎的配置中参数 <code>innodb_flush_method</code> 通常设置为 <code>O_DIRECT</code>, 这也是官方文档所推荐的设置值。DBA或开发人员 知道该参数是文件打开的一个标识，启用后文件的写入将绕过操作系统缓存, 直接写文件。其在InnoDB存储引擎中的表现为对于写入到数据表空间将绕过操作 系统缓存。这样设置通常不会有更好的性能，但是数据库已经有自己的缓存系统，这样的设置可以确定数据库系统对于内存的使用。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show global variables like &quot;%innodb_flush_method%&quot;;</span><br><span class="line">+---------------------+-------+</span><br><span class="line">| Variable_name       | Value |</span><br><span class="line">+---------------------+-------+</span><br><span class="line">| innodb_flush_method |       |</span><br><span class="line">+---------------------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>也就是说, 从 redo log buffer 将日志刷到磁盘的 redo log file 的过程大致如下:<br><img src="/img/mysql/技术内幕/01/redo01.png"></li>
+</ul>
+</li>
+<li><p>MySQL 支持用户自定义在commit事务时, 如何将 log buffer 中的日志刷到 磁盘的 log file 中, 参数 <code>innodb_flush_log_at_trx_commit</code> 就是用来控制重做日志刷新到磁盘的策略</p>
+<ul>
+<li><p>innodb_flush_log_at_trx_commit 有3种值: 0, 1, 2 (默认为1)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like &quot;%innodb_flush_log_at_trx_commit%&quot;;</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| Variable_name                  | Value |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">| innodb_flush_log_at_trx_commit | 1     |</span><br><span class="line">+--------------------------------+-------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当设置为1时, 事务每次提交都会将log buffer中的日志写入os buffer并调用fsync()刷到log file on disk中, 这种方式即使系统崩溃也不会丢失任何数据, 但是因为每次提交都写入磁盘, IO的性能较差</p>
+</li>
+<li>当设置为0时, 事务提交时不会将log buffer中日志写入到os buffer, 而是每秒写入os buffer并调用fsync()写入到log file on disk中, 也就是说设置为0时, 是(大约)每秒刷新写入到磁盘中的, 当系统崩溃, 会丢失1秒钟的数据</li>
+<li>当设置为2时, 每次提交都仅写入到os buffer, 然后是每秒调用fsync()将os buffer中的日志写入到log file on disk, 在这个设置下, 当 MySQL数据库发生宕机而操作系统不发生宕机时, 并不会导致事务的丢失而当操作系统宕机时, 重启数据库后会丢失未从文件系统缓存刷新到重做日志文件那部分事务</li>
+</ul>
+</li>
+<li><p>innodb_flush_log_at_trx_commit 策略大致如下:<br> <img src="/img/mysql/技术内幕/01/redo02.png"><br> 注意, 有一个变量 <code>innodb_flush_log_at_timeout</code> 的值为1秒, 该变量表示的是刷日志的频率</p>
+</li>
+<li><p><strong>注意:</strong> 在主从复制结构中, 要保证事务的持久性和一致性, 需要对日志相关变量设置为如下:</p>
+<ul>
+<li>如果启用了二进制日志, 则设置 <code>sync_binlog=1</code>, 即每提交一次事务同步写到磁盘中</li>
+<li>总是设置 <code>innodb_flush_log_at_trx_commit=1</code>, 即每提交一次事务都写到磁盘中</li>
+<li>上述两项变量的设置保证了 每次提交事务都写入 二进制日志 和 事务日志, 并在提交时将它们刷新到磁盘中</li>
+</ul>
+</li>
+</ol>
+<h2 id="log-block"><a href="#log-block" class="headerlink" title="log block"></a>log block</h2><ol>
+<li>Innodb存储引擎中, redo log 是以 块 为单位进行存储的, 每个块占512字节, 这称为 redo log block, 所以不管是log buffer中还是os buffer中以及redo log file on disk中, 都是这样以512字节的块存储的;</li>
+</ol>
+<pre><code>每个redo log block由3部分组成：日志块头、日志块尾和日志主体。其中日志块头占用12字节，日志块尾占用8字节，所以每个redo log block的日志主体部分只有512-12-8=492字节
+</code></pre><h3 id="redo-与-binlog"><a href="#redo-与-binlog" class="headerlink" title="redo 与 binlog"></a>redo 与 binlog</h3><ol>
+<li><h2 id="undolog"><a href="#undolog" class="headerlink" title="undolog"></a>undolog</h2></li>
+<li><p>redolog 记录了事务的行为, 可以很好地通过其对页进行 “重做” 操作, 但是事务有时还需要进行回滚操作, 这时就需要 undo; 因此在对数据库进行修改时, InnoDB存储引擎不但会产生redo, 还会产生一定量的 undo<br> 这样, 如果用户执行的事务由于某种原因失败了, 或者用户执行了 ROLLBACK 语句请求回滚, 就可以利用这些 undo 信息将数据回滚到修改之前的样子;  </p>
+</li>
+<li><p>redo存放在重做日志文件中, 与redo不同, undo存放在数据库内部的一个特殊段(segment)中, 这个段称为 undo 段 (undo segment)</p>
+<ul>
+<li>undo段位于共享表空间内</li>
+<li>用户通常对undo有这样的误解:<br>undo用于将数据库物理地恢复到执行语句或事务之前的样子, 但事实并非如此<br>undo是逻辑日志, 因此只是将数据库逻辑地恢复到原来的样子, 所有修改都被逻辑地取消了, 但是数据结构和页本身在回滚之后可能大不相同; 这是因为在多用户并发系统中, 可能会有数十、数百甚至数千个并发事务。数据库的主要任务就是协调对数据记录的并发访问。比如, 一个事务在修改当前一个页中某几条记录, 同时还有别的事务在对同一个页中另几条记录进行修改, 因此,不能将一个页回滚到事务开始的样子, 因为这样会影响其他事务正在进行的工作;<br>例如, 用户执行了一个INSERT10W条记录的事务, 这个事务会导致分配一个新的段, 即表空间会增大, 在用户执行 ROLLBACK时, 会将插入的事务进行回滚, 但是表空间的大小并不会因此而收缩, 因此, 当 InnoDB存储引擎回滚时, 它实际上做的是与先前相反的工作, 对于每个INSERT, InnoDB存储引擎会完成一个DELETE; 对于每个DELETE, InnoDB存储引擎会执行一个 INSERT; 对于每个UPDATE, InnoDB存储引擎会执行一个相反的UPDATE, 将修改前的行放回去;<br>除了回滚操作, undo的另一个作用是MVCC, 即在 InnoDB存储引擎中MVCC的实现是通过undo来完成, 当用户读取一行记录时, 若该记录已经被其他事务占用, 当前事务可以通过undo读取之前的行版本信息, 以此实现非锁定读取<br>最后也是最为重要的一点是, undo log会产生redo log, 也就是undo log的产生会伴随着 redo log的产生, 这是因为undo log也需要持久性的保护</li>
+</ul>
+</li>
+<li></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&title=《33. 事务, redolog, undolog》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&title=《33. 事务, redolog, undolog》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33. 事务, redolog, undolog》 — Lant's&url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/03/09/MySQL/2019-03-09-mysql-46/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">46. 高性能索引 -- 覆盖索引</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/03/13/MySQL/2019-03-13-mysql-35/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">35. The Binary Log 基础</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&title=《33. 事务, redolog, undolog》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&title=《33. 事务, redolog, undolog》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《33. 事务, redolog, undolog》 — Lant's&url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/10/MySQL/2019-03-10-mysql-33/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aO3LDMAwFQN//0k6bjMfMAyAVpJZVxrEprgoM8Xm94vX+tT4/Wa9k529PuXhhYGBsy0gOkTA+j7Xef71zfjYMDIznMJJQOAfkkTM/GwYGBsb6O8klshpGMTAwMK5irI+7DrXrl4KBgYExSWLvKNtVr6EX5OIYGBgbMiaJ5d1/39LfwMDA2IrxLq470tTeb//sg4GBcTQjD3C9A/UamdXzYGBgnM3oBb6k+JV8vzrSEd1bMTAwjmbkl7/qY+4YOPsacDEwMI5jVEv2VUzvwpc3O5udBwwMjK0YSeDLDzS/PlbDLgYGxhMYk0S02gCYvJTCgAUGBsZxjGqTchIKE1izzIeBgXE0I28P9AbF8nJb3gQtdGIxMDCOY+SFtvyaeB/mgpYABgbGJoyrRiJ6zYBqYe6fSyEGBsahjOrW1SZlnuhOCnYYGBhnM3rjWfm7SQ5X3bM5bIGBgXEQo9e87JXtkvAahXgMDIyjGfP2Yf6YSRo8mnHDwMA4iHHHsEXyUub/xcDAeBqjF+yqmLwJmo90YGBgPIExaRLME+BkjXoaGBgY2zLexTVJQatlu7z9iYGBcTZjEuyqV8beJ5OwjoGBcRJjkrgmTYVCyWzSWsDAwHgAI5+2qobFSaM0b0tgYGBg9BLRZKSj+sRR1RADA+MxjHkZbs67IOBiYGBsyJg0AybpaK8KiIGB8TRG/rNqqyBPQatht9nUxMDA2I/xAw1r0T/znD51AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -13,25 +13,25 @@
     
     
     
-    <title>01. | Lant&#39;s</title>
+    <title>01. 认识 ZooKeeper | Lant&#39;s</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="theme-color" content="#3F51B5">
     
     
     <meta name="keywords" content="zookeeper">
-    <meta name="description" content="一致性模型 弱一致性 强一致性 同步 Paxos Raft(multi-paxos) ZAB(multi-paxos)    CAP     强一致性算法 Paxos 算法  Raft 算法  ZAB  一致性hashnameserverzookeeper 不适合存储大量数据https://github.com/Snailclimb/JavaGuide/blob/master/主流框架/ZooKe">
+    <meta name="description" content="ZooKeeper (译名为 动物园管理员)  企业级应用系统中, 随着信息化水平的不断提高, 企业级系统变得越来越庞大臃肿, 性能急剧下降, 拆分系统是目前我们可选择的解决系统可伸缩性和性能问题的唯一行之有效的方法但是拆分系统同时也带来了系统的复杂性, 各子系统不是孤立存在的, 它们彼此之间需要协作和交互, 这就是我们常说的分布式系统各个子系统就好比动物园里的动物, 为了使各个子系统能正常为用">
 <meta name="keywords" content="zookeeper">
 <meta property="og:type" content="article">
-<meta property="og:title" content="01.">
+<meta property="og:title" content="01. 认识 ZooKeeper">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="一致性模型 弱一致性 强一致性 同步 Paxos Raft(multi-paxos) ZAB(multi-paxos)    CAP     强一致性算法 Paxos 算法  Raft 算法  ZAB  一致性hashnameserverzookeeper 不适合存储大量数据https://github.com/Snailclimb/JavaGuide/blob/master/主流框架/ZooKe">
+<meta property="og:description" content="ZooKeeper (译名为 动物园管理员)  企业级应用系统中, 随着信息化水平的不断提高, 企业级系统变得越来越庞大臃肿, 性能急剧下降, 拆分系统是目前我们可选择的解决系统可伸缩性和性能问题的唯一行之有效的方法但是拆分系统同时也带来了系统的复杂性, 各子系统不是孤立存在的, 它们彼此之间需要协作和交互, 这就是我们常说的分布式系统各个子系统就好比动物园里的动物, 为了使各个子系统能正常为用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-15T08:39:02.000Z">
+<meta property="og:updated_time" content="2019-01-25T09:23:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="01.">
-<meta name="twitter:description" content="一致性模型 弱一致性 强一致性 同步 Paxos Raft(multi-paxos) ZAB(multi-paxos)    CAP     强一致性算法 Paxos 算法  Raft 算法  ZAB  一致性hashnameserverzookeeper 不适合存储大量数据https://github.com/Snailclimb/JavaGuide/blob/master/主流框架/ZooKe">
+<meta name="twitter:title" content="01. 认识 ZooKeeper">
+<meta name="twitter:description" content="ZooKeeper (译名为 动物园管理员)  企业级应用系统中, 随着信息化水平的不断提高, 企业级系统变得越来越庞大臃肿, 性能急剧下降, 拆分系统是目前我们可选择的解决系统可伸缩性和性能问题的唯一行之有效的方法但是拆分系统同时也带来了系统的复杂性, 各子系统不是孤立存在的, 它们彼此之间需要协作和交互, 这就是我们常说的分布式系统各个子系统就好比动物园里的动物, 为了使各个子系统能正常为用">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
@@ -105,7 +105,7 @@
         <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
           <i class="icon icon-lg icon-navicon"></i>
         </a>
-        <div class="flex-col header-title ellipsis">01.</div>
+        <div class="flex-col header-title ellipsis">01. 认识 ZooKeeper</div>
         
         <div class="search-wrap" id="search-wrap">
             <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
@@ -148,18 +148,11 @@
 
 <div class="container body-wrap">
     
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一致性模型"><span class="post-toc-number">1.</span> <span class="post-toc-text">一致性模型</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CAP"><span class="post-toc-number">2.</span> <span class="post-toc-text">CAP</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Paxos-算法"><span class="post-toc-number">3.</span> <span class="post-toc-text">Paxos 算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Raft-算法"><span class="post-toc-number">4.</span> <span class="post-toc-text">Raft 算法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ZAB"><span class="post-toc-number">5.</span> <span class="post-toc-text">ZAB</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一致性hash"><span class="post-toc-number">6.</span> <span class="post-toc-text">一致性hash</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#nameserver"><span class="post-toc-number">7.</span> <span class="post-toc-text">nameserver</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#zookeeper"><span class="post-toc-number">8.</span> <span class="post-toc-text">zookeeper</span></a></li></ol>
-        </nav>
-    </aside>
-    
 <article id="post-zookeeper/2018-06-10-01"
   class="post-article article-type-post fade" itemprop="blogPost">
 
     <div class="post-card">
-        <h1 class="post-card-title">01.</h1>
+        <h1 class="post-card-title">01. 认识 ZooKeeper</h1>
         <div class="post-meta">
             <time class="post-time" title="2018-06-10 13:21:09" datetime="2018-06-10T05:21:09.000Z"  itemprop="datePublished">2018-06-10</time>
 
@@ -172,30 +165,28 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="一致性模型"><a href="#一致性模型" class="headerlink" title="一致性模型"></a>一致性模型</h2><ol>
-<li>弱一致性</li>
-<li>强一致性<ul>
-<li>同步</li>
-<li>Paxos</li>
-<li>Raft(multi-paxos)</li>
-<li>ZAB(multi-paxos)</li>
-</ul>
+            <ol>
+<li><p>ZooKeeper (译名为 动物园管理员)</p>
+<blockquote>
+<p>企业级应用系统中, 随着信息化水平的不断提高, 企业级系统变得越来越庞大臃肿, 性能急剧下降, 拆分系统是目前我们可选择的解决系统可伸缩性和性能问题的唯一行之有效的方法<br>但是拆分系统同时也带来了系统的复杂性, 各子系统不是孤立存在的, 它们彼此之间需要协作和交互, 这就是我们常说的分布式系统<br>各个子系统就好比动物园里的动物, 为了使各个子系统能正常为用户提供统一的服务, 必须需要一种机制来进行协调——这就是ZooKeeper(动物园管理员)</p>
+</blockquote>
 </li>
-</ol>
-<h2 id="CAP"><a href="#CAP" class="headerlink" title="CAP"></a>CAP</h2><ol>
-<li></li>
-<li></li>
-<li></li>
-</ol>
-<p>强一致性算法</p>
-<h2 id="Paxos-算法"><a href="#Paxos-算法" class="headerlink" title="Paxos 算法"></a>Paxos 算法</h2><ol>
-<li></li>
-<li><h2 id="Raft-算法"><a href="#Raft-算法" class="headerlink" title="Raft 算法"></a>Raft 算法</h2></li>
-<li></li>
-<li><h2 id="ZAB"><a href="#ZAB" class="headerlink" title="ZAB"></a>ZAB</h2></li>
-</ol>
-<h2 id="一致性hash"><a href="#一致性hash" class="headerlink" title="一致性hash"></a>一致性hash</h2><h2 id="nameserver"><a href="#nameserver" class="headerlink" title="nameserver"></a>nameserver</h2><h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><ol>
-<li>不适合存储大量数据<br><a href="https://github.com/Snailclimb/JavaGuide/blob/master/主流框架/ZooKeeper.md" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide/blob/master/主流框架/ZooKeeper.md</a></li>
+<li><p>ZooKeeper 概述: ZooKeeper 是一个开源的分布式协调服务, 由雅虎创建, 是 Google Chubby 的开源实现; 是Hadoop和Hbase的重要组件;</p>
+</li>
+<li><p>Zookeeper特色</p>
+<blockquote>
+<ul>
+<li>ZooKeeper是一个分布式小文件系统, 并且被设计为高可用性。通过选举算法和集群复制可以避免单点故障, 由于是文件系统, 所以即使所有的ZooKeeper节点全部挂掉, 数据也不会丢失, 重启服务器之后, 数据即可恢复;</li>
+<li>ZooKeeper的节点更新是原子的, 也就是说更新不是成功就是失败。通过版本号, ZooKeeper实现了更新的乐观锁, 当版本号不相符时, 则表示待更新的节点已经被其他客户端提前更新了, 而当前的整个更新操作将全部失败; </li>
+<li>当然所有的一切ZooKeeper已经为开发者提供了保障, 我们需要做的只是调用API。与此同时, 随着分布式应用的的不断深入, 需要对集群管理逐步透明化监控集群和作业状态, 可以充分利ZK的独有特性;</li>
+</ul>
+</blockquote>
+</li>
+<li><p>应用场景</p>
+<blockquote>
+<p>分布式应用程序可以基于 ZooKeeper 实现诸如数据发布/订阅、负载均衡、命名服务、分布式协调/通知、集群管理、Master 选举、配置维护, 名字服务、分布式同步、分布式锁和分布式队列等功能;</p>
+</blockquote>
+</li>
 </ol>
 
         </div>
@@ -233,7 +224,7 @@
 <div class="page-share" id="pageShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01.》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01. 认识 ZooKeeper》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -243,7 +234,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01.》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01. 认识 ZooKeeper》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -253,7 +244,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.》 — Lant's&url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 认识 ZooKeeper》 — Lant's&url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -365,7 +356,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2018</span>
+        <p><span>Lant &copy; 2016 - 2019</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -383,7 +374,7 @@
 <div class="global-share" id="globalShare">
     <ul class="reset share-icons">
       <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01.》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01. 认识 ZooKeeper》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
           <i class="icon icon-weibo"></i>
         </a>
       </li>
@@ -393,7 +384,7 @@
         </a>
       </li>
       <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01.》 — Lant's&source=" data-title=" QQ">
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&title=《01. 认识 ZooKeeper》 — Lant's&source=" data-title=" QQ">
           <i class="icon icon-qq"></i>
         </a>
       </li>
@@ -403,7 +394,7 @@
         </a>
       </li>
       <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01.》 — Lant's&url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《01. 认识 ZooKeeper》 — Lant's&url=http://blog.renyimin.com/2018/06/10/zookeeper/2018-06-10-01/&via=http://blog.renyimin.com" data-title=" Twitter">
           <i class="icon icon-twitter"></i>
         </a>
       </li>
@@ -463,21 +454,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

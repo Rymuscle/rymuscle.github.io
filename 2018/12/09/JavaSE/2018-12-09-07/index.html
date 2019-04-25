@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>07. 面向对象基础知识 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaSE">
+    <meta name="description" content="四种访问权限修饰符    访问权限 本类 本包的类 子类 非子类的外包类     private 是 否 否 否   default 是 是 否 否   protected 是 是 是 否   public 是 是 是 是      default : 这个缺省情况比较特殊, php貌似没有    另外, Java 可以直接创建包, 很容易实现自动加载 (php中, 虽然很多框架都自动提供了自动加">
+<meta name="keywords" content="JavaSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="07. 面向对象基础知识">
+<meta property="og:url" content="http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="四种访问权限修饰符    访问权限 本类 本包的类 子类 非子类的外包类     private 是 否 否 否   default 是 是 否 否   protected 是 是 是 否   public 是 是 是 是      default : 这个缺省情况比较特殊, php貌似没有    另外, Java 可以直接创建包, 很容易实现自动加载 (php中, 虽然很多框架都自动提供了自动加">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/access-default.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/super-10.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/this()-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/this()-01.png">
+<meta property="og:updated_time" content="2019-02-18T08:51:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="07. 面向对象基础知识">
+<meta name="twitter:description" content="四种访问权限修饰符    访问权限 本类 本包的类 子类 非子类的外包类     private 是 否 否 否   default 是 是 否 否   protected 是 是 是 否   public 是 是 是 是      default : 这个缺省情况比较特殊, php貌似没有    另外, Java 可以直接创建包, 很容易实现自动加载 (php中, 虽然很多框架都自动提供了自动加">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/javase/access-default.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">07. 面向对象基础知识</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-12-09T03:21:37.000Z" itemprop="datePublished" class="page-time">
+  2018-12-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#四种访问权限修饰符"><span class="post-toc-number">1.</span> <span class="post-toc-text">四种访问权限修饰符</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#匿名对象"><span class="post-toc-number">2.</span> <span class="post-toc-text">匿名对象</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构造器"><span class="post-toc-number">3.</span> <span class="post-toc-text">构造器</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#构造函数的继承-super"><span class="post-toc-number">4.</span> <span class="post-toc-text">构造函数的继承 super()</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#super"><span class="post-toc-number">5.</span> <span class="post-toc-text">super</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#this"><span class="post-toc-number">6.</span> <span class="post-toc-text">this</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#static"><span class="post-toc-number">7.</span> <span class="post-toc-text">static</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#成员变量-VS-静态变量"><span class="post-toc-number">8.</span> <span class="post-toc-text">成员变量 VS 静态变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#静态方法-VS-实例方法"><span class="post-toc-number">9.</span> <span class="post-toc-text">静态方法 VS 实例方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#静态代码块"><span class="post-toc-number">10.</span> <span class="post-toc-text">静态代码块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#非静态代码块"><span class="post-toc-number">11.</span> <span class="post-toc-text">非静态代码块</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码块示例小结"><span class="post-toc-number">12.</span> <span class="post-toc-text">代码块示例小结</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#final"><span class="post-toc-number">13.</span> <span class="post-toc-text">final</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内部类"><span class="post-toc-number">14.</span> <span class="post-toc-text">内部类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Object-类"><span class="post-toc-number">15.</span> <span class="post-toc-text">Object 类</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2018-12-09-07"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">07. 面向对象基础知识</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-12-09 11:21:37" datetime="2018-12-09T03:21:37.000Z"  itemprop="datePublished">2018-12-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="四种访问权限修饰符"><a href="#四种访问权限修饰符" class="headerlink" title="四种访问权限修饰符"></a>四种访问权限修饰符</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">访问权限</th>
+<th style="text-align:center">本类</th>
+<th style="text-align:center">本包的类</th>
+<th style="text-align:center">子类</th>
+<th style="text-align:center">非子类的外包类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">private</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+<tr>
+<td style="text-align:center">default</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">否</td>
+<td style="text-align:center">否</td>
+</tr>
+<tr>
+<td style="text-align:center">protected</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">否</td>
+</tr>
+<tr>
+<td style="text-align:center">public</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+<td style="text-align:center">是</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p>default : 这个缺省情况比较特殊, php貌似没有<br>  <img src="/img/javase/access-default.png" width="400/"></p>
+</li>
+<li><p>另外, Java 可以直接创建包, 很容易实现自动加载 (php中, 虽然很多框架都自动提供了自动加载; 但自己的练习项目, 如果想使用自动加载, 需要使用composer或者自己实现, 和Java相比还是比较鸡肋)</p>
+</li>
+<li><p>外部类的访问控制只能是: <code>public 、default</code> 这两种</p>
+</li>
+<li><p>抽象方法只有一个限制: 不能用 private 来修饰, 也即抽象方法不能是私有的, 否则, 子类就无法继承实现抽象方法</p>
+</li>
+<li><p>接口成员的访问权限, 接口由于其的特殊性, 所有成员的访问权限都规定得死死的, 下面是接口成员的访问权限:</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">变量 : public static final</span><br><span class="line">抽象方法 : public abstract</span><br><span class="line">静态方法 : public static, JDK1.8后才支持</span><br><span class="line">内部类、内部接口 : public static</span><br></pre></td></tr></table></figure>
+<p>  也因为所有的一切都默认强制规定好了, 所以我们在用的时候, 并不一定需要完整写出所有的修饰符, 编译器会帮我们完成的, 也就是, 可以少写修饰符, 但不能写错修饰符</p>
+</li>
+</ul>
+<h2 id="匿名对象"><a href="#匿名对象" class="headerlink" title="匿名对象"></a>匿名对象</h2><p>即没有名字的对象: 当对象对方法仅进行一次调用的时候, 就可以简化成使用匿名对象调用 <code>new Car().run();</code></p>
+<h2 id="构造器"><a href="#构造器" class="headerlink" title="构造器"></a>构造器</h2><ol>
+<li><p>在Java中, <strong>函数名与类名相同</strong>, 正因如此, <strong>子类无法重写构造函数</strong>, 但是可以重载 (php由于构造方法名为与类名无关的 __construct, 所以可以重写)</p>
+</li>
+<li><p>构造方法不要定义返回值类型 (这个函数是没有返回值的, 甚至连 <code>void</code> 都不要写), 自然也没有返回值;</p>
+</li>
+<li><p>在创建对象时就会自动调用构造函数 ( 所以可以利用这个特性给对象进行初始化 )</p>
+</li>
+<li><p>一个类中如果没有定义过构造函数, 那么该类中会有一个 <strong>默认的空参构造器</strong></p>
+<ul>
+<li><p>在你编译过的.class文件中就有一个默认的空参数构造函数的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">class Demo</span><br><span class="line">&#123;</span><br><span class="line">&#125;</span><br><span class="line">就这么个简单的类, 其实在编译完之后, 生成的.class文件中其实是 :</span><br><span class="line">class Demo</span><br><span class="line">&#123;</span><br><span class="line">   Demo()&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果一个类中指定了构造函数, 那么类中的默认构造函数就没有了, 此时.class文件中保存的是你自己写的构造函数</p>
+</li>
+</ul>
+</li>
+<li><p>构造函数不能被 <code>static, final, synchronized, abstract, native</code> 修饰;</p>
+</li>
+<li><p><strong>普通函数不能调用构造函数</strong> (构造函数是用来给对象初始化的)</p>
+</li>
+<li><p><strong>普通的函数也可以用类名作为自己的函数名</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void  Person()     // 给函数加了返回类型后(尽管是void), 看似的构造函数, 其实就成了一般函数了</span><br><span class="line">&#123;</span><br><span class="line">     name = &quot;baby&quot;;</span><br><span class="line">     age = 1;</span><br><span class="line">     System.out.println(&quot;person run&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="构造函数的继承-super"><a href="#构造函数的继承-super" class="headerlink" title="构造函数的继承 super()"></a>构造函数的继承 <code>super()</code></h2><ol>
+<li><p>如下, 子类对象被创建时, 会访问子类的构造器, 但是下面会发现父类的构造方法其实也运行了:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class Fu</span><br><span class="line">&#123;</span><br><span class="line">    Fu()</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;fu run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Zi extends Fu</span><br><span class="line">&#123;</span><br><span class="line">    Zi()</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;zi run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ExtendsDemo</span><br><span class="line">&#123;</span><br><span class="line">    public static void main(String[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        new Zi();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其原因是在子类的每个构造函数中, 首行都会默认有一个隐式语句: <code>super()</code> 来调用父类的空参构造函数 ( 这点和php不同, php只有显示指定了 <code>parent::__construct()</code> 才会调用父类的构造函数 )</p>
+<ul>
+<li>如果父类没有空参构造函数, 那么你需要在子类每个构造器的首行手动去使用 <code>super(参数)</code> 来指定具体需要父类的哪个构造器</li>
+<li><strong>需注意</strong>: 如果你没有在子类的构造函数中手动使用 <code>super(参数)</code> 指定调用父类的其他重载构造器, 而子类也没有空参构造器, 则会报错<br><img src="/img/javase/super-10.png" width="400/"></li>
+<li>因此, 在设计类时, 尽量提供一个空参构造器 (因为你一旦在父类中有了其他的重载的构造器, 那么空参构造器就没了, 这就导致你需要在所有子类的所有构造器首行去手动使用<code>super()</code>指定你使用了父类中的哪个构造器)</li>
+<li>… 父类再往上, 最终会在其父类的构造器中调用的是顶端类Object的空参构造器</li>
+</ul>
+</li>
+<li><p>其实子类中所有的构造器, 默认在首行都会执行 <code>super()</code> 调用父类中的 <strong>空参数的构造函数</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class Fu</span><br><span class="line">&#123;</span><br><span class="line">    Fu()</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;fu run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Fu(int age)</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(&quot;fu age:&quot; + age + &quot;run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Zi extends Fu</span><br><span class="line">&#123;</span><br><span class="line">    Zi()</span><br><span class="line">    &#123;</span><br><span class="line">        // super(); // 调用的就是父类中的空参数的构造函数</span><br><span class="line">        System.out.println(&quot;zi run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Zi(int age)</span><br><span class="line">    &#123;</span><br><span class="line">        // super(); // 调用的就是父类中的空参数的构造函数</span><br><span class="line">        System.out.println(&quot;zi age:&quot; + age + &quot; run&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ExtendsDemo</span><br><span class="line">&#123;</span><br><span class="line">    public static void main(String[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        new Zi();</span><br><span class="line">        new Zi(100);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fu run # 父类无参构造函数</span><br><span class="line">zi run</span><br><span class="line">fu run # 父类无参构造函数</span><br><span class="line">zi age:100 run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如果子类构造函数中还使用了 <code>this()</code> 调用了子类自己的构造函数, 那么子类的这个构造函数中的 <code>super()</code> 就没有了, <strong>因为 <code>super()</code> 和 <code>this()</code> 只能有一个</strong>, 并且 <code>super()</code> 语句也必须要定义在子类构造函数的第一行 (因为父类的初始化动作要先完成不然会提示错误)</p>
+</li>
+</ol>
+<h2 id="super"><a href="#super" class="headerlink" title="super"></a>super</h2><ol>
+<li><p>当子类和父类中的成员(变量或方法)重名的时候, 用 <code>super</code> 区分父类 (相当于 php 中的 <code>parent::</code>)</p>
+</li>
+<li><p><code>this</code> 和 <code>super</code> 的用法很相似</p>
+<ul>
+<li><code>super</code> 的用法跟 <code>this</code> 类似, <code>this</code> 代表对本类对象的引用, 指向本类已经创建的对象; 而 <code>super</code> 代表对父类对象的引用, 指向父类对象</li>
+<li>静态方法中不可以出现 <code>super</code>, <code>this</code> 关键字</li>
+</ul>
+</li>
+<li><p>在子类的<code>构造函数</code>中, 第一行会隐式地执行一个: <code>super()</code></p>
+</li>
+<li><p>如果子类没有写不带参数的构造函数, 由于默认会存在无参的构造函数, 所以还是会执行 <code>super()</code></p>
+</li>
+</ol>
+<h2 id="this"><a href="#this" class="headerlink" title="this"></a>this</h2><ol>
+<li><p><code>this</code>: 在类的成员方法中使用, 代表的是当前对象; </p>
+</li>
+<li><p><strong>注意</strong>: 在一般情况下, 如果在类方法中的成员属性和局部变量不重名的情况下, 其实成员属性前是不用写<code>this.</code>的, 因为Java默认就是用的 <code>this.</code> ( 这点和PHP不同 )</p>
+</li>
+<li><p>虽然, java在类的成员方法中调用成员变量时, 默认可以不用写 <code>this</code>, 但是 成员变量 和 局部变量 重名时, 必须用 <code>this.</code> 来给成员变量做引用</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public Person(name)</span><br><span class="line">&#123;</span><br><span class="line">    this.name = name</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>this()</code></p>
+<ul>
+<li>可以在构造函数中通过 <code>this(参数)</code> 的方式显示地调用本类中重载的其他构造函数 </li>
+<li><p><code>this(参数)</code> 只能用在构造函数内部, 并且使用时必须放在首行<br><img src="/img/javase/this()-02.png" width="400/"></p>
+<p><img src="/img/javase/this()-01.png" width="400/"></p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><ol>
+<li><p>static(静态的): 是一个修饰符, 可以用来修饰 属性, 方法, 代码块(初始化块), 内部类</p>
+</li>
+<li><p>类中不被 static 修饰的成员属性, 是属于对象的, 需要实例化对象后才能调用, 所以也叫 实例变量; 而被 static 修饰的成员属性是属于类的(和成员方法类似, 是所有对象共有的), 所以也叫 类变量;</p>
+</li>
+<li><p>static 修饰的 静态属性 和 静态方法 特点 :</p>
+<ul>
+<li>类变量 存放在 <code>静态域</code></li>
+<li>随着类的加载而加载</li>
+<li>优先于对象存在(因为它是随着类的加载而加载的, 而类加载的时候还没有对象的)</li>
+<li>被该类的所有对象所共享</li>
+<li>多了一种调用方式, 可以直接被类名调用(因为static成员存在的时候只有类存在, 对象尚未存在)</li>
+<li>static 修饰的数据是共享数据, 对象中存储的是对象自己特有数据</li>
+</ul>
+</li>
+<li><p>使用注意:</p>
+<ul>
+<li>静态方法只能访问静态成员(成员变量和成员函数)</li>
+<li>静态方法中不可以写 <code>this</code>, <code>super</code>关键字;</li>
+<li>之前我们一开始写的main主函数就是静态的;</li>
+</ul>
+</li>
+</ol>
+<h2 id="成员变量-VS-静态变量"><a href="#成员变量-VS-静态变量" class="headerlink" title="成员变量 VS 静态变量"></a>成员变量 VS 静态变量</h2><ol>
+<li><p>生命周期的不同:</p>
+<ul>
+<li>成员变量: 随着对象的创建而存在, 随着对象的被回收而释放;</li>
+<li>静态变量: 随着类的加载而加载, 随着类的消失而消失; (那类什么时候消失呢 ? 一般情况下, 虚拟机结束了, 类就消失了)</li>
+</ul>
+</li>
+<li><p>调用方式不同:</p>
+<ul>
+<li>成员变量: 只能被对象调用;</li>
+<li>静态变量: 可以被对象调用, 也可以被类名调用; (一般就用类名调用)</li>
+</ul>
+</li>
+<li><p>别名不同:</p>
+<ul>
+<li>成员变量: 也称为实例变量;     </li>
+<li>静态变量: 称为类变量;</li>
+</ul>
+</li>
+<li><p>数据的存储位置不一样:</p>
+<ul>
+<li>成员变量: 存储在堆内存的对象中, 所以是对象的特有数据;</li>
+<li>静态变量: 存储在于方法区(也叫共享数据区)的静态区中, 所以也叫对象的共享数据; </li>
+</ul>
+</li>
+<li><p>静态方法只能调用静态变量, 不能调用成员变量 (但是, 非静态方法是可以访问静态成员)</p>
+<ul>
+<li>因为静态方法在类被加载的时候就被加载了,可能还没有对象的时候, 就已经可以用类名来访问了 (<code>Person.show();</code>)</li>
+<li>如果它里面有成员变量的话, 由于此时还没有对象, 而成员变量是每个对象所特有的, 如果对象没有创建, 自然无法使用成员变量</li>
+</ul>
+</li>
+</ol>
+<h2 id="静态方法-VS-实例方法"><a href="#静态方法-VS-实例方法" class="headerlink" title="静态方法 VS 实例方法"></a>静态方法 VS 实例方法</h2><ol>
+<li><p>静态成员方法</p>
+<ul>
+<li>提供给外部调用的函数应该是非静态的还是静态的呢?<br>函数是否需要设置为静态函数, 只用参考该函数是否有访问到对象中的特有数据, 如果访问到了对象的特有数据的话, 那就不能用static来进行修饰了 (因为静态方法只能调用静态成员)</li>
+<li>简单来说就是 : 该函数是否需要访问非静态的成员, 如果需要访问非静态成员, 那么该功能就不能是静态的(因为静态方法只能调用静态成员) </li>
+</ul>
+</li>
+<li><p>如果创建的对象仅仅是为了去调用没有访问特有数据的非静态方法, 那么这个对象的创建除了浪费空间这个坏处之外, 没有别的任何好处了; 此时这个方法完全可以设置为static, 然后使用类名来调用, 而不用创建对象, 不浪费空间<br> (对象的创建是为了访问特有数据的, 没有访问特有数据, 干嘛要创建对象呢)</p>
+</li>
+<li><p>实例方法中可以调用静态属性和成员属性, 但是如果实例方法的形参和静态属性同名, 注意不能用<code>this.静态属性</code>了, 需要用 <code>类名.静态属性</code> </p>
+</li>
+</ol>
+<h2 id="静态代码块"><a href="#静态代码块" class="headerlink" title="静态代码块"></a>静态代码块</h2><ol>
+<li><p>静态代码块的特点:</p>
+<ul>
+<li>静态代码块 随着类的加载而执行, 而且<strong>只执行一次</strong></li>
+<li>静态代码块 的加载自然是要早于 构造器, 非静态代码块的</li>
+<li>多个静态代码块之间按照顺序结构执行</li>
+<li>静态代码块中只能执行静态属性和方法</li>
+<li>静态代码块中的内容不用创建对象就可以执行 (直接通过 <code>类名.静态属性</code> 就可以触发)</li>
+</ul>
+</li>
+<li><p>静态代码块的作用:</p>
+<ul>
+<li>用于给类进行一些初始化工作</li>
+<li>一般如果一个类里面都是静态成员, 这个类是不需要创建对象的, 直接用类名调用成员即可<br>如果此时还要进行一些初始化工作, 那就要靠静态代码块了 （但感觉这和直接在类中初始化静态成员不一样的么）</li>
+</ul>
+</li>
+<li><p>示例: 静态代码块只被调用了一次 (即使实例化了多个对象, 静态代码块也只运行一次)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">class ConstructBlock1 &#123;</span><br><span class="line">    public static String name = &quot;xingming&quot;;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;静态代码块1被执行:&quot; + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        System.out.println(&quot;静态代码块2被执行:&quot; + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class StaticConstructBlockDemo</span><br><span class="line">&#123;</span><br><span class="line">    public static void main(String[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(ConstructBlock1.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 运行结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">静态代码块1被执行:xingming</span><br><span class="line">静态代码块2被执行:xingming</span><br><span class="line">xingming</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="非静态代码块"><a href="#非静态代码块" class="headerlink" title="非静态代码块"></a>非静态代码块</h2><ol>
+<li><p>没有名字的普通代码块 (也叫 <code>初始化代码块</code>、<code>构造代码块</code>、<code>非静态代码块</code>)</p>
+</li>
+<li><p>非静态代码块的特点:</p>
+<ul>
+<li>在创建对象的时候, 构造代码块就被加载到了</li>
+<li>可以定义多个初始化代码块, 多个代码块按顺序执行</li>
+<li>代码块中除了赋值语句, 还可以有输出语句</li>
+<li>每创建一个对象, 非静态代码块都会加载一遍</li>
+<li><code>非静态代码块</code>的执行要早于构造器, 但是默认的初始化赋值语句 和 非静态代码块的执行是 按照语句先后顺序来的</li>
+</ul>
+</li>
+<li><p><code>非静态代码块</code> 与 <code>构造器</code> 都是做初始化的?</p>
+<ul>
+<li><code>构造器</code> 是给每个对象进行针对性的初始化, 而 <code>构造代码块</code> 是具备着对象初始化的通用性 ; </li>
+<li>因为初始化的时候, 每个对象传递的值可能不同, 这样的话, 由于类中可能有构造函数的重载, 那么每个对象调用的构造函数可能就不同;<br>但是可能对象在创建的时候都需要初始化一个相同的数据值, 这样的话, 除非给重载的每个构造函数中都初始化上该数据的值, 要不然的话, 创建对象的时候可能就会因为调用的构造函数不同而导致有些进行这个数据的初始化了, 有些对象的创建又没有进行 ; </li>
+<li>所以<strong>可以把创建对象的时候, 通用的初始化数据写到构造代码块中</strong></li>
+</ul>
+</li>
+<li><p>示例:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">class ConstructBlock &#123;</span><br><span class="line">    private String name = &quot;xingming&quot;;</span><br><span class="line"></span><br><span class="line">    public ConstructBlock(String name)</span><br><span class="line">    &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">        System.out.println(&quot;构造方法被执行:&quot; + this.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 构造代码块 和 构造器 的执行顺序 与 代码先后位置无关</span><br><span class="line">    // 先执行构造代码块内容, 后执行构造器</span><br><span class="line">    &#123;</span><br><span class="line">        this.name = &quot;姓名&quot;;</span><br><span class="line">        System.out.println(&quot;构造代码块1被执行:&quot; + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //private String name = &quot;xingming&quot;;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        this.name = &quot;小明&quot;;</span><br><span class="line">        System.out.println(&quot;构造代码块2被执行:&quot; + name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class ConstructBlockDemo</span><br><span class="line">&#123;</span><br><span class="line">    public static void main(String[] args)</span><br><span class="line">    &#123;</span><br><span class="line">        new ConstructBlock(&quot;王进&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 运行结果:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜  src javac ConstructBlockDemo.java</span><br><span class="line">➜  src java ConstructBlockDemo      </span><br><span class="line">构造代码块1被执行:姓名</span><br><span class="line">构造代码块2被执行:小明</span><br><span class="line">构造方法被执行:王进</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>注意: 静态代码块用于给类进行初始化, 构造函数是给对象初始化, 构造代码块是给<strong>对象</strong>进行公共部分初始化</p>
+</li>
+</ol>
+<h2 id="代码块示例小结"><a href="#代码块示例小结" class="headerlink" title="代码块示例小结"></a>代码块示例小结</h2><ol>
+<li><p>代码:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test2</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Student();</span><br><span class="line">        System.out.println(<span class="string">"\n"</span>);</span><br><span class="line">        <span class="keyword">new</span> Student();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String name = <span class="string">"姓名"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Person静态代码块被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Person代码块被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Person构造器被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">extends</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String name = <span class="string">"学生姓名"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Student静态代码块被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#123;</span><br><span class="line">        System.out.println(<span class="string">"Student代码块被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        System.out.println(<span class="string">"Student构造器被执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果:</p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Person静态代码块被执行</span><br><span class="line">Student静态代码块被执行</span><br><span class="line">Person代码块被执行</span><br><span class="line">Person构造器被执行</span><br><span class="line">Student代码块被执行</span><br><span class="line">Student构造器被执行</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Person代码块被执行</span><br><span class="line">Person构造器被执行</span><br><span class="line">Student代码块被执行</span><br><span class="line">Student构造器被执行</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="final"><a href="#final" class="headerlink" title="final"></a>final</h2><ol>
+<li><p>在Java中声明类, 属性和方法时, 可使用关键字final来修饰, 表示 最终</p>
+<ul>
+<li>final 修饰类: 不能被继承 (比如: Math, String)</li>
+<li>final 修饰的方法: 不能被子类覆盖重写 (但依然可以重载)</li>
+</ul>
+</li>
+<li><p>final 修饰变量: 表示把变量作为常量 (只能被赋值一次)</p>
+<ul>
+<li>某个值不需要变化, 可以用final, 这样这个变量还有名字, 具有可读性</li>
+<li>final 修饰的常量需要显示初始化</li>
+<li>写法规范: 常量所有字母都大写, 多个单词中间用下划线分开</li>
+<li>通常成员被 final 了, 都用 static, 用static 和 final 修饰的常量是全局类常量</li>
+</ul>
+</li>
+<li><p>内部类 只能访问被final修饰的局部变量</p>
+</li>
+</ol>
+<h2 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h2><ol>
+<li><p>在Java中, 可以将一个类定义在另一个类里面或者一个方法里面, 这样的类称为内部类。</p>
+</li>
+<li><p>广泛意义上的内部类一般来说包括如下四种:</p>
+</li>
+<li><p>成员内部类: 成员内部类是最普通的内部类, 它的定义为位于另一个类的内部</p>
+<ul>
+<li>成员内部类可以无条件访问外部类的所有成员属性和成员方法(包括private成员和静态成员)</li>
+<li><p>注意: 当成员内部类拥有和外部类同名的成员变量或者方法时, 会发生隐藏现象, 即默认情况下访问的是成员内部类的成员; 如果要访问外部类的同名成员, 需要以下面的形式进行访问:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">外部类.this.成员变量</span><br><span class="line">外部类.this.成员方法</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虽然成员内部类可以无条件地访问外部类的成员, 而外部类想访问成员内部类的成员却不是这么随心所欲了。在外部类中如果要访问成员内部类的成员, 必须先创建一个成员内部类的对象, 再通过指向这个对象的引用来访问;</p>
+</li>
+<li><p>成员内部类是依附外部类而存在的, 也就是说, 如果要创建成员内部类的对象, 前提是必须存在一个<code>外部类的对象</code>。创建成员内部类对象的一般方式如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args)  &#123;</span><br><span class="line">        //第一种方式：</span><br><span class="line">        Outter outter = new Outter();</span><br><span class="line">        Outter.Inner inner = outter.new Inner();  //必须通过Outter对象来创建</span><br><span class="line">         </span><br><span class="line">        //第二种方式：</span><br><span class="line">        Outter.Inner inner1 = outter.getInnerInstance();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">class Outter &#123;</span><br><span class="line">    private Inner inner = null;</span><br><span class="line">    public Outter() &#123;</span><br><span class="line">         </span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    public Inner getInnerInstance() &#123;</span><br><span class="line">        if(inner == null)</span><br><span class="line">            inner = new Inner();</span><br><span class="line">        return inner;</span><br><span class="line">    &#125;</span><br><span class="line">      </span><br><span class="line">    class Inner &#123;</span><br><span class="line">        public Inner() &#123;</span><br><span class="line">             </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>相比较外部类只有 public 和 default 修饰符不同, 内部类作为一个成员, 可以被任意修饰符修饰(private、protected、public、default)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">如果成员内部类用private修饰, 则只能在外部类的内部访问;</span><br><span class="line">如果用public修饰, 则任何地方都能访问;</span><br><span class="line">如果用protected修饰, 则只能在同一个包下或者继承外部类的情况下访问;</span><br><span class="line">如果是default访问权限, 则只能在同一个包下访问;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>局部内部类: 局部内部类是定义在一个方法或者一个作用域里面的类, 它和成员内部类的区别在于局部内部类的访问仅限于方法内或者该作用域内<br> 注意: 局部内部类就像是方法里面的一个局部变量一样, 是不能有public、protected、private以及static修饰符</p>
+</li>
+<li><p>匿名内部类: 匿名内部类应该是平时我们编写代码时用得最多的, 在编写事件监听的代码时使用匿名内部类不但方便, 而且使代码更加容易维护, 下面这段代码是一段Android事件监听代码:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>静态内部类: 静态内部类也是定义在另一个类里面的类, 只不过在类的前面多了一个关键字static。静态内部类是不需要依赖于外部类的, 这点和类的静态成员属性有点类似, 并且它不能使用外部类的非static成员变量或者方法, 这点很好理解, 因为在没有外部类的对象的情况下, 可以创建静态内部类的对象, 如果允许访问外部类的非static成员就会产生矛盾, 因为外部类的非static成员必须依附于具体的对象。</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"> </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为什么在Java中需要内部类? 总结一下主要有以下四点:</p>
+<ul>
+<li>每个内部类都能独立的继承一个接口的实现, 所以无论外部类是否已经继承了某个(接口的)实现, 对于内部类都没有影响。内部类使得多继承的解决方案变得完整, </li>
+<li>方便将存在一定逻辑关系的类组织在一起, 又可以对外界隐藏。</li>
+<li>方便编写事件驱动程序</li>
+<li>方便编写线程代码<br>个人觉得第一点是最重要的原因之一, 内部类的存在使得Java的多继承机制变得更加完善。</li>
+</ul>
+</li>
+</ol>
+<p><a href="https://www.cnblogs.com/dolphin0520/p/3811445.html" target="_blank" rel="noopener">https://www.cnblogs.com/dolphin0520/p/3811445.html</a></p>
+<h2 id="Object-类"><a href="#Object-类" class="headerlink" title="Object 类"></a>Object 类</h2><ol>
+<li><p>Object类是所有Java类的根基类, 如果类的声明未使用extends关键字指明其基类, 则默认基类为Object类;</p>
+</li>
+<li><p>位于 <code>package java.lang;</code> 内</p>
+</li>
+<li><p><code>__toString()</code> : </p>
+<ul>
+<li>默认返回<code>包名 + 类名 + @ + 哈希码</code></li>
+<li>可以重写</li>
+</ul>
+</li>
+<li></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaSE/">JavaSE</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&title=《07. 面向对象基础知识》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&title=《07. 面向对象基础知识》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. 面向对象基础知识》 — Lant's&url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/09/JavaSE/2018-12-09-06/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">06. 基础小坑 (面试必备)</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/12/11/JavaSE/2018-12-11-08/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">08. 面向对象特征 多态 (Java对比PHP)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&title=《07. 面向对象基础知识》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&title=《07. 面向对象基础知识》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《07. 面向对象基础知识》 — Lant's&url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-07/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACM0lEQVR42u3ay26DQAwF0P7/T6dSV5Wi0GsbpGLOrKIGGE4W7vjx9RWv18/6/fl9HV//fu/79Z++PW1hYGDclvE6XO+vcvyi+WsleyXvhoGB8RxGEmQnwToPpsm+GBgYGEng+/Si1YNmHnwxMDAw8sB3nJT2QnOyFwYGBkaSxB6nsteV6k7OxTEwMG7IOCsgXvH58v4GBgbGv2e8Tl1JgpofSQv7YmBgrGbMi2X5sa964CunxxgYGEsZxzf3Utkr2gN/PAEDA2M1YzJs0Ws6Vgt2l8+MYGBg3IRRbVKe9bp50b9weMXAwFjHqDYIJw3IJEznR9VC1RADA+PmjF4AnRTLJkW96GkYGBjrGNVjXFKyz0coJo0BDAyM5zDyaatqGK0G6F4TtDw0hoGBcUPGvCh/Vksgb1h+zMUxMDCWMnqNgVH/IQ7rvZ8MAwNjH2PSRJxg8hGK6JkYGBgPYOTIXkmu13IoNA8wMDBWMyaDXDk4uXLeeMDAwNjNyNPLyUxHL8Utl9swMDCWMvLD2bwBmbcHkn8Ahd8VAwNjBSMfj8g3Sw5/vbGM6ISLgYGxiJEnmXnDoFduq5bYMDAwnsB4FdeE1PtLVJLDwMBYzZiEuWoprTpgcUJai4GBsYhRTVZ7h7neCFphXwwMjAcwellv9dhXHc4o3IWBgYERF9R6zYN5kwADAwOj1wCoNj6r12BgYDyNkYfRXqEtL6s164IYGBirGdXGwCR9TdLRXnMUAwNjKeMbWjXbGRTLe3UAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

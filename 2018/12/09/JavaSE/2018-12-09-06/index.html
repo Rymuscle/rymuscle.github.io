@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>06. 基础小坑 (面试必备) | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="JavaSE">
+    <meta name="description" content="字符做 + 运算 字符做 + 运算时, 结果不是简单地拼接字符, 而是使用字符的ascii码值进行加法运算  1234char c1 = &amp;apos;a&amp;apos;;  // ascii码是 97char c2 = &amp;apos;C&amp;apos;;  // ascii码是 67// \t的ascii码是9System.out.println(c1 + &amp;apos;\t&amp;apos; + c2); //">
+<meta name="keywords" content="JavaSE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="06. 基础小坑 (面试必备)">
+<meta property="og:url" content="http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="字符做 + 运算 字符做 + 运算时, 结果不是简单地拼接字符, 而是使用字符的ascii码值进行加法运算  1234char c1 = &amp;apos;a&amp;apos;;  // ascii码是 97char c2 = &amp;apos;C&amp;apos;;  // ascii码是 67// \t的ascii码是9System.out.println(c1 + &amp;apos;\t&amp;apos; + c2); //">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/type-conversion-10.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/type-conversion-11.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/variable.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/equals-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/String-equals()-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/String-Pool-01.png">
+<meta property="og:updated_time" content="2019-01-26T04:13:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="06. 基础小坑 (面试必备)">
+<meta name="twitter:description" content="字符做 + 运算 字符做 + 运算时, 结果不是简单地拼接字符, 而是使用字符的ascii码值进行加法运算  1234char c1 = &amp;apos;a&amp;apos;;  // ascii码是 97char c2 = &amp;apos;C&amp;apos;;  // ascii码是 67// \t的ascii码是9System.out.println(c1 + &amp;apos;\t&amp;apos; + c2); //">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/javase/type-conversion-10.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">06. 基础小坑 (面试必备)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-12-09T03:15:09.000Z" itemprop="datePublished" class="page-time">
+  2018-12-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#字符做-运算"><span class="post-toc-number">1.</span> <span class="post-toc-text">字符做 + 运算</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#与"><span class="post-toc-number">2.</span> <span class="post-toc-text">+= 与 =</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#字符型常量-VS-字符串常量"><span class="post-toc-number">3.</span> <span class="post-toc-text">字符型常量 VS 字符串常量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#局部变量-VS-成员变量"><span class="post-toc-number">4.</span> <span class="post-toc-text">局部变量 VS 成员变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#equals"><span class="post-toc-number">5.</span> <span class="post-toc-text">== , equals()</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">==</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#equals-1"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">equals()</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#String对equals-的重写"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">String对equals()的重写</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#equals-重写的自动生成"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">equals()重写的自动生成</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#String类的内存解析"><span class="post-toc-number">6.</span> <span class="post-toc-text">String类的内存解析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#hashCode-与-equals"><span class="post-toc-number">7.</span> <span class="post-toc-text">hashCode 与 equals</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么Java中只有值传递"><span class="post-toc-number">8.</span> <span class="post-toc-text">为什么Java中只有值传递</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2018-12-09-06"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">06. 基础小坑 (面试必备)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-12-09 11:15:09" datetime="2018-12-09T03:15:09.000Z"  itemprop="datePublished">2018-12-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/JavaSE/">JavaSE</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="字符做-运算"><a href="#字符做-运算" class="headerlink" title="字符做 + 运算"></a>字符做 <code>+</code> 运算</h2><ol>
+<li><p>字符做 <code>+</code> 运算时, 结果不是简单地拼接字符, 而是使用字符的ascii码值进行加法运算</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">char c1 = &apos;a&apos;;  // ascii码是 97</span><br><span class="line">char c2 = &apos;C&apos;;  // ascii码是 67</span><br><span class="line">// \t的ascii码是9</span><br><span class="line">System.out.println(c1 + &apos;\t&apos; + c2); // 结果是 97 + 9 + 67 = 173</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>字符做 <code>+</code> 运算时, 如果运算中包含 <strong>字符串</strong> 时, 则为结果为字符串拼接</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">char c1 = &apos;a&apos;;  // ascii码是 97</span><br><span class="line">char c2 = &apos;C&apos;;  // ascii码是 67</span><br><span class="line">System.out.println(c1 + &quot;\t&quot; + c2); // 结果是 a       C</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="与"><a href="#与" class="headerlink" title="+= 与 ="></a>+= 与 =</h2><p><code>+=</code> 之类的运算符 与 简单赋值运算符 <code>=</code> 的区别 </p>
+<ol>
+<li><p>对于如下的运算, 之前已经熟悉了, 编译会报错</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">short s1 = 5;</span><br><span class="line">// 由于自动类型提升为int, 所以这种复制运算编译报错</span><br><span class="line">// 错误: 不兼容的类型: 从int转换到short可能会有损失</span><br><span class="line">s1 = s1 + 2;</span><br></pre></td></tr></table></figure>
+<p> <img src="/img/javase/type-conversion-10.png" width="400/"></p>
+</li>
+<li><p><strong>使用 <code>+=</code> 既可以实现运算, 又不会更改变量的数据类型</strong></p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">short s1 = 5;</span><br><span class="line">// 由于自动类型提升为int, 所以这种复制运算编译报错</span><br><span class="line">// 错误: 不兼容的类型: 从int转换到short可能会有损失</span><br><span class="line">s1 += 2;</span><br><span class="line">System.out.println(s1); // 7</span><br></pre></td></tr></table></figure>
+<p> <img src="/img/javase/type-conversion-11.png" width="400/"></p>
+</li>
+</ol>
+<h2 id="字符型常量-VS-字符串常量"><a href="#字符型常量-VS-字符串常量" class="headerlink" title="字符型常量 VS 字符串常量"></a>字符型常量 VS 字符串常量</h2><ol>
+<li>形式上: 字符常量是<code>单引号</code>引起的一个字符, 而字符串常量是<code>双引号</code>引起的若干个字符</li>
+<li>含义上: 字符常量相当于一个<strong>整形值(ASCII 值)</strong>, 可以参加表达式运算; 而字符串常量代表一个地址值(该字符串在内存中存放位置)</li>
+<li>占内存大小: 字符常量只占2个字节; 字符串常量占若干个字节(至少一个字符结束标志); (注意: char在Java中占两个字节)</li>
+<li>注意: Java要确定每种基本类型所占存储空间的大小, 它们的大小并不像其他大多数语言那样随机器硬件架构的变化而变化, <strong>这种所占存储空间大小的不变性是Java程序比其它大多数语言编写的程序更具可移植性的原因之一</strong></li>
+</ol>
+<h2 id="局部变量-VS-成员变量"><a href="#局部变量-VS-成员变量" class="headerlink" title="局部变量 VS 成员变量"></a>局部变量 VS 成员变量</h2><ol>
+<li><p>局部变量定义在 方法内、方法的形参部分、局部代码块内, 只在所属的区域有效; 成员变量定义在类里方法外, 整个类中都可以访问; </p>
+</li>
+<li><p>局部变量存在于栈内存的方法中; 成员变量存在于堆内存的对象中;</p>
+</li>
+<li><p>局部变量随着所属区域的执行而存在, 随着所属区域的结束而释放; 成员变量随着对象的创建而存在, 随着对象的消失而消失;</p>
+</li>
+<li><p>局部变量没有默认初始化值, 使用前必须先声明和初始化; 成员变量都有默认初始化值(boolean <code>false</code>, char <code>\u0000</code>(null), byte <code>(byte)0</code>, short <code>(short)0</code>, int <code>0</code>, long <code>0L</code>, float <code>0.0f</code>, double <code>0.0d</code>, String <code>null</code>);<br> <img src="/img/javase/variable.png" width="400/"></p>
+</li>
+<li><p>成员变量可以被 <code>public, 缺省, protected, private, static</code> 等修饰符修饰, 而局部变量不能被访问控制修饰符及 static 所修饰; 但是, 成员变量和局部变量都能被 <code>final</code> 所修饰;</p>
+</li>
+</ol>
+<h2 id="equals"><a href="#equals" class="headerlink" title="== , equals()"></a>== , equals()</h2><h3 id=""><a href="#" class="headerlink" title="=="></a>==</h3><ol>
+<li><p>对于基本数据类型, <code>==</code> 可以用来检测两个基本类型的值是否相等, 相等返回 true, 不相等返回 false; (对于两个基本类型的值, 数据类型可以不同)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int i = 65;</span><br><span class="line">short s = 65;</span><br><span class="line">char c = &apos;A&apos;;</span><br><span class="line">System.out.println(i == s); // true</span><br><span class="line">System.out.println(i == c); // true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>但是对于引用数据类型, <code>==</code> 比较的是引用类型数据的地址是否相等</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">public class test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Person p1 = new Person();</span><br><span class="line">        Person p2 = new Person();</span><br><span class="line">        System.out.println(p1);         // Person@1e81f4dc</span><br><span class="line">        System.out.println(p2);         // Person@4d591d15</span><br><span class="line">        System.out.println(p1 == p2);   // false</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Person</span><br><span class="line">&#123;</span><br><span class="line">    String name;</span><br><span class="line">    int age;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="equals-1"><a href="#equals-1" class="headerlink" title="equals()"></a>equals()</h3><p>相较于 <code>==</code>, 比较常用的还有一个 <code>equals()</code> 方法</p>
+<ol>
+<li><p><code>equals()</code> 方法只能用于引用类型的比较</p>
+</li>
+<li><p>对于上面的测试类, 两个对象在使用 <code>equals()</code> 方法比较时, 发现结果还是false, 和 == 没有不同 (难道还是用引用类型数据的地址进行比较?)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(p1.equals(p2));  // false</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>追踪 <code>equals()</code> : </p>
+<ul>
+<li>equals() 是 <code>java.lang.Object</code> 基类的方法<br><img src="/img/javase/equals-01.png" width="400/"></li>
+<li>而且在 java.lang.Object 基类中, equals() 方法仍然是使用 <code>==</code> 来进行比较<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">    return (this == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>虽然 <code>Object</code> 的 <code>equals()</code> 方法 和 <code>==</code> 都比较的是引用类型数据的地址, 但事实上, 很多类都对equals()进行了重写</p>
+</li>
+</ol>
+<h3 id="String对equals-的重写"><a href="#String对equals-的重写" class="headerlink" title="String对equals()的重写"></a>String对equals()的重写</h3><ol>
+<li><p>String类 对equals()的重写 (具体方法比较简单, 可以自行去阅读)<br> <img src="/img/javase/String-equals()-01.png" width="400/"></p>
+</li>
+<li><p>String类 重写后的 equals(), 比较的不是两个字符串的地址, 而是对字符串中的内容进行比较</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s1 = new String(&quot;test&quot;);</span><br><span class="line">String s2 = new String(&quot;test&quot;);</span><br><span class="line">System.out.println(s1 == s2);           // false</span><br><span class="line">System.out.println(s1.equals(s2));      // true</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="equals-重写的自动生成"><a href="#equals-重写的自动生成" class="headerlink" title="equals()重写的自动生成"></a>equals()重写的自动生成</h3><p>对于自定义的类, 如果希望其实例对象能使用 <code>equals()</code> 方法进行内容比较, 而不是地址比较, 你也可以自己重写 <code>equals()</code>, 不过, 不用这么麻烦, 可以使用IDE为我们生成即可 (IntellJ IDE : <code>Code-&gt;Generate-&gt;</code>)</p>
+<h2 id="String类的内存解析"><a href="#String类的内存解析" class="headerlink" title="String类的内存解析"></a><strong>String类的内存解析</strong></h2><ol>
+<li><p><code>String s1 = &quot;test&quot;</code> 与 <code>Sting s2 = new String(&quot;test&quot;)</code> 的不同</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">String s1 = new String(&quot;test&quot;);</span><br><span class="line">String s2 = new String(&quot;test&quot;);</span><br><span class="line">String s3 = &quot;test&quot;;</span><br><span class="line">String s4 = &quot;test&quot;;</span><br><span class="line">System.out.println(Integer.toHexString(System.identityHashCode(s1)));    // 3b22cdd0</span><br><span class="line">System.out.println(Integer.toHexString(System.identityHashCode(s2)));    // 1e81f4dc</span><br><span class="line">System.out.println(Integer.toHexString(System.identityHashCode(s3)));    // 4d591d15</span><br><span class="line">System.out.println(Integer.toHexString(System.identityHashCode(s4)));    // 4d591d15</span><br><span class="line"></span><br><span class="line">System.out.println(s1 == s2);   // new了两个不同的对象, 地址自然不同: false</span><br><span class="line">System.out.println(s3 == s4);   // true  地址为何相同?</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上面例子发现 s3和s4 两个String的地址是相同的, 而new出来的两个String的地址不相同, 那么到底在内存总它们有什么不同?</p>
+<ul>
+<li>这就涉及到String Pool的概念了: JVM为了提升性能和减少内存开销, 避免字符串的重复创建, 维护了一块特殊的内存空间, 即<strong>字符串池(String Pool)</strong></li>
+<li>内存图可以简单理解为如下:<br><img src="/img/javase/String-Pool-01.png" width="400/"></li>
+</ul>
+</li>
+</ol>
+<h2 id="hashCode-与-equals"><a href="#hashCode-与-equals" class="headerlink" title="hashCode 与 equals"></a>hashCode 与 equals</h2><ol>
+<li><a href="https://github.com/Snailclimb/JavaGuide/blob/master/Java相关/Java基础知识.md#9-构造器-constructor-是否可被-override" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide/blob/master/Java相关/Java基础知识.md#9-构造器-constructor-是否可被-override</a></li>
+<li></li>
+</ol>
+<h2 id="为什么Java中只有值传递"><a href="#为什么Java中只有值传递" class="headerlink" title="为什么Java中只有值传递"></a>为什么Java中只有值传递</h2><ol>
+<li><a href="https://github.com/Snailclimb/JavaGuide/blob/master/%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/%E6%9C%80%E6%9C%80%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84Java%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/%E7%AC%AC%E4%B8%80%E5%91%A8%EF%BC%882018-8-7%EF%BC%89.md" target="_blank" rel="noopener">https://github.com/Snailclimb/JavaGuide/blob/master/%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/%E6%9C%80%E6%9C%80%E6%9C%80%E5%B8%B8%E8%A7%81%E7%9A%84Java%E9%9D%A2%E8%AF%95%E9%A2%98%E6%80%BB%E7%BB%93/%E7%AC%AC%E4%B8%80%E5%91%A8%EF%BC%882018-8-7%EF%BC%89.md</a></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaSE/">JavaSE</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&title=《06. 基础小坑 (面试必备)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&title=《06. 基础小坑 (面试必备)》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 基础小坑 (面试必备)》 — Lant's&url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/08/JavaSE/2018-12-08-05/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">05. 数组, String</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/12/09/JavaSE/2018-12-09-07/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">07. 面向对象基础知识</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&title=《06. 基础小坑 (面试必备)》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&title=《06. 基础小坑 (面试必备)》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《06. 基础小坑 (面试必备)》 — Lant's&url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/12/09/JavaSE/2018-12-09-06/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJElEQVR42u3awU4DMQwEUP7/p8sVCVhmnC1qk7cnVNQ2j8Ngx/74iJ/Hl+f6t9+f5JOTb7nhwcDAeFtGcoj2t78dK3+l/gNhYGAcwEii8DoWf3slCevke/84MwYGBkbMyEvDPOgxMDAw7mIkber1N75E4GJgYLwwIw++vOC7DuX2T3ZbL46BgfGGjDY0//Pnp8w3MDAw3orxKJ/r6GxD87ZTYWBgbM3IAy4/yuwybraigYGBcRqjbTivi7l8bNmuYjQyDAyMnRmztbBZWK+Unn8ELgYGxhaM9ujteHK94CuiFgMD4wDGSgs6u9Cv/zPk2yIYGBgbMWakNnDzI65HNgYGxn6M9mIrj+OVeG3HqBgYGHsznjeqnBWU7dUbBgbGCYz2YmvWdq7Ub/W2CAYGxgGMpIHMY7QdKiSN8Q+vYGBgbM2YReFsCJpc6uUrHXXsYmBgbMHI37wyWsg/vw5rDAyMrRmzMjE/9OxSL38vBgbGCYyV8m4Wx+3gIRpXYGBgHMNYWapolyeG+2vJ3SEGBsamjLYUy0eMK5du9ZQDAwNja8ZsrLiCXFn1iCpcDAyMLRiP8kkKx5U2dUjFwMDYmtG2i+1F22yNY33AiYGBsR+jXcmaLXitl4BFL46BgbEpIw++NhaHvfWslcXAwMC4iZG3wcnFHwYGBkYenXcdfXiRh4GBcQDjecOAdpEiKRYxMDBOY+St4yxG1xvX/MoPAwNjO8YnCbRqmDL5KcIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

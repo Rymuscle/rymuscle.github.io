@@ -20,13 +20,13 @@
     
     
     <meta name="keywords" content="git">
-    <meta name="description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+    <meta name="description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一旦合">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="02. 选择 merge 还是 rebase?">
 <meta property="og:url" content="http://blog.renyimin.com/2018/12/12/git/2018-12-12-02/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+<meta property="og:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一旦合">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/git/gitrebase.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/git/rebase01.png">
@@ -41,10 +41,10 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/git/rebase-no-conflict-03.png">
-<meta property="og:updated_time" content="2018-12-14T06:27:33.000Z">
+<meta property="og:updated_time" content="2019-03-11T13:09:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02. 选择 merge 还是 rebase?">
-<meta name="twitter:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基; 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同; 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一">
+<meta name="twitter:description" content="git rebase 介绍 rebase: 变基, 即改变分支的根基 从某种程度来说, git rebase 和 git merge 都可以完成类似的合并工作, 但实际上两者有着本质的不同 假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 git rebase (虽然 git merge 也可以实现, 但是一旦合">
 <meta name="twitter:image" content="http://blog.renyimin.com/img/git/gitrebase.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
@@ -187,8 +187,8 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <h2 id="git-rebase-介绍"><a href="#git-rebase-介绍" class="headerlink" title="git rebase 介绍"></a>git rebase 介绍</h2><ol>
-<li>rebase: 变基, 即改变分支的根基;</li>
-<li>从某种程度来说, <code>git rebase</code> 和 <code>git merge</code> 都可以完成类似的合并工作, 但实际上两者有着本质的不同;</li>
+<li>rebase: 变基, 即改变分支的根基</li>
+<li>从某种程度来说, <code>git rebase</code> 和 <code>git merge</code> 都可以完成类似的合并工作, 但实际上两者有着本质的不同</li>
 <li><p>假设你的项目有 mywork, origin 两个分支, 如果你想让 mywork 的分支历史看起来像没有经过任何合并一样, 你可以用 <code>git rebase</code> (虽然 <code>git merge</code> 也可以实现, 但是一旦合并遇到冲突时, 还是会出现分叉) </p>
 <ul>
 <li>如下命令: 会把你的 origin 分支从 mywork 切出来后的每个提交(commit)取消掉, 并且把它们临时保存为补丁(patch)(这些补丁放到”.git/rebase”目录中), 然后把 origin 分支更新到最新的 mywork 分支, 最后把保存的这些补丁应用到 mywork 分支上。 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout mywork</span><br><span class="line">$ git rebase origin</span><br></pre></td></tr></table></figure>
@@ -332,9 +332,9 @@
     
   
     <div class="waves-block waves-effect next">
-      <a href="/2018/12/14/git/2018-12-14-03/" id="post-next" class="post-nav-link">
+      <a href="/2018/12/13/JavaSE/2018-12-13-09/" id="post-next" class="post-nav-link">
         <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">03. git push 时出现 &#34;Merge branch &#39;master&#39; of ...&#34;</h4>
+        <h4 class="title">09. 常用类</h4>
       </a>
     </div>
   
@@ -408,7 +408,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2018</span>
+        <p><span>Lant &copy; 2016 - 2019</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -506,21 +506,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
