@@ -191,56 +191,6 @@ char(M) 中的 M 用于指定该字段可存储的 字符(注意不是字节) �
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-MySQL/2018-10-13-mysql-04"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2019-03-29 19:43:26" datetime="2019-03-29T11:43:26.000Z"  itemprop="datePublished">2019-03-29</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2019/03/29/MySQL/2018-10-13-mysql-04/">04. MySQL5.7 - YUM 安装</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        YUM 库配置
-要在Linux上使用YUM安装MySQL, 可以使用官网提供的 YUM 库 MySQL Yum库提供用于安装 MySQL server, client, MySQL Workbench, MySQL Utilities, MySQL Router, MySQL Shell, Connector/ODBC, Connector/Python 等的RPM软件包
-
-可以通过安装My...
-    
-
-        <a href="/2019/03/29/MySQL/2018-10-13-mysql-04/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
             <article id="post-MySQL/2019-03-27-guid"
   class="article-card article-type-post" itemprop="blogPost">
 
@@ -658,6 +608,59 @@ redo log 也叫重做日志, 用来实现事务的持久性, 即 ACID 中的 D, 
 
         </li>
     
+        <li class="post-list-item fade">
+            <article id="post-MySQL/2019-03-03-mysql-42"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2019-03-03 19:05:16" datetime="2019-03-03T11:05:16.000Z"  itemprop="datePublished">2019-03-03</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2019/03/03/MySQL/2019-03-03-mysql-42/">42. 高性能索引 -- 独立的列</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        本篇非常简单
+
+独立的列 是指索引列不能是表达式的一部分, 也不能是函数的参数;
+
+示例: 很容易看出 where 中的表达式其实等价于 actor_id=4, 但MySQL却无法自动解析这个方程式
+ 1mysql&gt; select actor_id FROM actor where actor_id+1=5;
+ (就像 mysql的查询优化器不能将 id&gt;5 和 id&gt;6 ...
+    
+
+        <a href="/2019/03/03/MySQL/2019-03-03-mysql-42/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
     </ul>
 
     
@@ -770,5 +773,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
