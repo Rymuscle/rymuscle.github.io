@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>83. EXPLAIN | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="《高性能MySQL》">
+    <meta name="description" content="参考 https://segmentfault.com/a/1190000017278335 进行补充 ExplainMySQL中的 explain 命令, 其主要功能是用来分析 select 语句的运行效果, 例如它可以获取select语句使用的索引情况、排序情况等等  语法: EXPLAIN [EXTENDED] SELECT select_options  EXPLAIN 只能解释selec">
+<meta name="keywords" content="《高性能MySQL》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="83. EXPLAIN">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="参考 https://segmentfault.com/a/1190000017278335 进行补充 ExplainMySQL中的 explain 命令, 其主要功能是用来分析 select 语句的运行效果, 例如它可以获取select语句使用的索引情况、排序情况等等  语法: EXPLAIN [EXTENDED] SELECT select_options  EXPLAIN 只能解释selec">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-07T03:31:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="83. EXPLAIN">
+<meta name="twitter:description" content="参考 https://segmentfault.com/a/1190000017278335 进行补充 ExplainMySQL中的 explain 命令, 其主要功能是用来分析 select 语句的运行效果, 例如它可以获取select语句使用的索引情况、排序情况等等  语法: EXPLAIN [EXTENDED] SELECT select_options  EXPLAIN 只能解释selec">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">83. EXPLAIN</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-10T05:20:29.000Z" itemprop="datePublished" class="page-time">
+  2019-04-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Explain"><span class="post-toc-number">1.</span> <span class="post-toc-text">Explain</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#测试准备"><span class="post-toc-number">2.</span> <span class="post-toc-text">测试准备</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#EXPLAIN-EXTENDED"><span class="post-toc-number">3.</span> <span class="post-toc-text">EXPLAIN EXTENDED</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#EXPLAIN-EXTENDED-示例"><span class="post-toc-number">4.</span> <span class="post-toc-text">EXPLAIN EXTENDED 示例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#EXPLAIN-PARTITIONS"><span class="post-toc-number">5.</span> <span class="post-toc-text">EXPLAIN PARTITIONS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#EXPLAIN-结果列说明"><span class="post-toc-number">6.</span> <span class="post-toc-text">EXPLAIN 结果列说明</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#跳转到-id-列"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">跳转到 id 列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#跳转到-select-type列"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">跳转到 select_type列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#table-列"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">table 列</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#跳转到-type-列"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">跳转到 type 列</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#possible-keys-key"><span class="post-toc-number">7.</span> <span class="post-toc-text">possible_keys, key</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#跳转到-key-len"><span class="post-toc-number">8.</span> <span class="post-toc-text">跳转到 key_len</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ref"><span class="post-toc-number">9.</span> <span class="post-toc-text">ref</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#rows"><span class="post-toc-number">10.</span> <span class="post-toc-text">rows</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#跳转到-Extra-列"><span class="post-toc-number">11.</span> <span class="post-toc-text">跳转到 Extra 列</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL 暂停/2019-04-10-mysql-83"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">83. EXPLAIN</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-10 13:20:29" datetime="2019-04-10T05:20:29.000Z"  itemprop="datePublished">2019-04-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>参考 <a href="https://segmentfault.com/a/1190000017278335" target="_blank" rel="noopener">https://segmentfault.com/a/1190000017278335</a> 进行补充</p>
+<h2 id="Explain"><a href="#Explain" class="headerlink" title="Explain"></a>Explain</h2><p>MySQL中的 <code>explain</code> 命令, 其主要功能是用来分析 select 语句的运行效果, 例如它可以获取select语句使用的索引情况、排序情况等等 </p>
+<p>语法: <code>EXPLAIN [EXTENDED] SELECT select_options</code> </p>
+<p>EXPLAIN 只能解释select查询, 并不会对存储程序调用和INSERT、UPDATE、DELETE或其他语句做解释</p>
+<p>EXPLAIN 结果的表头如下<br>MySQL 5.6.35<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+--------+------+---------------+------+---------+------+------+-------+</span><br><span class="line">| id | select_type | table  | type | possible_keys | key  | key_len | ref  | rows | Extra |</span><br><span class="line">+----+-------------+--------+------+---------------+------+---------+------+------+-------+</span><br></pre></td></tr></table></figure></p>
+<p>MySQL 5.7.25 (多了两列)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+--------+------------+-------+---------------+-----+---------+------+------+----------+-------+</span><br><span class="line">| id | select_type | table  | partitions | type  | possible_keys | key | key_len | ref  | rows | filtered | Extra |</span><br><span class="line">+----+-------------+--------+------------+-------+---------------+-----+---------+------+------+----------+-------+</span><br></pre></td></tr></table></figure></p>
+<h2 id="测试准备"><a href="#测试准备" class="headerlink" title="测试准备"></a>测试准备</h2><ol>
+<li><p>几张简陋的测试表</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE `t1` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(20) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `t2` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(20) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=MyISAM DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `t3` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `name` varchar(20) NOT NULL,</span><br><span class="line">  PRIMARY KEY (`id`)</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>几张简陋的测试表</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">DROP TABLE IF EXISTS `explain_customer`;</span><br><span class="line">CREATE TABLE `explain_customer` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `customer_name` varchar(20) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `customer_age` tinyint(3) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `gender` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `identity_card_type` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `identity_card_no` varchar(20) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `customer_phone` varchar(20) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `customer_level` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `customer_email` varchar(50) NOT NULL DEFAULT &apos;&apos;,</span><br><span class="line">  `status` int(11) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,</span><br><span class="line">  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `idx_unique_identity_card_no` (`identity_card_no`) USING BTREE COMMENT &apos;身份证号唯一&apos;,</span><br><span class="line">  UNIQUE KEY `idx_unique_phone` (`customer_phone`) USING BTREE COMMENT &apos;手机号唯一&apos;,</span><br><span class="line">  KEY `idx_unique_custome` (`customer_name`,`gender`,`customer_level`) USING BTREE COMMENT &apos;cms常用查询条件&apos;</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `explain_goods` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `goods_number` varchar(50) NOT NULL,</span><br><span class="line">  `goods_name` varchar(100) NOT NULL,</span><br><span class="line">  `goods_weight` int(11) NOT NULL,</span><br><span class="line">  `goods_brand` varchar(50) NOT NULL,</span><br><span class="line">  `stock` int(11) NOT NULL,</span><br><span class="line">  `goods_status` tinyint(1) NOT NULL,</span><br><span class="line">  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,</span><br><span class="line">  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `idx_goods_number` (`goods_number`) USING BTREE,</span><br><span class="line">  KEY `idx_goods` (`goods_name`,`goods_brand`,`goods_weight`) USING BTREE</span><br><span class="line">) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;</span><br><span class="line"></span><br><span class="line">CREATE TABLE `explain_order` (</span><br><span class="line">  `id` int(11) NOT NULL AUTO_INCREMENT,</span><br><span class="line">  `customer_id` int(11) NOT NULL,</span><br><span class="line">  `seller_id` int(11) NOT NULL,</span><br><span class="line">  `goods_id` int(11) NOT NULL,</span><br><span class="line">  `order_number` varchar(50) NOT NULL,</span><br><span class="line">  `order_status` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `pay_status` tinyint(1) NOT NULL DEFAULT &apos;0&apos;,</span><br><span class="line">  `seller_status` tinyint(1) NOT NULL COMMENT &apos;卖家备货状态&apos;,</span><br><span class="line">  `delivery_type` tinyint(1) NOT NULL COMMENT &apos;配送类型&apos;,</span><br><span class="line">  `delivery_id` int(11) NOT NULL COMMENT &apos;配送方id&apos;,</span><br><span class="line">  `order_amount` decimal(12,2) NOT NULL,</span><br><span class="line">  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,</span><br><span class="line">  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,</span><br><span class="line">  PRIMARY KEY (`id`),</span><br><span class="line">  UNIQUE KEY `idx_order_number` (`order_number`) USING BTREE,</span><br><span class="line">  KEY `idx_ocreated_at` (`created_at`) USING BTREE</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="EXPLAIN-EXTENDED"><a href="#EXPLAIN-EXTENDED" class="headerlink" title="EXPLAIN EXTENDED"></a>EXPLAIN EXTENDED</h2><p>其实除了 explain 以外, 其变种 <code>explain extended</code> 命令也非常有用, 它能够在原本explain的基础上额外的提供一些查询优化的信息, 这些信息可以通过mysql的 <code>show warnings</code> 命令得到, 执行分为两步:</p>
+<ul>
+<li><code>explain extended 你的SQL;</code></li>
+<li><code>show warnings;</code></li>
+</ul>
+<p>EXPLAIN EXTENDED 命令的表头如下:</p>
+<ul>
+<li><p>MySQL 5.6.35  (多了 filtered 列)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-------+------+---------------+-----+---------+------+------+----------+--------+</span><br><span class="line">| id | select_type | table | type | possible_keys | key | key_len | ref  | rows | filtered | Extra  |</span><br><span class="line">+----+-------------+-------+------+---------------+-----+---------+------+------+----------+---------+</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>MySQL 5.7.25 (相对 EXPLAIN 来说, 表头没有变化)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-------+------------+--------+---------------+-----+---------+-----+------+----------+-------+</span><br><span class="line">| id | select_type | table | partitions | type   | possible_keys | key | key_len | ref | rows | filtered | Extra |</span><br><span class="line">+----+-------------+-------+------------+--------+---------------+-----+---------+-----+------+----------+-------+</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>从 explain extend 的输出中, 你可以看到sql的执行方式, 对于分析sql还是很有帮助的</strong></p>
+<p>explain extended 除了能够告诉我们mysql的查询优化能做什么, 同时也能告诉我们mysql的查询优化做不了什么</p>
+<ul>
+<li>比如 mysql的查询优化器不能将 id&gt;5 和 id&gt;6 这两个查询条件优化合并成一个 id&gt;6 (<a href="https://www.percona.com/blog/2006/07/24/extended-explain/" target="_blank" rel="noopener">参考</a>)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; EXPLAIN EXTENDED SELECT * FROM t1 WHERE id &gt; 5 AND id &gt; 6;</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+------+------+----------+-------------+</span><br><span class="line">| id | select_type | table | type  | possible_keys | key     | key_len | ref  | rows | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+------+------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t1    | range | PRIMARY       | PRIMARY | 4       | NULL |    1 |   100.00 | Using where |</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+------+------+----------+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br><span class="line">mysql&gt; show warnings;</span><br><span class="line">+-------+------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Level | Code | Message                                                                                                                                                                                        |</span><br><span class="line">+-------+------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Note  | 1003 | /* select#1 */ select `explain_test`.`t1`.`id` AS `id`,`explain_test`.`t1`.`name` AS `name` from `explain_test`.`t1` where ((`explain_test`.`t1`.`id` &gt; 5) and (`explain_test`.`t1`.`id` &gt; 6)) |</span><br><span class="line">+-------+------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>注意</strong>: 从 <code>EXPLAIN extended</code> + <code>show warnings</code> 得到 优化以后 的查询语句可能还不是最终优化执行的sql, 或者说explain extended看到的信息还不足以说明mysql最终对查询语句优化的结果<br>    (?? <a href="https://www.jianshu.com/p/7656b114e783" target="_blank" rel="noopener">https://www.jianshu.com/p/7656b114e783</a>)</p>
+<h2 id="EXPLAIN-EXTENDED-示例"><a href="#EXPLAIN-EXTENDED-示例" class="headerlink" title="EXPLAIN EXTENDED 示例"></a>EXPLAIN EXTENDED 示例</h2><p>如下在一个 简单的子查询中, 使用 <code>=</code> 和 使用 <code>in</code> 的结果截然不同</p>
+<ol>
+<li><p>使用 <code>=</code> 时, 可以看到, 3条执行记录的id是递增的, 是有两个子句的执行, 最后才执行了外层的查询 (表中无数据)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 当表中没有数据时</span><br><span class="line">mysql&gt; EXPLAIN extended SELECT * FROM t1 WHERE id = (SELECT id FROM t2 WHERE id = (SELECT id FROM t3 WHERE name=&quot;Lant3&quot;));</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra                          |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">|  1 | PRIMARY     | NULL  | NULL       | NULL | NULL          | NULL | NULL    | NULL | NULL |     NULL | no matching row in const table |</span><br><span class="line">|  2 | SUBQUERY    | NULL  | NULL       | NULL | NULL          | NULL | NULL    | NULL | NULL |     NULL | no matching row in const table |</span><br><span class="line">|  3 | SUBQUERY    | t3    | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    1 |   100.00 | Using where                    |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+------+----------+--------------------------------+</span><br><span class="line">3 rows in set, 2 warnings (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show warnings;</span><br><span class="line">+---------+------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Level   | Code | Message                                                                                                                                                                                                                                                                 |</span><br><span class="line">+---------+------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Warning | 1681 | &apos;EXTENDED&apos; is deprecated and will be removed in a future release.                                                                                                                                                                                                       |</span><br><span class="line">| Note    | 1003 | /* select#1 */ select NULL AS `id`,NULL AS `name` from `test`.`t1` where multiple equal((/* select#2 */ select NULL from `test`.`t2` where multiple equal((/* select#3 */ select `test`.`t3`.`id` from `test`.`t3` where (`test`.`t3`.`name` = &apos;Lant3&apos;)), NULL)), NULL) |</span><br><span class="line">+---------+------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>而在使用 <code>in</code> 时, 可以看到, <code>id</code> 列的值都是1, 即为并行执行的, 使用 <code>show warnings</code> 查看后发现, MySQL将语句优化成了 join 结构</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; EXPLAIN extended SELECT * FROM t1 WHERE id in (SELECT id FROM t2 WHERE id in (SELECT id FROM t3 WHERE name=&quot;Lant3&quot;));</span><br><span class="line">+----+-------------+-------+------------+--------+---------------+---------+---------+------------+------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type   | possible_keys | key     | key_len | ref        | rows | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+--------+---------------+---------+---------+------------+------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t1    | NULL       | ALL    | PRIMARY       | NULL    | NULL    | NULL       |    1 |   100.00 | NULL        |</span><br><span class="line">|  1 | SIMPLE      | t2    | NULL       | eq_ref | PRIMARY       | PRIMARY | 4       | test.t1.id |    1 |   100.00 | Using index |</span><br><span class="line">|  1 | SIMPLE      | t3    | NULL       | eq_ref | PRIMARY       | PRIMARY | 4       | test.t1.id |    1 |   100.00 | Using where |</span><br><span class="line">+----+-------------+-------+------------+--------+---------------+---------+---------+------------+------+----------+-------------+</span><br><span class="line">3 rows in set, 2 warnings (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; show warnings;</span><br><span class="line">+---------+------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Level   | Code | Message                                                                                                                                                                                                                                                   |</span><br><span class="line">+---------+------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">| Warning | 1681 | &apos;EXTENDED&apos; is deprecated and will be removed in a future release.                                                                                                                                                                                         |</span><br><span class="line">| Note    | 1003 | /* select#1 */ select `test`.`t1`.`id` AS `id`,`test`.`t1`.`name` AS `name` from `test`.`t3` join `test`.`t2` join `test`.`t1` where ((`test`.`t2`.`id` = `test`.`t1`.`id`) and (`test`.`t3`.`id` = `test`.`t1`.`id`) and (`test`.`t3`.`name` = &apos;Lant3&apos;)) |</span><br><span class="line">+---------+------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="EXPLAIN-PARTITIONS"><a href="#EXPLAIN-PARTITIONS" class="headerlink" title="EXPLAIN PARTITIONS"></a>EXPLAIN PARTITIONS</h2><h2 id="EXPLAIN-结果列说明"><a href="#EXPLAIN-结果列说明" class="headerlink" title="EXPLAIN 结果列说明"></a>EXPLAIN 结果列说明</h2><h3 id="跳转到-id-列"><a href="#跳转到-id-列" class="headerlink" title="跳转到 id 列"></a>跳转到 <a href="/2019/04/10/MySQL/2019-04-10-mysql-84/">id 列</a></h3><h3 id="跳转到-select-type列"><a href="#跳转到-select-type列" class="headerlink" title="跳转到 select_type列"></a>跳转到 <a href="/2019/04/11/MySQL/2019-04-11-mysql-85/">select_type列</a></h3><h3 id="table-列"><a href="#table-列" class="headerlink" title="table 列"></a><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain_table" target="_blank" rel="noopener">table 列</a></h3><ol>
+<li><p>显示这一行显示了对应行正在访问哪个表, 在通常情况下, 它相当明了: 它就是那个表, 或是该表的别名(如果sql中定义了别名)</p>
+</li>
+<li><p>当FROM子句中有子查询或者有UNION时, table列会变得复杂得多, 在这些场景下, 确实没有一个 “表” 可以参考到, 因为 MySQL 创建的匿名临时表仅在查询执行过程中存在</p>
+<ul>
+<li>当在FROM子句中有子查询时, table列是 <derivedn> 的形式, 其中 N 是子查询的id </derivedn></li>
+<li>当有 UNION 时, UNION RESULT 的table列包含一个参与UNION的 id 列表 (<union n,m=""> )</union></li>
+</ul>
+</li>
+</ol>
+<h3 id="跳转到-type-列"><a href="#跳转到-type-列" class="headerlink" title="跳转到 type 列"></a>跳转到 <a href="/2019/04/13/MySQL/2019-04-13-mysql-86/">type 列</a></h3><ol>
+<li>这一列显示了 MySQL 是决定如何查找表中的行, 下面是最重要的访问方法, 依次从最差到最优</li>
+</ol>
+<h2 id="possible-keys-key"><a href="#possible-keys-key" class="headerlink" title="possible_keys, key"></a>possible_keys, key</h2><ol>
+<li>possible_keys: 显示可能应用在这张表中的索引, 一个或多个; 查询涉及到的字段上若存在索引, 则该索引将被列出, 但不一定被查询实际使用 </li>
+<li>key : 实际使用的索引, 如果为NULL, 表示没有使用索引; 如果查询中使用了覆盖索引, 则该索引仅出现在key列表中</li>
+</ol>
+<h2 id="跳转到-key-len"><a href="#跳转到-key-len" class="headerlink" title="跳转到 key_len"></a>跳转到 <a href="/2019/04/15/MySQL/2019-04-15-mysql-87/">key_len</a></h2><h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a>ref</h2><ol>
+<li><p>显示索引的哪一列被使用了, 如果可能的话, 是一个常数 (哪些列或常量被用于查找索引列上的值) </p>
+</li>
+<li><p>示例</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain SELECT t1.id,t3.id FROM t1 join t3 on t1.id=t3.id;</span><br><span class="line">+----+-------------+-------+--------+---------------+---------+---------+------------+------+-------------+</span><br><span class="line">| id | select_type | table | type   | possible_keys | key     | key_len | ref        | rows | Extra       |</span><br><span class="line">+----+-------------+-------+--------+---------------+---------+---------+------------+------+-------------+</span><br><span class="line">|  1 | SIMPLE      | t1    | index  | PRIMARY       | PRIMARY | 4       | NULL       |    3 | Using index |</span><br><span class="line">|  1 | SIMPLE      | t3    | eq_ref | PRIMARY       | PRIMARY | 4       | test.t1.id |    1 | Using index |</span><br><span class="line">+----+-------------+-------+--------+---------------+---------+---------+------------+------+-------------+</span><br><span class="line">2 rows in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; explain SELECT * from t1 where id=1;</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">| id | select_type | table | type  | possible_keys | key     | key_len | ref   | rows | Extra |</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">|  1 | SIMPLE      | t1    | const | PRIMARY       | PRIMARY | 4       | const |    1 | NULL  |</span><br><span class="line">+----+-------------+-------+-------+---------------+---------+---------+-------+------+-------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="rows"><a href="#rows" class="headerlink" title="rows"></a><a href="https://dev.mysql.com/doc/refman/5.7/en/explain-output.html#explain_rows" target="_blank" rel="noopener">rows</a></h2><ol>
+<li>根据表统计信息及索引选用情况, 大致估算出找到所需的记录所需要读取的行数, 这是MySQL认为它要检查的行数, 而不是结果集里的行数; </li>
+<li>对于InnoDB表, 此数字是估计值, 可能并不总是准确的</li>
+<li>…</li>
+</ol>
+<h2 id="跳转到-Extra-列"><a href="#跳转到-Extra-列" class="headerlink" title="跳转到 Extra 列"></a>跳转到 <a href="/2019/04/15/MySQL/2019-04-15-mysql-88/">Extra 列</a></h2>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&title=《83. EXPLAIN》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&title=《83. EXPLAIN》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《83. EXPLAIN》 — Lant's&url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/09/JavaSE/2019-04-09-47/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">47. Java IO 体系</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/10/MySQL 暂停/2019-04-10-mysql-84/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">84. EXPLAIN -- id 列</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&title=《83. EXPLAIN》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&title=《83. EXPLAIN》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《83. EXPLAIN》 — Lant's&url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/10/MySQL 暂停/2019-04-10-mysql-83/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwklEQVR42u3a0W7qMBAEUP7/p1v1vlUV6cxuTLnSyRNqIfgYyd6M9/GIr49/1/V/f77n59+fvU7unLx/eOHh4eGNhv7suh7W9afyCWqnIxkzHh4e3mne9YAS9l1DvB5DPmY8PDy8d+C11HYbyMt6PDw8vP+FN4sk8uHmRTkeHh7eO/CSMCIpoDdT05bmN2cteHh4eDFvU87+1euD53t4eHh4i1P1JGC93gCuC9/2qKweLR4eHt4B3nU5237BJmiYTVy0beDh4eHdyrte7ttGgXZS2qnMj9++7Xt4eHh4L+S1a+zsiGvWaJXEu3h4eHgnePnC3Zbd+eI+K+KLwh0PDw/v5bx2Ic7D37ylIJ/cRztDeHh4eCWvDUxnm0fOuLm5AQ8PD+8ALymFZ41QOWYTAReNWXh4eHg38YrDpNHgZuy2veDpFODh4eEd5uVRQv6k34a8wxaBWRiBh4eHN+INH+xHJfJd7Qg3RBh4eHh4C94mPJ0dZbXBx2pDwsPDwzvASxblj/KahbP5SNq4BA8PD+8EL7/d9VDybaANR/LSvP7d8PDw8Epeu7jP4oPNpMwaGvDw8PDO8WbB66bM3bQFtKU5Hh4e3ut5eWG9L4vbw7bh7oeHh4e35uUtULPlPqHOGhSiz+Lh4eEd5s2Cg02MO7tDsV3h4eHhHeblDVhJ+Nsu6LNp/WULwcPDwzvAmw03OaDaFOt178O9vwYeHh5eGYm2UUXemDU7QttsV3h4eHinecmVL9N5hLGPP57eDQ8PD+8Ary272yh2Fi5spnX1VIGHh4e3zjnzwjcvxPPCerYx4OHh4b2Sl4cRm+atZCNpQ9tfynQ8PDy8P+Ulx/ybo6y8UC5KbTw8PLw34OVRwvW35NvDZivCw8PDO8dr2wI2DQGbT9UNB3h4eHgHeHcdgOVHX3kDwfC87kTrAB4eHt7X9QnPOaZLzkiqDAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

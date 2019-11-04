@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>41. 基础概念 -- 用户态, 内核态, 系统调用 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,IO">
+    <meta name="description" content="在了解 IO 之前, 我们有必要先了解一下 系统调用 的概念而在了解 系统调用 的概念前, 又不得不先了解Linux操作系统中 用户态与内核态 的概念 用户态 与 内核态 为什么需要区分内核空间与用户空间?在 CPU 的所有指令中, 有些指令是非常危险的, 如果错用, 将导致系统崩溃, 比如清内存、设置时钟等。如果允许所有的程序都可以使用这些指令, 那么系统崩溃的概率将大大增加。所以, CPU 将">
+<meta name="keywords" content="Java,IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="41. 基础概念 -- 用户态, 内核态, 系统调用">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="在了解 IO 之前, 我们有必要先了解一下 系统调用 的概念而在了解 系统调用 的概念前, 又不得不先了解Linux操作系统中 用户态与内核态 的概念 用户态 与 内核态 为什么需要区分内核空间与用户空间?在 CPU 的所有指令中, 有些指令是非常危险的, 如果错用, 将导致系统崩溃, 比如清内存、设置时钟等。如果允许所有的程序都可以使用这些指令, 那么系统崩溃的概率将大大增加。所以, CPU 将">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/io-base-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/io-base-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/systemcall.jpg">
+<meta property="og:updated_time" content="2019-09-06T10:35:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="41. 基础概念 -- 用户态, 内核态, 系统调用">
+<meta name="twitter:description" content="在了解 IO 之前, 我们有必要先了解一下 系统调用 的概念而在了解 系统调用 的概念前, 又不得不先了解Linux操作系统中 用户态与内核态 的概念 用户态 与 内核态 为什么需要区分内核空间与用户空间?在 CPU 的所有指令中, 有些指令是非常危险的, 如果错用, 将导致系统崩溃, 比如清内存、设置时钟等。如果允许所有的程序都可以使用这些指令, 那么系统崩溃的概率将大大增加。所以, CPU 将">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/IO/io-base-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">41. 基础概念 -- 用户态, 内核态, 系统调用</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-07T06:20:18.000Z" itemprop="datePublished" class="page-time">
+  2019-04-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/IO/">IO</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用户态-与-内核态"><span class="post-toc-number">1.</span> <span class="post-toc-text">用户态 与 内核态</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#系统调用-System-calls"><span class="post-toc-number">2.</span> <span class="post-toc-text">系统调用(System calls)</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2019-04-07-41"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">41. 基础概念 -- 用户态, 内核态, 系统调用</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-07 14:20:18" datetime="2019-04-07T06:20:18.000Z"  itemprop="datePublished">2019-04-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/IO/">IO</a></li></ul></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在了解 IO 之前, 我们有必要先了解一下 <strong>系统调用</strong> 的概念<br>而在了解 系统调用 的概念前, 又不得不先了解Linux操作系统中 <strong>用户态与内核态</strong> 的概念</p>
+<h1 id="用户态-与-内核态"><a href="#用户态-与-内核态" class="headerlink" title="用户态 与 内核态"></a>用户态 与 内核态</h1><ol>
+<li><p>为什么需要区分内核空间与用户空间?<br>在 CPU 的所有指令中, 有些指令是非常危险的, 如果错用, 将导致系统崩溃, 比如清内存、设置时钟等。如果允许所有的程序都可以使用这些指令, 那么系统崩溃的概率将大大增加。<br>所以, CPU 将指令分为特权指令和非特权指令, 对于那些危险的指令, 只允许操作系统及其相关模块使用, 普通应用程序只能使用那些不会造成灾难的指令。比如 Intel 的 CPU 将特权等级分为 4 个级别：Ring0~Ring3。<br>其实 Linux 系统只使用了 Ring0 和 Ring3 两个运行级别(Windows 系统也是一样的)。 当进程运行在 Ring3 级别时被称为运行在用户态, 而运行在 Ring0 级别时被称为运行在内核态。</p>
+</li>
+<li><p>Linux 从整体上分为 <code>内核态</code>(内核空间) 与 <code>用户态</code>(用户空间)</p>
+<blockquote>
+<p>比如一个32位的操作系统, 寻址地址(虚拟内存空间)是2的32次方, 也就是4G<br> 操作系统将较高的1G字节作为内核空间 (内核空间具有用户空间所不具备的操作权限)<br> 将较低的3G字节作为用户空间</p>
+</blockquote>
+<p> <img src="/img/IO/io-base-01.png"></p>
+</li>
+<li><p>内核态 与 用户态 </p>
+</li>
+</ol>
+<ul>
+<li><code>内核态</code> 就是内核所处的空间, 内核负责调用底层硬件资源, 并为上层应用程序提供运行环境</li>
+<li><code>用户态</code> 即 应用程序的活动空间 (应用程序通常运行在用户空间, 当某些操作需要内核权限时, 通过 <code>系统调用(System calls</code>), 进入内核态执行, <strong>这也就是一次 <code>用户态\内核态</code> 的转换</strong>)</li>
+</ul>
+<h1 id="系统调用-System-calls"><a href="#系统调用-System-calls" class="headerlink" title="系统调用(System calls)"></a>系统调用(System calls)</h1><ol>
+<li><p>应用程序的运行必须依托于内核提供的硬件资源(如cpu\存储\IO), 而内核是通过暴露外部接口供应用程序进行调用 — 内核提供的这些外部接口就称为 <code>SystemCall, 系统调用</code></p>
+</li>
+<li><p>系统调用是操作系统的最小功能单位, <strong>每次系统调用都会发生一次用户态与内核态的切换, 切换过程中涉及了各种函数的调用以及数据的复制</strong></p>
+<blockquote>
+<p>系统调用是每个操作系统必不可少的一部分, 操作系统上的每个应用程序都必须依靠 系统调用 来进入内核态,进而实现对硬件资源的操作<br> 而应用程序的 <code>read()</code> 实现其实是来源于内核空间的内核函数 <code>sys_read()</code>, 这样, 通过 <code>read()</code> 就形成一个系统调用 (更多系统调用可以搜索: Linux系统调用表(system call table) 去查看)<br> 系统调用是 用户态 进入 内核态 的唯一入口</p>
+</blockquote>
+</li>
+<li><p>用户空间 与 操作系统内核空间 的系统调用 架构简图1 如下:<br><img src="/img/IO/io-base-02.png"></p>
+</li>
+<li>用户空间 与 操作系统内核空间 的系统调用 架构简图2 如下:<br><img src="/img/IO/systemcall.jpg"></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&title=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&title=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/07/JavaSE/2019-04-07-40/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">40. IO 基础概念</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/07/JavaSE/2019-04-07-42/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">42. Linux 文件IO操作的分类 - 文件IO, 标准IO</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&title=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&title=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《41. 基础概念 -- 用户态, 内核态, 系统调用》 — Lant's&url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-41/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3aS27DMAxFUe9/0y7QUYFUzn2kArTU1ShwnFjHA4IfXRde9/f6+fn1yur+1+ur+1ffblsyZMj4t4z7ca0Yz5vmV8iznvcmQ4aMcxgkyJLQSSJhGtyf75EhQ4YMvmme0tWCrwwZMmTwwLcL03mWDBkyzmSQIjYNi7woTe+XIUPGaYxdAfETnz8+35AhQ8afZ9ztlRao6ZgT7UGGDBmjGWmLP03dOoPJNAGVIUPGVAZv9+8qaGvjgTf/IEOGjNEM3tDfNXTkCWI8GJAhQ8YBDF6CpgGav4jn3wZtOBkyZAxipCkdL1B5WpleX3YNZciQcQAjDbi1Zlm/qffLFRkyZIxmEEBnW88BvTMYkCFDxjmM/nGH9BXwYpUnoDJkyDiBQcJo5zAEacDVSujlJFaGDBkHMIJhYW3+gAcPrYArQ4aMEQySxqUPqxW0vNkX9+dkyJAxglFLAdP1wU3LkCFjNCM9wsXDa/+4Bvl2WcTKkCFjEKPWJuNBcxce7U2GDBnHMEgRmw4sa+OBOHGUIUPGAYw4FcMP3lUevwn3MmTIGM3oDCz5VnYNPlG6KUOGjEGMWnM/PR7RD7tv/lmGDBmjGbUwVwus6T+nqacMGTJmM3iQTQMuP5xRG3Ne/DEyZMgYwShWvXjMQDZaO6ghQ4YMGWnTnxyzqA1Ng0msDBkyDmakgZLfz/EyZMg4mdEfTKajSpJ6Bn1BGTJkjGb0BwNpkE1fBxl8ypAhYyjjC38pdHIO/oh+AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

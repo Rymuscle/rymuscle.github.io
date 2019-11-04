@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Maven 入门 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Maven">
+    <meta name="description" content="概述 Maven 是一个采用纯Java编写的开源项目管理工具; 是当前最受欢迎的Java项目管理构建自动化综合工具, 类似以前Java中的Ant、node.js中的npm、dotNet中的nuget、PHP中的Composer  Maven 基于POM(POM project object model 项目对象模型)对项目进行管理(使用 pom.xml 来对项目进行管理)   Maven 解决的问">
+<meta name="keywords" content="Maven">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven 入门">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="概述 Maven 是一个采用纯Java编写的开源项目管理工具; 是当前最受欢迎的Java项目管理构建自动化综合工具, 类似以前Java中的Ant、node.js中的npm、dotNet中的nuget、PHP中的Composer  Maven 基于POM(POM project object model 项目对象模型)对项目进行管理(使用 pom.xml 来对项目进行管理)   Maven 解决的问">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/maven-repo.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/maven-mirrors.png">
+<meta property="og:updated_time" content="2019-08-22T09:04:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maven 入门">
+<meta name="twitter:description" content="概述 Maven 是一个采用纯Java编写的开源项目管理工具; 是当前最受欢迎的Java项目管理构建自动化综合工具, 类似以前Java中的Ant、node.js中的npm、dotNet中的nuget、PHP中的Composer  Maven 基于POM(POM project object model 项目对象模型)对项目进行管理(使用 pom.xml 来对项目进行管理)   Maven 解决的问">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/javase/maven-repo.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Maven 入门</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-11T08:23:07.000Z" itemprop="datePublished" class="page-time">
+  2019-04-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Maven/">Maven</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Maven-解决的问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">Maven 解决的问题</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#核心功能"><span class="post-toc-number">3.</span> <span class="post-toc-text">核心功能</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#依赖管理"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">依赖管理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一键构建"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">一键构建</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#maven仓库"><span class="post-toc-number">4.</span> <span class="post-toc-text">maven仓库</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#安装配置"><span class="post-toc-number">5.</span> <span class="post-toc-text">安装配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#本地仓储配置"><span class="post-toc-number">6.</span> <span class="post-toc-text">本地仓储配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#中央仓库配置"><span class="post-toc-number">7.</span> <span class="post-toc-text">中央仓库配置</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#maven-项目标准目录结构"><span class="post-toc-number">8.</span> <span class="post-toc-text">maven 项目标准目录结构</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#maven常用命令"><span class="post-toc-number">9.</span> <span class="post-toc-text">maven常用命令</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Maven/2019-04-11-maven-01"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Maven 入门</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-11 16:23:07" datetime="2019-04-11T08:23:07.000Z"  itemprop="datePublished">2019-04-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Maven/">Maven</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ol>
+<li><p>Maven 是一个采用纯Java编写的开源项目管理工具; 是当前最受欢迎的Java项目管理构建自动化综合工具, 类似以前Java中的Ant、node.js中的npm、dotNet中的nuget、PHP中的Composer</p>
+</li>
+<li><p>Maven 基于POM(POM project object model 项目对象模型)对项目进行管理(使用 pom.xml 来对项目进行管理)</p>
+</li>
+</ol>
+<h1 id="Maven-解决的问题"><a href="#Maven-解决的问题" class="headerlink" title="Maven 解决的问题"></a>Maven 解决的问题</h1><ol>
+<li><p>大量jar包的引入, jar包冲突, 版本冲突</p>
+</li>
+<li><p>可以和IDEA一样 将代码编译成字节码文件</p>
+</li>
+<li><p>批量(可以指定目录)单元测试</p>
+</li>
+<li><p>项目打包, 发布 (简化)</p>
+</li>
+<li><p>节省项目空间: 传统web工程, jar包会包含在项目中, 项目会很大 (如果有10个项目, 每个项目都要在自己项目中放入所用到的jar包)</p>
+</li>
+</ol>
+<h1 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h1><h2 id="依赖管理"><a href="#依赖管理" class="headerlink" title="依赖管理"></a>依赖管理</h2><p>上面描述maven所解决的问题时, 无不体现了maven的这一核心功能</p>
+<h2 id="一键构建"><a href="#一键构建" class="headerlink" title="一键构建"></a>一键构建</h2><ol>
+<li><p>传统的Java项目, 往往都要经历 编译、测试、运行、打包、安装、部署等一系列过程 (每一步都是在构建只不过构建的成都不一样)</p>
+</li>
+<li><p>Maven 一键构建 指的就是项目从 编译、测试、运行、打包、安装、部署整个过程都交给 maven 进行管理 (整个构建过程, 使用 maven 一个命令可以轻松完成整个工作)<br> maven已经在内部继承了tomcat插件</p>
+</li>
+<li><p>之前我们手动创建的项目, 需要手动打包, 然后将项目部署到tomcat的webapp目录下, 然后启动tomcat, 才可以访问项目; 虽然将tomcat集成到IDEA后, 让此过程变得简单了一些, 但让需要一些步骤;<br> 而如果使用maven来构建, 只用执行一个命令 <code>mvc tomcat:run</code></p>
+</li>
+</ol>
+<h1 id="maven仓库"><a href="#maven仓库" class="headerlink" title="maven仓库"></a>maven仓库</h1><ol>
+<li><p>maven项目中只是在pom.xml中存放了依赖jar包的坐标, 当maven初次启动时, 会从远程仓库把pom文件中所标明的 jar包 拿下来, 放到本地仓库</p>
+</li>
+<li><p>maven 默认将jar包放置的位置:</p>
+<ul>
+<li>可以查看maven的配置文件 maven安装路径/conf/settings.xml (mac在  ${user.home}/.m2/ 下)</li>
+<li>在settings.xml中找到 localRepository, 可以看到默认位置为 ${user.home}/.m2/repository</li>
+<li>重新指定本机仓库地址 <code>&lt;localRepository&gt;新指定的位置&lt;/localRepository&gt;</code></li>
+</ul>
+</li>
+<li><p>仓库种类 (项目启动后, maven找包的位置依次是 从上到下)</p>
+<ul>
+<li>本机的本地仓库</li>
+<li>远程仓库(公司私服)</li>
+<li>中央仓库: <a href="http://mvnrepository.com/" target="_blank" rel="noopener">http://mvnrepository.com/</a> 、 <a href="https://search.maven.org/、http://repo2.maven.org/maven2/" target="_blank" rel="noopener">https://search.maven.org/、http://repo2.maven.org/maven2/</a>   </li>
+</ul>
+</li>
+</ol>
+<h1 id="安装配置"><a href="#安装配置" class="headerlink" title="安装配置"></a>安装配置</h1><ol>
+<li><p>其实主流的开发工具如IDEA、Eclipse都集成了Maven(可见重要性), 但为了更加深刻的学习与管理该工具(比如多个IDE共享的问题), 建议还是单独安装比较好</p>
+</li>
+<li><p><a href="http://maven.apache.org/download.cgi" target="_blank" rel="noopener">下载地址</a> (Maven3必须JDK1.7以上)</p>
+</li>
+<li><p>Mac 使用 <code>brew install maven</code> 安装后不用做什么配置</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">➜  ~ mvn -version</span><br><span class="line">Apache Maven 3.5.4 (1edded0938998edf8bf061f1ceb3cfdeccf443fe; 2018-06-18T02:33:14+08:00)</span><br><span class="line">Maven home: /usr/local/Cellar/maven/3.5.4/libexec</span><br><span class="line">Java version: 11.0.1, vendor: Oracle Corporation, runtime: /Library/Java/JavaVirtualMachines/jdk-11.0.1.jdk/Contents/Home</span><br><span class="line">Default locale: zh_CN_#Hans, platform encoding: UTF-8</span><br><span class="line">OS name: &quot;mac os x&quot;, version: &quot;10.12.6&quot;, arch: &quot;x86_64&quot;, family: &quot;mac&quot;</span><br><span class="line">➜  ~</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="本地仓储配置"><a href="#本地仓储配置" class="headerlink" title="本地仓储配置"></a>本地仓储配置</h1><ol>
+<li><p>如果不进行配置, 默认会在 <code>/Users/renyimin/.m2/repository</code> 存放从远程下载到的包</p>
+</li>
+<li><p>mac上brew安装maven后, setting.xml文件位于 <code>/Users/renyimin/.m2/</code> （如果需要重新设置本地仓库的位置(打开maven安装目录, 打开conf目录下的setting.xml文件)进行配置）<br>配置本地仓储的的位置: ``</p>
+</li>
+<li><p>你还可以在运行时指定本地仓库位置 <code>mvn clean install -Dmaven.repo.local=yourpath</code><br><img src="/img/javase/maven-repo.png"></p>
+</li>
+</ol>
+<h1 id="中央仓库配置"><a href="#中央仓库配置" class="headerlink" title="中央仓库配置"></a>中央仓库配置</h1><ol>
+<li><p>当构建一个Maven项目时, 首先检查 pom.xml 文件以确定依赖包的下载位置, 执行顺序如下：</p>
+<ul>
+<li>从本地资源库中查找并获得依赖包, 如果没有, 执行第2步</li>
+<li>从Maven默认中央仓库中查找并获得依赖包 (<a href="http://repo1.maven.org/maven2/" target="_blank" rel="noopener">http://repo1.maven.org/maven2/</a>), 如果没有, 执行第3步</li>
+<li>如果在 pom.xml 中定义了自定义的远程仓库, 那么也会在这里的仓库中进行查找并获得依赖包, 如果都没有找到, 那么Maven就会抛出异常</li>
+</ul>
+</li>
+<li><p>可以修改默认中央仓库地址或增加新的镜像地址<br><img src="/img/javase/maven-mirrors.png"></p>
+</li>
+<li><p>常用地址</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- http://maven.aliyun.com/nexus/content/groups/public/  阿里云  （强力推荐）</span><br><span class="line">- http://www.sonatype.org/nexus/  私服nexus工具使用</span><br><span class="line">- http://mvnrepository.com/ （推荐）</span><br><span class="line">- http://repo1.maven.org/maven2</span><br><span class="line">- http://repo2.maven.org/maven2/</span><br><span class="line">- http://uk.maven.org/maven2/</span><br><span class="line">- http://repository.jboss.org/nexus/content/groups/public</span><br><span class="line">- http://maven.oschina.net/content/groups/public/</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="maven-项目标准目录结构"><a href="#maven-项目标准目录结构" class="headerlink" title="maven 项目标准目录结构"></a>maven 项目标准目录结构</h1><p>传统Java项目中, 像是 测试部分, 配置部分可能并不需要被打包, 但是每个公司都有自己对这两部分的命名以便打包时可以不打包这些内容, 但这样比较混乱, 而maven有自己的标准规范: </p>
+<ol>
+<li><code>src/main/java</code> 核心代码部分</li>
+<li><code>src/main/resources</code> 配置文件部分</li>
+<li><code>src/test/java</code> 测试代码部分</li>
+<li><code>src/test/resources</code> 测试代码的配置文件</li>
+<li><code>src/main/webapp</code> 页面资源, js,css,图片等 (Maven的web工程会有该目录)</li>
+</ol>
+<h1 id="maven常用命令"><a href="#maven常用命令" class="headerlink" title="maven常用命令"></a>maven常用命令</h1><ol>
+<li><p><code>mvn clean</code>: 删除项目中的 target 目录<br> 一般拿到别人的代码, 由于环境不一定一致, 所以一般先执行这个命令, 用自己的环境重新编译</p>
+</li>
+<li><p><code>mvn compile</code>: 编译 src/main 下的代码, 生成 target 目录 </p>
+</li>
+<li><p><code>mvn test</code>: 该命令除了会编译 src/main 下的代码, 也会把 src/test/java 下的代码编译</p>
+</li>
+<li><p><code>mvn package</code>: 会执行 <code>mvn test</code>, 然后会默认将项目打成 <code>jar</code> 包 (也可以在pom文件中配置, 打成 <code>war</code> 包)</p>
+</li>
+<li><p><code>mvn install</code>: 除了干了 <code>mvn package</code> 的活儿, 还把项目打好的包放到了本地 maven 仓库</p>
+</li>
+<li><p><code>maven deploy</code>: 发布  </p>
+</li>
+</ol>
+<!--
+# 命令行创建maven项目
+1. 输入命令 `mvn archetype:generate`, 按回车, 根据提示输入参数, 如果是第一次使用, 需要下载插件, 稍等几分钟即可
+
+2. 选择骨架模板
+<img src="/img/javase/mvn-archetype-generate.png" />
+
+3. 填写项目骨架信息
+<img src="/img/javase/mvn-create.png" />
+
+4. 创建项目成功
+<img src="/img/javase/mvn-success.png" />
+
+5. 将项目转换成IDEA项目
+    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">➜  mvnTest mvn idea:idea</span><br><span class="line"></span><br><span class="line">.......</span><br><span class="line">[INFO] jdkName is not set, using [java version11.0.1] as default.</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 4.259 s</span><br><span class="line">[INFO] Finished at: 2019-07-19T17:24:08+08:00</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>之后即可使用idea打开项目<br><img src="/img/javase/mvn-project.png" /></p>
+</li>
+<li><p>将项目打包 （打包报错）<br><img src="/img/javase/mvn-package-error.png" />    </p>
+</li>
+<li><p>解决方案一</p>
+</li>
+</ol>
+<ul>
+<li>在settings.xml文件中指定jdk版本 (既可以修改全局的settings.xml文件 <code>maven安装目录\conf\settings.xml</code>, 也可以修改用户的settings.xml文件 <code>~\.m2\settings.xml</code>)</li>
+<li>我的jdk版本是8, 所以在 setting.xml 中配置<br><img src="/img/javase/mvn-setting-jdkversion.png" />    </li>
+</ul>
+<ol>
+<li><p>解决方案二: 在项目的pom.xml文件中指定jdk版本</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties&gt;</span><br><span class="line">    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;</span><br><span class="line">    &lt;!--补充下面两行即可--&gt;</span><br><span class="line">    &lt;maven.compiler.source&gt;10&lt;/maven.compiler.source&gt;</span><br><span class="line">    &lt;maven.compiler.target&gt;10&lt;/maven.compiler.target&gt;</span><br><span class="line">&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打包成功<br><img src="/img/javase/mvn-package-success.png" /></p>
+</li>
+</ol>
+<p><img src="/img/javase/mvn-package-success-02.png" /> </p>
+<p>—&gt;</p>
+<h1 id="idea集成maven"><a href="#idea集成maven" class="headerlink" title="idea集成maven"></a>idea集成maven</h1><p>(通常使用maven创建项目时, 尽量不用使用骨架创建)<br><img src="/img/javase/maven-idea-01.png" /></p>
+<p>如果有一个非maven的项目想转换成maven管理的项目, 只需如下操作即可<br><img src="/img/javase/to-maven.png" /><br>然后选择maven与其它想添加的框架</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/best/p/9676515.html#_label0">https://www.cnblogs.com/best/p/9676515.html#_label0</a></p>
+-->
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Maven/">Maven</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&title=《Maven 入门》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&title=《Maven 入门》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Maven 入门》 — Lant's&url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/11/MySQL 暂停/2019-04-11-mysql-85/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">85. EXPLAIN -- select_type 列</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/11/Maven/2019-04-11-maven-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">No title</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&title=《Maven 入门》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&title=《Maven 入门》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Maven 入门》 — Lant's&url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/11/Maven/2019-04-11-maven-01/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACM0lEQVR42u3aS27DMAxF0e5/0+60QGPlPtIJIOpqFDiJreMBIX5+fvC6/qy7b++u/P989/v1Ux5YMmTI2JZxLRff1vq/ZNXuL0OGjHMY6zCafu6E0fU9b6/LkCFDBthubUNrsAwZMmSkm6ilo5z9pYArQ4aMbRlpIkoek5bhvpSLy5AhY0NGJ7H89OeP9DdkyJCxFeMK1zqkfqcZ8OIOMmTIGM3otDDTBJUfPYtDHjJkyBjN4CGPh9r+8Bm5jwwZMk5g9Ito5JFPhdrbf8mQIWM046ljGWkkkEPkA0V/GTJkjGbw6/wYl5bb+Ou4DbgyZMgYyqgNh6XJLR/8agViGTJkjGN0Cmq8JZAW6VBg5eU2GTJkbM7gLclayZ63RXn8fNPZkCFDxmgGOSyur3ReR21oQ4YMGWcyeGGr1jBIK/zB02XIkDGaUXskD7W83FYb5pAhQ8ZsRqfgRQ52aQOSpLgveDJkyBjN4OWtdLsdarH9KUOGjAMYaXE/HSZLi3q8tCdDhoxzGGno5EWxtGHAU2sZMmScxkgbA53jY/rLeNhChgwZ4xjpMY6ExTRwpw2JuGEgQ4aMbRlXuNLkkwTr2iuIs20ZMmRsy0hHtTimM+BFWgvxLIkMGTI2Z/ByWy2xTI+DtYaoDBkyTmDwx6dhujZ2FufiMmTIkIETTrKhzot7k5HLkCFDRlgC47y0wSlDhowzGTyJ5eWwWjuz2EyVIUPGaEaajhYDYqeUhvcgQ4aMcYxfYemtYxRD5rEAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

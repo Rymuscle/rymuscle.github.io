@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>43. 高性能索引 -- 前缀索引 &amp; 索引选择性 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="《高性能MySQL》">
+    <meta name="description" content="什么时候要用前缀索引? 有时候需要为某个很长的字符列创建索引, 这会让索引变得大且慢, 一个策略是前面提到过的模拟哈希索引, 但有时候这样却不那么合适   其实对于很长的字符列, 如果要创建索引, 我们可以尝试为该列开始的部分字符创建索引, 这样就可以大大节约索引空间, 从而提高索引效率, 但可能会降低索引的选择性;  什么是索引的选择性? 索引的选择性是指 不重复的索引值的数量 和 数据表的记录">
+<meta name="keywords" content="《高性能MySQL》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="43. 高性能索引 -- 前缀索引 &amp; 索引选择性">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="什么时候要用前缀索引? 有时候需要为某个很长的字符列创建索引, 这会让索引变得大且慢, 一个策略是前面提到过的模拟哈希索引, 但有时候这样却不那么合适   其实对于很长的字符列, 如果要创建索引, 我们可以尝试为该列开始的部分字符创建索引, 这样就可以大大节约索引空间, 从而提高索引效率, 但可能会降低索引的选择性;  什么是索引的选择性? 索引的选择性是指 不重复的索引值的数量 和 数据表的记录">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-26T11:00:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="43. 高性能索引 -- 前缀索引 &amp; 索引选择性">
+<meta name="twitter:description" content="什么时候要用前缀索引? 有时候需要为某个很长的字符列创建索引, 这会让索引变得大且慢, 一个策略是前面提到过的模拟哈希索引, 但有时候这样却不那么合适   其实对于很长的字符列, 如果要创建索引, 我们可以尝试为该列开始的部分字符创建索引, 这样就可以大大节约索引空间, 从而提高索引效率, 但可能会降低索引的选择性;  什么是索引的选择性? 索引的选择性是指 不重复的索引值的数量 和 数据表的记录">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">43. 高性能索引 -- 前缀索引 &amp; 索引选择性</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-03T12:07:57.000Z" itemprop="datePublished" class="page-time">
+  2018-06-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#什么时候要用前缀索引"><span class="post-toc-number">1.</span> <span class="post-toc-text">什么时候要用前缀索引?</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#如何选择合适的前缀长度"><span class="post-toc-number">2.</span> <span class="post-toc-text">如何选择合适的前缀长度?</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前缀长度-—-统计观察"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">前缀长度 — 统计观察</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#前缀长度-—-选择性计算"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">前缀长度 — 选择性计算</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL 暂停/2018-06-03-mysql-43"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">43. 高性能索引 -- 前缀索引 & 索引选择性</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-03 20:07:57" datetime="2018-06-03T12:07:57.000Z"  itemprop="datePublished">2018-06-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="什么时候要用前缀索引"><a href="#什么时候要用前缀索引" class="headerlink" title="什么时候要用前缀索引?"></a>什么时候要用前缀索引?</h2><ol>
+<li><p>有时候需要为某个很长的字符列创建索引, 这会让索引变得大且慢, 一个策略是前面提到过的模拟哈希索引, 但有时候这样却不那么合适 </p>
+</li>
+<li><p>其实对于很长的字符列, 如果要创建索引, 我们可以尝试为该列开始的部分字符创建索引, 这样就可以大大节约索引空间, 从而提高索引效率, 但可能会降低索引的选择性;</p>
+<blockquote>
+<p>什么是索引的选择性?<br> 索引的选择性是指 不重复的索引值的数量 和 数据表的记录总数(n) 的比值 (范围从 1/n 到 1之间)<br> 索引的选择性越高, 则查询效率越高; 因为选择性高的索引可以让MySQL在查找时过滤更多的行, 唯一索引的选择性是1, 这是最好的索引选择性, 性能也是最好的;</p>
+</blockquote>
+</li>
+<li><p>一般情况下, 某个列的前缀索引的选择性都是比较高的, 足以满足查询性能, 对于 BLOB, TEXT 或 很长的 VARCHAR 类型的列, 必须使用前缀索引, 因为MySQL不允许索引这些列的完整长度;</p>
+</li>
+<li><p>要注意的是: 我们要选择足够长的前缀字符, 以保证较高的选择性, 但同时又不能太长(以便于节约空间)</p>
+</li>
+</ol>
+<h2 id="如何选择合适的前缀长度"><a href="#如何选择合适的前缀长度" class="headerlink" title="如何选择合适的前缀长度?"></a>如何选择合适的前缀长度?</h2><ol>
+<li><p>那么 当你为一个 较长的字符列 创建索引时, 如何决定前缀的合适长度呢? (我们的目的是选择足够长的前缀, 从而提高前缀索引的选择性, 提高查询性能) </p>
+</li>
+<li><p>准备一张简单的城市表, 里面存放了美国的一些地方名</p>
+</li>
+</ol>
+<h3 id="前缀长度-—-统计观察"><a href="#前缀长度-—-统计观察" class="headerlink" title="前缀长度 — 统计观察"></a>前缀长度 — 统计观察</h3><ol>
+<li><p>尝试 根据各城市名分组 根据各组统计的次数 倒序排名: 可以看到, 完整列的选择性也并非是1, 我们可以选择合适的前缀, 让选择性逐渐接近完整列的</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select count(*) as cnt, city_name from test_city group by city_name order by cnt desc limit 10;</span><br><span class="line">+-----+-----------+</span><br><span class="line">| cnt | city_name |</span><br><span class="line">+-----+-----------+</span><br><span class="line">|   4 | SantaRosa |</span><br><span class="line">|   3 | Auburn    |</span><br><span class="line">|   3 | Norfolk   |</span><br><span class="line">|   3 | Roanoke   |</span><br><span class="line">|   3 | Richfield |</span><br><span class="line">|   3 | Olympia   |</span><br><span class="line">|   3 | Danville  |</span><br><span class="line">|   3 | Arlington |</span><br><span class="line">|   3 | Provo     |</span><br><span class="line">|   3 | Plano     |</span><br><span class="line">+-----+-----------+</span><br><span class="line">10 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>尝试取长度为3的前缀, 继续上述统计:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select count(*) as cnt, left(city_name, 3) as pref from test_city group by pref order by cnt desc limit 10;</span><br><span class="line">+-----+------+</span><br><span class="line">| cnt | pref |</span><br><span class="line">+-----+------+</span><br><span class="line">|  19 | New  |</span><br><span class="line">|  17 | Nor  |</span><br><span class="line">|  16 | For  |</span><br><span class="line">|  16 | San  |</span><br><span class="line">|  13 | Cha  |</span><br><span class="line">|  11 | Sal  |</span><br><span class="line">|  10 | Roc  |</span><br><span class="line">|   9 | Gra  |</span><br><span class="line">|   9 | Ken  |</span><br><span class="line">|   9 | Bel  |</span><br><span class="line">+-----+------+</span><br><span class="line">10 rows in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>尝试增加前缀长度, 让前缀选择性接近完整列的选择性</p>
+</li>
+</ol>
+<h3 id="前缀长度-—-选择性计算"><a href="#前缀长度-—-选择性计算" class="headerlink" title="前缀长度 — 选择性计算"></a>前缀长度 — 选择性计算</h3><ol>
+<li>计算合适前缀长度的另外一个方法就是计算完整列的选择性, 并使前缀的选择性接近于完整列的选择性</li>
+<li><p>下面显示了如何计算完整列的选择性:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT COUNT(DISTINCT city_name ) / COUNT( * ) FROM test_city;</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">| COUNT(DISTINCT city_name ) / COUNT( * ) |</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">| 0.4821                                  |</span><br><span class="line">+-----------------------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>上面看来, 对 city_name 这列来说, 完整列的选择性是 0.4821, 不算高, 但如果要对该列建索引, 那么选择的前缀要保证选择性能接近 0.4821 即可</p>
+</li>
+<li><p>下面给出了如何在同一个查询中计算不同前缀长度的选择性:</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT</span><br><span class="line">	COUNT( DISTINCT city_name ) / COUNT( * )  as t0,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 4) ) / COUNT( * )  as t1,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 5) ) / COUNT( * )  as t2,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 6) ) / COUNT( * )  as t3,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 7) ) / COUNT( * )  as t4,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 8) ) / COUNT( * )  as t5,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 9) ) / COUNT( * )  as t6,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 10) ) / COUNT( * )  as t7,</span><br><span class="line">	COUNT( DISTINCT left(city_name, 11) ) / COUNT( * )  as t8</span><br><span class="line">FROM</span><br><span class="line">	test_city;</span><br><span class="line"></span><br><span class="line">+--------+--------+--------+--------+--------+--------+--------+--------+--------+</span><br><span class="line">| t0     | t1     | t2     | t3     | t4     | t5     | t6     | t7     | t8     |</span><br><span class="line">+--------+--------+--------+--------+--------+--------+--------+--------+--------+</span><br><span class="line">| 0.4821 | 0.4055 | 0.4351 | 0.4597 | 0.4729 | 0.4760 | 0.4791 | 0.4811 | 0.4811 |</span><br><span class="line">+--------+--------+--------+--------+--------+--------+--------+--------+--------+</span><br><span class="line">1 row in set (0.01 sec)</span><br></pre></td></tr></table></figure>
+<p> 可以看到, 前缀长度到达 10 的时候, 选择性的提升已经很小了, 因此 10 可以算是一个差不多合理的长度了</p>
+</li>
+<li><p><strong>注意</strong>: 前缀索引是一种能似索引更小, 更快的有效办法, 但也有其缺点: </p>
+<ul>
+<li>MySQL无法使用前缀索引做 ORDER BY 和 GROUP BY </li>
+<li>也无法使用前缀索引做覆盖索引</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&title=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&title=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/03/MySQL 暂停/2018-06-03-mysql-42/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">42. 高性能索引 -- 独立的列</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/05/MySQL 暂停/2018-06-05-mysql-44/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">44. 高性能索引 -- 多列索引</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&title=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&title=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 高性能索引 -- 前缀索引 & 索引选择性》 — Lant's&url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/03/MySQL 暂停/2018-06-03-mysql-43/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsUlEQVR42u3aQW7CQAwFUO5/abqthBK+7TGl0ssKpcDMm0qxsf14xNfz1/V65/X+/adeXyfrJu9vXnh4eHiDrd9vOlnm9a9Xd6qHcr+fy73h4eHhrfHuN5q/vt96LwDk34mHh4f3nbyrJaPFBukyHh4e3n/n5duthoq8zIGHh4f3t7ykGDFPc5OCQrU8cazWgoeHhxfz8i7S97xe6e/h4eHhjbvq1Ud2/g2TNLqwFh4eHt7aWnsNqnvYZGAr2SceHh7eHq/3gz8PANUyR14ULiTfeHh4eEd58y3mD+jq8c0HDvDw8PDO8vI2f2/5PDDk35yHBzw8PLwNXnUsYNLs3wswhd4dHh4e3piXh4T8OHrBo7efQusLDw8P7xCv2qzaKD309pAcMR4eHt4GbzIQ0KwZ9xr/rUlUPDw8vD1edawqT7InowM5+/IfgIeHh7fG66XLeTm4eqc6dHV5ZHh4eHgLvHmyW21l5eXaeScLDw8Pb4+XLHxq3CovK5Sr0VchAQ8PD+8ob96CmpcwzibrzVoLHh4e3oBX/cFfTaZ7owZJ8n044uHh4eHd1jbn7ahJOJm33968Bw8PD2+BN184T3PzRLwXfvDw8PC2eXmZIAkD1e9JBgjyIYNm1w4PDw+v9dle06u6WNLi6oWW8i8GPDw8vAXeqO3UOqbqAEGhkYaHh4f3Ed68wtEbMkiONUm+8fDw8D7J6zXyJ4WJ5BCrDTk8PDy8Pd6zeE0mmqrF3N5xXDbA8PDw8A7xjsWWQckgZ/SOEg8PD2+D1yuk5qXbySFWk/hyYo2Hh4c34FUbY5OFe4/7Zs0WDw8P7wt4yaZ7raxeOePNAeHh4eF9GS95NCfIfKSgPJiFh4eHt8ZLPlxtklVbaL2hhGO1Fjw8PLxDXfX8AT1pcR0eUcXDw8Pb4v0A01AiFkvEeS0AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>51. 索引案例 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="《高性能MySQL》">
+    <meta name="description" content="选择性低 vs 高使用频率 假设要设计一个在线约会的网站, 用户信息表有很多列, 包括 国家, 地区, 城市, 性别, 年龄 等, 网站必须支持以上列的各种组合来搜索用户, 此时如何设计索引? 根据之前对 选择性 这一概念的了解, 你可能会想到我们应该在选择性高的列上创建索引  但在这里有两个特殊的列: 选择性很低的 sex 列, 和 选择性不怎么高的 country 列; 这两个列的选择性虽然很">
+<meta name="keywords" content="《高性能MySQL》">
+<meta property="og:type" content="article">
+<meta property="og:title" content="51. 索引案例">
+<meta property="og:url" content="http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="选择性低 vs 高使用频率 假设要设计一个在线约会的网站, 用户信息表有很多列, 包括 国家, 地区, 城市, 性别, 年龄 等, 网站必须支持以上列的各种组合来搜索用户, 此时如何设计索引? 根据之前对 选择性 这一概念的了解, 你可能会想到我们应该在选择性高的列上创建索引  但在这里有两个特殊的列: 选择性很低的 sex 列, 和 选择性不怎么高的 country 列; 这两个列的选择性虽然很">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-05T11:26:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="51. 索引案例">
+<meta name="twitter:description" content="选择性低 vs 高使用频率 假设要设计一个在线约会的网站, 用户信息表有很多列, 包括 国家, 地区, 城市, 性别, 年龄 等, 网站必须支持以上列的各种组合来搜索用户, 此时如何设计索引? 根据之前对 选择性 这一概念的了解, 你可能会想到我们应该在选择性高的列上创建索引  但在这里有两个特殊的列: 选择性很低的 sex 列, 和 选择性不怎么高的 country 列; 这两个列的选择性虽然很">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">51. 索引案例</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-10T11:20:53.000Z" itemprop="datePublished" class="page-time">
+  2018-06-10
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#选择性低-vs-高使用频率"><span class="post-toc-number">1.</span> <span class="post-toc-text">选择性低 vs 高使用频率</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#范围查询"><span class="post-toc-number">2.</span> <span class="post-toc-text">范围查询??</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#优化排序"><span class="post-toc-number">3.</span> <span class="post-toc-text">优化排序</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-MySQL 暂停/2018-06-11-mysql-51"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">51. 索引案例</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-10 19:20:53" datetime="2018-06-10T11:20:53.000Z"  itemprop="datePublished">2018-06-10</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="选择性低-vs-高使用频率"><a href="#选择性低-vs-高使用频率" class="headerlink" title="选择性低 vs 高使用频率"></a>选择性低 vs 高使用频率</h2><ol>
+<li><p>假设要设计一个在线约会的网站, 用户信息表有很多列, 包括 国家, 地区, 城市, 性别, 年龄 等, 网站必须支持以上列的各种组合来搜索用户, 此时如何设计索引?<br> 根据之前对 <code>选择性</code> 这一概念的了解, 你可能会想到我们应该在选择性高的列上创建索引</p>
+</li>
+<li><p>但在这里有两个特殊的列: 选择性很低的 sex 列, 和 选择性不怎么高的 country 列; 这两个列的选择性虽然很低, 但<strong>使用频率却很高</strong>, 因此往往建议在创建不同组合索引的时候, 将 (sex, country) 列作为前缀</p>
+</li>
+<li><p>这里之所以将两个选择性很低的字段作为索引的前缀列, 理由是:</p>
+<ul>
+<li>在查询时 sex 列的使用频率非常高, 可能几乎每个查询都会用到sex列, 甚至会把整个网站设计成每次都只能按某一种性别搜索用户</li>
+<li>而对于某个不限制性别的查询, 可以通过在查询条件中新增 <code>SEX IN (&#39;m&#39;, &#39;f&#39;) AND</code> 来让 MySQL 匹配索引的最左前缀<br>不过需要注意的是, 如果列有太多不同的值, 就会让 IN() 列表太长, 就不适合这样做了</li>
+</ul>
+</li>
+<li></li>
+</ol>
+<h2 id="范围查询"><a href="#范围查询" class="headerlink" title="范围查询??"></a>范围查询??</h2><ol>
+<li><p>对于上述表的 age 字段, 在创建组合索引时, 通常放在索引的最后, 因为查询只能使用索引的最左前缀, 直到遇到第一个范围条件列(<code>&gt;,&lt;,BETWEEN,LIKE</code>), 而age通常是范围查找<br> 当然你他也可以使用 IN() 来代替范围查询, 但毕竟不是所有范围查询都可以转换</p>
+</li>
+<li><p>要避免多个范围查询</p>
+</li>
+</ol>
+<p><a href="http://myrock.github.io/2014/09/24/in-and-range/" target="_blank" rel="noopener">http://myrock.github.io/2014/09/24/in-and-range/</a></p>
+<h2 id="优化排序"><a href="#优化排序" class="headerlink" title="优化排序"></a>优化排序</h2><ol>
+<li></li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&title=《51. 索引案例》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&title=《51. 索引案例》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《51. 索引案例》 — Lant's&url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/06/10/elasticsearch/2018-06-10-06/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">06. mget, bulk 批量操作</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/11/MySQL 暂停/2018-06-11-mysql-50/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">No title</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&title=《51. 索引案例》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&title=《51. 索引案例》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《51. 索引案例》 — Lant's&url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACv0lEQVR42u3b3WrqYBAFUN//pVs4Vwc0uufnixRWrkTSJstCZtwzfTzi4+ff8f/r5+P5zKufvTrz6rrPV1k+8PDw8Fq3Xr3pBHB1TvWjzD/iF1fBw8PDO8bLi8H7dya32KN+sODh4eF9lZfDkia42i7j4eHh/UVeDu414r0igYeHh/ctXhJGJF/+r97J491e+VnIWvDw8PBi3m60es/r4/M9PDw8vNZUvRcWzM98X0gKd4uHh4d3gPe+na3GB8nt9vDV8dsj6fHx8PDwxrwkgOgVg946V/WuLn8nHh4e3jFer9mtrl4lvK1FLjw8PLwTvOrFestYk4Y4LyofshY8PDy8JV5v6DWJJ6oBcb6gsDbTw8PDwxszektU1Yf1/K9RCCPw8PDwVnn58D5/Jy8n1ZY6KmB4eHh4q7xecDCBVZcGqkO1F1kLHh4e3iovb2ebs7VBeFFeEZh063h4eHhFXm9InxSJfJDWG2Lh4eHhfYs3/0Xz0lJdwyoUJDw8PLxjvHlEm68F5OsF1dJ1Gebi4eHhLfHytdG8JEzig931WTw8PLxzvN1B19baVvXfAz7sRODh4eHdyKuOo6qN8rnWHA8PD+8Eb/JVv7oikMS+ecNdbtnx8PDwlni9y2w1wVtDuPJkDw8PD+8AL2lwe4Wh2oL3lgnw8PDw7uRNVqMmDXQ16o0+XDw8PLwDvNFjtzj+3y0Dj/zAw8PDW+UlwWj+iJ8sBOx+rC/WVfHw8PCO8ZLoIX/0v2+Ie4v+ydWjHAUPDw+vxeu13eWthGK4MNqAmH+rwMPDw4tzzqQY9Ib61ZWCSWHAw8PDu5OXFIO8qZ20v9XQ9kObjoeHh/dVXt4i90ZZW4tchaqFh4eHdzuvNwZLRlxV6pHCgIeHh9cag51eDqg++ssLB3h4eHgHeNUBWHWSlocXk0hidODh4eGlxy9t3wHGGt8NTQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

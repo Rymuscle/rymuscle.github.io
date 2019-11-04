@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTP 缓存代理 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="把之前介绍的 HTTP 缓存控制 和 HTTP 的代理服务 结合起来就是这节所要说的 缓存代理, 也就是支持缓存控制的代理服务 之前谈到缓存时, 主要讲了客户端(浏览器)上的缓存控制, 它能够减少响应时间、节约带宽, 提升客户端的用户体验。但 HTTP 传输链路上, 不只是客户端有缓存, 服务器上的缓存也是非常有价值的, 可以让请求不必走完整个后续处理流程, 而是”就近”获得响应结果 HTTP 的">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP 缓存代理">
+<meta property="og:url" content="http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="把之前介绍的 HTTP 缓存控制 和 HTTP 的代理服务 结合起来就是这节所要说的 缓存代理, 也就是支持缓存控制的代理服务 之前谈到缓存时, 主要讲了客户端(浏览器)上的缓存控制, 它能够减少响应时间、节约带宽, 提升客户端的用户体验。但 HTTP 传输链路上, 不只是客户端有缓存, 服务器上的缓存也是非常有价值的, 可以让请求不必走完整个后续处理流程, 而是”就近”获得响应结果 HTTP 的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-proxy-cache.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-proxy-cache-001.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-proxy-cache-002.png">
+<meta property="og:updated_time" content="2019-10-23T11:33:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP 缓存代理">
+<meta name="twitter:description" content="把之前介绍的 HTTP 缓存控制 和 HTTP 的代理服务 结合起来就是这节所要说的 缓存代理, 也就是支持缓存控制的代理服务 之前谈到缓存时, 主要讲了客户端(浏览器)上的缓存控制, 它能够减少响应时间、节约带宽, 提升客户端的用户体验。但 HTTP 传输链路上, 不只是客户端有缓存, 服务器上的缓存也是非常有价值的, 可以让请求不必走完整个后续处理流程, 而是”就近”获得响应结果 HTTP 的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/http-proxy-cache.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTP 缓存代理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-10-23T11:50:17.000Z" itemprop="datePublished" class="page-time">
+  2019-10-23
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#代理服务器-Cache-Control"><span class="post-toc-number">1.</span> <span class="post-toc-text">代理服务器 Cache-Control</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2019-10-23-HTTP-Proxy-cache"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTP 缓存代理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-10-23 19:50:17" datetime="2019-10-23T11:50:17.000Z"  itemprop="datePublished">2019-10-23</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>把之前介绍的 HTTP 缓存控制 和 HTTP 的代理服务 结合起来就是这节所要说的 <strong>缓存代理</strong>, 也就是支持缓存控制的代理服务</p>
+<p>之前谈到缓存时, 主要讲了客户端(浏览器)上的缓存控制, 它能够减少响应时间、节约带宽, 提升客户端的用户体验。但 HTTP 传输链路上, 不只是客户端有缓存, 服务器上的缓存也是非常有价值的, 可以让请求不必走完整个后续处理流程, 而是”就近”获得响应结果</p>
+<p>HTTP 的服务器缓存功能主要由代理服务器来实现(即缓存代理), 而源服务器系统内部虽然也经常有各种缓存(如 Memcache、Redis、Varnish 等), 但与 HTTP 没有太多关系, 所以这里暂且不说</p>
+<p><img src="/img/http/http-proxy-cache.png" width="500/"></p>
+<p>1。 代理服务收到源服务器发来的响应数据后需要做两件事</p>
+<pre><code>- 第一个当然是把报文转发给客户端, 而第二个就是把报文存入自己的 Cache 里
+- 下一次再有相同的请求, 代理服务器就可以直接发送 304 或者缓存数据, 不必再从源服务器那里获取。这样就降低了客户端的等待时间, 同时节约了源服务器的网络带宽
+</code></pre><ol>
+<li>作为中转站的 代理服务器, 它除了具备 客户端和服务器的双重角色, 可以使用之前的 <code>Cache-Control</code> 属性外, 还有一些特有的 <code>Cache-Control</code> 属性<br> 因为它和客户端还是有一些不一样, 客户端的缓存只是用户自己使用, 而代理的缓存可能会为非常多的客户端提供服务。所以, 需要对它的缓存再多一些限制条件</li>
+</ol>
+<h1 id="代理服务器-Cache-Control"><a href="#代理服务器-Cache-Control" class="headerlink" title="代理服务器 Cache-Control"></a>代理服务器 Cache-Control</h1><ol>
+<li>代理服务器首先要区分源服务器给他的缓存, 是让客户端缓存还是让代理缓存, 可以使用两个新属性 <code>private</code> 和 <code>public</code><ul>
+<li>private 表示缓存只能在客户端保存, 是用户 私有的, 不能放在代理上与别人共享</li>
+<li>而 public 的意思就是缓存完全开放, 是存在代理服务器上, 谁都可以存, 谁都可以用</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p>其次, 缓存失效后的重新验证也要区分开 (即 条件请求 <code>Last-modified</code> 和 <code>ETag</code>)</p>
+<ul>
+<li><code>must-revalidate</code> 是只要过期就必须回源服务器验证</li>
+<li>而新的 <code>proxy-revalidate</code> 只要求代理的缓存过期后必须验证, 客户端不必回源, 只验证到代理这个环节就行了</li>
+</ul>
+</li>
+<li><p>再其次, 缓存的生存时间可以使用新的 <code>s-maxage</code> (s 是 share 的意思, 注意 maxage 中间没有 “-“), 只限定在代理上能够存多久, 而客户端仍然使用 “max-age”</p>
+</li>
+<li><p>还有一个代理专用的属性 <code>no-transform</code><br> 代理有时候会对缓存下来的数据做一些优化, 比如把图片生成 png、webp 等几种格式, 方便今后的请求处理, 而 <code>no-transform</code> 就会禁止这样做, 不许“偷偷摸摸搞小动作”</p>
+</li>
+<li><p>注意: 源服务器在设置完“Cache-Control”后必须要为报文加上“Last- modified”或“ETag”字段。否则, 客户端和代理后面就无法使用条件请求来验证缓存是否有效, 也就不会有 304 缓存重定向</p>
+</li>
+<li><p>下面的流程图是完整的服务器端缓存控制策略, 可以同时控制客户端和代理<br><img src="/img/http/http-proxy-cache-001.png"><br><img src="/img/http/http-proxy-cache-002.png"></p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&title=《HTTP 缓存代理》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&title=《HTTP 缓存代理》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP 缓存代理》 — Lant's&url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/10/23/http/2019-10-23-HTTP-Proxy/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTP 代理服务</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/10/23/http/2019-10-23-HTTS/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">HTTPS是什么?SSL/TLS又是什么?</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&title=《HTTP 缓存代理》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&title=《HTTP 缓存代理》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTP 缓存代理》 — Lant's&url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/23/http/2019-10-23-HTTP-Proxy-cache/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuElEQVR42u3awW4qMQwFUP7/p3nS21VVR/faCWJxZlUNZcgJUmxsv17x9f5//XXn99+////3e/961/P1unHh4eHhjZb+/Li/eM+w503J77fbgYeHh/cZ3vNH5h+fh5A8kLTrwcPDw/se3qkkOMfkgQoPDw/vO3nJUf78rvbQb5+Gh4eH90lechAnrz5vQV68yF89VmvBw8PDu9BF+p6/L/b38PDw8BZd9c3h2x7i7cBBtEI8PDy8C7y2BTUrsG4KCrMBhdesw4aHh4cX8M7+1J8Fg+ci7Cyo/Ih7eHh4eEd5s7GnzaZsEuv2aXh4eHi3eZsUtm13JduUPDn6YvDw8PA+wmsXl5cq8mGvWZkjCgx4eHh4h3j5IvJSRXKnXUkehPDw8PBu8JKf9/lyZ4lyu015KRkPDw/vM7yzpYrZdsxCznAmAg8PD6/kbRpds5R3XwLejIvh4eHh7XmbI3iTTBdF2PIL+HEfDw8P7wIvb8O37ai2GZan4+1YAx4eHt5Z3v7IbouzbbmhHfnCw8PDu83bp79ta6r9rDa9Xn2HeHh4eKPMtg0JeTo+S6P3Aw14eHh4Z3lJQjz7gFn62w5dRVUWPDw8vKO8vDG/SZfbDZo1w4peGR4eHt4h3qygsF/QptE1LEDg4eHhrXmbZtgm7T6w6PxdeHh4eB/h7Qek8obWpp0WBSQ8PDy8o7y8dJsf7rNX84Jykcrj4eHhXeO1x30eVN7BVRdn8yCEh4eHd5T3Lq/ZdrTgU0/Dw8PDu8HLr9kg1KzQcDZo4eHh4d3gzYJBcky35dcrgQEPDw/vGq89lNvhgDzlnaXF0dAAHh4e3tfw2oLFjXJGVKXGw8PD+zgvKShs7reDBYcDAx4eHl7Ja0sMbSkhSYLzUkVRn8bDw8O7wNs0wJIFbUYQknLwpoSBh4eHV/L+AWwvkpfPtRtSAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

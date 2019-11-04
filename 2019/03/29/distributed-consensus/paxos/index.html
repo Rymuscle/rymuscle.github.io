@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Paxos | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="分布式一致性协议">
+    <meta name="description" content="参考https://github.com/Tencent/phxpaxos/blob/master/README.zh_CN.mdhttps://mp.weixin.qq.com/s?__biz=MzI4NDMyNTU2Mw==&amp;amp;mid=2247483695&amp;amp;idx=1&amp;amp;sn=91ea422913fc62579e020e941d1d059e#rdhttps://github">
+<meta name="keywords" content="分布式一致性协议">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paxos">
+<meta property="og:url" content="http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="参考https://github.com/Tencent/phxpaxos/blob/master/README.zh_CN.mdhttps://mp.weixin.qq.com/s?__biz=MzI4NDMyNTU2Mw==&amp;amp;mid=2247483695&amp;amp;idx=1&amp;amp;sn=91ea422913fc62579e020e941d1d059e#rdhttps://github">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-07-30T10:42:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Paxos">
+<meta name="twitter:description" content="参考https://github.com/Tencent/phxpaxos/blob/master/README.zh_CN.mdhttps://mp.weixin.qq.com/s?__biz=MzI4NDMyNTU2Mw==&amp;amp;mid=2247483695&amp;amp;idx=1&amp;amp;sn=91ea422913fc62579e020e941d1d059e#rdhttps://github">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Paxos</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-03-29T06:16:31.000Z" itemprop="datePublished" class="page-time">
+  2019-03-29
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/分布式一致性协议/">分布式一致性协议</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考"><span class="post-toc-number">1.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-distributed-consensus/paxos"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Paxos</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-03-29 14:16:31" datetime="2019-03-29T06:16:31.000Z"  itemprop="datePublished">2019-03-29</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/分布式一致性协议/">分布式一致性协议</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://github.com/Tencent/phxpaxos/blob/master/README.zh_CN.md" target="_blank" rel="noopener">https://github.com/Tencent/phxpaxos/blob/master/README.zh_CN.md</a><br><a href="https://mp.weixin.qq.com/s?__biz=MzI4NDMyNTU2Mw==&amp;mid=2247483695&amp;idx=1&amp;sn=91ea422913fc62579e020e941d1d059e#rd" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MzI4NDMyNTU2Mw==&amp;mid=2247483695&amp;idx=1&amp;sn=91ea422913fc62579e020e941d1d059e#rd</a><br><a href="https://github.com/Tencent/phxpaxos/wiki" target="_blank" rel="noopener">https://github.com/Tencent/phxpaxos/wiki</a></p>
+<p>活锁</p>
+<p><a href="https://github.com/benbjohnson/thesecretlivesofdata" target="_blank" rel="noopener">https://github.com/benbjohnson/thesecretlivesofdata</a></p>
+<p><a href="https://www.jdon.com/artichect/paxos.html" target="_blank" rel="noopener">https://www.jdon.com/artichect/paxos.html</a></p>
+<p>两军问题: <a href="https://www.cnblogs.com/charlesblc/p/6037963.html" target="_blank" rel="noopener">https://www.cnblogs.com/charlesblc/p/6037963.html</a></p>
+<p>mvcc: <a href="https://www.cnblogs.com/charlesblc/p/6037963.html" target="_blank" rel="noopener">https://www.cnblogs.com/charlesblc/p/6037963.html</a></p>
+<p>秘书竞标的例子 <a href="https://www.cnblogs.com/williamjie/p/10214133.html" target="_blank" rel="noopener">https://www.cnblogs.com/williamjie/p/10214133.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/分布式一致性协议/">分布式一致性协议</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&title=《Paxos》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&title=《Paxos》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Paxos》 — Lant's&url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/03/21/JavaSE/2019-03-21-35/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">29. 无边界通配符 `?`</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/07/JavaSE/2019-04-07-40/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">40. IO 基础概念</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&title=《Paxos》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&title=《Paxos》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Paxos》 — Lant's&url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/03/29/distributed-consensus/paxos/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACvElEQVR42u3awW7cMAwE0Pz/T6dAb0Ua7wwppYvi+bRYOGs9HSxmyI+P+Pr8fT1//nr/1yu/8+v93/3CgQsPDw9vtPTnBzwvsX387M7v1vNiE/Hw8PCu8ZKfTu58/ibZuGdGvmY8PDy8d+A9P3IGe94+PDw8vP+D9/xCTxY6Cxfw8PDw3o2XhBFtdJsU6PmmXM9a8PDw8GLeqQbYT37+B/09PDw8vOD1mr+U26C2DS9mFx4eHt4N3j4qTV7WbetrFlsU/zHg4eHhLXibF+5mSKsNO/JW2R+f8fDw8C7wogZSUOzmy9rg2ygZDw8P72d4SQF9Lzlutyz/Bg8PD+8UbzYuMAsUNsNbq1MODw8P7ygvuXVfKOcHSVvQF0/Bw8PDO8qb/fM/a5vl23EqyMDDw8M7y0uK1/xlvfmrfCuLcQQ8PDy8a7zNyzcfLMhDhCSGiEJkPDw8vB/htUvPH5wU5fmmFDNleHh4eEd5bRQ7iyTaqGJ2kLzIWvDw8PAO8Wbtq01BPGuS5bzo3MPDw8Nb82blb146t0fFZujq25QaDw8P7xDvbP6ZXPsDYDbogIeHh3eKt49uE94sAm7xxWQEHh4e3pp3qpw9NWSwabxFKQUeHh7egpfHBO1GtE21NiwuohA8PDy8a7xNGd0uMR81mLXW/jIZgYeHh3eIN4tl27I7/362WXXWgoeHh3eNNxsXmFHbsj7aVjw8PLwLvLxg3TTyZ5vVruTFkYOHh4d3iPdZXptRqlkx3W5QPRmBh4eHN+9G1UMGbTsqOULyrdkfJ3h4eHgb3mY0avNq3gQQxSgYHh4e3jXeMMMIFrFZ4myb8PDw8N6H145GzcYIZo23F60vPDw8vLfhPS8uj2jbYLdov+Hh4eFd4+0HsGb4fRPuxfGAh4eHd4E3a4DlUUVbgifHwKqbh4eHhzfn/QI9XQMnnZ7PuAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

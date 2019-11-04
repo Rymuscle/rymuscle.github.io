@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>tcp/ip -- questions | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="network">
+    <meta name="description" content="现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开? 在 HTTP/1.0 中, 一个服务器在发送完一个 HTTP 响应后, 会断开 TCP 链接, 但是这样会导致每次请求都会重新建立和断开 TCP 连接, 代价过大; 所以虽然标准中没有设定, 但某些服务器对 Connection: keep-alive 的 Header 进行了支持, 意思是">
+<meta name="keywords" content="network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tcp&#x2F;ip -- questions">
+<meta property="og:url" content="http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开? 在 HTTP/1.0 中, 一个服务器在发送完一个 HTTP 响应后, 会断开 TCP 链接, 但是这样会导致每次请求都会重新建立和断开 TCP 连接, 代价过大; 所以虽然标准中没有设定, 但某些服务器对 Connection: keep-alive 的 Header 进行了支持, 意思是">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/question-011.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/question-012.png">
+<meta property="og:updated_time" content="2019-11-04T02:47:32.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tcp&#x2F;ip -- questions">
+<meta name="twitter:description" content="现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开? 在 HTTP/1.0 中, 一个服务器在发送完一个 HTTP 响应后, 会断开 TCP 链接, 但是这样会导致每次请求都会重新建立和断开 TCP 连接, 代价过大; 所以虽然标准中没有设定, 但某些服务器对 Connection: keep-alive 的 Header 进行了支持, 意思是">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/network/question-011.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">tcp/ip -- questions</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-08-26T11:17:36.000Z" itemprop="datePublished" class="page-time">
+  2019-08-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#现代浏览器在与服务器建立了一个-TCP-连接后是否会在一个-HTTP-请求完成后断开-什么情况下会断开"><span class="post-toc-number">1.</span> <span class="post-toc-text">现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#一次http请求-谁会先断开TCP连接-什么情况下客户端先断-什么情况下服务端先断"><span class="post-toc-number">2.</span> <span class="post-toc-text">一次http请求, 谁会先断开TCP连接? 什么情况下客户端先断, 什么情况下服务端先断?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#一个tcp连接可以发送多少个http请求"><span class="post-toc-number">3.</span> <span class="post-toc-text">一个tcp连接可以发送多少个http请求?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#一个-TCP-连接中-HTTP-请求发送可以一起发送么（比如一起发三个请求-再三个响应一起接收）"><span class="post-toc-number">4.</span> <span class="post-toc-text">一个 TCP 连接中 HTTP 请求发送可以一起发送么（比如一起发三个请求, 再三个响应一起接收）?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#为什么有的时候刷新页面不需要重新建立-SSL-连接"><span class="post-toc-number">5.</span> <span class="post-toc-text">为什么有的时候刷新页面不需要重新建立 SSL 连接?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#浏览器对同一-Host-建立-TCP-连接到数量有没有限制"><span class="post-toc-number">6.</span> <span class="post-toc-text">浏览器对同一 Host 建立 TCP 连接到数量有没有限制?</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-network/tcpip-questions-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">tcp/ip -- questions</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-08-26 19:17:36" datetime="2019-08-26T11:17:36.000Z"  itemprop="datePublished">2019-08-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="现代浏览器在与服务器建立了一个-TCP-连接后是否会在一个-HTTP-请求完成后断开-什么情况下会断开"><a href="#现代浏览器在与服务器建立了一个-TCP-连接后是否会在一个-HTTP-请求完成后断开-什么情况下会断开" class="headerlink" title="现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开?"></a>现代浏览器在与服务器建立了一个 TCP 连接后是否会在一个 HTTP 请求完成后断开? 什么情况下会断开?</h1><ol>
+<li><p>在 HTTP/1.0 中, 一个服务器在发送完一个 HTTP 响应后, 会断开 TCP 链接, 但是这样会导致每次请求都会重新建立和断开 TCP 连接, 代价过大;<br> 所以虽然标准中没有设定, 但某些服务器对 <code>Connection: keep-alive</code> 的 Header 进行了支持, 意思是说, 完成这个 HTTP 请求之后, 不要断开 HTTP 请求使用的 TCP 连接, 这样的好处是连接可以被重新使用, 之后发送 HTTP 请求的时候不需要重新建立 TCP 连接, 并且如果维持连接, 那么 SSL 的开销也可以避免</p>
+</li>
+<li><p>持久连接: 既然维持 TCP 连接好处这么多, HTTP/1.1 就把 Connection 头写进标准, 并且默认开启持久连接, 除非请求中写明 <code>Connection: close</code>, 那么浏览器和服务器之间是会维持一段时间的 TCP 连接, 不会一个请求结束就断掉<br> 所以第一个问题的答案是: 默认情况下建立 TCP 连接不会断开, 只有在请求报头中声明 <code>Connection: close</code> 才会在请求完成后关闭连接</p>
+</li>
+<li><p>下面两张图片是我短时间内两次访问 <a href="https://www.github.com" target="_blank" rel="noopener">https://www.github.com</a> 的时间统计<br><img src="/img/network/question-011.png" width="450/"></p>
+</li>
+</ol>
+<p>初始化连接和 SSL 开销消失了, 说明使用的是同一个 TCP 连接:<br><img src="/img/network/question-012.png" width="450/"></p>
+<h1 id="一次http请求-谁会先断开TCP连接-什么情况下客户端先断-什么情况下服务端先断"><a href="#一次http请求-谁会先断开TCP连接-什么情况下客户端先断-什么情况下服务端先断" class="headerlink" title="一次http请求, 谁会先断开TCP连接? 什么情况下客户端先断, 什么情况下服务端先断?"></a>一次http请求, 谁会先断开TCP连接? 什么情况下客户端先断, 什么情况下服务端先断?</h1><h1 id="一个tcp连接可以发送多少个http请求"><a href="#一个tcp连接可以发送多少个http请求" class="headerlink" title="一个tcp连接可以发送多少个http请求?"></a>一个tcp连接可以发送多少个http请求?</h1><ol>
+<li>如果tcp连接保持长连接, 只要在tcp连接（默认两小时）不断开, 可以一直串行发送数量无上限</li>
+<li>如果tcp连接不保持长连接(<code>Connection:close</code>), 则只能发一次http请求</li>
+<li>如果http2, 采用多路复用技术Multiplexing, 一个tcp可以并发多个http请求, 同样也是无上限</li>
+<li>如果和服务器建立多个tcp连接(chrome 浏览器一个host默认tcp连接并发数6, 这个限制是有原因的, Ipv4地址稀有资源, 涉及到NAT转换, 内网外网的端口映射详见<a href="https://blog.csdn.net/qfzhangwei/article/details/90614129" target="_blank" rel="noopener">https://blog.csdn.net/qfzhangwei/article/details/90614129</a>), 底层还是长连接, 则发送数量无上限；</li>
+</ol>
+<h1 id="一个-TCP-连接中-HTTP-请求发送可以一起发送么（比如一起发三个请求-再三个响应一起接收）"><a href="#一个-TCP-连接中-HTTP-请求发送可以一起发送么（比如一起发三个请求-再三个响应一起接收）" class="headerlink" title="一个 TCP 连接中 HTTP 请求发送可以一起发送么（比如一起发三个请求, 再三个响应一起接收）?"></a>一个 TCP 连接中 HTTP 请求发送可以一起发送么（比如一起发三个请求, 再三个响应一起接收）?</h1><ol>
+<li><p>HTTP/1.1 存在一个问题, 单个 TCP 连接在同一时刻只能处理一个请求, 意思是说: 两个请求的生命周期不能重叠, 任意两个 HTTP 请求从开始到结束的时间在同一个 TCP 连接里不能重叠</p>
+</li>
+<li><p>虽然 HTTP/1.1 规范中规定了 <code>Pipelining</code> 来试图解决这个问题, 但是这个功能在浏览器中默认是关闭的</p>
+</li>
+<li><p>但是, HTTP2 提供了 Multiplexing 多路传输特性, 可以在一个 TCP 连接中同时完成多个 HTTP 请求, 至于 Multiplexing 具体怎么实现的就是另一个问题了, 下面看一下使用 HTTP2 的效果</p>
+</li>
+</ol>
+<h1 id="为什么有的时候刷新页面不需要重新建立-SSL-连接"><a href="#为什么有的时候刷新页面不需要重新建立-SSL-连接" class="headerlink" title="为什么有的时候刷新页面不需要重新建立 SSL 连接?"></a>为什么有的时候刷新页面不需要重新建立 SSL 连接?</h1><p>在第一个问题的讨论中已经有答案了, TCP 连接有的时候会被浏览器和服务端维持一段时间, TCP 不需要重新建立, SSL 自然也会用之前的</p>
+<h1 id="浏览器对同一-Host-建立-TCP-连接到数量有没有限制"><a href="#浏览器对同一-Host-建立-TCP-连接到数量有没有限制" class="headerlink" title="浏览器对同一 Host 建立 TCP 连接到数量有没有限制?"></a>浏览器对同一 Host 建立 TCP 连接到数量有没有限制?</h1><ol>
+<li><p>假设我们还处在 HTTP/1.1 时代, 那个时候没有多路传输, 当浏览器拿到一个有几十张图片的网页该怎么办呢? 肯定不能只开一个 TCP 连接顺序下载, 那样用户肯定等的很难受, 但是如果每个图片都开一个 TCP 连接发 HTTP 请求, 那电脑或者服务器都可能受不了, 要是有 1000 张图片的话总不能开 1000 个TCP 连接吧, 你的电脑同意 NAT 也不一定会同意;<br> 所以答案是: 有  (Chrome 最多允许对同一个 Host 建立六个 TCP 连接。不同的浏览器有一些区别。)<br> <a href="https://developers.google.com/web/tools/chrome-devtools/network/issues#queued-or-stalled-requestsdevelopers.google.com" target="_blank" rel="noopener">https://developers.google.com/web/tools/chrome-devtools/network/issues#queued-or-stalled-requestsdevelopers.google.com</a></p>
+</li>
+<li><p>那么回到最开始的问题, 收到的 HTML 如果包含几十个图片标签, 这些图片是以什么方式、什么顺序、建立了多少连接、使用什么协议被下载下来的呢？</p>
+<ul>
+<li>如果图片都是 HTTPS 连接并且在同一个域名下, 那么浏览器在 SSL 握手之后会和服务器商量能不能用 HTTP2, 如果能的话就使用 Multiplexing 功能在这个连接上进行多路传输。不过也未必会所有挂在这个域名的资源都会使用一个 TCP 连接去获取, 但是可以确定的是 Multiplexing 很可能会被用到。</li>
+<li>如果发现用不了 HTTP2 呢? 或者用不了 HTTPS（现实中的 HTTP2 都是在 HTTPS 上实现的, 所以也就是只能使用 HTTP/1.1）。那浏览器就会在一个 HOST 上建立多个 TCP 连接, 连接数量的最大限制取决于浏览器设置, 这些连接会在空闲的时候被浏览器用来发送新的请求, 如果所有的连接都正在发送请求呢？那其他的请求就只能等等了。</li>
+</ul>
+</li>
+</ol>
+<p><a href="https://www.cnblogs.com/qcloud1001/p/9591172.html" target="_blank" rel="noopener">https://www.cnblogs.com/qcloud1001/p/9591172.html</a></p>
+<p>原文链接：<a href="https://blog.csdn.net/qq_36865108/article/details/84885506" target="_blank" rel="noopener">https://blog.csdn.net/qq_36865108/article/details/84885506</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/">network</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&title=《tcp/ip -- questions》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&title=《tcp/ip -- questions》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《tcp/ip -- questions》 — Lant's&url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/08/26/network/2019-08-26-TCPIP/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">TCP/IP 协议简介</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/28/network/tcpip-questions-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">TCP 三次握手 -- 为什么TCP需要三次握手, 而不是两次, 四次或五次?</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&title=《tcp/ip -- questions》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&title=《tcp/ip -- questions》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《tcp/ip -- questions》 — Lant's&url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/08/26/network/tcpip-questions-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsElEQVR42u3aUW7rMAwEwNz/0nkHKJy3K4pFCoy/AtS1NfoQaZKvV3y9H66f9zzd/3TPz9+fn/nauPDw8PAuLf1pucnLnrbg89PatyebjoeHh7fHaw/ld3DlB3obPJI14+Hh4X0n726afsbGw8PD+yu86NFBQpyz8fDw8L6NN0mLPy8iT5Hbv16uteDh4eHFvDz9/Z7fK/09PDw8vHFXPW9H5W+ZBKR6tXh4eHgLvLbQkAxdTTaifWO0lXh4eHhrvHbRbRMrCTPJ1uT/i4eHh7fHawcFkscly803dDJMgIeHh3eXl4xStQf6RqOrLUzg4eHh7fHywankgE6iULugZPsO+3h4eHh4R7zDwmh5iOfvbVPw/xQj8PDw8JZ5bQHibOnJEs/ecrl0i4eHhxfz2nJDGxjyVtlksOAxMODh4eGNeXe/4vMhgMnvwyCBh4eHt8xrC6n5spIyxFmxuAgMeHh4eGNe3ohqC7v5drQtsSIFx8PDw1vmtSWGvGCRFyDyIBS9BQ8PD2+BNynCnqW8E3weZvDw8PA2eHk7P0lq83ZUHkja7cPDw8Pb5p21u9qGU9skq0cB8oiHh4eHd4l3VpxtE+skhJwVdqNPAjw8PLxLvPmYVD6G1Y4OnBV26y8GPDw8vKMybt7yz4/+PClvk/X6OXh4eHi/yMuLCO3rz7avvQcPDw9vm7ddus2DUPLkouyLh4eHt8bLi6fzsYAcc3bh4eHh7fHe5TVJnc+y3EnJAw8PD2+D1x61ecEiT6bbQJKPYeHh4eHt8drP+720eBIYogYYHh4e3lVeW4rND+vJCNeoyoKHh4f3Nbw87W4DTDJS0Lbf8PDw8L6Bd2u8tR1QOCs34+Hh4e3x2kJAW6JtQ0s+kIqHh4f3+7z2I79tZbXBIBlNmJct8PDw8I54/wCdCe4DbjO1fgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

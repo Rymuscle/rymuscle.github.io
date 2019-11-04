@@ -19,19 +19,19 @@
     <meta name="theme-color" content="#3F51B5">
     
     
-    <meta name="keywords" content="Elasticsearch基础">
-    <meta name="description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
-<meta name="keywords" content="Elasticsearch基础">
+    <meta name="keywords" content="Elasticsearch">
+    <meta name="description" content="开源  基于 Lucene, 提供比较简单的Restful API Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解) 但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎, 并可根据相关度对结果进行排序">
+<meta name="keywords" content="Elasticsearch">
 <meta property="og:type" content="article">
 <meta property="og:title" content="01. 初识 Elasticsearch">
 <meta property="og:url" content="http://blog.renyimin.com/2018/06/09/elasticsearch/2018-06-09-01/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+<meta property="og:description" content="开源  基于 Lucene, 提供比较简单的Restful API Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解) 但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎, 并可根据相关度对结果进行排序">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-22T03:46:48.000Z">
+<meta property="og:updated_time" content="2019-08-30T08:53:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="01. 初识 Elasticsearch">
-<meta name="twitter:description" content="可以通过如下几个特点来认识ES:  开源  基于 Lucene, 提供比较简单的Restful APILucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎,">
+<meta name="twitter:description" content="开源  基于 Lucene, 提供比较简单的Restful API Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解) 但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API  高性能全文检索和分析引擎, 并可根据相关度对结果进行排序">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
@@ -166,35 +166,27 @@
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
             <ol>
-<li><p>可以通过如下几个特点来认识ES:</p>
-<ul>
 <li><p>开源</p>
 </li>
-<li><p>基于 Lucene, 提供比较简单的Restful API<br>Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)<br>但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API</p>
+<li><p>基于 Lucene, 提供比较简单的Restful API<br> Lucene 可以说是当下最先进、高性能、全功能的搜索引擎库, 由Apache软件基金会支持和提供(更多细节自行了解)<br> 但Lucene非常复杂, ES的目的是使全文检索变得简单, 通过隐藏 Lucene 的复杂性, 取而代之的提供一套简单一致的 RESTful API</p>
 </li>
 <li><p><strong>高性能全文检索和分析引擎, 并可根据相关度对结果进行排序</strong></p>
 </li>
-<li><p>可以快速且 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/near-real-time.html" target="_blank" rel="noopener">近实时</a> 地存储,检索(从文档被索引到可以被检索只有轻微延时, 约1s)以及分析</p>
+<li><p>可以快速且 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/near-real-time.html" target="_blank" rel="noopener">近实时</a> 地存储, 检索(从文档被索引到可以被检索只有轻微延时, 约1s)以及分析</p>
 </li>
 <li><p>海量数据检索及分析: 可以扩展到上百台服务器, 处理PB级 <a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/structured-search.html" target="_blank" rel="noopener">结构化</a> 或 非结构化 数据 </p>
 </li>
 <li><p>面向文档型数据库, 存储的是整个对象或者文档, 它不但会存储它们, 还会为它们建立索引</p>
 </li>
-</ul>
-</li>
 <li><p>应用场景</p>
-<ul>
-<li><p>当你的应用数据量很大, 数据结构灵活多变, 数据之间的结构比较复杂, 如果用传统数据库, 可能不仅需要面对大量的表设计及数据库的性能问题, 此时可以考虑使用ES, 它不仅可以处理非结构化数据, 而且可以帮你快速进行扩容, 承载大量数据;</p>
-</li>
-<li><p>具体比如多数据源聚合大列表页: 微服务架构是目前很多公司都采用的架构, 所以经常会面对 多数据源聚合的 大列表页, 一个列表中的筛选字段,展示字段可能会来自多个服务, 同时涉及到分页, 所以传统方案可能比较吃力, 而且也得不到比较好的效果; (RRC这边目前是使用 ES 做 <strong>数据视图服务</strong>, 对这种大列表页所用到的数据源字段做统一配置和聚合)</p>
-</li>
-<li><p>日志数据分析, RRC 使用 ElasticStack 技术栈来很方便地对各服务的日志进行查询,分析,统计;</p>
-</li>
-<li><p>站内搜索(电商, 招聘, 门户 等等)都可以使用 ES 来做全文检索并根据相关性进行排名, 高亮展示关键词等;</p>
-</li>
-</ul>
 </li>
 </ol>
+<ul>
+<li>当你的应用数据量很大, 数据结构灵活多变, 数据之间的结构比较复杂, 如果用传统数据库, 可能不仅需要面对大量的表设计及数据库的性能问题, 此时可以考虑使用ES, 它不仅可以处理非结构化数据, 而且可以帮你快速进行扩容, 承载大量数据</li>
+<li>具体比如多数据源聚合大列表页: 微服务架构是目前很多公司都采用的架构, 所以经常会面对 多数据源聚合的 大列表页, 一个列表中的筛选字段,展示字段可能会来自多个服务, 同时涉及到分页, 所以传统方案可能比较吃力, 而且也得不到比较好的效果; (RRC这边目前是使用 ES 做 <strong>数据视图服务</strong>, 对这种大列表页所用到的数据源字段做统一配置和聚合)</li>
+<li>日志数据分析, RRC 使用 ElasticStack 技术栈来很方便地对各服务的日志进行查询,分析,统计</li>
+<li>站内搜索(电商, 招聘, 门户 等等)都可以使用 ES 来做全文检索并根据相关性进行排名, 高亮展示关键词等</li>
+</ul>
 
         </div>
 
@@ -221,7 +213,7 @@
 
         <div class="post-footer">
             
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch基础/">Elasticsearch基础</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
             
@@ -279,9 +271,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2018/06/09/rabbitmq/2018-06-09-rabbitmq-15/" id="post-prev" class="post-nav-link">
+        <a href="/2018/06/09/MySQL 暂停/2018-06-09-mysql-46/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">RabbitMQ内置集群</h4>
+          <h4 class="title">46. 高性能索引 -- 覆盖索引</h4>
         </a>
       </div>
     
@@ -461,21 +453,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

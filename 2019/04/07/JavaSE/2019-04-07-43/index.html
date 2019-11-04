@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>43. 网络IO 基础概念 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java,IO">
+    <meta name="description" content="文件描述符 Linux 会把所有的外部设备都看成一个文件来操作, 对外部设备的操作可以看成是对文件的操作 我们对一个文件的读写, 都会通过内核提供的系统调用, 内核会给我们返回一个 File Descriptor, 这个描述符是一个数字, 指向内核的一个结构体, 我们应用程序对文件的读写就是对描述符指向的结构体的读写  文件描述符(File descriptor): 其形式上是一个非负整数 ,它是">
+<meta name="keywords" content="Java,IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="43. 网络IO 基础概念">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="文件描述符 Linux 会把所有的外部设备都看成一个文件来操作, 对外部设备的操作可以看成是对文件的操作 我们对一个文件的读写, 都会通过内核提供的系统调用, 内核会给我们返回一个 File Descriptor, 这个描述符是一个数字, 指向内核的一个结构体, 我们应用程序对文件的读写就是对描述符指向的结构体的读写  文件描述符(File descriptor): 其形式上是一个非负整数 ,它是">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/blocking-IO-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/non-blocking-IO-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/IO-multiplexing-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/asynchronous-IO-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/IO/io-model-01.png">
+<meta property="og:updated_time" content="2019-09-11T10:30:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="43. 网络IO 基础概念">
+<meta name="twitter:description" content="文件描述符 Linux 会把所有的外部设备都看成一个文件来操作, 对外部设备的操作可以看成是对文件的操作 我们对一个文件的读写, 都会通过内核提供的系统调用, 内核会给我们返回一个 File Descriptor, 这个描述符是一个数字, 指向内核的一个结构体, 我们应用程序对文件的读写就是对描述符指向的结构体的读写  文件描述符(File descriptor): 其形式上是一个非负整数 ,它是">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/IO/blocking-IO-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">43. 网络IO 基础概念</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-07T07:10:53.000Z" itemprop="datePublished" class="page-time">
+  2019-04-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/IO/">IO</a></li></ul></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#文件描述符"><span class="post-toc-number">1.</span> <span class="post-toc-text">文件描述符</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#简述-网络IO-主要工作"><span class="post-toc-number">2.</span> <span class="post-toc-text">简述 网络IO 主要工作</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Linux-五种-I-O-模型"><span class="post-toc-number">3.</span> <span class="post-toc-text">Linux 五种 I/O 模型</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#阻塞IO-blocking-IO"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">阻塞IO (blocking IO)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#非阻塞IO-non-blocking-IO"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">非阻塞IO (non-blocking IO)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#IO-多路复用"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">IO 多路复用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#概述"><span class="post-toc-number">3.3.1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IO-多路复用-VS-同步非阻塞"><span class="post-toc-number">3.3.2.</span> <span class="post-toc-text">IO 多路复用 VS 同步非阻塞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IO-多路复用-VS-多线程-同步阻塞"><span class="post-toc-number">3.3.3.</span> <span class="post-toc-text">IO 多路复用 VS 多线程+同步阻塞</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#同步非阻塞-VS-多线程-同步阻塞"><span class="post-toc-number">3.3.4.</span> <span class="post-toc-text">同步非阻塞 VS 多线程+同步阻塞</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#异步IO-asynchronous-IO"><span class="post-toc-number">3.4.</span> <span class="post-toc-text">异步IO (asynchronous IO)</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#信号驱动式I-O模型"><span class="post-toc-number">3.5.</span> <span class="post-toc-text">信号驱动式I/O模型</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#各-IO-Model-对比"><span class="post-toc-number">4.</span> <span class="post-toc-text">各 IO Model 对比</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考"><span class="post-toc-number">5.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2019-04-07-43"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">43. 网络IO 基础概念</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-07 15:10:53" datetime="2019-04-07T07:10:53.000Z"  itemprop="datePublished">2019-04-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a><ul class="article-category-list-child"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/IO/">IO</a></li></ul></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h1><ol>
+<li><p>Linux 会把所有的外部设备都看成一个文件来操作, 对外部设备的操作可以看成是对文件的操作<br> 我们对一个文件的读写, 都会通过内核提供的系统调用, 内核会给我们返回一个 File Descriptor, 这个描述符是一个数字, 指向内核的一个结构体, 我们应用程序对文件的读写就是对描述符指向的结构体的读写</p>
+</li>
+<li><p>文件描述符(File descriptor): 其形式上是一个非负整数 ,它是一个索引值, 指向内核为每一个进程所维护的该进程打开文件的记录表</p>
+ <!--文件描述符
+ https://blog.csdn.net/Cooling88/article/details/52356865
+ https://blog.csdn.net/qq769651718/article/details/79459346-->
+</li>
+<li><p>注意: 文件描述符 是一个<strong>抽象</strong>的概念 (这里的 <code>文件</code> 应该理解为 <code>信息载体</code>, 而不要直接理解为磁盘上的文件)</p>
+<blockquote>
+<p>Socket也是最初就作为UNIX操作系统的一部分而开发的, 所以其API和系统其他IO设备集成在一起 (套接字是一个抽象出来的概念,本质上也是一个文件描述符)<br> 对于通常的文件IO来说, 其文件描述符最终是指向磁盘文件的<br> 但是对于网络IO来说, socket的读写也会有相应的描述符, 称为 <code>socketfd</code>( <code>socket 描述符</code>), Socket描述符是一个指向内部数据结构的指针, 它指向描述符表入口, 调用Socket函数时, socket执行体将建立一个Socket, 实际上”建立一个Socket”意味着为一个Socket数据结构分配存储空间</p>
+</blockquote>
+</li>
+</ol>
+<h1 id="简述-网络IO-主要工作"><a href="#简述-网络IO-主要工作" class="headerlink" title="简述 网络IO 主要工作"></a>简述 网络IO 主要工作</h1><ol>
+<li><p>为了执行网络I/O, 一个进程必须做的第一件事就是调用 <code>socket()</code> 函数, 指定期望的通信协议类型。该函数只是作为一个简单的接口函数供用户调用, 调用该函数后将进入内核栈进行系统调用 <code>sys_socket()</code> (<a href="https://blog.csdn.net/wukery/article/details/79295567" target="_blank" rel="noopener">linux系统调用表(system call table)</a>)</p>
+</li>
+<li><p>网络 IO 和 磁盘IO 类似</p>
+<ul>
+<li>当进程读取磁盘上的文件时, 磁盘IO 的主要工作就是将 磁盘上的文件内容读取到 内核缓存中, 然后最终由 内核缓存 中拷贝到用户空间(缓存/无缓存), 最后被进程拿到数据</li>
+<li>而网络IO与磁盘IO的读取过程类似, 他是将从网卡流入到内核空间的数据, 最终拷贝到用户空间的进程, 进而被进程所使用</li>
+</ul>
+</li>
+<li><p>小结: 简单来说, <strong> IO 读取的过程就是将 从外部设备来的数据 从 内核空间 拷贝到 用户空间的 过程</strong>! （写入则相反）</p>
+</li>
+</ol>
+<h1 id="Linux-五种-I-O-模型"><a href="#Linux-五种-I-O-模型" class="headerlink" title="Linux 五种 I/O 模型"></a>Linux 五种 I/O 模型</h1><h2 id="阻塞IO-blocking-IO"><a href="#阻塞IO-blocking-IO" class="headerlink" title="阻塞IO (blocking IO)"></a>阻塞IO (blocking IO)</h2><ol>
+<li><p>在Unix中,默认情况下所有的socket都是blocking, 一个典型的读操作流程大概如下<br><img src="/img/IO/blocking-IO-01.png"></p>
+</li>
+<li><p>当用户进程调用了 <code>recvfrom()</code> 这个函数(其底层的是进行 系统调用 <code>sys_recvfrom()</code> ), kernel 就开始了IO的第一个阶段: 准备数据</p>
+<ul>
+<li>对于 网络IO 来说, 很多时候数据在一开始可能还没有到达(比如, 还没有收到一个完整的UDP包), 这个时候kernel就要等待足够的数据到来, 这个过程是需要等待的, 也就是说数据被拷贝到 操作系统内核的缓冲区 是需要一个过程的, 在这个过程中, 内核在做等待(被阻塞), 用户进程也在等待(被阻塞)  </li>
+<li><p>kernel一直等到数据准备好了, 也就是数据从外设拷贝到了 操作系统内核缓冲区 中了, 接下来才会将数据从 kernel缓冲区 拷贝到 用户内存, 拷贝完成一组数据, 用户进程才暂时会解除block的状态, 重新运行起来</p>
+</li>
+<li><p>上述过程中有两处可能会被阻塞的地方: <code>外设(网卡) --&gt; 操作系统内核缓冲区</code>, <code>操作系统内核缓冲区 --&gt; 用户空间</code><br>tip: 外设数据准备好后, 虽然会向操作系统内核缓冲区进行拷贝, 对于内核来说, 处于非阻塞状态, 因为它一直在工作, 但缓冲区只要没满, 而对于用户空间进程来说, 其实是处于阻塞状态, 因为它没有等到从内和缓冲区拷贝来的数据</p>
+</li>
+</ul>
+</li>
+<li><p>优点和缺点</p>
+<ul>
+<li>优点: 一个线程处理一个任务, 编程模型比较简单 （另外, 进程处于 阻塞状态 时, 是不占用CPU资源的）</li>
+<li>缺点: 一个线程只能处理一个任务</li>
+</ul>
+</li>
+</ol>
+<h2 id="非阻塞IO-non-blocking-IO"><a href="#非阻塞IO-non-blocking-IO" class="headerlink" title="非阻塞IO (non-blocking IO)"></a>非阻塞IO (non-blocking IO)</h2><ol>
+<li><p>进程把一个 套接字 设置成 非阻塞 是在告诉内核, 当 内核中的数据 因为某些原因(为准备好,或者内核区未满) 尚无法拷贝数据到用户内核空间 时, 需要返回一个error; 当对一个 non-blocking socket 执行读操作时, 流程如下:<br><img src="/img/IO/non-blocking-IO-01.png"></p>
+</li>
+<li><p>从用户进程角度讲, 它发起一个 read 操作后, 并不需要等待, 而是马上就得到了一个结果, 用户进程判断结果是一个error时, 它就知道数据还没有准备好, 于是它可以再次发送read操作, 一旦kernel中的数据准备好了, 并且又再次收到了用户进程的system call, 那么它马上就将数据拷贝到了用户内存, 然后返回, 所以, 用户进程其实是需要不断的主动询问kernel数据好了没有<br> 也就是我们的<strong>用户进程需要自己不断的测试数据是否已经准备好</strong>, 如果没有准备好, 继续测试, 直到数据准备好为止, 在这个不断测试的过程中, 会大量的占用CPU的时间<br> (Linux下, 可以通过设置 socket 使其变为 non-blocking, 当使用socket()函数和WSASocket()函数创建套接字时, 默认都是阻塞的。在创建套接字之后, 通过调用ioctlsocket()函数, 将该套接字设置为非阻塞模式。Linux下的函数是:fcntl())</p>
+</li>
+<li><p>优点和缺点</p>
+<ul>
+<li>优点: 相较于阻塞模型, 非阻塞模型下, 线程不用再等待任务, 而是可以把时间花费到其它任务上, 也就是说这个当前线程可以尝试去同时处理多个任务 (编程)</li>
+<li>缺点: 导致任务完成的响应延迟增大了, 因为每隔一段时间才去执行询问的动作, 但是任务可能在两个询问动作的时间间隔内完成, 这会导致整体数据吞吐量的降低 (另外, 不停地轮询, 不是每次都成功, 所以可能会消耗大量CPU资源)</li>
+</ul>
+</li>
+</ol>
+<h2 id="IO-多路复用"><a href="#IO-多路复用" class="headerlink" title="IO 多路复用"></a>IO 多路复用</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><ol>
+<li><p>IO 多路复用 (IO multiplexing) 就是使用 <code>select</code>, <code>poll</code>, <code>epoll</code> (有些地方也称这种IO方式为 <code>event driven IO</code> ) 这些方法<br> (<a href="https://blog.csdn.net/wukery/article/details/79295567" target="_blank" rel="noopener">linux系统调用表(system call table)</a>) 可以找到这些方法及其底层对应的系统调用方法</p>
+</li>
+<li><p>有了I/O复用, 我们就可以调用 <code>select</code>, <code>poll</code>, <code>epoll</code>, 它们最终仍然是让用户进程处于阻塞状态, 只不过是<strong>内核在其内部对这几个方法所管辖的多个 socket fd 该进行轮询</strong><br> 在这些方法阻塞用户进程后, 内核会轮询检查每个IO连接的内核缓冲区的数据是否准备好了<br> 如果内核管理的某个 socket fd 的内核缓冲区的数据准备好了, 则 <code>select</code> 会有返回值, 用户进程可以进一步去调用 <code>recvfrom()</code><br> <img src="/img/IO/IO-multiplexing-01.png"></p>
+</li>
+<li><p>先看一下 <code>select</code> 函数原型</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/select.h&gt;</span><br><span class="line">int select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, struct timeval* timeout);</span><br></pre></td></tr></table></figure>
+<p> <strong>参数解释</strong>: </p>
+<ul>
+<li>nfds: 需要监视的最大文件描述符+1；</li>
+<li>readfds: 监视可读文件描述符集合 （select在调用之前, 需要手动在应用程序里将要监控的文件描述符添加到 fed_set 集合中, 然后加载到内核进行监控)</li>
+<li>writefds: 监视可写文件描述符集合</li>
+<li>exceptfds: 监视异常文件描述符集合</li>
+<li>timeout: 设置select的等待时间      (<strong>也就是select的阻塞进程的时间, 设置为NULL则表示没有timeout, 用户进程会一直阻塞</strong>, 该参数直接就明示了 select 阻塞用户进程的特性)<br>返回值:<br>负值: select错误<br>正值: 某些文件可读写或出错<br>0: 等待超时, 没有可读写或错误的文件<br>如果参数timeout设为NULL, 则表示select没有timeout<br>```</li>
+</ul>
+</li>
+</ol>
+<h3 id="IO-多路复用-VS-同步非阻塞"><a href="#IO-多路复用-VS-同步非阻塞" class="headerlink" title="IO 多路复用 VS 同步非阻塞"></a>IO 多路复用 VS 同步非阻塞</h3><ol>
+<li><p><code>select</code> 调用是内核级别的, select的轮询也是内核在其内部执行的 (你事先需要把你需要执行的多个 IO操作的 socket fd 通过 select 传给内核, 让内核帮你进行轮询), 对用户进程来说,一个进程虽然是阻塞的,但其内部可以对多个socket fd进行监控<br> (另外, 在io复用模型下, 对于每一个socket, 一般都设置成 non-blocking, 但其实整个用户进程是一直被block的, 只不过用户进程不是被 socket IO 给block的, 而是被 select 这个函数block住的)</p>
+</li>
+<li><p>而 非阻塞模型中的轮询 是 应用程序进程在 用户空间 进行的轮询 (你也可以在一个进程中对多个 socket fd 进行轮询 ), 对用户层来说, 进程确实是非阻塞的</p>
+</li>
+<li><p>其实 <code>select</code> 相比较 <code>non-blocking</code> 来说, 在单个任务的情况下可能要更差一些, 因为这里调用了 <code>select</code> 和 <code>recvfrom</code> 两个 system call, 而 non-blocking 只调用了一个 <code>recvfrom</code> , 但是用select的优势在于它可以帮你同时处理多个 socket fd, 而不用你自己去处理多个 socket fd</p>
+</li>
+</ol>
+<h3 id="IO-多路复用-VS-多线程-同步阻塞"><a href="#IO-多路复用-VS-多线程-同步阻塞" class="headerlink" title="IO 多路复用 VS 多线程+同步阻塞"></a>IO 多路复用 VS 多线程+同步阻塞</h3><p>IO多路复用的图 其实看着和 blocking IO的图 没有太大的不同, 事实上, 还更差一些, 因为这里需要使用两个system call (select 和 recvfrom), 而 blocking IO 只调用了一个system call (recvfrom)<br>但是, 用select的优势在于它可以同时处理多个socket fd, 所以, 如果处理的连结数目不高的话, 使用 <code>select/epoll</code> 的 web server 不一定比使用 <code>multi-threading + blocking IO</code> 的web server性能好, 可能延迟还更大(因为阻塞可以保证没有延迟, 但是多路复用是处理先存在的数据, 所以数据的顺序则不管, 导致处理一个完整的任务的时间上有延迟)</p>
+<h3 id="同步非阻塞-VS-多线程-同步阻塞"><a href="#同步非阻塞-VS-多线程-同步阻塞" class="headerlink" title="同步非阻塞 VS 多线程+同步阻塞"></a>同步非阻塞 VS 多线程+同步阻塞</h3><p>高并发的程序一般使用 <code>同步非阻塞</code>方式 而非 <code>多线程 + 同步阻塞</code> 方式<br>因为在高并发场景下, 为每个任务(用户请求)创建一个进程或线程的开销非常大, 而 同步非阻塞 方式可以把多个 IO 请求丢到后台去, 这就可以在一个进程里服务大量的并发 IO 请求</p>
+<h2 id="异步IO-asynchronous-IO"><a href="#异步IO-asynchronous-IO" class="headerlink" title="异步IO (asynchronous IO)"></a>异步IO (asynchronous IO)</h2><p>上面说的 阻塞, 非阻塞, IO多路复用 这几种方式, 对用户进程来说: 阻塞 和 IO多路复用 都是主动去等待; 非阻塞是用户进程主动去轮询; 总之都是用户进程都是自己主动去拿到了结果, 不是被回调通知的, 所以对用户进程来说都是同步的IO操作</p>
+<ol>
+<li>Unix下的 asynchronous IO 其实用得很少<br><img src="/img/IO/asynchronous-IO-01.png"></li>
+</ol>
+<p>用户进程发起读取操作之后, 立刻就可以开始去做其它的事, 而另一方面,  从kernel的角度, 当它收到一个asynchronous read之后, 首先它会立刻返回, 所以不会对用户进程产生任何block, 然后, kernel会等待数据准备完成, 然后将数据拷贝到用户内存, 当这一切都完成之后, kernel会给用户进程发送一个signal, 告诉它read操作完成了</p>
+<h2 id="信号驱动式I-O模型"><a href="#信号驱动式I-O模型" class="headerlink" title="信号驱动式I/O模型"></a>信号驱动式I/O模型</h2><p>……</p>
+<h1 id="各-IO-Model-对比"><a href="#各-IO-Model-对比" class="headerlink" title="各 IO Model 对比"></a>各 IO Model 对比</h1><p><img src="/img/IO/io-model-01.png"></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="https://www.cnblogs.com/diegodu/p/6823855.html" target="_blank" rel="noopener">https://www.cnblogs.com/diegodu/p/6823855.html</a><br><a href="https://blog.csdn.net/jay900323/article/details/18141217#t6" target="_blank" rel="noopener">https://blog.csdn.net/jay900323/article/details/18141217#t6</a><br><a href="https://blog.csdn.net/lemon89/article/details/78290389#Reactor_183" target="_blank" rel="noopener">https://blog.csdn.net/lemon89/article/details/78290389#Reactor_183</a></p>
+<p><a href="https://blog.csdn.net/u014730165/article/details/85044285" target="_blank" rel="noopener">https://blog.csdn.net/u014730165/article/details/85044285</a>   ？</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/IO/">IO</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&title=《43. 网络IO 基础概念》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&title=《43. 网络IO 基础概念》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 网络IO 基础概念》 — Lant's&url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/07/JavaSE/2019-04-07-42/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">42. Linux 文件IO操作的分类 - 文件IO, 标准IO</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/09/JavaSE/2019-04-09-44/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">44. 同步/异步/阻塞/非阻塞 (可忽略)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&title=《43. 网络IO 基础概念》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&title=《43. 网络IO 基础概念》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《43. 网络IO 基础概念》 — Lant's&url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/07/JavaSE/2019-04-07-43/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aQW7CQAwFUO5/aSp1VYmGftsJKubNCoU0mcfCtce+3eJ1/14/Pz9eObr/8frR/UffnrYwMDDelnF/uo4YzzedX0ne9XxvGBgYn8NIgmwvOPbuz/eGgYGBkWylmtL1gi8GBgbGJOAmL+4FWQwMDIxqEdvbev6cF9XiGBgYb8g4KyBe8fny/gYGBsa/Z9zHq1qgVtuc0R4wMDBWM647LJs3JsvlMQYGxlJGtYw897htPhz2y/8NDAyMdYzkoXkaV72zelQX/RUGBsY6RlJw9toAvQHW5jAHBgbGaka+9Tztq6aV1euF4zYMDIwVjCSQ5SljDug1TQ+vYGBgrGbkQxXJ4X7vab3GAAYGxucwJm3FCTgpVhNG82UYGBhvyMjL13zrvVmIJFmMilgMDIxFjLxcLA89xCsPrH/sCgMDYzWjGjTzlLE3ulFuXmJgYKxmnDUAkZSsL/3tMTAwFjGuCLjVQrSaniY/EAYGxm5GHv6SEY1qMTwpfTEwMHYz8ublZAij2h4oJ44YGBgfwJg8uspLrpTLYAwMjNWMeSE6OW6rpoxRPxYDA2MR415c1aBcDbLNIzkMDIzVjKt7gpM2ajX1xMDA2M244rgtP86rjnFEuS0GBsZSRl715i+obrQ3qIGBgYExoZ7V8jxhog0DA+NjGL0WYxJYkzEyDAwMjHljstqqrAb0cuaIgYGxiDE5vu8VqNWfI2l8YmBgLGV8ARSWvCp1634TAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

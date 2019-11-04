@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>03. HTTP状态码详解 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="1xx 101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)  2xx Web API的设计与开发 P109  200 OK : 200码非常出名, 似乎没有对它进一步说明的必要 201 Created : 当在服务器端创建数据成功时, 会返回201状态码 (比如使用 POST 请求方法, 如 用户登录后添加了新用户, 上传了图片等">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="03. HTTP状态码详解">
+<meta property="og:url" content="http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="1xx 101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)  2xx Web API的设计与开发 P109  200 OK : 200码非常出名, 似乎没有对它进一步说明的必要 201 Created : 当在服务器端创建数据成功时, 会返回201状态码 (比如使用 POST 请求方法, 如 用户登录后添加了新用户, 上传了图片等">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-21T08:24:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="03. HTTP状态码详解">
+<meta name="twitter:description" content="1xx 101: 参考博文WebSocket简单示例分析 (做协议升级, 还会响应: Connection: Upgrade)  2xx Web API的设计与开发 P109  200 OK : 200码非常出名, 似乎没有对它进一步说明的必要 201 Created : 当在服务器端创建数据成功时, 会返回201状态码 (比如使用 POST 请求方法, 如 用户登录后添加了新用户, 上传了图片等">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">03. HTTP状态码详解</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-30T06:30:12.000Z" itemprop="datePublished" class="page-time">
+  2017-11-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1xx"><span class="post-toc-number">1.</span> <span class="post-toc-text">1xx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2xx"><span class="post-toc-number">2.</span> <span class="post-toc-text">2xx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3xx"><span class="post-toc-number">3.</span> <span class="post-toc-text">3xx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4xx"><span class="post-toc-number">4.</span> <span class="post-toc-text">4xx</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5xx"><span class="post-toc-number">5.</span> <span class="post-toc-text">5xx</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2017-11-30-HTTP-03-httpStatusCode"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">03. HTTP状态码详解</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-30 14:30:12" datetime="2017-11-30T06:30:12.000Z"  itemprop="datePublished">2017-11-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="1xx"><a href="#1xx" class="headerlink" title="1xx"></a>1xx</h2><ol>
+<li><code>101</code>: 参考博文<a href="/2017/10/28/WebSocket/2017-10-28-websocket-02/">WebSocket简单示例分析</a> (做协议升级, 还会响应: <code>Connection: Upgrade</code>)</li>
+</ol>
+<h2 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h2><blockquote>
+<p><strong>Web API的设计与开发 P109</strong></p>
+</blockquote>
+<p><strong>200 OK</strong> : 200码非常出名, 似乎没有对它进一步说明的必要</p>
+<p><strong>201 Created</strong> : 当在服务器端创建数据成功时, 会返回201状态码 (比如使用 <code>POST</code> 请求方法, 如 用户登录后添加了新用户, 上传了图片等新创建数据的场景)</p>
+<p><strong>202 Accepted</strong> : 在异步处理客户端请求时, 它用来表示服务器端已经接受了来自客户端的请求, 但处理尚未结束</p>
+<ul>
+<li>在文件格式转换, 处理远程通知(Apple Push Notification等)这类很耗时的场景中, 如果等到所有处理都结束后才向客户端返回响应消息, 就会花费相当长的时间, 造成应用可用性不高; 这时采用的方法是服务器向客户端返回一次响应消息, 然后立刻开始异步处理</li>
+<li>202状态码就被用于告知客户端服务器端已经开始处理请求, 但整个处理过程尚未结束</li>
+<li>比如: 以LinkedIn的参与讨论的API为例<br>如果成功参与讨论并发表意见, 服务器端通常会返回201状态码<br>但如果需要得到群主的确认, 那么所发表的意见就无法立即在页面显示出来, 这时服务器端就需要返回202状态码; 从广义上来看, 该场景也属于异步处理, 但和程序设计里的异步执行当然不同</li>
+</ul>
+<p><strong><a href="http://www.laruence.com/2011/01/20/1844.html" target="_blank" rel="noopener">204 No Content</a></strong> : 正如其字面意思, 当响应消息为空时会返回该状态码</p>
+<ul>
+<li>其实就是告诉浏览器, 服务端执行成功了, 但是没什么数据返回给你, 所以你不用刷新页面, 也不用导向新的页面 </li>
+<li>在用 <code>DELETE</code> 方法删除数据时, 服务器端通常会返回204状态码(阮一峰博文也提到过, 对<code>DELETE</code>适用)</li>
+<li>除此之外, 也有人认为在使用 <code>PUT</code>或<code>PATCH</code> 方法更新数据时, 因为只是更新已有数据, 所以返回204状态码更加自然<br>  书中建议 <code>DELETE</code> 返回204; <code>PUT</code>或<code>PATCH</code>返回200并返回该方法所操作的数据; </li>
+<li>关于204状态码的讨论可以参考 p111;</li>
+</ul>
+<p><strong>205 Reset Content</strong> : 告诉浏览器, 页面表单需要被重置 </p>
+<ul>
+<li>205的意思是服务端在接收了浏览器POST请求以后, 处理成功以后, 告诉浏览器, 执行成功了, 请清空用户填写的Form表单, 方便用户再次填写;</li>
+</ul>
+<p><strong>206 Partial Content</strong> : 成功执行了一个部分或Range(范围)的请求 </p>
+<ul>
+<li>206响应中, 必须包含 <code>Content-Range</code>, <code>Date</code> 以及 <code>ETag</code>或<code>Content-Location</code>首部;</li>
+</ul>
+<h2 id="3xx"><a href="#3xx" class="headerlink" title="3xx"></a>3xx</h2><p><strong>300 Multiple Choices</strong> : 客户端驱动方式进行内容协商时, 服务器可能返回多个连接供客户端进行选择 (比如多语言网站可能会出现)</p>
+<p><strong>301 Moved Permanently</strong> : 俗称 <code>永久重定向</code>, 意思 是原 URI 已经 “永久” 性地不存在了, 今后的所有请求都必 须改用新的 URI<br>浏览器看到 301，就知道原来的 URI “过时” 了, 就会做适当的优化 (比如历史记录、更新书签), 下次可能就会直接用新的 URI 访问, 省去了再次跳转的成本 (需要清除浏览器缓存才行)<br>搜索引擎的爬虫看 到 301, 也会更新索引库, 不再使用老的 URI<br>重定向后 请求里的方法 会转成 <code>GET</code></p>
+<p><strong>302 Found</strong>: 俗称 <code>临时重定向</code>, 意思是原 URI 处于 “临时维护” 状态, 新的 URI 是起 “顶包” 作用的 “临时工”<br>浏览器或者爬虫看到 302, 会认为原来的 URI 仍然有效, 但暂时不可用, 所以只会执行简单的跳转页面, 不记录新的 URI, 也不会有其他的多余动作, 下次访问还是用原 URI<br>重定向后 请求里的方法 会转成 <code>GET</code></p>
+<p><strong>303 See Other</strong> : HTTP/1.1使用303来实现和302一样的<strong>临时</strong>重定向<br>重定向后 请求里的方法 会转成 <code>GET</code></p>
+<p><strong>307 Temporary Redirect</strong>: 类似 302 (HTTP/1.1规范要求用307来取代302进行临时重定向; 302临时重定向留给HTTP/1.0)<br>但重定向后请求 里的方法不允许变动</p>
+<p><strong><a href="https://tools.ietf.org/html/draft-reschke-http-status-308-07" target="_blank" rel="noopener">308 Permanent Redirect</a></strong><br>貌似不是rfc2616的标准<br>具备和301永久重定向的特点 (需要清除浏览器缓存才行)<br>但重定向后请求 里的方法不允许变动</p>
+<p><strong>304 Not Modified</strong> : 参考博文<a href="/2017/11/30/http/2017-11-30-HTTP-05/">缓存相关</a></p>
+<h2 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h2><blockquote>
+<p><strong>Web API的设计与开发 P113</strong><br>4字头状态码主要用于描述因客户端请求的问题而引发的错误。<br>也就是说, 服务器端不存在问题, 但服务器端无法理解客户端发送的请求, 或虽然服务器端能够理解但请求却没有被执行, 当遇到这些情况引发的错误时, 服务器端便会向客户端返回这一类别的状态码。<br>因此, 当服务器端返回4字头的状态码时, 就表示客户端的访问方式发生了问题, 用户需要检查一下客户端的访问方式或访问的目标资源等。</p>
+</blockquote>
+<p><strong>400 Bad Request</strong> : 表示其他错误的意思, 即其他4字头状态码都无法描述的错误类型;</p>
+<p><strong>401 Unauthorized</strong> : 表示<code>认证(Authentication)</code>类型的错误</p>
+<ul>
+<li>比如当需要先进行登录操作, 而却没有告诉服务器端所需的会话信息(比如token..), 服务器端就会返回401状态码, 告知客户端出错的大致原因;</li>
+</ul>
+<p><strong>403 Forbidden</strong> : 和401状态码比较相似, 所以也经常被混淆; 其实403表示的是 <code>授权(Authotization)</code> 类型的错误, 授权和认证的不同之处是:</p>
+<ul>
+<li><code>认证</code>表示”识别前来访问的是谁”, 而<code>授权</code>则表示”赋予特定用户执行特定操作的权限”</li>
+<li>通俗地说: 401状态码表示”我不知道你是谁”, 403状态码表示”虽然知道你是谁, 但你没有执行该操作的权限”</li>
+</ul>
+<p><strong>404 Not Found</strong> : 表示访问的数据不存在, 但是</p>
+<ul>
+<li>例如当客户端湿度获取不存在的用户信息时, 或者试图访问原本就不存在的端点时, 服务器就会返回404状态码;</li>
+<li>所以, 如果客户端想要获取用户信息, 却得到服务器端返回的404状态码, 客户端仅凭”404 Not Found”将难以区分究竟是用户不存在, 还是端点URI错误导致访问了原本不存在的URI;</li>
+</ul>
+<p><strong>405 Method Not Allowed</strong> : 表示虽然访问的端点存在, 但客户端使用的HTTP方法不被服务器端允许;</p>
+<ul>
+<li>比如客户端使用了POST方法来访问只支持GET方法的信息检索专用的API;</li>
+<li>又比如客户端用了GET方法来访问更新数据专用的API等;</li>
+</ul>
+<p><strong>406 Not Acceptable</strong> : 服务器端API不支持客户端指定的数据格式时, 服务器端所返回的状态码; </p>
+<ul>
+<li>比如, 服务器端只支持JSON和XML输出的API被客户端指定返回YAML的数据格式时, 服务器端就会返回406状态码;</li>
+</ul>
+<p><strong>408 Request Timeout</strong> : 当客户端发送请求至服务器端所需的时间过长时, 就会触发服务器端的超时处理, 从而使服务器端返回该状态码;</p>
+<p><strong>409 Conflict</strong>: 用于表示资源发生冲突时的错误 (est中就会有该错误码)</p>
+<ul>
+<li>比如通过指定ID等唯一键值信息来调用注册功能的API时, 倘若已有相同ID的数据存在, 就会导致服务器端返回409状态码;</li>
+<li>在使用邮箱地址及Facebook ID等信息进行新用户注册时, 如果该邮箱地址或者ID已经被其他用户注册, 就会引起冲突, 这时服务器端就会返回409状态码告知客户端该邮箱地址或ID已被使用;</li>
+</ul>
+<p><strong>410 Gone</strong> : 和 404状态码 相同, 都表示访问资源不存在, 只是410状态码不单表示资源不存在, 还进一步告知<strong>资源曾经存在</strong>, 只是目前已经消失了;</p>
+<ul>
+<li>因此服务器端常在访问被删除的数据时返回该状态码, 但是为了返回该状态码, 服务器必须保存该数据已被删除的信息, 而且客户端也应该知晓服务器端保存了这样的信息;</li>
+<li>但是在通过邮箱地址搜索用户信息的API中, 从保护个人信息的角度来说, <strong>返回410状态码的做法也会受到质疑</strong>; (所以在此种资源不存在的情况下, 为了稍微安全一些, 返回410状态码需要慎重)</li>
+</ul>
+<p><strong>413 Request Entity Too Large</strong> : 413也是比较容易出现的一种状态码, 表示请求实体过大而引发的错误</p>
+<ul>
+<li>请求消息体过长是指, 比如在上传文件这样的API中, 如果发送的数据超过了所允许的最大值, 就会引发这样的错误;</li>
+</ul>
+<p><strong>414 Request-URI Too Large</strong> : 414是表示请求首部过长而引发的错误</p>
+<ul>
+<li>如果在进行GET请求时, 查询参数被指定了过长的数据, 就会导致服务器端返回414状态码</li>
+</ul>
+<p><strong>415 Unsupported Media Type</strong> : 和406比较相似</p>
+<ul>
+<li>406我们知道是表示服务器端不支持客户端想要接收的数据格式</li>
+<li>而415表示的是服务器端不支持客户端请求首部 <code>Content-Type</code> 里指定的数据格式, 也就是说, 当客户端通过POST,PUT,PATCH等方法发送的请求消息体的数据格式不被服务器支持时, 服务器端就会返回415状态码;</li>
+<li>例如在只接收JSON格式的API里, 如果客户端请求时发送的是XML格式的数据去请求服务器端, 或者在 <code>Content-Type</code> 首部指定 <code>application/xml</code>, 都会导致该类型错误;</li>
+</ul>
+<p><strong>429 Too Many Requests</strong> : 是2012年RFC6585文档中新定义的状态码, 表示访问次数超过了所允许的范围;</p>
+<ul>
+<li>例如某API存在一小时内只允许访问100次的访问限制, 这种情况下入股哦客户端视图进行第101次访问, 服务器便会返回该状态码;</li>
+<li>表示在一定的时间内用户发送了太多的请求, 即超出了”频次限制”, 在响应中，可以提供一个 <code>Retry-After</code> 首部来提示用户需要等待多长时间之后再发送新的请求;</li>
+</ul>
+<h2 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h2><blockquote>
+<p>5字头状态码表示错误不发生在客户端, 而是由服务器自身问题引发的。</p>
+</blockquote>
+<p><strong>500 Internal Server Error</strong> : 是web应用程序开发里非常常见的错误, 当服务器代码里存在bug, 输出错误信息并停止运行等情况下, 就会返回该类型的错误;</p>
+<ul>
+<li>因此, 不仅限于API, 对于5字头状态码的错误, 都要认真监视错误日志, 使系统在出错时及时告知管理员, 以便在错误发生时做好应对措施, 防止再次发生。</li>
+</ul>
+<p><strong>501 Not Implemented</strong> : ???</p>
+<p><strong>502 Bad GateWay</strong> : ???</p>
+<p><strong>503 Service Unavaliable</strong> : 用来表示服务器当前处于<strong>暂</strong>不可用状态</p>
+<ul>
+<li>可以回送:响应首部 <code>Retry-After</code> 表示多久恢复;</li>
+<li>不同的客户端与服务器端应用对于 Retry-After 首部的支持依然不太一致;</li>
+<li>不过，一些爬虫程序，比如谷歌的爬虫程序Googlebot, 会遵循Retry-After响应首部的规则, 将其与503(Service Unavailable,当前服务不存在)响应一起发送有助于互联网引擎做出判断,在宕机结束之后继续对网站构建索引。</li>
+<li>参考:<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Retry-After</a></li>
+</ul>
+<p><strong>504 Gateway Time-out</strong>: 复现这个错误码比较简单, 让你的php程序模拟耗时请求</p>
+<ul>
+<li><p>如下代码</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">sleep(70);//模拟耗时，睡70秒</span><br><span class="line">echo &quot;睡醒了&quot;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>返回</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">504 Gateway Time-out</span><br><span class="line">nginx/1.11.4</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>505 HTTP Version Not Supported</strong>: 服务器收到的请求, 使用的是它无法支持的HTTP协议版本;</p>
+<p>参考:</p>
+<ul>
+<li>《HTTP权威指南》、《Web API的设计与开发》</li>
+<li><a href="http://yongxiong.leanote.com/post/Nginx状态码含义及chong-xuan#title-14" target="_blank" rel="noopener">http://yongxiong.leanote.com/post/Nginx状态码含义及chong-xuan#title-14</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&title=《03. HTTP状态码详解》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&title=《03. HTTP状态码详解》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. HTTP状态码详解》 — Lant's&url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2017/11/30/http/2017-11-30-HTTP-02-httpMethods/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02. HTTP Methods</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/03/10/redis/2018-03-10-redis-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. 杂项</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&title=《03. HTTP状态码详解》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&title=《03. HTTP状态码详解》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《03. HTTP状态码详解》 — Lant's&url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2017/11/30/http/2017-11-30-HTTP-03-httpStatusCode/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACuklEQVR42u3aQY7jMAwEwPn/p3eBOS2wI0+3KCU5lE6BAcsqH0yG5NdXvP58r9X1f1dyfbXn6sr/+xxeeHh4eFtHX63VsfZW+yrz17d8Ch4eHt41Xv6Y57vawPB8uDyoLK/j4eHhvZWXMyavIA8YeHh4eJ/Pa0sMCS+n4uHh4X0aLwEk4SFJx0+VgA/XWvDw8PCm1dToo/yu3xf7e3h4eHiDrvo8zZ2UMJJA8stp8fDw8C7w9o7Vfr4nQwnPKXsUNvDw8PCO8tqjtIfI92zLDdErw8PDw7vGaz/xeyl1GxgmQ1d4eHh4r+G1xYik4bQ3cNDusLyCh4eH90Je0gZL0ug99nz/+jF4eHh4ZZ8937oND0loOTX1sDwJHh4e3lFeGwbm7f98h3afZUqNh4eHd4GXF1X3irN7geTAnwE8PDy8a7zJv/i8kJHs2T7ll93w8PDwrvHmZYK9Ua02Ha9baHh4eHgXeJMSantXy85f9y9hCQ8PD+8CLy8r5GnuXnjIB7+S0Ss8PDy8e7znI+bJa1uYaF/uZoEYDw8P7wLv7EHz8FAMAZQvfTO9xsPDw4t5OSZveuWpdj6asBlO8PDw8F7CSwoQyWc9Hws4exceHh7ebd5em2qSBG82sYJWXPFfAQ8PD2+L17a78gfsfeInSXlRn8bDw8Mb8/LA0CbZk4DRhqgfTouHh4d3gdeOArQf/XbsIMn66x3w8PDwjvKK9DTeepJwFwXZdn4BDw8P7wIvWZMhgEk77UCtBQ8PD+8Qb6/J1IaZyRjWJDXHw8PDu8driw558aIt2p7aHw8PD+81vLaIkD9yb7BgLyD9cE48PDy8t/LyZDovE+y1vopn4eHh4X0k7zkY5ODJAMHFwICHh4e34J1qej2n48n1vCQRpf54eHh4F3htA2yvfPAMmwwZHFh4eHh46foL+VTkKeZ5FRwAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

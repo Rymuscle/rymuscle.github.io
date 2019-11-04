@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Cookie | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="HTTP协议 是 “无状态” 的, 但却是可扩展的, 后来发明的 Cookie 技术, 就给 HTTP 增加了 “记忆能力” Cookie 的工作过程Cookie 的传递主要用到两个字段: 响应头字段 Set-Cookie 和 请求头字段 Cookie  当用户通过浏览器第一次访问服务器的时候, 服务器肯定是不知道他的身份的。所以, 服务器就要创建一个独特的身份标识数据, 格式是 key=valu">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie">
+<meta property="og:url" content="http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="HTTP协议 是 “无状态” 的, 但却是可扩展的, 后来发明的 Cookie 技术, 就给 HTTP 增加了 “记忆能力” Cookie 的工作过程Cookie 的传递主要用到两个字段: 响应头字段 Set-Cookie 和 请求头字段 Cookie  当用户通过浏览器第一次访问服务器的时候, 服务器肯定是不知道他的身份的。所以, 服务器就要创建一个独特的身份标识数据, 格式是 key=valu">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/http-cookie-01.png">
+<meta property="og:updated_time" content="2019-10-22T07:37:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cookie">
+<meta name="twitter:description" content="HTTP协议 是 “无状态” 的, 但却是可扩展的, 后来发明的 Cookie 技术, 就给 HTTP 增加了 “记忆能力” Cookie 的工作过程Cookie 的传递主要用到两个字段: 响应头字段 Set-Cookie 和 请求头字段 Cookie  当用户通过浏览器第一次访问服务器的时候, 服务器肯定是不知道他的身份的。所以, 服务器就要创建一个独特的身份标识数据, 格式是 key=valu">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/http-cookie-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Cookie</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-10-21T05:10:31.000Z" itemprop="datePublished" class="page-time">
+  2019-10-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Cookie-的工作过程"><span class="post-toc-number">1.</span> <span class="post-toc-text">Cookie 的工作过程</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Cookie-的属性"><span class="post-toc-number">2.</span> <span class="post-toc-text">Cookie 的属性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Expires、Max-Age"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">Expires、Max-Age</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Domain、Path"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">Domain、Path</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#HttpOnly"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">HttpOnly</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SameSite"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">SameSite</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Secure"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">Secure</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Cookie-应用"><span class="post-toc-number">3.</span> <span class="post-toc-text">Cookie 应用</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Tip"><span class="post-toc-number">4.</span> <span class="post-toc-text">Tip</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2019-10-21-HTTP-Cookie"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Cookie</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-10-21 13:10:31" datetime="2019-10-21T05:10:31.000Z"  itemprop="datePublished">2019-10-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>HTTP协议 是 “无状态” 的, 但却是可扩展的, 后来发明的 Cookie 技术, 就给 HTTP 增加了 “记忆能力”</p>
+<h1 id="Cookie-的工作过程"><a href="#Cookie-的工作过程" class="headerlink" title="Cookie 的工作过程"></a>Cookie 的工作过程</h1><p>Cookie 的传递主要用到两个字段: 响应头字段 <code>Set-Cookie</code> 和 请求头字段 <code>Cookie</code></p>
+<ol>
+<li><p>当用户通过浏览器第一次访问服务器的时候, 服务器肯定是不知道他的身份的。所以, 服务器就要创建一个独特的身份标识数据, 格式是 <code>key=value</code>, 然后放进 <code>Set-Cookie</code> 字段里,  随着响应报文一同发给浏览器<br> 浏览器收到响应报文, 看到里面有 <code>Set-Cookie</code>, 知道这是服务器给的身份标识, 于是就保存起来, 下次再请求的时候就自动把这个值放进 <code>Cookie</code> 字段里发给服务器 </p>
+</li>
+<li><p>浏览器第二次请求时, 请求头字段里面有了 Cookie 字段, 服务器就知道这个用户不是新人, 之前来过, 就拿出 Cookie 里的值, 识别出用户的身份, 然后提供个性化的服务<br> 服务器可以在响应头里添加多个 <code>Set-Cookie</code>, 存储多个 “key=value”, 但浏览器这边发送时不需要用多个 Cookie 字段, 只要在一行里用 <code>;</code> 隔开就行</p>
+</li>
+</ol>
+<h1 id="Cookie-的属性"><a href="#Cookie-的属性" class="headerlink" title="Cookie 的属性"></a>Cookie 的属性</h1><p>Cookie 就是服务器委托浏览器存储在客户端里的一些数据, 而这些数据通常都会记录用户的关键识别信息。所以在 “key=value” 外, 还需要再用一些手段来保护Cookie, 防止外泄或窃取, 这些手段就是 Cookie 的属性<br><img src="/img/http/http-cookie-01.png"></p>
+<p>为了保护 Cookie, 还要给它设置有效期、作用域等属性, 常用的有 Max-Age、Expires、Domain、HttpOnly 等</p>
+<h2 id="Expires、Max-Age"><a href="#Expires、Max-Age" class="headerlink" title="Expires、Max-Age"></a>Expires、Max-Age</h2><p>首先, 我们应该设置 Cookie 的生存周期, 也就是它的有效期, 让它只能在一段时间内可用, 就像是食品的” 保鲜期”, 一旦超过这个期限浏览器就认为是 Cookie 失效, 在存储里删除, 也不会发送给服务器<br>Cookie 的有效期可以使用 <code>Expires</code> 和 <code>Max-Age</code> 两个属性来设置:</p>
+<ul>
+<li><code>Expires</code> 俗称 “过期时间”, 用的是绝对时间点, 可以理解为 “截止日期”(deadline)</li>
+<li><code>Max-Age</code> 用的是相对时间, 单位是<strong>秒</strong>, 浏览器用收到报文的时间点再加上 Max-Age, 就可以得到失效的绝对时间</li>
+<li><code>Expires</code> 和 <code>Max-Age</code> 可以同时出现, 两者的失效时间可以一致, 也可以不一致, <strong>但浏览器会优先采用 Max-Age 计算失效期</strong></li>
+</ul>
+<h2 id="Domain、Path"><a href="#Domain、Path" class="headerlink" title="Domain、Path"></a>Domain、Path</h2><p>其次, 需要设置 Cookie 的作用域, 让浏览器仅发送给特定的服务器 和 URI, 避免被其他网站盗用<br>作用域的设置比较简单, <code>Domain</code> 和 <code>Path</code> 指定了 Cookie 所属的域名和路径, 浏览器在发送 Cookie 前会从 URI 中提取出 host 和 path 部分, 对比 Cookie 的属性, 如果不满足条件, 就不会在请求头里发送 Cookie</p>
+<p>使用这两个属性可以为不同的 域名 和 路径 分别设置各自的 Cookie (比如 “/19-1” 用一个 Cookie, “/19-2” 再用另外一个 Cookie, 两者互不干扰, 不过现实中为了省事, 通常 Path 就用一个 “/“ 或者直接省略,表示域名下的任意路径都允许使用该Cookie)</p>
+<h2 id="HttpOnly"><a href="#HttpOnly" class="headerlink" title="HttpOnly"></a>HttpOnly</h2><p>最后要考虑的就是Cookie 的安全性了, 尽量不要让服务器以外的人看到<br>写过前端的同学一定知道, 在 JS 脚本里可以用 <code>document.cookie</code> 来读写 Cookie 数据,这就带来了安全隐患, 有可能会导致 “跨站脚本”(XSS)攻击窃取数据</p>
+<p>属性 “HttpOnly” 会告诉浏览器, 此 Cookie 只能通过浏览器 HTTP 协议传输, 禁止其他方式访问, 浏览器的 JS 引擎就无法使用 document.cookie 等一切相关的 API, 脚本攻击也就无从谈起了</p>
+<h2 id="SameSite"><a href="#SameSite" class="headerlink" title="SameSite"></a>SameSite</h2><p>另一个属性 “SameSite”, 可以防范”跨站请求伪造”(XSRF)攻击, 设置 <code>SameSite=Strict</code> 可以严格限定 Cookie 不能随着跳转链接跨站发送, 而 <code>SameSite=Lax</code> 则略宽松一点, 允许 GET/HEAD 等安全方法, 但禁止 POST 跨站发送</p>
+<h2 id="Secure"><a href="#Secure" class="headerlink" title="Secure"></a>Secure</h2><p>还有一个属性叫 “Secure”, 表示这个 Cookie 仅能用 HTTPS 协议加密传输, 明文的 HTTP 协议会禁止发送, 但 Cookie 本身不是加密的,浏览器里还是以明文的形式存在</p>
+<h1 id="Cookie-应用"><a href="#Cookie-应用" class="headerlink" title="Cookie 应用"></a>Cookie 应用</h1><p>Cookie 最基本的一个用途就是身份识别, 保存用户的登录信息, 实现会话事务 (比如, 你用账号和密码登录某电商, 登录成功后网站服务器就会发给浏览器一个 Cookie, 内容大概是“name=yourid”, 这样就成功地把身份标签贴在了你身上)</p>
+<p>Cookie 的另一个常见用途是广告跟踪</p>
+<h1 id="Tip"><a href="#Tip" class="headerlink" title="Tip"></a>Tip</h1><p>Cookie 是由浏览器负责存储的, 而不是操作系统。所以, 它是 <strong>浏览器绑定</strong> 的, 只能在本浏览器内生效 (如果你换个浏览器或者换台电脑, 新的浏览器里没有服务器对应的 Cookie, 只能再走一遍 Set-Cookie 流程)<br>Cookie 这个词来源于计算机编程里的术语 <code>Magic Cookie</code>, 意思是不透明的数据, 并不是 “小甜饼” 的含义 (虽然字面意思如此)</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&title=《Cookie》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&title=《Cookie》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cookie》 — Lant's&url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/09/23/nio-socket/2019-09-23-02/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">02.</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/10/22/http/2019-10-22-XSRF/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">XSRF</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&title=《Cookie》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&title=《Cookie》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Cookie》 — Lant's&url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/21/http/2019-10-21-HTTP-Cookie/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtElEQVR42u3a0WrjQAwF0P7/T3dhX0Ode6WZbliOn4opsY4DI0XS11d8ff+9Xu+8Xs//n3/mT0/5unHh4eHhjUJPws0floSeR/L6mUnMeHh4eLd5zyH+9NH74zt5oc/xvLHg4eHh/VPe8532pSRB4+Hh4f1PvPZwf+blpTMeHh7e5/DatuwzMj/oz744PDw8vN/htQOwT/j74nwPDw8PbzFVz0dim+WDttFQxImHh4d3gdeWubNR2aydkY/E3rwaPDw8vMu8U0OstsExWx2IkhMeHh7er/DylkTetG0XBZK0EZXjeHh4eNd4m9WrfHC1GbytmhF4eHh4h3j5AD4pZ2dlcbsuUKyF4eHh4V3gnVoOeL6Tp5O8HK8XC/Dw8PAO8TathM0SQJJI8vv1N4aHh4e3PYHrxaYkxFPN31myeVNY4+Hh4S14eQt1VkZvBmmzBYXh3AwPDw8v5rWthPwBm6FXO/oqimk8PDy8Na/9eZ8EfWM9azZgw8PDw/tN3mzVqS2g25RQN03w8PDwLvBmC1WzRat2GevYagIeHh7eNd5s6NWmhFmrt+Udm+nh4eHhlROiWVk8Wy9o2Qe61Hh4eHiL07IdceUF8awN0SaAqNeCh4eHd5SXp4c2weSjtdmg602SwMPDw7vGa1u37VG+WS84MPrCw8PDO8prj/gkxE3i2TSF68SGh4eHN+Jtfvy3Td6c2n4bUa8FDw8P7xBvMzc7W/62iwXt2AwPDw/vFO+7vPK2wr5ZnKer1TYZHh4eXsnbjLU2j8mT0OYl4uHh4d3jzZJBcn/Wuk2GbcWgDg8PD+8ab99uyDGzpYG2BMfDw8P7NN6pFu1sDSuJBA8PD+8TeLPhVl5kty8rygJ4eHh413h5M2K2RHUjeRSJAQ8PD+8ob/VTf4TZJKSzLQw8PDy8kvcH7uZBBSR6tdcAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

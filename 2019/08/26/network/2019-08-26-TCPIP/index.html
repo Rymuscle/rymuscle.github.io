@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>TCP/IP 协议简介 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="network">
+    <meta name="description" content="TCP/IP五层协议 和 OSI的七层协议 对应关系如下 在每一层都工作着不同的设备, 比如我们常用的交换机就工作在数据链路层的, 一般的路由器是工作在网络层的 在每一层实现的协议也各不同, 即每一层的服务也不同.下图列出了每层主要的协议: 各分层的协议 (在OSI模型中ARP协议属于链路层；而在TCP/IP四层模型中, ARP协议属于网络层)OSI:12345678910111213物理层：EI">
+<meta name="keywords" content="network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP&#x2F;IP 协议简介">
+<meta property="og:url" content="http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="TCP/IP五层协议 和 OSI的七层协议 对应关系如下 在每一层都工作着不同的设备, 比如我们常用的交换机就工作在数据链路层的, 一般的路由器是工作在网络层的 在每一层实现的协议也各不同, 即每一层的服务也不同.下图列出了每层主要的协议: 各分层的协议 (在OSI模型中ARP协议属于链路层；而在TCP/IP四层模型中, ARP协议属于网络层)OSI:12345678910111213物理层：EI">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/tcpip-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/tcpip-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/tcpip-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/network/tcpip-05.png">
+<meta property="og:updated_time" content="2019-11-04T02:47:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP&#x2F;IP 协议简介">
+<meta name="twitter:description" content="TCP/IP五层协议 和 OSI的七层协议 对应关系如下 在每一层都工作着不同的设备, 比如我们常用的交换机就工作在数据链路层的, 一般的路由器是工作在网络层的 在每一层实现的协议也各不同, 即每一层的服务也不同.下图列出了每层主要的协议: 各分层的协议 (在OSI模型中ARP协议属于链路层；而在TCP/IP四层模型中, ARP协议属于网络层)OSI:12345678910111213物理层：EI">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/network/tcpip-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">TCP/IP 协议简介</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-08-26T10:28:05.000Z" itemprop="datePublished" class="page-time">
+  2019-08-26
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-network/2019-08-26-TCPIP"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">TCP/IP 协议简介</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-08-26 18:28:05" datetime="2019-08-26T10:28:05.000Z"  itemprop="datePublished">2019-08-26</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>TCP/IP五层协议 和 OSI的七层协议 对应关系如下<br><img src="/img/network/tcpip-01.png" width="450/"></p>
+<p>在每一层都工作着不同的设备, 比如我们常用的交换机就工作在数据链路层的, 一般的路由器是工作在网络层的<br><img src="/img/network/tcpip-02.png"></p>
+<p>在每一层实现的协议也各不同, 即每一层的服务也不同.下图列出了每层主要的协议:<br><img src="/img/network/tcpip-03.png"></p>
+<p>各分层的协议 (在OSI模型中ARP协议属于链路层；而在TCP/IP四层模型中, ARP协议属于网络层)<br>OSI:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">物理层：EIA/TIA-232, EIA/TIA-499, V.35, V.24, RJ45, Ethernet, 802.3, 802.5, FDDI, NRZI, NRZ, B8ZS</span><br><span class="line"></span><br><span class="line">数据链路层：Frame Relay, HDLC, PPP, IEEE 802.3/802.2, FDDI, ATM,  IEEE 802.5/802.2</span><br><span class="line"></span><br><span class="line">网络层：IP, IPX, AppleTalk DDP, 【ARP,RARP】</span><br><span class="line"></span><br><span class="line">传输层：TCP, UDP, SPX</span><br><span class="line"></span><br><span class="line">会话层：RPC,SQL,NFS,NetBIOS,names,AppleTalk,ASP,DECnet,SCP</span><br><span class="line"></span><br><span class="line">表示层:TIFF,GIF,JPEG,PICT,ASCII,EBCDIC,encryption,MPEG,MIDI,HTML</span><br><span class="line"></span><br><span class="line">应用层：FTP,WWW,Telnet,NFS,SMTP,Gateway,SNMP</span><br></pre></td></tr></table></figure></p>
+<p>参考极客时间: <a href="https://time.geekbang.org/course/detail/100026801-93590" target="_blank" rel="noopener">https://time.geekbang.org/course/detail/100026801-93590</a><br><img src="/img/network/tcpip-05.png"></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/">network</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&title=《TCP/IP 协议简介》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&title=《TCP/IP 协议简介》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《TCP/IP 协议简介》 — Lant's&url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/08/26/network/2019-08-26-OSI/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">OSI 七层模型</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/08/26/network/tcpip-questions-02/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">tcp/ip -- questions</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&title=《TCP/IP 协议简介》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&title=《TCP/IP 协议简介》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《TCP/IP 协议简介》 — Lant's&url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/08/26/network/2019-08-26-TCPIP/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMElEQVR42u3ay07DQAwFUP7/p4vECgk6XNtTIJMzqwo1aU4Wxq+3t/g8Ps768+e/fD35ndffHx0MDIzLMh7L8+xxk7s9u3/OSJ4NAwPjPow8FCYhMr82eQXrZ8PAwMBI0sFJUtgL9BgYGBhJ0Ewet1e+YmBgYEyK2AS2TvvWv1t9fRgYGPdh7BoMvOLzH8w3MDAw/hnjUTyTcnRXkP3mDhgYGEcz8jQuHw/kjOTXC8NUDAyMQxmTgWLSaMsHnEmpXM5bMTAwbsBYk/Ifrj50de0MAwPjbEYvOCal6WQ8WcVjYGCczchb8L1yNG/PVUN8YacDAwPjCEa+QjEZSVZTz8JnDAyMoxmTHY1eEllNNwtXYWBg3IaxoU1fXMLIHxcDAwNjc5u+WCrPh50YGBhnM3o9q2o4rg47879gYGDcjbH+ar5yUW3e9ZY2ysusGBgYl2XkLftJOC60+IOhaXkei4GBcQSjl5YlBXA1lCdhulkHY2BgXJwxySvzhlo1xWzuuGFgYBzE6BWlvVHlrldW/o+BgYFxBKM6KsjHAHsTyqevCQMD42hGEkZ7P9Br3o0WOzAwMA5lPIrnFU236gDgm2sxMDCOZuSn19zPA3oe6DEwMO7JmATZpJU2SQHLa2EYGBhHM/ZuLySlbDX2/3AVBgYGxrgEnbTkyjsjGBgYGMVhQL7AUf3OhhEmBgbGpRhJEfs7I4R1utkcZGJgYFycUS0gJ2Xt3qtG8w0MDIxrMN4BVTQZBpddVY4AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

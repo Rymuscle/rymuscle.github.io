@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>JdbcTemplate | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Spring">
+    <meta name="description" content="概述 JdbcTemplate 是 spring 框架中提供的一个对象, 是对原始 Jdbc API 对象的简单封装  Spring 框架为我们提供了很多 操作模板类  操作关系型数据的: JdbcTemplate、HibernateTemplate  操作 nosql 数据库的: RedisTemplate 操作消息队列的: JmsTemplate   在导包的时候，除了要导入这个 spring">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JdbcTemplate">
+<meta property="og:url" content="http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="概述 JdbcTemplate 是 spring 框架中提供的一个对象, 是对原始 Jdbc API 对象的简单封装  Spring 框架为我们提供了很多 操作模板类  操作关系型数据的: JdbcTemplate、HibernateTemplate  操作 nosql 数据库的: RedisTemplate 操作消息队列的: JmsTemplate   在导包的时候，除了要导入这个 spring">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/jdbc-template-xml.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbc-00.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbctemplate-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbctemplate-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbctemplate-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbctemplate-04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-jdbctemplate-05.png">
+<meta property="og:updated_time" content="2019-08-12T09:15:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JdbcTemplate">
+<meta name="twitter:description" content="概述 JdbcTemplate 是 spring 框架中提供的一个对象, 是对原始 Jdbc API 对象的简单封装  Spring 框架为我们提供了很多 操作模板类  操作关系型数据的: JdbcTemplate、HibernateTemplate  操作 nosql 数据库的: RedisTemplate 操作消息队列的: JmsTemplate   在导包的时候，除了要导入这个 spring">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/SpringFramework/jdbc-template-xml.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">JdbcTemplate</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-19T12:19:36.000Z" itemprop="datePublished" class="page-time">
+  2019-05-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.</span> <span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#JdbcTemplate"><span class="post-toc-number">2.</span> <span class="post-toc-text">JdbcTemplate</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-SpringFramework5/2019-05-19-10"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">JdbcTemplate</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-19 20:19:36" datetime="2019-05-19T12:19:36.000Z"  itemprop="datePublished">2019-05-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ol>
+<li><p><code>JdbcTemplate</code> 是 spring 框架中提供的一个对象, 是对原始 Jdbc API 对象的简单封装</p>
+</li>
+<li><p>Spring 框架为我们提供了很多 操作模板类</p>
+<ul>
+<li>操作关系型数据的: <code>JdbcTemplate</code>、<code>HibernateTemplate</code> </li>
+<li>操作 nosql 数据库的: <code>RedisTemplate</code></li>
+<li>操作消息队列的: <code>JmsTemplate</code></li>
+</ul>
+</li>
+<li><p>在导包的时候，除了要导入这个 <code>spring-jdbc-5.1.4.RELEASE.jar</code> 包外, 还需要导入一个 <code>spring-tx-5.1.4.RELEASE.jar</code> (它是和事务相关的)<br><img src="/img/SpringFramework/jdbc-template-xml.png"></p>
+</li>
+<li><p>下图仅供参考<br><img src="/img/SpringFramework/spring-jdbc-00.png"></p>
+</li>
+</ol>
+<h1 id="JdbcTemplate"><a href="#JdbcTemplate" class="headerlink" title="JdbcTemplate"></a>JdbcTemplate</h1><ol>
+<li><p>JdbcTemplate 最基本的使用<br><img src="/img/SpringFramework/spring-jdbctemplate-01.png"></p>
+</li>
+<li><p>基于 ioc, JdbcTemplate 最基本的使用<br><img src="/img/SpringFramework/spring-jdbctemplate-02.png"></p>
+</li>
+<li><p>JdbcTemplate 基本的 crud 操作<br><img src="/img/SpringFramework/spring-jdbctemplate-03.png"></p>
+</li>
+<li><p>JdbcTemplate 在Dao中的使用<br><img src="/img/SpringFramework/spring-jdbctemplate-04.png"></p>
+</li>
+<li><p>JdbcDaoSupport 使用, 解决各个 Dao 中的重复代码<br><img src="/img/SpringFramework/spring-jdbctemplate-05.png"></p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&title=《JdbcTemplate》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&title=《JdbcTemplate》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JdbcTemplate》 — Lant's&url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/05/18/SpringFramework5/2019-05-18-09/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">AOP (Aspect Oriented Programming) 面向切面编程</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/05/25/SpringFramework5/2019-05-25-11/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Spring 事务控制</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&title=《JdbcTemplate》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&title=《JdbcTemplate》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《JdbcTemplate》 — Lant's&url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/19/SpringFramework5/2019-05-19-10/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACtklEQVR42u3awWrDMBAE0Pz/T6eXHgLFyYy0Ci48n4rr1HoqaJXRPh7x9Xy5Xu/8/e3r/asnk0/lzwxceHh4eBtDv/pz73+bT8r7yWqnKRoVHh4e3jHe1eCunkkG/f5+Ph3JeC7v4+Hh4d2Alyzra9v0dgx4eHh4/4U3+90/DyDw8PDw7sZLBtQOLl/c2+k4krXg4eHhxbx8ub/Pz0fO9/Dw8PC2t7/tYVi7gT733t9P4eHh4R3g5Qvu/qH+VK9UHQ3j4eHhHeOdPtBKYo482ihCXjw8PLwDvDyAyIfexsHtu9aauvDw8PCmeMlRUw7OQ4TkjfmoPpzv4eHh4R3jtdvl2ei2fW9d3/Dw8PBGeW1YkIS57YSulZDoAAwPDw9vlNcmFnl4ulMq2mL24VN4eHh4o7x8iPmA8nKyM8V10xUeHh7eNm9t49vGu+2RWLtl/9ATgYeHh/d1Xh62rpWZtaU/Cnnx8PDwvsJLtsjtYVVeSJItddGkhYeHh3eYV6QXcXCw1hyQx8F1yoKHh4c3swQ+WlJeVPIJamORojjh4eHhHeAli2+7KOfBbt5qsBMB4+Hh4U3xksG1cUO7Ic5LSN2UgIeHh3eAt9YW8IivZ3y15WEt+MDDw8Ob4iVf9dtAdr/ktAFE9L/Cw8PDG+Lli/Lawf8aOA8giuYDPDw8vCFeHgok7Hy7vF9OoiYGPDw8vGO8fPHNX7lTPPZbFvDw8PC+w1sLTPNXJlv29op6IvDw8PCGeM/y2jkq25+4djx4eHh4J3hrTQBrjVBrJWSqiQEPDw9vltcGqe1x1Owk1oEFHh4e3jHeue3yflEZqGl4eHh4N+C1bQH7u/61goGHh4d3H15bGPLGgrYF4cM04eHh4R3jtYdPO42teeC7dmyGh4eHd5o3u51tD8Omnh8LLPDw8PDeXT+dlOQpsBv+HAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

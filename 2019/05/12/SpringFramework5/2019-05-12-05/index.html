@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>基于注解的IOC配置 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Spring">
+    <meta name="description" content="Spring2.0 开始引入基于注解的配置方式, 即 Bean的定义信息可以通过在 Bean的实现类上 标注注解来实现 注解配置和 xml 配置要实现的功能都是一样的, 都是要降低程序间的耦合, 只是配置的形式不一样, 关于实际的开发中到底使用 xml 还是注解, 每家公司有着不同的使用习惯 (基于注解的配置需要 aop jar 包) 创建 spring 的 xml 配置文件并开启对注解的支持 (">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于注解的IOC配置">
+<meta property="og:url" content="http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="Spring2.0 开始引入基于注解的配置方式, 即 Bean的定义信息可以通过在 Bean的实现类上 标注注解来实现 注解配置和 xml 配置要实现的功能都是一样的, 都是要降低程序间的耦合, 只是配置的形式不一样, 关于实际的开发中到底使用 xml 还是注解, 每家公司有着不同的使用习惯 (基于注解的配置需要 aop jar 包) 创建 spring 的 xml 配置文件并开启对注解的支持 (">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-04.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-Autowired.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-Autowired-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-Autowired-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-Autowired-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-innotation-xml-Qualifier-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/springboot/@Value-bean-property-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-annotation.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-annotation-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-annotation-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-annotation-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-annotation-04.png">
+<meta property="og:updated_time" content="2019-08-30T02:53:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于注解的IOC配置">
+<meta name="twitter:description" content="Spring2.0 开始引入基于注解的配置方式, 即 Bean的定义信息可以通过在 Bean的实现类上 标注注解来实现 注解配置和 xml 配置要实现的功能都是一样的, 都是要降低程序间的耦合, 只是配置的形式不一样, 关于实际的开发中到底使用 xml 还是注解, 每家公司有着不同的使用习惯 (基于注解的配置需要 aop jar 包) 创建 spring 的 xml 配置文件并开启对注解的支持 (">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-04.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">基于注解的IOC配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-12T11:36:11.000Z" itemprop="datePublished" class="page-time">
+  2019-05-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用于创建Bean的注解"><span class="post-toc-number">1.</span> <span class="post-toc-text">用于创建Bean的注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Component"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">@Component</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#另外几个注解"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">另外几个注解</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用于-注入依赖bean-的注解"><span class="post-toc-number">2.</span> <span class="post-toc-text">用于 注入依赖bean 的注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Autowired"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">@Autowired</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Qualifier"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">@Qualifier</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Resource"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">@Resource</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#基本类型-的注入"><span class="post-toc-number">3.</span> <span class="post-toc-text">基本类型 的注入</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Value"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">@Value</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用于改变作用范围的注解"><span class="post-toc-number">4.</span> <span class="post-toc-text">用于改变作用范围的注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Scope"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">@Scope</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#用于生命周期的注解"><span class="post-toc-number">5.</span> <span class="post-toc-text">用于生命周期的注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PostConstruct"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">@PostConstruct</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PreDestroy"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">@PreDestroy</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#xml-注解-的IOC"><span class="post-toc-number">6.</span> <span class="post-toc-text">xml + 注解 的IOC</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#几个问题"><span class="post-toc-number">7.</span> <span class="post-toc-text">几个问题</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#纯注解配置IOC"><span class="post-toc-number">8.</span> <span class="post-toc-text">纯注解配置IOC</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Spring的几个新注解"><span class="post-toc-number">9.</span> <span class="post-toc-text">Spring的几个新注解</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Import"><span class="post-toc-number">9.1.</span> <span class="post-toc-text">@Import</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#PropertySource"><span class="post-toc-number">9.2.</span> <span class="post-toc-text">@PropertySource</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#关于-Spring-注解和-XML-的选择问题"><span class="post-toc-number">10.</span> <span class="post-toc-text">关于 Spring 注解和 XML 的选择问题</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-SpringFramework5/2019-05-12-05"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">基于注解的IOC配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-12 19:36:11" datetime="2019-05-12T11:36:11.000Z"  itemprop="datePublished">2019-05-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Spring2.0 开始引入基于注解的配置方式, 即 Bean的定义信息可以通过在 Bean的实现类上 标注注解来实现</p>
+<p>注解配置和 xml 配置要实现的功能都是一样的, 都是要降低程序间的耦合, 只是配置的形式不一样, 关于实际的开发中到底使用 xml 还是注解, 每家公司有着不同的使用习惯 (基于注解的配置需要 aop jar 包)</p>
+<p>创建 spring 的 xml 配置文件并开启对注解的支持 (基于注解整合时, 导入约束时需要多导入 context 名称空间下的约束)<br><img src="/img/SpringFramework/bean-xml-04.png"></p>
+<p>下面开始介绍 Spring IOC 的常用注解</p>
+<h1 id="用于创建Bean的注解"><a href="#用于创建Bean的注解" class="headerlink" title="用于创建Bean的注解"></a>用于创建Bean的注解</h1><p>作用和之前学的使用xml实现ioc时, 配置一个 <code>&lt;bean id=&quot;accountService&quot; class=&quot;com.spring.study.service.impl.AccountServiceImpl&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;</code> 是类似的</p>
+<h2 id="Component"><a href="#Component" class="headerlink" title="@Component"></a><code>@Component</code></h2><p>该注解用于把当前类对象存入Spring容器中<br>属性 <code>value</code>: 指定 bean 的 id (如果不指定 value 属性, 默认 bean 的 id 是当前类的类名, 首字母小写)</p>
+<p><strong>tips</strong>: 要知道, 只在类上加了 <code>@Component</code> 并不能完成 “将类对象存入Spring容器<br>因为我们目前仍然是通过 <code>new ClassPathXmlApplicationContext(&quot;bean.xml&quot;);</code> 来创建容器的, 因此 <code>bean.xml</code> 需要知道你在哪些地方使用了 <code>@Component</code><br>所以会用到新的xml标签 <code>&lt;context:component-scan base-package=&quot;要扫描的包&quot;&gt;&lt;/context:component-scan&gt;</code>, 用来指定将要扫描的注解的位置</p>
+<p><img src="/img/SpringFramework/ioc-innotation-xml.png"></p>
+<h2 id="另外几个注解"><a href="#另外几个注解" class="headerlink" title="另外几个注解"></a>另外几个注解</h2><p><code>@Controller</code>、 <code>@Service</code>、 <code>@Repository</code>, 他们三个注解都是针对 <code>@Component</code> 的衍生注解, 作用及属性都一样, 只不过是提供了更加明确的语义化</p>
+<ul>
+<li><code>@Controller</code>: 一般用于表现层的注解</li>
+<li><code>@Service</code>: 一般用于业务层的注解</li>
+<li><code>@Repository</code>: 一般用于持久层的注解</li>
+</ul>
+<p><img src="/img/SpringFramework/ioc-innotation-xml-01.png"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>相比 使用xml配置来创建bean, xml + annotation 的方式只用在xml中配置很少的内容, 然后对于需要被Spring容器管理的对象, 在其类上加上以上注解即可（<strong>但此时仍然需要在xml中进行配置, 为了说明你使用注解的地方</strong>） </p>
+<h1 id="用于-注入依赖bean-的注解"><a href="#用于-注入依赖bean-的注解" class="headerlink" title="用于 注入依赖bean 的注解"></a>用于 注入依赖bean 的注解</h1><p>作用和之前学的使用xml实现 ioc 时, 在 <code>&lt;bean&gt;</code> 下通过 <code>&lt;property name=&quot;&quot; value=&quot;&quot;&gt;&lt;/property&gt;</code> 或 <code>&lt;property name=&quot;&quot; ref=&quot;&quot;&gt;&lt;/property&gt;</code> 是类似的</p>
+<h2 id="Autowired"><a href="#Autowired" class="headerlink" title="@Autowired"></a><code>@Autowired</code></h2><p>其作用是<strong>自动按照类型注入</strong>, 只要容器中有唯一的一个bean对象的类型 和 <code>@Autowired</code> 所修饰的要注入的变量的类型一致, 就可以注入成功; </p>
+<p>该注解可以修饰 成员变量、方法 ……</p>
+<p><img src="/img/SpringFramework/ioc-innotation-xml-Autowired.png"></p>
+<p><img src="/img/SpringFramework/ioc-innotation-xml-Autowired-01.png"></p>
+<p>如果容器中没有任何对象的类型与当前变量类型匹配, 则注入失败会报错</p>
+<p>如果容器中有多个对象(的类型与当前变量类型匹配时, 会继续使用当前变量名称作为 bean的id进行匹配, 如果id都不匹配则报错)<br><img src="/img/SpringFramework/ioc-innotation-xml-Autowired-02.png"></p>
+<p><img src="/img/SpringFramework/ioc-innotation-xml-Autowired-03.png"></p>
+<p><strong>tip</strong>: 值得注意的是, 在 <code>AccountServiceImpl</code> 中注入 <code>AccountDaoImpl</code> 时, 并没有使用之前xml配置ioc时的三种方式 (并没有 <code>setter</code>), 这是肿么回事儿?<br><code>@Autowired</code> 方式是通过万能而无节操的反射设置属性值的…. （有空可以看看源码）</p>
+<h2 id="Qualifier"><a href="#Qualifier" class="headerlink" title="@Qualifier"></a><code>@Qualifier</code></h2><p>相比于 <code>@Autowired</code>, <code>@Qualifier</code> 会同时按照 类型 和 bean的id 进行匹配<br>属性 <code>value</code> : 用于指定注入bean的id</p>
+<p><code>@Qualifier</code> 略微闹心, 在修饰类成员变量时, 不能单独使用, 还得使用 <code>@Autowired</code></p>
+<p><strong>tips</strong>: 它在给类成员注入时不能单独使用, 但是在给方法参数注入时可以单独使用 (如: <code>public QueryRunner createQueryRunner(@Qualifier(&quot;ds2&quot;) DataSource dataSource){</code>, 指明当Spring容器中有多个类型都为 DataSource 的bean对象时, 此处取name为ds2的)</p>
+<p><img src="/img/SpringFramework/ioc-innotation-xml-Qualifier-01.png"></p>
+<h2 id="Resource"><a href="#Resource" class="headerlink" title="@Resource"></a><code>@Resource</code></h2><p>相比之前两种, <code>@Resource</code> 可以直接按照bean的id进行注入, 并且可以单独使用</p>
+<p>但是它的属性是 <code>name</code>, 用来指明bean的id</p>
+<h1 id="基本类型-的注入"><a href="#基本类型-的注入" class="headerlink" title="基本类型 的注入"></a>基本类型 的注入</h1><ol>
+<li>以上注解都只能注入其他bean类型的数据, 而 基本类型 和 String类型 无法使用上述注解实现</li>
+<li>另外, <strong>集合类型的注入只能使用 xml 配置的方式进行注入</strong></li>
+</ol>
+<h2 id="Value"><a href="#Value" class="headerlink" title="@Value"></a><code>@Value</code></h2><p>其作用用于注入 基本类型 和 String类型 的数据</p>
+<p>属性value用于指定数据的值, 同时它还可以使用 Spring 中的 SpEL表达式 (el表达式的写法 <code>${表达式}</code>)</p>
+<p><img src="/img/springboot/@Value-bean-property-01.png"></p>
+<h1 id="用于改变作用范围的注解"><a href="#用于改变作用范围的注解" class="headerlink" title="用于改变作用范围的注解"></a>用于改变作用范围的注解</h1><h2 id="Scope"><a href="#Scope" class="headerlink" title="@Scope"></a><code>@Scope</code></h2><p>作用 和 之前学的使用xml实现ioc时, 在 <code>&lt;bean&gt;</code> 中使用 <code>scope</code> 属性是类似的</p>
+<p>属性<code>value</code>: 用于指定范围, 取值为 (singleton: 默认值, 单例的、prototype: 多例的  、…)</p>
+<p>可以用在类上(当类使用了创建bean的注解时,可以一起用), 也可以用在返回bean对象的方法上(当方法上使用了 <code>@Bean</code> 将bean交给Spring容器进行管理时, 可以一起使用)</p>
+<h1 id="用于生命周期的注解"><a href="#用于生命周期的注解" class="headerlink" title="用于生命周期的注解"></a>用于生命周期的注解</h1><p>作用和之前学的使用xml实现ioc时, 在 <code>&lt;bean&gt;</code> 中使用 <code>init-method</code>、<code>destroy-method</code> 属性是类似的<br>用于方法上, 指定方法为 初始化方法 或者 销毁方法 (<strong>如果是多例对象的话, 调用销毁方法没效, 因为多例的销毁是JVM进行的</strong>)</p>
+<h2 id="PostConstruct"><a href="#PostConstruct" class="headerlink" title="@PostConstruct"></a><code>@PostConstruct</code></h2><p>指定初始化方法</p>
+<h2 id="PreDestroy"><a href="#PreDestroy" class="headerlink" title="@PreDestroy"></a><code>@PreDestroy</code></h2><p>指定销毁方法</p>
+<h1 id="xml-注解-的IOC"><a href="#xml-注解-的IOC" class="headerlink" title="xml + 注解 的IOC"></a><code>xml + 注解</code> 的IOC</h1><p>到目前为止我们仍未脱离 xml配置: 对于上面的示例中的操作, 相比 使用xml配置来 创建bean 或者 依赖注入, xml+annotation 的方式只用在xml中配置很少的内容（为了说明你使用注解的地方）, 然后对于需要被Spring容器管理的对象, 在其类上加上以上注解即可</p>
+<h1 id="几个问题"><a href="#几个问题" class="headerlink" title="几个问题"></a>几个问题</h1><ol>
+<li>注解配置Ioc的问题： <strong>试想一下, 一旦当我们所依赖的对象是其他 jar 包中的类时, 我们是无法使用 注解 方法完成bean的创建 和 注入 的, 因为我们无法在别人jar包的代码中加注解</strong></li>
+<li>如何将 xml配置 直接取消, 完全使用纯注解进行 IOC 配置呢 ?</li>
+</ol>
+<h1 id="纯注解配置IOC"><a href="#纯注解配置IOC" class="headerlink" title="纯注解配置IOC"></a>纯注解配置IOC</h1><p><img src="/img/SpringFramework/ioc-annotation.png"></p>
+<h1 id="Spring的几个新注解"><a href="#Spring的几个新注解" class="headerlink" title="Spring的几个新注解"></a>Spring的几个新注解</h1><p>在纯注解配置IOC时, 如果要对配置类进行拆分, 比如 公共配置类, 和多个专项配置类, 如果拆开的话, 由于主配置类文件中的扫描路径不包含 config路径, 所以会报错, 可以如下:<br><img src="/img/SpringFramework/ioc-annotation-01.png"><br>或者<br><img src="/img/SpringFramework/ioc-annotation-02.png"></p>
+<p>如果不希望每个配置类都配置 <code>@Configuration</code>, 并且在主配置类中还要修改 <code>@ComponentScan</code> 设置多个路径<br>或者也不希望在 <code>AnnotationConfigApplicationContext</code> 中传递多个配置类<br>该怎么办?</p>
+<h2 id="Import"><a href="#Import" class="headerlink" title="@Import"></a><code>@Import</code></h2><p>用于导入其他配置类; 属性value, 用于指定其他配置类的字节码</p>
+<p><img src="/img/SpringFramework/ioc-annotation-03.png"></p>
+<h2 id="PropertySource"><a href="#PropertySource" class="headerlink" title="@PropertySource"></a><code>@PropertySource</code></h2><p>用于指定 properties 文件的路径, 属性value用来指定文件的路径 （value中的关键字<code>classpath:</code>表示类路径下）<br>当使用 <code>@Configuration</code> 修饰的配置类, 并通过在其中的方法上使用 <code>@Bean</code> 来将bean对象交给Spring容器管理时, 比如在操作数据库时, 由于需要设置一些datasource的数据参数, 这些参数就写死到了 方法中</p>
+<p>此时就需要使用 <code>@PropertySource</code> 并且配合 <code>@Value</code>来将这些基本类型进行注入</p>
+<p><img src="/img/SpringFramework/ioc-annotation-04.png"></p>
+<h1 id="关于-Spring-注解和-XML-的选择问题"><a href="#关于-Spring-注解和-XML-的选择问题" class="headerlink" title="关于 Spring 注解和 XML 的选择问题"></a>关于 Spring 注解和 XML 的选择问题</h1><ol>
+<li><p>注解的优势: 配置简单, 维护方便 (我们找到类, 就相当于找到了对应的配置)</p>
+</li>
+<li><p>XML 的优势: 修改时, 不用改源码。不涉及重新编译和部署 </p>
+</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&title=《基于注解的IOC配置》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&title=《基于注解的IOC配置》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于注解的IOC配置》 — Lant's&url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/05/12/SpringFramework5/2019-05-12-04/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">基于 XML 的 IOC 配置</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/05/14/SpringFramework5/2019-05-14-07/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Spring 整合 Junit</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&title=《基于注解的IOC配置》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&title=《基于注解的IOC配置》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于注解的IOC配置》 — Lant's&url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-05/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACsklEQVR42u3aQW4jMQwEQP//08k1QOK4m5SyxqLm5MN4NCUDEt3U4xFfH1+u5J7v19d7nt2fPPNx48LDw8NbvPrvr/V9gP23kuckU/N0CvDw8PCu8Z6tqL/fkzwhX9aTTSJ/Zzw8PLz34e0L5bZMx8PDw/ufeG25nG8AySTi4eHh/VteHr8mW0W7uLehxpWsBQ8PDy/m5V2k9/l8pb+Hh4eHt+6qt6XtrKHVjlt8Cw8PD+8CL19wjw22XtXrFhoeHh7eUV4eOuQR6uxg1mZan25ReHh4eJd5M0B+vCAvu/NQ+EWIjIeHh3eZ17a1Zm3+vDSfvecP/xXw8PDwjvJuDDArr2dl+rFUAw8PDy/m5WV0XhbnEUM70W2UjIeHh3ePty+d2+jhVKPrxZTh4eHhXeDNlua8pM63hDz+2ETAeHh4eKd4m2J6H9Qmn9vRi/odDw8Pr/zWrB2Vl7CbdDlZ9F+U8nh4eHgXeG0h2y7T+f1tBFwcccDDw8O7xpsN1ka0+evmLbfo0BUeHh7eZV4bB7Rts1n7rT18gIeHh3eb1x4ImC3leYiQH7o6EObi4eHhjXizTWJfEOcTOjyUgIeHh3eB1y76m5I6iQ82x7nqxBoPDw+v5M2GPLttzMr0YsfDw8PDO8o70F4qo9VTBwWKnwcPDw/vMi8/aFU3ouItZD8FfUqBh4eHt+WdLbLzp81i3BfTgYeHh3eZN2uG5aVwcoCgvV68Gx4eHt5R3kd5tUcBZu3/2fECPDw8vL/htYvvZrCkmM6nbL+d4OHh4W14myA1WcT3k7gKLPDw8PCu8eoMo9we2iX+2M6Gh4eH92a89gDBpuqfbRh4eHh478DL49o80m3jjPwQLR4eHt49Xt58SmLZU5HEgbIeDw8P7wJv9o8+Hz5f4vP7H2cvPDw8vJT3CddkDQGHlHU9AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

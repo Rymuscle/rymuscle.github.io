@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>50. 多线程入门 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Java">
+    <meta name="description" content="并发 vs 并行 并发: 指的是同一时间段内, 有两个或多个事件在执行 并行: 指的是同一时刻, 有两个或多个事件在执行  创建线程的 类 Java 使用 java.lang.Thread 类代表线程类, 所有的线程对象都必须是 Thread类 或 其子类的实例; 每个线程的作用是完成一定的任务(即 执行一段程序流, 一段代码)  Java 中有两种方式来创建线程: 一种是继承 Thread类 的">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="50. 多线程入门">
+<meta property="og:url" content="http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="并发 vs 并行 并发: 指的是同一时间段内, 有两个或多个事件在执行 并行: 指的是同一时刻, 有两个或多个事件在执行  创建线程的 类 Java 使用 java.lang.Thread 类代表线程类, 所有的线程对象都必须是 Thread类 或 其子类的实例; 每个线程的作用是完成一定的任务(即 执行一段程序流, 一段代码)  Java 中有两种方式来创建线程: 一种是继承 Thread类 的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-name-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-setname-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-setname-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-sleep-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase/thread-10.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/javase-concurrency/create-thread-runnable-01.png">
+<meta property="og:updated_time" content="2019-09-04T03:10:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="50. 多线程入门">
+<meta name="twitter:description" content="并发 vs 并行 并发: 指的是同一时间段内, 有两个或多个事件在执行 并行: 指的是同一时刻, 有两个或多个事件在执行  创建线程的 类 Java 使用 java.lang.Thread 类代表线程类, 所有的线程对象都必须是 Thread类 或 其子类的实例; 每个线程的作用是完成一定的任务(即 执行一段程序流, 一段代码)  Java 中有两种方式来创建线程: 一种是继承 Thread类 的">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/javase/thread-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">50. 多线程入门</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-04-21T03:19:36.000Z" itemprop="datePublished" class="page-time">
+  2019-04-21
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#并发-vs-并行"><span class="post-toc-number">1.</span> <span class="post-toc-text">并发 vs 并行</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#创建线程的-类"><span class="post-toc-number">2.</span> <span class="post-toc-text">创建线程的 类</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#继承-Thread类-创建线程类"><span class="post-toc-number">3.</span> <span class="post-toc-text">继承 Thread类 创建线程类</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Thread类常用方法"><span class="post-toc-number">4.</span> <span class="post-toc-text">Thread类常用方法</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#两种方法获取线程名"><span class="post-toc-number">5.</span> <span class="post-toc-text">两种方法获取线程名</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#两种方法设置线程名"><span class="post-toc-number">6.</span> <span class="post-toc-text">两种方法设置线程名</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#线程的-sleep-方法"><span class="post-toc-number">7.</span> <span class="post-toc-text">线程的 sleep() 方法</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#多线程内存浅析"><span class="post-toc-number">8.</span> <span class="post-toc-text">多线程内存浅析</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#实现-Runnable接口-创建线程"><span class="post-toc-number">9.</span> <span class="post-toc-text">实现 Runnable接口 创建线程</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#扩展"><span class="post-toc-number">10.</span> <span class="post-toc-text">扩展</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-JavaSE/2019-04-21-50"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">50. 多线程入门</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-04-21 11:19:36" datetime="2019-04-21T03:19:36.000Z"  itemprop="datePublished">2019-04-21</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Java/">Java</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="并发-vs-并行"><a href="#并发-vs-并行" class="headerlink" title="并发 vs 并行"></a>并发 vs 并行</h1><ol>
+<li>并发: 指的是同一时间段内, 有两个或多个事件在执行</li>
+<li>并行: 指的是同一时刻, 有两个或多个事件在执行</li>
+</ol>
+<h1 id="创建线程的-类"><a href="#创建线程的-类" class="headerlink" title="创建线程的 类"></a>创建线程的 类</h1><ol>
+<li><p>Java 使用 <code>java.lang.Thread</code> 类代表线程类, 所有的线程对象都必须是 Thread类 或 其子类的实例; 每个线程的作用是完成一定的任务(即 执行一段程序流, 一段代码)</p>
+</li>
+<li><p>Java 中有两种方式来创建线程: 一种是继承 <code>Thread类</code> 的方式, 另一种是实现 <code>Runnable接口</code> 的方式</p>
+</li>
+</ol>
+<h1 id="继承-Thread类-创建线程类"><a href="#继承-Thread类-创建线程类" class="headerlink" title="继承 Thread类 创建线程类"></a>继承 <code>Thread类</code> 创建线程类</h1><ol>
+<li><p>通过继承 <code>Thread类</code> 来创建并启动多线程, 步骤如下:</p>
+<ul>
+<li>定义 <code>Thread类</code> 的子类, 并重写该类的 <code>run()</code> 方法, 方法体就代表了线程需要执行的任务 ( <code>run()</code> 方法也称为线程的执行体)</li>
+<li>创建线程对象 (实例化你的线程类)</li>
+<li>调用线程对象的 <code>start()</code> 方法来启动该线程</li>
+</ul>
+</li>
+<li><p>Java程序属于 <strong>抢占式调度</strong>, 哪个线程的优先级高, 哪个线程就优先执行, 同一个优先级会随机选择一个执行</p>
+</li>
+<li><p>可以看到main线程和新创建的thread线程会出现抢占调度的情况<br><img src="/img/javase/thread-01.png"></p>
+</li>
+</ol>
+<h1 id="Thread类常用方法"><a href="#Thread类常用方法" class="headerlink" title="Thread类常用方法"></a>Thread类常用方法</h1><ol>
+<li><p>构造方法:</p>
+<ul>
+<li><code>public Thread()</code> 分配一个新的线程对象</li>
+<li><code>public Thread(String name)</code> 分配一个指定名字的新的线程对象</li>
+<li><code>public Thread(Runnable target)</code> 分配一个带有指定目标的新的线程对象</li>
+<li><code>public Thread(Runnable target, String name)</code> 分配一个带有指定目标的新的线程对象, 并指定线程名字</li>
+</ul>
+</li>
+<li><p>常用方法</p>
+<ul>
+<li><code>public void start()</code> 导致此线程开始执行, JVM调用此线程的 <code>run()</code> 方法</li>
+<li><code>public void run()</code> 此线程要指定的任务在此处定义代码</li>
+<li><code>public String getName()</code> 获取当前线程名称</li>
+<li><code>public static void sleep(long millis)</code> 使当前正在执行的线程以指定的毫秒数暂停</li>
+<li><code>public static Thread currentThread()</code> 返回对当前正在执行的线程对象的引用</li>
+</ul>
+</li>
+</ol>
+<h1 id="两种方法获取线程名"><a href="#两种方法获取线程名" class="headerlink" title="两种方法获取线程名"></a>两种方法获取线程名</h1><p>1.可以直接使用 <code>Thread类</code> 中的方法 <code>String getName()</code> 返回线程的名称</p>
+<p>2.也可以使用 <code>Thread类</code> 中的静态方法</p>
+<ul>
+<li>先获取到正在执行的线程 <code>Thread.currentThread()</code> 返回当前正在执行的线程对象的引用</li>
+<li>然后使用线程中的方法 <code>String getName()</code> 获取线程的名称 (当然, 如果在子线程对象中, 也可以不用Thread调用, 而是直接 <code>currentThread().getName()</code> 也可以)</li>
+</ul>
+<p>DEMO<br><img src="/img/javase/thread-name-01.png"></p>
+<h1 id="两种方法设置线程名"><a href="#两种方法设置线程名" class="headerlink" title="两种方法设置线程名"></a>两种方法设置线程名</h1><p>设置线程的名称有两种方法: 一种是子类自己给自己起名字, 一种是子类让父类Thread给起名字</p>
+<ol>
+<li><p>子类自己给自己起名字: 直接使用Thread类的方法 <code>setName(名字)</code><br> <img src="/img/javase/thread-setname-02.png"></p>
+</li>
+<li><p>父类 Thread 给自定义的线程类起名字:</p>
+<ul>
+<li>为你的线程类创建一个带参数的构造方法, 参数传递线程的名称</li>
+<li>在构造方法中调用父类的带参构造方法, 把线程名称传递给父类, 让父类(Thread)给子线程起一个名字<br><img src="/img/javase/thread-setname-01.png"></li>
+</ul>
+</li>
+</ol>
+<h1 id="线程的-sleep-方法"><a href="#线程的-sleep-方法" class="headerlink" title="线程的 sleep() 方法"></a>线程的 sleep() 方法</h1><p><code>Thread.sleep(毫秒数)</code><br>如下, 为了明显地看到线程抢占式调度的效果, 可以适当地将线程任务进行sleep<br><img src="/img/javase/thread-sleep-01.png"></p>
+<h1 id="多线程内存浅析"><a href="#多线程内存浅析" class="headerlink" title="多线程内存浅析"></a>多线程内存浅析</h1><ol>
+<li><p><strong>tip</strong>: 自定义线程对象直接调用 <code>run()</code> 和 调用 <code>start()</code> 是有区别的</p>
+</li>
+<li><p>线程 与 堆栈<br>栈是一块和线程紧密相关的内存区域, 每个线程都有自己的栈内存, 用于存储本地变量, 方法参数和栈调用, 一个线程中存储的变量对其它线程是不可见的;<br>而堆是所有线程共享的一片公用内存区域, 对象都在堆里创建, 为了提升效率线程会从堆中弄一个缓存到自己的栈, 如果多个线程使用该变量就可能引发问题, 这时 volatile 变量就可以发挥作用了, 它要求线程从主存中读取变量的值</p>
+</li>
+<li><p>如下图: 当我们直接调用线程对象的 <code>run()</code> 方法时, 该方法只是存在于 main线程栈空间的一个普通方法; 只有调用线程对象的 <code>start()</code> 方法时, 才会开辟新的栈空间并执行 run方法中的线程任务<br><img src="/img/javase/thread-10.png"></p>
+</li>
+</ol>
+<h1 id="实现-Runnable接口-创建线程"><a href="#实现-Runnable接口-创建线程" class="headerlink" title="实现 Runnable接口 创建线程"></a>实现 <code>Runnable接口</code> 创建线程</h1><ol>
+<li><p>采用 <code>java.lang.Runnable</code> 也是非常常见的一种创建线程的方式, 只需要重写 <code>run()</code> 方法即可</p>
+<ul>
+<li>定义 <code>Runnable接口</code> 的实现类, 并重写该接口的 <code>run()</code> 方法,  <code>run()</code> 方法的方法体同样是该线程的线程执行体</li>
+<li>创建 Runnable 实现类的实例, 并以此实例作为 <code>Thread类</code> 的 target参数 来创建Thread对象, 该Thread对象才是真正的线程对象</li>
+<li>最后调用线程对象的 <code>start()</code> 方法来启动线程</li>
+</ul>
+</li>
+<li><p>示例<br><img src="/img/javase-concurrency/create-thread-runnable-01.png"></p>
+</li>
+</ol>
+<h1 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h1><p>在Java中, 每次程序运行至少启动2个线程, 一个是main线程, 一个是垃圾收集线程; 因为每当使用java命令执行一个类的时候, 实际上都会启动一个JVM, 每一个JVM其实就是在操作系统中启动了一个进程;</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&title=《50. 多线程入门》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&title=《50. 多线程入门》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《50. 多线程入门》 — Lant's&url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/20/JavaWeb/2019-04-20-04/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">Servlet 体系结构</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/04/21/JavaSE/2019-04-21-51/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">51</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&title=《50. 多线程入门》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&title=《50. 多线程入门》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《50. 多线程入门》 — Lant's&url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/04/21/JavaSE/2019-04-21-50/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aMW7kMAwF0Ln/pWfbNJY/SScLS09VYGAsPRcMSfHzidf3x7p6vl7rN693eWxhYGC8lpFsf/Xk6g35QatvvqRiYGAcwEhC4frQSThe77Le9+bMGBgYGMvN1sFxnsthYGBgTAJuXl0mO/63/xsYGBgvYfQC36Q910tDH6jFMTAwXsioBs2//PtX7jcwMDBexfgWV16y5q3/B06FgYGxNSMPcJND52/I0z4MDIwzGfkG1UNPGnmFkhUDA2NTRnUAold2PvUhLn+FgYGxNaM3NpEUt08lfIXWGwYGxqaMdcDNrxWfuubMAzEGBsZpjKTgnCRw+RGbIRsDA2NrRnX0KilW5+E1v7aMLgYwMDBezsib8tXGXFIM964/b7qGGBgYmzLygFt4dZzwzXtoGBgY5zB6hWvv8qA3I3H5BAMD4wBGdY6sWmROPkp5ZgQDA2M7xmQUrDeW8VT6iIGBcSajd2E5n9eqXkJE4x0YGBjHMKpPclJvyKOwIwYGxnaMvL2VAyaF7idel003DAyMAxjVUa110jYPr+XrAQwMjE0Z1Sb+U4G4mlze9AsxMDC2Y3yLK2979YJsk4qBgbE1o1ouzkcieo25yfQXBgbGHoxJgTpBVlNADAwMjEngqw5bTK4EbkpZDAwMjGLTPylfqyNfNxU5BgYGRutwo4Qv/3AYGBgHMPLhrWTL9cb5QZMEEQMD4wRGXjqOZjoGhWs0FoaBgbEn4x/6yqh2IjKfAAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

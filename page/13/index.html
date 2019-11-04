@@ -139,14 +139,14 @@
     <ul class="post-list">
     
         <li class="post-list-item fade">
-            <article id="post-redis/2017-06-18-redis-12"
+            <article id="post-elasticsearch/2018-06-15-08"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-06-17 11:30:03" datetime="2017-06-17T03:30:03.000Z"  itemprop="datePublished">2017-06-17</time>
+        <time class="post-time" title="2018-06-15 18:56:31" datetime="2018-06-15T10:56:31.000Z"  itemprop="datePublished">2018-06-15</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -157,7 +157,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/17/redis/2017-06-18-redis-12/">12. Redis -- 发布订阅</a>
+      <a class="post-title-link" href="/2018/06/15/elasticsearch/2018-06-15-08/">08. 全文检索,结构化精确检索,短语检索,统计 预习</a>
     </h3>
   
 
@@ -167,28 +167,21 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        
-发布订阅其实 和 队列 非常相似:
+        查询和过滤
+在es中检索文档时候, 对文档的筛选分为 查询 和 过滤, 这两种方式是不太一样的
 
-这里的 频道, 就类似于任务队列中所讨论的 队列;
-而订阅者就类似于 任务队列中所讨论的 消费者;
-
-
-但他们还是有区别的: 
-
-对于队列来说, 即使消费者不在线, 消息也一直在队列中存放着, 等待消费者上线后进行处理;
-而对于 发布订阅 中的 订阅者来说, 如果消息发布到频道中时, 订阅者不在线(没有一直阻塞等待), 那么这条消息也不会为它保存着;
-...
+练习, 搜索商品desc字段中包含 ‘diannao’, 并且售价大于5000的商品
+ 1234567891011121314151617GET /products/computer/_search&#123;  &quot;query&quot; : &#123;    &quot;bool&...
     
 
-        <a href="/2017/06/17/redis/2017-06-18-redis-12/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/15/elasticsearch/2018-06-15-08/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
 
     </div>
     
@@ -197,14 +190,14 @@
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-redis/2017-06-17-redis-11"
+            <article id="post-elasticsearch/2018-06-14-07"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-06-17 11:30:03" datetime="2017-06-17T03:30:03.000Z"  itemprop="datePublished">2017-06-17</time>
+        <time class="post-time" title="2018-06-14 10:50:39" datetime="2018-06-14T02:50:39.000Z"  itemprop="datePublished">2018-06-14</time>
 
         
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
 
 
 
@@ -215,58 +208,7 @@
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/17/redis/2017-06-17-redis-11/">11. Redis -- task queue</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言现在有很多专门的队列软件(如ActiveMQ, RabbitMQ等)，在缺少专门的任务队列可用的情况下, 也可以使用Redis的队列机制;
-FIFO 先进先出队列
-Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的两端推入和弹出元素。
-
-假设一个操作中, 有向用户发送电子邮件这一功能, 由于这一功能可能会有非常高的延迟,甚至可能会出现发送失败, 所...
-    
-
-        <a href="/2017/06/17/redis/2017-06-17-redis-11/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-redis/2017-06-18-redis-15"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-15 22:37:42" datetime="2017-06-15T14:37:42.000Z"  itemprop="datePublished">2017-06-15</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/15/redis/2017-06-18-redis-15/">15. redis集群</a>
+      <a class="post-title-link" href="/2018/06/14/elasticsearch/2018-06-14-07/">07. 查询小优化</a>
     </h3>
   
 
@@ -277,16 +219,17 @@ Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的�
 
     
         
+由于你的每个查询操作都可能会被转发到不同node的shard去执行, 现在假设你的查询, 会打到不同的10个shard上, 每个shard上都要花费1秒钟才能出结果, 这样你总共10s后才会给用户响应, 如果是个商品列表, 用户体验就会非常差 假设本来需要在10秒钟拿到100条数据(每个shard上10条), 现在你可以设置让es在1秒钟就让请求返回, 只拿到部分数据即可 此时可以在查询请...
     
 
-        <a href="/2017/06/15/redis/2017-06-18-redis-15/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/14/elasticsearch/2018-06-14-07/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
 
     </div>
     
@@ -295,172 +238,11 @@ Redis的列表结构, 允许通过 RPUSH和LPUSH以及RPOP和LPOP, 从列表的�
         </li>
     
         <li class="post-list-item fade">
-            <article id="post-redis/2017-06-12-redis-08"
+            <article id="post-MySQL 暂停/2018-06-13-mysql-52"
   class="article-card article-type-post" itemprop="blogPost">
 
     <div class="post-meta">
-        <time class="post-time" title="2017-06-12 16:35:08" datetime="2017-06-12T08:35:08.000Z"  itemprop="datePublished">2017-06-12</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/12/redis/2017-06-12-redis-08/">08. redis锁 -- 不太安全?</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        前言一般来说, 在对数据进行”加锁”时, 程序首先需要获取锁来得到对数据进行排他性访问的能力, 然后才能对数据执行一系列操作, 最后还要将锁释放给其他程序;之前已经了解过, Redis使用WATCH命令来代替对数据进行加锁, 因为WATCH只会在数据被其他客户端抢先修改了的情况下通知执行了这个命令的客户端, 所以这个命令被称为乐观锁;
-SETEX 实现锁介绍为了对数据进行排他性访问, 程序首...
-    
-
-        <a href="/2017/06/12/redis/2017-06-12-redis-08/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-redis/2017-06-11-redis-07"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-11 21:14:46" datetime="2017-06-11T13:14:46.000Z"  itemprop="datePublished">2017-06-11</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/11/redis/2017-06-11-redis-07/">07. redis事务与WATCH乐观锁</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Redis事务与单线程
-因为Redis是单线程的, 所以即使多个客户端同时来对同一数据发来很多命令, 也会被串行挨个执行;
-
-但是需要注意的是, 这和mysql的srialize隔离级别一样, 即使是串行执行命令, redis也逃不过高并发事务时的 更新丢失 问题; 
-
-mysql是使用乐观锁, 悲观锁来解决的 参考MySQL高并发事务问题 及 解决方案
-而redis的事务也是通过与WATC...
-    
-
-        <a href="/2017/06/11/redis/2017-06-11-redis-07/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-redis/2017-06-11-redis-06"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-11 19:10:03" datetime="2017-06-11T11:10:03.000Z"  itemprop="datePublished">2017-06-11</time>
-
-        
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Redis/">Redis</a></li></ul>
-
-
-
-    </div>
-
-    
-
-
-  
-    <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/11/redis/2017-06-11-redis-06/">06. Redis 事务</a>
-    </h3>
-  
-
-
-
-
-    <div class="post-content" id="post-content" itemprop="postContent">
-
-    
-        Redis事务介绍
-redis事务是使用队列以先进先出(FIFO)的方法保存命令, 较先入队的命令会被放到数组的前面, 而较后入队的命令则会被放到数组的后面
-
-redis事务从开始到结束通常会通过三个阶段:
-
-事务开0始
-命令入队
-事务执行
-
-
-Redis事务通常会使用 MULTI, EXEC, WATCH等命令来完成
-
-
-redis事务的ACID特性在redis中, 事务具有 原子性(At...
-    
-
-        <a href="/2017/06/11/redis/2017-06-11-redis-06/" class="post-more waves-effect waves-button">
-            阅读全文…
-        </a>
-    </div>
-    
-    <div class="post-footer">
-        
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Redis/">Redis</a></li></ul>
-
-    </div>
-    
-</article>
-
-        </li>
-    
-        <li class="post-list-item fade">
-            <article id="post-MySQL/2017-06-10-mysql-01"
-  class="article-card article-type-post" itemprop="blogPost">
-
-    <div class="post-meta">
-        <time class="post-time" title="2017-06-10 11:02:51" datetime="2017-06-10T03:02:51.000Z"  itemprop="datePublished">2017-06-10</time>
+        <time class="post-time" title="2018-06-13 19:20:53" datetime="2018-06-13T11:20:53.000Z"  itemprop="datePublished">2018-06-13</time>
 
         
 	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
@@ -474,7 +256,7 @@ redis事务的ACID特性在redis中, 事务具有 原子性(At...
 
   
     <h3 class="post-title" itemprop="name">
-      <a class="post-title-link" href="/2017/06/10/MySQL/2017-06-10-mysql-01/">01. MySQL 知识点</a>
+      <a class="post-title-link" href="/2018/06/13/MySQL 暂停/2018-06-13-mysql-52/">52. 索引 和 锁</a>
     </h3>
   
 
@@ -484,22 +266,365 @@ redis事务的ACID特性在redis中, 事务具有 原子性(At...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        安装权限https://www.cnblogs.com/jackruicao/p/6068821.html?utm_source=itdadao&amp;utm_medium=referral
-几个重要文件数据库层面
-my.cnf (MySQL参数文件)
-error Log (MySQL 错误日志)
-slow Query Log (慢查询日志)
-general Query Log (全量日志...
+        
+https://segmentfault.com/a/1190000013669062
+聚集索引就是按照每张表的主键构造一棵B+树，同时叶子节点存放的即为整张表的行记录数据，聚集索引的叶子节点称为数据页。每个数据页通过一个双向链表来进行连接。通过查看表空间文件发现非数据页节点存放的仅仅是键值及指向数据页的偏移量，而不是一个完整的行记录，而数据页上存放的是完整的每行的记录。聚集索引的存储其实...
     
 
-        <a href="/2017/06/10/MySQL/2017-06-10-mysql-01/" class="post-more waves-effect waves-button">
+        <a href="/2018/06/13/MySQL 暂停/2018-06-13-mysql-52/" class="post-more waves-effect waves-button">
             阅读全文…
         </a>
     </div>
     
     <div class="post-footer">
         
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-14-rabbitmq-12"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-13 19:14:30" datetime="2018-06-13T11:14:30.000Z"  itemprop="datePublished">2018-06-13</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/13/rabbitmq/2018-06-14-rabbitmq-12/">12. 惰性队列</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        https://www.rabbitmq.com/lazy-queues.html
+
+    
+
+        <a href="/2018/06/13/rabbitmq/2018-06-14-rabbitmq-12/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-rabbitmq/2018-06-11-rabbitmq-10"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-12 14:36:51" datetime="2018-06-12T06:36:51.000Z"  itemprop="datePublished">2018-06-12</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/RabbitMQ/">RabbitMQ</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/12/rabbitmq/2018-06-11-rabbitmq-10/">10. 消息拉取和推送</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+    
+
+        <a href="/2018/06/12/rabbitmq/2018-06-11-rabbitmq-10/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-MySQL 暂停/2018-06-11-mysql-50"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-11 10:03:25" datetime="2018-06-11T02:03:25.000Z"  itemprop="datePublished">2018-06-11</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/11/MySQL 暂停/2018-06-11-mysql-50/">No title</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+    
+
+        <a href="/2018/06/11/MySQL 暂停/2018-06-11-mysql-50/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-MySQL 暂停/2018-06-11-mysql-51"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 19:20:53" datetime="2018-06-10T11:20:53.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/">51. 索引案例</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        选择性低 vs 高使用频率
+假设要设计一个在线约会的网站, 用户信息表有很多列, 包括 国家, 地区, 城市, 性别, 年龄 等, 网站必须支持以上列的各种组合来搜索用户, 此时如何设计索引? 根据之前对 选择性 这一概念的了解, 你可能会想到我们应该在选择性高的列上创建索引
+
+但在这里有两个特殊的列: 选择性很低的 sex 列, 和 选择性不怎么高的 country 列; 这两个列的选择性...
+    
+
+        <a href="/2018/06/10/MySQL 暂停/2018-06-11-mysql-51/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-10-06"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 17:06:39" datetime="2018-06-10T09:06:39.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-06/">06. mget, bulk 批量操作</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        mget 批量查询
+批量查询可以只发送一次网络请求, 返回多条查询结果, 能大大缩减网络请求的性能开销
+练习 : 12345678GET /_mget&#123;  &quot;docs&quot; : [    &#123;&quot;_index&quot;:&quot;products&quot;,&quot;_type&quot;:&quot;computer&quot;,&quot...
+    
+
+        <a href="/2018/06/10/elasticsearch/2018-06-10-06/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-MySQL 暂停/2018-06-10-mysql-49"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 15:21:01" datetime="2018-06-10T07:21:01.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/MySQL/">MySQL</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/MySQL 暂停/2018-06-10-mysql-49/">49. 未使用的索引</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        
+有些索引可能是服务器永远不会用到的索引, 这些未使用的索引完全是累赘, 建议删除;
+
+如何定位未使用的索引? … P188
+
+
+
+    
+
+        <a href="/2018/06/10/MySQL 暂停/2018-06-10-mysql-49/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/《高性能MySQL》/">《高性能MySQL》</a></li></ul>
+
+    </div>
+    
+</article>
+
+        </li>
+    
+        <li class="post-list-item fade">
+            <article id="post-elasticsearch/2018-06-10-05"
+  class="article-card article-type-post" itemprop="blogPost">
+
+    <div class="post-meta">
+        <time class="post-time" title="2018-06-10 14:33:46" datetime="2018-06-10T06:33:46.000Z"  itemprop="datePublished">2018-06-10</time>
+
+        
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Elasticsearch/">Elasticsearch</a></li></ul>
+
+
+
+    </div>
+
+    
+
+
+  
+    <h3 class="post-title" itemprop="name">
+      <a class="post-title-link" href="/2018/06/10/elasticsearch/2018-06-10-05/">05. ES的搜索方式 Query-string 与 query DSL, multi-index, multi-type搜索模式</a>
+    </h3>
+  
+
+
+
+
+    <div class="post-content" id="post-content" itemprop="postContent">
+
+    
+        Query-string 搜索
+之所以叫 query-string, 是因为search的参数都是以http请求的 query-string 来传递的
+
+练习, 搜索全部商品 GET /products/computer/_search
+
+练习, 搜索商品desc字段中包含 ‘diannao’, 并按照售价排序 GET /products/computer/_search?q=desc:di...
+    
+
+        <a href="/2018/06/10/elasticsearch/2018-06-10-05/" class="post-more waves-effect waves-button">
+            阅读全文…
+        </a>
+    </div>
+    
+    <div class="post-footer">
+        
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Elasticsearch/">Elasticsearch</a></li></ul>
 
     </div>
     
@@ -512,7 +637,7 @@ general Query Log (全量日志...
     
 <nav id="page-nav">
     <div class="inner">
-    <a class="extend prev" rel="prev" href="/page/12/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span>
+    <a class="extend prev" rel="prev" href="/page/12/">上一页</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><a class="page-number" href="/page/15/">15</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/14/">下一页</a>
     </div>
 </nav>
 
@@ -619,21 +744,5 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

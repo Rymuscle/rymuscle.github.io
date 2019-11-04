@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>HTTPS 证书申请 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="HTTP">
+    <meta name="description" content="系统, 浏览器 数字证书的申请HTTPS 整体过程浏览器验证证书流程 浏览器向服务器发请求https://www.example.com 服务器将caFile和pubkey1(实际上就是申请证书流程中生成的一对秘钥中的公钥pubk1)发给浏览器 浏览器收到caFile文件进行分析，知道了签名算法；拿到CA机构名称后，由于浏览器中内置了该CA机构的根证书，所以知道pubk2；还知道caFile文件">
+<meta name="keywords" content="HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTPS 证书申请">
+<meta property="og:url" content="http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="系统, 浏览器 数字证书的申请HTTPS 整体过程浏览器验证证书流程 浏览器向服务器发请求https://www.example.com 服务器将caFile和pubkey1(实际上就是申请证书流程中生成的一对秘钥中的公钥pubk1)发给浏览器 浏览器收到caFile文件进行分析，知道了签名算法；拿到CA机构名称后，由于浏览器中内置了该CA机构的根证书，所以知道pubk2；还知道caFile文件">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-01T06:39:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTPS 证书申请">
+<meta name="twitter:description" content="系统, 浏览器 数字证书的申请HTTPS 整体过程浏览器验证证书流程 浏览器向服务器发请求https://www.example.com 服务器将caFile和pubkey1(实际上就是申请证书流程中生成的一对秘钥中的公钥pubk1)发给浏览器 浏览器收到caFile文件进行分析，知道了签名算法；拿到CA机构名称后，由于浏览器中内置了该CA机构的根证书，所以知道pubk2；还知道caFile文件">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">HTTPS 证书申请</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-10-24T09:10:36.000Z" itemprop="datePublished" class="page-time">
+  2019-10-24
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#"><span class="post-toc-number">1.</span> <span class="post-toc-text"> </span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#数字证书的申请"><span class="post-toc-number">2.</span> <span class="post-toc-text">数字证书的申请</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#HTTPS-整体过程"><span class="post-toc-number">3.</span> <span class="post-toc-text">HTTPS 整体过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#浏览器验证证书流程"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">浏览器验证证书流程</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#tips"><span class="post-toc-number">4.</span> <span class="post-toc-text">tips</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-http/2019-10-24-HTTS"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">HTTPS 证书申请</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-10-24 17:10:36" datetime="2019-10-24T09:10:36.000Z"  itemprop="datePublished">2019-10-24</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/HTTP/">HTTP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id=""><a href="#" class="headerlink" title=" "></a> </h1><p>系统, 浏览器</p>
+<h1 id="数字证书的申请"><a href="#数字证书的申请" class="headerlink" title="数字证书的申请"></a>数字证书的申请</h1><h1 id="HTTPS-整体过程"><a href="#HTTPS-整体过程" class="headerlink" title="HTTPS 整体过程"></a>HTTPS 整体过程</h1><h2 id="浏览器验证证书流程"><a href="#浏览器验证证书流程" class="headerlink" title="浏览器验证证书流程"></a>浏览器验证证书流程</h2><ol>
+<li>浏览器向服务器发请求<a href="https://www.example.com" target="_blank" rel="noopener">https://www.example.com</a></li>
+<li>服务器将caFile和pubkey1(实际上就是申请证书流程中生成的一对秘钥中的公钥pubk1)发给浏览器</li>
+<li>浏览器收到caFile文件进行分析，知道了签名算法；拿到CA机构名称后，由于浏览器中内置了该CA机构的根证书，所以知道pubk2；还知道caFile文件中的签名值sigVal以及原文（caFile的一部分，这部分在申请证书流程中称为CSR文件）知道这四个条件，就可以验证签名了，若验证签名成功则进入第4步。</li>
+<li>接下来浏览器校验证书申请者的身份，从caFile中取出pubk1和网站地址w1。如果w1和<a href="https://www.example.com一摸一样，而且pubk1与连接成功后服务器发下来的公钥pubkey1相等，则说明浏览器连接的https://www.example.com没问题，而且没有受到中间人攻击" target="_blank" rel="noopener">https://www.example.com一摸一样，而且pubk1与连接成功后服务器发下来的公钥pubkey1相等，则说明浏览器连接的https://www.example.com没问题，而且没有受到中间人攻击</a></li>
+<li>一旦服务器校验成功，接下来就是进行秘钥协商，这个协商成功后的秘钥就是真正用来加密业务数据的秘钥</li>
+</ol>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ol>
+<li>一台服务器只能有一个证书? 一个证书如何解决一台服务器上多个https域名的问题?</li>
+</ol>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTTP/">HTTP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&title=《HTTPS 证书申请》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&title=《HTTPS 证书申请》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTPS 证书申请》 — Lant's&url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/10/23/http/2019-10-23-HTTS/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">HTTPS是什么?SSL/TLS又是什么?</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/10/24/network/https-wireshark/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Wireshark 抓包分析 HTTPS</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&title=《HTTPS 证书申请》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&title=《HTTPS 证书申请》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《HTTPS 证书申请》 — Lant's&url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/10/24/http/2019-10-24-HTTS/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKUlEQVR42u3aQY7jMAwEwPn/p7PnxcDebsoB1lL5NHAcR6UDhxT58xNfn1/X1f2rJ+/feXXn4QsDA+O1jGQR7ae/358vPd8mDAyM0xhXESx59dV7ZgH0/p2X9zEwMDDi5a6E72RrMDAwMGaMWQF8vykYGBgYsyJ2tvR8y9rQjIGBcQ5jpbD89t9f6W9gYGC8ivEpr1lKlwTKtsT9620YGBhbM/IAlyeO643Mdj0YGBjnMO5/Piky2yO2fPAiShYxMDA2ZSQ/0wbcNljngxqXPAwMjAMYbSBOBi9mY2HDBgAGBsZhjKdaj234nhXDGBgY5zBWCs6VZufsmG8p98TAwHgho2035m3LZ1sL0VZiYGBsyshL0DZEzgJ6vq3/OG7DwMDYjnF/rZ9xzVoLeUmMgYGxN2P4hXIII28M5CQMDIwzGe0IxQyTj53VbQMMDIxjGEXpWDLWg3iR52JgYGzEmB3056neeqiNWqoYGBhbM2aNySRpyxsGsyejWhwDA2M7Rjs2MStu22SxwGBgYBzGyO8nYXe2TXV7AAMD4wBGftDWJovf6zMW82gYGBivZXzKK190PmzRtiWGeSgGBsZrGe2o1mwkYmXkqxi2wMDA2JrRLi4/ys9bkrP0EQMD4zRGsrj2KC1PCh8Y4MDAwMAYDUCsHLrVQ2kYGBgYy/Vxgm+fefj/BgYGxn/PWGkGJE/mTYI2QcTAwDiBkX+tPWhr25bt0jEwMA5g/AHtKKh2N58IjQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

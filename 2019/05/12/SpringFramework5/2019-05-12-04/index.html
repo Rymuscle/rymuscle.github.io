@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>基于 XML 的 IOC 配置 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Spring">
+    <meta name="description" content="认识 Spring 的配置文件 Spring的配置文件 其实就是Spring容器对Bean进行生产以及关系注入的图纸, 它是Spring的基础, 如果没有配置文件的话, 则 Spring 的容器将无从谈起Spring 的配置文件 是用于指导 Spring 工厂进行 Bean 的生产、依赖关系注入及 Bean 实例分发的”图纸”, 我们必须学会并灵活应用这份”图纸”, 准确地表达自己的”生产意图”,">
+<meta name="keywords" content="Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 XML 的 IOC 配置">
+<meta property="og:url" content="http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="认识 Spring 的配置文件 Spring的配置文件 其实就是Spring容器对Bean进行生产以及关系注入的图纸, 它是Spring的基础, 如果没有配置文件的话, 则 Spring 的容器将无从谈起Spring 的配置文件 是用于指导 Spring 工厂进行 Bean 的生产、依赖关系注入及 Bean 实例分发的”图纸”, 我们必须学会并灵活应用这份”图纸”, 准确地表达自己的”生产意图”,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-construct-no-param.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ApplicationContext-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ApplicationContext-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ApplicationContext-03.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-constructor.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-setter.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/spring-p-namespace.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-p-namespace-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/SpringFramework/ioc-collection.png">
+<meta property="og:updated_time" content="2019-08-29T04:01:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 XML 的 IOC 配置">
+<meta name="twitter:description" content="认识 Spring 的配置文件 Spring的配置文件 其实就是Spring容器对Bean进行生产以及关系注入的图纸, 它是Spring的基础, 如果没有配置文件的话, 则 Spring 的容器将无从谈起Spring 的配置文件 是用于指导 Spring 工厂进行 Bean 的生产、依赖关系注入及 Bean 实例分发的”图纸”, 我们必须学会并灵活应用这份”图纸”, 准确地表达自己的”生产意图”,">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/SpringFramework/bean-xml-01.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">基于 XML 的 IOC 配置</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-12T07:07:48.000Z" itemprop="datePublished" class="page-time">
+  2019-05-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#认识-Spring-的配置文件"><span class="post-toc-number">1.</span> <span class="post-toc-text">认识 Spring 的配置文件</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#xml-配置-ioc"><span class="post-toc-number">2.</span> <span class="post-toc-text">xml 配置 ioc</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#配置-lt-bean-gt-标签"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">配置 &lt;bean&gt; 标签</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#bean-的作用范围和生命周期"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">bean 的作用范围和生命周期</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ApplicationContext-接口的实现类"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">ApplicationContext 接口的实现类</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建-Bean-的三种配置方式"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">创建 Bean 的三种配置方式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用默认无参构造函数"><span class="post-toc-number">2.4.1.</span> <span class="post-toc-text">使用默认无参构造函数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用静态工厂的方法创建对象"><span class="post-toc-number">2.4.2.</span> <span class="post-toc-text">使用静态工厂的方法创建对象</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用实例工厂的方法创建对象"><span class="post-toc-number">2.4.3.</span> <span class="post-toc-text">使用实例工厂的方法创建对象</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Ioc-注入-Bean-的三种方式"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">Ioc (注入 Bean) 的三种方式</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#构造函数注入-constructor-arg"><span class="post-toc-number">2.5.1.</span> <span class="post-toc-text">构造函数注入 (constructor-arg)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#set-方法注入-property"><span class="post-toc-number">2.5.2.</span> <span class="post-toc-text">set 方法注入 (property)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#p-名称空间注入数据-p"><span class="post-toc-number">2.5.3.</span> <span class="post-toc-text">p 名称空间注入数据 (p:)</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#如何注入集合属性"><span class="post-toc-number">2.6.</span> <span class="post-toc-text">如何注入集合属性?</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-SpringFramework5/2019-05-12-04"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">基于 XML 的 IOC 配置</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-12 15:07:48" datetime="2019-05-12T07:07:48.000Z"  itemprop="datePublished">2019-05-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Spring/">Spring</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="认识-Spring-的配置文件"><a href="#认识-Spring-的配置文件" class="headerlink" title="认识 Spring 的配置文件"></a>认识 Spring 的配置文件</h1><ol>
+<li><p><strong>Spring的配置文件 其实就是Spring容器对Bean进行生产以及关系注入的图纸, 它是Spring的基础, 如果没有配置文件的话, 则 Spring 的容器将无从谈起</strong><br>Spring 的配置文件 是用于指导 Spring 工厂进行 Bean 的生产、依赖关系注入及 Bean 实例分发的”图纸”, 我们必须学会并灵活应用这份”图纸”, 准确地表达自己的”生产意图”, 它是一个或多个标准的XML文档 (<code>ApplicationContext.xml</code> 是Spring的默认配置文件, 当容器启动时找不到其他的配置文件时, 则会尝试加载这个默认的配置文件)</p>
+</li>
+<li><p>Spring启动时会读取 配置文件 中提供的Bean的配置信息, 并在Spring容器中生成一份相应的Bean的配置注册表, 然后根据这张注册表来实例化Bean, 装配好Bean之间的依赖关系, 为上层应用提供准备就绪的运行环境</p>
+</li>
+<li><p><strong>bean的配置信息就是Bean的元数据信息, 由以下五个方面来组成</strong>:<br> Bean的一些属性信息: 比如 数据源的连接数, 用户名和密码等等<br> Bean的依赖关系: Spring根据依赖关系配置完成Bean之间的装配<br> Bean的行为配置: 比如, 生命周期范围以及生命周期各个过程的回调函数等<br> Bean的创建方式定义: 主要说明是通过构造器还是工厂方法来构造Bean</p>
+</li>
+<li><p>有时, 一个项目中可能存在多个配置文件, 那么Spring项目加载多个配置文件的方法如下:<br> 在配置文件中使用 <code>import</code> 来导入所需的配置文件<br> 将多个配置文件构造为一个数组, 然后传递给 <code>ApplicationContext</code><br> 这两种方式都是通过调用 <code>BeanDefinitionReader</code> 来读取定义文件的, 在内部实现上没有任何的区别</p>
+</li>
+<li><p>在大型的Spring项目当中, 所有的bean配置在一个配置文件当中很不容易管理且也不利于团队的开发; 因此, 通常在开发过程当中, 我们会按照 功能模块和开发人员 来将配置文件分成多个, 这样会有利与模块的划分, 接下来我们需要使用 <code>import</code> 属性来引入多个配置文件到项目当中</p>
+</li>
+</ol>
+<h1 id="xml-配置-ioc"><a href="#xml-配置-ioc" class="headerlink" title="xml 配置 ioc"></a>xml 配置 ioc</h1><p>在项目根目录下创建任意名称的 xml 文件 (此处为 bean.xml):</p>
+<p>给配置文件导入约束 (查看文档/spring-framework-5.1.4.RELEASE/docs/spring-framework-reference/core.html)<br><img src="/img/SpringFramework/bean-xml-01.png"><br>如下就做好了准备工作<br><img src="/img/SpringFramework/bean-xml-03.png"></p>
+<h2 id="配置-lt-bean-gt-标签"><a href="#配置-lt-bean-gt-标签" class="headerlink" title="配置 &lt;bean&gt; 标签"></a>配置 <code>&lt;bean&gt;</code> 标签</h2><ol>
+<li><p>其作用就是配置对象以让 spring 进行创建, 默认情况下它调用的是类中的无参构造函数, <strong>如果没有无参构造函数则不能创建成功</strong><br><img src="/img/SpringFramework/bean-xml-construct-no-param.png"></p>
+</li>
+<li><p>属性: </p>
+</li>
+</ol>
+<ul>
+<li>id: 给对象在容器中提供一个唯一标识, 用于获取对象</li>
+<li>class: 指定类的全类名, 用于反射创建对象 (默认情况下调用无参构造函数)</li>
+<li><p><strong>scope: 指定对象的作用范围</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">singleton: 默认值, 单例的</span><br><span class="line">prototype: 多例的</span><br><span class="line">request: WEB项目中, Spring创建一个Bean的对象, 将对象存入到request域中</span><br><span class="line">session: WEB项目中, Spring创建一个Bean的对象, 将对象存入到session域中</span><br><span class="line">global session: 作用于集群环境的会话范围, 当不是集群环境时, 则作用于session</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>init-method: 指定类中的初始化方法名称</p>
+</li>
+<li>destroy-method: 指定类中销毁方法名称</li>
+</ul>
+<h2 id="bean-的作用范围和生命周期"><a href="#bean-的作用范围和生命周期" class="headerlink" title="bean 的作用范围和生命周期"></a>bean 的作用范围和生命周期</h2><p>单例对象: <code>scope=&quot;singleton&quot;</code> </p>
+<ol>
+<li>一个应用只有一个对象的实例, 它的作用范围就是整个应用</li>
+<li>生命周期:</li>
+</ol>
+<ul>
+<li>对象出生: 当容器创建时(配置文件被加载时), 对象立刻就被创建了</li>
+<li>对象活着: 只要容器在, 对象一直活着</li>
+<li>对象死亡: 容器销毁时, 对象就被销毁了</li>
+<li>小结: 单例对象的生命周期和容器相同</li>
+</ul>
+<p>多例对象: <code>scope=&quot;prototype&quot;</code></p>
+<ol>
+<li>每次访问对象时, 都会重新创建对象实例</li>
+<li>生命周期: </li>
+</ol>
+<ul>
+<li>对象出生: 当获取对象时, 才会创建新的对象实例</li>
+<li>对象活着: 只要对象在使用中, 就一直活着</li>
+<li>对象死亡: 当对象长时间不用时, 且没有别的对象使用时, 会被 java 的垃圾回收器回收了</li>
+</ul>
+<h2 id="ApplicationContext-接口的实现类"><a href="#ApplicationContext-接口的实现类" class="headerlink" title="ApplicationContext 接口的实现类"></a><code>ApplicationContext</code> 接口的实现类</h2><ol>
+<li><code>ClassPathXmlApplicationContext</code>: 可以加载类路径下的配置文件, 否则无法加载 （实际开发中, 相比第二种而言, 这种比较常用）</li>
+<li><code>FileSystemXmlApplicationContext</code>: 可以加载磁盘任意路径下的配置文件 (必须有访问权限)</li>
+<li><p><code>AnnotationConfigApplicationContext</code>: 用于读取注解创建容器</p>
+</li>
+<li><p><code>BeanFactory</code> 和 <code>ApplicationContext</code></p>
+</li>
+</ol>
+<ul>
+<li><p><code>BeanFactory</code> 才是 Spring 容器中的顶层接口, <code>ApplicationContext</code> 是它的子接口<br><img src="/img/SpringFramework/ApplicationContext-01.png"><br><img src="/img/SpringFramework/ApplicationContext-02.png"><br>下面还可以查看其实现类<br><img src="/img/SpringFramework/ApplicationContext-03.png"></p>
+</li>
+<li><p>两者创建对象的时间点不一样<br><code>BeanFactory</code>: 创建对象采取的是延迟加载, 什么时候get, 什么时候创建对象 （所以 多例 貌似比较适用）<br><code>ApplicationContext</code>: 只要一读取配置文件, 默认情况下就会创建对象 （所以 单例 貌似比较适用） 实际开发中更多适用 <code>ApplicationContext</code> </p>
+</li>
+</ul>
+<h2 id="创建-Bean-的三种配置方式"><a href="#创建-Bean-的三种配置方式" class="headerlink" title="创建 Bean 的三种配置方式"></a>创建 Bean 的三种配置方式</h2><h3 id="使用默认无参构造函数"><a href="#使用默认无参构造函数" class="headerlink" title="使用默认无参构造函数"></a>使用默认无参构造函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--在默认情况下: 它会根据默认无参构造函数来创建类对象。如果 bean 中没有默认无参构造函数, 将会创建失败--&gt;</span><br><span class="line">&lt;bean id=&quot;accountService&quot; class=&quot;com.spring.study.service.impl.AccountServiceImpl&quot; scope=&quot;singleton&quot;&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="使用静态工厂的方法创建对象"><a href="#使用静态工厂的方法创建对象" class="headerlink" title="使用静态工厂的方法创建对象"></a>使用静态工厂的方法创建对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 模拟一个静态工厂, 创建业务层实现类</span><br><span class="line">*/</span><br><span class="line">public class StaticFactory &#123;</span><br><span class="line">    public static IAccountService createAccountService()&#123; </span><br><span class="line">        return new AccountServiceImpl();</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line">&lt;!-- 此种方式是: 使用 StaticFactory 类中的静态方法 createAccountService 创建对象, 并存入 spring 容器</span><br><span class="line">id 属性: 指定 bean 的 id, 用于从容器中获取 </span><br><span class="line">class 属性: 指定静态工厂的全限定类名 </span><br><span class="line">factory-method 属性: 指定生产对象的静态方法</span><br><span class="line">--&gt;</span><br><span class="line">&lt;bean id=&quot;accountService&quot; class=&quot;com.spring.study.factory.InstanceFactory&quot; factory-method=&quot;getAccountService&quot;&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="使用实例工厂的方法创建对象"><a href="#使用实例工厂的方法创建对象" class="headerlink" title="使用实例工厂的方法创建对象"></a>使用实例工厂的方法创建对象</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">* 模拟一个实例工厂, 创建业务层实现类</span><br><span class="line">* 此工厂创建对象, 必须现有工厂实例对象, 再调用方法 </span><br><span class="line">*/</span><br><span class="line">public class InstanceFactory &#123;</span><br><span class="line">public IAccountService createAccountService()&#123;</span><br><span class="line">    return new AccountServiceImpl(); </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&lt;!-- 此种方式是:</span><br><span class="line">先把工厂的创建交给 spring 来管理</span><br><span class="line">然后在使用工厂的 bean 来调用里面的方法 </span><br><span class="line">factory-bean 属性: 用于指定实例工厂 bean 的 id</span><br><span class="line">factory-method 属性: 用于指定实例工厂中创建对象的方法</span><br><span class="line">--&gt;</span><br><span class="line">&lt;bean id=&quot;instancFactory&quot; class=&quot;com.spring.study.factory.InstanceFactory&quot;&gt;&lt;/bean&gt;</span><br><span class="line">&lt;bean id=&quot;accountService&quot; factory-bean=&quot;instancFactory&quot; factory-method=&quot;createAccountService&quot;&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Ioc-注入-Bean-的三种方式"><a href="#Ioc-注入-Bean-的三种方式" class="headerlink" title="Ioc (注入 Bean) 的三种方式"></a>Ioc (注入 Bean) 的三种方式</h2><h3 id="构造函数注入-constructor-arg"><a href="#构造函数注入-constructor-arg" class="headerlink" title="构造函数注入 (constructor-arg)"></a>构造函数注入 (<code>constructor-arg</code>)</h3><p>顾名思义, 就是使用类中的构造函数, 给成员变量赋值 (<strong>注意</strong>: 赋值的操作不是我们自己做的, 还是通过配置的方式, 让 spring 框架来为我们注入)<br><img src="/img/SpringFramework/ioc-constructor.png"></p>
+<h3 id="set-方法注入-property"><a href="#set-方法注入-property" class="headerlink" title="set 方法注入 (property)"></a>set 方法注入 (<code>property</code>)</h3><p><img src="/img/SpringFramework/ioc-setter.png"></p>
+<h3 id="p-名称空间注入数据-p"><a href="#p-名称空间注入数据-p" class="headerlink" title="p 名称空间注入数据 (p:)"></a>p 名称空间注入数据 (<code>p:</code>)</h3><p>使用 p名称空间 注入数据(本质还是调用 set 方法, 即 类的属性需要有对应的setter)<br>参考文档 /spring-framework-5.1.4.RELEASE/docs/spring-framework-reference/core.html 在xml中导入 <code>P命名空间</code><br><img src="/img/SpringFramework/spring-p-namespace.png"><br>测试<br><img src="/img/SpringFramework/ioc-p-namespace-01.png"></p>
+<h2 id="如何注入集合属性"><a href="#如何注入集合属性" class="headerlink" title="如何注入集合属性?"></a>如何注入集合属性?</h2><p><img src="/img/SpringFramework/ioc-collection.png"></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&title=《基于 XML 的 IOC 配置》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&title=《基于 XML 的 IOC 配置》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于 XML 的 IOC 配置》 — Lant's&url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/05/12/SpringFramework5/2019-05-12-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">最基础的 Spring 项目</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/05/12/SpringFramework5/2019-05-12-05/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">基于注解的IOC配置</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&title=《基于 XML 的 IOC 配置》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&title=《基于 XML 的 IOC 配置》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《基于 XML 的 IOC 配置》 — Lant's&url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/12/SpringFramework5/2019-05-12-04/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACwUlEQVR42u3awW4bMQwE0Pz/T7dATwUar2dIyenh7clwbK+eDitmyK+v+Pr153r+69+fyV//+91Xv/y8htWFh4eHN1r6q6td7qvtyBc325qXW4CHh4d3jZfcJrnaAyM/cp637+X7eHh4eD/Ke6a2RXD+meTgwcPDw/s/ee3NNolBTsXDw8P7KV77uH8uoKOY4PF4yMvxY1kLHh4eXneXY9HqZ15f7O/h4eHhLbrqySFRF7iLVlm9Wjw8PLwLvNkN2oGAdpuei+x2i/Hw8PDO8mZtqk3cUOx6uQXfvMbDw8O7wHt+3M8e+u1GbNps0aGCh4eHd4HXtpc2R8ImzlgNcuHh4eEd5bVjAfkDvR0vaAcLVm0wPDw8vAXvQBIcRL1JQbxZevQtPDw8vDWv+Ge+DAvajZjd8c07eHh4eBd4myD17BjWqfj4TUqNh4eHd5R3I5LIS/Z2zKv4Fh4eHt5lXl7UtgdDvll5eBEV8Xh4eHjXeHnJOyua9+V422zDw8PDu8GbjZnmI1abYaznX4vaaXh4eHjXeHmRnRfBbWNsxnhTiOPh4eFd4LWYWfSQF8GbyOPlevDw8PA+wksevnlscXYsoP4kHh4e3gVe3uDPI922LE4C3DwUrr+Mh4eHN+JtSuT8CGkHFI5tCh4eHt4h3rFWUxKnBp/PxwsiJB4eHt413mz06lQ80YYXxb3w8PDwLvDyh/WsWZVHwO29inIcDw8P7yhv1pTKdy5v/+fjBUXIi4eHh3eZl1z74DUvxPPD4+Vv4uHh4V3g1Y/asnGVjyDkR0U7ZICHh4d3g7dvg+Utrlkh3h4MeHh4eJ/h5QttF5EvZVYcFyk1Hh4e3sd5bfF9turPG2zDgwEPDw/vI7w2hJ0FGZtwBA8PD+8eb1MKz8KCWQScrwEPDw/vHm/WAMuD3dly28093N/Dw8PD+/76DVGlnHFipGqxAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

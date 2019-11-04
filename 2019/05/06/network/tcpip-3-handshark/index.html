@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>三次握手 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="network">
+    <meta name="description" content="在抓包分析TCP/IP, 需要了解几个简单概念  位码, 即tcp标志位, 通常用大写, 有6种: SYN(synchronous建立联机)、ACK(acknowledgement 确认)、PSH(push传送)、FIN(finish结束)、RST(reset重置)、URG(urgent紧急) Sequence number(顺序号码)、Acknowledge number(确认号码)  三次握手">
+<meta name="keywords" content="network">
+<meta property="og:type" content="article">
+<meta property="og:title" content="三次握手">
+<meta property="og:url" content="http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="在抓包分析TCP/IP, 需要了解几个简单概念  位码, 即tcp标志位, 通常用大写, 有6种: SYN(synchronous建立联机)、ACK(acknowledgement 确认)、PSH(push传送)、FIN(finish结束)、RST(reset重置)、URG(urgent紧急) Sequence number(顺序号码)、Acknowledge number(确认号码)  三次握手">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/tcpip/3-handshark.jpg">
+<meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-01.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-02.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-03.png">
+<meta property="og:updated_time" content="2019-11-01T08:10:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="三次握手">
+<meta name="twitter:description" content="在抓包分析TCP/IP, 需要了解几个简单概念  位码, 即tcp标志位, 通常用大写, 有6种: SYN(synchronous建立联机)、ACK(acknowledgement 确认)、PSH(push传送)、FIN(finish结束)、RST(reset重置)、URG(urgent紧急) Sequence number(顺序号码)、Acknowledge number(确认号码)  三次握手">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/tcpip/3-handshark.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">三次握手</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-05-06T12:07:49.000Z" itemprop="datePublished" class="page-time">
+  2019-05-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#三次握手"><span class="post-toc-number">1.</span> <span class="post-toc-text">三次握手</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-network/tcpip-3-handshark"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">三次握手</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-05-06 20:07:49" datetime="2019-05-06T12:07:49.000Z"  itemprop="datePublished">2019-05-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/network/">network</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在抓包分析TCP/IP, 需要了解几个简单概念</p>
+<ul>
+<li>位码, 即tcp标志位, 通常用大写, 有6种: <code>SYN</code>(synchronous建立联机)、<code>ACK</code>(acknowledgement 确认)、<code>PSH</code>(push传送)、<code>FIN</code>(finish结束)、<code>RST</code>(reset重置)、<code>URG</code>(urgent紧急)</li>
+<li><code>Sequence number</code>(顺序号码)、<code>Acknowledge number</code>(确认号码)</li>
+</ul>
+<h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><p><img src="/img/tcpip/3-handshark.jpg"></p>
+<p>1.第一次握手<br><img src="/img/tools/wireshark/test-01.png"><br>主机A发送位码为 <code>SYN</code>(syn＝1), 随机产生 <code>seq number=x</code> 的数据包到服务器, 主机B由 <code>SYN</code>(syn=1) 知道,A要求建立联机\<br>客户端进入 <code>SYN SENT</code> 状态</p>
+<p>2.第二次握手<br><img src="/img/tools/wireshark/test-02.png"><br>主机B收到请求后要确认联机信息，向A发送位码为 <code>ACK</code>+<code>SYN</code> (ack=1, syn=1)<br>ACK: <code>ack number = x+1(即主机A的seq+1)</code><br>SYN: 随机产生 <code>seq number=y</code></p>
+<p>服务器进入 <code>SYN RECV</code> 状态</p>
+<p>3.第三次握手<br><img src="/img/tools/wireshark/test-03.png"><br>主机A收到后检查 <code>ack number</code> 是否正确,即第一次发送的 <code>seq number+1 (x+1)</code>, 以及位码 <code>ACK</code>(ack=1)<br>若正确, 主机A会再发送 <code>ack number=(主机B的seq+1,即 Y+1)</code>, 此时自然是<code>ACK</code>(ack=1), 同时还会将 <code>seq number=x+1</code> 发送到服务端<br>主机B收到后确认 <code>ACK</code>, <code>ack = y+1</code>, <code>seq = x+1</code> 值, 客户端和服务器进入 <code>ESTABLISHED</code> (TCP连接成功) 状态, 完成三次握手</p>
+<ol>
+<li>tip<br>10 帧是客户端向服务端发送 <code>tcp window update</code>, 表示buffer已经清空。并提示服务端现在已经有足够的window, 大小为 408288</li>
+</ol>
+<!--https://blog.csdn.net/qq_35860138/article/details/82054793-->
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/">network</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&title=《三次握手》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&title=《三次握手》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《三次握手》 — Lant's&url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/04/21/JavaWeb/2019-04-21-07/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">ServletContext</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/05/11/SpringFramework5/2019-05-11-01/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Spring Framework 5 入门</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&title=《三次握手》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&title=《三次握手》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《三次握手》 — Lant's&url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/05/06/network/tcpip-3-handshark/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aQXKDMAwF0Nz/0vQAGeBLIp3BfqwyacB+LFTJ0ucTX0dwnf0yefL3vZ9fXBgYGK9lTDZ39k11o2dPSPaGgYGxDyMJhfnnPIDmpJs9Y2BgYFwudh2+k7Cb3IWBgYFRZSQbur4352FgYGDkRWzvBGweph+uxTEwMF7IqG7oPz//pL+BgYHxKsZRvKqH+9VAebQuDAyMtRl5gMu3lZfEvUbC6S8xMDCWZlSDZl6sTkYrqjAMDIxVGb3GYS/h6wXuCIyBgbEBY578JVuZJKAP/JfAwMB4LSNfLP/rpIjNXw0GBsZujF4R2yt3J8dq5eCLgYGxBKPatnyqPVl95k3wxcDAWJrRWyA/jc9/kwf9m04sBgbGNoxkgWppOmknRGklBgbGBozqDMPk6C0vpPNvMDAw1mY8RSqMR7ReVqG1gIGBsRAjuS1JHPM0blLQnr50DAyMLRnVsjbZVvVF5EMbGBgYazPmcwvVEreXDjaLWAwMjIUY1eGGXjhOnpmPiN0MW2BgYCzNqB6iJelgtVXQG9HAwMDYjdE7ROulhlHGmvc0MDAwlmMcxevZ8a9eedysvDEwMF7LqI5q5YXrvNmQJ50YGBg7MPIgm+ebk6CZF7EYGBi7MZpjDYPBi17adxq+MTAwMIrDE3nKWF3xpiLHwMDAiI/JHkv44tUxMDB2YPSaAfnhft4qaB7/YWBgLM3Ib0tK1moSOWlOYGBgbMD4A8js0T/3m3pTAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

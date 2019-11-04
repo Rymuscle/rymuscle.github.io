@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>PHP 基础 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="PHP">
+    <meta name="description" content="语言结构和函数 什么是语言结构和函数  语言结构: 就是PHP语言的关键词, 语言语法的一部分 函数: 由代码块组成的,可以复用   语言结构为什么比函数快? 原因是在PHP中, 函数都要先被PHP解析器(Zend引擎)分解成语言结构, 所以有此可见, 函数比语言结构多了一层解析器解析这样就能比较好的理解, 为什么语言结构比函数快了  语言结构和函数的不同  语言结构比对应功能的函数快 语言结构在">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP 基础">
+<meta property="og:url" content="http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="语言结构和函数 什么是语言结构和函数  语言结构: 就是PHP语言的关键词, 语言语法的一部分 函数: 由代码块组成的,可以复用   语言结构为什么比函数快? 原因是在PHP中, 函数都要先被PHP解析器(Zend引擎)分解成语言结构, 所以有此可见, 函数比语言结构多了一层解析器解析这样就能比较好的理解, 为什么语言结构比函数快了  语言结构和函数的不同  语言结构比对应功能的函数快 语言结构在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://blog.renyimin.com/img/PHP/isset-empty.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/PHP/code-sniffer-01.png">
+<meta property="og:updated_time" content="2019-07-29T11:11:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP 基础">
+<meta name="twitter:description" content="语言结构和函数 什么是语言结构和函数  语言结构: 就是PHP语言的关键词, 语言语法的一部分 函数: 由代码块组成的,可以复用   语言结构为什么比函数快? 原因是在PHP中, 函数都要先被PHP解析器(Zend引擎)分解成语言结构, 所以有此可见, 函数比语言结构多了一层解析器解析这样就能比较好的理解, 为什么语言结构比函数快了  语言结构和函数的不同  语言结构比对应功能的函数快 语言结构在">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/PHP/isset-empty.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">PHP 基础</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-01-02T02:26:58.000Z" itemprop="datePublished" class="page-time">
+  2019-01-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#语言结构和函数"><span class="post-toc-number">1.</span> <span class="post-toc-text">语言结构和函数</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#isset-VS-empty"><span class="post-toc-number">2.</span> <span class="post-toc-text">isset() VS empty()</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#代码风格指南"><span class="post-toc-number">3.</span> <span class="post-toc-text">代码风格指南</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Restful-和-Rpc-区别"><span class="post-toc-number">4.</span> <span class="post-toc-text">Restful 和 Rpc 区别?</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#幂等"><span class="post-toc-number">5.</span> <span class="post-toc-text">幂等</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-PHP/2018-04-06-basic-point"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">PHP 基础</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-01-02 10:26:58" datetime="2019-01-02T02:26:58.000Z"  itemprop="datePublished">2019-01-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/PHP/">PHP</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="语言结构和函数"><a href="#语言结构和函数" class="headerlink" title="语言结构和函数"></a>语言结构和函数</h1><ol>
+<li><p>什么是语言结构和函数</p>
+<ul>
+<li>语言结构: 就是PHP语言的关键词, 语言语法的一部分</li>
+<li>函数: 由代码块组成的,可以复用</li>
+</ul>
+</li>
+<li><p>语言结构为什么比函数快? 原因是在PHP中, 函数都要先被PHP解析器(Zend引擎)分解成语言结构, 所以有此可见, 函数比语言结构多了一层解析器解析这样就能比较好的理解, 为什么语言结构比函数快了</p>
+</li>
+<li><p>语言结构和函数的不同</p>
+<ul>
+<li>语言结构比对应功能的函数快</li>
+<li>语言结构在错误处理上比较鲁棒, 由于是语言关键词, 所以不具备再处理的环节</li>
+<li>语言结构不能在配置项(php.ini)中禁用, 函数则可以</li>
+<li>语言结构不能被用做回调函数</li>
+</ul>
+</li>
+<li><p>语言结构列表: <code>echo()、print()、die()、isset()、unset()、include()、require()、array()、list()、empty()</code></p>
+</li>
+</ol>
+<h1 id="isset-VS-empty"><a href="#isset-VS-empty" class="headerlink" title="isset() VS empty()"></a><code>isset()</code> VS <code>empty()</code></h1><p>两个函数对比<br><img src="/img/PHP/isset-empty.png"></p>
+<h1 id="代码风格指南"><a href="#代码风格指南" class="headerlink" title="代码风格指南"></a><a href="http://laravel-china.github.io/php-the-right-way/" target="_blank" rel="noopener">代码风格指南</a></h1><ol>
+<li><a href="https://psr.phphub.org/" target="_blank" rel="noopener">PSR 规范</a></li>
+<li><blockquote>
+<p>PHP 社区百花齐放，拥有大量的函数库、框架和组件。PHP 开发者通常会在自己的项目中使用若干个外部库，因此 PHP 代码遵循（尽可能接近）同一个代码风格就非常重要，这让开发者可以轻松地将多个代码库整合到自己的项目中。<br> PHP标准组 提出并发布了一系列的风格建议。其中有部分是关于代码风格的，即 PSR-0, PSR-1, PSR-2 和 PSR-4。这些推荐只是一些被其他项目所遵循的规则，如 Drupal, Zend, Symfony, CakePHP, phpBB, AWS SDK, FuelPHP, Lithium 等。你可以把这些规则用在自己的项目中，或者继续使用自己的风格。<br> 通常情况下，你应该遵循一个已知的标准来编写 PHP 代码。可能是 PSR 的组合或者是 PEAR 或 Zend 编码准则中的一个。这代表其他开发者能够方便的阅读和使用你的代码，并且使用这些组件的应用程序可以和其他第三方的组件保持一致。<br> 阅读 <a href="https://www.php-fig.org/psr/psr-0/" target="_blank" rel="noopener">PSR-0</a><br> 阅读 <a href="https://learnku.com/laravel/t/2078/psr-specification-psr-1-basic-coding-specification" target="_blank" rel="noopener">PSR-1</a><br> 阅读 <a href="https://learnku.com/laravel/t/2079/psr-specification-psr-2-coding-style-specification" target="_blank" rel="noopener">PSR-2</a><br> 阅读 <a href="https://learnku.com/laravel/t/2081/psr-specification-psr-4-automatic-loading-specification" target="_blank" rel="noopener">PSR-4</a><br> 阅读 <a href="https://pear.php.net/manual/en/standards.php" target="_blank" rel="noopener">PEAR 编码准则</a><br> 阅读 <a href="https://symfony.com/doc/current/contributing/code/standards.html" target="_blank" rel="noopener">Symfony 编码准则</a></p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>你可以使用 <a href="https://pear.php.net/package/PHP_CodeSniffer/" target="_blank" rel="noopener">PHP_CodeSniffer</a> 来检查代码是否符合这些准则<br> <img src="/img/PHP/code-sniffer-01.png"></p>
+</blockquote>
+</li>
+</ol>
+<h1 id="Restful-和-Rpc-区别"><a href="#Restful-和-Rpc-区别" class="headerlink" title="Restful 和 Rpc 区别?"></a>Restful 和 Rpc 区别?</h1><p><a href="https://help.aliyun.com/document_detail/73740.html?spm=a2c4g.11186623.6.545.5d7f2a41QT13zj" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/73740.html?spm=a2c4g.11186623.6.545.5d7f2a41QT13zj</a></p>
+<h1 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h1><p><a href="https://help.aliyun.com/document_detail/104450.html?spm=a2c4g.11186623.6.553.bb4f4c07Lpyv10" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/104450.html?spm=a2c4g.11186623.6.553.bb4f4c07Lpyv10</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&title=《PHP 基础》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&title=《PHP 基础》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP 基础》 — Lant's&url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2018/12/09/PHP/2018-12-09-Laravel-03/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">Facade</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/01/02/PHP/2019-01-02-php7/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">PHP7 新特性</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2019</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&title=《PHP 基础》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&title=《PHP 基础》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《PHP 基础》 — Lant's&url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/01/02/PHP/2018-04-06-basic-point/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAN4AAADeCAAAAAB3DOFrAAACrElEQVR42u3aQY7jMAwEwPz/07PXARZedJNS1ofyychkIpUPIk3y84mvn7+u358/3bfff1rx6TvHLjw8PLz11p9++mmBZKPJ1vPVkz3j4eHh3ea1m04eUH6gnwoSeHh4eO/kJctv0vTZI8DDw8N7My9Jc2ffzIMBHh4e3ht4bVqcL9aWffPfOVxrwcPDw4t5efr7nvsr/T08PDy8dVe9bYblDa1ZQKp3i4eHh3eB1zaoZm2wTbyaNdLw8PDw7vFmx+5si0mYyQetohCFh4eH9xVe0u5qH0qSdudBKHk0q9kHPDw8vJjXftIe8XlLrBgLaN8V8PDw8I7y8jb//ljP0/Q8wHzyGIKHh4e34M0GqvYjUG26vFoXDw8P7yhvUzjIt5gHknY/UUqNh4eH9xXebGQqf2RJwt2OJuDh4eF9h5e/v2/KrMnoQB5sZuEHDw8P7zu85OhPihRtGWIWBurCLh4eHt4hXn643yhSnGqJrSIeHh4eXsCbJayzxliy3dlAw+MqeHh4eJd5+zJBe5TnwWBYjMDDw8M7yss3NzvKZ+WMdujq8R4PDw/vMi8vCrSF2iTJ3owUFBEPDw8Pb82bpcKzN/18TGo2SlXA8PDw8Ba8WWs/HxGYtcc2f32Me3h4eHiHeJsyaw7ICxN5gl4EGzw8PLxrvLPDVS1+X3qIhq7w8PDwrvFmZdm2PdYOGeQBKZqMwMPDw7vAm1H3AwSr2jMeHh7eZd5PeZ3a+iYdLx4KHh4e3gXebIwgT5cTcJ4c7xtpeHh4eKd4+UHftqzaZ7lvleHh4eF9k5d3jjZDBrcjGB4eHt47eac+OVsyjqrUeHh4eP+J1ya1s1GAtql2OKXGw8PDC3htQytPnfPkOKf++3/x8PDwbvPal/yk8Z+z8zGCPPnGw8PDu8b7A//WK/AOTcu2AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
