@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>02. nginx主配置文件(nginx.conf)结构 | Lant&#39;s</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="nginx">
+    <meta name="description" content="前言 整个conf文件分为 全局块、events块、http块、server块、location块 每个块有每个块的作用域, 外层块作用域就包含内部块的作用域, 如全局块作用域就包含events块、http块、server块和location块 修改nginx.conf后是必须重启nginx才会生效  nginx.conf 大体结构如下   1234567891011121314151617181">
+<meta name="keywords" content="nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02. nginx主配置文件(nginx.conf)结构">
+<meta property="og:url" content="http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/index.html">
+<meta property="og:site_name" content="Lant&#39;s">
+<meta property="og:description" content="前言 整个conf文件分为 全局块、events块、http块、server块、location块 每个块有每个块的作用域, 外层块作用域就包含内部块的作用域, 如全局块作用域就包含events块、http块、server块和location块 修改nginx.conf后是必须重启nginx才会生效  nginx.conf 大体结构如下   1234567891011121314151617181">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-07T07:45:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="02. nginx主配置文件(nginx.conf)结构">
+<meta name="twitter:description" content="前言 整个conf文件分为 全局块、events块、http块、server块、location块 每个块有每个块的作用域, 外层块作用域就包含内部块的作用域, 如全局块作用域就包含events块、http块、server块和location块 修改nginx.conf后是必须重启nginx才会生效  nginx.conf 大体结构如下   1234567891011121314151617181">
+    
+        <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand4.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpeg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Lant</h5>
+          <a href="mailto:18625036504@163.com" title="18625036504@163.com" class="mail">18625036504@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">02. nginx主配置文件(nginx.conf)结构</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h5 class="subtitle">
+            
+                <time datetime="2019-11-06T07:32:11.000Z" itemprop="datePublished" class="page-time">
+  2019-11-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/nginx/">nginx</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#配置项介绍"><span class="post-toc-number">2.</span> <span class="post-toc-text">配置项介绍</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#反向代理"><span class="post-toc-number">3.</span> <span class="post-toc-text">反向代理</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#负载均衡"><span class="post-toc-number">4.</span> <span class="post-toc-text">负载均衡</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#高可用"><span class="post-toc-number">5.</span> <span class="post-toc-text">高可用</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#openresty"><span class="post-toc-number">6.</span> <span class="post-toc-text">openresty</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#lua"><span class="post-toc-number">7.</span> <span class="post-toc-text">lua</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-nginx/2019-11-06-02"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">02. nginx主配置文件(nginx.conf)结构</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-11-06 15:32:11" datetime="2019-11-06T07:32:11.000Z"  itemprop="datePublished">2019-11-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/nginx/">nginx</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><ol>
+<li><p>整个conf文件分为 <code>全局块</code>、<code>events块</code>、<code>http块</code>、<code>server块</code>、<code>location块</code><br> 每个块有每个块的作用域, 外层块作用域就包含内部块的作用域, 如全局块作用域就包含events块、http块、server块和location块<br> 修改nginx.conf后是必须重启nginx才会生效</p>
+</li>
+<li><p>nginx.conf 大体结构如下  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">...                 #全局块</span><br><span class="line"></span><br><span class="line">event&#123;              #events块</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http&#123;               #http块</span><br><span class="line"></span><br><span class="line">    server&#123;         #server块</span><br><span class="line">        ...         #server全局块</span><br><span class="line"></span><br><span class="line">        location&#123;   #location块</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location&#123;   #location块</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server&#123;         #server块</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...             #http全局块</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>各块的作用</p>
+</li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th style="text-align:left">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全局块</td>
+<td style="text-align:left">全局块是默认配置文件从开始到events块之间的一部分内容, 主要是设置一些影响Nginx服务器整体运行的配置指令。因此, 这些指令的作用域是Nginx服务器全局。作用通常包括: 配置Ngnix服务器的用户组、worker process数、Nginx进程PID存放路径、日志的存放路径和类型以及<strong>配置文件引入</strong>等</td>
+</tr>
+<tr>
+<td>events块</td>
+<td style="text-align:left">events块涉及的指令主要是影响Nginx服务器与用户的网络链接。 常用的设置包括: 是否开启多worker process下的网络连接进行序列化, 是否允许同时接收多个网络连接, 选取那种事件驱动模型处连接请求, 每个worker process可以同时支持的最大连接数等 (该部分的指令对nginx的性能影响较大, 实际配置中应该根据实际情况进行灵活调整)</td>
+</tr>
+<tr>
+<td>http块</td>
+<td style="text-align:left">http块是Nginx服务器配置中的重要部分, 代理、缓存和日志定义等绝大多数的功能和第三方模块的配置都可以放在这模块中。可以在http全局块中配置的指令包括：文件引入、MIME-Type定义、日志自定义、是否使用sendfile传输文件、连接超时时间、单连接请求数上限等; 一个http块可以包含多个server块) </td>
+</tr>
+<tr>
+<td>server块</td>
+<td style="text-align:left">server块, 虚拟主机（虚拟服务器）。作用：使得Nginx服务器可以在同一台服务器上至运行一组Nginx进程, 就可以运行多个网站。(注意: 在http全局块中介绍过的部分指令可以在server块, location块中使用)</td>
+</tr>
+<tr>
+<td>location块</td>
+<td style="text-align:left">location块是server块的一个指令, 每个server块可以包含多个location块。作用：基于Nginx服务器接收到的请求字符串, 虚拟主机名称（ip, 域名）、url匹配, 对特定请求进行处理。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="配置项介绍"><a href="#配置项介绍" class="headerlink" title="配置项介绍"></a>配置项介绍</h1><ol>
+<li><p>配置运行nginx服务器的用户(组)   <code>user [user] [group]</code> </p>
+<ul>
+<li>如果希望所有用户都可以启动nginx, 注释掉该行或者 <code>user nobody nobody</code></li>
+<li>如果配置的用户或者用户组不存在, 则启动会报错</li>
+<li><strong>此指令只能在全局块中配置</strong></li>
+</ul>
+</li>
+<li><p><code>worker_processes number/auto</code> 该配置是服务器实现并发处理的关键所在 (rrc 是 auto)</p>
+<ul>
+<li>设置 number 会指定nginx进程最多可以产生的 worker process 数</li>
+<li>设置 auto 时, nginx进程将自动检测</li>
+<li><strong>此指令只能在全局块中配置</strong></li>
+</ul>
+</li>
+<li><p><code>pid file</code> 用来设置nginx进程的pid文件位置, 该文件用来保存当前运行程序的主进程号</p>
+<ul>
+<li><strong>此指令只能在全局块中配置</strong></li>
+</ul>
+</li>
+<li><p><code>error_log file/stderr [debug|info|notice....]</code> 配置错误日志的存放路径   (rrc是 error_log  /mnt/logs/nginx/error.log notice)</p>
+<ul>
+<li>注意 指定的文件需要对于运行nginx进程的用户具有写权限</li>
+</ul>
+</li>
+<li><p><strong>配置文件的引入</strong> : 在一些情况下, 我们可能需要将其他的nginx配置或者第三方模块的配置引入到当前的主配置文件中</p>
+<ul>
+<li><code>include file</code></li>
+<li>注意 引入的配置文件需要对于运行nginx进程的用户具有写权限</li>
+<li>注意: <strong>该指令可以放在配置文件的任意位置</strong> (rrc 放在 http全局块中 <code>include conf.d/*.conf;</code>)</li>
+</ul>
+</li>
+<li><p><code>accept_mutex on | off;</code> : 设置网络连接的序列化 (当一个新网络连接来到时, 多个worker进程会被同时唤醒, 但仅仅只有一个进程可以真正获得连接并处理之。如果每次唤醒的进程数目过多的话, 其实是会影响一部分性能的)</p>
+<ul>
+<li>如果accept_mutex on, 那么多个worker将是以串行方式来处理, 其中有一个worker会被唤醒；反之若accept_mutex off, 那么所有的worker都会被唤醒, 不过只有一个worker能获取新连接, 其它的worker会重新进入休眠状态</li>
+<li><strong>默认是开启(on)状态</strong>, <strong>只能在 events块中进行配置</strong></li>
+</ul>
+</li>
+<li><p><code>multi_accept on|off</code> : 每个worker process 一次只能接收一个新到达的网络连接。若想让每个Nginx的workerprocess都有能力同时接收多个网络连接, 则需要开启此配置</p>
+<ul>
+<li>该指令默认为off状态</li>
+<li><strong>只能在 events块中进行配置</strong></li>
+</ul>
+</li>
+<li><p><code>use method</code> 事件驱动模型的选择  (select/poll/kequeue/epoll…)</p>
+<ul>
+<li><strong>只能在 events块中进行配置</strong></li>
+</ul>
+</li>
+<li><p><code>worker_connections number</code> 主要用来设置允许每一个 worker process 同时开启的最大连接数 (默认值为512), (rrc 为 <code>worker_connections  65535;</code>) </p>
+<ul>
+<li>这里的 number 不仅仅包括和前端用户建立的连接数, 而是包括所有可能建立的连接数</li>
+<li>另外, number不能大于操作系统支持打开的最大文件句柄数</li>
+<li><strong>只能在 events块中进行配置</strong></li>
+</ul>
+</li>
+<li><p>include全局块中的 MIME类型 配置, 貌似一般不动</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">include       mime.types;</span><br><span class="line">default_type  application/octet-stream;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义服务日志</p>
+<ul>
+<li>在全局块中, 我们介绍过error_log指令, 其用于nginx进程运行时的日志存放和级别。此处所指的日志与常规日志不同, 它是记录nginx服务器提供服务过程应答前端请求的日志, 我们将其称为服务日志以示区分。</li>
+<li><code>access_log path [format [buffer=size]]</code> <strong>可以在 http,server,location中配置</strong></li>
+<li><code>log_format name string ...</code> <strong>只能在 http 全局块中进行配置</strong></li>
+<li>(rrc 把 <code>log_format</code> 放在 http全局块中, 然后通过 <code>include</code> 引入每个项目的server配置, 每个项目在自己的server配置中指定自己的 <code>access_log</code> )</li>
+</ul>
+</li>
+<li><p><code>keepalive_timeout imeout [header_timeout]</code> 配置连接超时时间 （rrc : <code>keepalive_timeout  30;</code>）</p>
+<ul>
+<li>timeout 服务端对连接的保持时间, 默认为65s</li>
+<li>header_timeout 经测试, 会在响应头中加上 <code>Keep-Alive: timeout=所设置的时间</code>  </li>
+<li><strong>可以在 http,server,location中配置</strong> </li>
+</ul>
+</li>
+<li><p><code>keepalive_requests number</code>: 用于限制用户通过某一个连接向nginx发送请求的次数</p>
+<ul>
+<li>默认为100</li>
+<li><strong>可以出现在server,location块中</strong></li>
+</ul>
+</li>
+<li><p>配置网络监听, 有三种方式 (基于ip, port, UNIX Domain Socket), 直接看例子<br><strong>一般用在 server 块中</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">listen  *:80 | *:8000  (默认) 监听所有80和8000端口</span><br><span class="line">listen  8000  监听8000端口上所有ip,相当于 listen *:8000</span><br><span class="line">listen  192.168.1.10   监听具体IP的所有端口上的链接</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>虚拟主机（基于端口,域名,ip）</p>
+</li>
+<li></li>
+</ol>
+<h1 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h1><h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p>算法</p>
+<h1 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h1><p>keepalived</p>
+<h1 id="openresty"><a href="#openresty" class="headerlink" title="openresty"></a>openresty</h1><h1 id="lua"><a href="#lua" class="headerlink" title="lua"></a>lua</h1><p><a href="https://www.cnblogs.com/chenglc/p/8024994.html" target="_blank" rel="noopener">https://www.cnblogs.com/chenglc/p/8024994.html</a><br><a href="https://www.cnblogs.com/knowledgesea/p/5175711.html" target="_blank" rel="noopener">https://www.cnblogs.com/knowledgesea/p/5175711.html</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+
+        
+    </div>
+    <footer>
+        <a href="http://blog.renyimin.com">
+            <img src="/img/avatar.jpeg" alt="Lant">
+            Lant
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/">nginx</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&title=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&title=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+      <div class="waves-block waves-effect prev">
+        <a href="/2019/11/06/nginx/2019-11-06-01/" id="post-prev" class="post-nav-link">
+          <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
+          <h4 class="title">01. nginx 安装</h4>
+        </a>
+      </div>
+    
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/11/07/nginx/2019-11-06-03/" id="post-next" class="post-nav-link">
+        <div class="tips">Next<i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">03. postman 测试 MIME类型</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+<section class="comments" id="comments">
+    <div id="gitment_thread"></div>
+    <link rel="stylesheet" href="//unpkg.com/gitment/style/default.css">
+    <script src="//unpkg.com/gitment/dist/gitment.browser.js"></script>
+    <script>
+        var gitment = new Gitment({
+            owner: 'rymuscle',
+            repo: 'rymuscle.github.io',
+            oauth: {
+                client_id: '49b906f6d47dbab8d929',
+                client_secret: '17fd73f24f616a09d4c09bca9480e0deba75a9a2',
+            },
+        })
+        gitment.render('comments')
+    </script>
+</section>
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        赞赏支持
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.png" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.png" data-alipay="/img/alipay.png">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="bottom">
+        <p><span>Lant &copy; 2016 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&title=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&pic=http://blog.renyimin.com/img/avatar.jpeg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&title=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《02. nginx主配置文件(nginx.conf)结构》 — Lant's&url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/&via=http://blog.renyimin.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://blog.renyimin.com/2019/11/06/nginx/2019-11-06-02/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMklEQVR42u3ay27CMBAF0P7/T1Opq0qQcK9NqsY+XkURGJ8shnnk6ytej591dP/3ev788/Xzbkf7fHhhYGDclvE4XclRku/mR092fkHFwMDYgHEeZK8Lpud3krNhYGBgnAfZo+Oe7zyWYmJgYGDkAbctcdsdMDAwMGaK2CSxSwJonixeUotjYGDckNEOBv7y+sL5BgYGxk0Yj+k1v2cbZF/sgIGBsTTjPO274t2GmWT0zQkxMDC2ZMyEyKTQzUvfqM2HgYGxKOOKJlrx/IJRaDQYwMDAWJrRHvpjadxEQC+eEAYGxhKMvDU/n/C1o82iYMbAwNiGMVZMnv9kfj/Hv7iDgYGxDaP4WhlM88FAmzhiYGDswEhKxDyxmylT29B82G7DwMBYlJGUqWMhcgw/1p7DwMBYlTGWlo19Mn+bq73GwMBYm3HFy1vtnSSsF48GAwNjOUYytsybbu0hBsvUo/8NDAyMpRn5i1/tT86H2ihBxMDAWJoxU5S2wbRNSZOAi4GBsQ9j/qWKsXHmWDCNGm0YGBiLMpICNQ+abUk8lpi+KWUxMDAWYuTHmgnNSeBuU0kMDIwdGI9yteVoO0Jok0gMDIwdGPlKjjjTPsuHB2N7YmBg3J3RlpFJGJ15FaNt5GFgYOzDGAt8bRuubpnFDwsDAwNjJvi2A9H8bwADAwMjb28lw4B2JFmPLTEwMDZg5M36NmmbGXYWfUEMDIylGTODgbER43z6+OERJgYGxv9lfAOxYPoIi6WKXQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+</body>
+</html>

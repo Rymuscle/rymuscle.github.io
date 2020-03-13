@@ -32,7 +32,7 @@
 <meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-02.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/tools/wireshark/test-03.png">
-<meta property="og:updated_time" content="2019-11-01T08:10:26.000Z">
+<meta property="og:updated_time" content="2019-12-03T07:30:32.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="三次握手">
 <meta name="twitter:description" content="在抓包分析TCP/IP, 需要了解几个简单概念  位码, 即tcp标志位, 通常用大写, 有6种: SYN(synchronous建立联机)、ACK(acknowledgement 确认)、PSH(push传送)、FIN(finish结束)、RST(reset重置)、URG(urgent紧急) Sequence number(顺序号码)、Acknowledge number(确认号码)  三次握手">
@@ -183,7 +183,7 @@
 <li><code>Sequence number</code>(顺序号码)、<code>Acknowledge number</code>(确认号码)</li>
 </ul>
 <h1 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h1><p><img src="/img/tcpip/3-handshark.jpg"></p>
-<p>1.第一次握手<br><img src="/img/tools/wireshark/test-01.png"><br>主机A发送位码为 <code>SYN</code>(syn＝1), 随机产生 <code>seq number=x</code> 的数据包到服务器, 主机B由 <code>SYN</code>(syn=1) 知道,A要求建立联机\<br>客户端进入 <code>SYN SENT</code> 状态</p>
+<p>1.第一次握手<br><img src="/img/tools/wireshark/test-01.png"><br>主机A发送位码为 <code>SYN</code>(syn＝1), 随机产生 <code>seq number=x</code> 的数据包到服务器, 主机B由 <code>SYN</code>(syn=1) 知道, A要求建立联机<br>客户端进入 <code>SYN SENT</code> 状态</p>
 <p>2.第二次握手<br><img src="/img/tools/wireshark/test-02.png"><br>主机B收到请求后要确认联机信息，向A发送位码为 <code>ACK</code>+<code>SYN</code> (ack=1, syn=1)<br>ACK: <code>ack number = x+1(即主机A的seq+1)</code><br>SYN: 随机产生 <code>seq number=y</code></p>
 <p>服务器进入 <code>SYN RECV</code> 状态</p>
 <p>3.第三次握手<br><img src="/img/tools/wireshark/test-03.png"><br>主机A收到后检查 <code>ack number</code> 是否正确,即第一次发送的 <code>seq number+1 (x+1)</code>, 以及位码 <code>ACK</code>(ack=1)<br>若正确, 主机A会再发送 <code>ack number=(主机B的seq+1,即 Y+1)</code>, 此时自然是<code>ACK</code>(ack=1), 同时还会将 <code>seq number=x+1</code> 发送到服务端<br>主机B收到后确认 <code>ACK</code>, <code>ack = y+1</code>, <code>seq = x+1</code> 值, 客户端和服务器进入 <code>ESTABLISHED</code> (TCP连接成功) 状态, 完成三次握手</p>
@@ -358,7 +358,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2019</span>
+        <p><span>Lant &copy; 2016 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -456,5 +456,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

@@ -20,18 +20,21 @@
     
     
     <meta name="keywords" content="HTTP">
-    <meta name="description" content="XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞 https://www.cnblogs.com/mao2080/p/9460397.html">
+    <meta name="description" content="XSS 简介 XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞  XSS 通常指黑客通过 “HTML注入” 篡改了网页, 插入了恶意的脚本, 从而在用户浏览网页时, 控制用户浏览器的一种攻击;  X">
 <meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="XSS(Cross Site Scripting) 跨站脚本攻击">
 <meta property="og:url" content="http://blog.renyimin.com/2019/10/22/http/2019-10-22-XSS/index.html">
 <meta property="og:site_name" content="Lant&#39;s">
-<meta property="og:description" content="XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞 https://www.cnblogs.com/mao2080/p/9460397.html">
+<meta property="og:description" content="XSS 简介 XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞  XSS 通常指黑客通过 “HTML注入” 篡改了网页, 插入了恶意的脚本, 从而在用户浏览网页时, 控制用户浏览器的一种攻击;  X">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-10-22T06:16:28.000Z">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/persistent-xss.png">
+<meta property="og:image" content="http://blog.renyimin.com/img/http/xss.png">
+<meta property="og:updated_time" content="2019-11-05T09:10:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="XSS(Cross Site Scripting) 跨站脚本攻击">
-<meta name="twitter:description" content="XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞 https://www.cnblogs.com/mao2080/p/9460397.html">
+<meta name="twitter:description" content="XSS 简介 XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞  XSS 通常指黑客通过 “HTML注入” 篡改了网页, 插入了恶意的脚本, 从而在用户浏览网页时, 控制用户浏览器的一种攻击;  X">
+<meta name="twitter:image" content="http://blog.renyimin.com/img/http/persistent-xss.png">
     
         <link rel="alternate" type="application/atom+xml" title="Lant&#39;s" href="/atom.xml">
     
@@ -148,6 +151,13 @@
 
 <div class="container body-wrap">
     
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#XSS-简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">XSS 简介</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#XSS分类"><span class="post-toc-number">2.</span> <span class="post-toc-text">XSS分类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#反射型-XSS"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">反射型 XSS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#存储型-XSS"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">存储型 XSS</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DOM-Based-XSS"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">DOM Based XSS</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#小结"><span class="post-toc-number">3.</span> <span class="post-toc-text">小结</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#XSS-漏洞修复方法"><span class="post-toc-number">4.</span> <span class="post-toc-text">XSS 漏洞修复方法</span></a></li></ol>
+        </nav>
+    </aside>
+    
 <article id="post-http/2019-10-22-XSS"
   class="post-article article-type-post fade" itemprop="blogPost">
 
@@ -165,9 +175,22 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <p>XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞</p>
-<p><a href="https://www.cnblogs.com/mao2080/p/9460397.html" target="_blank" rel="noopener">https://www.cnblogs.com/mao2080/p/9460397.html</a></p>
-
+            <h1 id="XSS-简介"><a href="#XSS-简介" class="headerlink" title="XSS 简介"></a>XSS 简介</h1><ol>
+<li><p>XSS(Cross Site Scripting)攻击 全称 跨站脚本攻击, 是为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆, 故将跨站脚本攻击缩写为XSS, XSS是一种经常出现在web应用中的计算机安全漏洞</p>
+</li>
+<li><p>XSS 通常指黑客通过 “HTML注入” 篡改了网页, 插入了恶意的脚本, 从而在用户浏览网页时, 控制用户浏览器的一种攻击;</p>
+</li>
+<li><p>XSS根据效果的不同可以分多种</p>
+</li>
+</ol>
+<h1 id="XSS分类"><a href="#XSS分类" class="headerlink" title="XSS分类"></a>XSS分类</h1><h2 id="反射型-XSS"><a href="#反射型-XSS" class="headerlink" title="反射型 XSS"></a>反射型 XSS</h2><p>反射型XSS: 反射型XSS又被称为非存储型XSS, 攻击者通常会通过URL参数传入恶意语句从而实现攻击<br>由于我们的payload未经过一个存储的过程直接传到了用户浏览的页面上, 所以也称之为非存储型XSS</p>
+<p>(反射型XSS只是简单地把用户输入的数据 “反射” 给浏览器。也就是说, 黑客往往需要诱使用户”点击”一个恶意链接, 才能攻击成功)</p>
+<p>最简单的反射型XSS拿cookie: <a href="https://blog.csdn.net/thislocal/article/details/51010021" target="_blank" rel="noopener">https://blog.csdn.net/thislocal/article/details/51010021</a></p>
+<h2 id="存储型-XSS"><a href="#存储型-XSS" class="headerlink" title="存储型 XSS"></a>存储型 XSS</h2><p>存储型XSS：攻击者在页面中插入XSS代码, 服务器将恶意代码传至数据库, 当受害者浏览页面时服务器将代码取出从而实现攻击。<br>(存储型xss与反射型xss的区别在于存储型会将用户输入的数据存入服务器, 在用户下一次点击时便会触发, 由于其隐蔽性较高, 所以危害也普遍大于反射型xss)<br><img src="/img/http/persistent-xss.png" width="500/"></p>
+<h2 id="DOM-Based-XSS"><a href="#DOM-Based-XSS" class="headerlink" title="DOM Based XSS"></a>DOM Based XSS</h2><p>DOM型XSS: DOM型XSS与反射型XSS漏洞大同小异, 但是区别在于反射型XSS会将语句存储于后端再出现在前端页面, 而DOM型XSS漏洞直接将语句存储于前端</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p><img src="/img/http/xss.png" width="500/"></p>
+<p><a href="http://www.imooc.com/article/252521" target="_blank" rel="noopener">http://www.imooc.com/article/252521</a></p>
+<h1 id="XSS-漏洞修复方法"><a href="#XSS-漏洞修复方法" class="headerlink" title="XSS 漏洞修复方法"></a>XSS 漏洞修复方法</h1>
         </div>
 
         <blockquote class="post-copyright">
@@ -251,9 +274,9 @@
 <nav class="post-nav flex-row flex-justify-between">
   
       <div class="waves-block waves-effect prev">
-        <a href="/2019/10/22/http/2019-10-22-XSRF/" id="post-prev" class="post-nav-link">
+        <a href="/2019/10/22/http/2019-10-22-CSRF/" id="post-prev" class="post-nav-link">
           <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i>Prev </div>
-          <h4 class="title">XSRF</h4>
+          <h4 class="title">CSRF</h4>
         </a>
       </div>
     
@@ -335,7 +358,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2019</span>
+        <p><span>Lant &copy; 2016 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -433,5 +456,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

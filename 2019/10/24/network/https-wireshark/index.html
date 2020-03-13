@@ -30,7 +30,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://blog.renyimin.com/img/https/wireshark-https-01.png">
 <meta property="og:image" content="http://blog.renyimin.com/img/https/wireshark-https-02.png">
-<meta property="og:updated_time" content="2019-11-04T02:43:10.000Z">
+<meta property="og:updated_time" content="2019-12-16T10:05:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Wireshark 抓包分析 HTTPS">
 <meta name="twitter:description" content="HTTPS 实现原理简介混合加密技术: 证书校验是使用CA机构提供的非对称加密, 然后使用非对称加密传递一个秘钥, 再使用对称加密  要使用HTTPS进行通信的服务端, 需要向CA机构申请数字证书, 来证明自己身份的有效性 (服务器会提供一对 公私钥) 当客户端请求的时候, 服务端把证书发给客户端, 客户端验证证书有效, 也就是认证了服务端的有效性, 并且拿出数字证书中包含的 (服务器)公钥 客户">
@@ -154,7 +154,7 @@
     <aside class="post-widget">
         <nav class="post-toc-wrap" id="post-toc">
             <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#HTTPS-实现原理简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">HTTPS 实现原理简介</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#HTTPS-数字证书的验证-概述"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTPS 数字证书的验证 概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CA证书认证流程概述"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CA证书认证流程概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对称秘钥的安全传递"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">对称秘钥的安全传递</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#抓包分析"><span class="post-toc-number">3.</span> <span class="post-toc-text">抓包分析</span></a></li></ol>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#HTTPS-实现原理简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">HTTPS 实现原理简介</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#HTTPS-数字证书的验证-概述"><span class="post-toc-number">2.</span> <span class="post-toc-text">HTTPS 数字证书的验证 概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#CA证书认证流程概述"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">CA证书认证流程概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对称秘钥的安全传递"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">对称秘钥的安全传递</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">小结</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#抓包分析"><span class="post-toc-number">3.</span> <span class="post-toc-text">抓包分析</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#https-传输的数据是否需要二次加密"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">https 传输的数据是否需要二次加密</span></a></li></ol></li></ol>
         </nav>
     </aside>
     
@@ -215,6 +215,24 @@
 </li>
 <li><p>分析<br>~~<br>参考: <a href="https://blog.csdn.net/firefile/article/details/80537053#1__3" target="_blank" rel="noopener">https://blog.csdn.net/firefile/article/details/80537053#1__3</a></p>
 </li>
+</ol>
+<p><a href="https://blog.csdn.net/u011803341/article/details/79708886" target="_blank" rel="noopener">https://blog.csdn.net/u011803341/article/details/79708886</a><br><a href="https://blog.csdn.net/qq_32998153/article/details/80022489" target="_blank" rel="noopener">https://blog.csdn.net/qq_32998153/article/details/80022489</a><br><a href="https://segmentfault.com/a/1190000014835279" target="_blank" rel="noopener">https://segmentfault.com/a/1190000014835279</a></p>
+<p>https加密在应用层其实还是明文传输的!!!<br><strong><a href="https://www.cnblogs.com/evan-blog/p/9867561.html" target="_blank" rel="noopener">https://www.cnblogs.com/evan-blog/p/9867561.html</a></strong></p>
+<p><a href="https://blog.csdn.net/u014294681/article/details/86599741" target="_blank" rel="noopener">https://blog.csdn.net/u014294681/article/details/86599741</a></p>
+<h2 id="https-传输的数据是否需要二次加密"><a href="#https-传输的数据是否需要二次加密" class="headerlink" title="https 传输的数据是否需要二次加密"></a>https 传输的数据是否需要二次加密</h2><p>https 能保证的是连接的安全，当我们打开网站的时候，是需要和服务器进行通信的，那么 https 能够保证在通信时数据传输是安全的。</p>
+<p>如果我们打开一个网页，在网址的前面有标明”https”的话，那么就说明这个网站有证书并且有进行加密的操作。但是，不少钓鱼网页其实也可以使用 https，这就说明了 https 并不能保证网站本身是安全的。举个例子，如果你在一个网页上输入账号密码的话，使用 https 的网页能够保证你的账号密码在传到网站服务器的过程中不会被其他的东西干扰或者盗取，但是，你输入的账号密码却有可能被你正在访问的这个网页盗用。</p>
+<p>再举个例子：移动端手机种了木马，终端被攻击了，那么对于传输通道进行加密就毫无意义，试想人家都跑到你家里面去了，所有的东西在内存跟硬盘里面都有，再进行网络监听毫无意义。</p>
+<p>所以 https 本身是安全的，至少在网络传输过程中，能够保证传输数据的完整性和一致性。但是并不代表它的宿主是安全的，所以如果是金融类，支付类等对安全等级要求很高的软件，最好进行二次加密。</p>
+<p>可以用生活中的场景做个类比:</p>
+<ol>
+<li>使用了https，可以这样认为: 你正在沟通的这个人, 是个合法的公民, 是被法律上认可的一个人, 他在公安局有备案,身份证等信息;<br>也仅此而已</li>
+</ol>
+<ul>
+<li>虽然是个合法公民, 你和他的沟通也要小心谨慎, 因为这只能保证你正在沟通的这个人是合法的, 但它未必是个守法的</li>
+<li>另外, 你和这个合法公民的沟通也要防止被截获, 因为你两的沟通只是在传输层以下进行了保证, 应用层如果必要的话, 也是需要有一套安全措施的</li>
+</ul>
+<ol>
+<li>不用https, 那你正在沟通的这个人可能根本就不是个合法公民, 连身份证都没有, 没有被政府所认可</li>
 </ol>
 
         </div>
@@ -384,7 +402,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2019</span>
+        <p><span>Lant &copy; 2016 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -482,5 +500,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>

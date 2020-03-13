@@ -28,7 +28,7 @@
 <meta property="og:site_name" content="Lant&#39;s">
 <meta property="og:description" content="前言 HTTP/1.1 常见的 Method 有: OPTIONS, HEAD, GET, POST, PUT, DELETE, TRACE, CONNECT (参考RFC2616)  RFC2616中提到: PATCH, LINK, UNLINK 方法被定义, 但并不常见; (《图解http协议》中也提到 LINK, UNLINK 已经被http1.1废弃);  不同应用各自的实现不同, 有些应">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-03-13T02:05:50.000Z">
+<meta property="og:updated_time" content="2019-11-05T07:51:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="02. HTTP Methods">
 <meta name="twitter:description" content="前言 HTTP/1.1 常见的 Method 有: OPTIONS, HEAD, GET, POST, PUT, DELETE, TRACE, CONNECT (参考RFC2616)  RFC2616中提到: PATCH, LINK, UNLINK 方法被定义, 但并不常见; (《图解http协议》中也提到 LINK, UNLINK 已经被http1.1废弃);  不同应用各自的实现不同, 有些应">
@@ -185,10 +185,7 @@
 </li>
 <li><p><code>PUT</code> 和 <code>POST</code>的区别: 在HTTP中, PUT被定义为 <a href="https://tools.ietf.org/html/rfc2616#section-9.1.2" target="_blank" rel="noopener"><code>idempotent(幂等性)</code></a> 的方法, POST则不是, 这是一个很重要的区别</p>
 </li>
-<li><p>应该用 <code>PUT</code> 还是 <code>POST</code>?</p>
-<ul>
-<li>取决于这个REST服务的行为是否是 idempotent(幂等) 的<br>假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用 <code>POST</code> 方法<br>但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用 <code>PUT</code> 方法</li>
-</ul>
+<li><p>应该用 <code>PUT</code> 还是 <code>POST</code>? 取决于这个REST服务的行为是否是 idempotent(幂等) 的<br> 假如发送两个请求, 希望服务器端是产生两个新数据，那就说明这个服务不是idempotent的, 因为多次使用产生了副作用了, 那就应该使用 <code>POST</code> 方法<br> 但如果是希望后一个请求把第一个请求覆盖掉(这不正是修改么), 那这个服务就是idempotent的, 那就应该使用 <code>PUT</code> 方法</p>
 </li>
 <li><p>虽然 <code>POST</code> 和 <code>PUT</code> 差别不大, 用错了也没关系, 但是你的服务一放到internet上，如果不遵从HTTP协议的规范，就可能给自己带来麻烦;</p>
 </li>
@@ -386,7 +383,7 @@
 
         <footer class="footer">
     <div class="bottom">
-        <p><span>Lant &copy; 2016 - 2019</span>
+        <p><span>Lant &copy; 2016 - 2020</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -484,5 +481,21 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
 
 
 
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!--<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 </body>
 </html>
